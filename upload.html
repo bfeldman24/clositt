@@ -1,0 +1,252 @@
+<!DOCTYPE>
+<html>
+<head>
+<link href="http://www.bprowd.com/lib/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://www.bprowd.com/lib/javascript/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"> 
+<link href="http://www.bprowd.com/css/bootstrap-styles.css" rel="stylesheet">  
+<link href="http://www.bprowd.com/css/style.css" rel="stylesheet">  
+
+<script src="http://www.bprowd.com/lib/javascript/jquery-1.7.2.min.js"></script>
+<script src="http://www.bprowd.com/lib/javascript/bootstrap/js/bootstrap.min.js"></script>
+
+<script src='https://cdn.firebase.com/v0/firebase.js'></script>
+
+<style type="text/css">
+#saveProducts input{
+	height: 30px !important;	
+}
+</style>
+</head>
+<body>
+	<form class="form-horizontal" id="saveProducts">
+	    <div class="control-group">
+	   		<label class="control-label" for="inputCompany">Company</label>
+		    <div class="controls">
+		    	<input type="text" id="inputCompany" placeholder="Company" class="input-xxlarge" name="company" required>
+		    </div>
+	    </div>
+	    <div class="control-group">
+		    <label class="control-label" for="inputAudience">Target Consumers</label>
+		    <div class="controls">
+		   		<input type="text" id="inputAudience" placeholder="Target Consumers (i.e. Women, Men, Boys, Girls, etc...)"  class="input-xxlarge"  name="consumer" required>
+		    </div>
+	    </div>
+	    <div class="control-group">
+		    <label class="control-label" for="inputCategory">Category</label>
+		    <div class="controls">
+		   		<input type="text" id="inputCategory" placeholder="Category (i.e. Dresses, Pants, Shoes, Hats, etc...)" class="input-xxlarge" name="category" required>
+		    </div>
+	    </div>
+	    <div class="control-group">
+		    <label class="control-label" for="inputProducts">Json Products</label>
+		    <div class="controls">
+		   		<textarea id="inputProducts" placeholder="Product list in JSON format" name="products" required></textarea>
+		    </div>
+	    </div>
+	    <div class="control-group">
+		    <div class="controls">
+		    	<button class="btn" id="save">Save</button>
+	    	</div>
+	    </div>
+    </form>
+    
+    <hr>
+    <div style="margin-top:50px;margin-left:50px;">
+    	<h2>Gap/Old Navy/Banana/Piperline/Athleta:</h2>    	
+    	<a href='javascript:void(function(){if(!document.getElementById("jQscript")){var%20jQscript=document.createElement("script");jQscript.id="jQscript";jQscript.src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js";document.documentElement.appendChild(jQscript);}var%20products="[";$(".productCatItem").each(function(){var%20product="{";product+="\"imageSrc\":\""+$(this).find("img").attr("productimagepath")+"\",";product+="\"link\": \""+location.href.substring(0,location.href.indexOf(".com")+4)+$(this).find(".productItemName").attr("href")+"\",";product+="\"name\":\""+$(this).find(".productItemName").html()+"\",";product+="\"price\":\""+$(this).find(".priceDisplay").html()+"\",";product+="\"strikeprice\":\""+$(this).find(".priceDisplayStrike").html()+"\",";product+="\"saleprice\":\""+$(this).find(".priceDisplaySale").html()+"\"";product+="},";products+=product;});products=products.substring(0,products.length-1)+"]";$("body").html(products);}());'>Bookmark Code</a>
+    	<div style="display:none;">
+    	<pre style="background:#EEE;">
+    	javascript:void(function(){if(!document.getElementById("jQscript")){var%20jQscript=document.createElement("script");jQscript.id="jQscript";jQscript.src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js";document.documentElement.appendChild(jQscript);}
+    		var products = "[";
+			$(".productCatItem").each(function(){
+				var product = "{";
+				product += "\"imageSrc\": \"" + $(this).find("img").attr("productimagepath") + "\",";	
+				product += "\"link\": \"" + location.href.substring(0,location.href.indexOf(".com")+4) + $(this).find(".productItemName").attr("href") + "\",";	
+				product += "\"name\": \"" + $(this).find(".productItemName").html() + "\",";
+				product += "\"price\": \"" + $(this).find(".priceDisplay").html() + "\",";	
+				product += "\"strikeprice\": \"" + $(this).find(".priceDisplayStrike").html() + "\",";
+				product += "\"saleprice\": \"" + $(this).find(".priceDisplaySale").html()  + "\"";	
+				product += "},";
+				products += product;
+			});
+			
+			products = products.substring(0,products.length-1) + "]";
+			$("body").html(products);
+		}());
+    	</pre>
+    	</div>
+    </div>
+    
+    <div style="margin-top:20px;margin-left:50px;">
+    	<h2>JCrew:</h2>    	
+    	<a href='javascript:void(function(){var%20products="[";$(".arrayProdCell").each(function(){var%20product="{";var%20imageSrc=$(this).find(".arrayImg").find("img").attr("src");product+="\"imageSrc\":\""+imageSrc+"\",";product+="\"link\":\""+$(this).find(".arrayImg").find("a").attr("href")+"\",";product+="\"name\":\""+$(this).find(".arrayProdName").find("a").text().trim()+"\",";product+="\"price\":\""+$(this).find(".arrayProdPrice").text().trim()+"\"";product+="},";if(imageSrc!=undefined&&imageSrc!=null){products+=product;}});products=products.substring(0,products.length-1)+"]";$("body").html(products);}());'>Bookmark Code</a>
+    	<div style="display:none;">
+    	<pre style="background:#EEE;">
+    	javascript:void(function(){    		
+    		var products = "[";    		
+			$(".arrayProdCell").each(function(){
+				var product = "{";
+				var imageSrc = $(this).find(".arrayImg").find("img").attr("src");
+				product += "\"imageSrc\": \"" + imageSrc + "\",";				
+				product += "\"link\": \"" + $(this).find(".arrayImg").find("a").attr("href") + "\",";			
+				product += "\"name\": \"" + $(this).find(".arrayProdName").find("a").text().trim() + "\",";				
+				product += "\"price\": \"" + $(this).find(".arrayProdPrice").text().trim()  + "\"";
+				product += "},";
+				
+				if(imageSrc != undefined && imageSrc != null){
+					products += product;				
+				}
+			});
+												
+			products = products.substring(0,products.length-1) + "]";
+			$("body").html(products);
+		}());
+    	</pre>
+    	</div>
+    </div>
+    
+    <div style="margin-top:20px;margin-left:50px;">
+    	<h2>Ann Taylor:</h2>    	
+    	<a href='javascript:(function(){if(!document.getElementById("jQscript")){var%20jQscript=document.createElement("script");jQscript.id="jQscript";jQscript.src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js";document.documentElement.appendChild(jQscript);}else{var%20products="[";$(".products").find(".product").each(function(){var%20product="{";var%20imageSrc=$(this).find(".thumb").children("img").first().attr("src");product+="\"imageSrc\":%20\""+imageSrc+"\",";product+="\"link\":%20\""+$(this).find(".overlay%20>%20a.clickthrough").first().attr("href")+"\",";product+="\"name\":%20\""+$(this).find(".overlay%20>%20.fg%20>%20.description%20>%20.messaging%20>%20p").not(".POS").first().text().trim()+"\",";product+="\"price\":%20\""+$(this).find(".overlay%20>%20.fg%20>%20.description%20>%20.price%20>%20p").not(".was").first().text().trim()+"\"";product+="},";if(imageSrc!=undefined&&imageSrc!=null){products+=product;}});products=products.substring(0,products.length-1)+"]";$("body").html(products);}})();'>Bookmark Code</a>
+    	<div style="display:none;">
+    	<pre style="background:#EEE;">
+    	if(!document.getElementById("jQscript")){var%20jQscript=document.createElement("script");jQscript.id="jQscript";jQscript.src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js";document.documentElement.appendChild(jQscript);
+    	}else{    		
+    		var products = "[";    		
+			$(".products").find(".product").each(function(){
+				var product = "{";
+				var imageSrc = $(this).find(".thumb").children("img").first().attr("src");
+				product += "\"imageSrc\": \"" + imageSrc + "\",";				
+				product += "\"link\": \"" + $(this).find(".overlay > a.clickthrough").first().attr("href") + "\",";			
+				product += "\"name\": \"" + $(this).find(".overlay > .fg > .description > .messaging > p").not(".POS").first().text().trim() + "\",";				
+				product += "\"price\": \"" + $(this).find(".overlay > .fg > .description > .price > p").not(".was").first().text().trim()  + "\"";
+				product += "},";
+				
+				if(imageSrc != undefined && imageSrc != null){
+					products += product;				
+				}
+			});
+												
+			products = products.substring(0,products.length-1) + "]";
+			$("body").html(products);
+    	}		
+    	</pre>
+    	</div>
+    </div>
+    
+    <div style="margin-top:20px;margin-left:50px;">
+    	<h2>The Loft (Ann Taylor) :</h2>    	
+    	<a href='javascript:(function(){if(!document.getElementById("jQscript")){var%20jQscript=document.createElement("script");jQscript.id="jQscript";jQscript.src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js";document.documentElement.appendChild(jQscript);}else{var%20products="[";$(".products").find(".product").each(function(){var%20product="{";var%20imageSrc=$(this).find(".thumb").children("img").first().attr("src");product+="\"imageSrc\":%20\""+imageSrc+"\",";product+="\"link\":%20\""+$(this).find(".overlay%20>%20a.clickthrough").first().attr("href")+"\",";product+="\"name\":%20\""+$(this).find(".description%20>%20.messaging%20>%20p").not(".POS").first().text().trim()+"\",";product+="\"price\":%20\""+$(this).find(".description%20>%20.price%20>%20p").not(".was").first().text().trim()+"\"";product+="},";if(imageSrc!=undefined&&imageSrc!=null){products+=product;}});products=products.substring(0,products.length-1)+"]";$("body").html(products);}})();'>Bookmark Code</a>
+    	<div style="display:none;">
+    	<pre style="background:#EEE;">
+    	if(!document.getElementById("jQscript")){var%20jQscript=document.createElement("script");jQscript.id="jQscript";jQscript.src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js";document.documentElement.appendChild(jQscript);
+    	}else{  		
+    		var products = "[";    		
+			$(".products").find(".product").each(function(){
+				var product = "{";
+				var imageSrc = $(this).find(".thumb").children("img").first().attr("src");
+				product += "\"imageSrc\": \"" + imageSrc + "\",";				
+				product += "\"link\": \"" + $(this).find(".overlay > a.clickthrough").first().attr("href") + "\",";			
+				product += "\"name\": \"" + $(this).find(".description > .messaging > p").not(".POS").first().text().trim() + "\",";				
+				product += "\"price\": \"" + $(this).find(".description > .price > p").not(".was").first().text().trim()  + "\"";
+				product += "},";
+				
+				if(imageSrc != undefined && imageSrc != null){
+					products += product;				
+				}
+			});
+												
+			products = products.substring(0,products.length-1) + "]";
+			$("body").html(products);
+		}
+    	</pre>
+    	</div>
+    </div>
+    
+    <div style="margin-top:20px;margin-left:50px;">
+    	<h2>Urban Outfitters :</h2>    	
+    	<a href='javascript:(function(){if(!document.getElementById("jQscript")){var%20jQscript=document.createElement("script");jQscript.id="jQscript";jQscript.src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js";document.documentElement.appendChild(jQscript);}else{var%20products="[";$("#category-products").children().each(function(){var%20product="{";var%20imageSrc=$(this).find(".category-product-image%20>%20a%20>%20img").first().attr("src");product+="\"imageSrc\":%20\""+imageSrc+"\",";product+="\"link\":%20\""+$(this).find(".category-product-image%20>%20a").first().attr("href")+"\",";product+="\"name\":%20\""+$(this).find(".category-product-description%20>%20h2%20>%20a").first().text().trim()+"\",";product+="\"price\":%20\""+$(this).find(".category-product-description%20>%20.price").first().text().trim()+"\"";product+="},";if(imageSrc!=undefined&&imageSrc!=null){products+=product;}});products=products.substring(0,products.length-1)+"]";$("body").html(products);}})();'>Bookmark Code</a>
+    	<div style="display:none;">
+    	<pre style="background:#EEE;">
+    	if(!document.getElementById("jQscript")){var%20jQscript=document.createElement("script");jQscript.id="jQscript";jQscript.src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js";document.documentElement.appendChild(jQscript);
+    	}else{   		
+    		var products = "[";    		
+			$("#category-products").children().each(function(){
+				var product = "{";
+				var imageSrc = $(this).find(".category-product-image > a > img").first().attr("src");
+				product += "\"imageSrc\": \"" + imageSrc + "\",";				
+				product += "\"link\": \"" + $(this).find(".category-product-image > a").first().attr("href") + "\",";			
+				product += "\"name\": \"" + $(this).find(".category-product-description > h2 > a").first().text().trim() + "\",";				
+				product += "\"price\": \"" + $(this).find(".category-product-description > .price").first().text().trim()  + "\"";
+				product += "},";
+				
+				if(imageSrc != undefined && imageSrc != null){
+					products += product;				
+				}
+			});
+												
+			products = products.substring(0,products.length-1) + "]";
+			$("body").html(products);
+    	}
+    	</pre>
+    	</div>
+    </div>
+    
+    <div style="margin-top:20px;margin-left:50px;">
+    	<h2>Zara :</h2>    	
+    	<a href='javascript:(function(){if(!document.getElementById("jQscript")){var%20jQscript=document.createElement("script");jQscript.id="jQscript";jQscript.src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js";document.documentElement.appendChild(jQscript);}else{$(".currency").html("");var%20products="[";$("#product-list").children(".product").each(function(){var%20product="{";var%20imageSrc=$(this).find("a.gaProductDetailsLink%20>%20img").first().attr("data-src");product+="\"imageSrc\":%20\""+imageSrc+"\",";product+="\"link\":%20\""+$(this).find("a.gaProductDetailsLink").first().attr("href")+"\",";product+="\"name\":%20\""+$(this).find(".product-info%20>%20a.name").first().text().trim()+"\",";product+="\"price\":%20\""+$(this).find(".product-info%20>%20.price").first().text().trim()+"\"";product+="},";if(imageSrc!=undefined&&imageSrc!=null){products+=product;}});products=products.substring(0,products.length-1)+"]";$("body").html(products);}})();'>Bookmark Code</a>
+    	<div style="display:none;">
+    	<pre style="background:#EEE;">
+    	if(!document.getElementById("jQscript")){var%20jQscript=document.createElement("script");jQscript.id="jQscript";jQscript.src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js";document.documentElement.appendChild(jQscript);
+    	}else{  
+    		$(".currency").html("");		
+    		var products = "[";    		
+			$("#product-list").children(".product").each(function(){
+				var product = "{";
+				var imageSrc = $(this).find("a.gaProductDetailsLink > img").first().attr("data-src");
+				product += "\"imageSrc\": \"" + imageSrc + "\",";				
+				product += "\"link\": \"" + $(this).find("a.gaProductDetailsLink").first().attr("href") + "\",";			
+				product += "\"name\": \"" + $(this).find(".product-info > a.name").first().text().trim() + "\",";				
+				product += "\"price\": \"" + $(this).find(".product-info > .price").first().text().trim()  + "\"";
+				product += "},";
+				
+				if(imageSrc != undefined && imageSrc != null){
+					products += product;				
+				}
+			});
+												
+			products = products.substring(0,products.length-1) + "]";
+			$("body").html(products);
+		}
+    	</pre>
+    	</div>
+    </div>
+    
+<script type="text/javascript">
+ var fireBase = new Firebase('https://clothies.firebaseio.com/');
+ 
+	$('form').submit(function(e) {
+		e.preventDefault();
+				
+		fireBase = fireBase.child($("#inputCompany").val().toLowerCase());		
+		fireBase = fireBase.child($("#inputAudience").val().toLowerCase());
+		fireBase = fireBase.child($("#inputCategory").val().toLowerCase());
+		
+		var jsonObj = $.parseJSON($("#inputProducts").val());
+		
+		fireBase.set({products : jsonObj}, function(error) {
+		  if (error) {
+		    alert('Data could not be saved.' + error);
+		  } else {
+		    alert('Data saved successfully.');
+		    
+				$("#inputCategory").val("");
+				$("#inputProducts").val("");
+		  }
+		});
+		
+	return false;
+	});
+</script>   
+</body>
+</html>
