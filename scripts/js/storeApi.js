@@ -207,9 +207,9 @@ function getToryBurch(data, url){
         $(data).find("#search > .productresultarea > .productlisting > .product").each(function(){
                 var item = new Object();
 
-                item.image = $(this).children(".image").find("img").first().attr("src");
+                item.image = $(this).children(".image").find("img:nth-child(2)").attr("src");
                 item.link = $(this).children(".image").find("a").first().attr("href");
-                item.price = $(this).children(".pricing > .price").first().text().trim();
+                item.price = $(this).find(".pricing > .price").first().text().trim();
                 item.name = $(this).children(".name").find("a").first().text().trim();
 
                 if(item.image != undefined){
