@@ -29,6 +29,9 @@ function getProducts(company, data, url){
 		case "hm":
 			products = getHM(data, home);
 			break;
+		case "toryburch":
+			products = getToryBurch(data, home);
+			break;
 	}	
 	
 	return products;
@@ -197,3 +200,23 @@ function getHM(data, url){
 										
 	return JSON.stringify(products);
 }
+
+function getToryBurch(data, url){
+        var products = new Array();
+
+        $(data).find("#search > .productresultarea > .productlisting > .product").each(function(){
+                var item = new Object();
+
+                item.image = $(this).children(".image").find("img").first().attr("src");
+                item.link = $(this).children(".image").find("a").first().attr("href");
+                item.price = $(this).children(".pricing > .price").first().text().trim();
+                item.name = $(this).children(".name").find("a").first().text().trim();
+
+                if(item.image != undefined){
+                        products.push(item);
+                }
+        });
+
+        return JSON.stringify(products);
+}
+
