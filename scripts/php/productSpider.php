@@ -61,7 +61,7 @@ body{
 				  <option value="urban">Urban Outfitters</option>
 				  <option value="zara">Zara</option>
 				  <option value="hm">H&M (json link)</option>
-				  <option value="toryburch">Tory Burch</option>
+				  <option value="toryburch">Tory Burch (not finalized)</option>
 				</select> 
 		    </div>
 	    </div>
