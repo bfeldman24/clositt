@@ -2,7 +2,7 @@ var productPresenter = {
 	splitValue: 30, 
 	
 	init: function(){
-		firebase.$.child('store').on('value', productPresenter.setup);	 	 
+		firebase.$.child('store').once('value', productPresenter.setup);	 	 
 	},
 	
 	setup: function(snapshot){
@@ -50,7 +50,7 @@ var productPresenter = {
 	 					var priceArray = product.price.split(/[\s-]+/);
 				 		var finalPrice = parseFloat(priceArray[priceArray.length - 1].replace(/[^0-9\.]+/g,""));
 				 		
-	 					if(prices.indexOf(finalPrice) < 0){ 						
+	 					if(prices.indexOf(finalPrice) < 0 && !isNaN(finalPrice)){ 						
 	 						prices.push(finalPrice);
 	 					}
 	 					

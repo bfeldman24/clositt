@@ -51,17 +51,17 @@ body{
 		    	<!--<input type="text" id="inputCompany" placeholder="Company" class="input-xxlarge" name="company" required>-->
 		    	<select id="inputCompany" name="company">
 				  <option value="gap">Gap (json link)</option>
-				  <option value="oldnavy">Old Navy (json link)</option>
+				  <option value="old navy">Old Navy (json link)</option>
 				  <option value="banana">Banana (json link)</option>
 				  <option value="piperlime">piperlime (json link)</option>
 				  <option value="athleta">Athleta (json link)</option>
 				  <option value="jcrew">JCrew</option>
-				  <option value="anntaylor">Ann Taylor</option>
+				  <option value="ann taylor">Ann Taylor</option>
 				  <option value="loft">Loft</option>
-				  <option value="urban">Urban Outfitters</option>
+				  <option value="urban outfitters">Urban Outfitters</option>
 				  <option value="zara">Zara</option>
 				  <option value="hm">H&M (json link)</option>
-				  <option value="toryburch">Tory Burch</option>
+				  <option value="tory burch">Tory Burch</option>
 				</select> 
 		    </div>
 	    </div>
@@ -192,6 +192,7 @@ function saveAllProducts(){
 			
 			var jsonObj = $.parseJSON($(this).text());
 			
+			// firebase.update
 			fireBase.set({products : jsonObj}, function(error) {
 			  if (!error) {	
 			    success++;
@@ -215,9 +216,9 @@ $('form').submit(function(e) {
 	e.preventDefault();
 	
 	$.getJSON("../js/json/storeLinks.json", function(json){
-		var company = $("#inputCompany").val().toLowerCase().replace(" ", "");
-		var customer = $("#inputAudience").val().toLowerCase().replace(" ", "_");
-		var category = $("#inputCategory").val().toLowerCase().replace(" ", "_");
+		var company = $("#inputCompany").val().toLowerCase().trim();
+		var customer = $("#inputAudience").val().toLowerCase().trim();
+		var category = $("#inputCategory").val().toLowerCase().trim();
 		var url = $("#inputLink").val();		
 				
 		if(json[company] == undefined){

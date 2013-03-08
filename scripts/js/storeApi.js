@@ -5,7 +5,7 @@ function getProducts(company, data, url){
 	
 	switch(company.toLowerCase()){
 		case "gap":
-		case "oldnavy":
+		case "old navy":
 		case "banana":
 		case "piperlime":
 		case "athleta":
@@ -14,13 +14,13 @@ function getProducts(company, data, url){
 		case "jcrew":
 			products = getJcrew(data, home);
 			break;		
-		case "anntaylor":
+		case "ann taylor":
 			products = getAnnTaylor(data, home);
 			break;
 		case "loft":
 			products = getLoft(data, home);
 			break;
-		case "urban":
+		case "urban outfitters":
 			products = getUrban(data, home);
 			break;
 		case "zara":
@@ -29,7 +29,7 @@ function getProducts(company, data, url){
 		case "hm":
 			products = getHM(data, home);
 			break;
-		case "toryburch":
+		case "tory burch":
 			products = getToryBurch(data, home);
 			break;
 	}	
@@ -39,7 +39,7 @@ function getProducts(company, data, url){
 
 
 function getGapHTML(data, url){
-		var products = new Array();
+		var products = new Object();
   		  		
 		$(data).find(".productCatItem").each(function(){					
 			var item = new Object();
@@ -47,9 +47,10 @@ function getGapHTML(data, url){
 			item.link = url + $(this).find(".productItemName").attr("href");	
 			item.name = $(this).find(".productItemName").html();
 			item.price = $(this).find(".priceDisplay").html();	
-			
-			if(item.image != undefined){			
-				products.push(item);
+		
+			if(item.image != undefined){
+				var itemid = item.link.replace(/\W/g, '');			
+				products[itemid] =item;
 			}
 		});
 	
@@ -59,32 +60,68 @@ function getGapHTML(data, url){
 
 function getGapJson(data, url){
 		var json = $.parseJSON(data);
-		var products = new Array();
+		var products = new Object();
   		var cid = json.productCategoryFacetedSearch.productCategory.businessCatalogItemId;
 		var vid = 1;
-	
-		$.each(json.productCategoryFacetedSearch.productCategory.childCategories, function(){
+
+		if(json.productCategoryFacetedSearch.productCategory.childCategories != null){
+			if(json.productCategoryFacetedSearch.productCategory.childCategories.length > 1){	
+				$.each(json.productCategoryFacetedSearch.productCategory.childCategories, function(){
   		
-		$.each(this.childProducts, function(){								
-			var pid = this.businessCatalogItemId;
+					$.each(this.childProducts, function(){								
+						var pid = this.businessCatalogItemId;
+					
+						var item = new Object();
+						item.image = this.quicklookImage.path;	
+						item.link = url + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;	
+						item.name = this.name;
+						item.price = this.price.currentMinPrice;	
 			
-			var item = new Object();
-			item.image = this.quicklookImage.path;	
-			item.link = url + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;	
-			item.name = this.name;
-			item.price = this.price.currentMinPrice;	
-			
-			if(item.image != undefined){			
-				products.push(item);
+						if(item.image != undefined){			
+							var itemid = item.link.replace(/\W/g, '');
+							products[itemid] = item;
+						}
+					});
+				});
+			}else{
+				$.each(json.productCategoryFacetedSearch.productCategory.childCategories.childProducts, function(){
+                                                var pid = this.businessCatalogItemId;
+
+                                                var item = new Object();
+                                                item.image = this.quicklookImage.path;
+                                                item.link = url + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
+                                                item.name = this.name;
+                                                item.price = this.price.currentMinPrice;
+
+                                                if(item.image != undefined){
+                                                        var itemid = item.link.replace(/\W/g, '');
+                                                        products[itemid] = item;
+                                               }
+                                       
+                                });		
 			}
-		});
-		});
+		}else{
+			$.each(json.productCategoryFacetedSearch.productCategory.childProducts, function(){
+                        	var pid = this.businessCatalogItemId;
+
+                                var item = new Object();
+                                item.image = this.quicklookImage.path;
+                                item.link = url + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
+                                item.name = this.name;
+                                item.price = this.price.currentMinPrice;
+
+                                if(item.image != undefined){
+                                	var itemid = item.link.replace(/\W/g, '');
+                                        products[itemid] = item;
+                                }
+                        });
+		}
 	return JSON.stringify(products);
 }
     
 function getJcrew(data, url){	
 	url += "?iNextCategory=-1";
-  	var products = new Array();   		
+  	var products = new Object();   		
   	
 	$(data).find(".arrayProdCell").each(function(){
 		var item = new Object();	
@@ -94,8 +131,9 @@ function getJcrew(data, url){
 		item.name = $(this).find(".arrayProdName").find("a").text().trim();				
 		item.price = $(this).find(".arrayProdPrice").text().trim();
 		
-		if(item.image != undefined){			
-			products.push(item);
+		if(item.image != undefined){
+			var itemid = item.link.replace(/\W/g, '');			
+			products[itemid] = item;
 		}
 	});
 										
@@ -103,7 +141,7 @@ function getJcrew(data, url){
 }
     
 function getAnnTaylor(data, url){
- 	var products = new Array();
+ 	var products = new Object();
  		   		
 	$(data).find(".product").each(function(){
 		var item = new Object();
@@ -113,8 +151,9 @@ function getAnnTaylor(data, url){
 		item.name = $(this).find(".overlay > .fg > .description > .messaging > p").not(".POS").first().text().trim();		
 		item.price = $(this).find(".overlay > .fg > .description > .price > p").not(".was").first().text().trim();
 		
-		if(item.image != undefined){			
-			products.push(item);
+		if(item.image != undefined){
+			var itemid = item.link.replace(/\W/g, '');			
+			products[itemid] = item;
 		}
 	});
 										
@@ -123,7 +162,7 @@ function getAnnTaylor(data, url){
 
     
 function getLoft(data, url){
-	 var products = new Array();
+	 var products = new Object();
 	 		    		
 	$(data).find(".products").find(".product").each(function(){
 		var item = new Object();
@@ -133,8 +172,9 @@ function getLoft(data, url){
 		item.name = $(this).find(".description > .messaging > p").not(".POS").first().text().trim();				
 		item.price = $(this).find(".description > .price > p").not(".was").first().text().trim();
 		
-		if(item.image != undefined){			
-			products.push(item);
+		if(item.image != undefined){
+			var itemid = item.link.replace(/\W/g, '');			
+			products[itemid] = item;
 		}
 	});
 										
@@ -142,7 +182,7 @@ function getLoft(data, url){
 }
     	
 function getUrban(data, url){
-    var products = new Array();
+    var products = new Object();
     		    		
 	$(data).find("#category-products").children().each(function(){
 		var item = new Object();
@@ -152,8 +192,9 @@ function getUrban(data, url){
 		item.name = $(this).find(".category-product-description > h2 > a").first().text().trim();				
 		item.price = $(this).find(".category-product-description > .price").first().text().trim();
 
-		if(item.image != undefined){			
-			products.push(item);
+		if(item.image != undefined){
+			var itemid = item.link.replace(/\W/g, '');			
+			products[itemid] = item;
 		}
 	});
 										
@@ -161,8 +202,8 @@ function getUrban(data, url){
 }
     
 function getZara(data, url){
-	var products = new Array();
-    $(".currency").html("");		
+	var products = new Object();
+    	$(".currency").html("");		
       	  		
 	$(data).find("#product-list").children(".product").each(function(){
 		var item = new Object();
@@ -172,8 +213,9 @@ function getZara(data, url){
 		item.name = $(this).find(".product-info > a.name").first().text().trim();				
 		item.price = $(this).find(".product-info > .price").first().text().trim();
 		
-		if(item.image != undefined){			
-			products.push(item);
+		if(item.image != undefined){
+			var itemid = item.link.replace(/\W/g, '');			
+			products[itemid] = item;
 		}
 	});
 										
@@ -182,7 +224,7 @@ function getZara(data, url){
 
 function getHM(data, url){
 	url += "&size=1000";
-	var products = new Array();
+	var products = new Object();
       	  		
 	$(data).find("#list-products").children("li").not(".getTheLook").each(function(){
 		var item = new Object();
@@ -193,8 +235,9 @@ function getHM(data, url){
 		$(this).find("a > .details > .price").first().remove();
 		item.name = $(this).find("a > .details").first().text().trim();				
 		
-		if(item.image != undefined){			
-			products.push(item);
+		if(item.image != undefined){
+			var itemid = item.link.replace(/\W/g, '');			
+			products[itemid] = item;
 		}
 	});
 										
@@ -202,7 +245,7 @@ function getHM(data, url){
 }
 
 function getToryBurch(data, url){
-        var products = new Array();
+        var products = new Object();
 
         $(data).find("#search > .productresultarea > .productlisting > .product").each(function(){
                 var item = new Object();
@@ -213,7 +256,8 @@ function getToryBurch(data, url){
                 item.name = $(this).children(".name").find("a").first().text().trim();
 
                 if(item.image != undefined){
-                        products.push(item);
+			var itemid = item.link.replace(/\W/g, '');
+                        products[itemid] = item;
                 }
         });
 
