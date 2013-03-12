@@ -17,6 +17,8 @@ var gridPresenter = {
 		}else{			
 			gridPresenter.alignRandomGrid("product-grid", columns, 200, 16, true);
 		}
+		
+		closetFormPresenter.markUsersClositItems();
 	},
 
 	alignDefaultGrid: function(){
@@ -29,6 +31,8 @@ var gridPresenter = {
 		}else{			
 			gridPresenter.alignRandomGrid("product-grid", columns, 200, 16);
 		}		
+		
+		closetFormPresenter.markUsersClositItems();
 	}, 
 	
 	getDefaultColumns: function(){
@@ -288,8 +292,8 @@ var gridEvents = {
 	init: function(){
 		gridEvents.overlayEvent();
 		$(window).scroll(gridEvents.continuousScroll);
-		$(document).on("click",".addToClosetBtn",gridEvents.getClosets);
-		$(document).on("submit",".addToClosetForm > form",gridEvents.addToCloset);
+		$(document).on("click",".addToClosetBtn",closetFormPresenter.showClosetForm);
+		$(document).on("submit",".addToClosetForm > form",closetFormPresenter.addToCloset);
 		$(document).on("click",'.addToClosetForm > form input[type="radio"]',function(el){
 			$(el.currentTarget).closest("form").submit();
 		});		
@@ -309,96 +313,5 @@ var gridEvents = {
 	
 	continuousScroll: function(){		
 		gridPresenter.showContent(15);
-	},
-	
-	getClosets: function(el){
-		if(firebase.isLoggedIn){
-			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").on('value', function(snapshot){
-				gridEvents.handleClosets(el.currentTarget, snapshot);	
-			});		
-		}else{
-			Messenger.info("Please login or sign up to add items to your closet!");	
-		}
-	},
-	
-	handleClosets: function(element, closets){
-		if($(element).parent().parent().find("form").length > 0){
-			$(element).children(".hanger-plus").addClass("icon-white");
-			$(element).parent().parent().children(".addToClosetForm").tooltip('destroy');
-			$(element).parent().parent().children(".addToClosetForm").remove();			
-			$(element).parent().parent().children(".bottom").show();			
-		}else{
-			$(element).children(".hanger-plus").removeClass("icon-white");			
-			var $checkboxes = $();		
-			
-			closets.forEach(function(closet){
-				$checkboxes = $checkboxes.add(
-					$("<div>").addClass("controls").append(
-	 					$("<label>").addClass("radio").append(
-	 						$("<input>").attr("type","radio").attr("name","closet").attr("value",closet.name())
-	 					).append($("<span>").html(closet.name()))
-	 				)
-	 			);
-			});		
-			
-			$(element).parent().next(".bottom").hide();
-					
-			$(element).parent().parent().append(
-				$("<div>").addClass("addToClosetForm").append(
-					$("<form>").append(
-						$("<div>").addClass("controls").append(
-							$("<label>").addClass("control-label").text("New Clositt: ").append(						
-								$("<input>").attr("type","text").attr("name","newCloset").addClass("newCloset")
-							)
-						)
-			 		).append(
-						$("<div>").addClass("selectCloset").append($checkboxes)
-					).append(
-						$("<input>").attr("type","submit").css("display","none")				
-					)
-				)
-			);
-			
-			var $closetForm = $(element).parent().parent().children(".addToClosetForm");
-			
-			$closetForm.tooltip({title:"Press Enter to add item",placement:"bottom"});
-			$closetForm.show();
-		}
-	},	
-	
-	addToCloset: function(el){
-		el.preventDefault();
-		
-		var name = $(el.currentTarget).parent().prev().find(".name").text();
-		var company = $(el.currentTarget).parent().prev().find(".companyName").text();
-		var link = $(el.currentTarget).parent().parent().prev().find("a").attr("href");
-		var image  = $(el.currentTarget).parent().parent().prev().find("img").attr("src");
-		
-		var closetNameInput = $(el.currentTarget).find('input[name="newCloset"]').val();
-		var closetNameRadio = $(el.currentTarget).find('input[name="closet"]:checked').val();
-		
-		var closetName = "";
-		
-		if(closetNameInput.trim().length > 0){
-			closetName = closetNameInput;
-		}else if(closetNameRadio.trim().length > 0){
-			closetName = closetNameRadio;
-		}
-		
-		if(closetName.trim().length > 0){
-			var item = {name: name, company: company, link: link, image: image}; 
-			var itemid = link.replace(/\W/g, '');
-				
-			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetName).child("items").child(itemid).set(item, function(error) {
-			  if (error) {
-			    	Messenger.error('Closet could not be saved.' + error);
-			  } else {
-			    	Messenger.success('This item was added to "' + closetName + '"');
-			  }
-			});
-		}
-		
-		return false;
-	}	
-	
+	}
 };

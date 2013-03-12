@@ -33,12 +33,17 @@
 
 <script src="scripts/js/gridPresenter.js"></script>
 <script src="scripts/js/productPresenter.js"></script>
+<script src="scripts/js/closetPresenter.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	gridPresenter.init();
 	productPresenter.init();	
-	filterPresenter.init();	
+	filterPresenter.init();			
 });
+
+function loggedIn(){
+	closetFormPresenter.getClosetInfo();
+}
 </script>
 
 </body>
