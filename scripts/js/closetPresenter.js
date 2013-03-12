@@ -294,7 +294,7 @@ var closetFormPresenter = {
 	},	
 	
 	addToCloset: function(el){
-		el.preventDefault();
+		el.preventDefault();				
 		
 		var name = $(el.currentTarget).parent().prev().find(".name").text();
 		var company = $(el.currentTarget).parent().prev().find(".companyName").text();
@@ -317,7 +317,7 @@ var closetFormPresenter = {
 			var itemid = link.replace(/\W/g, '');
 			var index = closetFormPresenter.closetItems.indexOf(itemid);
 			
-			if(index >= 0 && index < closetFormPresenter.closetItemsMapping.length && closetFormPresenter.closetItemsMapping[index] != closetName){			
+			if(index < 0 || index >= closetFormPresenter.closetItemsMapping.length || closetFormPresenter.closetItemsMapping[index] != closetName){			
 				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetName).child("items").child(itemid).set(item, function(error) {
 				  if (error) {
 						Messenger.error('Closet could not be saved.' + error);
