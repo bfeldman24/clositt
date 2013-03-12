@@ -327,10 +327,9 @@ var gridEvents = {
 			$(element).parent().parent().children(".addToClosetForm").remove();
 			$(element).parent().parent().children(".addTagForm").tooltip('destroy');
 			$(element).parent().parent().children(".addTagForm").remove();
-			$(element).parent().parent().children(".bottom").show();
 			$(element).parent().parent().children(".topright").show();
 		}else{														
-			$(element).parent().siblings().hide();
+			$(element).parent().siblings(".topright").hide();
 					
 			$(element).parent().parent().append(
 				$("<div>").addClass("addTagForm").append(
