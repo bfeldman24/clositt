@@ -23,7 +23,8 @@ var gridPresenter = {
 
 	alignDefaultGrid: function(){
 		var columns = gridPresenter.getDefaultColumns();
-		$(".addToClosetBtn").tooltip({title:"Add to Closet"});			
+		$(".addToClosetBtn").tooltip({title:"Add to Closet"});
+		$(".tagOutfitBtn").tooltip({title:"Tagitt"});
 		//$(".addToClosetBtn").tooltip();	
 			
 		if($("#gridType > .active").first().attr("value") == "normalGrid"){
@@ -292,11 +293,14 @@ var gridEvents = {
 	init: function(){
 		gridEvents.overlayEvent();
 		$(window).scroll(gridEvents.continuousScroll);
-		$(document).on("click",".addToClosetBtn",closetFormPresenter.showClosetForm);
+		$(document).on("click",".addToClosetBtn",closetFormPresenter.showClosetForm);		
 		$(document).on("submit",".addToClosetForm > form",closetFormPresenter.addToCloset);
 		$(document).on("click",'.addToClosetForm > form input[type="radio"]',function(el){
 			$(el.currentTarget).closest("form").submit();
 		});		
+		
+		$(document).on("click",".tagOutfitBtn",gridEvents.showTagForm);
+		$(document).on("submit",".addTagForm > form",gridEvents.addTag);
 	},
 	
 	overlayEvent: function(){
@@ -313,5 +317,76 @@ var gridEvents = {
 	
 	continuousScroll: function(){		
 		gridPresenter.showContent(15);
+	},
+	
+	showTagForm: function(el){
+		var element = el.currentTarget;					
+		
+		if($(element).parent().parent().find(".addTagForm").length > 0){						
+			$(element).parent().parent().children(".addToClosetForm").tooltip('destroy');
+			$(element).parent().parent().children(".addToClosetForm").remove();
+			$(element).parent().parent().children(".addTagForm").tooltip('destroy');
+			$(element).parent().parent().children(".addTagForm").remove();
+			$(element).parent().parent().children(".bottom").show();
+			$(element).parent().parent().children(".topright").show();
+		}else{														
+			$(element).parent().siblings().hide();
+					
+			$(element).parent().parent().append(
+				$("<div>").addClass("addTagForm").append(
+					$("<form>").append(
+						$("<div>").addClass("controls").append(
+							$("<label>").addClass("control-label").text("Tag: ").append(						
+								$("<input>").attr("type","text").attr("name","newTag").addClass("newTag")
+							)
+						)
+					).append(
+						$("<input>").attr("type","submit").css("display","none")				
+					)
+				)
+			);
+			
+			var $tagForm = $(element).parent().parent().children(".addTagForm");
+			
+			$tagForm.tooltip({title:"Press Enter to add tag",placement:"bottom"});
+			$tagForm.show();
+			$tagForm.find("input").first().focus();
+		}
+	},
+	
+	addTag: function(el){
+		el.preventDefault();				
+		var element = el.currentTarget;
+		var name = $(element).parent().prev().find(".name").text();
+		var company = $(element).parent().prev().find(".companyName").text();
+		var link = $(element).parent().parent().prev().find("a").attr("href");
+		var image  = $(element).parent().parent().prev().find("img").attr("src");
+		
+		var tagInput = $(element).find('input[name="newTag"]').val().trim();		
+		
+		
+		if(tagInput.length > 0){
+			var item = {name: name, company: company, link: link, image: image}; 
+			var itemid = link.replace(/\W/g, '');			
+					
+			try{		
+				firebase.$.child("tags").child(tagInput.toLowerCase()).child("items").child(itemid).set(item, function(error) {
+				  if (error) {
+						Messenger.error('Tag could not be saved. ' + error);
+				  } else {
+						Messenger.success('Tag was saved!');					
+						$(element).parent().prevAll(".topright").show();
+						$(element).parent().remove();
+				  }
+				});	
+			}catch(err){
+				Messenger.error('Tag could not be saved. ' + err);
+				return false;
+			}
+			
+			
+		}
+		
+		return false;
 	}
 };

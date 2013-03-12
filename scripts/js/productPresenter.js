@@ -102,6 +102,9 @@ var productPresenter = {
 		var html ='<div class="outfit">';
 				html +='<div class="picture"><a href="'+link+'" target="_blank"><img src="' + image + '" class="'+shadow+'" /></a></div>';							
 				html +='<div class="overlay">';
+					html +='<div class="topleft">';										
+						html +='<div class="tagOutfitBtn" data-toggle="tooltip" data-placement="left"><i class="icon-tags"></i></div>';
+					html += '</div>';
 					html +='<div class="topright">';										
 						html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right"><img id="hanger-'+id+'" class="hanger-icon" src="/css/images/hanger-icon-white.png" /><i class="icon-plus-sign icon-white hanger-plus"></i></div>';
 					html += '</div>';

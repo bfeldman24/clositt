@@ -244,7 +244,9 @@ var closetFormPresenter = {
 			if($(element).parent().parent().find("form").length > 0){
 				$(element).children(".hanger-plus").addClass("icon-white");
 				$(element).parent().parent().children(".addToClosetForm").tooltip('destroy');
-				$(element).parent().parent().children(".addToClosetForm").remove();			
+				$(element).parent().parent().children(".addToClosetForm").remove();
+				$(element).parent().parent().children(".addTagForm").tooltip('destroy');
+				$(element).parent().parent().children(".addTagForm").remove();
 				$(element).parent().parent().children(".bottom").show();			
 			}else{
 				$(element).children(".hanger-plus").removeClass("icon-white");			
@@ -320,7 +322,7 @@ var closetFormPresenter = {
 			if(index < 0 || index >= closetFormPresenter.closetItemsMapping.length || closetFormPresenter.closetItemsMapping[index] != closetName){			
 				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetName).child("items").child(itemid).set(item, function(error) {
 				  if (error) {
-						Messenger.error('Closet could not be saved.' + error);
+						Messenger.error('Closet could not be saved. ' + error);
 				  } else {
 						Messenger.success('This item was added to "' + closetName + '"');
 				  }

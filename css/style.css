@@ -450,9 +450,18 @@ footer p{
 	bottom: 0px;
 	min-height: 20%;
 	padding:5px;	
-}		
+}	
 
-.overlay > .bottom, .overlay > .topright, .overlay > .addToClosetForm {
+.overlay > .addTagForm {
+  min-height: 10%;
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 85%;
+}	
+
+.overlay > .bottom, .overlay > .topright, .overlay > .addToClosetForm, .overlay > .addTagForm {
 	/* black gradient */
 	//background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%); /* FF3.6+ */
 	//background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.65))); /* Chrome,Safari4+ */
@@ -492,7 +501,22 @@ footer p{
 	bottom: 5px;
 }
 
-.overlay > .topright{		display: block;	height: 25px;	padding: 5px;	position: absolute;	right: 0;	top: 0;	width: 29px;	
+.overlay > .topright{		
+	display: block;	
+	height: 25px;	
+	padding: 5px;	
+	position: absolute;	
+	right: 0;	
+	top: 0;	
+	width: 29px;	
+}
+
+.overlay > .topleft {
+  display: block;
+  left: 3px;
+  margin: 0;
+  position: absolute;
+  top: 0;
 }
 
 .overlay .hanger-icon{
@@ -502,6 +526,15 @@ footer p{
     opacity: 0.8;
     position: relative;
 }
+
+.overlay .icon-tags{
+	cursor: pointer;
+    height: 25px;
+    left: -2px;
+    opacity: 0.8;
+    position: relative;
+}
+
 
 .overlay > .hanger-icon > img, .overlay > .hanger-icon > i{
 	cursor: pointer;
@@ -520,7 +553,13 @@ footer p{
     width: 45%;	
 }
 
-.overlay > .addToClosetForm form, .overlay > .addToClosetForm label,.overlay > .addToClosetForm input[type="text"],  .overlay > .addToClosetForm radio:first-child{
+.overlay .newTag{
+	margin-left: 10px;
+    vertical-align: middle;
+    width: 70%;	
+}
+
+.overlay form, .overlay label,.overlay input[type="text"],  .overlay radio:first-child{
 	line-height: 18px;	
 	margin-bottom: 0px;
 	padding-top:0px;
