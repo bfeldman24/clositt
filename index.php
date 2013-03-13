@@ -38,7 +38,8 @@
 $(document).ready(function() {
 	gridPresenter.init();
 	productPresenter.init();	
-	filterPresenter.init();			
+	filterPresenter.init();	
+	tagPresenter.init();
 });
 
 function loggedIn(){

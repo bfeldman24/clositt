@@ -299,8 +299,8 @@ var gridEvents = {
 			$(el.currentTarget).closest("form").submit();
 		});		
 		
-		$(document).on("click",".tagOutfitBtn",gridEvents.showTagForm);
-		$(document).on("submit",".addTagForm > form",gridEvents.addTag);
+		$(document).on("click",".tagOutfitBtn",tagPresenter.showTagForm);
+		$(document).on("submit",".addTagForm > form",tagPresenter.addTag);
 	},
 	
 	overlayEvent: function(){
@@ -317,6 +317,19 @@ var gridEvents = {
 	
 	continuousScroll: function(){		
 		gridPresenter.showContent(15);
+	}
+}
+	
+
+var tagPresenter = {	
+
+	allTags: null,
+	
+	init: function(){
+		$( "#tags" ).val("");
+		tagPresenter.getAllTagNames();
+		$("#tag-search-form").submit(tagPresenter.searchTags);
+		$("#tag-search-clear").click(tagPresenter.clearSearch);
 	},
 	
 	showTagForm: function(el){
@@ -357,15 +370,22 @@ var gridEvents = {
 		el.preventDefault();				
 		var element = el.currentTarget;
 		var name = $(element).parent().prev().find(".name").text();
-		var company = $(element).parent().prev().find(".companyName").text();
+		var company = $(element).parent().prev().find(".companyName").text();		
+		var customer = $(element).parent().parent().parent().attr("customer");
+		var category = $(element).parent().parent().parent().attr("category");
 		var link = $(element).parent().parent().prev().find("a").attr("href");
 		var image  = $(element).parent().parent().prev().find("img").attr("src");
+		var price = $(element).parent().prev().find(".price").text();
+		
+		if(price != null){
+			price = price.substring(1); // Remove $
+		}
 		
 		var tagInput = $(element).find('input[name="newTag"]').val().trim();		
 		
 		
 		if(tagInput.length > 0){
-			var item = {name: name, company: company, link: link, image: image}; 
+			var item = {name: name, company: company, customer: customer, category: category, link: link, image: image, price: price}; 
 			var itemid = link.replace(/\W/g, '');			
 					
 			try{		
@@ -381,11 +401,84 @@ var gridEvents = {
 			}catch(err){
 				Messenger.error('Tag could not be saved. ' + err);
 				return false;
-			}
-			
-			
+			}					
 		}
 		
+		return false;
+	},
+	
+	getAllTagNames: function(){
+		firebase.$.child("tags").once('value',function(snapshot){
+			tagPresenter.allTags = new Array();
+			
+			snapshot.forEach(function(tag){
+				tagPresenter.allTags.push(tag.name());
+			});
+			
+			$( "#tags" ).autocomplete({
+				source: tagPresenter.allTags
+			});
+		});
+	},
+	
+	searchTags: function(el){
+		el.preventDefault();
+		var tag = $( "#tags" ).val();
+		var products = new Array();
+
+		
+		if(/^[a-zA-Z0-9]+$/.test(tag)){	
+			$("#product-grid").children().remove();
+			$("#loadingMainContent").show();
+		
+			firebase.$.child("tags").child(tag.toLowerCase()).child("items").once('value',function(snapshot){
+				snapshot.forEach(function(item){
+					var product = item.val();
+	 					 					
+					var priceArray = product.price.split(/[\s-]+/);
+					var finalPrice = parseFloat(priceArray[priceArray.length - 1].replace(/[^0-9\.]+/g,""));										
+					
+					var filterPrice = Math.floor(finalPrice/50)*50;
+					
+					var product = {"o":product.company,"u":product.customer,"a":product.category,"l":product.link,
+										"i":product.image,"n":product.name,"p":finalPrice,"fp":filterPrice}
+					products.push(product);
+				});
+				
+				sessionStorage.clothingStore = JSON.stringify(products);
+				sessionStorage.filterStore = JSON.stringify(products);
+				sessionStorage.productIndex = 0;
+
+				$("#loadingMainContent").hide();
+				
+				if( products.length > 0){
+					gridPresenter.showContent(15);
+				}else{
+					$("#product-grid").append($("<div>").html("Sorry there are no outfits with that tag! Don't be shy though, be the first to use the tag \"" + tag + "\""));
+				}
+				
+				$("#tag-search-clear").show();
+			});			
+		}else{
+			Messenger.error('Tags can only be alphanumeric!');					
+		}
+		
+		return false;
+	},
+	
+	clearSearch: function(el){
+		el.preventDefault();
+		$("#product-grid").remove();
+		$("#loadingMainContent").show();
+		$("#tag-search-clear").hide();
+		
+		sessionStorage.clothingStore = null;
+		sessionStorage.filterStore = null;
+		sessionStorage.productIndex = 0;
+		
+		
+		productPresenter.init();
+				
 		return false;
 	}
 };

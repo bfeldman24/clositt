@@ -99,7 +99,8 @@ var productPresenter = {
 		}		
 			 			
  		//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
-		var html ='<div class="outfit">';
+ 		var attr = 	'customer="'+audience+'" category="'+category+'"';
+		var html ='<div class="outfit" '+attr+'>';
 				html +='<div class="picture"><a href="'+link+'" target="_blank"><img src="' + image + '" class="'+shadow+'" /></a></div>';							
 				html +='<div class="overlay">';
 					html +='<div class="topleft">';										
