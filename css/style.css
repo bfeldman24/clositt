@@ -955,6 +955,19 @@ h1 #user-closet-title{
 	background: none repeat scroll 0 0 rgba(30, 30, 30, 0.8);
 }
 
-input.closetNameInput[type="text"] {  border-radius: 8px 8px 8px 8px;  font-size: 24px;  height: 40px;  margin-bottom: 0;  vertical-align: top;}
+input.closetNameInput[type="text"] {  
+	border-radius: 8px 8px 8px 8px;  
+	font-size: 24px;  
+	height: 40px;  
+	margin-bottom: 0;  
+	vertical-align: top;
+}
+
+.ui-autocomplete{
+	z-index: 9999;
+	opacity: 1;
+	border-radius: 0 0 10px 10px;
+}
+    
     
 	
