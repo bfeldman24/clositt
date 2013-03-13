@@ -4,6 +4,7 @@ var Messenger = {
 	position: 'top',
 	align: 'center',	
 	timeout: 4000,
+	defaultTimeout: 4000,
 	width: 300, 
 	height: 75,
 	

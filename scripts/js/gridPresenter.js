@@ -393,7 +393,9 @@ var tagPresenter = {
 				  if (error) {
 						Messenger.error('Tag could not be saved. ' + error);
 				  } else {
-						Messenger.success('Tag was saved!');					
+				  		Messenger.timeout = 1750;
+						Messenger.success('Tag \"'+tagInput+'\" was saved!');					
+						Messenger.timeout = Messenger.defaultTimeout;
 						$(element).parent().prevAll(".topright").show();
 						$(element).parent().remove();
 				  }
@@ -468,6 +470,7 @@ var tagPresenter = {
 	
 	clearSearch: function(el){
 		el.preventDefault();
+		$( "#tags" ).val("");
 		$("#product-grid").remove();
 		$("#loadingMainContent").show();
 		$("#tag-search-clear").hide();

@@ -9,7 +9,7 @@
 	            	<li class="search">
 	            		<form id="tag-search-form" style="margin:-4px 30px 0 0;">
 							<div class="ui-widget form-search input-append">
-								<label for="tags">Tags: </label>
+								<label for="tags" style="height: 100%;margin: 0 2px 0 0;vertical-align: middle;">Tags: </label>
 								<input id="tags" placeholder="Search Tags..." class="input-medium search-query" />
 								<button class="btn" type="button" id="tag-search-clear" style="display:none;  height: 26px; margin-top: 1px;">Clear</button>
 							</div>
