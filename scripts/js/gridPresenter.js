@@ -257,7 +257,7 @@ var gridPresenter = {
 	showContent: function(numElements){
 		var lastHeight = $("#product-grid").children("div[aligned=true]").last().css("top");
 		
-		if(lastHeight == undefined || lastHeight == null ||lastHeight.trim() == ""){
+		if(lastHeight == undefined || lastHeight == null || lastHeight.trim() == ""){
 			lastHeight = 0;
 		}else{
 			lastHeight = parseFloat(lastHeight,10);	
@@ -265,11 +265,11 @@ var gridPresenter = {
 		
 		if(lastHeight <= ($(window).height() + $(window).scrollTop() + 125)){			
 			
-			if(sessionStorage.clothingStore != null){			
-				//$("#product-grid").append($("#filter-grid").children("div").slice(0, numElements));
+			if(productPresenter.clothingStore != null){							
 				var $items = $();
-				var el=JSON.parse(sessionStorage.filterStore);
-				var index = parseInt(sessionStorage.productIndex)
+				var el=productPresenter.filterStore;
+				var index = productPresenter.productIndex;
+				
 				for(var i = index; i < index + numElements;i++){
 					
 					if(el[i] != null){
@@ -277,7 +277,7 @@ var gridPresenter = {
 						$items = $items.add(html);
 					}
 				}
-				sessionStorage.productIndex = parseInt(sessionStorage.productIndex) + numElements;
+				productPresenter.productIndex += numElements;
 				
 				$("#product-grid").append($items);
 								
@@ -447,9 +447,9 @@ var tagPresenter = {
 					products.push(product);
 				});
 				
-				sessionStorage.clothingStore = JSON.stringify(products);
-				sessionStorage.filterStore = JSON.stringify(products);
-				sessionStorage.productIndex = 0;
+				productPresenter.clothingStore = products;
+				productPresenter.filterStore = products;
+				productPresenter.productIndex = 0;
 
 				$("#loadingMainContent").hide();
 				
@@ -475,9 +475,9 @@ var tagPresenter = {
 		$("#loadingMainContent").show();
 		$("#tag-search-clear").hide();
 		
-		sessionStorage.clothingStore = null;
-		sessionStorage.filterStore = null;
-		sessionStorage.productIndex = 0;
+		productPresenter.clothingStore = [];
+		productPresenter.filterStore = [];
+		productPresenter.productIndex = 0;
 		
 		
 		productPresenter.init();

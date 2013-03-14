@@ -1,82 +1,39 @@
 var productPresenter = {	
 	splitValue: 30, 
+	productIndex: 0,
+	clothingStore: [], 
+	filterStore: [], 	
 	
-	init: function(){
-		firebase.$.child('store').once('value', productPresenter.setup);	 	 
+	init: function(){		
+		firebase.$.child('clositt').once('value', productPresenter.setup);	 	 
 	},
 	
-	setup: function(snapshot){
-		sessionStorage.productIndex = productPresenter.splitValue;		
+	setup: function(snapshot){		
 		productPresenter.showCompanyProducts(snapshot);
 	 	gridPresenter.alignDefaultGrid();
 		$('body').css("min-height",$(window).height());	
+		productPresenter.productIndex += productPresenter.splitValue;	
 	},
  
  	showCompanyProducts: function(store){
-	 	var grid = $('<div>').attr("id","product-grid");
-	 	//var hiddenGrid = $("<div>").attr("id","hidden-grid");
-	 	//var filterGrid = $("<div>").attr("id","filter-grid");
-		var productListing = new Array();	
-	 	var companies = new Array();
-	 	var customers = new Array();
-	 	var categories = new Array();
-	 	var prices = new Array();
+	 	var grid = $('<div>').attr("id","product-grid");	
 	 	var i=0;
 	 	
-	 	store.forEach(function(company){	 			 		
-	 		var companyName = stringFunctions.toTitleCase(company.name());
-	 		
-	 		if(companies.indexOf(companyName) < 0){
-		 		companies.push(companyName);
-	 		}
-	 		
-	 		company.forEach(function(audience){
-	 			var customerName = stringFunctions.toTitleCase(audience.name());
-	 			
-	 			if(customers.indexOf(customerName) < 0){
-		 			customers.push(customerName);
-	 			}
-	 			
-	 			audience.forEach(function(category){
-	 				var categoryName = stringFunctions.toTitleCase(category.name()); 				
-	 				
-	 				if(categories.indexOf(categoryName) < 0){
-		 				categories.push(categoryName);
-	 				}
-	 				 				 				 				
-	 				category.child("products").forEach(function(productSnapshot){
-	 					var product = productSnapshot.val();
-	 					 					
-	 					var priceArray = product.price.split(/[\s-]+/);
-				 		var finalPrice = parseFloat(priceArray[priceArray.length - 1].replace(/[^0-9\.]+/g,""));
-				 		
-	 					if(prices.indexOf(finalPrice) < 0 && !isNaN(finalPrice)){ 						
-	 						prices.push(finalPrice);
-	 					}
-	 					
-	 					var filterPrice = Math.floor(finalPrice/50)*50;
-	 					
-	 					var product = {"o":companyName,"u":customerName,"a":categoryName,"l":product.link,
-								 			"i":product.image,"n":product.name,"p":finalPrice,"fp":filterPrice}
-	 					productListing.push(product);
-								 	
-						var rand = Math.floor(Math.random() * 50);
-	 					if(i < productPresenter.splitValue && rand == 0){
-							var outfit = productPresenter.getProductTemplate(product);								
-		 					grid.append(outfit);		 								
-		 					i++;
-						}
-	 				});	
-	 			});	
-	 		});	
-	 	}); 	 	
-	 		
-	 	sessionStorage.clothingStore = JSON.stringify(productListing);
-	 	sessionStorage.filterStore = JSON.stringify(productListing);
+	 	productPresenter.clothingStore = store.child("products").val();	
+	 	productPresenter.filterStore = store.child("products").val();	
+	 	var companies = store.child("companies").val();
+	 	var customers = store.child("customers").val();
+	 	var categories = store.child("categories").val();
+	 	var prices = store.child("prices").val();			
+		
+		for(var i=0; i<productPresenter.splitValue;i++){
+			var rand = Math.floor(Math.random() * productPresenter.clothingStore.length);
+			var outfit = productPresenter.getProductTemplate(productPresenter.clothingStore[rand]);								
+			grid.append(outfit);		 								
+		}
+	 	 		 			 	
 	 	$("#loadingMainContent").hide();
 	 	$("#main-content").append(grid);
-//	 	$("#main-content").append(filterGrid);
-//	 	$("#main-content").append(hiddenGrid);
 	 	
 	 	filterPresenter.createFilters(companies, customers, categories, prices);
 	 },
@@ -257,7 +214,7 @@ var filterPresenter = {
 	 	$("#product-grid").children().remove();	 		 	
 	 	$("#product-grid").append($("<br><br><br><br>"));
 	 	
-	 	var products = JSON.parse(sessionStorage.clothingStore);
+	 	var products = productPresenter.clothingStore;
 	 	if(allParams != ""){
 			products = $.grep(products, function(p,i){
 				return eval(allParams);	
@@ -265,16 +222,16 @@ var filterPresenter = {
 	 	}
 		
 		var items = $();
-		sessionStorage.productIndex = 0;
+		productPresenter.productIndex = 0;
 		for(var i=0; i< productPresenter.splitValue && i< products.length; i++){
 				items = items.add(productPresenter.getProductTemplate(products[i]));	
-				sessionStorage.productIndex = i+1;
+				productPresenter.productIndex = i+1;
 		}
 		
 		if(products.length >= productPresenter.splitValue){ 
-			sessionStorage.filterStore = JSON.stringify(products.slice(productPresenter.splitValue));
+			productPresenter.filterStore = products.slice(productPresenter.splitValue);
 		}else{
-			sessionStorage.filterStore = "[]";
+			productPresenter.filterStore = [];
 		}
 		
 		if(items.length <= 0){

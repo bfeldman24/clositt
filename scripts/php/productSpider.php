@@ -40,6 +40,8 @@ body{
 <button onclick="getProductsFromLinks()">Get Products</button>
 <button onclick="getProductsFromLinks(true)">Get Products and Save</button>
 <button onclick="saveAllProducts()">Save</button>
+<br><br>
+<p>After you save the products go to this page to optimize the products to load faster on startup: <a href="preload.php">Product Optimizer</a></p>
 
 
 <hr>
