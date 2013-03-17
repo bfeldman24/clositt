@@ -21,7 +21,7 @@ var storeSetup = {
 
 	setup: function(){
 		console.log("Initializing... Please be patient this could take a few minutes...");
-		$("body").append($("<div>").html("Initializing..."));
+		$("body").append($("<div>").html("Initializing... Please be patient this could take a few minutes..."));
 		storeSetup.firebase = new Firebase('https://clothies.firebaseio.com');
 		storeSetup.firebase.child('store').once('value', storeSetup.getProducts);	 	 
 	},
@@ -88,7 +88,7 @@ var storeSetup = {
 	 	var endTime = d.getTime();
 	 	
 	 	console.log("Loaded " + productListing.length + " products in " + ((endTime - startTime) / 1000) + " seconds");
-	 	$("body").append($("<div>").html("Loaded " + productListing.length + " products in " + ((endTime - startTime) / 1000) + " seconds"));
+	 	$("body").append($("<div>").html("Loaded " + productListing.length + " products in " + ((endTime - startTime) / 1000) + " seconds<br><br>"));
 	 	
 	 	//storeSetup.randomize(productListing, companies, customers, categories, prices);
 	 	storeSetup.saveAllProducts(productListing, companies, customers, categories, prices);
@@ -110,23 +110,24 @@ var storeSetup = {
 	 
 	 
 	 saveAllProducts: function(products, companies, customers, categories, prices){
-	 	storeSetup.save("products", products);
-		storeSetup.save("companies", companies.sort());
-		storeSetup.save("customers", customers.sort());
-		storeSetup.save("categories", categories.sort());
-		storeSetup.save("prices", prices.sort());		
+	 	var i=1;
+	 	storeSetup.save("products", products, i++);
+		storeSetup.save("companies", companies.sort(), i++);
+		storeSetup.save("customers", customers.sort(), i++);
+		storeSetup.save("categories", categories.sort(), i++);
+		storeSetup.save("prices", prices.sort(), i++);		
 	 },
 	 
-	 save: function(name, obj){
-	 	console.log("Saving " + obj.length + " " + name  + "...");
-	 	$("body").append($("<div>").html("Saving " + obj.length + " " + name + "..."));
+	 save: function(name, obj, i){
+	 	console.log(i + ") Saving " + obj.length + " " + name  + "...");
+	 	$("body").append($("<div>").html(i + ") Saving " + obj.length + " " + name + "..."));
 	 	
 		if(obj.length > 0){																							
 			
 			storeSetup.firebase.child("clositt").child(name).set(obj, function(error) {
 				  if (!error) {						
-						console.log(obj.length + " " + name + " saved successfully. ");
-						$("body").append($("<div>").html(obj.length + " " + name + " saved successfully."));
+						console.log(i + ") " + obj.length + " " + name + " saved successfully. ");
+						$("body").append($("<div>").html(i + ") " + obj.length + " " + name + " saved successfully."));
 				  }
 			});
 			
