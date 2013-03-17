@@ -41,7 +41,7 @@ body{
 <button onclick="getProductsFromLinks(true)">Get Products and Save</button>
 <button onclick="saveAllProducts()">Save</button>
 <br><br>
-<p>After you save the products go to this page to optimize the products to load faster on startup: <a href="preload.php">Product Optimizer</a></p>
+<p>*** <a href="preload.php">UPDATE WEBSITE WITH NEW PRODUCTS</a> ***</p>
 
 
 <hr>
@@ -156,6 +156,7 @@ function getProductsFromLinks(save){
 			var customer = $(this).attr("customer");
 			var category = $(this).attr("category");
 			var url = $(this).attr("url");
+			url = storeApi.getFullUrl(company, url);
 			
 			$.post("webProxy.php", {u:url}, function(data){														
 				$("#json-output").append(
@@ -163,7 +164,7 @@ function getProductsFromLinks(save){
 						.attr("company", company)
 						.attr("customer", customer)
 						.attr("category", category)
-						.html( getProducts(company, data, url) )
+						.html( storeApi.getProducts(company, data, url) )
 				);		
 				
 				count++;
