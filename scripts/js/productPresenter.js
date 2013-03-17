@@ -242,6 +242,7 @@ var filterPresenter = {
 		} 		
 	 	
 	 	gridPresenter.alignDefaultGrid();	
+	 	productPresenter.productIndex = 0;
  	},
  	
  	formatSelectedValued: function(group){ 
