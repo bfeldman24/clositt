@@ -19,7 +19,7 @@ $emailMessage = "Name: " . $name . "\r\n" .
 $headers = 'From: '. $email . "\r\n" .
 		    'Reply-To: '. $email . "\r\n" .
 		    'Bcc: bfeldman24@gmail.com' . "\r\n";
-		    		    
+		    
 
 if(mail($to, $emailSubject, $emailMessage, $headers)){
 	echo "success";	
@@ -28,4 +28,3 @@ if(mail($to, $emailSubject, $emailMessage, $headers)){
 }
 
 ?>
-

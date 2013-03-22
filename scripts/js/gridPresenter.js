@@ -347,10 +347,8 @@ var tagPresenter = {
 			$(element).parent().parent().append(
 				$("<div>").addClass("addTagForm").append(
 					$("<form>").append(
-						$("<div>").addClass("controls").append(
-							$("<label>").addClass("control-label").text("Tag: ").append(						
-								$("<input>").attr("type","text").attr("name","newTag").addClass("newTag")
-							)
+						$("<div>").addClass("controls").append(					
+							$("<input>").attr("type","text").attr("name","newTag").addClass("newTag")
 						)
 					).append(
 						$("<input>").attr("type","submit").css("display","none")				

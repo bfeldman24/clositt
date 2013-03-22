@@ -1,0 +1,6 @@
+# For security reasons, Option followsymlinks cannot be overridden.
+#Options +FollowSymLinks
+Options +SymLinksIfOwnerMatch
+RewriteEngine On
+
+RewriteRule ^!/(.*)$ closet.php?user=$1

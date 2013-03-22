@@ -63,21 +63,22 @@ var firebase = {
         });     	
 	},
 	
-	signup: function(email, password, remember, name){
+	signup: function(email, password, remember, name, username){
 		firebase.authClient.createUser(email, password, function(error,user){
-			firebase.register(error, user, password, remember, name);
+			firebase.register(error, user, password, remember, name, username);
 		});
 	},
 	
-	register: function(error, user, password, remember, name){
+	register: function(error, user, password, remember, name, username){
 		 if (!error) {		  			  	
-		 	var username = stringFunctions.toTitleCase(name);
-		 	firebase.$.child(firebase.userPath).child(user.id).set({"email":user.email,"name":username});
+		 	var firstname = stringFunctions.toTitleCase(name);
+		 	username = username.toLowerCase();
+		 	firebase.$.child(firebase.userPath).child(user.id).set({"email":user.email,"name":firstname,"username":username});
 		 	
 		  	firebase.login(user.email, password, remember);		  			  	
 
 		  }else{		  	
-		  		Message.error(error);	
+		  		Messenger.error(error);	
 		  }
 	},
 	

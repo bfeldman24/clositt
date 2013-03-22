@@ -15,7 +15,6 @@ print_r($_SESSION);
 
 <h1>Sign Up</h1>
     
-
 	<form class="form-horizontal">
 	    <div class="control-group">
 		    <label class="control-label" for="inputName">Name</label>
@@ -23,6 +22,15 @@ print_r($_SESSION);
 			  <div class="input-prepend">
 				<span class="add-on"><i class="icon-user"></i></span>
 				<input type="text" id="inputName" placeholder="Name" class="input-xlarge">
+			  </div>
+		    </div>
+	    </div>
+	    <div class="control-group">
+		    <label class="control-label" for="inputUsername">Username</label>
+		    <div class="controls">		  	  
+			  <div class="input-prepend">
+				<span class="add-on"><i class="icon-asterisk"></i></span>
+				<input type="text" id="inputUsername" placeholder="www.Clositt.com/!/USERNAME" class="input-xlarge">
 			  </div>
 		    </div>
 	    </div>
@@ -83,8 +91,9 @@ $("form").on("submit",function(event){
 		var password = $("#inputPassword").val();
 		var remember = $("#remember").is(':checked');
 		var name = $("#inputName").val();
+		var username = $("#inputUsername").val();		
 	
-		firebase.signup(email, password,remember,name);
+		firebase.signup(email, password,remember,name, username);
 	}else{
 		console.log("invalid");	
 	}

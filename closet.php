@@ -18,8 +18,8 @@
 
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
-<script src="scripts/js/closetPresenter.js"></script>
-<script src="scripts/js/productPresenter.js"></script>
+<script src="/scripts/js/closetPresenter.js"></script>
+<script src="/scripts/js/productPresenter.js"></script>
 <script type="text/javascript">
 function userDataReady(user){
 	$("#user-closet-title").text(user + "'s Closet");

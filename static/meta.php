@@ -1,8 +1,9 @@
+<link href='http://fonts.googleapis.com/css?family=Roboto:300,400,700,900' rel='stylesheet' type='text/css'>
 <link href="/lib/javascript/bootstrap.min.css" rel="stylesheet">
 <link href="/lib/javascript/messenger/build/css/messenger.css" rel="stylesheet">
 <link href="/lib/javascript/messenger/build/css/messenger-theme-future.css" rel="stylesheet">
 <link href="/lib/javascript/jquery-ui-1.10.1.custom/css/ui-lightness/jquery-ui-1.10.1.custom.min.css" rel="stylesheet">
-<link href="css/style.css" rel="stylesheet">  
+<link href="/css/style.css" rel="stylesheet">  
 
 
 
