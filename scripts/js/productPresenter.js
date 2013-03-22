@@ -267,7 +267,7 @@ var filterPresenter = {
 	 	 $("#filter-search-icon").toggle('slow');
 	 	 $("#filter-hide-icon").toggle('slow');
 	 	 
-	 	 if(parseInt($("#product-grid").css("left")) == 0){
+	 	 if(isNaN(parseInt($("#product-grid").css("left"))) || parseInt($("#product-grid").css("left")) == 0){
 	 	 	$("#product-grid").animate({left: '200px'}, 1000);
 	 	 }else{
 	 	 	$("#product-grid").animate({left: '0px'}, 1000);

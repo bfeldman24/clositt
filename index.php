@@ -59,9 +59,9 @@ Once you find something you like, just click on the hanger icon and add it to yo
 <script src="/scripts/js/closetPresenter.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	if(sessionStorage.welcomeClosit == undefined){
+	if(localStorage.welcomeClosit == undefined){
 		$('#welcomeModal').modal();
-		sessionStorage.welcomeClosit = "true";
+		localStorage.welcomeClosit = "true";
 	}
 	gridPresenter.init();
 	productPresenter.init();	
