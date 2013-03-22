@@ -1,8 +1,8 @@
 <footer>
 	<div id="footer-wrapper">
 		<div class="center">Clositt.com Inc &copy; 2013</div>
-		<div><a href="#">Contact Us</a></div>
-		<div><a href="#">About Us</a></div>
+		<div><a href="contact-us.php">Contact Us</a></div>
+		<!--<div><a href="#">About Us</a></div>-->
 		<div><a href="/acknowledgements.php">Shout Outs</a></div>
 		
 		<?php
