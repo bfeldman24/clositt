@@ -1,7 +1,9 @@
 <?php
+require_once(dirname(__FILE__) . '/globals.php');
+
 if (!isset($_SESSION)) {
 	//any subdomains, including "www.mydomain.com" will be included in the session. 
-	session_set_cookie_params('', '/', '.clothies.bprowd.com', 0);
+	session_set_cookie_params('', '/', '.' . DOMAIN, 0);
 	session_start();
 }
 
@@ -53,14 +55,25 @@ $_SESSION['userid'] = 0;
 
 
 <script type="text/javascript">
+function loggedOut(){
+	Messenger.info("You are not Authorized to enter the site");
+}
+
+function loggedOutError(){
+	Messenger.info("You are not Authorized to enter the site");
+}
+
 function loggedIn(){	
 	
 	firebase.$.child("Auth/Token").on('value',function(snapshot){	
 			var token = snapshot.val();			
 			
-			$.post("auth.php", { auth: token }, function(data) {
+			$.post("auth.php", { auth: token, user: firebase.userid }, function(data) {
 				if(data == "success"){
 					Messenger.info("You are now authorized to enter the site.");
+					setTimeout(function(){
+						location.href = "/";
+					}, 2000);
 				}else{
 					Messenger.info("Not Authorized");
 				}
@@ -70,22 +83,16 @@ function loggedIn(){
 
 $("form").on("submit",function(event){
 	 event.preventDefault();
-	 var valid = false;
 
      if($('#inputPassword').val().length > 5){
-             valid = true;                    
-     }else{     		 
-             Messenger.error("Login information is incorrect!");        
-     }
 
-	if(valid){
 		var email = $("#inputEmail").val();
 		var password = $("#inputPassword").val();
 		var remember = $("#remember").is(':checked');		
 					  	
 	  	firebase.login(email,password,remember);		    
 	}else{
-		Messenger.info("Not Authorized");	
+		Messenger.info("Login information is incorrect");	
 		return false;
 	}		
 });

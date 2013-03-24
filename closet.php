@@ -26,6 +26,10 @@ function userDataReady(user){
 	$("#user-closet-title").text(user + "'s Closet");
 	closetPresenter.init();
 }
+
+function loggedOut();
+	location.href = "/";	
+}
 </script>
 
 </body>

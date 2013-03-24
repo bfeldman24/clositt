@@ -17,6 +17,8 @@ var firebase = {
 	  	if (error) {
 		    // an error occurred while attempting login
 		    console.log(error);
+		    Messenger.error(error);
+		    firebase.loggedOutErrorCallback();
 		} else if (user) {
 		    // user authenticated with Firebase		    
 		    firebase.handleUserData(user);		    				    			  			    
@@ -26,10 +28,7 @@ var firebase = {
 	  	} else {
 		    // user is logged out		    
 		    console.log("logged out");
-		    
-		    if(location.pathname == "/closet.php"){
-		    	location.href = "/";	
-		    }
+		    firebase.loggedOutCallback();
 		}
 	 
 		if(error || !user){
@@ -89,6 +88,20 @@ var firebase = {
 		}  
 	},
 	
+	loggedOutCallback: function(){
+		if(typeof loggedOut == 'function')
+		{
+			loggedOut();
+		}  
+	},
+	
+	loggedOutErrorCallback: function(){
+		if(typeof loggedOutError == 'function')
+		{
+			loggedOutError();
+		}  
+	},
+	
 	userDataAvailableCallback: function(username){
 		if(typeof userDataReady == 'function')
 		{
@@ -113,7 +126,9 @@ var firebase = {
 
  	logout: function(){
 		firebase.authClient.logout();
-		location.href="/";
+		$.post("../../auth.php", function(){
+			location.href="/";
+		});
 	}
 };
 

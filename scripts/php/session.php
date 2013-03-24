@@ -1,7 +1,9 @@
 <?php
+require_once(dirname(__FILE__) . '/../../globals.php');
+
 if (!isset($_SESSION)) {
 	//any subdomains, including "www.mydomain.com" will be included in the session. 
-	session_set_cookie_params('', '/', '.clositt.com', 0);
+	session_set_cookie_params('', '/', '.' . DOMAIN, 0);
 	session_start();
 }
 
