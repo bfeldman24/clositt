@@ -1,3 +1,4 @@
+<?php require_once(dirname(__FILE__) . '/scripts/php/session.php'); ?>
 <!DOCTYPE>
 <html>
 <head>

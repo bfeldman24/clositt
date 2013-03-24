@@ -1,4 +1,12 @@
-<?php require_once(dirname(__FILE__) . '/scripts/php/session.php'); ?>
+<?php
+if (!isset($_SESSION)) {
+	//any subdomains, including "www.mydomain.com" will be included in the session. 
+	session_set_cookie_params('', '/', '.clothies.bprowd.com', 0);
+	session_start();
+}
+
+$_SESSION['userid'] = 0;
+?>
 <!DOCTYPE>
 <html>
 <head>
@@ -11,7 +19,8 @@
 
 <div id="signup">
 
-<h1>Login</h1>
+<h3>Clositt.com is an exclusive site. You must have login credentials to continue</h3>
+<br><br>
     
 
 	<form class="form-horizontal" action="closet.php">
@@ -33,12 +42,8 @@
 			  	</div>		   		
 		    </div>
 	    </div>
-	    <div class="control-group">
-		    <div class="controls">
-		    <label class="checkbox">
-		    	<input type="checkbox" id="remember"> Remember me
-		    </label>
-		    <button type="submit" class="btn btn-primary">Login</button>
+	    <div class="control-group" style="margin: auto; width: 400px;">
+		    <button type="submit" class="btn btn-primary">Authorize</button>
 		    </div>
 	    </div>
     </form>
@@ -48,8 +53,19 @@
 
 
 <script type="text/javascript">
-function loggedIn(){
-	location.href= "/closet.php";	
+function loggedIn(){	
+	
+	firebase.$.child("Auth/Token").on('value',function(snapshot){	
+			var token = snapshot.val();			
+			
+			$.post("auth.php", { auth: token }, function(data) {
+				if(data == "success"){
+					Messenger.info("You are now authorized to enter the site.");
+				}else{
+					Messenger.info("Not Authorized");
+				}
+			});
+		});
 }
 
 $("form").on("submit",function(event){
@@ -69,7 +85,7 @@ $("form").on("submit",function(event){
 					  	
 	  	firebase.login(email,password,remember);		    
 	}else{
-		console.log("invalid");	
+		Messenger.info("Not Authorized");	
 		return false;
 	}		
 });
