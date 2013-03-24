@@ -17,7 +17,7 @@ var firebase = {
 	  	if (error) {
 		    // an error occurred while attempting login
 		    console.log(error);
-		    Messenger.error(error);
+		    Messenger.error("Incorrect login information");
 		    firebase.loggedOutErrorCallback();
 		} else if (user) {
 		    // user authenticated with Firebase		    
