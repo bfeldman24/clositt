@@ -27,7 +27,7 @@ function userDataReady(user){
 	closetPresenter.init();
 }
 
-function loggedOut();
+function loggedOut(){
 	location.href = "/";	
 }
 </script>
