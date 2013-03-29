@@ -3,4 +3,4 @@
 Options +SymLinksIfOwnerMatch
 RewriteEngine On
 
-RewriteRule ^!/(.*)$ closet.php?user=$1
+RewriteRule ^!(.*)$ closet.php?user=$1

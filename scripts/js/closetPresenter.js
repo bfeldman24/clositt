@@ -1,10 +1,11 @@
 var closetPresenter = {
-	
+	share: '1212000',	
 	carouselLeft: null,	
 	carouselRight: null,
 
-	init: function(){
-		closetPresenter.getClosets();
+	init: function(user){
+		var u = user ==  undefined ? undefined : user.toString().replace(closetPresenter.share,'');
+		closetPresenter.getClosets(u);
 		$(document).on("mousedown",".carousel-left", closetPresenter.leftAnimation);
 		$(document).on("mousedown",".carousel-right", closetPresenter.rightAnimation);
 		$(document).on("mouseup",".carousel-left", closetPresenter.stopCarouselLeft);
@@ -12,13 +13,20 @@ var closetPresenter = {
 		
 		$("#closet-settings > .settings-minicon").on("click", closetPresenter.showSettings);
 		$(document).on("click", "#closet-settings > .save-minicon", closetPresenter.saveClosets);
+		$(document).on("click", "#closet-share > .share-freeiconsweb", closetPresenter.shareCloset);
 		$(document).on("click",".delete-outfit", closetPresenter.removeOutfit);		
 		$(document).keypress(closetPresenter.saveClosetsOnEnter);				
 	},
 	
-	getClosets: function(){
-		if(firebase.isLoggedIn){
+	getClosets: function(user){
+		if(user != undefined){
+			firebase.$.child(firebase.userPath).child(user).child("closets").once('value', closetPresenter.showClosets);
+			firebase.$.child(firebase.userPath).child(user).child("name").once('value', function(data){
+				$("#user-closet-title").text(data.val() + "'s Closet");
+			});
+		}else if(firebase.isLoggedIn){
 			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").once('value', closetPresenter.showClosets);		
+			 $("#user-closet-title").text(firebase.username + "'s Closet");
 		}else{
 			Messenger.info("Please login or sign up to add items to your closet!");	
 		}
@@ -84,7 +92,11 @@ var closetPresenter = {
 	showSettings: function(){
 		if( !$(".settings-minicon").hasClass("active") && $(".outfit").length > 0){
 			$(".settings-minicon").addClass("active");
-			
+
+			$("#closet-share > .share-freeiconsweb").animate({
+				right: '+=50'
+			}, 50);			
+	
 			$("#closet-settings").prepend(
 				$("<i>").addClass("minicon-single save-minicon")
 			);
@@ -111,8 +123,12 @@ var closetPresenter = {
 	hideSettings: function(){
 		if( $(".settings-minicon").hasClass("active") ){
 			$(".settings-minicon").removeClass("active");
-			
+
 			$("#closet-settings .save-minicon").remove();
+
+			$("#closet-share > .share-freeiconsweb").animate({
+                                right: '-=50'
+                        }, 50);
 			
 			$(".picture .delete-outfit").remove();
 				
@@ -189,6 +205,27 @@ var closetPresenter = {
 		    	Messenger.success('This item was removed from "' + closetName +'"');		    	
 		  }
 		});
+	},
+
+	shareCloset: function(){
+		if($("#share-url").length){
+			$("#share-url").remove();
+		}else{
+			var query = location.href.toString().replace("closet.php",("!" + closetPresenter.share) + firebase.userid)
+
+			$("#closet-share > .share-freeiconsweb").before(
+      			  $('<input type="text">')
+            		 	.attr("id","share-url")
+            			.attr("value",query)
+            			.css("position","absolute")
+           			.css("top","110px")
+            			.css("right","30px")
+            			.css("height","30px")
+            			.css("width","200px")
+        		);
+
+			$("#share-url").focus();
+		}
 	}
 }
 

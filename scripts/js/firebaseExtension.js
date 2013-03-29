@@ -125,7 +125,8 @@ var firebase = {
 	},	
 
  	logout: function(){
-		firebase.authClient.logout();
+		firebase.authClient.logout();	
+
 		$.post("../../auth.php", function(){
 			location.href= "../../";
 		}).fail(function() {

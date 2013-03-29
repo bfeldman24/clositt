@@ -13,19 +13,30 @@
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
 <div id="main-content" class="container main-container">
 	<h1><span id="user-closet-title"></span></h1>
-	<div id="closet-settings"><i class="minicon-single settings-minicon"></i></div>
+	
+	<?php if(!isset($_GET['user'])){ ?>
+		<div id="closet-settings"><i class="minicon-single settings-minicon"></i></div>
+		<div id="closet-share"><i class="minicon-single share-freeiconsweb"></i></div>
+	<?php } ?>
+
 	<div id="closet-list"></div>
 </div>
 
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
+<div id="closetId" style="display:none;"><?php echo $_GET['user'];?></div>
 <script src="<?php echo HOME_ROOT; ?>scripts/js/closetPresenter.js"></script>
 <script src="<?php echo HOME_ROOT; ?>scripts/js/productPresenter.js"></script>
 <script type="text/javascript">
+<?php if(isset($_GET['user'])){ ?>
+$(document).ready(function(){ 
+	closetPresenter.init(<?php echo $_GET['user']; ?>);
+ });
+<?php }else{ ?>
 function userDataReady(user){
-	$("#user-closet-title").text(user + "'s Closet");
-	closetPresenter.init();
+       closetPresenter.init();
 }
+<?php } ?>
 
 function loggedOut(){
 	location.href = "<?php echo HOME_ROOT; ?>";

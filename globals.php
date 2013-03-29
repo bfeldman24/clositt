@@ -1,4 +1,4 @@
 <?php 
-define('DOMAIN','dev.bprowd.com');
+define('DOMAIN','clothies.bprowd.com');
 define('HOME_ROOT','/');
 ?>

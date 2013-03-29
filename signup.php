@@ -10,9 +10,6 @@
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
 
 <div id="signup">
-<?php 
-print_r($_SESSION);
-?>
 
 <h1>Sign Up</h1>
     
