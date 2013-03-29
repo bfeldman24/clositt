@@ -72,7 +72,7 @@ function loggedIn(){
 				if(data == "success"){
 					Messenger.info("You are now authorized to enter the site.");
 					setTimeout(function(){
-						location.href = "/";
+						location.href = "<?php echo HOME_ROOT; ?>/";
 					}, 2000);
 				}else{
 					Messenger.info("Not Authorized");

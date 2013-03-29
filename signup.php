@@ -70,7 +70,7 @@ print_r($_SESSION);
 
 <script type="text/javascript">
 function loggedIn(){
-	location.href= "/closet.php";	
+	location.href= "<?php echo HOME_ROOT; ?>closet.php";	
 }
 
 $("form").on("submit",function(event){

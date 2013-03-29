@@ -1,3 +1,4 @@
 <?php 
-define('DOMAIN','clositt.com');
+define('DOMAIN','dev.bprowd.com');
+define('HOME_ROOT','/');
 ?>

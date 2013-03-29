@@ -2,7 +2,7 @@
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
-	          <a class="brand" id="brand" href="/">Clositt</a>
+	          <a class="brand" id="brand" href="<?php echo HOME_ROOT;?>">Clositt</a>
 	            <ul class="nav navleft" id="user-project-nav">		           
 	            </ul>
 	            <ul class="nav navright unstyled" style="margin-top: 10px;">  

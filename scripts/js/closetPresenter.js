@@ -51,7 +51,7 @@ var closetPresenter = {
 				$itemlist.append(
 					productPresenter.getClosetItemTemplate(item.val()).prepend(
 						$("<div>").addClass("hanger").append(
-							$("<img>").attr("src","/css/images/hanger.png")
+							$("<img>").attr("src","css/images/hanger.png")
 						)
 					)
 				); 				

@@ -19,16 +19,16 @@
 
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
-<script src="/scripts/js/closetPresenter.js"></script>
-<script src="/scripts/js/productPresenter.js"></script>
+<script src="<?php echo HOME_ROOT; ?>scripts/js/closetPresenter.js"></script>
+<script src="<?php echo HOME_ROOT; ?>scripts/js/productPresenter.js"></script>
 <script type="text/javascript">
 function userDataReady(user){
 	$("#user-closet-title").text(user + "'s Closet");
 	closetPresenter.init();
 }
 
-function loggedOut();
-	location.href = "/";	
+function loggedOut(){
+	location.href = "<?php echo HOME_ROOT; ?>";	
 }
 </script>
 

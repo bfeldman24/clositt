@@ -3,7 +3,7 @@
 		<div class="center">Clositt.com Inc &copy; 2013</div>
 		<div><a href="contact-us.php">Contact Us</a></div>
 		<!--<div><a href="#">About Us</a></div>-->
-		<div><a href="/acknowledgements.php">Shout Outs</a></div>
+		<div><a href="acknowledgements.php">Shout Outs</a></div>
 		
 		<?php
 		if((isset($_GET['ben']) && $_GET['ben'] != "") || (isset($_GET['eli']) && $_GET['eli'] != "")){
@@ -13,8 +13,8 @@
 	</div>
 </footer>
 
-<script src="/scripts/js/firebaseExtension.js"></script>
-<script src="/scripts/js/messenger.js"></script>
+<script src="<?php echo HOME_ROOT; ?>scripts/js/firebaseExtension.js"></script>
+<script src="<?php echo HOME_ROOT; ?>scripts/js/messenger.js"></script>
 <script type="text/javascript">
 firebase.init();
 Messenger.init();
