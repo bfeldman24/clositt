@@ -1,7 +1,10 @@
 <!DOCTYPE>
 <html>
 <head>
-<?php include(dirname(__FILE__) . '/../../static/meta.php');   ?>
+<?php 
+require_once(dirname(__FILE__) . '/../../globals.php');
+include(dirname(__FILE__) . '/../../static/meta.php');   
+?>
 <style type="text/css">
 .company{
 	margin: 0 0 20px 5px;	
