@@ -417,6 +417,7 @@ var reviewsPresenter = {
 		 	reviewsPresenter.currentReviewFB.push({name:user, rating:rating, comment: comment, date:nowString});	 	
 		 	
 		 	$("#review-add-comment").val("");
+		 	reviewsPresenter.refreshRating(0);
 	 	}else{
 	 		Messenger.info("Please enter a comment");
 	 	}
