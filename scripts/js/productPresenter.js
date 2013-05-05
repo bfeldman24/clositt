@@ -42,7 +42,7 @@ var productPresenter = {
 		var company = product.o;
 		var audience = product.u;
 		var category = product.a;
-		var link = product.l;
+		var link = product.l.replace(/\W/g, '');
 		var image = product.i;
 		var name = product.n;
 		var id = link.replace(/\W/g, '');
@@ -56,9 +56,9 @@ var productPresenter = {
 		}		
 			 			
  		//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
- 		var attr = 	'customer="'+audience+'" category="'+category+'"';
+ 		var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'"';
 		var html ='<div class="outfit" '+attr+'>';
-				html +='<div class="picture"><a href="'+link+'" target="_blank"><img src="' + image + '" class="'+shadow+'" /></a></div>';							
+				html +='<div class="picture"><a productid="'+link+'"><img src="' + image + '" class="'+shadow+'" /></a></div>';			
 				html +='<div class="overlay">';
 					html +='<div class="topleft">';										
 						html +='<div class="tagOutfitBtn" data-toggle="tooltip" data-placement="left"><i class="icon-tags icon-white"></i></div>';
@@ -263,15 +263,32 @@ var filterPresenter = {
  	},
  	
  	filterPanelToggle: function(){
+ 	 		
 	 	 $("#filter-float").toggle('slow');
 	 	 $("#filter-search-icon").toggle('slow');
 	 	 $("#filter-hide-icon").toggle('slow');
-	 	 
-	 	 if(isNaN(parseInt($("#product-grid").css("left"))) || parseInt($("#product-grid").css("left")) == 0){
-	 	 	$("#product-grid").animate({left: '200px'}, 1000);
-	 	 }else{
-	 	 	$("#product-grid").animate({left: '0px'}, 1000);
-	 	 }
+		
+		if(!$("#review-form").is(":visible")){ 	 
+		 	 if(isNaN(parseInt($("#product-grid").css("left"))) || parseInt($("#product-grid").css("left")) == 0){
+		 	 	$("#product-grid").animate({left: '200px'}, 1000);
+		 	 }else{
+		 	 	$("#product-grid").animate({left: '0px'}, 1000);
+		 	 }
+ 		}
+	 },
+	 
+	 hideFilterPanel: function(){
+	 	if($("#filter-float").is(":visible")){
+		 	 $("#filter-float").toggle('fast');
+		 	 $("#filter-search-icon").toggle('fast');
+		 	 $("#filter-hide-icon").toggle('fast');
+		 	 
+		 	 if(isNaN(parseInt($("#product-grid").css("left"))) || parseInt($("#product-grid").css("left")) == 0){
+		 	 	$("#product-grid").animate({left: '200px'}, 500);
+		 	 }else{
+		 	 	$("#product-grid").animate({left: '0px'}, 500);
+		 	 }
+	 	}
 	 },
 	 
 	 filterTutorialToolip: function(){

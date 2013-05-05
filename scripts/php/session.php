@@ -23,8 +23,8 @@ class ValidateSession {
 	}
 	
 	function unauthorized(){
-		$this->session_defaults();
-		header( 'Location: ' . HOME_ROOT .  $this->WELCOME_PAGE ) ;	
+		//$this->session_defaults();
+		//header( 'Location: ' . HOME_ROOT .  $this->WELCOME_PAGE ) ;	
 	}	
 }
 

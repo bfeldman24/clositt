@@ -27,7 +27,23 @@
 <div id="filter-float" style="display:none;">
 <br><br><br><br>
 </div>
-
+<div id="review-float" style="display:none;">
+	<ul id="review-comments">
+		
+	</ul>
+	<div id="review-form">
+		<textarea id="review-add-comment" rows="3" placeholder="Add a Review..."></textarea>
+		<div id="review-rating">
+			<i class="review-star star-large-empty" star="1"></i>
+			<i class="review-star star-large-empty" star="2"></i>
+			<i class="review-star star-large-empty" star="3"></i>
+			<i class="review-star star-large-empty" star="4"></i>
+			<i class="review-star star-large-empty" star="5"></i>
+			<span id="review-average" class="label label-info">0</span>	
+		</div>	
+		<button id="review-add-btn" class="btn btn-success" type="button">Add Review</button>
+	</div>
+</div>
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 
@@ -53,6 +69,7 @@ Once you find something you like, just click on the hanger icon and add it to yo
     </div>
 <!-- End Modal -->
 
+<div id="review-mask"></div>
 
 
 <script src="<?php echo HOME_ROOT; ?>scripts/js/gridPresenter.js"></script>
@@ -68,6 +85,7 @@ $(document).ready(function() {
 	productPresenter.init();	
 	filterPresenter.init();	
 	tagPresenter.init();
+	reviewsPresenter.init();
 	$("#tagSearch").show();	
 });
 

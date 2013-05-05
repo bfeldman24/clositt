@@ -13,6 +13,10 @@ p, div, span, input, button, select, textarea, a, td {
 	font-family: 'Roboto', sans-serif !important;
 }
 
+a{
+	cursor: pointer;	
+}
+
 .width100{
 	width: 100%;
 }		
@@ -595,6 +599,10 @@ footer p{
 	box-shadow: 0 2px 9px #E1E1E1;	
 }
 
+#product-grid .outfit{
+	background-color: #FFF;	
+}
+
 
 
 
@@ -677,7 +685,19 @@ body {
 
 .navbar .brand {  color: #FFFFFF;  font-size: 28px;  text-shadow: 0 2px 0 #333333;}
 
-#filter-float{
+#review-mask{
+	background: none repeat scroll 0 0 rgba(115, 115, 115, 0.7);
+	z-index: 50;
+	position: fixed;
+	width:100%;
+	height:100%;
+	display: none;	
+	top:0;
+	left:0;
+	cursor: pointer;
+}
+
+#filter-float,#review-float{
 	bottom: 30px;
     box-shadow: 1px 1px 6px #333333;
     display: block;
@@ -686,6 +706,10 @@ body {
     padding: 0 60px 0 25px;
     position: fixed;
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.91);
+}
+
+#review-float{
+	background: none repeat scroll 0 0 rgb(255, 255, 255);
 }
 
 #filter-float label, #filter-float .controls{
@@ -698,6 +722,161 @@ body {
 	text-decoration: underline;	
 }
 
+#review-float{
+	right: 0;
+	z-index: 75;
+	width: 400px;
+	padding: 0;
+	overflow-y: hidden;
+}
+
+#review-comments{
+	height: 100%;
+    margin: 70px 0 0 0;
+    overflow-y: auto;
+    padding: 10px;
+    width: 380px;	
+    color: #333333;
+    list-style: none outside none;
+}
+
+ul#review-comments {
+	margin-left: 0;
+    padding: 10px;
+    overflow-x: hidden;
+    list-style: none;
+    color: #333333;
+}
+ul#review-comments li:before {
+    float: left;
+    width: 0;
+    white-space: nowrap;
+    color: #AAAAAA;
+    font-size: 6px;
+    content: "-------------------------------------------------------" 
+    		 "-------------------------------------------------------"
+    		 "-------------------------------------------------------"
+    		 "-------------------------------------------------------";
+}
+
+ul#review-comments span{
+	background: #FFFFFF;
+}
+
+//ul#review-comments span:nth-child(2) {
+//    padding-right: 10px;    
+//}
+//ul#review-comments span:last-child {
+//    float: right;
+//    padding-left: 10px;    
+//}
+
+.review-header{
+	color: #AAAAAA;	
+}
+.review-comment-date{
+	float:right;	
+	padding-left: 5px;
+}
+
+.review-comment-rating{	
+	padding-right: 5px;	
+}
+
+.review-text{
+	padding-left: 15px;
+}
+
+.review-text pre{
+	background-color: inherit;
+    border: none;
+    border-radius: 0;
+    display: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    font-family: inherit;
+}
+
+#review-form{
+    background-color: #DFDFDF;
+    height: 120px;
+    padding: 10px;
+    width: 380px;
+    position: absolute;
+    bottom: 0;
+}
+
+#review-rating{
+	margin-left: 5px;
+    margin-top: 5px;
+}
+
+#review-average{
+	display:none;
+	margin-left: 5px;
+    position: relative;
+    top: -2px;
+}
+
+#review-average.label {
+    padding: 1px 6px 2px 4px;
+}
+
+#review-add-btn{
+	bottom: 8px;
+    position: absolute;
+    right: 11px;	
+}
+
+
+.review-comment-rating{
+	//width: 78px;			
+}	
+
+.star-small-empty, .star-small-half, .star-small-full{
+	display: inline-block;
+    height: 13px;
+    margin: 0 1px;
+    width: 13px;
+    position: relative;
+    top: 1px;
+}
+
+.star-small-empty{
+	background: url("images/star-small.png") no-repeat scroll -26px 0 transparent;
+}
+
+.star-small-half{
+	background: url("images/star-small.png") no-repeat scroll -13px 0 transparent;	
+}	
+
+.star-small-full{
+	background: url("images/star-small.png") no-repeat scroll 0 0 transparent;
+}	
+
+.star-large-empty, .star-large-half, .star-large-full{
+	height: 25px;
+	width: 26px;		
+	display: inline-block;
+    margin: -6px 0px;	
+    cursor: pointer;
+}
+
+.star-large-empty{
+	background: url("images/star-large.png") no-repeat scroll -52px 0 / 78px 25px transparent
+}
+
+.star-large-half{
+	background: url("images/star-large.png") no-repeat scroll -26px 0 / 78px 25px transparent
+}						
+
+.star-large-full{
+	background: url("images/star-large.png") no-repeat scroll 0 0 / 78px 25px transparent
+}
+
 footer{
 	position:fixed;
 	bottom:0;
@@ -707,6 +886,7 @@ footer{
     box-shadow: 0 1px 5px #888888;
     margin-top: 0px;
     padding: 0px;
+    z-index: 100;
 	
 	
 	background: rgb(0,186,108); /* Old browsers */
