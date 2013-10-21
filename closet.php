@@ -30,17 +30,22 @@
 <script type="text/javascript">
 <?php if(isset($_GET['user'])){ ?>
 $(document).ready(function(){ 
-	closetPresenter.init(<?php echo $_GET['user']; ?>);
+	closetPresenter.init(<?php echo $_GET['user']; ?>);		
  });
 <?php }else{ ?>
 function userDataReady(user){
-       closetPresenter.init();
+    pagePresenter.init();
+    closetPresenter.init();              
 }
 <?php } ?>
 
 function loggedOut(){
 	location.href = "<?php echo HOME_ROOT; ?>";
 }
+
+
+$("#subheader-navbar li a").removeClass();
+$('#subheader-navbar li a[href="closet.php"]').addClass("active");
 </script>
 
 </body>

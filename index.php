@@ -13,20 +13,24 @@
 <div id="left-nav" style="display:none;"></div>
 
 <div id="wrapper">
-	<div id="main-content" class="container main-container"><div id="loadingMainContent"><img src="css/images/loading.gif"/></div></div>
-</div>
 
-<div id="right-nav">
-	<div class="btn-group" data-toggle="buttons-radio" id="gridType">
-	    <button type="button" class="btn" value="normalGrid"><i class="icon-th-large"></i></button>
-	    <button type="button" class="btn" value="randomGrid"><i class="icon-th"></i></button>
+    <div class="search" id="Search">
+      	<form id="search-form">
+      		<div class="form-search input-append">
+      		    <div id="seach-bar-icon"><img src="css/images/Search.png" /></div>
+      			<input id="search-bar" placeholder="Start your search here! (ex. Black Party Dress)" class="input-xxlarge search-query" />
+      			<button class="btn" type="button" id="search-clear-btn" style="display:none;">Clear</button>
+      		</div>
+      		<input type="submit" style="display:none;" />
+      	</form>
     </div>
+    
+    <div id="main-content" class="container main-container"><div id="loadingMainContent"><img src="css/images/loading.gif"/></div></div>
 </div>
 
 <br><br><br><br>
-<div id="filter-float" style="display:none;">
-<br><br><br><br>
-</div>
+<div id="filter-toggle">Show Filter</div>
+<div id="filter-float" style="display:none;"></div>
 <div id="review-float" style="display:none;">
 	<ul id="review-comments">
 		
@@ -81,12 +85,14 @@ $(document).ready(function() {
 		$('#welcomeModal').modal();
 		localStorage.welcomeClosit = "true";
 	}
+	
+	pagePresenter.init();
 	gridPresenter.init();
 	productPresenter.init();	
 	filterPresenter.init();	
 	tagPresenter.init();
 	reviewsPresenter.init();
-	$("#tagSearch").show();	
+		
 });
 
 function loggedIn(){

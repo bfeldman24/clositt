@@ -102,9 +102,7 @@ var productPresenter = {
 var filterPresenter = {
 	
 	init: function(){		
-		filterPresenter.filterTutorialToolip();	
-		
-		$(document).on("click","#footer-filter", filterPresenter.filterPanelToggle);
+		$(document).on("click","#filter-toggle", filterPresenter.filterPanelToggle);
 		$("#filter-float").on("click","input", function(){
 			setTimeout(filterPresenter.onFilterSelect, 50);			
 		});		
@@ -179,6 +177,7 @@ var filterPresenter = {
  		}); 
  		
  		$("#filter-float").append($("<br><br><br>"));
+ 		filterPresenter.showFilter();
  	},
  
  	
@@ -264,52 +263,85 @@ var filterPresenter = {
  	
  	filterPanelToggle: function(){
  	 		
-	 	 $("#filter-float").toggle('slow');
-	 	 $("#filter-search-icon").toggle('slow');
-	 	 $("#filter-hide-icon").toggle('slow');
+	 	 $("#filter-float").toggle('slide',1000);	 	 
 		
 		if(!$("#review-form").is(":visible")){ 	 
 		 	 if(isNaN(parseInt($("#product-grid").css("left"))) || parseInt($("#product-grid").css("left")) == 0){
 		 	 	$("#product-grid").animate({left: '200px'}, 1000);
+		 	 	$("#filter-toggle").animate({left: '224px'}, 1000);
+		 	 	$("#filter-toggle").text('Hide Filter');
 		 	 }else{
 		 	 	$("#product-grid").animate({left: '0px'}, 1000);
+		 	 	$("#filter-toggle").animate({left: '-29px'}, 1000);
+		 	 	$("#filter-toggle").text('Show Filter');
 		 	 }
  		}
 	 },
 	 
 	 hideFilterPanel: function(){
 	 	if($("#filter-float").is(":visible")){
-		 	 $("#filter-float").toggle('fast');
-		 	 $("#filter-search-icon").toggle('fast');
-		 	 $("#filter-hide-icon").toggle('fast');
-		 	 
-		 	 if(isNaN(parseInt($("#product-grid").css("left"))) || parseInt($("#product-grid").css("left")) == 0){
-		 	 	$("#product-grid").animate({left: '200px'}, 500);
-		 	 }else{
-		 	 	$("#product-grid").animate({left: '0px'}, 500);
-		 	 }
+		 	 $("#filter-float").hide('slide',500);
+		 	 $("#product-grid").animate({left: '0px'}, 500);
+		 	 $("#filter-toggle").animate({left: '-29px'}, 500);
+		 	 $("#filter-toggle").text('Show Filter');
 	 	}
 	 },
 	 
-	 filterTutorialToolip: function(){
-		 $("footer").prepend(
-			$('<div id="footer-filter" class="last" data-toggle="popover"><i class="icon-search icon-white" id="filter-search-icon"></i><i class="icon-chevron-down icon-white" id="filter-hide-icon" style="display:none;"></i></div>')			
-		);
-		
-		$("#footer-filter").popover({ 
-			placement: "top",
-			title: "Filter",
-			content: "Click the icon to show the filter. Narrow down your search to find exactly what you want!",
-			trigger: "manual"
-		}).popover('show');
-
-		var pop = $(".popover").first();		
-		pop.css("top",(parseFloat(pop.css('top')) - 13) + 'px');	
-		pop.addClass("override");
-		
-		setTimeout(function(){
-			pop.remove();
-		},8000);
+	 showFilter: function(){
+	   if(!$("#review-form").is(":visible")){ 
+	        $("#filter-float").show('slide',500);
+	 	 	$("#product-grid").animate({left: '200px'}, 500);
+	 	 	$("#filter-toggle").animate({left: '224px'}, 500);
+	 	 	$("#filter-toggle").text('Hide Filter');    
+	   }
 	 }
+};
+
+
+var pagePresenter = {
+    
+    init: function(){
+        $("#subheader-navbar").show('fast');
+   	    $("#brand").css("position", "fixed");
+        $("#user-dropdown").css("position", "fixed");
+        
+        $(document).on("error","img", pagePresenter.handleImageNotFound);
+        $(window).scroll(pagePresenter.handleScrollEvents);
+        
+    },
+    
+    handleScrollEvents: function(){
+        pagePresenter.toggleHeader();
+                
+        if(typeof gridEvents == 'function'){
+            gridEvents.continuousScroll();          
+        }        
+    },
+    
+    toggleHeader: function(){
+                
+	   var defaultHeaderHeight = 45;
+	   var scrollLocation = $(window).scrollTop();	  
+	   
+	   if (scrollLocation > defaultHeaderHeight && $("#subheader-navbar").css('position') != 'fixed'){
+	       $("#subheader-navbar").css('position', 'fixed');
+	       $("#subheader-navbar").css('top', '0');
+	       $("#filter-float").css("top", defaultHeaderHeight + "px");	
+	       $("#brand-fixed-background").show("blind","fast");      
+	   } else if (scrollLocation <= defaultHeaderHeight){
+	       $("#filter-float").css("top", (84 - scrollLocation) + "px");
+	       
+	       if($("#subheader-navbar").css('position') == 'fixed')
+	       {
+    	       $("#subheader-navbar").css('position', 'relative');
+    	       $("#subheader-navbar").css('top', '30px');	       
+    	       $("#brand-fixed-background").hide("blind","fast");
+	       }
+	   } 
+	},
+    
+    handleImageNotFound:  function() {
+        $( this ).attr( "src", "../../css/images/missing.png" );
+    }
 };
 

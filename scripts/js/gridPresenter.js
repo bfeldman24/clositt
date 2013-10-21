@@ -1,51 +1,33 @@
-var gridPresenter = {
+var gridPresenter = {	
 	
-	defaultGrid: 'normalGrid',
-	
-	init: function(){		
-		$("#gridType").children('[value="'+gridPresenter.defaultGrid+'"]').first().button('toggle');	
-		$("#gridType").children("button").on("click", function(){gridPresenter.gridToggle($(this).attr("value"))});
+	init: function(){				
 		gridEvents.init();
-	},		
-	
-	gridToggle: function(gridType){
-		var columns = gridPresenter.getDefaultColumns();
-		$("#product-grid").children().attr("aligned",false);
-		
-		if(gridType == "normalGrid"){
-			gridPresenter.alignGrid("product-grid", columns, 200, 25);	
-		}else{			
-			gridPresenter.alignRandomGrid("product-grid", columns, 200, 16, true);
-		}
-		
-		closetFormPresenter.markUsersClositItems();
-	},
+	},			
 
 	alignDefaultGrid: function(){
 		var columns = gridPresenter.getDefaultColumns();
 		$(".addToClosetBtn").tooltip({title:"Add to Closet"});
 		$(".tagOutfitBtn").tooltip({title:"Tagitt"});
 		//$(".addToClosetBtn").tooltip();	
-			
-		if($("#gridType > .active").first().attr("value") == "normalGrid"){
-			gridPresenter.alignGrid("product-grid", columns, 200, 25);				
-		}else{			
-			gridPresenter.alignRandomGrid("product-grid", columns, 200, 16);
-		}		
-		
+					
+		gridPresenter.alignGrid("product-grid", columns, 200, 25);						
 		closetFormPresenter.markUsersClositItems();
 	}, 
 	
 	getDefaultColumns: function(){
-		var columns = 2;
+		var columns = 1;
 		var screenWidth = $(document).width();
 		
-		if(screenWidth > 1200){
+		if(screenWidth > 1425){
+			columns = 6;	
+		}else if(screenWidth > 1200){
 			columns = 5;	
 		}else if(screenWidth > 975){
 			columns = 4;	
 		}else if(screenWidth > 750){
 			columns = 3;	
+		}else if(screenWidth > 525){
+			columns = 2;	
 		}
 		
 		/*
@@ -57,128 +39,6 @@ var gridPresenter = {
 		
 		return columns;	
 	},
-
-	alignRandomGrid: function(/*string*/ id, /*int*/ cols, /*int*/ cellWidth, /*int*/ padding) {
-   
-		var x = 0;
-		var count = 0;
-		var unit = "px";
-		var yPos = new Array();
-		//var staticCellSizes = [[2,2,2,3,4,3,2,1,2,2,2,1],[2,2,2,2,3,2,2,2,2,3,2,2],[3,3,3,3,3,3,3,3,3,3,2,3,1],[1,2,3,3,4,2,2,2,4,2,4,2]];
-		var colNum = 0;
-		var randCols = 0;
-		
-		var divisor = 4;
-		cols *= divisor;
-		cellWidth = Math.ceil(cellWidth / divisor);
-		padding = Math.ceil(padding / divisor);
-		
-		for(var i=0; i< cols; i++){
-			yPos[i] = 0;	
-		}				
-		
-		$lastOutfit = $("#" + id).children("div[aligned=true]").last();
-		
-		if($lastOutfit.size() > 0){			
-	       	for(var i=0; i < cols; i++){
-	       		yPos[i] = parseInt($lastOutfit.attr("ypos"));
-	       	}        
-	       	
-	        x = parseInt($lastOutfit.attr("xpos")); 
-	        
-	        count = parseInt($lastOutfit.attr("sc")) + parseInt($lastOutfit.attr("rc")) % cols;	        	        	       
-		}                              
-		
-	    $("#" + id).css("position", "relative").css("margin","0 auto").css("width", (cols * (cellWidth + padding)) + "px");
-	    
-	    $(".pageEndSpacer").remove();
-	    
-	    $("#" + id).children("div[aligned!=true]").each(function() {
-	    	colNum = count % cols;
-	    	//var rowNum = Math.floor(count / cols) % staticCellSizes.length;
-	    	
-	    	// get max available cols
-	    	var maxCols = divisor - (colNum % divisor);		    					    			    	
-	    	
-	    	// get rand # cols within max cols
-	    	randCols = Math.floor(Math.random() * (maxCols - 1)) + 2;
-	    	//var randCols = staticCellSizes[rowNum][colNum];
-	    	
-	    	// get the max height of the previous cells in the overlapping cols
-	    	var maxHeightOfPreviousRow = 0;
-	    	
-	    	for(var i= colNum; i < colNum + randCols; i++){
-	    		if(yPos[i % cols] > maxHeightOfPreviousRow){
-	    			maxHeightOfPreviousRow = yPos[i % cols];	
-	    		}	
-	    	}	
-	    	
-	    	// get the max height of the cells in the current row
-	    	var maxHeightOfCurrentRow = 0;
-	    	
-	    	for(var i= 0; i < cols; i++){
-	    		if(yPos[i] > maxHeightOfCurrentRow){
-	    			maxHeightOfCurrentRow = yPos[i];	
-	    		}	
-	    	}		    
-	    	
-	    	var cellTempPadding = padding * randCols;		    	
-	    	var cellTempWidth = cellWidth * randCols;
-	    	
-	    	if(cellTempPadding != padding * divisor){
-	    		cellTempWidth -= cellTempPadding / 2;	
-	    	}		    			    			    	
-	    	
-	    	var imgHeight = $(this).find(".picture > a > img").first().css("height");
-	    	var imgWidth = $(this).find(".picture > a > img").first().css("width");
-	    	
-	    	if(imgHeight == undefined || imgHeight == null || imgHeight.trim() == ""){
-				imgHeight = 70;	    	
-		    	imgWidth = cellTempWidth;  	
-	    	}else{		    	
-		    	imgHeight = parseInt(imgHeight.substring(0,imgHeight.length - 2));	    	
-		    	imgWidth = parseInt(imgWidth.substring(0,imgWidth.length - 2));
-	    	}
-	    	
-	    	if(imgHeight < 50){	    		
-	    		imgHeight = 270;
-	    		imgWidth = 202;	
-	    	}
-	    	
-	    	var newHeight = cellTempWidth * imgHeight / imgWidth;
-	    	
-	        $(this).css("width", cellTempWidth + unit);
-	        $(this).css("height", newHeight + unit);
-	        $(this).css("position", "absolute");		        		        		    		    	
-	        
-	        $(this).css("left", x + unit);
-	        $(this).css("top", maxHeightOfPreviousRow + unit);
-	        $(this).attr("aligned", true);
-	        $(this).attr("sc", colNum);
-	        $(this).attr("rc", randCols);	        
-	        
-	        if (colNum + randCols >= cols -1 ) {
-	            x = 0;	            
-	        } else {
-	            x += cellTempWidth + cellTempPadding;
-	        }	        	        	           
-	        
-	        for(var i=colNum; i<colNum + randCols; i++){
-	        	yPos[i % cols] = maxHeightOfPreviousRow + newHeight + cellTempPadding;
-	        }
-	        
-	        $(this).attr("ypos", maxHeightOfCurrentRow);
-	        $(this).attr("xpos", x);
-	        
-	        count += randCols;
-	    });
-	    
-	     $("#" + id).append(
-	    	$("<div>").addClass("pageEndSpacer")	    		
-	    		.css("top", yPos[(count-1) % cols] + "px")
-	    );	    
-	},
-
 
 	alignGrid: function(/*string*/ id, /*int*/ cols, /*int*/ cellWidth, /*int*/ padding) {
    
@@ -291,8 +151,7 @@ var gridPresenter = {
 var gridEvents = {	
 	
 	init: function(){
-		gridEvents.overlayEvent();
-		$(window).scroll(gridEvents.continuousScroll);
+		gridEvents.overlayEvent();				
 		$(document).on("click",".addToClosetBtn",closetFormPresenter.showClosetForm);		
 		$(document).on("submit",".addToClosetForm > form",closetFormPresenter.addToCloset);
 		$(document).on("click",'.addToClosetForm > form input[type="radio"]',function(el){
@@ -300,7 +159,7 @@ var gridEvents = {
 		});		
 		
 		$(document).on("click",".tagOutfitBtn",tagPresenter.showTagForm);
-		$(document).on("submit",".addTagForm > form",tagPresenter.addTag);
+		$(document).on("submit",".addTagForm > form",tagPresenter.addTag);				
 	},
 	
 	overlayEvent: function(){
@@ -315,9 +174,9 @@ var gridEvents = {
 			$(this).children(".overlay").first().fadeOut('slow');
 	}, 
 	
-	continuousScroll: function(){		
+	continuousScroll: function(){		 
 		gridPresenter.showContent(15);
-	}
+	}		
 };
 
 
@@ -608,10 +467,11 @@ var tagPresenter = {
 	allTags: null,
 	
 	init: function(){
-		$( "#tags" ).val("");
+		$( "#search-bar" ).val("");
 		tagPresenter.getAllTagNames();
-		$("#tag-search-form").submit(tagPresenter.searchTags);
-		$("#tag-search-clear").click(tagPresenter.clearSearch);
+		$("#search-form").submit(tagPresenter.searchTags);
+		$("#seach-bar-icon").on("click", tagPresenter.searchTags);
+		$("#search-clear").click(tagPresenter.clearSearch);
 	},
 	
 	showTagForm: function(el){
@@ -704,11 +564,11 @@ var tagPresenter = {
 	
 	searchTags: function(el){
 		el.preventDefault();
-		var tag = $( "#tags" ).val();
+		var tag = $( "#search-bar" ).val();
 		var products = new Array();
 
 		
-		if(/^[a-zA-Z0-9]+$/.test(tag)){	
+		if(/^[a-zA-Z0-9 '-]+$/.test(tag)){	
 			$("#product-grid").children().remove();
 			$("#loadingMainContent").show();
 		
@@ -735,13 +595,13 @@ var tagPresenter = {
 				if( products.length > 0){
 					gridPresenter.showContent(15);
 				}else{
-					$("#product-grid").append($("<div>").html("Sorry there are no outfits with that tag! Don't be shy though, be the first to use the tag \"" + tag + "\""));
+					$("#product-grid").append($("<div>").html("Sorry there are no outfits that match: \"" + tag + "\"! Try using another way to describe what you are looking for."));
 				}
 				
-				$("#tag-search-clear").show();
+				$("#search-clear").show();
 			});			
 		}else{
-			Messenger.error('Tags can only be alphanumeric!');					
+			Messenger.error('Search text can only contain letters, numbers, and apostrophes!');					
 		}
 		
 		return false;
@@ -749,10 +609,10 @@ var tagPresenter = {
 	
 	clearSearch: function(el){
 		el.preventDefault();
-		$( "#tags" ).val("");
+		$( "#search-bar" ).val("");
 		$("#product-grid").remove();
 		$("#loadingMainContent").show();
-		$("#tag-search-clear").hide();
+		$("#search-clear").hide();
 		
 		productPresenter.clothingStore = [];
 		productPresenter.filterStore = [];
