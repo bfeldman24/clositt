@@ -5,8 +5,13 @@
 			    <div id="brand-fixed-background" class="clositt-green" style="display:none;width:300px;height:43px;position:fixed; box-shadow: 3px 0 0 #FFFFFF;"></div>			    
   	            <a class="brand" id="brand" href="<?php echo HOME_ROOT;?>">Clositt</a>
 	            
-	            <ul class="nav navleft" id="user-project-nav">		           
+	            <ul class="nav navleft" id="user-project-nav">	
+	               
 	            </ul>
+	            
+	            <div id="misc-header-links">
+    	            <a href="contact-us.php">Feedback</a>    	            
+	            </div>        
 	            
 	            <div id="user-dropdown">
                     <ul class="nav navright unstyled" style="margin-top: 10px;">  

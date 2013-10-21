@@ -1249,6 +1249,24 @@ input.closetNameInput[type="text"] {
     text-decoration: none;    
 }
 
+#misc-header-links{       
+    position: fixed;
+    right: 214px;
+    top: 8px;
+    z-index: 10;   
+}
+
+#misc-header-links a{
+    font-weight: lighter;
+    font-size: 24px;
+    color: #FFFFFF;
+}
+
+#misc-header-links a:hover{
+    text-decoration: none;
+    color: #DDDDDD;   
+}
+
 #filter-toggle{
     background: linear-gradient(to bottom, #00BA6C 0%, #14AD6B 50%, #46B585 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);    border-radius: 10px 10px 0 0;    color: #FFFFFF;    left: -29px;    padding: 7px 10px;    position: fixed;    top: 120px;
     cursor: pointer;    transform: rotate(90deg);

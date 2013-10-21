@@ -1,5 +1,5 @@
 <?php include(dirname(__FILE__) . '/globals.php'); ?> 
-<!DOCTYPE>i
+<!DOCTYPE>
 <html>
 <head>
 
@@ -10,9 +10,6 @@
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
 
 <div id="signup">
-<?php 
-print_r($_SESSION);
-?>
 
 <h1>Contact Us</h1>
 	<form class="form-horizontal">
@@ -60,9 +57,6 @@ print_r($_SESSION);
 
 
 <script type="text/javascript">
-function loggedIn(){
-	location.href= "<?php echo HOME_ROOT;?>closet.php";	
-}
 
 $("form").on("submit",function(event){
 	 event.preventDefault();
