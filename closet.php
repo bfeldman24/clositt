@@ -11,7 +11,7 @@
 <body>
 
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
-<div id="main-content" class="container main-container">
+<div id="main-content" class="container main-container" style="margin-top:80px">
 	<h1><span id="user-closet-title"></span></h1>
 	
 	<?php if(!isset($_GET['user'])){ ?>
