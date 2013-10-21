@@ -312,8 +312,8 @@ var pagePresenter = {
     
     handleScrollEvents: function(){
         pagePresenter.toggleHeader();
-                
-        if(typeof gridEvents == 'function'){
+
+        if(typeof gridEvents == 'object'){
             gridEvents.continuousScroll();          
         }        
     },
