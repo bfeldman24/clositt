@@ -337,7 +337,7 @@ var closetFormPresenter = {
 		
 		var name = $(el.currentTarget).parent().prev().find(".name").text();
 		var company = $(el.currentTarget).parent().prev().find(".companyName").text();
-		var link = $(el.currentTarget).parent().parent().prev().find("a").attr("href");
+		var link = $(el.currentTarget).parent().parent().prev().find("a").attr("productid");
 		var image  = $(el.currentTarget).parent().parent().prev().find("img").attr("src");
 		
 		var closetNameInput = $(el.currentTarget).find('input[name="newCloset"]').val();
