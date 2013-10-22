@@ -218,8 +218,8 @@ var closetPresenter = {
             		 	.attr("id","share-url")
             			.attr("value",query)
             			.css("position","absolute")
-           			.css("top","110px")
-            			.css("right","30px")
+           			    .css("top","110px")
+            			.css("right","185px")
             			.css("height","30px")
             			.css("width","200px")
         		);
