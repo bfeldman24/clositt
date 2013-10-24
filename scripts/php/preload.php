@@ -77,7 +77,7 @@ var storeSetup = {
 							}
 							
 							var product = {"o":companyName,"u":customerName,"a":categoryName,"l":product.link,
-												"i":product.image,"n":product.name,"p":finalPrice,"fp":filterPrice};
+												"i":product.image,"n":product.name,"p":finalPrice,"fp":filterPrice,"s":product.sku};
 							productListing.push(product);																						
 	 				});	
 	 			});	
