@@ -97,7 +97,7 @@ storeApi = {
 							item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;	
 							item.name = this.name;
 							item.price = this.price.currentMinPrice;	
-							item.sku = 'g-' + this.businessCatalogItemId;
+							item.sku = 'g' + this.businessCatalogItemId;
 				
 							if(item.image != undefined){			
 								var itemid = item.sku.replace(/-\W/g, '');
@@ -114,7 +114,7 @@ storeApi = {
 	                                                item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
 	                                                item.name = this.name;
 	                                                item.price = this.price.currentMinPrice;
-	                                                item.sku = 'g-' + this.businessCatalogItemId;
+	                                                item.sku = 'g' + this.businessCatalogItemId;
 	
 	                                                if(item.image != undefined){
 	                                                        var itemid = item.sku.replace(/-\W/g, '');
@@ -132,7 +132,7 @@ storeApi = {
 	                                item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
 	                                item.name = this.name;
 	                                item.price = this.price.currentMinPrice;
-	                                item.sku = 'g-' + this.businessCatalogItemId;
+	                                item.sku = 'g' + this.businessCatalogItemId;
 	
 	                                if(item.image != undefined){
 	                                	var itemid = item.sku.replace(/-\W/g, '');
@@ -157,7 +157,7 @@ storeApi = {
 			item.price = $(this).find(".arrayProdPrice").text().trim();									     			
 			
 			if(item.image != undefined){    
-			    item.sku = 'jc-' + item.link.substring(item.link.lastIndexOf("/")+1, item.link.lastIndexOf("."));
+			    item.sku = 'jc' + item.link.substring(item.link.lastIndexOf("/")+1, item.link.lastIndexOf("."));
 			    
 				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
@@ -179,7 +179,7 @@ storeApi = {
 			item.price = $(this).find(".overlay > .fg > .description > .price > p").not(".was").first().text().trim();
 			
 			var url = item.link.substring(0, item.link.indexOf("?"));
-            item.sku = 'at-' + url.substring(url.lastIndexOf("/")+1);
+            item.sku = 'at' + url.substring(url.lastIndexOf("/")+1);
 			
 			if(item.image != undefined){
 				var itemid = item.sku.replace(/-\W/g, '');			
@@ -226,7 +226,7 @@ storeApi = {
 			item.price = $(this).find(".category-product-description > .price").first().text().trim();		        
 	
 			if(item.image != undefined){
-			    item.sku = 'uo-' + item.link.substring(item.link.indexOf("id=")+3, item.link.indexOf("&"));
+			    item.sku = 'uo' + item.link.substring(item.link.indexOf("id=")+3, item.link.indexOf("&"));
 			    
 				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
@@ -247,7 +247,7 @@ storeApi = {
 			item.link = $(this).find("a.gaProductDetailsLink").first().attr("href");			
 			item.name = $(this).find(".product-info > a.name").first().text().trim();				
 			item.price = $(this).find(".product-info > .price").first().text().trim();
-			item.sku = 'z-' + $(this).find("a.gaProductDetailsLink").first().attr("data-item");
+			item.sku = 'z' + $(this).find("a.gaProductDetailsLink").first().attr("data-item");
 			
 			if(item.image != undefined){
 				var itemid = item.sku.replace(/-\W/g, '');			
@@ -270,7 +270,7 @@ storeApi = {
 			item.price = $(this).find("a > .details > .price").first().text().trim();
 			$(this).find("a > .details > .price").first().remove();
 			item.name = $(this).find("a > .details").first().text().trim();	
-			item.sku = 'hm-' + $(this).find("button.quicklook").first().attr("data-product");				
+			item.sku = 'hm' + $(this).find("button.quicklook").first().attr("data-product");				
 			
 			if(item.image != undefined){
 				var itemid = item.sku.replace(/-\W/g, '');			
@@ -293,7 +293,7 @@ storeApi = {
 	                item.name = $(this).children(".name").find("a").first().text().trim();	                
 	
 	                if(item.image != undefined){
-	                   item.sku = 'tb-' + item.link.substring(item.link.lastIndexOf("/")+1,item.link.indexOf(","));
+	                   item.sku = 'tb' + item.link.substring(item.link.lastIndexOf("/")+1,item.link.indexOf(","));
 	                   
 				        var itemid = item.sku.replace(/-\W/g, '');
 	                    products[itemid] = item;
