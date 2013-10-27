@@ -203,7 +203,7 @@ storeApi = {
 			item.price = $(this).find(".description > .price > p").not(".was").first().text().trim();
 			
 			var url = item.link.substring(0, item.link.indexOf("?"));
-            item.sku = 'l-' +url.substring(url.lastIndexOf("/")+1);
+            item.sku = 'l' + url.substring(url.lastIndexOf("/")+1);
 			
 			if(item.image != undefined){
 				var itemid = item.sku.replace(/-\W/g, '');			

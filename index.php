@@ -19,17 +19,20 @@
       		<div class="form-search input-append">
       		    <div id="seach-bar-icon"><img src="css/images/Search.png" /></div>
       			<input id="search-bar" placeholder="Start your search here! (ex. Black Party Dress)" class="input-xxlarge search-query" />
-      			<button class="btn" type="button" id="search-clear-btn" style="display:none;">Clear</button>
+      			<button id="search-clear-btn" style="display:none;" class="close">&times;</button>
       		</div>
       		<input type="submit" style="display:none;" />
       	</form>
     </div>
     
-    <div id="main-content" class="container main-container"><div id="loadingMainContent"><img src="css/images/loading.gif"/></div></div>
+    <div id="main-content" class="container main-container">
+        <div id="loadingMainContent"><img src="css/images/loading.gif"/></div>
+        <div id="product-grid"></div>
+    </div>
 </div>
 
 <br><br><br><br>
-<div id="filter-toggle">Show Filter</div>
+<div id="filter-toggle" class="clositt-green">Show Filter</div>
 <div id="filter-float" style="display:none;"></div>
 <div id="review-float" style="display:none;">
 	<ul id="review-comments">
@@ -76,8 +79,14 @@ Once you find something you like, just click on the hanger icon and add it to yo
 <div id="review-mask"></div>
 
 
+<script src="<?php echo HOME_ROOT; ?>scripts/js/pagePresenter.js"></script>
 <script src="<?php echo HOME_ROOT; ?>scripts/js/gridPresenter.js"></script>
+<script src="<?php echo HOME_ROOT; ?>scripts/js/gridEvents.js"></script>
 <script src="<?php echo HOME_ROOT; ?>scripts/js/productPresenter.js"></script>
+<script src="<?php echo HOME_ROOT; ?>scripts/js/filterPresenter.js"></script>
+<script src="<?php echo HOME_ROOT; ?>scripts/js/tagPresenter.js"></script>
+<script src="<?php echo HOME_ROOT; ?>scripts/js/searchController.js"></script>
+<script src="<?php echo HOME_ROOT; ?>scripts/js/reviewsPresenter.js"></script>
 <script src="<?php echo HOME_ROOT; ?>scripts/js/closetPresenter.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -91,8 +100,8 @@ $(document).ready(function() {
 	productPresenter.init();	
 	filterPresenter.init();	
 	tagPresenter.init();
-	reviewsPresenter.init();
-		
+	searchController.init();
+	reviewsPresenter.init();		
 });
 
 function loggedIn(){

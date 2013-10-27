@@ -10,7 +10,7 @@ var firebase = {
 		
 	init: function(){
 		firebase.$ = new Firebase(firebase.url);	
-		firebase.authClient = new FirebaseAuthClient(firebase.$, firebase.checkActiveUser);
+		firebase.authClient = new FirebaseSimpleLogin(firebase.$, firebase.checkActiveUser);
 	},
 		
 	checkActiveUser: function(error, user){
