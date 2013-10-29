@@ -11,7 +11,7 @@
 <body>
 
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
-<div id="main-content" class="container main-container">
+<div id="main-content" class="container main-container" style="margin-top:80px">
 	<h1><span id="user-closet-title"></span></h1>
 	
 	<?php if(!isset($_GET['user'])){ ?>
@@ -27,20 +27,26 @@
 <div id="closetId" style="display:none;"><?php echo $_GET['user'];?></div>
 <script src="<?php echo HOME_ROOT; ?>scripts/js/closetPresenter.js"></script>
 <script src="<?php echo HOME_ROOT; ?>scripts/js/productPresenter.js"></script>
+<script src="<?php echo HOME_ROOT; ?>scripts/js/pagePresenter.js"></script>
 <script type="text/javascript">
 <?php if(isset($_GET['user'])){ ?>
 $(document).ready(function(){ 
-	closetPresenter.init(<?php echo $_GET['user']; ?>);
+	closetPresenter.init(<?php echo $_GET['user']; ?>);		
  });
 <?php }else{ ?>
 function userDataReady(user){
-       closetPresenter.init();
+    pagePresenter.init();
+    closetPresenter.init();              
 }
 <?php } ?>
 
 function loggedOut(){
 	location.href = "<?php echo HOME_ROOT; ?>";
 }
+
+
+$("#subheader-navbar li a").removeClass();
+$('#subheader-navbar li a[href="closet.php"]').addClass("active");
 </script>
 
 </body>

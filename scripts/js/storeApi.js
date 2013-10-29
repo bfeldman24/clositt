@@ -78,32 +78,13 @@ storeApi = {
 	},
 	
 	
-	getGapHTML: function(data, url){
-			var products = new Object();
-	  		  		
-			$(data).find(".productCatItem").each(function(){					
-				var item = new Object();
-				item.image = $(this).find("img").attr("productimagepath");	
-				item.link = url + $(this).find(".productItemName").attr("href");	
-				item.name = $(this).find(".productItemName").html();
-				item.price = $(this).find(".priceDisplay").html();	
-			
-				if(item.image != undefined){
-					var itemid = item.link.replace(/\W/g, '');			
-					products[itemid] =item;
-				}
-			});
-		
-		return JSON.stringify(products);
-	},
-	
-	
-	getGapJson: function(data, url){
+	getGapJson: function(data, siteHome){
 			var json = $.parseJSON(data);
 			var products = new Object();
 	  		var cid = json.productCategoryFacetedSearch.productCategory.businessCatalogItemId;
 			var vid = 1;
 	
+	        
 			if(json.productCategoryFacetedSearch.productCategory.childCategories != null){
 				if(json.productCategoryFacetedSearch.productCategory.childCategories.length > 1){	
 					$.each(json.productCategoryFacetedSearch.productCategory.childCategories, function(){
@@ -113,54 +94,58 @@ storeApi = {
 						
 							var item = new Object();
 							item.image = this.quicklookImage.path;	
-							item.link = url + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;	
+							item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;	
 							item.name = this.name;
 							item.price = this.price.currentMinPrice;	
+							item.sku = 'g' + this.businessCatalogItemId;
 				
 							if(item.image != undefined){			
-								var itemid = item.link.replace(/\W/g, '');
+								var itemid = item.sku.replace(/-\W/g, '');
 								products[itemid] = item;
 							}
 						});
 					});
-				}else{
+				}else if (json.productCategoryFacetedSearch.productCategory.childCategories.childProducts != null){
 					$.each(json.productCategoryFacetedSearch.productCategory.childCategories.childProducts, function(){
 	                                                var pid = this.businessCatalogItemId;
 	
 	                                                var item = new Object();
 	                                                item.image = this.quicklookImage.path;
-	                                                item.link = url + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
+	                                                item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
 	                                                item.name = this.name;
 	                                                item.price = this.price.currentMinPrice;
+	                                                item.sku = 'g' + this.businessCatalogItemId;
 	
 	                                                if(item.image != undefined){
-	                                                        var itemid = item.link.replace(/\W/g, '');
+	                                                        var itemid = item.sku.replace(/-\W/g, '');
 	                                                        products[itemid] = item;
 	                                               }
 	                                       
 	                                });		
 				}
-			}else{
+			}else if(json.productCategoryFacetedSearch.productCategory.childProducts != null){
 				$.each(json.productCategoryFacetedSearch.productCategory.childProducts, function(){
 	                        	var pid = this.businessCatalogItemId;
 	
 	                                var item = new Object();
 	                                item.image = this.quicklookImage.path;
-	                                item.link = url + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
+	                                item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
 	                                item.name = this.name;
 	                                item.price = this.price.currentMinPrice;
+	                                item.sku = 'g' + this.businessCatalogItemId;
 	
 	                                if(item.image != undefined){
-	                                	var itemid = item.link.replace(/\W/g, '');
+	                                	var itemid = item.sku.replace(/-\W/g, '');
 	                                        products[itemid] = item;
 	                                }
 	                        });
 			}
+	        
 		return JSON.stringify(products);
 	},
 	    
-	getJcrew: function(data, url){	
-		url += "?iNextCategory=-1";
+	getJcrew: function(data, siteHome){	
+		siteHome += "?iNextCategory=-1";
 	  	var products = new Object();   		
 	  	
 		$(data).find(".arrayProdCell").each(function(){
@@ -169,10 +154,12 @@ storeApi = {
 			item.image = $(this).find(".arrayImg").find("img").attr("src");			
 			item.link = $(this).find(".arrayImg").find("a").attr("href");			
 			item.name = $(this).find(".arrayProdName").find("a").text().trim();				
-			item.price = $(this).find(".arrayProdPrice").text().trim();
+			item.price = $(this).find(".arrayProdPrice").text().trim();									     			
 			
-			if(item.image != undefined){
-				var itemid = item.link.replace(/\W/g, '');			
+			if(item.image != undefined){    
+			    item.sku = 'jc' + item.link.substring(item.link.lastIndexOf("/")+1, item.link.lastIndexOf("."));
+			    
+				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
 		});
@@ -180,19 +167,22 @@ storeApi = {
 		return JSON.stringify(products);	
 	},
 	    
-	getAnnTaylor: function(data, url){
+	getAnnTaylor: function(data, siteHome){
 	 	var products = new Object();
 	 		   		
 		$(data).find(".product").each(function(){
 			var item = new Object();
 			
 			item.image = $(this).find(".thumb").children("img").first().attr("src");
-			item.link = url + $(this).find(".overlay > a.clickthrough").first().attr("href");			
+			item.link = siteHome + $(this).find(".overlay > a.clickthrough").first().attr("href");			
 			item.name = $(this).find(".overlay > .fg > .description > .messaging > p").not(".POS").first().text().trim();		
 			item.price = $(this).find(".overlay > .fg > .description > .price > p").not(".was").first().text().trim();
 			
+			var url = item.link.substring(0, item.link.indexOf("?"));
+            item.sku = 'at' + url.substring(url.lastIndexOf("/")+1);
+			
 			if(item.image != undefined){
-				var itemid = item.link.replace(/\W/g, '');			
+				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
 		});
@@ -201,19 +191,22 @@ storeApi = {
 	},
 	
 	    
-	getLoft: function(data, url){
+	getLoft: function(data, siteHome){
 		 var products = new Object();
 		 		    		
 		$(data).find(".products").find(".product").each(function(){
 			var item = new Object();
 			
 			item.image = $(this).find(".thumb").children("img").first().attr("src");				
-			item.link = url + $(this).find(".overlay > a.clickthrough").first().attr("href");			
+			item.link = siteHome + $(this).find(".overlay > a.clickthrough").first().attr("href");			
 			item.name = $(this).find(".description > .messaging > p").not(".POS").first().text().trim();				
 			item.price = $(this).find(".description > .price > p").not(".was").first().text().trim();
 			
+			var url = item.link.substring(0, item.link.indexOf("?"));
+            item.sku = 'l' + url.substring(url.lastIndexOf("/")+1);
+			
 			if(item.image != undefined){
-				var itemid = item.link.replace(/\W/g, '');			
+				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
 		});
@@ -221,19 +214,21 @@ storeApi = {
 		return JSON.stringify(products);
 	},
 	    	
-	getUrban: function(data, url){
+	getUrban: function(data, siteHome){
 	    var products = new Object();
 	    		    		
 		$(data).find("#category-products").children().each(function(){
 			var item = new Object();
 					
 			item.image = $(this).find(".category-product-image > a > img").first().attr("src");				
-			item.link = url + $(this).find(".category-product-image > a").first().attr("href");			
+			item.link = siteHome + $(this).find(".category-product-image > a").first().attr("href");			
 			item.name = $(this).find(".category-product-description > h2 > a").first().text().trim();				
-			item.price = $(this).find(".category-product-description > .price").first().text().trim();
+			item.price = $(this).find(".category-product-description > .price").first().text().trim();		        
 	
 			if(item.image != undefined){
-				var itemid = item.link.replace(/\W/g, '');			
+			    item.sku = 'uo' + item.link.substring(item.link.indexOf("id=")+3, item.link.indexOf("&"));
+			    
+				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
 		});
@@ -241,7 +236,7 @@ storeApi = {
 		return JSON.stringify(products);
 	},
 	    
-	getZara: function(data, url){
+	getZara: function(data, siteHome){
 		var products = new Object();
 	    	$(".currency").html("");		
 	      	  		
@@ -252,9 +247,10 @@ storeApi = {
 			item.link = $(this).find("a.gaProductDetailsLink").first().attr("href");			
 			item.name = $(this).find(".product-info > a.name").first().text().trim();				
 			item.price = $(this).find(".product-info > .price").first().text().trim();
+			item.sku = 'z' + $(this).find("a.gaProductDetailsLink").first().attr("data-item");
 			
 			if(item.image != undefined){
-				var itemid = item.link.replace(/\W/g, '');			
+				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
 		});
@@ -262,8 +258,8 @@ storeApi = {
 		return JSON.stringify(products);
 	},
 	
-	getHM: function(data, url){
-		url += "&size=1000";
+	getHM: function(data, siteHome){
+		siteHome += "&size=1000";
 		var products = new Object();
 	      	  		
 		$(data).find("#list-products").children("li").not(".getTheLook").each(function(){
@@ -273,10 +269,11 @@ storeApi = {
 			item.link = $(this).find("a").first().attr("href");			
 			item.price = $(this).find("a > .details > .price").first().text().trim();
 			$(this).find("a > .details > .price").first().remove();
-			item.name = $(this).find("a > .details").first().text().trim();				
+			item.name = $(this).find("a > .details").first().text().trim();	
+			item.sku = 'hm' + $(this).find("button.quicklook").first().attr("data-product");				
 			
 			if(item.image != undefined){
-				var itemid = item.link.replace(/\W/g, '');			
+				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
 		});
@@ -284,7 +281,7 @@ storeApi = {
 		return JSON.stringify(products);
 	},
 	
-	getToryBurch: function(data, url){
+	getToryBurch: function(data, siteHome){
 	        var products = new Object();
 	
 	        $(data).find("#search > .productresultarea > .productlisting > .product").each(function(){
@@ -293,11 +290,13 @@ storeApi = {
 	                item.image = $(this).children(".image").find("img:nth-child(2)").attr("src");
 	                item.link = $(this).children(".image").find("a").first().attr("href");
 	                item.price = $(this).find(".pricing > .price").first().text().trim();
-	                item.name = $(this).children(".name").find("a").first().text().trim();
+	                item.name = $(this).children(".name").find("a").first().text().trim();	                
 	
 	                if(item.image != undefined){
-				var itemid = item.link.replace(/\W/g, '');
-	                        products[itemid] = item;
+	                   item.sku = 'tb' + item.link.substring(item.link.lastIndexOf("/")+1,item.link.indexOf(","));
+	                   
+				        var itemid = item.sku.replace(/-\W/g, '');
+	                    products[itemid] = item;
 	                }
 	        });
 	

@@ -10,7 +10,7 @@ var firebase = {
 		
 	init: function(){
 		firebase.$ = new Firebase(firebase.url);	
-		firebase.authClient = new FirebaseAuthClient(firebase.$, firebase.checkActiveUser);
+		firebase.authClient = new FirebaseSimpleLogin(firebase.$, firebase.checkActiveUser);
 	},
 		
 	checkActiveUser: function(error, user){
@@ -81,21 +81,21 @@ var firebase = {
 		  }
 	},
 	
-	logginCallback: function(){
+	logginCallback: function(){	    	   
 		if(typeof loggedIn == 'function')
 		{
 			loggedIn();
 		}  
 	},
 	
-	loggedOutCallback: function(){
+	loggedOutCallback: function(){	    	   
 		if(typeof loggedOut == 'function')
 		{
 			loggedOut();
 		}  
 	},
 	
-	loggedOutErrorCallback: function(){
+	loggedOutErrorCallback: function(){	   
 		if(typeof loggedOutError == 'function')
 		{
 			loggedOutError();
@@ -111,7 +111,7 @@ var firebase = {
 	
 	updateLoggedInDropdownMenu: function(){
 		$("#account-dropdown").html("")
-	    	.append($('<li><a href="closet.php">My Closet</a></li>'))    	
+	    	//.append($('<li><a href="closet.php">My Closet</a></li>'))    	
 	    	.append($('<li><a href="#">Account Settings</a></li>'))
 	    	.append($('<li class="divider"></li>'))
 	    	.append($('<li><a href="javascript:firebase.logout();">Logout</a></li>')); 

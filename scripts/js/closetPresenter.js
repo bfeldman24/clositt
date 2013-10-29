@@ -218,8 +218,8 @@ var closetPresenter = {
             		 	.attr("id","share-url")
             			.attr("value",query)
             			.css("position","absolute")
-           			.css("top","110px")
-            			.css("right","30px")
+           			    .css("top","110px")
+            			.css("right","185px")
             			.css("height","30px")
             			.css("width","200px")
         		);
@@ -338,6 +338,7 @@ var closetFormPresenter = {
 		var name = $(el.currentTarget).parent().prev().find(".name").text();
 		var company = $(el.currentTarget).parent().prev().find(".companyName").text();
 		var link = $(el.currentTarget).parent().parent().prev().find("a").attr("href");
+		var sku = $(el.currentTarget).parent().parent().prev().find("a").attr("pid");
 		var image  = $(el.currentTarget).parent().parent().prev().find("img").attr("src");
 		
 		var closetNameInput = $(el.currentTarget).find('input[name="newCloset"]').val();
@@ -352,8 +353,8 @@ var closetFormPresenter = {
 		}
 		
 		if(closetName.trim().length > 0){
-			var item = {name: name, company: company, link: link, image: image}; 
-			var itemid = link.replace(/\W/g, '');
+			var item = {name: name, company: company, link: link, image: image, sku: sku}; 
+			var itemid = sku;
 			var index = closetFormPresenter.closetItems.indexOf(itemid);
 			
 			if(index < 0 || index >= closetFormPresenter.closetItemsMapping.length || closetFormPresenter.closetItemsMapping[index] != closetName){			

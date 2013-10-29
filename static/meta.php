@@ -14,4 +14,4 @@
 
 
 <script src='https://cdn.firebase.com/v0/firebase.js'></script>
-<script type='text/javascript' src='https://cdn.firebase.com/v0/firebase-auth-client.js'></script>
+<script type='text/javascript' src='https://cdn.firebase.com/v0/firebase-simple-login.js'></script>

@@ -29,7 +29,7 @@ var storeSetup = {
  	getProducts: function(store){	 
  		console.log("Getting products...");
  		$("body").append($("<div>").html("Getting products..."));
-		var productListing = new Array();	
+		var productListing = new Object();	
 	 	var companies = new Array();
 	 	var customers = new Array();
 	 	var categories = new Array();
@@ -76,9 +76,9 @@ var storeSetup = {
 								prices.push(filterPrice);
 							}
 							
-							var product = {"o":companyName,"u":customerName,"a":categoryName,"l":product.link,
-												"i":product.image,"n":product.name,"p":finalPrice,"fp":filterPrice};
-							productListing.push(product);																						
+							var item = {"o":companyName,"u":customerName,"a":categoryName,"l":product.link,
+												"i":product.image,"n":product.name,"p":finalPrice,"fp":filterPrice,"s":product.sku};
+							productListing[product.sku] = item;				
 	 				});	
 	 			});	
 	 		});	
@@ -119,15 +119,14 @@ var storeSetup = {
 	 },
 	 
 	 save: function(name, obj, i){
-	 	console.log(i + ") Saving " + obj.length + " " + name  + "...");
-	 	$("body").append($("<div>").html(i + ") Saving " + obj.length + " " + name + "..."));
-	 	
-		if(obj.length > 0){																							
-			
+	 	console.log(i + ") Saving " + Object.keys(obj).length + " " + name  + "...");
+	 	$("body").append($("<div>").html(i + ") Saving " + Object.keys(obj).length + " " + name + "..."));
+	 		 	
+		if(obj != null && Object.keys(obj).length > 0){																					
 			storeSetup.firebase.child("clositt").child(name).set(obj, function(error) {
 				  if (!error) {						
-						console.log(i + ") " + obj.length + " " + name + " saved successfully. ");
-						$("body").append($("<div>").html(i + ") " + obj.length + " " + name + " saved successfully."));
+						console.log(i + ") " + Object.keys(obj).length + " " + name + " saved successfully. ");
+						$("body").append($("<div>").html(i + ") " + Object.keys(obj).length + " " + name + " saved successfully."));
 				  }
 			});
 			
