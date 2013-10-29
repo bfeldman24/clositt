@@ -14,39 +14,53 @@ $_SESSION['userid'] = 0;
 <head>
 
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
+<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Monoton|Roboto+Slab|Roboto"/>
+<link type="text/css" rel="stylesheet" href="WelcomeV2-style.css"/>
 </head>
 <body>
 
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
 
-<div id="signup">
 
-<h3>Clositt.com is an exclusive site. You must have login credentials to continue</h3>
-<br><br>
-    
 
-	<form class="form-horizontal" action="closet.php">
-	    <div class="control-group">
-		    <label class="control-label" for="inputEmail">Email</label>
-		    <div class="controls">		  	  
-			  <div class="input-prepend">
-				<span class="add-on"><i class="icon-envelope"></i></span>
-				<input type="text" id="inputEmail" placeholder="Email" class="input-xlarge">
-			  </div>
-		    </div>
-	    </div>
-	    <div class="control-group">
-		    <label class="control-label" for="inputPassword">Password</label>
-		    <div class="controls">
-		    	<div class="input-prepend">
-					<span class="add-on"><i class="icon-lock"></i></span>
-					<input type="password" id="inputPassword" placeholder="Password" class="input-xlarge">		
-			  	</div>		   		
-		    </div>
-	    </div>
-	    <div class="control-group" style="margin: auto; width: 400px;">
-		    <button type="submit" class="btn btn-primary">Authorize</button>
-		    </div>
+
+<div id="mainContainer">
+
+	<div id= "contentContainer">
+	<div id="topBanner"> <span id="bannerText">Clositt is the best way to find, compare, and share, clothing from dozens of retailers <br> and help you find EXACTLY what you are looking for.</span>
+	</div>
+	 
+	<div id="leftContainer" class="homeGrid">
+		<div id="join">
+			<!need to insert sign up form here>
+			<h1 class="waitList">Join the wait list <br> for a Clositt account</h1> 
+			<input type="text" id="joinEmail" placeholder="Sign up for Clositt" class="inputBox">
+			<button type="submit" id="joinButton" class="button">Join Clositt</button
+		</div>
+	
+		<div id="login">
+			<form class="form-horizontal" action="closet.php">
+				<h1 class="account">Got an Account? Signin.</h1>
+			<div id="email">
+			<input type="text" id="inputEmail" placeholder="Email" class="inputBox">
+				</div>
+					<div id="password">	
+					<input type="password" id="inputPassword" placeholder="Password" class="inputBox">		
+					</div>		   		
+					<div>	
+						 <button type="submit" id="loginButton" class="button">Login</button>
+					</div>
+				</div> 
+		</div> 	
+	</div>
+	
+	<div id="rightBanner" class="homeGrid"> 
+		<h1 class="stop">STOP SEARCHING...</h1>
+		<h1 class="start">START FINDING</h1>
+		<div id="bannerImage"></div>
+	</div>
+</div>
+</div>			 
 	    </div>
     </form>
 </div>

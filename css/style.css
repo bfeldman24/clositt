@@ -6,11 +6,11 @@ body{
 	padding-left: 0px;
     padding-right: 0px;
     min-width: 920px;
-    font-family: 'Roboto', sans-serif !important;
+    font-family: 'Roboto', sans-serif ;
 }
 
 p, div, span, input, button, select, textarea, a, td {
-	font-family: 'Roboto', sans-serif !important;
+	font-family: 'Roboto', sans-serif ;
 }
 
 a{
