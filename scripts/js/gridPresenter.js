@@ -6,9 +6,9 @@ var gridPresenter = {
 
 	alignDefaultGrid: function(){
 		var columns = gridPresenter.getDefaultColumns();
-		$(".addToClosetBtn").tooltip({title:"Add to Closet"});
-		$(".tagOutfitBtn").tooltip({title:"Tagitt"});
-		//$(".addToClosetBtn").tooltip();	
+		$(".addToClosetBtn").tooltip();
+		$(".tagOutfitBtn").tooltip();
+		$(".showComments").tooltip();
 					
 		gridPresenter.alignGrid("product-grid", columns, 200, 25);						
 		closetFormPresenter.markUsersClositItems();

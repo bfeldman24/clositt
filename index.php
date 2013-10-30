@@ -34,23 +34,21 @@
 <br><br><br><br>
 <div id="filter-toggle" class="clositt-green">Show Filter</div>
 <div id="filter-float" style="display:none;"></div>
-<div id="review-float" style="display:none;">
-	<ul id="review-comments">
-		
-	</ul>
-	<div id="review-form">
-		<textarea id="review-add-comment" rows="3" placeholder="Add a Review..."></textarea>
+<!--<div id="review-float" class="review-float" style="display:none;">	
+	<div class="review-form">
+		<textarea class="review-add-comment" rows="3" placeholder="Add a Comment..."></textarea>
 		<div id="review-rating">
-			<i class="review-star star-large-empty" star="1"></i>
-			<i class="review-star star-large-empty" star="2"></i>
-			<i class="review-star star-large-empty" star="3"></i>
-			<i class="review-star star-large-empty" star="4"></i>
-			<i class="review-star star-large-empty" star="5"></i>
-			<span id="review-average" class="label label-info">0</span>	
+			<i class="review-star star-small-empty" star="1"></i>
+			<i class="review-star star-small-empty" star="2"></i>
+			<i class="review-star star-small-empty" star="3"></i>
+			<i class="review-star star-small-empty" star="4"></i>
+			<i class="review-star star-small-empty" star="5"></i>
+			<span class="review-average" class="label label-info">0</span>	
 		</div>	
-		<button id="review-add-btn" class="btn btn-success" type="button">Add Review</button>
+		<button class="review-add-btn" class="btn btn-success btn-mini" type="button">Add Comment</button>
 	</div>
-</div>
+	<ul class="review-comments"></ul>
+</div>-->
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 

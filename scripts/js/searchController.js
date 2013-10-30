@@ -49,17 +49,24 @@ var searchController = {
         cleanSearchTerm = cleanSearchTerm.replace(/(\b(\w{1,2})\b(\s|$))/gi,'');
         
         // remove common words
-        cleanSearchTerm = cleanSearchTerm.replace(/(for|with|that|has|like)(\s|$)/gi,'');
+        cleanSearchTerm = cleanSearchTerm.replace(/(for|with|that|has|like)(\s|$)/gi,'');                
         
         filters = filters.replace(/s?(?=\s|\||$)/gi, ""); // remove trailing 's' form every word
         filters = filters.replace(/sse/gi, "ss"); // remove 'es' from applicable words        
         
         var regex = new RegExp(searchController.regexEscape(filters), 'gi');
         var matchingFilters = cleanSearchTerm.match(regex);
+        
+        // Get additional filters based on key words
+        if(matchingFilters == null){
+            matchingFilters = [];   
+        }        
+        var tags = cleanSearchTerm.split(" ");
+        searchController.getAdditionalFiltersFromTags(matchingFilters, tags);
                 
         filterPresenter.clearFilters();
-        var selectedFilters = {};        
-        if (matchingFilters != null){
+        var selectedFilters = {};
+        if (matchingFilters != null && matchingFilters.length > 0){
             
             searchController.getAdditionalFilters(matchingFilters);
             
@@ -67,7 +74,8 @@ var searchController = {
             regex = new RegExp(searchController.regexEscape(matchingFilters.join('|')), 'gi');
             cleanSearchTerm = cleanSearchTerm.replace(regex, '');
             cleanSearchTerm = cleanSearchTerm.replace(/(\b(\w{1,2})\b(\s|$))/gi,''); // remove words less than 3 chars
-            cleanSearchTerm = cleanSearchTerm.trim();       
+            cleanSearchTerm = cleanSearchTerm.trim(); 
+            tags = cleanSearchTerm.split(" ");              
             
             for(var i=0; i < matchingFilters.length; i++){
                var filter = $("#filter-float").find('input[value^="' + searchController.toTitleCase(matchingFilters[i]) + '"]');
@@ -103,8 +111,7 @@ var searchController = {
                 }
             });               
         }       
-       
-        var tags = cleanSearchTerm.split(" ");        
+               
         searchController.results = new Object();     
         searchController.getProductsWithTag(searchTerm, tags, selectedFilters); 
     },
@@ -234,14 +241,31 @@ var searchController = {
 	
 	getAdditionalFilters: function(matchingFilters){
 	   
-	   if (($.inArray("dress", matchingFilters) ||
-	        $.inArray("skirts", matchingFilters) ||
-	        $.inArray("ann taylor", matchingFilters) ||
-	        $.inArray("loft", matchingFilters)) &&
-	        $.inArray("women", matchingFilters)){
+	   if (($.inArray("dress", matchingFilters) >= 0 ||
+	        $.inArray("skirts", matchingFilters)  >= 0 ||
+	        $.inArray("ann taylor", matchingFilters)  >= 0 ||
+	        $.inArray("loft", matchingFilters) >= 0) &&
+	        $.inArray("women", matchingFilters)  >= 0){
 	           
 	            matchingFilters.push("women");  
 	        }
+	},
+	
+	getAdditionalFiltersFromTags: function(matchingFilters, tags){
+	   if ($.inArray("top", tags) >= 0 || $.inArray("tops", tags) >= 0){	  	       	                
+            matchingFilters.push("polos");
+            matchingFilters.push("shirts");
+            matchingFilters.push("sweaters");
+            matchingFilters.push("t's & tops");
+            matchingFilters.push("top");  
+        }
+        
+        if ($.inArray("bottom", tags) >= 0 || $.inArray("bottoms", tags) >= 0){	           
+            matchingFilters.push("jeans");
+            matchingFilters.push("pants");
+            matchingFilters.push("skirts");
+            matchingFilters.push("bottom");  
+        }  
 	},
 	
 	getMatchingChild: function(snapshot, tag){
