@@ -21,50 +21,47 @@ $_SESSION['userid'] = 0;
 
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
 
-
-
-
 <div id="mainContainer">
 
 	<div id= "contentContainer">
-	<div id="topBanner"> <span id="bannerText">Clositt is the best way to find, compare, and share, clothing from dozens of retailers <br> and help you find EXACTLY what you are looking for.</span>
-	</div>
-	 
-	<div id="leftContainer" class="homeGrid">
-		<div id="join">
-			<!need to insert sign up form here>
-			<h1 class="waitList">Join the wait list <br> for a Clositt account</h1> 
-			<input type="text" id="joinEmail" placeholder="Sign up for Clositt" class="inputBox">
-			<button type="submit" id="joinButton" class="button">Join Clositt</button
-		</div>
-	
-		<div id="login">
-			<form class="form-horizontal" action="closet.php">
-				<h1 class="account">Got an Account? Signin.</h1>
-			<div id="email">
-			<input type="text" id="inputEmail" placeholder="Email" class="inputBox">
-				</div>
-					<div id="password">	
-					<input type="password" id="inputPassword" placeholder="Password" class="inputBox">		
-					</div>		   		
-					<div>	
-						 <button type="submit" id="loginButton" class="button">Login</button>
-					</div>
-				</div> 
-		</div> 	
-	</div>
-	
-	<div id="rightBanner" class="homeGrid"> 
-		<h1 class="stop">STOP SEARCHING...</h1>
-		<h1 class="start">START FINDING</h1>
-		<div id="bannerImage"></div>
-	</div>
-</div>
-</div>			 
-	    </div>
-    </form>
-</div>
+        	<div id="topBanner"> <span id="bannerText">Clositt is the best way to find, compare, and share, clothing from dozens of retailers <br> and help you find EXACTLY what you are looking for.</span>
+        	</div>
+        	 
+        	<div id="leftContainer" class="homeGrid">
+        		<div id="join">
+        			<h1 class="waitList">Join the wait list <br> for a Clositt account</h1> 
 
+        			<form id="waitinglist">
+            			<input type="text" id="joinEmail" placeholder="Sign up for Clositt" class="inputBox" />
+            			<button type="submit" id="joinButton" class="button">Join Clositt</button>
+        			</form>
+        		</div>
+        	
+        		<div id="login">
+        			<form id="signin" class="form-horizontal" action="closet.php">
+        				<h1 class="account">Got an Account? Signin.</h1>
+            			<div id="email">
+                			   <input type="text" id="inputEmail" placeholder="Email" class="inputBox" />
+                			</div>
+        				<div id="password">	
+        					<input type="password" id="inputPassword" placeholder="Password" class="inputBox" />		
+        				</div>		   		
+        				<div>	
+        				    <button type="submit" id="loginButton" class="button">Login</button>
+        				</div>
+        			</form> 
+        		</div> 	
+        	</div>
+        	
+        	<div id="rightBanner" class="homeGrid"> 
+        		<h1 class="stop">STOP SEARCHING...</h1>
+        		<h1 class="start">START FINDING</h1>
+        		<div id="bannerImage"></div>
+        	</div>
+        </div>
+    </div>
+</div>
+	
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 
 
@@ -95,7 +92,7 @@ function loggedIn(){
 		});
 }
 
-$("form").on("submit",function(event){
+$("#signin").on("submit",function(event){
 	 event.preventDefault();
 
      if($('#inputPassword').val().length > 5){
@@ -110,6 +107,19 @@ $("form").on("submit",function(event){
 		return false;
 	}		
 });
+
+$("#waitinglist").on("submit",function(event){
+	event.preventDefault();
+    firebase.addToWaitingList($("#joinEmail").val(), waitingListCallback);
+    
+    return false;   
+});
+
+function waitingListCallback(success){
+    if(success){
+        $("#joinEmail").val("");
+    }
+}
 
 </script>
 </body>

@@ -36,10 +36,12 @@ var reviewsPresenter = {
 	 },
 	 	 
 	 hideReview:function(review){
- 	     reviewsPresenter.currentReviewFB.off('child_added', reviewsPresenter.addReview);	
- 	     reviewsPresenter.currentReviewFbUrl = null;
+	     if (reviewsPresenter.currentReviewFB != null){
+     	     reviewsPresenter.currentReviewFB.off('child_added', reviewsPresenter.addReview);	
+     	     reviewsPresenter.currentReviewFbUrl = null;
+	     }
  	     
- 	     if(review != null){
+ 	     if(review != null && review.is(":visible")){
 	 	 	   review.hide('blind');
 	 	 	   review.find(".review-comments").html("");
  	     }

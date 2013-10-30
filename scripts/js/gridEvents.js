@@ -22,6 +22,11 @@ var gridEvents = {
 	
 	hideOverlay: function() {			
 			$(this).children(".overlay").first().fadeOut('slow');
+			
+			if (reviewsPresenter != null){
+			     var sku = $(this).find('a[pid]').first().attr("pid");			     			     
+			     reviewsPresenter.hideReview(reviewsPresenter.getReviewBlock(sku));
+			}
 	}, 
 	
 	continuousScroll: function(){		 
