@@ -15,7 +15,7 @@ $_SESSION['userid'] = 0;
 
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
 <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Monoton|Roboto+Slab|Roboto"/>
-<link type="text/css" rel="stylesheet" href="WelcomeV2-style.css"/>
+<link type="text/css" rel="stylesheet" href="css/WelcomeV2-style.css"/>
 </head>
 <body>
 
