@@ -476,7 +476,7 @@ footer p{
 }
 
 .outfit{
-    overflow-y: visible;
+	overflow:hidden;	
 }
 
 .outfit-toolbar-overlay{
@@ -635,15 +635,6 @@ footer p{
 	cursor:pointer;
 }
 
-.overlay .productActions{ 
-    height: 20px;  
-    border-bottom: 1px solid rgb(255, 255, 255);     
-}
-
-.overlay .productActions{
-    cursor: pointer;
-}
-
 #main-content h2{
 	text-align:center;	
 }
@@ -730,7 +721,7 @@ footer p{
 	cursor: pointer;
 }
 
-#filter-float{
+#filter-float,#review-float{
 	bottom: 30px;
 	top:84px;
     box-shadow: 1px 1px 6px #333333;
@@ -740,6 +731,10 @@ footer p{
     padding: 0 25px 0 25px;
     position: fixed;
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.91);
+}
+
+#review-float{
+	background: none repeat scroll 0 0 rgb(255, 255, 255);
 }
 
 #filter-float label, #filter-float .controls{
@@ -752,25 +747,32 @@ footer p{
 	text-decoration: underline;	
 }
 
-.review-float{
+#review-float{
+	right: 0;
 	z-index: 75;
-	width: 200px;
+	width: 400px;
 	padding: 0;
 	overflow-y: hidden;
-	position: absolute;
-	background: none repeat scroll 0 0 rgb(255, 255, 255);
 }
 
-ul.review-comments {        
-    list-style: none outside none;        	
-    margin: 0 0 10px;
+#review-comments{
+	height: 100%;
+    margin: 70px 0 0 0;
     overflow-y: auto;
-    overflow-x: hidden;
+    padding: 10px;
+    width: 380px;	
     color: #333333;
-    padding: 0 5px 10px;
-    width: 190px;
+    list-style: none outside none;
 }
-ul.review-comments li:before {
+
+ul#review-comments {
+	margin-left: 0;
+    padding: 10px;
+    overflow-x: hidden;
+    list-style: none;
+    color: #333333;
+}
+ul#review-comments li:before {
     float: left;
     width: 0;
     white-space: nowrap;
@@ -782,45 +784,32 @@ ul.review-comments li:before {
     		 "-------------------------------------------------------";
 }
 
-ul.review-comments li{
-    margin-bottom: 10px;
-    padding-left: 5px;
-    text-align: left;   
+ul#review-comments span{
+	background: #FFFFFF;
 }
 
-ul.review-comments span{
-	color: #FFFFFF;
-}
-
-//ul.review-comments span:nth-child(2) {
+//ul#review-comments span:nth-child(2) {
 //    padding-right: 10px;    
 //}
-//ul.review-comments span:last-child {
+//ul#review-comments span:last-child {
 //    float: right;
 //    padding-left: 10px;    
 //}
 
 .review-header{
 	color: #AAAAAA;	
-	padding-top: 0;
-    text-align: left;
 }
 .review-comment-date{
-	font-size: 11px;
-    padding-left: 0;
-    margin-left: 10px;   
+	float:right;	
+	padding-left: 5px;
 }
 
 .review-comment-rating{	
 	padding-right: 5px;	
 }
 
-.review-star{
-    cursor: pointer;
-}
-
 .review-text{
-	//padding-left: 15px;
+	padding-left: 15px;
 }
 
 .review-text pre{
@@ -836,50 +825,41 @@ ul.review-comments span{
     font-family: inherit;
 }
 
-.review-form{    
+#review-form{
+    background-color: #DFDFDF;
     height: 120px;
     padding: 10px;
-    width: 180px;
+    width: 380px;
+    position: absolute;
+    bottom: 0;
 }
 
-.review-form, ul.review-comments{
-    background: none repeat scroll 0 0 rgba(120, 213, 167, 0.65);   
-}
-
-.review-rating{
+#review-rating{
+	margin-left: 5px;
     margin-top: 5px;
-    width: 90px;
-    cursor: default;
 }
 
-.review-average{
+#review-average{
 	display:none;
 	margin-left: 5px;
     position: relative;
     top: -2px;
 }
 
-.review-average.label {
+#review-average.label {
     padding: 1px 6px 2px 4px;
 }
 
-.review-add-btn{
-	margin-top: -18px;
+#review-add-btn{
+	bottom: 8px;
     position: absolute;
-    right: 10px;	
+    right: 11px;	
 }
 
 
-.review-comment-rating{	
-	float: right;
-    margin-top: 3px;
-    width: 78px;		
+.review-comment-rating{
+	width: 78px;			
 }	
-
-ul.review-comments span.review-comment-user{
-    color: #666666;
-    font-weight: bold;
-}
 
 .star-small-empty, .star-small-half, .star-small-full{
 	display: inline-block;
