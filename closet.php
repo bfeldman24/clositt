@@ -30,13 +30,13 @@
 <script src="<?php echo HOME_ROOT; ?>scripts/js/pagePresenter.js"></script>
 <script type="text/javascript">
 <?php if(isset($_GET['user'])){ ?>
-$(document).ready(function(){ 
-	closetPresenter.init(<?php echo $_GET['user']; ?>);		
+$(document).ready(function(){     
+    productPresenter.initCloset(<?php echo $_GET['user']; ?>);			
  });
 <?php }else{ ?>
-function userDataReady(user){
-    pagePresenter.init();
-    closetPresenter.init();              
+function userDataReady(user){    
+    pagePresenter.init();    
+    productPresenter.initCloset();        
 }
 <?php } ?>
 

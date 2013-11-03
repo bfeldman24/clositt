@@ -41,7 +41,7 @@ var filterPresenter = {
  			$("#filter-float").append(
  				$("<div>").addClass("controls").append(
  					$("<label>").addClass("checkbox").append(
- 						$("<input>").attr("type","checkbox").attr("name","u").attr("value",value)
+ 						$("<input>").attr("type","checkbox").attr("name","customer").attr("value",value)
  					).append($("<span>").html(value))
  				)
  			)
@@ -55,7 +55,7 @@ var filterPresenter = {
  			$("#filter-float").append(
  				$("<div>").addClass("controls").append(
  					$("<label>").addClass("checkbox").append(
- 						$("<input>").attr("type","checkbox").attr("name","a").attr("value",value)
+ 						$("<input>").attr("type","checkbox").attr("name","category").attr("value",value)
  					).append($("<span>").html(value))
  				)
  			)
@@ -66,7 +66,7 @@ var filterPresenter = {
  			$("#filter-float").append(
  				$("<div>").addClass("controls").append(
  					$("<label>").addClass("checkbox").append(
- 						$("<input>").attr("type","checkbox").attr("name","fp").attr("value",priceBuckets[i])
+ 						$("<input>").attr("type","checkbox").attr("name","filterprice").attr("value",priceBuckets[i]).attr("max",priceBuckets[i+1])
  					).append($("<span>").html("$"+priceBuckets[i]+" - $"+priceBuckets[i+1]))
  				)
  			)
@@ -79,7 +79,7 @@ var filterPresenter = {
  			$("#filter-float").append(
  				$("<div>").addClass("controls").append(
  					$("<label>").addClass("checkbox").append(
- 						$("<input>").attr("type","checkbox").attr("name","o").attr("value",value)
+ 						$("<input>").attr("type","checkbox").attr("name","company").attr("value",value)
  					).append($("<span>").html(value))
  				)
  			)
@@ -90,70 +90,43 @@ var filterPresenter = {
  	},
  
  	
- 	onFilterSelect: function(){		
-	 	var params = new Object(); 	
-	 	var isSearch = $( "#search-bar" ).val().toLowerCase().trim().length > 0;
+ 	onFilterSelect: function(){
+	 	var criteria = new Object();
+	 	var isSearch = $( "#search-bar" ).val().trim().length > 0;
 	 	var areAnyFiltersChecked = false;
-	 	var filters = new Array("customer","price","category","company");
-	 	var filterNameCode = new Array("u","fp","a","o");	
+	 	var filters = new Array("customer","filterprice","category","company");
 	 	
 	 	$.each(filters, function(index, filterName) {
-	 		params[filterName] = new Array();
+	 		criteria[filterName] = new Array();
 	 		
-		 	$("#filter-float").find('input[name="'+filterNameCode[index]+'"]:checked').each(function(){
+		 	$("#filter-float").find('input[name="'+filterName+'"]:checked').each(function(){
 		 	    areAnyFiltersChecked = true;
 		 		var name = $(this).attr("name");
-		 		var value = $(this).attr("value");
-		 		var value = value.replace(/'/g, "\\'");	 		
+		 		var value = $(this).val().toLowerCase();
+		 		var value = value.replace(/'/g, "\\'");
 		 		
-		 		if(name == "price"){
-		 			var prices = value.split(" - "); 			
-		 			params[filterName].push("p." + name + '==\'' + prices[prices.length-1] + '\'');
-		 		}else{	 		
-			 		params[filterName].push("p." + name + '==\'' + value + '\'');
+		 		if(name == "filterprice"){
+		 			var abovePrice = parseInt(value);
+		 			var belowPrice = parseInt($(this).attr("max"));
+		 					 			   
+	 			   if(criteria['belowPrice'] == null || belowPrice > criteria['belowPrice']){
+	 			      criteria['belowPrice'] = belowPrice;
+	 			   }
+	 			   
+	 			   if(criteria['abovePrice'] == null || abovePrice < criteria['abovePrice']){
+	 			      criteria['abovePrice'] = abovePrice;
+	 			   }
+		 		}else{
+			 		criteria[filterName].push(value);
 		 		}
-		 	}); 		 	
-	 	}); 
+		 	});	 	
+	 	});
 	 	
-	 	if (areAnyFiltersChecked){	 		 	 	 		 		 	
-	 	
-     	 	// Format selected parameters into a boolean expression
-     	 	var allParams = filterPresenter.formatSelectedValued(params.customer);
-     	 	allParams += filterPresenter.formatSelectedValued(params.price);
-     	 	allParams += filterPresenter.formatSelectedValued(params.category);
-     	 	allParams += filterPresenter.formatSelectedValued(params.company);	 		 		 		 	
-     	 	allParams = allParams.substring(0,allParams.length-4); 	 	
-     	 	
-     	 	$("#product-grid").children().remove();	 		 	
-     	 	$("#product-grid").append($("<br><br><br><br>"));
-     	 	
-     	 	var products = [];
-     	 	if(allParams != ""){	 	     
-     	 	     for(var key in productPresenter.filterStore) {
-     	 	        var sku = productPresenter.formatSku(key);
-     	 	        var p = productPresenter.clothingStore[sku];
-     	 	        
-     				if (eval(allParams)){
-     				    products.push(key);   
-     				}
-     			}
-     	 	}     	
-     		
-     		if(products.length <= 0){
-     			$("#product-grid").append($("<div>").addClass("noresults").html("No Results"));
-     		}else{     		 
-     			productPresenter.filterStore = productPresenter.getProductsFromSkuList(products);
-     			$(".noresults").remove();
-     		    productPresenter.refreshFilteredProducts();			     			
-     		} 		     	 	
-
-	 	}else if (isSearch){	 	      
-	 	     if(Object.keys(productPresenter.filterStore).length <= 0){
-     			$("#product-grid").append($("<div>").addClass("noresults").html("No Results"));
-     		}else{     		
-     			$(".noresults").remove();
-     			productPresenter.refreshFilteredProducts();	
-     		} 	
+	 	if (isSearch){
+	 	     searchController.search(criteria);
+	 	     
+	 	}else if (areAnyFiltersChecked){	 		 	 	 		 		 	
+            searchController.getProducts(criteria, null, searchController.showResults);
 	 	}else{
 	 	      $(".noresults").remove();
 	 	      productPresenter.refreshProducts();
@@ -183,7 +156,7 @@ var filterPresenter = {
 		
 		if(!$("#review-form").is(":visible")){ 	 
 		 	 if(isNaN(parseInt($("#product-grid").css("left"))) || parseInt($("#product-grid").css("left")) == 0){
-		 	 	$("#product-grid").animate({left: '200px'}, 1000);
+		 	 	$("#product-grid").animate({left: '100px'}, 1000);
 		 	 	$("#filter-toggle").animate({left: '185px'}, 1000);
 		 	 	$("#filter-toggle").text('Hide Filter');
 		 	 }else{
@@ -210,7 +183,7 @@ var filterPresenter = {
 	 showFilter: function(){
 	   if(!$("#review-form").is(":visible")){ 
 	        $("#filter-float").show('slide',500);
-	 	 	$("#product-grid").animate({left: '200px'}, 500);
+	 	 	$("#product-grid").animate({left: '100px'}, 500);
 	 	 	$("#filter-toggle").animate({left: '185px'}, 500);
 	 	 	$("#filter-toggle").text('Hide Filter');    
 	   }

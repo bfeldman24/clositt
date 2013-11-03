@@ -2,9 +2,10 @@ var closetPresenter = {
 	share: '1212000',	
 	carouselLeft: null,	
 	carouselRight: null,
+	user: null,
 
-	init: function(user){
-		var u = user ==  undefined ? undefined : user.toString().replace(closetPresenter.share,'');
+	init: function(){
+		var u = closetPresenter.user == undefined ? undefined : closetPresenter.user.toString().replace(closetPresenter.share,'');
 		closetPresenter.getClosets(u);
 		$(document).on("mousedown",".carousel-left", closetPresenter.leftAnimation);
 		$(document).on("mousedown",".carousel-right", closetPresenter.rightAnimation);
@@ -18,10 +19,14 @@ var closetPresenter = {
 		$(document).keypress(closetPresenter.saveClosetsOnEnter);				
 	},
 	
-	getClosets: function(user){
-		if(user != undefined){
-			firebase.$.child(firebase.userPath).child(user).child("closets").once('value', closetPresenter.showClosets);
-			firebase.$.child(firebase.userPath).child(user).child("name").once('value', function(data){
+	setUser: function(user){
+	   closetPresenter.user = user;
+	},
+	
+	getClosets: function(){
+		if(closetPresenter.user != undefined){
+			firebase.$.child(firebase.userPath).child(closetPresenter.user).child("closets").once('value', closetPresenter.showClosets);
+			firebase.$.child(firebase.userPath).child(closetPresenter.user).child("name").once('value', function(data){
 				$("#user-closet-title").text(data.val() + "'s Closet");
 			});
 		}else if(firebase.isLoggedIn){
@@ -333,13 +338,8 @@ var closetFormPresenter = {
 	},	
 	
 	addToCloset: function(el){
-		el.preventDefault();				
-		
-		var name = $(el.currentTarget).parent().prev().find(".name").text();
-		var company = $(el.currentTarget).parent().prev().find(".companyName").text();
-		var link = $(el.currentTarget).parent().parent().prev().find("a").attr("href");
+		el.preventDefault();								
 		var sku = $(el.currentTarget).parent().parent().prev().find("a").attr("pid");
-		var image  = $(el.currentTarget).parent().parent().prev().find("img").attr("src");
 		
 		var closetNameInput = $(el.currentTarget).find('input[name="newCloset"]').val();
 		var closetNameRadio = $(el.currentTarget).find('input[name="closet"]:checked').val();
@@ -353,16 +353,15 @@ var closetFormPresenter = {
 		}
 		
 		if(closetName.trim().length > 0){
-			var item = {name: name, company: company, link: link, image: image, sku: sku}; 
-			var itemid = sku;
-			var index = closetFormPresenter.closetItems.indexOf(itemid);
+			var index = closetFormPresenter.closetItems.indexOf(sku);
 			
 			if(index < 0 || index >= closetFormPresenter.closetItemsMapping.length || closetFormPresenter.closetItemsMapping[index] != closetName){			
-				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetName).child("items").child(itemid).set(item, function(error) {
+				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetName).child("items").push(sku, function(error) {
 				  if (error) {
 						Messenger.error('Closet could not be saved. ' + error);
 				  } else {
 						Messenger.success('This item was added to "' + closetName + '"');
+						closetFormPresenter.updateClosetCount(sku);						
 				  }
 				});
 			}else{
@@ -380,6 +379,22 @@ var closetFormPresenter = {
 			$closetItems.parent().tooltip('destroy');
 			$closetItems.parent().tooltip({title:"In my Closet"});	
 		}
+	},
+	
+	updateClosetCount: function(sku){
+	   
+	 	firebase.$.child("clositt/products/"+sku+"/cc").transaction(function(value) {
+	 	   var newValue = 1;
+	 	   
+	 	   if(value == null){		 	       
+	 	       firebase.$.child("clositt/products/"+sku+"/cc").set(newValue);
+	 	   }else{
+	 	        newValue = value +1;		 	        
+	 	   } 		 	            
+	 	   
+	 	   //targetOutfit.find(".numReviews").text(newValue);
+	 	   return newValue;       
+        });
 	}
 }
 

@@ -28,7 +28,7 @@ var reviewsPresenter = {
       	 	   reviewsPresenter.refreshRating(reviewBlock, 0);
       	 	   reviewsPresenter.showAverageRating(reviewBlock);
       	 	   
-      	 	   reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);	 	 	
+      	 	   reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);      	 	         	 	        	 	   
       	 	   reviewsPresenter.currentReviewFB.on('child_added', reviewsPresenter.addReview);	 
 	 	 	   
     	       reviewBlock.show('blind');
@@ -72,6 +72,21 @@ var reviewsPresenter = {
 		 	targetOutfit.find(".review-add-comment").val("");		 	
 		 	var review = targetOutfit.find(".review-float");
 		 	reviewsPresenter.refreshRating(review, 0);
+		 	
+		 	// update review count
+		 	firebase.$.child("clositt/products/"+sku+"/rc").transaction(function(value) {
+		 	   var newValue = 1;
+		 	   
+		 	   if(value == null){		 	       
+    	 	       firebase.$.child("clositt/products/"+sku+"/rc").set(newValue);
+		 	   }else{
+		 	        newValue = value +1;		 	        
+		 	   } 		 	            
+		 	   
+		 	   targetOutfit.find(".numReviews").text(newValue);
+		 	   return newValue;       
+            });
+		 	
 	 	}else{
 	 		Messenger.info("Please enter a comment");
 	 	}
@@ -118,7 +133,7 @@ var reviewsPresenter = {
 	 	).append(
 		 		reviewsPresenter.getReviewRating(review.rating)
 	 	);
-	 },
+	 },	 	 
 	 
 	 getReviewRating: function(numStars){
 	 	var rating = $("<span>").addClass("review-comment-rating").attr("rating",numStars);
