@@ -1247,6 +1247,17 @@ input.closetNameInput[type="text"] {
     margin: 0 -10px 0 0;
 }
 
+#search-bar-sort-block{
+    margin:-37px -720px 25px 10px;
+}
+
+#search-bar-sort{    
+    font-size: 17px;
+    font-weight: lighter;
+    width: 145px;         
+    height: 35px;
+}
+
 
 
 /* Sub header nav */

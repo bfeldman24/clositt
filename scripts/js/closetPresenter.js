@@ -202,7 +202,7 @@ var closetPresenter = {
 		var link = $(el.currentTarget).prev("a").attr("href").replace(/\W/g,'');
 		var closetName = $(el.currentTarget).parent().parent().parent().parent().prev(".closetName").find("input").attr("original");
 		
-		firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetName).child("items").child(link).remove(function(error){
+		firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetName).child(link).remove(function(error){
 		  if (error) {
 		    	Messenger.error('Item could not be removed.' + error);
 		  } else {
@@ -257,8 +257,8 @@ var closetFormPresenter = {
 				snapshot.forEach(function(closet){
 					closetNames[i] = closet.name();
 					
-					closet.child("items").forEach(function(item){
-						closetItems.push(item.name());
+					closet.forEach(function(item){
+						closetItems.push(item.val());
 						closetItemsMapping.push(closetNames[i]);							
 					});
 					
@@ -356,7 +356,7 @@ var closetFormPresenter = {
 			var index = closetFormPresenter.closetItems.indexOf(sku);
 			
 			if(index < 0 || index >= closetFormPresenter.closetItemsMapping.length || closetFormPresenter.closetItemsMapping[index] != closetName){			
-				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetName).child("items").push(sku, function(error) {
+				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetName).push(sku, function(error) {
 				  if (error) {
 						Messenger.error('Closet could not be saved. ' + error);
 				  } else {

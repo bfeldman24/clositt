@@ -20,6 +20,16 @@
       		    <div id="seach-bar-icon"><img src="css/images/Search.png" /></div>
       			<input id="search-bar" placeholder="Start your search here! (ex. Black Party Dress)" class="input-xxlarge search-query" />
       			<button id="search-clear-btn" style="display:none;" class="close">&times;</button>
+      			<div id="search-bar-sort-block">
+      			   <span>Sory By:</span>
+         		   <select id="search-bar-sort">
+                     <option value="relevance" selected="selected">Relevance</option>
+                     <option value="mostpopular">Most Popular</option>
+                     <option value="mostdiscussed">Most Discussed</option>
+                     <option value="pricelowtohigh">Price (low to high)</option>
+                     <option value="pricehightolow">Price (high to low)</option>
+                   </select>                    
+                </div>
       		</div>
       		<input type="submit" style="display:none;" />
       	</form>

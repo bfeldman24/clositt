@@ -8,6 +8,7 @@ var searchController = {
         $("#search-form").submit(searchController.startSearch);
 		$("#seach-bar-icon").on("click", searchController.searchBarSubmit);
 		$("#search-clear-btn").click(searchController.clearSearch);
+		$("#search-bar-sort").change(searchController.sortBy);
     },
     
     searchOnEnter: function(el){        
@@ -326,6 +327,36 @@ var searchController = {
 	    }
 	},
 	
+	sortBy: function(){	   
+	   gridPresenter.beginTask();
+	   searchController.showResults(productPresenter.filterStore);
+	},
+	
+	getSortFunction: function(){
+	   var sort = $("#search-bar-sort").val();
+	   var sortFunction = null;
+	   	 
+	   switch(sort){	       	           
+	       case "pricelowtohigh":
+	           sortFunction = searchController.sortPriceLowToHigh;
+	           break;
+	       case "pricehightolow":
+    	       sortFunction = searchController.sortPriceHighToLow;
+    	       break;
+    	   case "mostpopular":
+    	       sortFunction = searchController.sortMostPopular;
+    	       break;
+    	   case "mostdiscussed":
+    	       sortFunction = searchController.sortMostDiscussed;
+    	       break;
+    	   default:
+    	       sortFunction = searchController.sortRanks;
+	           break;
+	   }
+	   
+	   return sortFunction;
+	},
+	
 	orderResults: function(products){
 	   var rankedProducts = [];
 	   var orderedProducts = {};
@@ -335,7 +366,8 @@ var searchController = {
 	       rankedProducts.push(products[Object.keys(products)[i]]);
 	   }   
 	   
-	   rankedProducts.sort(searchController.sortRanks);
+	   var sortFunction = searchController.getSortFunction();
+	   rankedProducts.sort(sortFunction);
 	   
 	   for(var i=0; i < rankedProducts.length; i++){
 	          orderedProducts[i + "_" + rankedProducts[i]['s']] = rankedProducts[i];
@@ -348,9 +380,25 @@ var searchController = {
 	   return b.rank - a.rank; 
 	},
 	
+	sortPriceLowToHigh: function(a, b){
+	   return a.p - b.p; 
+	},
+	
+	sortPriceHighToLow: function(a, b){
+	   return b.p - a.p; 
+	},
+	
+	sortMostPopular: function(a, b){
+	   return b.cc - a.cc;
+	},
+	
+	sortMostDiscussed: function(a, b){
+	   return b.rc - a.rc;
+	},
+	
 	sortLowestToHighest: function(a, b){
 	   return a - b; 
-	},
+	},		
 	
 	clearSearch: function(el){
 		el.preventDefault();
