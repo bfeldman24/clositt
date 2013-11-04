@@ -1248,13 +1248,13 @@ input.closetNameInput[type="text"] {
 }
 
 #search-bar-sort-block{
-    margin:-37px -720px 25px 10px;
+    margin:-37px -735px 25px 10px;
 }
 
 #search-bar-sort{    
     font-size: 17px;
     font-weight: lighter;
-    width: 145px;         
+    width: 170px;         
     height: 35px;
 }
 
