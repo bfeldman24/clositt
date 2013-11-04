@@ -86,11 +86,21 @@ function testProductsFromLinks(){
 				
 				try{
 				    var dataString = storeApi.getProducts(company, data, url);
-				    var data = $.parseJSON(data);
+				    var data = $.parseJSON(dataString);
 				    
 				    if (data != null && data.constructor === {}.constructor){
-				        isValid = true;
-				        validCount++;
+				        var testProduct = data[Object.keys(data)[0]];
+				        
+				        if (testProduct != null &&
+				            testProduct.price != null && 
+				            testProduct.image != null && 
+				            testProduct.link != null && 
+				            testProduct.name != null &&
+				            testProduct.sku != null){				        
+
+        				        isValid = true;        				                				        
+        				        validCount++;
+				            }
 				    }
 				}catch(err){
 				    // do nothing
