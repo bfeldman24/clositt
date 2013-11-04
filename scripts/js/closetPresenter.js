@@ -60,7 +60,7 @@ var closetPresenter = {
 				)
 			);
 			
-			closet.child("items").forEach(function(item){											
+			closet.forEach(function(item){											
 				$itemlist.append(
 					productPresenter.getClosetItemTemplate(item.val()).prepend(
 						$("<div>").addClass("hanger").append(
