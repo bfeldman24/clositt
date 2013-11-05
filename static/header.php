@@ -38,7 +38,7 @@
 	   <div class="container">
 	       <ul>
 	           <li><a href="/">Trending</a></li>
-	           <li><a>Feed</a></li>
+	           <li id="feed"><a>Feed <span id="soon">Coming Soon!</span></a></li>
 	           <li><a href="closet.php">Clositt</a></li>
 	       </ul>
 	   </div>

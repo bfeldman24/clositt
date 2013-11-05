@@ -1204,7 +1204,7 @@ input.closetNameInput[type="text"] {
 
 #Search .search-query{
    height: 40px;
-   font-size: 20px;
+   font-size: 18px;
    font-weight: lighter;     border-color: #A9A9A9;   border-radius: 0 0 0 0;   border-style: double;   border-width: 1px;   box-shadow: 3px 4px 4px #B7B7B7;   color: #9A9A9A;   margin-bottom: 0;   padding-left: 14px;   padding-right: 14px;     
    text-indent: 20px;}
 
@@ -1245,6 +1245,26 @@ input.closetNameInput[type="text"] {
     color: #808080;
     font-size: 30px; 
 }
+
+/* --------- ER CODE -------- */
+#subheader-navbar li #soon{
+	display:none;
+        position:relative;
+        margin-left:-79px;
+        background-color: rgba(0, 176, 88, 0.5);
+        width:80px;
+        font-size:12px;
+        color:white;
+        top: -5px;
+        padding: 2px;
+        border-radius: 4px 4px 4px 4px;
+}
+
+#feed:hover #soon{
+	display:inline;
+}
+
+/* ---- end ER CODE---------*/
 
 #subheader-navbar li a:hover, #subheader-navbar li a.active{
     border-bottom: 3px solid #00B058;
