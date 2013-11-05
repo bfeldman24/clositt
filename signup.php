@@ -1,4 +1,20 @@
-<?php require_once(dirname(__FILE__) . '/scripts/php/session.php'); ?>
+<?php //require_once(dirname(__FILE__) . '/scripts/php/session.php'); ?>
+<?php
+require_once(dirname(__FILE__) . '/globals.php');
+
+if (!isset($_SESSION)) {
+	//any subdomains, including "www.mydomain.com" will be included in the session. 
+	session_set_cookie_params('', '/', '.' . DOMAIN, 0);
+	session_start();
+}
+
+$_SESSION['userid'] = 0;
+
+
+if ($_GET['beta'] != 'earlyaccess'){    
+	header( 'Location: ' . HOME_ROOT .  'welcome.php' ) ;	   
+}
+?>
 <!DOCTYPE>
 <html>
 <head>
