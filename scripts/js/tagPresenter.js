@@ -46,7 +46,7 @@ var tagPresenter = {
 				
 		if(tagInput.length > 0){								
 			try{		
-				firebase.$.child("tags").child(tagInput.toLowerCase()).child("items").push(itemid, function(error) {
+				firebase.$.child("store/tags").child(tagInput.toLowerCase()).child("items").push(itemid, function(error) {
 				  if (error) {
 						Messenger.error('Tag could not be saved. ' + error);
 				  } else {
@@ -67,7 +67,7 @@ var tagPresenter = {
 	},
 	
 	getAllTagNames: function(){
-		firebase.$.child("tags").once('value',function(snapshot){
+		firebase.$.child("store/tags").once('value',function(snapshot){
 			tagPresenter.allTags = new Array();
 			
 			snapshot.forEach(function(tag){

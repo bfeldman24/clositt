@@ -6,9 +6,9 @@ var gridPresenter = {
 
 	alignDefaultGrid: function(){
 		var columns = gridPresenter.getDefaultColumns();
-		$(".addToClosetBtn").tooltip({title:"Add to Closet"});
-		$(".tagOutfitBtn").tooltip({title:"Tagitt"});
-		//$(".addToClosetBtn").tooltip();	
+		$(".addToClosetBtn").tooltip();
+		$(".tagOutfitBtn").tooltip();
+		$(".showComments").tooltip();
 					
 		gridPresenter.alignGrid("product-grid", columns, 200, 25);						
 		closetFormPresenter.markUsersClositItems();
@@ -80,12 +80,12 @@ var gridPresenter = {
 			    		imgHeight = 270;
 			    		imgWidth = 202;	
 			    	}
-		    	}
+		    	}		    
 		    	
-		    	var newHeight = cellWidth * imgHeight / imgWidth;
+		    	var newHeight = cellWidth * imgHeight / imgWidth;		    	
 		    	
 		        $(this).css("width", cellWidth + unit);
-		        $(this).css("height", newHeight + unit);
+		        $(this).css("height", newHeight + unit);		        
 		        $(this).css("position", "absolute");		        
 		        
 		        $(this).css("left", x + unit);
@@ -140,5 +140,15 @@ var gridPresenter = {
 				$("#loadingMainContent").hide();	
 			}		
 		}
+	},
+	
+	beginTask: function(){
+	   $("#product-grid").children().remove();	 		 	
+       $("#product-grid").append($("<br><br><br><br>"));
+       $("#loadingMainContent").show();	
+	},
+	
+	endTask: function(){
+	   $("#loadingMainContent").hide();	
 	}
 };

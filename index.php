@@ -20,6 +20,16 @@
       		    <div id="seach-bar-icon"><img src="css/images/Search.png" /></div>
       			<input id="search-bar" placeholder="Start your search here (ex. Women's Sweaters Under $100)" class="input-xxlarge search-query" />
       			<button id="search-clear-btn" style="display:none;" class="close">&times;</button>
+      			<div id="search-bar-sort-block">
+      			   <span>Sory By:</span>
+         		   <select id="search-bar-sort">
+                     <option value="relevance" selected="selected">Relevance</option>
+                     <option value="mostpopular">Most Popular</option>
+                     <option value="mostdiscussed">Most Discussed</option>
+                     <option value="pricelowtohigh">Price (low to high)</option>
+                     <option value="pricehightolow">Price (high to low)</option>
+                   </select>                    
+                </div>
       		</div>
       		<input type="submit" style="display:none;" />
       	</form>
@@ -34,23 +44,21 @@
 <br><br><br><br>
 <div id="filter-toggle" class="clositt-green">Show Filter</div>
 <div id="filter-float" style="display:none;"></div>
-<div id="review-float" style="display:none;">
-	<ul id="review-comments">
-		
-	</ul>
-	<div id="review-form">
-		<textarea id="review-add-comment" rows="3" placeholder="Add a Review..."></textarea>
+<!--<div id="review-float" class="review-float" style="display:none;">	
+	<div class="review-form">
+		<textarea class="review-add-comment" rows="3" placeholder="Add a Comment..."></textarea>
 		<div id="review-rating">
-			<i class="review-star star-large-empty" star="1"></i>
-			<i class="review-star star-large-empty" star="2"></i>
-			<i class="review-star star-large-empty" star="3"></i>
-			<i class="review-star star-large-empty" star="4"></i>
-			<i class="review-star star-large-empty" star="5"></i>
-			<span id="review-average" class="label label-info">0</span>	
+			<i class="review-star star-small-empty" star="1"></i>
+			<i class="review-star star-small-empty" star="2"></i>
+			<i class="review-star star-small-empty" star="3"></i>
+			<i class="review-star star-small-empty" star="4"></i>
+			<i class="review-star star-small-empty" star="5"></i>
+			<span class="review-average" class="label label-info">0</span>	
 		</div>	
-		<button id="review-add-btn" class="btn btn-success" type="button">Add Review</button>
+		<button class="review-add-btn" class="btn btn-success btn-mini" type="button">Add Comment</button>
 	</div>
-</div>
+	<ul class="review-comments"></ul>
+</div>-->
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 

@@ -1,100 +1,92 @@
 var reviewsPresenter = {	
-	currentOutfit: null,
-	currentOutfitPosition: null,
-	
-	
+	cachedReviews: null,	
 	currentReviewFB: null,	
 	 
 	 init: function(){
-	 	$(document).on("click", ".picture > a", reviewsPresenter.showReview);
-	 	$(document).on("click", "#review-add-btn", reviewsPresenter.saveReview);	
-	 	$(document).on("click", "#review-mask", reviewsPresenter.hideReview);		 		 
+	    reviewsPresenter.cachedReviews = new Object();
+	    $(document).on("click",".showComments",reviewsPresenter.showReview);
+//	 	$(document).on("click", ".picture > a", reviewsPresenter.showReview);
+	 	$(document).on("click", ".review-add-btn", reviewsPresenter.saveReview);	
+	 	$(document).on("click", ".review-mask", reviewsPresenter.hideReview);		 		 
 	 	
-	 	$(document).on("mouseenter", "#review-rating .review-star", reviewsPresenter.showFilledStars);		 		 
-	 	$(document).on("mouseleave", "#review-rating", reviewsPresenter.resetRating);		 		 	 	
-	 	$(document).on("click", "#review-rating .review-star", reviewsPresenter.chooseRating);		 		 	 	
+	 	$(document).on("mouseenter", ".review-rating .review-star", reviewsPresenter.showFilledStars);		 		 
+	 	$(document).on("mouseleave", ".review-rating", reviewsPresenter.resetRating);		 		 	 	
+	 	$(document).on("click", ".review-rating .review-star", reviewsPresenter.chooseRating);		 		 	 	
 	 },
 	 
-	 
-	 showReview: function(e){	 	
-	 	 	 	
-	 	 $("#review-comments").height($("#review-float").height() - 230);
+	 showReview: function(e){
+	       var targetOutfit = $(e.target).parent().parent().parent().parent().parent();
+	       var sku = targetOutfit.find('a[pid]').first().attr("pid");
+	       var reviewBlock = reviewsPresenter.getReviewBlock(sku);
+	       
+	       if(reviewBlock.is(":visible")){	 	 		 	
+	 	 	       reviewsPresenter.hideReview(reviewBlock);	 	   
+	 	   }else{	 	   	 	 	  	 	       	 	
+	 	       targetOutfit.find(".product-comments").html(reviewBlock);
+	 	              	 	       
+      	 	   reviewBlock.find(".review-rating").attr("userRating",0);      	 	   
+      	 	   reviewsPresenter.refreshRating(reviewBlock, 0);
+      	 	   reviewsPresenter.showAverageRating(reviewBlock);
+      	 	   
+      	 	   reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);      	 	         	 	        	 	   
+      	 	   reviewsPresenter.currentReviewFB.on('child_added', reviewsPresenter.addReview);	 
+	 	 	   
+    	       reviewBlock.show('blind');
+	 	   }
+	 },
 	 	 
-	 	 if( reviewsPresenter.currentOutfit != null && 
-	 	 	reviewsPresenter.currentOutfit.find('a[pid]').first().attr("pid") == $(e.target).parent().attr("pid") ){	 	 	
-	 	
-	 	 	reviewsPresenter.hideReview();	 	 			 
-	 	 }else{	 
-	 	 	filterPresenter.hideFilterPanel();
-	 	 	$("#review-comments").html("Be the first to add a review!");
-	 	 	$("#review-rating").attr("userRating",0);
-	 	 	reviewsPresenter.refreshRating(0);
-	 	 	reviewsPresenter.showAverageRating();	 	 	
-	 	 	reviewsPresenter.currentOutfit = $(e.target).parent().parent().parent();
-	 	 	var store = reviewsPresenter.currentOutfit.attr("company");
-		 	var customer = reviewsPresenter.currentOutfit.attr("customer");
-		 	var category = reviewsPresenter.currentOutfit.attr("category");	 	
-		 	var product = reviewsPresenter.currentOutfit.find('a[pid]').first().attr("pid");	 	 		 	 	
-	 	 	reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+store+"/"+customer+"/"+category+"/"+product);	 	 	
-	 	 	reviewsPresenter.currentReviewFB.on('child_added', reviewsPresenter.addReview);
-	 	 	
-	 	 	setTimeout(function(){
-	 	 		$("#review-float").fadeIn();
-	 	 	}, 500);
-	 	 	
-	 	 	$("#review-mask").fadeIn();
-	 	 	if(isNaN(parseInt($("#product-grid").css("left"))) || parseInt($("#product-grid").css("left")) == 0){
-	 	 		$("#product-grid").animate({left: '-200px'}, 1000);
-		 	}
-		 	
-		 	
-	 	 	reviewsPresenter.currentOutfitPosition = reviewsPresenter.currentOutfit.css("left");
-	 	 	reviewsPresenter.currentOutfit.css("z-index",60);
-	 	 	reviewsPresenter.currentOutfit.css("box-shadow","0 0 20px #080808");
-	 	 	reviewsPresenter.currentOutfit.animate({left: "50%"}, 1000);
-	 	 }
-	 },
+	 hideReview:function(review){
+	     if (reviewsPresenter.currentReviewFB != null){
+     	     reviewsPresenter.currentReviewFB.off('child_added', reviewsPresenter.addReview);	
+     	     reviewsPresenter.currentReviewFbUrl = null;
+	     }
+ 	     
+ 	     if(review != null && review.is(":visible")){
+	 	 	   review.hide('blind');
+	 	 	   review.find(".review-comments").html("");
+ 	     }
+	 },	 	 
 	 
-	 hideReview:function(){
-	 	reviewsPresenter.currentReviewFB.off('child_added', reviewsPresenter.addReview);	
-	 	 	reviewsPresenter.currentReviewFbUrl = null;
-	 	 	
-	 	 	if(reviewsPresenter.currentOutfit != null){
-		 	 	reviewsPresenter.currentOutfit.animate({left: reviewsPresenter.currentOutfitPosition}, 1000, function() {
-					reviewsPresenter.currentOutfit.css("z-index",0);
-			 	 	reviewsPresenter.currentOutfit.css("box-shadow","none");	
-			 	 	reviewsPresenter.currentOutfit = null;
-			 	 	
-			 	 	$("#review-float").hide();	 	 	
-		 	 		$("#review-mask").fadeOut();
-				});	 	 		 	 				
-		 	 	
-		 	 	if(parseInt($("#product-grid").css("left")) == -200){
-			 	 	$("#product-grid").animate({left: '0px'}, 1000);
-		 	 	}
-	 	 	}
-	 },
-	 
-	 saveReview: function(){
-	 	var comment = $("#review-add-comment").val();
+	 saveReview: function(e){
+	    var targetOutfit = $(e.target).parent().parent().parent().parent().parent();
+	   
+	 	var comment = targetOutfit.find(".review-add-comment").val();
 	 	
 	 	if(comment.trim() != ""){	 		
 		 	var now = new Date();
 		 	var ampm = now.getHours() >= 12 ? "PM" : "AM";
 		 	var hour = now.getHours() % 12;
-		 	hour = hour != 0 ? hour : 12;
+		 	hour = hour == 0 ? 12 : hour;
 		 	hour = reviewsPresenter.addZero(hour);
 		 	var minute = reviewsPresenter.addZero(now.getMinutes());
 		 	
-		 	var nowString = now.getMonth() +"/"+ now.getDate() +"/"+ now.getFullYear() + " " + hour +":"+ minute + " " + ampm;
-		 	var user = firebase.username != null ? firebase.username : "Guest";
-		 	var rating = $("#review-rating").attr("userRating");
+		 	var nowString = (now.getMonth() + 1) +"/"+ now.getDate() +"/"+ now.getFullYear() + " " + hour +":"+ minute + " " + ampm;
+		 	var user = firebase.username == null ? "Guest" : firebase.username;
+		 	var rating = targetOutfit.find(".review-rating").attr("userRating");
 		 	rating = rating == undefined ? 0 : rating;
 		 	
-		 	reviewsPresenter.currentReviewFB.push({name:user, rating:rating, comment: comment, date:nowString});	 	
+		 	var sku = targetOutfit.find('a[pid]').first().attr("pid");
+		 	reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);	 	 	
+		 	reviewsPresenter.currentReviewFB.push({name:user, rating:rating, comment: comment, date:nowString, sku:sku});	 	
 		 	
-		 	$("#review-add-comment").val("");
-		 	reviewsPresenter.refreshRating(0);
+		 	targetOutfit.find(".review-add-comment").val("");		 	
+		 	var review = targetOutfit.find(".review-float");
+		 	reviewsPresenter.refreshRating(review, 0);
+		 	
+		 	// update review count
+		 	firebase.$.child("clositt/products/"+sku+"/rc").transaction(function(value) {
+		 	   var newValue = 1;
+		 	   
+		 	   if(value == null){		 	       
+    	 	       firebase.$.child("clositt/products/"+sku+"/rc").set(newValue);
+		 	   }else{
+		 	        newValue = value +1;		 	        
+		 	   } 		 	            
+		 	   
+		 	   targetOutfit.find(".numReviews").text(newValue);
+		 	   return newValue;       
+            });
+		 	
 	 	}else{
 	 		Messenger.info("Please enter a comment");
 	 	}
@@ -102,76 +94,91 @@ var reviewsPresenter = {
 	 
 	 addReview: function(snapshot){
 		var review = snapshot.val();
-		if(review != null){			
+		if(review != null){		
+		    var reviewBlock = reviewsPresenter.getReviewBlock(review.sku);		  	
 			
-			if(!$("#review-comments > li").length){
-				$("#review-comments").html("");	
+			if(!reviewBlock.find(".review-comments > li").length){
+				reviewBlock.find(".review-comments").html("");	
 			}
 				
-			$("#review-comments").append(
+			reviewBlock.find(".review-comments").append(
 				$("<li>").append(
 					reviewsPresenter.getReviewHeader(review)
 				).append(				
-					$("<span>").addClass("review-text").append( $("<pre>").text(review.comment) )
+					$("<span>").addClass("review-text").append( 
+					   $("<span>").addClass("review-comment-user").text(review.name + ": ")
+					).append(
+					   $("<pre>").text(review.comment) 
+					)
 				)
 			);
 			
-			reviewsPresenter.showAverageRating();	
+			reviewsPresenter.showAverageRating(reviewBlock);	
 		}	
 	 },
 	 
 	 getReviewHeader: function(review){
+	    var isToday = reviewsPresenter.isDateToday(review.date);	    
+	    var dateTimeSplitIndex = review.date.indexOf(" ");
+	    var reviewDate = "";
+	    
+	    if (isToday){
+	       reviewDate = review.date.substring(dateTimeSplitIndex + 1);  
+	    }else{
+	       reviewDate = review.date.substring(0,dateTimeSplitIndex);
+	    }	    	    
+	   
 	 	return $("<div>").addClass("review-header").append(
-	 		$("<span>").addClass("review-comment-user").text(review.name + " ")
+	 		$("<span>").addClass("review-comment-date").text(reviewDate)	 		
 	 	).append(
 		 		reviewsPresenter.getReviewRating(review.rating)
-	 	).append(
-	 		$("<span>").addClass("review-comment-date").text(review.date)
 	 	);
-	 },
+	 },	 	 
 	 
 	 getReviewRating: function(numStars){
 	 	var rating = $("<span>").addClass("review-comment-rating").attr("rating",numStars);
 	 	var count = 0;
 	 	
-	 	if(numStars != null && numStars >= 0 && numStars <=5){
-		 	for(var r=1; r <= numStars; r++){
-		 		rating.append(
-		 			$("<i>").addClass("star-small-full")
-		 		);
-		 		count++;
-		 	}	
-		 	
-		 	if(count < 5 && numStars % .5 == 1){
-		 		rating.append(
-		 			$("<i>").addClass("star-small-half")
-		 		)
-		 		count++;
-		 	}
-		 	
-		 	while(count < 5){
-		 		rating.append(
-			 		$("<i>").addClass("star-small-empty")
-			 	)
-		 		count++;
-		 	}
-		 	
-		 	rating.prepend("&lt;");
-		 	rating.append("&gt;");
-	 	}	 		 	
+	 	if(numStars == null || numStars <= 0 || numStars > 5){
+	 	     return null;
+	 	}
+	 	
+	 	for(var r=1; r <= numStars; r++){
+	 		rating.append(
+	 			$("<i>").addClass("star-small-full")
+	 		);
+	 		count++;
+	 	}	
+	 	
+	 	if(count < 5 && numStars % .5 == 1){
+	 		rating.append(
+	 			$("<i>").addClass("star-small-half")
+	 		)
+	 		count++;
+	 	}
+	 	
+	 	while(count < 5){
+	 		rating.append(
+		 		$("<i>").addClass("star-small-empty")
+		 	)
+	 		count++;
+	 	}		 		 		 		 		 	
 	 	
 	 	return rating;	
 	 },
 	 
-	 showAverageRating: function(){	 	
-	 	var aveRating = reviewsPresenter.getAverageRating();		 	
+	 showAverageRating: function(review){	 	
+	    // remove to get average rating
+	    return null;
+	    
+	 	var aveRating = reviewsPresenter.getAverageRating(review);		 	
 		
 		if(aveRating >= 0 && aveRating <=5){
-		 	$("#review-average").text(aveRating);
-		 	$("#review-average").show();
+		 	review.find(".review-average").text(aveRating);
+		 	review.find(".review-average").show();
 		}else{
-			$("#review-average").text(0);
-		 	$("#review-average").hide();
+			review.find(".review-average").text(0);
+		 	review.find(".review-average").hide();
 		}
 	 	
 //	 	if(userRating == undefined || isNaN(userRating) || userRating <= 0){	 	
@@ -185,11 +192,11 @@ var reviewsPresenter = {
 //	 	}
 	 },
 	 
-	 getAverageRating: function(){	 
+	 getAverageRating: function(review){	 
 	 	var totalRatings = 0;
 	 	var numRatings = 0;
 	 		
-	 	$("#review-comments .review-comment-rating").each(function(){
+	 	review.find(".review-comments .review-comment-rating").each(function(){
 	 		var val = $(this).attr("rating");
 	 		val = val < 0 ? 0 : val;
 	 		val = val > 5 ? 5 : val;
@@ -210,61 +217,102 @@ var reviewsPresenter = {
 	 	var star = $(e.target).attr("star");
 	 	star = star > 5 ? 5 : star;
 	 	
-	 	var userRating = $("#review-rating").attr("userRating");
+	 	var userRating = $(".review-rating").attr("userRating");
 	 	
 	 	if(userRating == undefined || isNaN(userRating) || userRating <= 0){
-	 		reviewsPresenter.refreshRating(star);	 	
+	 	    var outfit = $(e.target).parent().parent().parent();
+	 		reviewsPresenter.refreshRating(outfit, star);	 	
 	 	}
 	 },
 	 
-	 refreshRating: function(star){	 
+	 refreshRating: function(review, star){	 
 	 	star = parseFloat(star);
 	 	var count = 0;
 	 	 	
 	 	// Full Stars
 	 	for(var i=1; i<= star; i++){
-	 		var targetStar = $('#review-rating .review-star[star="'+i+'"]');
-	 		targetStar.removeClass("star-large-empty star-large-half");
-	 		targetStar.addClass("star-large-full");
+	 		var targetStar = review.find('.review-rating .review-star[star="'+i+'"]');
+	 		targetStar.removeClass("star-small-empty star-small-half");
+	 		targetStar.addClass("star-small-full");
 	 		count++;
 	 	}	 
 	 	
 	 	// Half Stars
 	 	if(count < 5 && star % .5 == 1){
-	 		var targetStar = $('#review-rating .review-star[star="'+count+'"]');
-	 		targetStar.removeClass("star-large-empty star-large-full");
-	 		targetStar.addClass("star-large-half");
+	 		var targetStar = review.find('.review-rating .review-star[star="'+count+'"]');
+	 		targetStar.removeClass("star-small-empty star-small-full");
+	 		targetStar.addClass("star-small-half");
 	 		count++;
 	 	}		 	
 	 	
 	 	// Empty Stars
 	 	for(var i=count+1; i<= 5; i++){
-	 		var targetStar = $('#review-rating .review-star[star="'+i+'"]');
+	 		var targetStar = review.find('.review-rating .review-star[star="'+i+'"]');
 	 			 		
-	 		targetStar.removeClass("star-large-full star-large-half");
-	 		targetStar.addClass("star-large-empty");
+	 		targetStar.removeClass("star-small-full star-small-half");
+	 		targetStar.addClass("star-small-empty");
 	 	} 
 	 },
 	 
 	 chooseRating: function(e){
 	 	var star = $(e.target).attr("star");	 	
 	 	
-	 	if($("#review-rating").attr("userRating") == star){
+	 	if($(".review-rating").attr("userRating") == star){
 	 		star = 0;
 	 	}
 
-		$("#review-rating").attr("userRating",star);	 			 	
-	 	reviewsPresenter.refreshRating(star);
+		$(".review-rating").attr("userRating",star);
+		var outfit = $(e.target).parent().parent().parent();	 			 	
+	 	reviewsPresenter.refreshRating(outfit, star);
 	 },
 	 
-	 resetRating: function(){
-	 	var userRating = $("#review-rating").attr("userRating");
+	 resetRating: function(e){
+	    var outfit = $(e.target).parent().parent().parent();
+	 	var userRating = outfit.find(".review-rating").attr("userRating");
 	 	
 	 	if(userRating == undefined || isNaN(userRating) || userRating <= 0){
-	 		reviewsPresenter.refreshRating(0);	 	
+	 		reviewsPresenter.refreshRating(outfit, 0);	 	
 	 	}else{
-		 	reviewsPresenter.refreshRating(userRating);	 		
+		 	reviewsPresenter.refreshRating(outfit, userRating);	 		
 	 	}
+	 },
+	 
+	 getReviewBlock: function(id){
+	   if (reviewsPresenter.cachedReviews[id] != null){
+	       return reviewsPresenter.cachedReviews[id];
+	   }
+	   
+	   var reviewRating = $("<div>").addClass("review-rating");
+	   
+	   for (var i=1; i <= 5; i++){
+	       reviewRating.append(
+                $("<i>").addClass("review-star star-small-empty").attr("star",i)
+            )
+	   }
+	   
+	   //reviewRating.append($("<span>").addClass("review-average label label-info").text("0"));    
+	   	   
+       var reviewBlock = $("<div>").attr("id",id + "-review-float").addClass("review-float").css("display","none").append(
+            $("<div>").addClass("review-form").append(
+                $("<textarea>").addClass("review-add-comment").attr("rows","3").attr("placeholder","Add a Comment...")
+            ).append(reviewRating).append(
+                $("<button>").addClass("review-add-btn btn btn-success btn-mini").attr("type","button").text("Add Comment")
+            )                       
+       ).append(
+            $("<ul>").addClass("review-comments")
+       ); 	          
+       
+       reviewsPresenter.cachedReviews[id] = reviewBlock;
+       return reviewBlock;        	   
+	 },
+	 
+	 isDateToday: function(d){
+	   var date = new Date(d);
+	   var today = new Date();
+	   
+	   return date.getUTCFullYear() == today.getUTCFullYear() &&
+	          date.getUTCMonth() == today.getUTCMonth() &&
+	          date.getUTCDate() == today.getUTCDate();	   
 	 },
 	 
 	 addZero: function(i){

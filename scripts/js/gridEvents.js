@@ -8,7 +8,7 @@ var gridEvents = {
 			$(el.currentTarget).closest("form").submit();
 		});		
 		
-		$(document).on("click",".tagOutfitBtn",tagPresenter.showTagForm);
+		$(document).on("click",".tagOutfitBtn",tagPresenter.showTagForm);		
 		$(document).on("submit",".addTagForm > form",tagPresenter.addTag);				
 	},
 	
@@ -22,6 +22,11 @@ var gridEvents = {
 	
 	hideOverlay: function() {			
 			$(this).children(".overlay").first().fadeOut('slow');
+			
+			if (reviewsPresenter != null){
+			     var sku = $(this).find('a[pid]').first().attr("pid");			     			     
+			     reviewsPresenter.hideReview(reviewsPresenter.getReviewBlock(sku));
+			}
 	}, 
 	
 	continuousScroll: function(){		 

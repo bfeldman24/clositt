@@ -14,8 +14,8 @@ body{
 #contentContainer{
 	position:absolute;
 	/*background:grey;*/
-	margin:20px;
-	width:1100px;
+	margin:35px 20px 20px;
+	width:985px;
 	left:75px;
 }
 
@@ -136,7 +136,7 @@ h1.account{
 #bannerImage{
 	position:relative;
 	/*background:red;*/
-	background-image: url(css/images/Hangers_Fullsize.jpg);
+	background-image: url(images/Hangers_Fullsize.jpg);
 	background-repeat: no-repeat;
 	background-position:center;
 	background-size:100%;

@@ -14,6 +14,16 @@ var productPresenter = {
 		$('body').css("min-height",$(window).height());	
 		productPresenter.productIndex += productPresenter.splitValue;	
 	},
+	
+	initCloset: function(user){	
+	    closetPresenter.setUser(user);	
+	    firebase.$.child('clositt').once('value', productPresenter.closetSetup);			 	 
+	},
+	
+	closetSetup: function(store){
+	   productPresenter.clothingStore = store.child("products").val();
+	   closetPresenter.init();	   
+	},	
  
  	showCompanyProducts: function(store){	 		 	
 	 	productPresenter.clothingStore = store.child("products").val();	
@@ -36,6 +46,7 @@ var productPresenter = {
 		var link = product.l;
 		var image = product.i;
 		var name = product.n;
+		var reviewCount = product.rc == null ? '' : product.rc;
 		var id = product.s;
 		var price = product.p == null || isNaN(product.p) ? "" : "$" + Math.round(product.p);		 	
  		var filterPrice = product.fp; 		 		
@@ -47,21 +58,25 @@ var productPresenter = {
 		}		
 			 			
  		//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
- 		var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'"';
+ 		var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
 		var html ='<div class="outfit" '+attr+'>';
-				html +='<div class="picture"><a href="'+link+'" pid="'+id+'"><img src="' + image + '" class="'+shadow+'" /></a></div>';			
+				html +='<div class="picture"><a href="'+link+'" pid="'+id+'" target="_blank"><img src="' + image + '" class="'+shadow+'" /></a></div>';			
 				html +='<div class="overlay">';
 					html +='<div class="topleft">';										
-						html +='<div class="tagOutfitBtn" data-toggle="tooltip" data-placement="left"><i class="icon-tags icon-white"></i></div>';
+						html +='<div class="tagOutfitBtn" data-toggle="tooltip" data-placement="left" title="Tagitt"><i class="icon-tags icon-white"></i></div>';
 					html += '</div>';
 					html +='<div class="topright">';										
-						html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right"><img id="hanger-'+id+'" class="hanger-icon" src="css/images/hanger-icon-white.png" /><i class="icon-plus-sign icon-white hanger-plus"></i></div>';
+						html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Closet"><img id="hanger-'+id+'" class="hanger-icon" src="css/images/hanger-icon-white.png" /><i class="icon-plus-sign icon-white hanger-plus"></i></div>';
 					html += '</div>';
-					html +='<div class="bottom">';										
+					html +='<div class="bottom">';	
+					    html += '<div class="productActions" >';
+					       html += '<div data-toggle="tooltip" data-placement="top" title="Show Comments" class="showComments"><span class="numReviews">'+reviewCount+'</span><i class="icon-comment icon-white"></i></div>';
+					    html += '</div>';														
 						html +='<div class="companyName">' + company + '</div>';
 						html +='<div class="price">' +  price + '</div>';
 						html +='<div class="name">' + name + '</div>';
 					html += '</div>';
+					html += '<div class="product-comments"></div>';
 				html += '</div>';
 				html += '<div class="clear"></div>';				
 			html +='</div>';
@@ -69,11 +84,12 @@ var productPresenter = {
 		return $(html);
 	},
 	
-	getClosetItemTemplate: function(product){
-		var company = product.company;				
-		var link = product.link;
-		var image = product.image;
-		var name = product.name;				
+	getClosetItemTemplate: function(sku){
+	    var product = productPresenter.clothingStore[sku];	
+		var company = product.o;
+		var link = product.l;
+		var image = product.i;
+		var name = product.n;
 			 			
 		var html ='<div class="outfit">';
 				html +='<div class="picture"><a href="'+link+'" target="_blank"><img src="' + image + '" /></a></div>';							
@@ -107,12 +123,13 @@ var productPresenter = {
 	},
 	
 	refreshFilteredProducts: function(){
+	    gridPresenter.endTask();
 	    productPresenter.productIndex = 0;
-	    gridPresenter.showContent(15);
+	    gridPresenter.showContent(15);	    
 	},
 	
 	refreshProducts: function(){
-	    $("#product-grid").children().remove();
+	    gridPresenter.beginTask();
 	    var grid = $("#product-grid");
 
 		for(var i=0; i<productPresenter.splitValue;i++){
@@ -121,7 +138,7 @@ var productPresenter = {
 			grid.append(outfit);		 								
 		}
 	 	 		 			 		 	
-	 	$("#loadingMainContent").hide();	
+	 	gridPresenter.endTask();
 	 	gridPresenter.alignDefaultGrid();	
      	productPresenter.productIndex = 0;      	
 	 	productPresenter.filterStore = productPresenter.clothingStore;		 		 	
