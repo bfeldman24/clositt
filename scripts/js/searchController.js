@@ -135,7 +135,30 @@ var searchController = {
                 cleanSearchTerm = cleanSearchTerm.replace(/(\b(\w{1,2})\b(\s|$))/gi,''); // remove words less than 3 chars
                 cleanSearchTerm = cleanSearchTerm.trim(); 
                 tags = cleanSearchTerm.split(" ");       
-            }  
+            }
+            
+            
+            // Seach for colors
+            var colors = colorPresenter.getColorNames().join("|").toLowerCase().trim();            
+            var regex = new RegExp(searchController.regexEscape(colors), 'gi');
+            matchingColors = cleanSearchTerm.match(regex);
+            
+            if(matchingColors == null){
+                matchingColors = [];   
+            }   
+            
+            searchController.getAdditionalColorsFromTags(matchingColors, tags);                                                
+            
+            if (matchingColors != null && matchingColors.length > 0){
+                criteria['colors'] = matchingColors;
+                
+                // remove filters in the search string
+                regex = new RegExp(searchController.regexEscape(matchingColors.join('|')), 'gi');
+                cleanSearchTerm = cleanSearchTerm.replace(regex, '');
+                cleanSearchTerm = cleanSearchTerm.replace(/(\b(\w{1,2})\b(\s|$))/gi,''); // remove words less than 3 chars
+                cleanSearchTerm = cleanSearchTerm.trim(); 
+                tags = cleanSearchTerm.split(" ");       
+            }              
         }
           
         searchController.getProducts(criteria, tags, searchController.showResults);
@@ -229,11 +252,11 @@ var searchController = {
                 				var sku = item.val();
                 				var product = products[sku];
                 				
-                				if (product == null){                    				                    				
+                				if (product == null && !hasCriteria){                    				                    				
                 				   product = productPresenter.clothingStore[sku];
                 				   
                 				   if (product != null){
-                                        product.rank = 0;    
+                                        product.rank = 1;    
                 				   }            				                       				
                 				}else{
                 				   product.rank += 5; 
@@ -259,6 +282,30 @@ var searchController = {
         			        });		
         		        }					
                     }
+                }
+                
+                // Get product with colors and add ranking
+                if(criteria.colors != null && criteria.colors.length > 0){ 
+                    var productsMatchingColorCriteria = {};
+                    for(var i=0; i < criteria.colors.length; i++){
+                        var color = criteria.colors[i].toLowerCase();
+        		    
+        		        if (store.hasChild("colors/" + color)){
+                			store.child("colors/" + color).forEach(function(item){
+                				var sku = item.val();
+                				var product = products[sku];
+                				
+                				if (product != null){                				   
+                				   product.rank += 5; 
+                				   productsMatchingColorCriteria[sku] = product;
+                				}                				                				
+                				
+                				
+        			        });		
+        		        }					
+                    }
+                    
+                    products = productsMatchingColorCriteria;                                        
                 }
                 
                 callback(products);
@@ -487,6 +534,9 @@ var searchController = {
         }  
         
         return item;
+    },
+    
+    getAdditionalColorsFromTags: function(matchingColors, tags){          
     },
     
     regexEscape: function(str) {

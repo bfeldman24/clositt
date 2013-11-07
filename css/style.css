@@ -753,6 +753,60 @@ footer p{
 	text-decoration: underline;	
 }
 
+/* Color Filter */
+.colorFilterGroup{
+    width: 135px; 
+}
+
+.colorFilter{
+    border-radius: 5px;
+    display: inline-block;
+    height: 24px;
+    margin: 2px;
+    width: 24px;
+    cursor: pointer;
+}
+
+.bottom-left:hover{
+  box-shadow: -2px 2px 4px #999;
+}
+
+.left:hover{
+  box-shadow: -2px 0px 4px #999;
+}
+
+.top-left:hover{
+  box-shadow: -2px -2px 4px #999;
+}
+
+.top:hover{
+  box-shadow: 0px -2px 4px #999;
+}
+
+.top-right:hover{
+  box-shadow: 2px -2px 4px #999;
+}
+
+.right:hover{
+  box-shadow: 2px 0px 4px #999;
+}
+
+.bottom-right:hover{
+  box-shadow: 2px 2px 4px #999;
+}
+
+.bottom:hover{
+  box-shadow: 0px 2px 4px #999;
+}
+
+.middle:hover{
+  box-shadow: 0px 0px 4px #999;
+}
+
+.selectedColor, .selectedColor:hover{
+  box-shadow: 2px 2px 2px #333 inset;
+}
+
 .review-float{
 	z-index: 75;
 	width: 200px;

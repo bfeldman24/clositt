@@ -46,6 +46,7 @@ body{
 <button onclick="saveAllProducts()">Save</button>
 <br><br>
 <p>*** <a href="preload.php">UPDATE WEBSITE WITH NEW PRODUCTS</a> ***</p>
+<p>*** <a href="colorProcessor.php">UPDATE NEW PRODUCT COLORS</a> ***</p>
 
 
 <hr>

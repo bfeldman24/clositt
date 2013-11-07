@@ -96,6 +96,7 @@ Once you find something you like, just click on the hanger icon and add it to yo
 <script src="<?php echo HOME_ROOT; ?>scripts/js/searchController.js"></script>
 <script src="<?php echo HOME_ROOT; ?>scripts/js/reviewsPresenter.js"></script>
 <script src="<?php echo HOME_ROOT; ?>scripts/js/closetPresenter.js"></script>
+<script src="<?php echo HOME_ROOT; ?>scripts/js/colorPresenter.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	if(localStorage.welcomeClosit == undefined){
@@ -108,8 +109,9 @@ $(document).ready(function() {
 	productPresenter.init();	
 	filterPresenter.init();	
 	tagPresenter.init();
-	searchController.init();
+	searchController.init();	
 	reviewsPresenter.init();		
+	colorPresenter.init();
 });
 
 function loggedIn(){

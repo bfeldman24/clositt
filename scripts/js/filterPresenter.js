@@ -59,18 +59,7 @@ var filterPresenter = {
  					).append($("<span>").html(value))
  				)
  			)
- 		}); 
- 		
- 		$("#filter-float").append($("<br>")).append($("<h4>").html("Price:"));		 		 		
- 		for(var i=0;i<priceBuckets.length-1;i++){
- 			$("#filter-float").append(
- 				$("<div>").addClass("controls").append(
- 					$("<label>").addClass("checkbox").append(
- 						$("<input>").attr("type","checkbox").attr("name","filterprice").attr("value",priceBuckets[i]).attr("max",priceBuckets[i+1])
- 					).append($("<span>").html("$"+priceBuckets[i]+" - $"+priceBuckets[i+1]))
- 				)
- 			)
- 		}
+ 		});  		 		
  		
  		$("#filter-float").append($("<br>")).append($("<h4>").html("Brands:"));
  		$.each(companies, function(index, value) {
@@ -85,6 +74,20 @@ var filterPresenter = {
  			)
  		}); 
  		
+ 		$("#filter-float").append($("<br>")).append($("<h4>").html("Price:"));		 		 		
+ 		for(var i=0;i<priceBuckets.length-1;i++){
+ 			$("#filter-float").append(
+ 				$("<div>").addClass("controls").append(
+ 					$("<label>").addClass("checkbox").append(
+ 						$("<input>").attr("type","checkbox").attr("name","filterprice").attr("value",priceBuckets[i]).attr("max",priceBuckets[i+1])
+ 					).append($("<span>").html("$"+priceBuckets[i]+" - $"+priceBuckets[i+1]))
+ 				)
+ 			)
+ 		}
+ 		
+ 		$("#filter-float").append($("<br>")).append($("<h4>").html("Colors:"));		 		 		 		
+		$("#filter-float").append(colorPresenter.getColorFilters());
+ 		 		
  		$("#filter-float").append($("<br><br><br><br><br><br><br>"));
  		filterPresenter.showFilter();
  	},
@@ -121,6 +124,8 @@ var filterPresenter = {
 		 		}
 		 	});	 	
 	 	});
+	 	
+	 	criteria['colors'] = colorPresenter.selectedColors;
 	 	
 	 	if (isSearch){
 	 	     searchController.search(criteria);
