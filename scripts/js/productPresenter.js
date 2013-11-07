@@ -60,7 +60,7 @@ var productPresenter = {
  		//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
  		var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
 		var html ='<div class="outfit" '+attr+'>';
-				html +='<div class="picture"><a href="'+link+'" pid="'+id+'" target="_blank"><img src="' + image + '" class="'+shadow+'" /></a></div>';			
+				html +='<div class="picture"><a href="'+link+'" pid="'+id+'" target="_blank"><img src="' + image + '" class="'+shadow+'" onerror="return pagePresenter.handleImageNotFound(this)"/></a></div>';			
 				html +='<div class="overlay">';
 					html +='<div class="topleft">';										
 						html +='<div class="tagOutfitBtn" data-toggle="tooltip" data-placement="left" title="Tagitt"><i class="icon-tags icon-white"></i></div>';

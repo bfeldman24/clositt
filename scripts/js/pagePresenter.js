@@ -5,7 +5,6 @@ var pagePresenter = {
    	    $("#brand").css("position", "fixed");
         $("#user-dropdown").css("position", "fixed");
         
-        $(document).on("error","img", pagePresenter.handleImageNotFound);
         $(window).scroll(pagePresenter.handleScrollEvents);
         
     },
@@ -40,7 +39,12 @@ var pagePresenter = {
 	   } 
 	},
     
-    handleImageNotFound:  function() {
-        $( this ).attr( "src", "../../css/images/missing.png" );
+    handleImageNotFound:  function(e) {
+        $(e).attr( "src", "css/images/missing.png" );
+//        var randomSku = Object.keys(productPresenter.filterStore)[Object.keys(productPresenter.filterStore).length - 1];
+//        var sku = $(e).parent().attr("pid");
+//        $(e).parents(".outfit").replaceWith(productPresenter.getProductTemplate(randomSku));
+        
+        return true;
     }
 };
