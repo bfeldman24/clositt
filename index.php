@@ -18,7 +18,7 @@
       	<form id="search-form">
       		<div class="form-search input-append">
       		    <div id="seach-bar-icon"><img src="css/images/Search.png" /></div>
-      			<input id="search-bar" placeholder="Start your search here! (ex. Black Party Dress)" class="input-xxlarge search-query" />
+      			<input id="search-bar" placeholder="Start your search here (ex. Women's Sweaters Under $100)" class="input-xxlarge search-query" />
       			<button id="search-clear-btn" style="display:none;" class="close">&times;</button>
       			<div id="search-bar-sort-block">
       			   <span>Sory By:</span>
