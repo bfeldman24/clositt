@@ -181,6 +181,8 @@ var searchController = {
             var hasCriteria = (criteria.company != null && Object.keys(criteria.company).length > 0) || 
                               (criteria.customer != null && Object.keys(criteria.customer).length > 0) ||
                               (criteria.category != null && Object.keys(criteria.category).length > 0);                           
+                              
+            var hasColors = criteria.colors != null && criteria.colors.length > 0;
             
             // search store for all matching products
             firebase.$.child("store").once('value',function(store){                
@@ -227,7 +229,7 @@ var searchController = {
                                                     }
                                                     
                                                     // Add product
-                                                    if (hasCriteria || foundMatchInName){
+                                                    if (hasCriteria || hasColors || foundMatchInName){
                                                         products[sku] = product;
                                                     }
                                                 }
@@ -285,18 +287,19 @@ var searchController = {
                 }
                 
                 // Get product with colors and add ranking
-                if(criteria.colors != null && criteria.colors.length > 0){ 
+                if(hasColors){ 
                     var productsMatchingColorCriteria = {};
                     for(var i=0; i < criteria.colors.length; i++){
                         var color = criteria.colors[i].toLowerCase();
         		    
         		        if (store.hasChild("colors/" + color)){
                 			store.child("colors/" + color).forEach(function(item){
-                				var sku = item.val();
+                				var sku = item.name();
+                				var percent = item.val();
                 				var product = products[sku];
                 				
                 				if (product != null){                				   
-                				   product.rank += 5; 
+                				   product.rank += percent; 
                 				   productsMatchingColorCriteria[sku] = product;
                 				}                				                				
                 				

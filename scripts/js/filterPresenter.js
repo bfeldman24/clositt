@@ -123,9 +123,12 @@ var filterPresenter = {
 			 		criteria[filterName].push(value);
 		 		}
 		 	});	 	
-	 	});
+	 	});	 		 	
 	 	
-	 	criteria['colors'] = colorPresenter.selectedColors;
+	 	if (colorPresenter.selectedColors != null && colorPresenter.selectedColors.length > 0){
+	 	     criteria['colors'] = colorPresenter.selectedColors;
+	 	     areAnyFiltersChecked = true;
+	 	}
 	 	
 	 	if (isSearch){
 	 	     searchController.search(criteria);

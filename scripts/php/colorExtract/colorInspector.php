@@ -99,21 +99,22 @@ $numColorsToTag = 2;
             	   
             	   // add the parent color of the closest color to the list of returned colors
             	   if(!in_array($basicColors[$closestColor]['p'], $productColors)){   	   
-            	       $productColors[] = $basicColors[$closestColor]['p']; 
+            	       $productColors[$basicColors[$closestColor]['p']] = $percent; 
+            	   }else{
+            	       $productColors[$basicColors[$closestColor]['p']] += $percent;   
             	   }            	   
             	}
             }
                         
             // Add the top colors to the color store
-            for($c=0; $c < $numColorsToTag && $c < count($productColors); $c++){
-               $parentColor = $productColors[$c];
+            foreach ( $productColors as $parentColor => $percent ){            
                
                if ($parentColor != null && trim($parentColor) != ""){                
                    if(!array_key_exists($parentColor, $colorStore['colors'])){   	                   
             	       $colorStore['colors'][$parentColor] = array();
             	   }
             	   
-            	   $colorStore['colors'][$parentColor][] = $sku;            	   
+            	   $colorStore['colors'][$parentColor][$sku] = $percent;            	   
                }
             }  
             

@@ -23,6 +23,8 @@ var colorProcessor = {
 
 	success: "",
 	firebase: null,
+	refresh: true,
+	maxProductsToLoad: 3000,
 	previouslySavedImages: null,
 	colorStore: null,	
 	interval: null,
@@ -40,9 +42,14 @@ var colorProcessor = {
 	},
 	
 	start: function(store){
-	   // load current saved colors
-	   colorProcessor.colorStore = store.child('colors').val();
-	   colorProcessor.previouslySavedImages = colorProcessor.getColorStore(colorProcessor.colorStore);	   
+	   if (colorProcessor.refresh){
+           colorProcessor.colorStore = {};
+    	   colorProcessor.previouslySavedImages = [];	    	       
+	   }else{
+    	   // load current saved colors
+    	   colorProcessor.colorStore = store.child('colors').val();
+    	   colorProcessor.previouslySavedImages = colorProcessor.getColorStore(colorProcessor.colorStore);	   
+	   }
 	   
 	   // Get all products from store  	   
 	   colorProcessor.getProducts(store.child('products').val());
@@ -67,9 +74,7 @@ var colorProcessor = {
 		var productListing = new Object();	
 	 	var d = new Date();
 	 	var startTime = d.getTime();
-	 	var alreadyInStoreCount = 0;	 
-	 	
-	 	var max = 100;		 	
+	 	var alreadyInStoreCount = 0;	 	 		 			 	
 	 	
 	 	// Get flat product listing	 	
 	 	for(var company in store){	 			 			 			 		
@@ -77,7 +82,7 @@ var colorProcessor = {
     	 		for(var category in store[company][audience]){
     	 			for(var sku in store[company][audience][category]){
     	 			   
-    	 			    if (max > Object.keys(productListing).length){
+    	 			    if (colorProcessor.maxProductsToLoad > Object.keys(productListing).length){
     	 			       
     	 			       if(colorProcessor.previouslySavedImages.indexOf(sku) < 0){
     					       productListing[sku] = store[company][audience][category][sku]['image'];													
@@ -132,6 +137,8 @@ var colorProcessor = {
 	 
 	 getProcessedStatus: function(){
             $.getJSON( "colorExtract/colorInspectorSaved.json", function( json ) {               
+                var isStaleCounter = json.numProducts == parseInt($("#counter").text());
+                
                 $("#counter").text(json.numProducts);                    
                 var width = parseInt((json.numProducts / colorProcessor.totalImages) * 100) ;
                 width += "%";
@@ -142,7 +149,7 @@ var colorProcessor = {
                     $("body").append($("<div>").html('All of the images were processed successfully')); 
                     colorProcessor.saveColorTags(json);                      
                     
-                }else if (json.numProducts == parseInt($("#counter").text())){
+                }else if (isStaleCounter){
                     colorProcessor.intervalCounter++;
                     
                     if (colorProcessor.intervalCounter > 5){
@@ -155,7 +162,8 @@ var colorProcessor = {
 	 },
 	 
 	 getColorsFromSavedFile: function(){
-	   var str = $(".fileEnding").val();	   
+	   var str = $(".fileEnding").val();
+	   str = str == null ? "" : str;	   	   
 	   $.getJSON( "colorExtract/colorInspectorSaved.json" + str, function( json ) {               
 	       colorProcessor.saveColorTags(json);                                
 	   });
@@ -192,7 +200,6 @@ var colorProcessor = {
          				  }else{
          						console.log("Color mapping was saved successfully. ");
          						$("body").append($("<div>").html("Color mapping was saved successfully."));
-         						$("body").append($("<div>").html("Saved "+ Object.keys(colorStore.colors).length +" products!"));
          						$("body").append($("<div>").html("ALL DONE!!!"));         						
          				  }
          			});			
