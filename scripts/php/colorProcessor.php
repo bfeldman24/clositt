@@ -23,8 +23,8 @@ var colorProcessor = {
 
 	success: "",
 	firebase: null,
-	refresh: true,
-	maxProductsToLoad: 3000,
+	refresh: false,
+	maxProductsToLoad: 10000,
 	previouslySavedImages: null,
 	colorStore: null,	
 	interval: null,
