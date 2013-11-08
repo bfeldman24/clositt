@@ -45,7 +45,7 @@ var firebase = {
 			if( firebase.username === null) {
 			    console.log("No User Found")
 			} else {
-			  	$("#user-name").html(firebase.username);	    			  	
+			  	$("#user-name").html(firebase.username.split(" ")[0]);	    			  	
 			  	firebase.userDataAvailableCallback(firebase.username);
 			}
 			
