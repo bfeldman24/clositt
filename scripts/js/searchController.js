@@ -228,8 +228,24 @@ var searchController = {
                                                         }
                                                     }
                                                     
+                                                    // matches color
+                                                    var matchesColor = false;
+                                                    if(hasColors){ 
+                                                        for(var i=0; i < criteria.colors.length; i++){
+                                                            var color = criteria.colors[i].toLowerCase();
+                                          		    
+                                          		            if (store.hasChild("colors/" + color + "/" + sku)){
+                                          		                var percent = store.child("colors/" + color + "/" + sku).val();
+                                                  				product.rank += percent; 	
+                                                  				matchesColor = true;
+                                          			        }	
+                                          		        }
+                                                    }
+                                                    
                                                     // Add product
-                                                    if (hasCriteria || hasColors || foundMatchInName){
+                                                    if ((hasCriteria || foundMatchInName) || 
+                                                        (matchesColor || !hasColors)){
+                                                            
                                                         products[sku] = product;
                                                     }
                                                 }
@@ -260,7 +276,7 @@ var searchController = {
                 				   if (product != null){
                                         product.rank = 1;    
                 				   }            				                       				
-                				}else{
+                				}else if(product != null){
                 				   product.rank += 5; 
                 				}
                 				
@@ -277,39 +293,30 @@ var searchController = {
                                         if (matches != null){
                             			        product.rank += matches.length * 2;                            	
                                         }
-                                    
-                                        products[sku] = product;
+                                        
+                                        // matches color
+                                        var matchesColor = false;
+                                        if(hasColors){ 
+                                            for(var i=0; i < criteria.colors.length; i++){
+                                                var color = criteria.colors[i].toLowerCase();
+                                		    
+                            		            if (store.hasChild("colors/" + color + "/" + sku)){
+                            		                var percent = store.child("colors/" + color + "/" + sku).val();
+                                    				product.rank += percent; 	
+                                    				matchesColor = true;
+                            			        }	
+                            		        }
+                                        }
+                            
+                                        if(matchesColor || !hasColors){
+                                            products[sku] = product;
+                                        }
                                     }
                                 }
         			        });		
         		        }					
                     }
-                }
-                
-                // Get product with colors and add ranking
-                if(hasColors){ 
-                    var productsMatchingColorCriteria = {};
-                    for(var i=0; i < criteria.colors.length; i++){
-                        var color = criteria.colors[i].toLowerCase();
-        		    
-        		        if (store.hasChild("colors/" + color)){
-                			store.child("colors/" + color).forEach(function(item){
-                				var sku = item.name();
-                				var percent = item.val();
-                				var product = products[sku];
-                				
-                				if (product != null){                				   
-                				   product.rank += percent; 
-                				   productsMatchingColorCriteria[sku] = product;
-                				}                				                				
-                				
-                				
-        			        });		
-        		        }					
-                    }
-                    
-                    products = productsMatchingColorCriteria;                                        
-                }
+                }                                
                 
                 callback(products);
             });                                                 

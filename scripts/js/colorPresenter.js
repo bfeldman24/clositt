@@ -1,25 +1,31 @@
 var colorPresenter = {
-    selectedColors: [],
     
     init: function(){
       $(document).on("click",".colorFilter", colorPresenter.filterColor);
     },
     
     filterColor: function(el){
-        var color = $(el.target).attr("data-original-title").toLowerCase();
-        
-        if($(el.target).hasClass("selectedColor")){
-            $(el.target).removeClass("selectedColor");     
-            var index = colorPresenter.selectedColors.indexOf(color);
-            colorPresenter.selectedColors.splice(index, 1);
+                
+        if($(el.target).hasClass("selectedColor")){            
+            $(".selectedColor").removeClass("selectedColor");            
         }else{
-            $(el.target).addClass("selectedColor");  
-            colorPresenter.selectedColors.push(color);
+            $(".selectedColor").removeClass("selectedColor");
+            $(el.target).addClass("selectedColor");            
         }
         
         filterPresenter.onFilterSelect();
     },
+    
+    getSelectedColors: function(){
+        var selectedColors = [];
         
+        $(".selectedColor").each(function(){
+            var color = $(this).attr("data-original-title").toLowerCase();
+            selectedColors.push(color);
+        });
+        
+        return selectedColors;
+    },        
     
     getColorNames: function(){
         var colorNames = [];

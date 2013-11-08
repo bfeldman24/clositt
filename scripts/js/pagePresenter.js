@@ -4,8 +4,11 @@ var pagePresenter = {
         $("#subheader-navbar").show('fast');
    	    $("#brand").css("position", "fixed");
         $("#user-dropdown").css("position", "fixed");
-        
-        $(window).scroll(pagePresenter.handleScrollEvents);
+                        
+        $(document).ready(function(){
+            $(window).scroll(pagePresenter.handleScrollEvents);
+            pagePresenter.handleScrollEvents();    
+        });
         
     },
     
@@ -22,9 +25,9 @@ var pagePresenter = {
 	   var defaultHeaderHeight = 45;
 	   var scrollLocation = $(window).scrollTop();	  
 	   
-	   if (scrollLocation > defaultHeaderHeight && $("#subheader-navbar").css('position') != 'fixed'){
+	   if (scrollLocation > defaultHeaderHeight && $("#subheader-navbar").css('position') != 'fixed'){	       
 	       $("#subheader-navbar").css('position', 'fixed');
-	       $("#subheader-navbar").css('top', '0');
+	       $("#subheader-navbar").css('top', '0');	       
 	       $("#filter-float").css("top", defaultHeaderHeight + "px");	
 	       $("#brand-fixed-background").show("blind","fast");      
 	   } else if (scrollLocation <= defaultHeaderHeight){

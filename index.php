@@ -70,8 +70,8 @@
 		</div>
 		<div class="modal-body">
 		    <p>Welcome to Clositt, the best way to discover, share, and compare clothing online.
-Looking for something specific? Click the magnifying glass on the lower left corner to open the filter menu.
-Or you can simply browse to homepage to see the latest trends and styles from your favorite stores.
+Looking for something specific? Use the filter on the left or the search bar to narrow down what you are looking for. 
+Browse the homepage to see the latest trends and styles from your favorite stores.
 Once you find something you like, just click on the hanger icon and add it to your Clositt.</p><br>
 
 	<p>Got questions or feedback? Let us know: <a href="mailto:info@clositt.com">info@clositt.com</a></p>

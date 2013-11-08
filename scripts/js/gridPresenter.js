@@ -10,7 +10,7 @@ var gridPresenter = {
 		$(".tagOutfitBtn").tooltip();
 		$(".showComments").tooltip();
 					
-		gridPresenter.alignGrid("product-grid", columns, 200, 25);						
+		gridPresenter.alignGrid("product-grid", columns, 200, 270, 25);						
 		closetFormPresenter.markUsersClositItems();
 	}, 
 	
@@ -36,28 +36,23 @@ var gridPresenter = {
 		return columns;	
 	},
 
-	alignGrid: function(/*string*/ id, /*int*/ cols, /*int*/ cellWidth, /*int*/ padding) {
+	alignGrid: function(/*string*/ id, /*int*/ cols, /*int*/ cellWidth, /*int*/ cellHeight, /*int*/ padding) {
    
 		var x = 0;
 		var y = 0;
 		var count = $("#" + id).children("div[aligned=true]").size();
-		var unit = "px";
-		var yCol = new Array();
-		
-		for(var i=0; i< cols; i++){
-			yCol[i] = 0;	
-		}
+		var unit = "px";				
 		
 		var n=count;
 		$("#" + id).children("div[aligned=true]").slice(-1 * cols).each(function() {
 			var colNum = n++ % cols;
 			if (colNum >= cols - 1) {
 				x = 0;
+				y = parseFloat($(this).css("top"),10) + cellHeight + padding;
 			}else{
-				x = parseInt($(this).css("left"),10) + cellWidth + padding;				
-			}						
-			
-			yCol[colNum] = parseFloat($(this).css("top"),10) + parseFloat($(this).css("height"),10) + padding;
+				x = parseInt($(this).css("left"),10) + cellWidth + padding;	
+				y = parseFloat($(this).css("top"),10);			
+			}
 		});
 				
 		$("#" + id).css("position", "relative").css("margin","0 auto").css("width", (cols * (cellWidth + padding)) + "px");
@@ -65,47 +60,49 @@ var gridPresenter = {
 		$(".pageEndSpacer").remove();
 		    
 		$("#" + id).children("div[aligned!=true]").each(function() {
-		    	var colNum = count % cols;
+		        var colNum = count % cols;		   
+		        $(this).css("width", cellWidth + unit);
+		        $(this).css("height", cellHeight + unit); 	
+		    	
 		    	var imgHeight = $(this).find(".picture > a > img").first().css("height");
 		    	var imgWidth = $(this).find(".picture > a > img").first().css("width");
 		    	
 		    	if(imgHeight == undefined || imgHeight == null || imgHeight.trim() == ""){
-					imgHeight = 70;	    	
+					imgHeight = cellHeight;	    	
 			    	imgWidth = cellWidth;  	
 		    	}else{		    	
 			    	imgHeight = parseFloat(imgHeight,10);	    	
-			    	imgWidth = parseFloat(imgWidth,10);		    	
-			    	
-			    	if(imgHeight < 50){			    		
-			    		imgHeight = 270;
-			    		imgWidth = 202;	
-			    	}
+			    	imgWidth = parseFloat(imgWidth,10);		    				    				    	
 		    	}		    
 		    	
-		    	var newHeight = cellWidth * imgHeight / imgWidth;		    	
+		    	var newHeight = cellWidth * (imgHeight / imgWidth);
 		    	
-		        $(this).css("width", cellWidth + unit);
-		        $(this).css("height", newHeight + unit);		        
+		    	if (newHeight <= cellHeight){		              
+		              $(this).find(".picture > a > img").first().css("width", cellWidth + unit);
+		    	}else{
+		    	     var newWidth = cellHeight / (imgHeight / imgWidth); 		    	     
+		             $(this).find(".picture > a > img").first().css("height", cellHeight + unit);  		    	     
+		    	}
+		    	
 		        $(this).css("position", "absolute");		        
 		        
 		        $(this).css("left", x + unit);
-		        $(this).css("top", yCol[colNum] + unit);	        
+		        $(this).css("top", y + unit);	        
 		        $(this).attr("aligned",true);
 		        		        		        
 		        if (colNum >= cols - 1) {
 		            x = 0;	           
+		            y += cellHeight + padding;
 		        } else {
 		            x += cellWidth + padding;
 		        }
-		        
-		        yCol[colNum] += newHeight + padding;
-		        
+		        		        		        
 		        count++;
 	    });
 	    
 	    $("#" + id).append(
 	    	$("<div>").addClass("pageEndSpacer")	    		
-	    		.css("top", yCol[(count-1) % cols] + "px")
+	    		.css("top", y + "px")
 	    );
 	},
 					

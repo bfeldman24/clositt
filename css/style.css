@@ -476,7 +476,7 @@ footer p{
 }
 
 .outfit{
-    overflow-y: visible;
+    overflow: hidden;
 }
 
 .outfit-toolbar-overlay{
@@ -672,8 +672,7 @@ footer p{
 }
 
 #main-content {
-	padding:10px;
-	padding-bottom:80px; /* Height of the footer element */
+	padding:10px 0 80px; // 80px = Height of the footer element
 	height: auto !important;
 }
 
@@ -1101,9 +1100,10 @@ footer .last{
 
 #loadingMainContent > img{
 	height: 35px;
-	width: 35px;
-	position:relative;
-	top: 150px;	
+    position: fixed;
+    top: 300px;
+    width: 35px;
+    z-index: 999;	
 }
 
 
@@ -1282,13 +1282,24 @@ input.closetNameInput[type="text"] {
 /* Browse Page */
 #Search {    
     margin-top: 100px;   
+    margin-left: 155px;
 }
 
 #Search .search-query{
    height: 40px;
    font-size: 18px;
-   font-weight: lighter;     border-color: #A9A9A9;   border-radius: 0 0 0 0;   border-style: double;   border-width: 1px;   box-shadow: 3px 4px 4px #B7B7B7;   color: #9A9A9A;   margin-bottom: 0;   padding-left: 14px;   padding-right: 14px;     
-   text-indent: 20px;}
+   font-weight: lighter;     
+   border-color: #A9A9A9;   
+   border-radius: 0 0 0 0;   
+   border-style: double;   
+   border-width: 1px;   
+   box-shadow: 3px 4px 4px #B7B7B7;   
+   color: #9A9A9A;   
+   margin-bottom: 0;   
+   padding-left: 14px;   
+   padding-right: 14px;     
+   text-indent: 20px;
+}
 
 #seach-bar-icon{    cursor: pointer;    display: inline-block;    height: 24px;    left: 31px;    padding: 7px 3px;    position: relative;    top: 0;    width: 24px;    z-index: 10;
 }
@@ -1302,7 +1313,8 @@ input.closetNameInput[type="text"] {
 }
 
 #search-bar-sort-block{
-    margin:-37px -735px 25px 10px;
+    display: inline;
+    margin-left: 10px;
 }
 
 #search-bar-sort{    

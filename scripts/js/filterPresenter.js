@@ -94,6 +94,10 @@ var filterPresenter = {
  
  	
  	onFilterSelect: function(){
+ 	    productPresenter.filterStore = [];
+ 	    window.scrollTo(0, 0);
+ 	    gridPresenter.beginTask(); 	       	    
+ 	    
 	 	var criteria = new Object();
 	 	var isSearch = $( "#search-bar" ).val().trim().length > 0;
 	 	var areAnyFiltersChecked = false;
@@ -124,9 +128,10 @@ var filterPresenter = {
 		 		}
 		 	});	 	
 	 	});	 		 	
+	 		 	
+	 	criteria['colors'] = colorPresenter.getSelectedColors();
 	 	
-	 	if (colorPresenter.selectedColors != null && colorPresenter.selectedColors.length > 0){
-	 	     criteria['colors'] = colorPresenter.selectedColors;
+	 	if (criteria['colors'] != null && criteria['colors'].length > 0){     
 	 	     areAnyFiltersChecked = true;
 	 	}
 	 	
