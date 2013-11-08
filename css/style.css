@@ -472,12 +472,13 @@ footer p{
 
 .picture{
 	max-width: 300px;
-	max-height: 400px;	
+	max-height: 400px;
+	overflow: hidden;	
 }
 
-.outfit{
-    overflow: hidden;
-}
+//.outfit{
+//    overflow: hidden;
+//}
 
 .outfit-toolbar-overlay{
 	background:RGBa(3,3,3,0.6);	color: #EFEFEF;	display: none;	height: 30px;	position: absolute;	top: 0;	width: 100%;

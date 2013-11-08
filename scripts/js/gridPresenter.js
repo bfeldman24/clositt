@@ -61,8 +61,8 @@ var gridPresenter = {
 		    
 		$("#" + id).children("div[aligned!=true]").each(function() {
 		        var colNum = count % cols;		   
-		        $(this).css("width", cellWidth + unit);
-		        $(this).css("height", cellHeight + unit); 	
+		        $(this).find(".picture").css("width", cellWidth + unit);
+		        $(this).find(".picture").css("height", cellHeight + unit); 	
 		    	
 		    	var imgHeight = $(this).find(".picture > a > img").first().css("height");
 		    	var imgWidth = $(this).find(".picture > a > img").first().css("width");
