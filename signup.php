@@ -39,6 +39,7 @@ if ($_GET['beta'] != 'earlyaccess'){
 			  </div>
 		    </div>
 	    </div>
+	    <?php /* ?>
 	    <div class="control-group">
 		    <label class="control-label" for="inputUsername">Username</label>
 		    <div class="controls">		  	  
@@ -48,6 +49,7 @@ if ($_GET['beta'] != 'earlyaccess'){
 			  </div>
 		    </div>
 	    </div>
+	    <?php */ ?>
 	    <div class="control-group">
 		    <label class="control-label" for="inputEmail">Email</label>
 		    <div class="controls">		  	  
