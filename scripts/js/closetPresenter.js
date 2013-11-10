@@ -286,11 +286,12 @@ var closetFormPresenter = {
 			
 			if($(element).parent().parent().find("form").length > 0){
 				$(element).children(".hanger-plus").addClass("icon-white");
-				$(element).parent().parent().children(".addToClosetForm").tooltip('destroy');
-				$(element).parent().parent().children(".addToClosetForm").remove();
-				$(element).parent().parent().children(".addTagForm").tooltip('destroy');
-				$(element).parent().parent().children(".addTagForm").remove();
-				$(element).parent().parent().children(".bottom").show();			
+				$parent = $(element).parent().parent();
+				$parent.children(".addToClosetForm").tooltip('destroy');
+				$parent.children(".addToClosetForm").remove();
+				$parent.children(".addTagForm").tooltip('destroy');
+				$parent.children(".addTagForm").remove();
+				$parent.children(".bottom").show();			
 			}else{
 				$(element).children(".hanger-plus").removeClass("icon-white");			
 				var $checkboxes = $();		
@@ -365,17 +366,13 @@ var closetFormPresenter = {
 				  } else {
 						Messenger.success('This item was added to "' + closetName + '"');
 						closetFormPresenter.showClosetForm(el);
-						closetFormPresenter.updateClosetCount(sku);						
+						closetFormPresenter.updateClosetCount(sku);																		
 				  }
 				});
 			}else{
 				Messenger.success('This item is already in your closet "' + closetName + '"');
 			}
-		}
-		
-		if(closetName.trim().length > 0){
-			
-		}
+		}				
 		
 		return false;
 	},
