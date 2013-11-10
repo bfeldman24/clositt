@@ -364,6 +364,7 @@ var closetFormPresenter = {
 						Messenger.error('Closet could not be saved. ' + error);
 				  } else {
 						Messenger.success('This item was added to "' + closetName + '"');
+						closetFormPresenter.showClosetForm(el);
 						closetFormPresenter.updateClosetCount(sku);						
 				  }
 				});

@@ -40,7 +40,8 @@ var searchController = {
 		
 		// log search term
 		var logSearchTerm = searchTerm.replace(/[^A-Za-z0-9\w\s]/gi,'');
-		firebase.$.child("search").child(logSearchTerm).child(Firebase.ServerValue.TIMESTAMP).set({user: firebase.userid});
+		var timestamp = new Date().getTime();
+		firebase.$.child("search").child(logSearchTerm).child(timestamp).set({user: firebase.userid});
 		
 		// get price if there is one
 		if(searchTerm.indexOf("$") > 0 || searchTerm.indexOf("dollar") > 0){  
