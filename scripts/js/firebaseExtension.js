@@ -4,6 +4,7 @@ var firebase = {
 	authClient: null,
 	userid: null,
 	username: null,
+	email: null,
 	isLoggedIn: false,
 	url: 'https://clothies.firebaseio.com/',
 	userPath: 'userdata',
@@ -41,6 +42,7 @@ var firebase = {
 		firebase.$.child(firebase.userPath).child(user.id).child('name').on('value',function(snapshot){	
 			firebase.username = snapshot.val();
 			firebase.userid = user.id;
+			firebase.email = user.email;
 			
 			if( firebase.username === null) {
 			    console.log("No User Found")
@@ -129,7 +131,7 @@ var firebase = {
 	updateLoggedInDropdownMenu: function(){
 		$("#account-dropdown").html("")
 	    	//.append($('<li><a href="closet.php">My Closet</a></li>'))    	
-	    	.append($('<li><a href="#">Account Settings</a></li>'))
+	    	.append($('<li><a href="settings.php">Account Settings</a></li>'))
 	    	.append($('<li class="divider"></li>'))
 	    	.append($('<li><a href="javascript:firebase.logout();">Logout</a></li>')); 
 	},
