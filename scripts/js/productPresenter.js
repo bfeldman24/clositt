@@ -92,7 +92,7 @@ var productPresenter = {
 		var name = product.n;
 			 			
 		var html ='<div class="outfit">';
-				html +='<div class="picture"><a href="'+link+'" target="_blank"><img src="' + image + '" /></a></div>';							
+				html +='<div class="picture"><a href="'+link+'" target="_blank" pid="'+sku+'"><img src="' + image + '" /></a></div>';							
 				html +='<div class="overlay">';
 					html +='<div class="bottom">';										
 						html +='<div class="companyName">' + company + '</div>';

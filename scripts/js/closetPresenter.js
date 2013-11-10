@@ -46,7 +46,7 @@ var closetPresenter = {
 			
 			$("#closet-list").append($("<hr>")).append(
 				$("<div>").addClass("closet").addClass("clearfix").append(
-					$("<h1>").addClass("closetName").append($("<span>").addClass(textColor).text(closet.name()))				
+					$("<h1>").addClass("closetName").append($("<span>").addClass(textColor).attr("closetid",closet.name()).text(closet.val().name))				
 				).append(
 					$("<div>").addClass("carousel").append(
 						$("<div>").addClass("carousel-left").append(
@@ -60,7 +60,7 @@ var closetPresenter = {
 				)
 			);
 			
-			closet.forEach(function(item){											
+			closet.child("items").forEach(function(item){
 				$itemlist.append(
 					productPresenter.getClosetItemTemplate(item.val()).prepend(
 						$("<div>").addClass("hanger").append(
@@ -117,6 +117,7 @@ var closetPresenter = {
 						$("<input>").addClass("closetNameInput")
 							.attr("type","text")
 							.attr("name","closetName")
+							.attr("closetid",$(this).attr("closetid"))
 							.attr("original",$(this).text())
 							.attr("value",$(this).text()));
 			});			
@@ -138,53 +139,39 @@ var closetPresenter = {
 			$(".picture .delete-outfit").remove();
 				
 			$(".closetName > span").replaceWith(function() {
-				return $("<span>").text($(this).children("input").attr("original"));
+				return $("<span>").attr("closetid",$(this).children("input").attr("closetid")).text($(this).children("input").attr("original"));
 			});			
 		}
 	},
 	
 	saveClosets: function(){	
-		if( $(".settings-minicon").hasClass("active") ){			
+		if( $(".settings-minicon").hasClass("active") ){			    
+		  		
 			$(".closetName input").each(function(){
+				var closetid = $(this).attr("closetid");
 				var original = $(this).attr("original");
-				var newName = $(this).val();
+				var newName = $(this).val().trim();
 				var $closetNameInput = $(this);
 				var success = true;
-				
-				if(newName != original){
-					firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(original).once('value',function(snapshot){
-						
-						firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(newName).set(snapshot.val(), function(error){
-							if (error) {
-							    	Messenger.error('Item could not be removed.' + error);
-							    	success = false;
-				 			  } else {
-				 				    firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(original).remove();
-						
-									$closetNameInput.attr("original",newName);
-									$closetNameInput.attr("value",newName);
-																																	
-									if ($closetNameInput.parent().parent().attr("last")){
-										if(success){
-											Messenger.success("Closet Names were saved!");
-											closetPresenter.hideSettings();	
-										}else{
-											Messenger.error("Error! Closet Names were not saved!");	
-										}
-									}	
-							  }						
-						});					
-					});										
-				}else{
-					if ($closetNameInput.parent().parent().attr("last")){
-						if(success){
-							Messenger.success("Closet Names were saved!");
-							closetPresenter.hideSettings();	
-						}else{
-							Messenger.error("Error! Closet Names were not saved!");	
-						}
-					}	
-				}			
+								
+				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets/"+closetid+"/name").set(newName, function(error){
+					  if (error) {
+					    	Messenger.error('Item could not be removed.' + error);
+					    	success = false;
+		 			  } else {						
+							$closetNameInput.attr("original",newName);
+							$closetNameInput.attr("value",newName);
+																															
+							if ($closetNameInput.parent().parent().attr("last")){
+								if(success){
+									Messenger.success("Closet Names were saved!");
+									closetPresenter.hideSettings();	
+								}else{
+									Messenger.error("Error! Closet Names were not saved!");	
+								}
+							}	
+					  }									
+				});																
 			});	
 		}			
 	},
@@ -199,17 +186,27 @@ var closetPresenter = {
 	},
 	
 	removeOutfit: function(el){
-		var link = $(el.currentTarget).prev("a").attr("href").replace(/\W/g,'');
+		var sku = $(el.currentTarget).prev("a").attr("pid");
 		var closetName = $(el.currentTarget).parent().parent().parent().parent().prev(".closetName").find("input").attr("original");
+		var closetId = $(el.currentTarget).parent().parent().parent().parent().prev(".closetName").find("input").attr("closetid");
 		
-		firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetName).child(link).remove(function(error){
-		  if (error) {
-		    	Messenger.error('Item could not be removed.' + error);
-		  } else {
-		  		$(el.currentTarget).parent().parent().css("display","none");
-		    	Messenger.success('This item was removed from "' + closetName +'"');		    	
-		  }
+		firebase.$.child(firebase.userPath).child(firebase.userid).child("closets/"+closetId+"/items").once('value', function(items){
+		      items.forEach(function(item){
+		          if(item.val() == sku){
+		              firebase.$.child(firebase.userPath).child(firebase.userid).child("closets/"+closetId+"/items/"+item.name()).remove(function(error){
+                		  if (error) {
+                		    	Messenger.error('Item could not be removed.' + error);
+                		  } else {
+                		  		$(el.currentTarget).parent().parent().css("display","none");
+                		    	Messenger.success('This item was removed from "' + closetName +'"');		    	
+                		  }
+                	  });
+                	  
+                	  return true;                 
+		          } 
+		      });
 		});
+			
 	},
 
 	shareCloset: function(){
@@ -240,6 +237,7 @@ var closetPresenter = {
 
 var closetFormPresenter = {
 
+	closetIds: null,
 	closetNames: null, 
 	closetItems: null,
 	closetItemsMapping: null,
@@ -249,15 +247,17 @@ var closetFormPresenter = {
 	getClosetInfo: function(){
 		if(closetFormPresenter.closetNames == null && firebase.isLoggedIn){
 			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").on('value', function(snapshot){
+				var closetIds = new Array();
 				var closetNames = new Array();
 				var closetItems = new Array();
 				var closetItemsMapping = new Array();
 				var i=0;
 				
 				snapshot.forEach(function(closet){
-					closetNames[i] = closet.name();
+					closetIds[i] = closet.name();
+					closetNames[i] = closet.val().name;
 					
-					closet.forEach(function(item){
+					closet.child("items").forEach(function(item){
 						closetItems.push(item.val());
 						closetItemsMapping.push(closetNames[i]);							
 					});
@@ -265,6 +265,7 @@ var closetFormPresenter = {
 					i++;
 				});	
 				
+				closetFormPresenter.closetIds = closetIds;
 				closetFormPresenter.closetNames = closetNames;
 				closetFormPresenter.closetItems = closetItems;
 				closetFormPresenter.closetItemsMapping = closetItemsMapping;
@@ -295,7 +296,8 @@ var closetFormPresenter = {
 				var $checkboxes = $();		
 				
 				for(var i=0; i< closetFormPresenter.closetNames.length; i++){
-					var $input = $("<input>").attr("type","radio").attr("name","closet").attr("value",closetFormPresenter.closetNames[i]);
+					var $input = $("<input>").attr("type","radio").attr("name","closet").attr("value",closetFormPresenter.closetIds[i])
+					                   .attr("closetName",closetFormPresenter.closetNames[i]);
 
 					var index = closetFormPresenter.closetItems.indexOf($(element).children("img").attr("id").substring(7)); // hanger- = 7
 					if(index >= 0 && index < closetFormPresenter.closetItemsMapping.length &&
@@ -341,22 +343,23 @@ var closetFormPresenter = {
 		el.preventDefault();								
 		var sku = $(el.currentTarget).parent().parent().prev().find("a").attr("pid");
 		
-		var closetNameInput = $(el.currentTarget).find('input[name="newCloset"]').val();
-		var closetNameRadio = $(el.currentTarget).find('input[name="closet"]:checked').val();
-		
-		var closetName = "";
-		
-		if(closetNameInput.trim().length > 0){
-			closetName = closetNameInput;
-		}else if(closetNameRadio.trim().length > 0){
-			closetName = closetNameRadio;
-		}
+		var closetName = $(el.currentTarget).find('input[name="newCloset"]').val();
+		var closetId = $(el.currentTarget).find('input[name="closet"]:checked').val();				
 		
 		if(closetName.trim().length > 0){
+			closetName = closetName.trim();
+			closetId = new Date().getTime();			
+			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetId).child("name").set(closetName);		
+		}else if(closetId != null){		  
+		    closetName = $(el.currentTarget).find('input[name="closet"]:checked').attr("closetName").trim();
+		}
+		
+		if (closetName.length > 0){				
 			var index = closetFormPresenter.closetItems.indexOf(sku);
 			
-			if(index < 0 || index >= closetFormPresenter.closetItemsMapping.length || closetFormPresenter.closetItemsMapping[index] != closetName){			
-				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetName).push(sku, function(error) {
+			if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){			
+			 
+				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetId).child("items").push(sku, function(error) {
 				  if (error) {
 						Messenger.error('Closet could not be saved. ' + error);
 				  } else {
@@ -367,6 +370,10 @@ var closetFormPresenter = {
 			}else{
 				Messenger.success('This item is already in your closet "' + closetName + '"');
 			}
+		}
+		
+		if(closetName.trim().length > 0){
+			
 		}
 		
 		return false;

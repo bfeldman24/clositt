@@ -40,8 +40,7 @@ var searchController = {
 		
 		// log search term
 		var logSearchTerm = searchTerm.replace(/[^A-Za-z0-9\w\s]/gi,'');
-		var timestamp = new Date().getTime();
-		firebase.$.child("search").child(logSearchTerm).child(timestamp).set({user: firebase.userid});
+		firebase.$.child("search").child(logSearchTerm).child(Firebase.ServerValue.TIMESTAMP).set({user: firebase.userid});
 		
 		// get price if there is one
 		if(searchTerm.indexOf("$") > 0 || searchTerm.indexOf("dollar") > 0){  
@@ -178,7 +177,7 @@ var searchController = {
         if (criteria != null){
             var hasCriteria = (criteria.company != null && Object.keys(criteria.company).length > 0) || 
                               (criteria.customer != null && Object.keys(criteria.customer).length > 0) ||
-                              (criteria.customer != null && Object.keys(criteria.customer).length > 0);                           
+                              (criteria.category != null && Object.keys(criteria.category).length > 0);                           
                               
             var hasColors = criteria.colors != null && criteria.colors.length > 0;
             
