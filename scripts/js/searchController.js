@@ -155,14 +155,7 @@ var searchController = {
             searchController.getAdditionalColorsFromTags(matchingColors, tags);                                                
             
             if (matchingColors != null && matchingColors.length > 0){
-                criteria['colors'] = matchingColors;
-                
-                // remove filters in the search string
-                regex = new RegExp(searchController.regexEscape(matchingColors.join('|')), 'gi');
-                cleanSearchTerm = cleanSearchTerm.replace(regex, '');
-                cleanSearchTerm = cleanSearchTerm.replace(/(\b(\w{1,2})\b(\s|$))/gi,''); // remove words less than 3 chars
-                cleanSearchTerm = cleanSearchTerm.trim(); 
-                tags = cleanSearchTerm.split(" ");       
+                criteria['colors'] = matchingColors;                                       
             }              
         }
           
@@ -185,7 +178,7 @@ var searchController = {
         if (criteria != null){
             var hasCriteria = (criteria.company != null && Object.keys(criteria.company).length > 0) || 
                               (criteria.customer != null && Object.keys(criteria.customer).length > 0) ||
-                              (criteria.category != null && Object.keys(criteria.category).length > 0);                           
+                              (criteria.customer != null && Object.keys(criteria.customer).length > 0);                           
                               
             var hasColors = criteria.colors != null && criteria.colors.length > 0;
             
@@ -248,10 +241,9 @@ var searchController = {
                                                     }
                                                     
                                                     // Add product
-                                                    if ((hasCriteria || foundMatchInName) || 
-                                                        (matchesColor || !hasColors)){
-                                                            
-                                                        products[sku] = product;
+                                                    if((matchesColor || !hasColors) &&                                                        
+                                                       (hasCriteria || hasColors || foundMatchInName)){                                                                
+                                                            products[sku] = product;                                                       
                                                     }
                                                 }
                                             }                                              	                                                                                            
