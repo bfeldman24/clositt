@@ -71,10 +71,17 @@ var firebase = {
 	},
 	
 	register: function(error, user, password, remember, name, username){
-		 if (!error) {		  			  	
+		 if (!error) {		  			  			  
 		 	var firstname = stringFunctions.toTitleCase(name);
-		 	username = username.toLowerCase();
-		 	firebase.$.child(firebase.userPath).child(user.id).set({"email":user.email,"name":firstname,"username":username});
+		 	
+		 	var userData = {"email":user.email,"name":firstname};
+		 	
+		 	if (username != null){
+    		 	username = username.toLowerCase();
+    		 	userData['username'] = username;
+		 	}
+		 	
+		 	firebase.$.child(firebase.userPath).child(user.id).set(userData);
 		 	
 		  	firebase.login(user.email, password, remember);		  			  	
 
