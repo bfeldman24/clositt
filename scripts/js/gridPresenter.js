@@ -36,19 +36,20 @@ var gridPresenter = {
 		return columns;	
 	},
 
-	alignGrid: function(/*string*/ id, /*int*/ cols, /*int*/ cellWidth, /*int*/ cellHeight, /*int*/ padding) {
+	alignGrid: function(/*string*/ id, /*int*/ cols, /*int*/ cellWidth, /*int*/ cellHeight, /*int*/ padding, /*int*/ verticalMargin) {
    
 		var x = 0;
-		var y = 0;
+		var y = 0;		
 		var count = $("#" + id).children("div[aligned=true]").size();
-		var unit = "px";				
+		var unit = "px";	
+		verticalMargin = typeof verticalMargin !== 'undefined' ? a : 0;					
 		
 		var n=count;
 		$("#" + id).children("div[aligned=true]").slice(-1 * cols).each(function() {
 			var colNum = n++ % cols;
 			if (colNum >= cols - 1) {
 				x = 0;
-				y = parseFloat($(this).css("top"),10) + cellHeight + padding;
+				y = parseFloat($(this).css("top"),10) + cellHeight + padding + verticalMargin;
 			}else{
 				x = parseInt($(this).css("left"),10) + cellWidth + padding;	
 				y = parseFloat($(this).css("top"),10);			
@@ -59,30 +60,10 @@ var gridPresenter = {
 		
 		$(".pageEndSpacer").remove();
 		    
-		$("#" + id).children("div[aligned!=true]").each(function() {
+		$("#" + id).children("div[aligned!=true][ignore!=true]").each(function() {
 		        var colNum = count % cols;		   
 		        $(this).find(".picture").css("width", cellWidth + unit);
-		        $(this).find(".picture").css("height", cellHeight + unit); 	
-		    	
-		    	var imgHeight = $(this).find(".picture > a > img").first().css("height");
-		    	var imgWidth = $(this).find(".picture > a > img").first().css("width");
-		    	
-		    	if(imgHeight == undefined || imgHeight == null || imgHeight.trim() == ""){
-					imgHeight = cellHeight;	    	
-			    	imgWidth = cellWidth;  	
-		    	}else{		    	
-			    	imgHeight = parseFloat(imgHeight,10);	    	
-			    	imgWidth = parseFloat(imgWidth,10);		    				    				    	
-		    	}		    
-		    	
-		    	var newHeight = cellWidth * (imgHeight / imgWidth);
-		    	
-		    	if (newHeight <= cellHeight){		              
-		              $(this).find(".picture > a > img").first().css("width", cellWidth + unit);
-		    	}else{
-		    	     var newWidth = cellHeight / (imgHeight / imgWidth); 		    	     
-		             $(this).find(".picture > a > img").first().css("height", cellHeight + unit);  		    	     
-		    	}
+		        $(this).find(".picture").css("height", cellHeight + unit); 			    			    
 		    	
 		        $(this).css("position", "absolute");		        
 		        
@@ -92,7 +73,7 @@ var gridPresenter = {
 		        		        		        
 		        if (colNum >= cols - 1) {
 		            x = 0;	           
-		            y += cellHeight + padding;
+		            y += cellHeight + padding + verticalMargin;
 		        } else {
 		            x += cellWidth + padding;
 		        }
@@ -105,7 +86,30 @@ var gridPresenter = {
 	    		.css("top", y + "px")
 	    );
 	},
-					
+	
+	// This is currently not called anywhere, but may be needed in the future
+	resizeImages: function(el){
+	    var image = $(el.currentTarget);
+	    var imgHeight = image.css("height");
+    	var imgWidth = image.css("width");
+    	
+    	if(imgHeight == undefined || imgHeight == null || imgHeight.trim() == ""){
+			imgHeight = cellHeight;	    	
+	    	imgWidth = cellWidth;  	
+    	}else{		    	
+	    	imgHeight = parseFloat(imgHeight,10);	    	
+	    	imgWidth = parseFloat(imgWidth,10);		    				    				    	
+    	}		    
+    	
+    	var newHeight = cellWidth * (imgHeight / imgWidth);
+    	
+    	if (newHeight <= cellHeight){		              
+              image.css("width", cellWidth + unit);
+    	}else{
+    	     var newWidth = cellHeight / (imgHeight / imgWidth); 		    	     
+             image.css("height", cellHeight + unit);  		    	     
+    	}
+	},					
 	
 	showContent: function(numElements){
 		var lastHeight = $("#product-grid").children("div[aligned=true]").last().css("top");
