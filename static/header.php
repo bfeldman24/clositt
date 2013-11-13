@@ -1,8 +1,8 @@
 <div id="header">
 	<div class="navbar top-navbar">
-		<div class="navbar-inner clositt-green">
+		<div class="navbar-inner clositt-theme">
 			<div class="container">
-			    <div id="brand-fixed-background" class="clositt-green" style="display:none;width:300px;height:43px;position:fixed; box-shadow: 3px 0 0 #FFFFFF;"></div>			    
+			    <div id="brand-fixed-background" class="clositt-theme" style="display:none;width:300px;height:43px;position:fixed; box-shadow: 3px 0 0 #FFFFFF;"></div>			    
   	            <a class="brand" id="brand" href="<?php echo HOME_ROOT;?>">Clositt</a>
 	            
 	            <ul class="nav navleft" id="user-project-nav">	

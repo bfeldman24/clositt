@@ -83,7 +83,7 @@
 
 <br><br><br><br>
 
-<div id="feedSettings-toggle" class="clositt-green" style="display:none">Edit Feed</div>
+<div id="feedSettings-toggle" class="clositt-theme" style="display:none">Edit Feed</div>
 <div id="feedSettings-float" style="display:none;">
 </div>
 

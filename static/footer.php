@@ -1,4 +1,4 @@
-<footer>
+<footer class="clositt-theme">
 	<div id="footer-wrapper">
 		<div class="center">Clositt.com Inc &copy; 2013</div>
 		<div><a href="contact-us.php">Contact Us</a></div>

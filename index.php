@@ -42,7 +42,7 @@
 </div>
 
 <br><br><br><br>
-<div id="filter-toggle" class="clositt-green">Show Filter</div>
+<div id="filter-toggle" class="clositt-theme">Show Filter</div>
 <div id="filter-float" style="display:none;"></div>
 <!--<div id="review-float" class="review-float" style="display:none;">	
 	<div class="review-form">
