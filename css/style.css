@@ -498,8 +498,7 @@ footer p{
 	//background:RGBa(3,3,3,0.6);
 	color:#FFFFFF;
 	///text-shadow: 1px 1px 1px #333333;		
-	text-align:center;	
-	
+	text-align:center;		
 }	
 
 .overlay > .bottom, .overlay > .addToClosetForm{
@@ -620,7 +619,7 @@ footer p{
     height: 25px;
 }
 
-.overlay form, .overlay label,.overlay input[type="text"],  .overlay radio:first-child{
+.overlay form, .overlay label, .overlay input[type="text"],  .overlay radio:first-child{
 	line-height: 18px;	
 	margin-bottom: 0px;
 	padding-top:0px;
@@ -637,12 +636,12 @@ footer p{
 }
 
 .overlay .productActions{ 
-    height: 20px;  
-    border-bottom: 1px solid rgb(255, 255, 255);     
+    height: 20px;          
 }
 
-.overlay .productActions{
+.overlay .productActions, .overlay .productSubHeader{
     cursor: pointer;
+     border-bottom: 1px solid rgb(255, 255, 255);
 }
 
 #main-content h2{
@@ -653,7 +652,7 @@ footer p{
 	box-shadow: 0 2px 9px #E1E1E1;	
 }
 
-#product-grid .outfit{
+#product-grid .outfit, #feed-grid .outfit{
 	background-color: #FFF;	
 }
 
@@ -730,7 +729,7 @@ footer p{
 	cursor: pointer;
 }
 
-#filter-float{
+#filter-float, #feedSettings-float{
 	bottom: 30px;
 	top:84px;
     box-shadow: 1px 1px 6px #333333;
@@ -741,6 +740,12 @@ footer p{
     position: fixed;
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.91);
     z-index: 20;
+    width: 154px;
+}
+
+#feedSettings-float{
+    padding: 0 10px;
+    width: 184px;   
 }
 
 #filter-float label, #filter-float .controls{
@@ -749,8 +754,28 @@ footer p{
 	padding-bottom: 0;
 }
 
-#filter-float h4{
+#filter-float h4, #feedSettings-float h4{
 	text-decoration: underline;	
+}
+
+#feedSettings-float > ul{
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+#feedSettings-float > ul > li{   
+    background-image: url("images/hanger-icon.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 18px auto;
+    border-bottom: 1px dashed #00BA6C;
+    margin-bottom: 15px;
+    padding-left: 28px;
+}
+
+#feedSettings-float .feedListing{
+    font-size:10px;   
 }
 
 /* Color Filter */
@@ -1126,59 +1151,56 @@ h1 #user-closet-title{
 	margin: 10px auto;	padding: 5px 20px;
 }
 
-#closet-list h1 span.red{
+#closet-list h1 span.red, #feed-grid h1 span.red{
 	color: #DEB0A7;	
 }
 
-#closet-list h1 span.orange{
+#closet-list h1 span.orange, #feed-grid h1 span.orange{
 	color: #FCBA6D;	
 }
 
-#closet-list .outfit{
+#closet-list .outfit, .feedClosetItems .outfit{
 	float: left;
     margin: 0 10px;	
+    box-shadow: 0 2px 9px #ADADAD;	
+	overflow: visible;
+    position: relative;
 }
 
-#closet-list:before, #closet-list:after{
+#closet-list:before, #closet-list:after, .feedClosetItems:before, .feedClosetItems:after {
 	clear:both;
 }
 
-#closet-list .items{
+#closet-list .items, .feedClosetItems .items{
 	margin:80px	20px 20px;
 	width: 99999px;
 	position: relative;
 }
 
-#closet-list .closet{
+#closet-list .closet, .feedClosetItems .closet{
 	margin: 20px 0px 80px;
 }
 
-#closet-list .outfit{
-	box-shadow: 0 2px 9px #ADADAD;	
-	overflow: visible;
-    position: relative;
-}
-
-#closet-list img{
+#closet-list img, .feedClosetItems img{
 	height: 150px;	
 }
 
-#closet-list .hanger{
+#closet-list .hanger, .feedClosetItems .hanger{
 	left: 10px;	position: absolute;	top: -60px;	
 }
 
-#closet-list .hanger img{
+#closet-list .hanger img, .feedClosetItems .hanger img{
 	height: 65px;
 }
 
-#closet-list .carousel{
+#closet-list .carousel, .feedClosetItems .carousel{
 	 height: 260px;
     margin-bottom: 0px;
     overflow: hidden;
     width: 100%;	
 }
 
-#closet-list .carousel .carousel-left,#closet-list .carousel .carousel-right{
+#closet-list .carousel .carousel-left,#closet-list .carousel .carousel-right,  .feedClosetItems .carousel .carousel-left,.feedClosetItems .carousel .carousel-right{
 	height: 260px;
     top: 0;
     position: absolute;
@@ -1189,29 +1211,40 @@ h1 #user-closet-title{
     cursor: pointer;
 }
 
-#closet-list .carousel .carousel-left{
+#closet-list .carousel .carousel-left, .feedClosetItems .carousel .carousel-left{
     left: 0;
 }
 
-#closet-list .carousel .carousel-right{
+#closet-list .carousel .carousel-right, .feedClosetItems .carousel .carousel-right{
     right: 0;   
 }
 
-#closet-list .carousel-left .left-arrow,#closet-list .carousel-right .right-arrow{
+#closet-list .carousel-left .left-arrow,#closet-list .carousel-right .right-arrow,
+.feedClosetItems .carousel-left .left-arrow, .feedClosetItems .carousel-right .right-arrow{
 	width: 0;
     height: 0;
     border-bottom: 30px solid transparent;    
     border-top: 30px solid transparent;    
 }
 
-#closet-list .carousel-left .left-arrow{
+#closet-list .carousel-left .left-arrow, .feedClosetItems .carousel-left .left-arrow{
     border-right: 30px solid rgba(255, 255, 255, 0.8);	
     margin: 100px 0 0 15px;
 }
 
-#closet-list .carousel-right .right-arrow{
+#closet-list .carousel-right .right-arrow, .feedClosetItems .carousel-right .right-arrow{
     border-left: 30px solid rgba(255, 255, 255, 0.8);	
     margin: 100px 0 0 25px;
+}
+
+.feedCloset .arrow-down {
+	border-left: 100px solid rgba(0, 0, 0, 0);
+    border-right: 100px solid rgba(0, 0, 0, 0);
+    border-top: 30px solid rgba(120, 213, 167, 0.65);
+    height: 0;
+    position: absolute;
+    width: 0;
+    z-index: 999;	
 }
 
 #closet-settings .settings-minicon{
@@ -1396,17 +1429,32 @@ input.closetNameInput[type="text"] {
     color: #DDDDDD;   
 }
 
-#filter-toggle{
-    border-radius: 10px 10px 0 0;    
-    color: #FFFFFF;    
-    left: -29px;    
-    padding: 7px 10px;    
-    position: fixed;    
-    top: 120px;
-    cursor: pointer;    
-    transform: rotate(90deg);
-    height: 32px;
-    -ms-transform:rotate(90deg); /* IE 9 */
-    -webkit-transform:rotate(90deg); /* Safari and Chrome */   
+#filter-toggle, #feedSettings-toggle{
+    border-radius: 10px 10px 0 0;
+    color: #FFFFFF;
+    cursor: pointer;
+    height: 22px;
+    left: -37px;
+    padding: 7px 10px;
+    position: fixed;
+    text-align: center;
+    top: 140px;    
+    width: 90px;
     z-index: 15;
+    transform: rotate(90deg);
+    -ms-transform:rotate(90deg); /* IE 9 */
+    -webkit-transform:rotate(90deg); /* Safari and Chrome */       
+}
+
+#feed-grid{
+    top: 100px;   
+}
+
+.outfitFeedOwner{
+    font-size: 12px;   
+}
+
+// should be at the end of the css file to override any settings above it
+.alwaysVisible, .alwaysVisible.active, .alwaysVisible:hover{
+    display: block !important;   
 }

@@ -36,7 +36,7 @@ $(document).ready(function(){
 <?php }else{ ?>
 function userDataReady(user){    
     pagePresenter.init();    
-    productPresenter.initCloset();        
+    productPresenter.populateStore(closetPresenter.init);        
 }
 <?php } ?>
 

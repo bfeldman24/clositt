@@ -27,11 +27,24 @@ var pagePresenter = {
 	   
 	   if (scrollLocation > defaultHeaderHeight && $("#subheader-navbar").css('position') != 'fixed'){	       
 	       $("#subheader-navbar").css('position', 'fixed');
-	       $("#subheader-navbar").css('top', '0');	       
-	       $("#filter-float").css("top", defaultHeaderHeight + "px");	
+	       $("#subheader-navbar").css('top', '0');	 	            	        	       
 	       $("#brand-fixed-background").show("blind","fast");      
+	       
+	       if ($("#filter-float").length > 0){
+	           $("#filter-float").css("top", defaultHeaderHeight + "px");	    
+	       }
+	       
+	       if ($("#feedSettings-float").length > 0){
+	           $("#feedSettings-float").css("top", defaultHeaderHeight + "px");	    
+	       }
 	   } else if (scrollLocation <= defaultHeaderHeight){
-	       $("#filter-float").css("top", (84 - scrollLocation) + "px");
+	       if ($("#filter-float").length > 0){
+	           $("#filter-float").css("top", (84 - scrollLocation) + "px");
+	       }
+	       
+	       if ($("#feedSettings-float").length > 0){
+	           $("#feedSettings-float").css("top", (84 - scrollLocation) + "px"); 
+	       }
 	       
 	       if($("#subheader-navbar").css('position') == 'fixed')
 	       {

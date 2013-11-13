@@ -166,18 +166,16 @@ var filterPresenter = {
  	filterPanelToggle: function(){
  	 		
 	 	 $("#filter-float").toggle('slide',1000);	 	 
-		
-		if(!$("#review-form").is(":visible")){ 	 
-		 	 if(isNaN(parseInt($("#product-grid").css("left"))) || parseInt($("#product-grid").css("left")) == 0){
-		 	 	$("#product-grid").animate({left: '100px'}, 1000);
-		 	 	$("#filter-toggle").animate({left: '185px'}, 1000);
-		 	 	$("#filter-toggle").text('Hide Filter');
-		 	 }else{
-		 	 	$("#product-grid").animate({left: '0px'}, 1000);
-		 	 	$("#filter-toggle").animate({left: '-29px'}, 1000);
-		 	 	$("#filter-toggle").text('Show Filter');
-		 	 }
- 		}
+			 
+	 	 if(isNaN(parseInt($("#product-grid").css("left"))) || parseInt($("#product-grid").css("left")) == 0){
+	 	 	$("#product-grid").animate({left: '100px'}, 1000);
+	 	 	$("#filter-toggle").animate({left: '165px'}, 1000);
+	 	 	$("#filter-toggle").text('Hide Filter');
+	 	 }else{
+	 	 	$("#product-grid").animate({left: '0px'}, 1000);
+	 	 	$("#filter-toggle").animate({left: '-37px'}, 1000);
+	 	 	$("#filter-toggle").text('Show Filter');
+	 	 } 		
 	 },
 	 
 	 clearFilters: function(){
@@ -188,7 +186,7 @@ var filterPresenter = {
 	 	if($("#filter-float").is(":visible")){
 		 	 $("#filter-float").hide('slide',500);
 		 	 $("#product-grid").animate({left: '0px'}, 500);
-		 	 $("#filter-toggle").animate({left: '-29px'}, 500);
+		 	 $("#filter-toggle").animate({left: '-37px'}, 500);
 		 	 $("#filter-toggle").text('Show Filter');
 	 	}
 	 },
@@ -197,7 +195,7 @@ var filterPresenter = {
 	   if(!$("#review-form").is(":visible")){ 
 	        $("#filter-float").show('slide',500);
 	 	 	$("#product-grid").animate({left: '100px'}, 500);
-	 	 	$("#filter-toggle").animate({left: '185px'}, 500);
+	 	 	$("#filter-toggle").animate({left: '165px'}, 500);
 	 	 	$("#filter-toggle").text('Hide Filter');    
 	   }
 	 }

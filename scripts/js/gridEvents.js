@@ -17,11 +17,11 @@ var gridEvents = {
 	},
 	
 	showOverlay: function() {			
-			$(this).children(".overlay").first().fadeIn('slow');
+			$(this).children(".overlay").not(".alwaysVisible").first().fadeIn('slow');
 	},
 	
 	hideOverlay: function() {			
-			$(this).children(".overlay").first().fadeOut('slow');
+			$(this).children(".overlay").not(".alwaysVisible").first().fadeOut('slow');
 			
 			if (reviewsPresenter != null){
 			     var sku = $(this).find('a[pid]').first().attr("pid");			     			     

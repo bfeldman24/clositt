@@ -5,7 +5,7 @@ var searchController = {
     init: function(){
         $("#search-bar").on("keyup", searchController.showClearBtn);
         $("#search-bar").on("keypress", searchController.searchOnEnter);
-        $("#search-form").submit(searchController.startSearch);
+        $("#search-form").submit(searchController.search);
 		$("#seach-bar-icon").on("click", searchController.searchBarSubmit);
 		$("#search-clear-btn").click(searchController.clearSearch);
 		$("#search-bar-sort").change(searchController.sortBy);

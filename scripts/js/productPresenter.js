@@ -2,7 +2,8 @@ var productPresenter = {
 	splitValue: 30, 
 	productIndex: 0,
 	clothingStore: [], 
-	filterStore: [], 	
+	filterStore: [], 
+	populateStoreCallback: null,	
 	
 	init: function(){		
 		firebase.$.child('clositt').once('value', productPresenter.setup);	 	 
@@ -15,14 +16,17 @@ var productPresenter = {
 		productPresenter.productIndex += productPresenter.splitValue;	
 	},
 	
-	initCloset: function(user){	
-	    closetPresenter.setUser(user);	
+	populateStore: function(callback){
+	    productPresenter.populateStoreCallback = callback;
 	    firebase.$.child('clositt').once('value', productPresenter.closetSetup);			 	 
 	},
 	
 	closetSetup: function(store){
 	   productPresenter.clothingStore = store.child("products").val();
-	   closetPresenter.init();	   
+	   
+	   if (productPresenter.populateStoreCallback != null && typeof productPresenter.populateStoreCallback == 'function'){
+	       productPresenter.populateStoreCallback();
+	   }	   	   
 	},	
  
  	showCompanyProducts: function(store){	 		 	
@@ -45,11 +49,13 @@ var productPresenter = {
 		var category = product.a;
 		var link = product.l;
 		var image = product.i;
-		var name = product.n;
+		var name = product.n;		
 		var reviewCount = product.rc == null ? '' : product.rc;
 		var id = product.s;
 		var price = product.p == null || isNaN(product.p) ? "" : "$" + Math.round(product.p);		 	
  		var filterPrice = product.fp; 		 		
+ 		var feedOwner = product.owner;
+		var feedCloset = product.closet;
 
 		var rand = Math.floor(Math.random() * 3) + 1;
 		var shadow = "";
@@ -68,10 +74,17 @@ var productPresenter = {
 					html +='<div class="topright">';										
 						html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Closet"><img id="hanger-'+id+'" class="hanger-icon" src="css/images/hanger-icon-white.png" /><i class="icon-plus-sign icon-white hanger-plus"></i></div>';
 					html += '</div>';
-					html +='<div class="bottom">';	
+					html +='<div class="bottom">';						    					    
 					    html += '<div class="productActions" >';
 					       html += '<div data-toggle="tooltip" data-placement="top" title="Show Comments" class="showComments"><span class="numReviews">'+reviewCount+'</span><i class="icon-comment icon-white"></i></div>';
-					    html += '</div>';														
+					    html += '</div>';									
+					    
+					    if(feedOwner != null && feedCloset != null){
+					       html += '<div class="productSubHeader" >';
+	   				            html += '<div class="outfitFeedOwner"><span class="outfitOwner">'+feedOwner+'\'s</span><span>&nbsp;\"'+feedCloset+'\" clositt</span></div>';
+    					    html += '</div>';  
+					    }
+					    					
 						html +='<div class="companyName">' + company + '</div>';
 						html +='<div class="price">' +  price + '</div>';
 						html +='<div class="name">' + name + '</div>';
@@ -103,7 +116,7 @@ var productPresenter = {
 			html +='</div>';
 			
 		return $(html);
-	},
+	},		
 	
 	refreshImages: function(){	   
 	     var date = new Date();

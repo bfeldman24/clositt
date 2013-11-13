@@ -4,13 +4,17 @@ var gridPresenter = {
 		gridEvents.init();
 	},			
 
-	alignDefaultGrid: function(){
+	alignDefaultGrid: function(gridName){
+	    if (gridName == null){
+	       gridName = "product-grid";  
+	    }
+	   
 		var columns = gridPresenter.getDefaultColumns();
 		$(".addToClosetBtn").tooltip();
 		$(".tagOutfitBtn").tooltip();
 		$(".showComments").tooltip();
 					
-		gridPresenter.alignGrid("product-grid", columns, 200, 270, 25);						
+		gridPresenter.alignGrid(gridName, columns, 200, 270, 25);						
 		closetFormPresenter.markUsersClositItems();
 	}, 
 	
@@ -42,7 +46,7 @@ var gridPresenter = {
 		var y = 0;		
 		var count = $("#" + id).children("div[aligned=true]").size();
 		var unit = "px";	
-		verticalMargin = typeof verticalMargin !== 'undefined' ? a : 0;					
+		verticalMargin = typeof verticalMargin !== 'undefined' ? verticalMargin : 0;					
 		
 		var n=count;
 		$("#" + id).children("div[aligned=true]").slice(-1 * cols).each(function() {

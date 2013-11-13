@@ -119,6 +119,8 @@ var firebase = {
 		{
 			loggedOut();
 		}  
+		
+		firebase.sendToWelcomePage();
 	},
 	
 	loggedOutErrorCallback: function(){	   
@@ -126,6 +128,8 @@ var firebase = {
 		{
 			loggedOutError();
 		}  
+		
+		firebase.sendToWelcomePage();
 	},
 	
 	userDataAvailableCallback: function(username){
@@ -160,6 +164,12 @@ var firebase = {
                         	location.href= "./";
                 	}) 
 		});
+	},
+	
+	sendToWelcomePage: function(){
+	   if (location.href.indexOf("welcome.php") < 0){
+	       location.href = "/welcome.php";
+	   }
 	}
 };
 

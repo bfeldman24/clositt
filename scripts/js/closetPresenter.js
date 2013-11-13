@@ -39,40 +39,47 @@ var closetPresenter = {
 	
 	showClosets: function(closets){							
 		closets.forEach(function(closet){
-			var $itemlist = $("<div>").addClass("items");
-			
-			var rand = Math.floor(Math.random() * 3) + 1;
-			var textColor = rand > 1 ? 'orange' : rand > 0 ? 'red' : '';
-			
-			$("#closet-list").append($("<hr>")).append(
-				$("<div>").addClass("closet").addClass("clearfix").append(
-					$("<h1>").addClass("closetName").append($("<span>").addClass(textColor).attr("closetid",closet.name()).text(closet.val().name))				
-				).append(
-					$("<div>").addClass("carousel").append(
-						$("<div>").addClass("carousel-left").append(
-							$("<div>").addClass("left-arrow")
-						)
-					).append($itemlist).append(
-						$("<div>").addClass("carousel-right").append(
-							$("<div>").addClass("right-arrow")
-						)						
-					)
-				)
-			);
-			
-			closet.child("items").forEach(function(item){
-				$itemlist.append(
-					productPresenter.getClosetItemTemplate(item.val()).prepend(
-						$("<div>").addClass("hanger").append(
-							$("<img>").attr("src","css/images/hanger.png")
-						)
-					)
-				); 				
-			});				
+		      closetPresenter.getClosetTemplate("closet-list", closet, true);				
 		});	
 		
 		$(".closetName").last().attr("last",true);
 	},		
+	
+	getClosetTemplate: function(parentId, closet, includeClosetName){
+	    var $itemlist = $("<div>").addClass("items");
+			
+		var rand = Math.floor(Math.random() * 3) + 1;
+		var textColor = rand > 1 ? 'orange' : rand > 0 ? 'red' : '';
+		var closetHeader = null;
+		
+		if (includeClosetName){
+		  closetHeader = $("<h1>").addClass("closetName").append($("<span>").addClass(textColor).attr("closetid",closet.name()).text(closet.val().name));
+		}
+		
+		$("#"+parentId).append($("<hr>")).append(		
+			$("<div>").addClass("closet").addClass("clearfix").append(closetHeader).append(
+				$("<div>").addClass("carousel").append(
+					$("<div>").addClass("carousel-left").append(
+						$("<div>").addClass("left-arrow")
+					)
+				).append($itemlist).append(
+					$("<div>").addClass("carousel-right").append(
+						$("<div>").addClass("right-arrow")
+					)						
+				)
+			)
+		);
+		
+		closet.child("items").forEach(function(item){
+			$itemlist.append(
+				productPresenter.getClosetItemTemplate(item.val()).prepend(
+					$("<div>").addClass("hanger").append(
+						$("<img>").attr("src","css/images/hanger.png")
+					)
+				)
+			); 				
+		});	
+	},
 	
 	stopCarouselLeft: function(el){
 		$(el.currentTarget).next(".items").first().stop();

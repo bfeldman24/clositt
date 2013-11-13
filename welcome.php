@@ -39,7 +39,7 @@ $_SESSION['userid'] = 0;
         	
         		<div id="login">
         			<form id="signin" class="form-horizontal" action="closet.php">
-        				<h1 class="account">Got an Account? Signin.</h1>
+        				<h1 class="account">Got an Account? Sign in.</h1>
             			<div id="email">
                 			   <input type="text" id="inputEmail" placeholder="Email" class="inputBox" />
                 			</div>
@@ -67,11 +67,11 @@ $_SESSION['userid'] = 0;
 
 <script type="text/javascript">
 function loggedOut(){
-	Messenger.info("You are not Authorized to enter the site");
+	Messenger.info("You must enter your username and password to enter the site");
 }
 
 function loggedOutError(){
-	Messenger.info("You are not Authorized to enter the site");
+	Messenger.error("You are not Authorized to enter the site");
 }
 
 function loggedIn(){	
@@ -81,7 +81,7 @@ function loggedIn(){
 			
 			$.post("auth.php", { auth: token, user: firebase.userid }, function(data) {
 				if(data == "success"){
-					Messenger.info("You are now authorized to enter the site.");
+					Messenger.success("You are now authorized to enter the site.");
 					setTimeout(function(){
 						location.href = "<?php echo HOME_ROOT; ?>";
 					}, 2000);
