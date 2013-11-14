@@ -3,7 +3,7 @@
 		<div class="center">Clositt.com Inc &copy; 2013</div>
 		<div><a href="contact-us.php">Contact Us</a></div>
 		<!--<div><a href="#">About Us</a></div>-->
-		<div><a href="acknowledgements.php">Shout Outs</a></div>
+		<div class="last"><a href="acknowledgements.php">Shout Outs</a></div>
 		
 		<?php
 		if((isset($_GET['ben']) && $_GET['ben'] != "") || (isset($_GET['eli']) && $_GET['eli'] != "")){
