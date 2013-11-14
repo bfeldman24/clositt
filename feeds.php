@@ -201,19 +201,22 @@ var closetSearchController = {
                     
             for (var closetid in closets){
                 var closet = closets[closetid];    
-                var sku = closet.items[Object.keys(closet.items)[0]];
-                var item = productPresenter.clothingStore[sku];
-                var row = Math.floor(i / columns);                                
                 
-                $("#feed-grid").append(
-                    closetSearchController.getClosetTemplate(closetSearchController.currentClosetsUser, closetid, closet.name, item.i, row)
-                );         
-                
-                i++;
-                if (i % columns == 0){
+                if (closet != null && closet.items != null){
+                    var sku = closet.items[Object.keys(closet.items)[0]];
+                    var item = productPresenter.clothingStore[sku];
+                    var row = Math.floor(i / columns);                                
+                    
                     $("#feed-grid").append(
-                       $("<div>").attr("id","feedClosetItems-" +row).addClass("feedClosetItems").attr("row",row).attr("ignore","true").css("display","none")
-                   );
+                        closetSearchController.getClosetTemplate(closetSearchController.currentClosetsUser, closetid, closet.name, item.i, row)
+                    );         
+                    
+                    i++;
+                    if (i % columns == 0){
+                        $("#feed-grid").append(
+                           $("<div>").attr("id","feedClosetItems-" +row).addClass("feedClosetItems").attr("row",row).attr("ignore","true").css("display","none")
+                       );
+                    }
                 }
             }
             
