@@ -4,3 +4,5 @@ Options +SymLinksIfOwnerMatch
 RewriteEngine On
 
 RewriteRule ^!(.*)$ closet.php?user=$1
+
+Redirect /smg /signup.php?beta=earlyaccess
