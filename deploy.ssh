@@ -6,7 +6,7 @@ cp -r css/ ../$1/
 
 mkdir ../$1/lib
 cp -r lib/css ../$1/lib
-cp -r lib/javascript ../$1/lib
+cp -r lib/js ../$1/lib
 cp -r lib/img ../$1/lib
 
 
