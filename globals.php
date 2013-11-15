@@ -22,7 +22,7 @@ $js = '<script src="' . HOME_ROOT .'scripts/js/firebaseExtension.js"></script>' 
 define('CLOSITT_JS',$js);
 
 // PROD
-//define('CLOSITT_CSS',HOME_ROOT .'lib/style.min.css');
-//define('CLOSITT_JS','<script src="' . HOME_ROOT .'scripts/java/clositt.min.encode.js"></script>');
+//define('CLOSITT_CSS',HOME_ROOT .'css/style.min.css');
+//define('CLOSITT_JS','<script src="' . HOME_ROOT .'scripts/js/clositt.min.encode.js"></script>');
 
 ?>
