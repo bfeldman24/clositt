@@ -86,17 +86,6 @@ Once you find something you like, just click on the hanger icon and add it to yo
 
 <div id="review-mask"></div>
 
-
-<script src="<?php echo HOME_ROOT; ?>scripts/js/pagePresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/gridPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/gridEvents.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/productPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/filterPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/tagPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/searchController.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/reviewsPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/closetPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/colorPresenter.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	if(localStorage.welcomeClosit == undefined){

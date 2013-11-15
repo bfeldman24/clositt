@@ -157,8 +157,8 @@ var firebase = {
  	logout: function(){
 		firebase.authClient.logout();	
 
-		$.post("../../auth.php", function(){
-			location.href= "../../";
+		$.post("/auth.php", function(){
+			location.href= "/";
 		}).fail(function() {
 			 $.post("auth.php", function(){
                         	location.href= "./";

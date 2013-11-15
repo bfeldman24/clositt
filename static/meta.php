@@ -1,15 +1,12 @@
 <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,700,900' rel='stylesheet' type='text/css'>
-<link href="<?php echo HOME_ROOT; ?>lib/javascript/bootstrap.min.css" rel="stylesheet">
-<link href="<?php echo HOME_ROOT; ?>lib/javascript/messenger/build/css/messenger.css" rel="stylesheet">
-<link href="<?php echo HOME_ROOT; ?>lib/javascript/messenger/build/css/messenger-theme-future.css" rel="stylesheet">
-<link href="<?php echo HOME_ROOT; ?>lib/javascript/jquery-ui-1.10.1.custom/css/ui-lightness/jquery-ui-1.10.1.custom.min.css" rel="stylesheet">
-<link href="<?php echo HOME_ROOT; ?>css/style.css" rel="stylesheet">  
+<link href="<?php echo HOME_ROOT; ?>lib/css/bootstrap.min.css" rel="stylesheet">
+<link href="<?php echo HOME_ROOT; ?>lib/css/messenger.css" rel="stylesheet">
+<link href="<?php echo HOME_ROOT; ?>lib/css/messenger-theme-future.css" rel="stylesheet">
+<link href="<?php echo HOME_ROOT; ?>lib/css/jquery-ui-1.10.1.custom.min.css" rel="stylesheet">
+<link href="<?php echo CLOSITT_CSS; ?>" rel="stylesheet">  
 
-
-
-<!--<script src="http://www.bprowd.com/lib/javascript/jquery-1.7.2.min.js"></script>-->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="<?php echo HOME_ROOT; ?>lib/javascript/jquery-ui-1.10.1.custom/js/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="<?php echo HOME_ROOT; ?>lib/javascript/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="<?php echo HOME_ROOT; ?>lib/javascript/bootstrap.min.js"></script>
 
 

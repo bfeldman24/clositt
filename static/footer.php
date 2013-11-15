@@ -13,8 +13,8 @@
 	</div>
 </footer>
 
-<script src="<?php echo HOME_ROOT; ?>scripts/js/firebaseExtension.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/messenger.js"></script>
+<?php echo CLOSITT_JS; ?>
+
 <script type="text/javascript">
 firebase.init();
 Messenger.init();
