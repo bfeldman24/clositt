@@ -6,13 +6,19 @@ echo "I need a directory to run. Pass a directory as the first and only paramete
 exit 1
 fi
 
-mv ../$1/ ../$1/archive/
+rm -rf ../$1/archive/*
+mkdir ../$1/archive
+mv ../$1/* ../$1/archive/
 echo "Archived target directory"
 
-php scripts/php/jsCompiler.php 
+echo "Compiling all JS files..."
+php -q scripts/php/jsCompiler.php
+
+echo ""
+echo "Minifying JS and CSS files... (Takes a few seconds)" 
 java -jar scripts/java/yuicompressor-2.4.8.jar scripts/java/clositt.js -o scripts/js/clositt.min.js
 java -jar scripts/java/yuicompressor-2.4.8.jar css/style.css -o css/style.min.css
-echo "Minified JS and CSS"
+echo "Minified JS and CSS finished"
 
 cp *.php ../$1/
 cp -r static/ ../$1/
