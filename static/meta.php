@@ -6,8 +6,8 @@
 <link href="<?php echo CLOSITT_CSS; ?>" rel="stylesheet">  
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="<?php echo HOME_ROOT; ?>lib/javascript/jquery-ui-1.10.1.custom.min.js"></script>
-<script src="<?php echo HOME_ROOT; ?>lib/javascript/bootstrap.min.js"></script>
+<script src="<?php echo HOME_ROOT; ?>lib/js/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="<?php echo HOME_ROOT; ?>lib/js/bootstrap.min.js"></script>
 
 
 <script src='https://cdn.firebase.com/v0/firebase.js'></script>
