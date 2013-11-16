@@ -1,5 +1,19 @@
 #!/bin/sh
 
+if [ $# -ne 1 ]
+then
+echo "I need a directory to run. Pass a directory as the first and only parameter."
+exit 1
+fi
+
+mv ../$1/ ../$1/archive/
+echo "Archived target directory"
+
+php scripts/php/jsCompiler.php 
+java -jar scripts/java/yuicompressor-2.4.8.jar scripts/java/clositt.js -o scripts/js/clositt.min.js
+java -jar scripts/java/yuicompressor-2.4.8.jar css/style.css -o css/style.min.css
+echo "Minified JS and CSS"
+
 cp *.php ../$1/
 cp -r static/ ../$1/
 cp -r css/ ../$1/
@@ -9,7 +23,6 @@ cp -r lib/css ../$1/lib
 cp -r lib/js ../$1/lib
 cp -r lib/img ../$1/lib
 
-
 mkdir ../$1/scripts
 mkdir ../$1/scripts/php
 mkdir ../$1/scripts/js
@@ -17,4 +30,5 @@ mkdir ../$1/scripts/js
 cp scripts/php/session.php ../$1/scripts/php
 cp scripts/js/clositt* ../$1/scripts/js
 
-echo "DONE";
+echo "Moved current directory to target directory"
+echo "DONE!"
