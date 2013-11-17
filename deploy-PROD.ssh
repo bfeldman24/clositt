@@ -1,0 +1,44 @@
+#!/bin/sh
+
+if [ $# -ne 1 ]
+then
+	echo "I need a directory to run. Pass a directory as the first and only parameter."
+	exit 1
+fi
+
+if [ $1 = 'clositt' ]
+then 
+	echo "Are you sure you want to update production? [y/n]"
+	read update
+	
+	if [ $update = 'n' ]
+	then
+		echo "Done!"
+		exit 1
+	fi
+fi 
+
+echo  'Did you modify the globals.php? [y/n]> '
+read x
+
+if [ $x = 'n' ]
+then 
+	echo "Go back and modify to globals.php"
+	exit 1
+fi
+
+p=$(pwd)
+if [ $p != '/home1/thewinn2/public_html/pp' ]
+then
+	echo "Current dir is $p! you must be in /pp to use this script"
+	exit 1
+fi
+
+d=$(date +%d-%m-%y_%H-%M)
+echo "backup dir name will be ../prod-archive/$d"
+
+mv ../$1/* "../prod-archive/$d/"
+mv * ../$1/
+
+echo "Please verify the release!"
+echo "DONE!"
