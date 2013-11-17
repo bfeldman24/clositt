@@ -45,20 +45,19 @@
 //  echo "<br><br><br><br>";
   
   
-$files = array("firebaseExtension.js",
+$files = array("closetPresenter.js",
+"colorPresenter.js",
+"feedPresenter"
+"filterPresenter.js",
+"firebaseExtension.js",
+"gridEvents.js",
+"gridPresenter.js",
 "messenger.js",
 "pagePresenter.js",
-"gridPresenter.js",
-"gridEvents.js",
 "productPresenter.js",
-"filterPresenter.js",
-"tagPresenter.js",
-"searchController.js",
 "reviewsPresenter.js",
-"closetPresenter.js",
-"colorPresenter.js");
-
-
+"searchController.js",
+"tagPresenter.js");
 
   
   for($i=0; $i < count($files); $i++){

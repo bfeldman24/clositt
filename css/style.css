@@ -1390,6 +1390,58 @@ input.closetNameInput[type="text"] {
 }
 
 
+/** FEED PAGE **/
+.typeahead {
+    font-size: 14px;
+}
+
+.feedCloset{     
+     position: relative;
+     width: 200px;   
+}
+
+.feedClosetName{
+    height: 90px;       
+    position: relative;
+}
+
+.feedClosetName .closetName{
+    bottom: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%; 
+}
+
+#feedSearch {
+    margin-left: 0;
+}
+
+.feedCloset .bottom > div {
+    display: inline;
+    padding: 0 12px;
+    position: relative;
+    top: 20px;
+    cursor: pointer;
+}
+
+.feedCloset .bottom > div:hover {
+    color: #008800;
+}
+
+.feedClosetItems{
+    background-color: #FFFFFF;
+    position: absolute;
+    top: 355px;
+    width: 100%;   
+}
+
+#feed-grid .noOutfits{
+    left: 300px;
+    position: absolute;
+    top: 150px;   
+}
+
+
 /***** CLOSITT COLOR THEME ****/
 
 .overlay > .bottom, .overlay > .topright, .overlay > .topleft, .overlay > .addToClosetForm, .overlay > .addTagForm {
