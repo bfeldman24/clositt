@@ -34,9 +34,10 @@ then
 	exit 1
 fi
 
-d=$(date +%d-%m-%y_%H-%M)
+d=$(date +%d.%m.%y_%H.%M)
 echo "backup dir name will be ../prod-archive/$d"
 
+mkdir "../prod-archive/$d"
 mv ../$1/* "../prod-archive/$d/"
 cp -rf * ../$1/
 
