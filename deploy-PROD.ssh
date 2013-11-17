@@ -44,7 +44,9 @@ echo "backup dir name will be ../prod-archive/$d"
 
 mkdir "../prod-archive/$d"
 mv ../$1/* "../prod-archive/$d/"
+mv ../$1/.htaccess "../prod-archive/$d/"
 cp -rf * ../$1/
+cp .htaccess ../$1/
 rm ../$1/deploy-PROD.ssh
 rm -rf ../$1/archive
 
