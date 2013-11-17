@@ -39,7 +39,7 @@
 	       <ul>
 	           <li><a href="/">Trending</a></li>
 	           <li id="feed"><a href="feeds.php">Feed</a></li>
-	           <li><a href="closet.php">Clositt</a></li>
+	           <li><a href="clositt.php">MyClositt</a></li>
 	       </ul>
 	   </div>
 	</div>

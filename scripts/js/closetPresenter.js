@@ -27,13 +27,13 @@ var closetPresenter = {
 		if(closetPresenter.user != undefined){
 			firebase.$.child(firebase.userPath).child(closetPresenter.user).child("closets").once('value', closetPresenter.showClosets);
 			firebase.$.child(firebase.userPath).child(closetPresenter.user).child("name").once('value', function(data){
-				$("#user-closet-title").text(data.val() + "'s Closet");
+				$("#user-closet-title").text(data.val() + "'s Clositt");
 			});
 		}else if(firebase.isLoggedIn){
 			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").once('value', closetPresenter.showClosets);		
-			 $("#user-closet-title").text(firebase.username + "'s Closet");
+			 $("#user-closet-title").text(firebase.username + "'s Clositt");
 		}else{
-			Messenger.info("Please login or sign up to add items to your closet!");	
+			Messenger.info("Please login or sign up to add items to your clositt!");	
 		}
 	},
 	
@@ -220,7 +220,7 @@ var closetPresenter = {
 		if($("#share-url").length){
 			$("#share-url").remove();
 		}else{
-			var query = location.href.toString().replace("closet.php",("!" + closetPresenter.share) + firebase.userid)
+			var query = location.href.toString().replace("clositt.php",("!" + closetPresenter.share) + firebase.userid)
 
 			$("#closet-share > .share-freeiconsweb").before(
       			  $('<input type="text">')

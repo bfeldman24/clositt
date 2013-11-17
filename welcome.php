@@ -38,7 +38,7 @@ $_SESSION['userid'] = 0;
         		</div>
         	
         		<div id="login">
-        			<form id="signin" class="form-horizontal" action="closet.php">
+        			<form id="signin" class="form-horizontal" action="clositt.php">
         				<h1 class="account">Got an Account? Sign in.</h1>
             			<div id="email">
                 			   <input type="text" id="inputEmail" placeholder="Email" class="inputBox" />

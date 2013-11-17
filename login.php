@@ -14,7 +14,7 @@
 <h1>Login</h1>
     
 
-	<form class="form-horizontal" action="closet.php">
+	<form class="form-horizontal" action="clositt.php">
 	    <div class="control-group">
 		    <label class="control-label" for="inputEmail">Email</label>
 		    <div class="controls">		  	  
@@ -49,7 +49,7 @@
 
 <script type="text/javascript">
 function loggedIn(){
-	location.href= "<?php echo HOME_ROOT; ?>closet.php";	
+	location.href= "<?php echo HOME_ROOT; ?>clositt.php";	
 }
 
 $("form").on("submit",function(event){

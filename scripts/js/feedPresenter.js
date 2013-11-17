@@ -67,7 +67,7 @@ var feedPresenter = {
       				$("#loadingMainContent").hide();	
       			
       			}else if($(".noOutfits").length <= 0){			    
-      			    $("#feed-grid").append($("<div>").addClass("noOutfits").text("There are no closets in your feed! To add closets into your feed click on the \"Edit Feed\" button on the left."));   
+      			    $("#feed-grid").append($("<div>").addClass("noOutfits").text("There are no clositts in your feed! To add clositts into your feed click on the \"Edit Feed\" button on the left."));   
       			}		
       		}
         }
@@ -135,9 +135,9 @@ var feedPresenter = {
             firebase.$.child(firebase.userPath).child(firebase.userid).child("feeds/main")
                 .child(owner).child("closets").child(closetid).remove(function(error){
                     if(error){
-                        Messenger.error("There was a problem removing that closet from your feed!");   
+                        Messenger.error("There was a problem removing that clositt from your feed!");   
                     }else{
-                        Messenger.success(ownername + "\'s Closet \"" + closetname + "\" was removed from your feed!");   
+                        Messenger.success(ownername + "\'s Clositt \"" + closetname + "\" was removed from your feed!");   
                     }
             });
      },
@@ -384,9 +384,9 @@ var closetSearchController = {
                             .child(closetRef).set(closetName,function(error){
                         
                             if(error){
-                                Messenger.error("There was a problem saving that closet to your feed!");   
+                                Messenger.error("There was a problem saving that clositt to your feed!");   
                             }else{
-                                Messenger.success("Closet \"" + closetName + "\" was added to your feed!");   
+                                Messenger.success("Clositt \"" + closetName + "\" was added to your feed!");   
                             }
                         });  
                     }

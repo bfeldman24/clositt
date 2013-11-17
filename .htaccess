@@ -6,7 +6,7 @@ Options +SymLinksIfOwnerMatch
 Options -Indexes 
 
 RewriteEngine On
-RewriteRule ^!(.*)$ closet.php?user=$1
+RewriteRule ^!(.*)$ clositt.php?user=$1
 Redirect /smg /signup.php?beta=earlyaccess
 
 RewriteRule ^(.*)log$ /whoops.php

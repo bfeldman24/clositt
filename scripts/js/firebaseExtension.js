@@ -141,7 +141,7 @@ var firebase = {
 	
 	updateLoggedInDropdownMenu: function(){
 		$("#account-dropdown").html("")
-	    	//.append($('<li><a href="closet.php">My Closet</a></li>'))    	
+	    	//.append($('<li><a href="clositt.php">MyClositt</a></li>'))    	
 	    	.append($('<li><a href="settings.php">Account Settings</a></li>'))
 	    	.append($('<li class="divider"></li>'))
 	    	.append($('<li><a href="javascript:firebase.logout();">Logout</a></li>')); 

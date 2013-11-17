@@ -43,7 +43,7 @@ function loggedOut(){
 
 
 $("#subheader-navbar li a").removeClass();
-$('#subheader-navbar li a[href="closet.php"]').addClass("active");
+$('#subheader-navbar li a[href="clositt.php"]').addClass("active");
 </script>
 
 </body>

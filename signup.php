@@ -85,7 +85,7 @@ if ($_GET['beta'] != 'earlyaccess'){
 
 <script type="text/javascript">
 function loggedIn(){
-	location.href= "<?php echo HOME_ROOT; ?>closet.php";	
+	location.href= "<?php echo HOME_ROOT; ?>clositt.php";	
 }
 
 $("form").on("submit",function(event){
