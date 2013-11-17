@@ -1,11 +1,13 @@
 #!/bin/sh
 
+# Check parameters
 if [ $# -ne 1 ]
 then
 	echo "I need a directory to run. Pass a directory as the first and only parameter."
 	exit 1
 fi
 
+# Check production update
 if [ $1 = 'clositt' ]
 then 
 	echo "Are you sure you want to update production? [y/n]"
@@ -18,7 +20,18 @@ then
 	fi
 fi 
 
-echo  'Did you modify the globals.php? [y/n]> '
+# Check latest code
+echo 'Did you take the lastest git repo? [y/n]'
+read g
+
+if [ $g = 'n' ]
+then 
+	echo "Go back and take latest"
+	exit 1
+fi
+
+# Check updated globals
+echo  'Did you modify the globals.php? [y/n]'
 read x
 
 if [ $x = 'n' ]
@@ -27,6 +40,7 @@ then
 	exit 1
 fi
 
+# Check correct current directory
 p=$(pwd)
 if [ $p != '/home1/thewinn2/public_html/pp' ]
 then
@@ -34,6 +48,7 @@ then
 	exit 1
 fi
 
+# Deploy to target directory
 d=$(date +%d.%m.%y_%H.%M)
 echo "backup dir name will be ../prod-archive/$d"
 
