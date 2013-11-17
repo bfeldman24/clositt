@@ -21,6 +21,8 @@ java -jar scripts/java/yuicompressor-2.4.8.jar css/style.css -o css/style.min.cs
 echo "Minified JS and CSS finished"
 
 cp *.php ../$1/
+cp favicon.ico ../$1/
+cp .htaccess ../$1/
 cp deploy-PROD.ssh ../$1/
 cp -r static/ ../$1/
 cp -r css/ ../$1/

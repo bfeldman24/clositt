@@ -56,6 +56,7 @@ mkdir "../prod-archive/$d"
 mv ../$1/* "../prod-archive/$d/"
 cp -rf * ../$1/
 rm ../$1/deploy-PROD.ssh
+rm -rf ../$1/archive
 
 echo "Please verify the release!"
 echo "DONE!"
