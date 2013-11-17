@@ -170,8 +170,9 @@ var firebase = {
 	   if (location.href.indexOf("signup") < 0 &&
 	       location.href.indexOf("welcome") < 0 &&
 	       location.href.indexOf("login") < 0 &&
+	       location.href.indexOf("acknowledgements") < 0 &&
 	       location.href.indexOf("whoops") < 0 && 
-	       location.href.indexOf("contact") < 0){	           	               
+	       location.href.indexOf("contact") < 0){        	               
 	       
           	   if (location.href.indexOf("welcome.php") < 0){
           	       location.href = "/welcome.php";

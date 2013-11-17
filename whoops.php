@@ -17,7 +17,6 @@ if (!strpos($page, "whoops.php")){
 <!DOCTYPE>
 <html>
 <head>
-
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
 <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Monoton|Roboto+Slab|Roboto"/>
 <link type="text/css" rel="stylesheet" href="css/WelcomeV2-style.css"/>
@@ -39,8 +38,6 @@ if (!strpos($page, "whoops.php")){
         			<p><span><a onclick="window.history.back()" >Go back</a></span></p>
         			<p><span><a href="/" >Go home</a></span></p>
         			<p><span><a href="/contact-us.php" >Contact us to let us know of the problem</a></span></p>
-        			<p>
-        			</p>
         		</div>        	
         	</div>
         	
