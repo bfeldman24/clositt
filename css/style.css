@@ -37,6 +37,12 @@ textarea{
 
 /*** TOP NAV ***/
 
+.logo-beta{
+   font-size: 15px;
+   font-style: italic;
+   font-variant: small-caps;   
+}
+
 .top-navbar{
     top:0;
     left:0;

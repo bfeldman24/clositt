@@ -3,7 +3,7 @@
 		<div class="navbar-inner clositt-theme">
 			<div class="container">
 			    <div id="brand-fixed-background" class="clositt-theme" style="display:none;width:300px;height:43px;position:fixed; box-shadow: 3px 0 0 #FFFFFF;"></div>			    
-  	            <a class="brand" id="brand" href="<?php echo HOME_ROOT;?>">Clositt</a>
+  	            <a class="brand" id="brand" href="<?php echo HOME_ROOT;?>">Clositt <span class="logo-beta">beta</span></a>
 	            
 	            <ul class="nav navleft" id="user-project-nav">	
 	               
