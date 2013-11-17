@@ -90,7 +90,7 @@
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 
-<script src="<?php echo HOME_ROOT; ?>lib/javascript/typeahead.min.js"></script>
+<script src="<?php echo HOME_ROOT; ?>lib/js/typeahead.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {	
 	
