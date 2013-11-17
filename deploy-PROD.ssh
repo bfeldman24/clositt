@@ -20,16 +20,6 @@ then
 	fi
 fi 
 
-# Check latest code
-echo 'Did you take the lastest git repo? [y/n]'
-read g
-
-if [ $g = 'n' ]
-then 
-	echo "Go back and take latest"
-	exit 1
-fi
-
 # Check updated globals
 echo  'Did you modify the globals.php? [y/n]'
 read x

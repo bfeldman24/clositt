@@ -6,6 +6,16 @@ echo "I need a directory to run. Pass a directory as the first and only paramete
 exit 1
 fi
 
+# Check latest code
+echo 'Did you take the lastest git repo? [y/n]'
+read g
+
+if [ $g = 'n' ]
+then
+        echo "Go back and take latest"
+        exit 1
+fi
+
 rm -rf ../$1/archive/*
 mkdir ../$1/archive
 mv ../$1/* ../$1/archive/
