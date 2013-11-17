@@ -38,7 +38,7 @@ d=$(date +%d-%m-%y_%H-%M)
 echo "backup dir name will be ../prod-archive/$d"
 
 mv ../$1/* "../prod-archive/$d/"
-mv * ../$1/
+cp -rf * ../$1/
 
 echo "Please verify the release!"
 echo "DONE!"
