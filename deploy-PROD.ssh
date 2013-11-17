@@ -40,6 +40,7 @@ echo "backup dir name will be ../prod-archive/$d"
 mkdir "../prod-archive/$d"
 mv ../$1/* "../prod-archive/$d/"
 cp -rf * ../$1/
+rm ../$1/deploy-PROD.ssh
 
 echo "Please verify the release!"
 echo "DONE!"
