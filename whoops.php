@@ -36,7 +36,7 @@ if (!strpos($page, "whoops.php")){
         		<div id="goback">
         			<h1 class="waitList">What you can do from here:</h1> <br>
 
-        			<p id="gobacklink" style="display:none;"><span><a>Go back</a></span></p>
+        			<p><span><a onclick="window.history.back()" >Go back</a></span></p>
         			<p><span><a href="/" >Go home</a></span></p>
         			<p><span><a href="/contact-us.php" >Contact us to let us know of the problem</a></span></p>
         			<p>
@@ -55,12 +55,5 @@ if (!strpos($page, "whoops.php")){
 	
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 
-
-<script type="text/javascript">
-function loggedIn(){	
-    $("#gobacklink").attr("onclick","window.history.back()");
-	$("#gobacklink").show();	
-}
-</script>
 </body>
 </html>

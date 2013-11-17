@@ -2,16 +2,18 @@
 
 $email = $_REQUEST['e'];
 $name = $_REQUEST['n'];
+$id = $_REQUEST['i'];
 $subject = $_REQUEST['s'];
 $message = $_REQUEST['m'];
 
 // TODO VALIDATION
 
-$to      = 'eliyahurosen@gmail.com';
+$to = 'eliyahurosen@gmail.com';
 
 $emailSubject = 'CLOSITT CONTACT FORM: ' . $subject;
 
 $emailMessage = "Name: " . $name . "\r\n" . 
+                "Clositt Id: " . $id . "\r\n" . 
 				"Email: " . $email . "\r\n" .
 				"Subject: " . $subject . "\r\n" . 
 				"Message: " . $message . "\r\n"; 
