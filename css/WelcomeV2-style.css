@@ -70,6 +70,16 @@ body{
 	height:90px;
 	padding:2em;
 }
+
+#goback{
+	position:absolute;
+	background:white;
+	margin-top:0px;
+	width:233px;
+	height:302px;
+	padding:2em;    
+}
+
 h1.waitList{
 	margin-top:-16px;
 	font-family: 'Roboto', serif;
