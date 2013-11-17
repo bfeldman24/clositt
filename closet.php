@@ -25,9 +25,6 @@
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 <div id="closetId" style="display:none;"><?php echo $_GET['user'];?></div>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/closetPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/productPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/pagePresenter.js"></script>
 <script type="text/javascript">
 <?php if(isset($_GET['user'])){ ?>
 $(document).ready(function(){     

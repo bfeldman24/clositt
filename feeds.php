@@ -90,14 +90,6 @@
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 
-<script src="<?php echo HOME_ROOT; ?>scripts/js/pagePresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/productPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/gridPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/gridEvents.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/closetPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/filterPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/reviewsPresenter.js"></script>
-<script src="<?php echo HOME_ROOT; ?>scripts/js/tagPresenter.js"></script>
 <script src="<?php echo HOME_ROOT; ?>lib/javascript/typeahead.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {	
