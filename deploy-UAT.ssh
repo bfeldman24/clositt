@@ -28,10 +28,11 @@ mv ../$1/* ../$1/archive/
 echo "Archived target directory"
 
 echo "Compiling all JS files..."
+mv scripts/java/clositt.js scripts/java/clositt.js.bak
 php -q scripts/php/jsCompiler.php
 
 echo ""
-echo "Minifying JS and CSS files... (Takes a few seconds)" 
+echo "Minifying JS and CSS files... (Takes a minute)" 
 java -jar scripts/java/yuicompressor-2.4.8.jar scripts/java/clositt.js -o scripts/js/clositt.min.js
 java -jar scripts/java/yuicompressor-2.4.8.jar css/style.css -o css/style.min.css
 echo "Minified JS and CSS finished"
