@@ -6,6 +6,12 @@ echo "I need a directory to run. Pass a directory as the first and only paramete
 exit 1
 fi
 
+if [ $1 = 'clositt' ]
+then
+        echo "You cannot run this script for production"
+        exit 1
+fi
+
 # Check latest code
 echo 'Did you take the lastest git repo? [y/n]'
 read g
