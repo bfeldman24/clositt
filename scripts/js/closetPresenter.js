@@ -171,10 +171,10 @@ var closetPresenter = {
 																															
 							if ($closetNameInput.parent().parent().attr("last")){
 								if(success){
-									Messenger.success("Closet Names were saved!");
+									Messenger.success("Clositt Names were saved!");
 									closetPresenter.hideSettings();	
 								}else{
-									Messenger.error("Error! Closet Names were not saved!");	
+									Messenger.error("Error! Clositt Names were not saved!");	
 								}
 							}	
 					  }									
@@ -283,7 +283,7 @@ var closetFormPresenter = {
 	
 	showClosetForm: function(el){
 		if(!firebase.isLoggedIn){
-			Messenger.info("Please login or sign up to add items to your closet!");	
+			Messenger.info("Please login or sign up to add items to your clositt!");	
 		}else{
 			if(closetFormPresenter.closetNames == null){
 				closetFormPresenter.getClosetInfo();
@@ -369,7 +369,7 @@ var closetFormPresenter = {
 			 
 				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetId).child("items").push(sku, function(error) {
 				  if (error) {
-						Messenger.error('Closet could not be saved. ' + error);
+						Messenger.error('Clositt could not be saved. ' + error);
 				  } else {
 						Messenger.success('This item was added to "' + closetName + '"');
 						closetFormPresenter.showClosetForm(el);
@@ -377,7 +377,7 @@ var closetFormPresenter = {
 				  }
 				});
 			}else{
-				Messenger.success('This item is already in your closet "' + closetName + '"');
+				Messenger.success('This item is already in your clositt "' + closetName + '"');
 			}
 		}				
 		
@@ -389,7 +389,7 @@ var closetFormPresenter = {
 			var $closetItems = $("#hanger-" +  closetFormPresenter.closetItems.join(", #hanger-") );
 			$closetItems.attr("src",closetFormPresenter.darkHangerImg);
 			$closetItems.parent().tooltip('destroy');
-			$closetItems.parent().tooltip({title:"In my Closet"});	
+			$closetItems.parent().tooltip({title:"In my Clositt"});	
 		}
 	},
 	
