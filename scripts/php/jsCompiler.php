@@ -47,7 +47,7 @@
   
 $files = array("closetPresenter.js",
 "colorPresenter.js",
-"feedPresenter"
+"feedPresenter",
 "filterPresenter.js",
 "firebaseExtension.js",
 "gridEvents.js",
