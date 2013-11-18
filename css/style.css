@@ -491,6 +491,14 @@ footer p{
 	padding:5px;	
 }	
 
+.selectCloset {
+    text-align: left;
+}
+
+.selectCloset > .controls > .radio > span{
+    padding-left: 5px;   
+}
+
 .overlay > .addTagForm {  min-height: 25px;  padding: 5px;  position: absolute;  right: 0;  top: 0;  width: 151px;}	
 
 .overlay > .bottom > .name{
@@ -917,7 +925,7 @@ ul.review-comments span{
 }	
 
 ul.review-comments span.review-comment-user{
-    color: #666666;
+    color: #5BB75B;
     font-weight: bold;
 }
 
