@@ -262,7 +262,7 @@ function getProductTemplate(product, company, audience, category){
 	var image = product.image;
 	var name = product.name;		
 	var id = product.sku;
-	var price = product.price == null || isNaN(product.price) ? "" : "$" + Math.round(product.price);		 	
+	var price = "$" + Math.round(parseInt(product.price.replace("$","").trim()));		 	
 
 	var rand = Math.floor(Math.random() * 3) + 1;
 	var shadow = "";
