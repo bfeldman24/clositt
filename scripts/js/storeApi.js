@@ -1,38 +1,32 @@
+/*
+var jq = document.createElement('script');
+jq.src = "//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js";
+document.getElementsByTagName('head')[0].appendChild(jq);
+
+lululemon
+saks fifth avenue
+*/
+
 storeApi = {
 
 	getFullUrl: function(company, url){
 		var newUrl = "";		
 		
-		switch(company.toLowerCase()){
-			case "gap":
-			case "old navy":
-			case "banana":
-			case "piperlime":
-			case "athleta":
-				newUrl = url;
-				break;
-			case "jcrew":
-				newUrl = url;
-				break;		
+		switch(company.toLowerCase()){		
 			case "ann taylor":				
-				var catid = url.substring(url.lastIndexOf("/") + 1);
-				newUrl = url.indexOf("?") > 0 ? '' : "http://www.anntaylor.com/ann/catalog/category.jsp?pageSize=1000&goToPage=1&catid=" + catid;
+				var catid = url.indexOf("?") > 0 ? url.substring(url.lastIndexOf("catid") + 6) : url.substring(url.lastIndexOf("/") + 1);
+                catid = url.indexOf("?") > 0 ? catid.substring(0, catid.indexOf("&")) : catid;
+                newUrl = "http://www.anntaylor.com/ann/catalog/category.jsp?pageSize=1000&goToPage=1&catid=" + catid;
 				break;
-			case "loft":
+		    case "bcbg":
+		        newUrl = url + "#start=0&sz=1000";
+		        break;	
+		    case "charles tyrwhitt":
+		        newUrl = url + "&ppp=1000";																
+		        break;
+			default:
 				newUrl = url;
-				break;
-			case "urban outfitters":
-				newUrl = url;
-				break;
-			case "zara":
-				newUrl = url;
-				break;	
-			case "hm":
-				newUrl = url;
-				break;
-			case "tory burch":
-				newUrl = url;
-				break;
+				break;			
 		}	
 		
 		return newUrl;
@@ -47,11 +41,12 @@ storeApi = {
 			case "gap":
 			case "old navy":
 			case "banana":
+			case "banana republic":
 			case "piperlime":
 			case "athleta":
 				products = storeApi.getGapJson(data, home);
 				break;
-			case "jcrew":
+			case "j crew":
 				products = storeApi.getJcrew(data, home);
 				break;		
 			case "ann taylor":
@@ -66,12 +61,43 @@ storeApi = {
 			case "zara":
 				products = storeApi.getZara(data, home);
 				break;	
-			case "hm":
+			case "h&m":
 				products = storeApi.getHM(data, home);
 				break;
 			case "tory burch":
 				products = storeApi.getToryBurch(data, home);
 				break;
+			case "anthropologie":
+			    products = storeApi.getAnthropologie(data, home);
+			    break;
+			case "bloomingdales":
+    			products = storeApi.getBloomingdales(data, home);
+			    break;
+			case "intermix":
+			    products = storeApi.getIntermix(data, home);
+			    break;
+			case "madewell":
+			    products = storeApi.getMadewell(data, home);
+			    break;
+			case "brooks brothers":
+			    products = storeApi.getBrooksBrothers(data, home);
+			    break; 
+			case "nordstrom":
+			    products = storeApi.getNordstrom(data, home);
+			    break;  
+			case "american apparel":			     
+			    products = storeApi.getAmericanApparel(data, home);
+			    break;  
+			case "lord and taylor":			         
+			    products = storeApi.getLordAndTaylor(data, home);
+			    break;  
+			case "bcbg":			
+    			products = storeApi.getBCBG(data, home);
+			    break;  
+			case "charles tyrwhitt":
+				products = storeApi.getCharlesTyrwhitt(data, home);
+			    break;  
+			 
 		}	
 		
 		return products;
@@ -287,10 +313,10 @@ storeApi = {
 	        $(data).find("#search > .productresultarea > .productlisting > .product").each(function(){
 	                var item = new Object();
 	
-	                item.image = $(this).children(".image").find("img:nth-child(2)").attr("src");
-	                item.link = $(this).children(".image").find("a").first().attr("href");
+	                item.image = $(this).find(".image .product-image-primary").attr("src");
+	                item.link = $(this).find(".image").find("a").first().attr("href");
 	                item.price = $(this).find(".pricing > .price").first().text().trim();
-	                item.name = $(this).children(".name").find("a").first().text().trim();	                
+	                item.name = $(this).find(".name").find("a").first().text().trim();	                
 	
 	                if(item.image != undefined){
 	                   item.sku = 'tb' + item.link.substring(item.link.lastIndexOf("/")+1,item.link.indexOf(","));
@@ -301,5 +327,242 @@ storeApi = {
 	        });
 	
 	        return JSON.stringify(products);
-	}
+	},
+	
+	
+	// Needs to iterate over urls 
+	// &page=2&startValue=51
+	getAnthropologie: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".category-item").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".imageWrapper img").first().attr("src");
+                item.link = siteHome + $(this).find(".imageWrapper a").first().attr("href");                
+                item.price = $(this).find(".item-description > .item-price > .price").first().text();
+                item.name = $(this).find(".item-description a").first().attr("title");
+
+                if(item.image != undefined){
+                    
+                   var sku = $(this).find(".imageWrapper a").first().attr("id");  
+                   item.sku = 'a' + sku.replace(/\D/g, ''); // strip all non numeric chars
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getBloomingdales: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".productThumbnail").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".productImages img").first().attr("src");
+                item.link = $(this).find(".productImages a").first().attr("href");                
+                item.price = $(this).find(".prices .netPrice").first().val();
+                item.name = $(this).find(".shortDescription a").first().text();
+
+                if(item.image != undefined){
+                    
+                   var sku = $(this).attr("id");  
+                   item.sku = 'b' + sku.replace(/\D/g, ''); // strip all non numeric chars
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getIntermix: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".thumbtext").each(function(){
+                var item = new Object();
+
+                item.image = siteHome + $(this).find(".thumbcontainer img").first().attr("src");
+                item.link = siteHome + $(this).find(".thumbcontainer a").first().attr("href");                
+                item.price = $(this).find(".thumbInfo > .thumbPricing > #productPricing").first().text().trim();
+                item.name = $(this).find(".thumbcontainer img").first().attr("alt");
+
+                if(item.image != undefined){
+                    
+                   var sku = $(this).find(".qveThumbnail").attr("catpk");
+                   item.sku = 'i' + sku.replace(/\D/g, ''); // strip all non numeric chars
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getMadewell: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".arrayProdCell").each(function(){
+                var item = new Object();
+
+                item.image = siteHome + $(this).find(".arrayImg img").first().attr("src");
+                item.link = siteHome + $(this).find(".arrayImg a").first().attr("href");                
+                item.price = $(this).find(".arrayCopy .arrayProdPrice").text().replace(/([a-zA-Z$ ])*(\s)+/g, ' ').trim();
+                item.name = $(this).find(".arrayImg img").first().attr("alt");
+
+                if(item.image != undefined){
+                                    
+                   var sku = item.link.substring(item.link.lastIndexOf("/")+1, item.link.lastIndexOf("."));                    
+                   item.sku = 'm' + sku.replace(/\D/g, ''); // strip all non numeric chars
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getBrooksBrothers: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".grid-tile").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".product-image img").first().attr("src");
+                item.link = siteHome + $(this).find(".product-image a").first().attr("href");                
+                item.price = $(this).find(".product-pricing .price-value").text().trim();
+                item.name = $(this).find(".product-image a").first().attr("alt");
+
+                if(item.image != undefined){
+                   item.sku = 'bb' + $(this).attr("data-item-id");
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getNordstrom: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".fashion-item").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".fashion-photo img").first().attr("data-original");
+                item.link = siteHome + $(this).find(".info a").first().attr("href");                
+                item.price = $(this).find(".info > .price.regular").text().trim();
+                item.price += " " + $(this).find(".info > .price.sale").text().trim();
+                item.name = $(this).find(".fashion-photo img").first().attr("alt");
+
+                if(item.image != undefined){
+                   var sku = $(this).attr("id");
+                   item.sku = 'n' + sku.replace(/\D/g, ''); // strip all non numeric chars
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getAmericanApparel: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".product").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".product-img").first().attr("src");
+                item.link = siteHome + $(this).find(".name a").first().attr("href");                
+                item.price = $(this).find(".pricing").text().trim();
+                item.name = $(this).find(".name a").first().text();
+
+                if(item.image != undefined){
+                   var sku = $(this).find(".product-img").first().attr("id");                   
+                   item.sku = 'aa' + sku.substring(sku.indexOf("_")+1); 
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+    getLordAndTaylor: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find("#ProductsList #totproductsList").children("li").each(function(){
+                var item = new Object();
+
+                item.image = siteHome + $(this).find(".pro_pic img").first().attr("src");
+                item.link = $(this).find("a.pro_img").first().attr("href");                
+                item.price = $(this).find(".pro_price_black").text().trim();
+                item.price += " " + $(this).find(".pro_price_red").text().replace(/[a-zA-Z]*/g,'').trim();
+                item.name = $(this).find(".pro_pic img").first().attr("alt");
+
+                if(item.image != undefined){
+                   var sku = $(this).find(".pro_pic").attr("id");
+                   item.sku = 'll' + sku.replace(/\D/g, ''); // strip all non numeric chars
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getBCBG: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".grid-tile").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".product-image .thumb-link img").first().attr("src");
+                item.link = $(this).find(".product-image a.thumb-link").first().attr("href");
+                item.price = $(this).find(".product-pricing .normal-price").text().trim();
+                item.price += " " + $(this).find(".product-pricing .product-sales-price").text().trim();
+                item.name = $(this).find(".product-image .thumb-link img").first().attr("alt");
+
+                if(item.image != undefined){
+                   item.sku = 'bcbg' + $(this).find(".product-tile").attr("data-itemid");
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getCharlesTyrwhitt: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".prodcontainer").each(function(){
+                var item = new Object();
+
+                item.image = siteHome + $(this).find(".img img").first().attr("src");
+                item.link = siteHome + $(this).find("a.img").first().attr("href");
+                item.price = $(this).find(".price").text().replace(/[a-zA-Z]*/g,'').trim();
+                item.name = $(this).find("h3 a").first().text().trim();
+
+                if(item.image != undefined){
+                   item.sku = 'ct' + $(this).attr("id");
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
 }
