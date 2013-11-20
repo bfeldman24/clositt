@@ -83,7 +83,8 @@ var reviewsPresenter = {
 		 	        newValue = value +1;		 	        
 		 	   } 		 	            
 		 	   
-		 	   targetOutfit.find(".numReviews").text(newValue);
+		 	   targetOutfit.find(".numReviews > .counter").text(newValue);
+		 	   productPresenter.clothingStore[sku].rc = newValue;
 		 	   return newValue;       
             });
 		 	

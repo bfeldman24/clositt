@@ -3,6 +3,7 @@ var closetPresenter = {
 	carouselLeft: null,	
 	carouselRight: null,
 	user: null,
+	wishListClosetId: 2,
 
 	init: function(){
 		var u = closetPresenter.user == undefined ? undefined : closetPresenter.user.toString().replace(closetPresenter.share,'');
@@ -15,7 +16,7 @@ var closetPresenter = {
 		$("#closet-settings > .settings-minicon").on("click", closetPresenter.showSettings);
 		$(document).on("click", "#closet-settings > .save-minicon", closetPresenter.saveClosets);
 		$(document).on("click", "#closet-share > .share-freeiconsweb", closetPresenter.shareCloset);
-		$(document).on("click",".delete-outfit", closetPresenter.removeOutfit);		
+		$(document).on("click",".delete-outfit", closetPresenter.removeOutfit);				
 		$(document).keypress(closetPresenter.saveClosetsOnEnter);				
 	},
 	
@@ -260,12 +261,12 @@ var closetFormPresenter = {
 				var closetItemsMapping = new Array();
 				var i=0;
 				
-				snapshot.forEach(function(closet){
+				snapshot.forEach(function(closet){				    				    
 					closetIds[i] = closet.name();
-					closetNames[i] = closet.val().name;
+					closetNames[i] = closet.val().name;				    
 					
-					closet.child("items").forEach(function(item){
-						closetItems.push(item.val());
+					closet.child("items").forEach(function(item){					   					    
+						closetItems.push(item.val());					    
 						closetItemsMapping.push(closetNames[i]);							
 					});
 					
@@ -384,6 +385,29 @@ var closetFormPresenter = {
 		return false;
 	},
 	
+	addToWishList: function(el){	    
+	    el.preventDefault();								
+		var sku = $(el.currentTarget).parents(".outfit").find('a[pid]').attr("pid");
+		var closetName = "Wish List";
+		
+		var index = closetFormPresenter.closetItems.indexOf(sku);
+			
+		if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){			
+		 
+			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets")
+			          .child(closetPresenter.wishListClosetId).child("items").push(sku, function(error) {
+			  if (error) {
+					Messenger.error('Clositt could not be saved. ' + error);
+			  } else {
+					Messenger.success('This item was added to your ' + closetName + '!');					
+					closetFormPresenter.updateClosetCount(el, sku);																		
+			  }
+			});
+		}else{
+			Messenger.success('This item is already in your "' + closetName + '"');
+		}
+	},
+	
 	markUsersClositItems: function(){
 		if(closetFormPresenter.closetItems != null && firebase.isLoggedIn){
 			var $closetItems = $("#hanger-" +  closetFormPresenter.closetItems.join(", #hanger-") );
@@ -393,8 +417,9 @@ var closetFormPresenter = {
 		}
 	},
 	
-	updateClosetCount: function(sku){
-	   
+	updateClosetCount: function(el, sku){
+	    var targetOutfit = $(el.currentTarget).parents(".productActions");
+	    
 	 	firebase.$.child("clositt/products/"+sku+"/cc").transaction(function(value) {
 	 	   var newValue = 1;
 	 	   
@@ -404,7 +429,8 @@ var closetFormPresenter = {
 	 	        newValue = value +1;		 	        
 	 	   } 		 	            
 	 	   
-	 	   //targetOutfit.find(".numReviews").text(newValue);
+	 	   targetOutfit.find(".numClosets > .counter").text(newValue);
+	 	   productPresenter.clothingStore[sku].cc = newValue;
 	 	   return newValue;       
         });
 	}

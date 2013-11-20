@@ -837,11 +837,31 @@ ul.review-comments span{
 	color: #FFFFFF;
 }
 
-.numReviews{
+
+.numReviews, .numClosets, .addToWishList{
     font-size: 10px;
-    left: -2px;
     position: relative;
-    top: -4px;   
+    top: -4px;       
+}
+
+.numReviews > span, .numClosets > span{
+    margin-right: 1px;
+}
+
+.numReviews{
+    left: -2px;
+}
+
+.numClosets{
+    left: 5px;
+}
+
+.addToWishList{
+    left: -8px;
+}
+
+.numClosets > i, .addToWishList > i{
+    top: -5px;   
 }
 
 //ul.review-comments span:nth-child(2) {

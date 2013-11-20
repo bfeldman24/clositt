@@ -10,9 +10,7 @@ var gridPresenter = {
 	    }
 	   
 		var columns = gridPresenter.getDefaultColumns();
-		$(".addToClosetBtn").tooltip();
-		$(".tagOutfitBtn").tooltip();
-		$(".showComments").tooltip();
+		gridPresenter.showTooltips();
 					
 		gridPresenter.alignGrid(gridName, columns, 200, 270, 25);						
 		closetFormPresenter.markUsersClositItems();
@@ -155,5 +153,13 @@ var gridPresenter = {
 	
 	endTask: function(){
 	   $("#loadingMainContent").hide();	
+	},
+	
+	showTooltips: function(){
+		$(".addToClosetBtn").tooltip();
+		$(".tagOutfitBtn").tooltip();
+		$(".showComments").tooltip();
+		$(".numClosets").tooltip();
+		$(".addToWishList").tooltip();
 	}
 };

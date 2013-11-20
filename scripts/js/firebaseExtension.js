@@ -80,6 +80,10 @@ var firebase = {
     		 	username = username.toLowerCase();
     		 	userData['username'] = username;
 		 	}
+		 			 	
+		 	userData['closets'] = new Object();
+		 	userData['closets'][closetPresenter.wishListClosetId] = new Object();
+		 	userData['closets'][closetPresenter.wishListClosetId]['name'] = "Wish List";		 	
 		 	
 		 	firebase.$.child(firebase.userPath).child(user.id).set(userData);
 		 	

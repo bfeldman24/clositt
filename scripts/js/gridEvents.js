@@ -3,6 +3,7 @@ var gridEvents = {
 	init: function(){
 		gridEvents.overlayEvent();				
 		$(document).on("click",".addToClosetBtn",closetFormPresenter.showClosetForm);		
+		$(document).on("click",".addToWishList", closetFormPresenter.addToWishList);
 		$(document).on("submit",".addToClosetForm > form",closetFormPresenter.addToCloset);
 		$(document).on("click",'.addToClosetForm > form input[type="radio"]',function(el){
 			$(el.currentTarget).closest("form").submit();

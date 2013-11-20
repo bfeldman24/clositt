@@ -50,7 +50,9 @@ var productPresenter = {
 		var link = product.l;
 		var image = product.i;
 		var name = product.n;		
-		var reviewCount = product.rc == null ? '' : product.rc;
+		var reviewCount = product.rc == null ? 0 : product.rc;
+		var closetCount = product.cc == null ? 0 : product.cc;
+		var closetCountPlural = closetCount == 1 ? "" : "s"; 
 		var id = product.s;
 		var price = product.p == null || isNaN(product.p) ? "" : "$" + Math.round(product.p);		 	
  		var filterPrice = product.fp; 		 		
@@ -75,8 +77,10 @@ var productPresenter = {
 						html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Clositt"><img id="hanger-'+id+'" class="hanger-icon" src="css/images/hanger-icon-white.png" /><i class="icon-plus-sign icon-white hanger-plus"></i></div>';
 					html += '</div>';
 					html +='<div class="bottom">';						    					    
-					    html += '<div class="productActions" >';
-					       html += '<div data-toggle="tooltip" data-placement="top" title="Show Comments" class="showComments"><span class="numReviews">'+reviewCount+'</span><i class="icon-comment icon-white"></i></div>';
+					    html += '<div class="productActions" >';					    
+					       html += '<span data-toggle="tooltip" data-placement="top" title="Add to Wish List" class="addToWishList"><i class="icon-gift icon-white"></i></span>';
+					       html += '<span data-toggle="tooltip" data-placement="top" title="Show Comments" class="showComments numReviews"><span class="counter" >'+reviewCount+'</span><i class="icon-comment icon-white"></i></span>';
+					       html += '<span data-toggle="tooltip" data-placement="top" title="Added to '+closetCount+' Clositt'+closetCountPlural+'" class="numClosets"><span class="counter">'+closetCount+'</span><i class="icon-heart icon-white"></i></span>';
 					    html += '</div>';									
 					    
 					    if(feedOwner != null && feedCloset != null){
