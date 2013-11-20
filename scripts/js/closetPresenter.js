@@ -431,6 +431,8 @@ var closetFormPresenter = {
 	 	   
 	 	   targetOutfit.find(".numClosets > .counter").text(newValue);
 	 	   productPresenter.clothingStore[sku].cc = newValue;
+	 	   var closetCountPlural = newValue == 1 ? "" : "s"; 
+	 	   targetOutfit.find(".numClosets").attr("title","Added to "+newValue+" Clositt"+closetCountPlural);
 	 	   return newValue;       
         });
 	}
