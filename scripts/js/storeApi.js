@@ -362,10 +362,20 @@ storeApi = {
        $(data).find(".productThumbnail").each(function(){
                 var item = new Object();
 
-                item.image = $(this).find(".productImages img").first().attr("src");
                 item.link = $(this).find(".productImages a").first().attr("href");                
                 item.price = $(this).find(".prices .netPrice").first().val();
                 item.name = $(this).find(".shortDescription a").first().text();
+                
+                var imageUrl = $(this).find(".productImages img").first().attr("src");                
+                
+                if (imageUrl.indexOf("src=is{$b$") > 0){
+                    var baseUrl = imageUrl.substring(0, imageUrl.indexOf("?"));    
+                    var pStart = imageUrl.indexOf("src=is{$b$");
+                    var productUrl = imageUrl.substring(pStart+10, imageUrl.indexOf("}", pStart));                    
+                    item.image = baseUrl + "products/" + productUrl;   
+                }else{
+                    item.image = imageUrl;
+                }
 
                 if(item.image != undefined){
                     

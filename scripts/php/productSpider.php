@@ -130,6 +130,7 @@ body{
             <li>If the link is "Broken" report it</li>
             <li>Verfiy that the amount of products are what you expect</li>
             <li>Verify that the image, name, and price are present and look correct</li>
+            <li>(The "View Sample Products" button only works for one category at a time)</li>
         </ul>
     </li>
     <li><h3>Save the products found in the categories</h3>
