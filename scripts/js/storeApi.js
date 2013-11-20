@@ -2,9 +2,6 @@
 var jq = document.createElement('script');
 jq.src = "//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js";
 document.getElementsByTagName('head')[0].appendChild(jq);
-
-lululemon
-saks fifth avenue
 */
 
 storeApi = {
@@ -96,6 +93,9 @@ storeApi = {
 			    break;  
 			case "charles tyrwhitt":
 				products = storeApi.getCharlesTyrwhitt(data, home);
+			    break;  
+			case "lululemon":			 
+    			products = storeApi.getLuLuLemon(data, home);
 			    break;  
 			 
 		}	
@@ -293,7 +293,7 @@ storeApi = {
 			
 			item.image = $(this).find(".image > img:nth-child(2)").first().attr("src");
 			item.link = $(this).find("a").first().attr("href");			
-			item.price = $(this).find("a > .details > .price").first().text().trim();
+			item.price = $(this).find("a > .price").first().text().trim();
 			$(this).find("a > .details > .price").first().remove();
 			item.name = $(this).find("a > .details").first().text().trim();	
 			item.sku = 'hm' + $(this).find("button.quicklook").first().attr("data-product");				
@@ -565,4 +565,33 @@ storeApi = {
 
         return JSON.stringify(products);
 	},
+	
+	getLuLuLemon: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".product").each(function(){            
+            var price = $(this).find(".amount").text().replace(/[a-zA-Z]*/g,'').trim();
+            var name = $(this).attr("title").trim();
+            
+            $(this).find(".product-images > li").each(function(){
+                var item = new Object();
+                item.price = price;
+                item.name = name;
+                item.link = siteHome + $(this).find("a").first().attr("href");
+                item.image = $(this).find("img").first().attr("src");
+                
+                if(item.image != undefined && item.image.indexOf("_1") > 0){
+                    
+                    item.sku = 'lll' + $(this).attr("class").replace(/\D/g, ''); // strip all non numeric chars
+                    var itemid = item.sku.replace(/-\W/g, '');   
+			        
+			        if (products[itemid] == null){
+                        products[itemid] = item;
+			        }
+                } 
+            });                                
+        });
+
+        return JSON.stringify(products);
+	}
 }

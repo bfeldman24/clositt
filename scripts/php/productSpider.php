@@ -79,6 +79,7 @@ body{
 				  <option value="intermix">Intermix (json link)</option>
 				  <option value="j crew">JCrew</option>
 				  <option value="loft">Loft</option>
+				  <option value="lululemon">LuLuLemon</option>				  
 				  <option value="lord and taylor">Lord And Taylor</option>				  
 				  <option value="madewell">Madewell</option>
 				  <option value="nordstrom">Nordstrom</option>
@@ -115,6 +116,47 @@ body{
 	    </div>
     </form>
 <hr>
+<h2>Workflow:</h2>
+<ol>
+    <li><h3>Add new categories</h3>
+        <ul>
+            <li>Use the "Add New Product Page Link" form</li>
+        </ul>
+    </li>
+    
+    <li><h3>Test the categories (make sure the script works)</h3>
+        <ul>
+            <li>Check the category and click "Test Category" or "View Sample Products"</li>
+            <li>If the link is "Broken" report it</li>
+            <li>Verfiy that the amount of products are what you expect</li>
+            <li>Verify that the image, name, and price are present and look correct</li>
+        </ul>
+    </li>
+    <li><h3>Save the products found in the categories</h3>
+        <ul>
+            <li>Check the categories for which you want to save products</li>            
+            <li>Click "Get Products and Save"</li>
+            <li>All products that were previously saved from other categories will not be effected</li>
+            <li>All products that were previously saved from your currently selected categories will be OVERRIDDEN</li>
+            <li>Note: this action does not make the products live on the site</li>            
+        </ul>
+    </li>
+    <li><h3>Update product colors</h3>
+        <ul>
+            <li>clik the link "UPDATE NEW PRODUCT COLORS"</li>
+            <li>This goes through all of the products that are saved, but are not live, detects the top 2 colors in the image, and stores them in a searchable format</li>
+            <li>Note: this script can take a while to complete depending on the number of images it has to process</li>
+        </ul>
+    </li>
+    <li><h3>Update website with all of the products that were saved thus far</h3>
+        <ul>
+            <li>Click the link "UPDATE WEBSITE WITH NEW PRODUCTS"</li>
+            <li>This replaces all of the products that are live on the site with the products that are saved, but not live</li>
+            <li>The also creates the lists for the filter options (Categories, Companies, etc)</li>
+        </ul>
+    </li>    
+</ol>
+<br><br><br>
 
 <div id="main-workspace" style="display:none;"></div>
 <div id="json-output" style="display:none;"></div>

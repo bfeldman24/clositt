@@ -115,21 +115,26 @@ function testProductsFromLinks(showSample){
 				    var data = $.parseJSON(dataString);
 				    
 				    if (data != null && data.constructor === {}.constructor){
-				        var testProduct = data[Object.keys(data)[0]];
+				        var testProduct = data[Object.keys(data)[0]];				        				        
 				        
 				        if (testProduct != null &&
 				            testProduct.price != null && 
 				            testProduct.image != null && 
 				            testProduct.link != null && 
 				            testProduct.name != null &&
-				            testProduct.sku != null){				        
-
-        				        isValid = true;  
-        				        itemCount = Object.keys(data).length;
-        				        validCount++;
+				            testProduct.sku != null){				 
+				                
+				                var price = parseFloat(testProduct.price.replace("$",""));
+        				        price = parseFloat(price);       
         				        
-        				        if (showSample && validCount == 1){
-        				            showSampleProducts(data, company, customer, category);   
+        				        if(!isNaN(price)){
+            				        isValid = true;  
+            				        itemCount = Object.keys(data).length;
+            				        validCount++;
+            				        
+            				        if (showSample && validCount == 1){
+            				            showSampleProducts(data, company, customer, category);   
+            				        }
         				        }
 				            }
 				    }
@@ -273,13 +278,13 @@ function getProductTemplate(product, company, audience, category){
 		//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
 		var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
 	var html ='<div class="outfit" '+attr+'>';
-			html +='<div class="picture"><a href="'+link+'" pid="'+id+'" target="_blank"><img src="' + image + '" class="'+shadow+'" onerror="return pagePresenter.handleImageNotFound(this)"/></a></div>';			
+			html +='<div class="picture"><a href="'+link+'" pid="'+id+'" target="_blank"><img src="' + image + '" class="'+shadow+'"/></a></div>';			
 			html +='<div class="overlay">';
 				html +='<div class="topleft">';										
 					html +='<div class="tagOutfitBtn" data-toggle="tooltip" data-placement="left" title="Tagitt"><i class="icon-tags icon-white"></i></div>';
 				html += '</div>';
 				html +='<div class="topright">';										
-					html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Clositt"><img id="hanger-'+id+'" class="hanger-icon" src="css/images/hanger-icon-white.png" /><i class="icon-plus-sign icon-white hanger-plus"></i></div>';
+					html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Clositt"><img id="hanger-'+id+'" class="hanger-icon" src="../../css/images/hanger-icon-white.png" /><i class="icon-plus-sign icon-white hanger-plus"></i></div>';
 				html += '</div>';
 				html +='<div class="bottom">';						    					    
 				    html += '<div class="productActions" >';
