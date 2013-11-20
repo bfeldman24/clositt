@@ -54,7 +54,8 @@ mkdir ../$1/scripts/php
 mkdir ../$1/scripts/js
 
 cp scripts/php/session.php ../$1/scripts/php
-cp scripts/js/clositt* ../$1/scripts/js
+cp scripts/js/clositt.min.js ../$1/scripts/js
+cp scripts/js/clositt.min.e.js ../$1/scripts/js
 
 echo "Moved current directory to target directory"
 echo "DONE!"
