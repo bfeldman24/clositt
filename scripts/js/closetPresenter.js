@@ -433,6 +433,8 @@ var closetFormPresenter = {
 	 	   productPresenter.clothingStore[sku].cc = newValue;
 	 	   var closetCountPlural = newValue == 1 ? "" : "s"; 
 	 	   targetOutfit.find(".numClosets").attr("title","Added to "+newValue+" Clositt"+closetCountPlural);
+	 	   targetOutfit.find(".numClosets").tooltip('destroy');
+	 	   targetOutfit.find(".numClosets").tooltip();
 	 	   return newValue;       
         });
 	}
