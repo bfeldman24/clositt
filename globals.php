@@ -8,6 +8,7 @@ define('CLOSITT_CSS',HOME_ROOT .'css/style.css');
 $js = '<script src="' . HOME_ROOT .'scripts/js/firebaseExtension.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/messenger.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/pagePresenter.js"></script>' .
+'<script src="' . HOME_ROOT .'scripts/js/productPagePresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/gridPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/gridEvents.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/productPresenter.js"></script>' .
