@@ -1,7 +1,7 @@
 <?php 
 function file_get_contents_curl($url) {       
     $curl = curl_init($url);    
-    curl_setopt($curl, CURLOPT_USERAGENT, 'Googlebot/2.1 (http://www.googlebot.com/bot.html)');
+    curl_setopt($curl, CURLOPT_USERAGENT, 'search/1.0 (www.search.com)'); //'Googlebot/2.1 (http://www.googlebot.com/bot.html)')
     curl_setopt($curl, CURLOPT_AUTOREFERER, true);
     curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1 );
@@ -38,75 +38,76 @@ function combineMultipleUrls($file, $nextPage, $curl = false){
 }
 
 
-if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
-	$file = file_get_contents($_REQUEST['u']);
+if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){    
+    $url = stripslashes($_REQUEST['u']);
+    $file = file_get_contents($url);
 	
 	if (strpos($_REQUEST['u'],"anthropologie")){
     	// Combine multiple url <body> into one
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=2&startValue=51");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=3&startValue=101");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=4&startValue=151");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=5&startValue=201");	      	
+    	$file = combineMultipleUrls($file, $url . "&page=2&startValue=51");
+    	$file = combineMultipleUrls($file, $url . "&page=3&startValue=101");
+    	$file = combineMultipleUrls($file, $url . "&page=4&startValue=151");
+    	$file = combineMultipleUrls($file, $url . "&page=5&startValue=201");	      	
 	}
 	
-	else if (strpos($_REQUEST['u'],"bloomingdales")){
+	else if (strpos($url,"bloomingdales")){
     	// Combine multiple url <body> into one
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&pageIndex=2");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&pageIndex=3");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&pageIndex=4");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&pageIndex=5");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&pageIndex=6");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&pageIndex=7");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&pageIndex=8");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&pageIndex=9");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&pageIndex=10");	
+    	$file = combineMultipleUrls($file, $url . "&pageIndex=2");
+    	$file = combineMultipleUrls($file, $url . "&pageIndex=3");
+    	$file = combineMultipleUrls($file, $url . "&pageIndex=4");
+    	$file = combineMultipleUrls($file, $url . "&pageIndex=5");
+    	$file = combineMultipleUrls($file, $url . "&pageIndex=6");
+    	$file = combineMultipleUrls($file, $url . "&pageIndex=7");
+    	$file = combineMultipleUrls($file, $url . "&pageIndex=8");
+    	$file = combineMultipleUrls($file, $url . "&pageIndex=9");
+    	$file = combineMultipleUrls($file, $url . "&pageIndex=10");	
 	}	
 		
-	else if (strpos($_REQUEST['u'],"intermix")){
+	else if (strpos($url,"intermix")){
     	// Combine multiple url <body> into one
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=2");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=3");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=4");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=5");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=6");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=7");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=8");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=9");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=10");	
+    	$file = combineMultipleUrls($file, $url . "&page=2");
+    	$file = combineMultipleUrls($file, $url . "&page=3");
+    	$file = combineMultipleUrls($file, $url . "&page=4");
+    	$file = combineMultipleUrls($file, $url . "&page=5");
+    	$file = combineMultipleUrls($file, $url . "&page=6");
+    	$file = combineMultipleUrls($file, $url . "&page=7");
+    	$file = combineMultipleUrls($file, $url . "&page=8");
+    	$file = combineMultipleUrls($file, $url . "&page=9");
+    	$file = combineMultipleUrls($file, $url . "&page=10");	
 	}	 
 	
-	else if (strpos($_REQUEST['u'],"nordstrom")){
+	else if (strpos($url,"nordstrom")){
     	// Combine multiple url <body> into one
-    	$file = file_get_contents_curl($_REQUEST['u']);   	
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=2");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=3");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=4");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=5");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=6");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=7");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=8");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=9");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "&page=10");	
+    	$file = file_get_contents_curl($url);   	
+    	$file = combineMultipleUrls($file, $url . "&page=2");
+    	$file = combineMultipleUrls($file, $url . "&page=3");
+    	$file = combineMultipleUrls($file, $url . "&page=4");
+    	$file = combineMultipleUrls($file, $url . "&page=5");
+    	$file = combineMultipleUrls($file, $url . "&page=6");
+    	$file = combineMultipleUrls($file, $url . "&page=7");
+    	$file = combineMultipleUrls($file, $url . "&page=8");
+    	$file = combineMultipleUrls($file, $url . "&page=9");
+    	$file = combineMultipleUrls($file, $url . "&page=10");	
 	}	 
 	
-	else if (strpos($_REQUEST['u'],"brooksbrothers")){
+	else if (strpos($url,"brooksbrothers")){
     	// Combine multiple url <body> into one
-    	$url = substr($_REQUEST['u'], 0, strpos($_REQUEST['u'], "?"));
-    	$file = combineMultipleUrls($file, $url . "?pmin=1&start=0&sz=60&format=ajax");
-    	$file = combineMultipleUrls($file, $url . "?pmin=1&start=61&sz=60&format=ajax");
-    	$file = combineMultipleUrls($file, $url . "?pmin=1&start=121&sz=60&format=ajax");
-    	$file = combineMultipleUrls($file, $url . "?pmin=1&start=181&sz=60&format=ajax");
-    	$file = combineMultipleUrls($file, $url . "?pmin=1&start=241&sz=60&format=ajax");
-    	$file = combineMultipleUrls($file, $url . "?pmin=1&start=301&sz=60&format=ajax");
+    	$subUrl = substr($url, 0, strpos($url, "?"));
+    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=0&sz=60&format=ajax");
+    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=61&sz=60&format=ajax");
+    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=121&sz=60&format=ajax");
+    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=181&sz=60&format=ajax");
+    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=241&sz=60&format=ajax");
+    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=301&sz=60&format=ajax");
 	}	 		 
 	
-	else if (strpos($_REQUEST['u'],"lordandtaylor")){
+	else if (strpos($url,"lordandtaylor")){
     	// Combine multiple url <body> into one
-    	$file = combineMultipleUrls($file, $_REQUEST['u']);
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "?beginIndex=100");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "?beginIndex=200");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "?beginIndex=300");
-    	$file = combineMultipleUrls($file, $_REQUEST['u'] . "?beginIndex=400");	
+    	$file = combineMultipleUrls($file, $url);
+    	$file = combineMultipleUrls($file, $url . "?beginIndex=100");
+    	$file = combineMultipleUrls($file, $url . "?beginIndex=200");
+    	$file = combineMultipleUrls($file, $url . "?beginIndex=300");
+    	$file = combineMultipleUrls($file, $url . "?beginIndex=400");	
 	}	
 
     // only strip starting and ending body if the body tag exists (could be in json format)	

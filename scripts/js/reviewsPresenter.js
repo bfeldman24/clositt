@@ -15,40 +15,62 @@ var reviewsPresenter = {
 	 },
 	 
 	 showReview: function(e){
-	       var targetOutfit = $(e.target).parent().parent().parent().parent().parent();
-	       var sku = targetOutfit.find('a[pid]').first().attr("pid");
+	       var targetOutfit = $(e.target).parents(".item");
+	       var sku = targetOutfit.attr("pid");
 	       var reviewBlock = reviewsPresenter.getReviewBlock(sku);
 	       
 	       if(reviewBlock.is(":visible")){	 	 		 	
 	 	 	       reviewsPresenter.hideReview(reviewBlock);	 	   
 	 	   }else{	 	   	 	 	  	 	       	 	
 	 	       targetOutfit.find(".product-comments").html(reviewBlock);
-	 	              	 	       
+	 	       
+	 	       reviewBlock.find(".review-comments").html("");       	 	       
       	 	   reviewBlock.find(".review-rating").attr("userRating",0);      	 	   
       	 	   reviewsPresenter.refreshRating(reviewBlock, 0);
-      	 	   reviewsPresenter.showAverageRating(reviewBlock);
+      	 	   //reviewsPresenter.showAverageRating(reviewBlock);
+      	 	         	 	   	
+      	 	   reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);       	 	        	 	         	 	        	 	   
+      	 	   reviewsPresenter.currentReviewFB.on('child_added', reviewsPresenter.addReview);	
       	 	   
-      	 	   reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);      	 	         	 	        	 	   
-      	 	   reviewsPresenter.currentReviewFB.on('child_added', reviewsPresenter.addReview);	 
-	 	 	   
-    	       reviewBlock.show('blind');
+      	 	   //reviewBlock.show('blind');
+    	       reviewBlock.show(); 
 	 	   }
 	 },
-	 	 
+	 
+	 populateProductPageReview: function(targetOutfit, sku){
+	       var reviewBlock = reviewsPresenter.getReviewBlock(sku + "pp");
+	       targetOutfit.find(".product-comments").html(reviewBlock);
+	 	   
+ 	       reviewBlock.find(".review-comments").html("");       	 	       
+	 	   reviewBlock.find(".review-rating").attr("userRating",0);      	 	   
+	 	   reviewsPresenter.refreshRating(reviewBlock, 0);	 	   	 	   
+
+	 	         	 	   	
+	 	   reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);       	 	        	 	         	 	        	 	   
+	 	   reviewsPresenter.currentReviewFB.on('child_added', reviewsPresenter.addReviewForProductPage);	 
+ 	 	   
+	       //reviewBlock.show('blind');
+	       reviewBlock.show();
+	 },
+
 	 hideReview:function(review){
 	     if (reviewsPresenter.currentReviewFB != null){
      	     reviewsPresenter.currentReviewFB.off('child_added', reviewsPresenter.addReview);	
      	     reviewsPresenter.currentReviewFbUrl = null;
 	     }
- 	     
+
  	     if(review != null && review.is(":visible")){
 	 	 	   review.hide('blind');
-	 	 	   review.find(".review-comments").html("");
+	 	 	   
+	 	 	   setTimeout(function() {
+                  review.find(".review-comments").html("");
+                },300);
+	 	 	   
  	     }
 	 },	 	 
-	 
+
 	 saveReview: function(e){
-	    var targetOutfit = $(e.target).parent().parent().parent().parent().parent();
+	    var targetOutfit = $(e.target).parents(".item");
 	   
 	 	var comment = targetOutfit.find(".review-add-comment").val();
 	 	
@@ -65,7 +87,7 @@ var reviewsPresenter = {
 		 	var rating = targetOutfit.find(".review-rating").attr("userRating");
 		 	rating = rating == undefined ? 0 : rating;
 		 	
-		 	var sku = targetOutfit.find('a[pid]').first().attr("pid");
+		 	var sku = targetOutfit.attr("pid");
 		 	reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);	 	 	
 		 	reviewsPresenter.currentReviewFB.push({name:user, rating:rating, comment: comment, date:nowString, sku:sku});	 	
 		 	
@@ -83,7 +105,8 @@ var reviewsPresenter = {
 		 	        newValue = value +1;		 	        
 		 	   } 		 	            
 		 	   
-		 	   targetOutfit.find(".numReviews > .counter").text(newValue);
+		 	   $('.item[pid="'+sku+'"]').find(".numReviews > .counter").text(newValue);
+		 	   targetOutfit.find(".productPageCommentCount").text("("+newValue+")");
 		 	   productPresenter.clothingStore[sku].rc = newValue;
 		 	   return newValue;       
             });
@@ -114,7 +137,37 @@ var reviewsPresenter = {
 				)
 			);
 			
-			reviewsPresenter.showAverageRating(reviewBlock);	
+			//reviewsPresenter.showAverageRating(reviewBlock);	
+		}	
+	 },
+	 
+	 addReviewForProductPage: function(snapshot){
+		var review = snapshot.val();
+		if(review != null){		
+		    var reviewBlock = reviewsPresenter.getReviewBlock(review.sku + "pp");		  	
+			
+			if(!reviewBlock.find(".review-comments > li").length){
+				reviewBlock.find(".review-comments").html("");	
+			}
+				
+			reviewBlock.find(".review-comments").append(
+				$("<li>").append(
+					reviewsPresenter.getReviewHeader(review)
+				).append(				
+					$("<span>").addClass("review-text").append( 
+					   $("<span>").addClass("review-comment-user").text(review.name + ": ")
+					).append(
+					   $("<pre>").text(review.comment) 
+					)
+				)
+			);
+			
+		   //reviewsPresenter.showAverageRating(reviewBlock);
+		   var targetOutfit = reviewBlock.parents(".item");
+		   var aveRating = reviewsPresenter.showAverageRating(targetOutfit);	 	   
+	 	   aveRating = aveRating > 0 ? aveRating : 0;
+	 	   var aveRatingBlock = reviewsPresenter.getReviewRating(aveRating, 'large');
+	 	   targetOutfit.find(".productPageRating .review-average-stars").html(aveRatingBlock);
 		}	
 	 },
 	 
@@ -136,31 +189,32 @@ var reviewsPresenter = {
 	 	);
 	 },	 	 
 	 
-	 getReviewRating: function(numStars){
+	 getReviewRating: function(numStars, size){
+	    size = size == null ? 'small' : size;
 	 	var rating = $("<span>").addClass("review-comment-rating").attr("rating",numStars);
 	 	var count = 0;
 	 	
-	 	if(numStars == null || numStars <= 0 || numStars > 5){
+	 	if(numStars == null || numStars < 0 || numStars > 5){
 	 	     return null;
 	 	}
 	 	
 	 	for(var r=1; r <= numStars; r++){
 	 		rating.append(
-	 			$("<i>").addClass("star-small-full")
+	 			$("<i>").addClass("star-"+size+"-full")
 	 		);
 	 		count++;
 	 	}	
 	 	
 	 	if(count < 5 && numStars % .5 == 1){
 	 		rating.append(
-	 			$("<i>").addClass("star-small-half")
+	 			$("<i>").addClass("star-"+size+"-half")
 	 		)
 	 		count++;
 	 	}
 	 	
 	 	while(count < 5){
 	 		rating.append(
-		 		$("<i>").addClass("star-small-empty")
+		 		$("<i>").addClass("star-"+size+"-empty")
 		 	)
 	 		count++;
 	 	}		 		 		 		 		 	
@@ -169,17 +223,15 @@ var reviewsPresenter = {
 	 },
 	 
 	 showAverageRating: function(review){	 	
-	    // remove to get average rating
-	    return null;
 	    
 	 	var aveRating = reviewsPresenter.getAverageRating(review);		 	
 		
 		if(aveRating >= 0 && aveRating <=5){
-		 	review.find(".review-average").text(aveRating);
-		 	review.find(".review-average").show();
+		 	review.find(".review-average").text("("+aveRating+")");
+		 	//review.find(".review-average").show();
 		}else{
-			review.find(".review-average").text(0);
-		 	review.find(".review-average").hide();
+			review.find(".review-average").text("(0)");
+		 	//review.find(".review-average").hide();
 		}
 	 	
 //	 	if(userRating == undefined || isNaN(userRating) || userRating <= 0){	 	
@@ -191,6 +243,8 @@ var reviewsPresenter = {
 //		 		reviewsPresenter.refreshRating(0);
 //		 	}	 		 		 		
 //	 	}
+
+        return aveRating;
 	 },
 	 
 	 getAverageRating: function(review){	 
@@ -287,11 +341,11 @@ var reviewsPresenter = {
 	   
 	   for (var i=1; i <= 5; i++){
 	       reviewRating.append(
-                $("<i>").addClass("review-star star-small-empty").attr("star",i)
+                $("<i>").addClass("review-star star-small-empty").attr("star", i)
             )
-	   }
+	   }	   	   
 	   
-	   //reviewRating.append($("<span>").addClass("review-average label label-info").text("0"));    
+	   //reviewRating.append($("<span>").addClass("review-average label label-info").text("0"));     
 	   	   
        var reviewBlock = $("<div>").attr("id",id + "-review-float").addClass("review-float").css("display","none").append(
             $("<div>").addClass("review-form").append(

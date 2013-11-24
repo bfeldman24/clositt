@@ -194,7 +194,7 @@ var closetPresenter = {
 	},
 	
 	removeOutfit: function(el){
-		var sku = $(el.currentTarget).prev("a").attr("pid");
+		var sku = $(el.currentTarget).parents(".item").attr("pid");
 		var closetName = $(el.currentTarget).parent().parent().parent().parent().prev(".closetName").find("input").attr("original");
 		var closetId = $(el.currentTarget).parent().parent().parent().parent().prev(".closetName").find("input").attr("closetid");
 		
@@ -292,14 +292,15 @@ var closetFormPresenter = {
 			
 			var element = el.currentTarget;					
 			
-			if($(element).parent().parent().find("form").length > 0){
+			if($(element).parents(".item").find(".addToClosetForm > form").length > 0){
 				$(element).children(".hanger-plus").addClass("icon-white");
-				$parent = $(element).parent().parent();
-				$parent.children(".addToClosetForm").tooltip('destroy');
-				$parent.children(".addToClosetForm").remove();
-				$parent.children(".addTagForm").tooltip('destroy');
-				$parent.children(".addTagForm").remove();
-				$parent.children(".bottom").show();			
+				var $parent = $(element).parents(".item");
+				var $closittForm = $parent.find(".addToClosetForm");
+				$closittForm.tooltip('destroy');
+				$closittForm.html("").hide();
+				$parent.find(".addTagForm").tooltip('destroy');
+				$parent.find(".addTagForm").html("").hide();
+				$parent.find(".bottom").show();			
 			}else{
 				$(element).children(".hanger-plus").removeClass("icon-white");			
 				var $checkboxes = $();		
@@ -308,7 +309,7 @@ var closetFormPresenter = {
 					var $input = $("<input>").attr("type","radio").attr("name","closet").attr("value",closetFormPresenter.closetIds[i])
 					                   .attr("closetName",closetFormPresenter.closetNames[i]);
 
-					var index = closetFormPresenter.closetItems.indexOf($(element).children("img").attr("id").substring(7)); // hanger- = 7
+					var index = closetFormPresenter.closetItems.indexOf($(element).parents(".item").attr("pid"));
 					if(index >= 0 && index < closetFormPresenter.closetItemsMapping.length &&
 						closetFormPresenter.closetNames[i] == closetFormPresenter.closetItemsMapping[index]){
 						$input.attr("checked","checked");
@@ -322,25 +323,24 @@ var closetFormPresenter = {
 					);
 				}		
 				
-				$(element).parent().next(".bottom").hide();
+				$(element).parents(".item").find(".bottom").hide();
 						
-				$(element).parent().parent().append(
-					$("<div>").addClass("addToClosetForm").append(
-						$("<form>").append(
-							$("<div>").addClass("controls").append(
-								$("<label>").addClass("control-label").text("New Clositt: ").append(						
-									$("<input>").attr("type","text").attr("name","newCloset").addClass("newCloset")
-								)
+				$(element).parents(".item").find(".addToClosetForm").append(
+					$("<form>").append(
+						$("<div>").addClass("controls").append(
+							$("<label>").addClass("control-label").text("New Clositt: ").append(						
+								$("<input>").attr("type","text").attr("name","newCloset").addClass("newCloset")
 							)
-						).append(
-							$("<div>").addClass("selectCloset").append($checkboxes)
-						).append(
-							$("<input>").attr("type","submit").css("display","none")				
 						)
+					).append(
+						$("<div>").addClass("selectCloset").append($checkboxes)
+					).append(
+						$("<input>").attr("type","submit").css("display","none")				
 					)
 				);
 				
-				var $closetForm = $(element).parent().parent().children(".addToClosetForm");
+				$(element).parents(".item").find(".addToClosetForm").show();
+				var $closetForm = $(element).parents(".item").find(".addToClosetForm");
 				
 				$closetForm.tooltip({title:"Press Enter to add item",placement:"bottom"});
 				$closetForm.show();
@@ -350,7 +350,7 @@ var closetFormPresenter = {
 	
 	addToCloset: function(el){
 		el.preventDefault();								
-		var sku = $(el.currentTarget).parent().parent().prev().find("a").attr("pid");
+		var sku = $(el.currentTarget).parents(".item").attr("pid");
 		
 		var closetName = $(el.currentTarget).find('input[name="newCloset"]').val();
 		var closetId = $(el.currentTarget).find('input[name="closet"]:checked').val();				
@@ -387,7 +387,7 @@ var closetFormPresenter = {
 	
 	addToWishList: function(el){	    
 	    el.preventDefault();								
-		var sku = $(el.currentTarget).parents(".outfit").find('a[pid]').attr("pid");
+		var sku = $(el.currentTarget).parents(".item").attr("pid");
 		var closetName = "Wish List";
 		
 		var index = closetFormPresenter.closetItems.indexOf(sku);

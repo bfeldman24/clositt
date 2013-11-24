@@ -58,5 +58,38 @@ var closetRearranging = {
                 });
             });              
         });		
-    }   
+    },
+    
+    resetCommentCount: function(){
+        // clear all products
+        firebase.$.child("clositt/products").once('value', function(products){                        
+            products.forEach(function(product){
+                var sku = product.name();
+                var item = product.val();                
+                firebase.$.child("clositt/products").child(sku).child("rc").set(0, function(error){
+                    if (error){
+                        console.log("Product: " + sku + " FAILED RESETTING COUNT");
+                    }else{
+                        console.log("Product: " + sku + " RESET COUNT");
+                    } 
+                });                             
+            });                                       
+        });	
+        
+        // Set comment count for all products
+        firebase.$.child("reviews").once('value', function(reviews){                        
+            reviews.forEach(function(review){
+                var sku = review.name();
+                var count = review.numChildren();
+                                
+                firebase.$.child("clositt/products").child(sku).child("rc").set(count, function(error){
+                    if (error){
+                        console.log("Product: " + sku + " FAILED UPDATING COUNT");
+                    }else{
+                        console.log("Product: " + sku + " UPDATED COMMENT COUNT");
+                    } 
+                });                             
+            });                                       
+        });		
+    },   
 }

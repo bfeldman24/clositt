@@ -132,11 +132,17 @@ var storeSetup = {
 	 	console.log(i + ") Saving " + Object.keys(obj).length + " " + cleanName  + "...");
 	 	$("body").append($("<div>").html(i + ") Saving " + Object.keys(obj).length + " " + cleanName + "..."));
 	 		 	
+	 	var count = 0;	 	
 		if(obj != null && Object.keys(obj).length > 0){																					
 			storeSetup.firebase.child(name).set(obj, function(error) {
 				  if (!error) {						
 						console.log(i + ") " + Object.keys(obj).length + " " + cleanName + " saved successfully. ");
 						$("body").append($("<div>").html(i + ") " + Object.keys(obj).length + " " + cleanName + " saved successfully."));
+						
+						count++;
+						if (count == 5){
+						  $("body").append($("<div>").html("DONE!"));  
+						}
 				  }
 			});
 			

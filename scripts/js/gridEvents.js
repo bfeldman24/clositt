@@ -25,7 +25,7 @@ var gridEvents = {
 			$(this).children(".overlay").not(".alwaysVisible").first().fadeOut('slow');
 			
 			if (reviewsPresenter != null){
-			     var sku = $(this).find('a[pid]').first().attr("pid");			     			     
+			     var sku = $(this).parents(".item").attr("pid");			     			     
 			     reviewsPresenter.hideReview(reviewsPresenter.getReviewBlock(sku));
 			}
 	}, 

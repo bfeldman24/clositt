@@ -67,20 +67,21 @@ var productPresenter = {
 			 			
  		//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
  		var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
-		var html ='<div class="outfit" '+attr+'>';
-				html +='<div class="picture"><a href="'+link+'" pid="'+id+'" target="_blank"><img src="' + image + '" class="'+shadow+'" onerror="return pagePresenter.handleImageNotFound(this)"/></a></div>';			
+		var html ='<div class="outfit item" '+attr+' pid="'+id+'">';
+				html +='<div class="picture"><a class="productPage" target="_blank"><img src="' + image + '" class="'+shadow+'" onerror="return pagePresenter.handleImageNotFound(this)"/></a></div>';			
 				html +='<div class="overlay">';
 					html +='<div class="topleft">';										
-						html +='<div class="tagOutfitBtn" data-toggle="tooltip" data-placement="left" title="Tagitt"><i class="icon-tags icon-white"></i></div>';
+						html +='<div class="tagOutfitBtn" data-toggle="tooltip" data-placement="left" title="Tagitt"><i class="icon-tags icon-white"></i></div>';						 
 					html += '</div>';
+					html += '<div class="addTagForm" style="display:none;"></div>';
 					html +='<div class="topright">';										
-						html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Clositt"><img id="hanger-'+id+'" class="hanger-icon" src="css/images/hanger-icon-white.png" /><i class="icon-plus-sign icon-white hanger-plus"></i></div>';
+						html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Clositt"><img class="hanger-icon" src="css/images/hanger-icon-white.png" /><i class="icon-plus-sign icon-white hanger-plus"></i></div>';
 					html += '</div>';
 					html +='<div class="bottom">';						    					    
 					    html += '<div class="productActions" >';					    
 					       html += '<span data-toggle="tooltip" data-placement="top" title="Add to Wish List" class="addToWishList"><i class="icon-gift icon-white"></i></span>';
 					       html += '<span data-toggle="tooltip" data-placement="top" title="Show Comments" class="showComments numReviews"><span class="counter" >'+reviewCount+'</span><i class="icon-comment icon-white"></i></span>';
-					       html += '<span data-toggle="tooltip" data-placement="top" title="Added to '+closetCount+' Clositt'+closetCountPlural+'" class="numClosets"><span class="counter">'+closetCount+'</span><i class="icon-heart icon-white"></i></span>';
+					       html += '<span data-toggle="tooltip" data-placement="top" title="Added to '+closetCount+' Clositt'+closetCountPlural+'" class="numClosets"><span class="counter">'+closetCount+'</span><i class="icon-hanger-white"></i></span>';
 					    html += '</div>';									
 					    
 					    if(feedOwner != null && feedCloset != null){
@@ -94,6 +95,7 @@ var productPresenter = {
 						html +='<div class="name">' + name + '</div>';
 					html += '</div>';
 					html += '<div class="product-comments"></div>';
+					html += '<div class="addToClosetForm" style="display:none;"></div>';
 				html += '</div>';
 				html += '<div class="clear"></div>';				
 			html +='</div>';
@@ -108,8 +110,8 @@ var productPresenter = {
 		var image = product.i;
 		var name = product.n;
 			 			
-		var html ='<div class="outfit">';
-				html +='<div class="picture"><a href="'+link+'" target="_blank" pid="'+sku+'"><img src="' + image + '" /></a></div>';							
+		var html ='<div class="outfit item" pid="'+sku+'">';
+				html +='<div class="picture"><a href="'+link+'" target="_blank" ><img src="' + image + '" /></a></div>';							
 				html +='<div class="overlay">';
 					html +='<div class="bottom">';										
 						html +='<div class="companyName">' + company + '</div>';

@@ -9,28 +9,26 @@ var tagPresenter = {
 	showTagForm: function(el){
 		var element = el.currentTarget;					
 		
-		if($(element).parent().parent().find(".addTagForm").length > 0){						
-			$(element).parent().parent().children(".addToClosetForm").tooltip('destroy');
-			$(element).parent().parent().children(".addToClosetForm").remove();
-			$(element).parent().parent().children(".addTagForm").tooltip('destroy');
-			$(element).parent().parent().children(".addTagForm").remove();
-			$(element).parent().parent().children(".topright").show();
+		if($(element).parents(".item").find(".addTagForm > form").length > 0){			    					
+			$(element).parents(".item").find(".addToClosetForm").tooltip('destroy');
+			$(element).parents(".item").find(".addToClosetForm").html("").hide();
+			$(element).parents(".item").find(".addTagForm").tooltip('destroy');
+			$(element).parents(".item").find(".addTagForm").html("").hide();
+			$(element).parents(".item").find(".topright").show();
 		}else{														
-			$(element).parent().siblings(".topright").hide();
+			$(element).parents(".item").find(".topright").hide();
 					
-			$(element).parent().parent().append(
-				$("<div>").addClass("addTagForm").append(
-					$("<form>").append(
-						$("<div>").addClass("controls").append(					
-							$("<input>").attr("type","text").attr("name","newTag").addClass("newTag")
-						)
-					).append(
-						$("<input>").attr("type","submit").css("display","none")				
+			$(element).parents(".item").find(".addTagForm").append(
+				$("<form>").append(
+					$("<div>").addClass("controls").append(					
+						$("<input>").attr("type","text").attr("name","newTag").addClass("newTag")
 					)
+				).append(
+					$("<input>").attr("type","submit").css("display","none")				
 				)
 			);
 			
-			var $tagForm = $(element).parent().parent().children(".addTagForm");
+			var $tagForm = $(element).parents(".item").find(".addTagForm");
 			
 			$tagForm.tooltip({title:"Press Enter to add tag",placement:"bottom"});
 			$tagForm.show();
@@ -41,7 +39,7 @@ var tagPresenter = {
 	addTag: function(el){
 		el.preventDefault();				
 		var element = el.currentTarget;
-		var itemid = $(element).parent().parent().prev().find("a").attr("pid");		
+		var itemid = $(element).parents(".item").attr("pid");		
 		var tagInput = $(element).find('input[name="newTag"]').val().trim();		
 				
 		if(tagInput.length > 0){								
@@ -53,8 +51,9 @@ var tagPresenter = {
 				  		Messenger.timeout = 1750;
 						Messenger.success('Tag \"'+tagInput+'\" was saved!');					
 						Messenger.timeout = Messenger.defaultTimeout;
-						$(element).parent().prevAll(".topright").show();
-						$(element).parent().remove();
+						$(element).parents(".item").find(".topright").show();
+						$(element).parents(".item").find(".addTagForm").html("").hide();
+						$(element).parents(".item").find(".addTagForm").tooltip('destroy');
 				  }
 				});	
 			}catch(err){

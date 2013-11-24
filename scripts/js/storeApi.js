@@ -560,7 +560,7 @@ storeApi = {
        $(data).find(".prodcontainer").each(function(){
                 var item = new Object();
 
-                item.image = siteHome + $(this).find(".img img").first().attr("src");
+                item.image = $(this).find(".img img").first().attr("src");
                 item.link = siteHome + $(this).find("a.img").first().attr("href");
                 item.price = $(this).find(".price").text().replace(/[a-zA-Z]*/g,'').trim();
                 item.name = $(this).find("h3 a").first().text().trim();
