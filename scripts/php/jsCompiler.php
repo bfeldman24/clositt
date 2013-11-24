@@ -55,6 +55,7 @@ $files = array("closetPresenter.js",
 "messenger.js",
 "pagePresenter.js",
 "productPresenter.js",
+"productPagePresenter.js",
 "reviewsPresenter.js",
 "searchController.js",
 "tagPresenter.js");
