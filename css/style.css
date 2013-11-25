@@ -1183,6 +1183,10 @@ h1 #user-closet-title{
     width: 100%;	
 }
 
+#closet-list .carousel .item{
+	display:block;
+}
+
 #closet-list .carousel .carousel-left,#closet-list .carousel .carousel-right,  .feedClosetItems .carousel .carousel-left,.feedClosetItems .carousel .carousel-right{
 	height: 260px;
     top: 0;
