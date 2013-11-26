@@ -180,7 +180,9 @@ storeApi = {
 			item.image = $(this).find(".arrayImg").find("img").attr("src");			
 			item.link = $(this).find(".arrayImg").find("a").attr("href");			
 			item.name = $(this).find(".arrayProdName").find("a").text().trim();				
-			item.price = $(this).find(".arrayProdPrice").text().trim();									     			
+			var price = $(this).find(".arrayProdPrice").text().trim();
+			priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
+			item.price = priceArr[priceArr.length -1];									     			
 			
 			if(item.image != undefined){    
 			    item.sku = 'jc' + item.link.substring(item.link.lastIndexOf("/")+1, item.link.lastIndexOf("."));

@@ -91,5 +91,17 @@ var closetRearranging = {
                 });                             
             });                                       
         });		
-    },   
+    },  
+    
+    renameFirebaseNode: function(path, oldNode, newNode){
+        firebase.$.child(path).child(oldNode).once('value', function(snapshot){                                    
+                firebase.$.child(path).child(newNode).update(snapshot.val(), function(error){
+                    if (error){
+                        console.log("Error updating node");
+                    }else{
+                        console.log("Successfully updated node");
+                    }
+                });
+        });
+    } 
 }
