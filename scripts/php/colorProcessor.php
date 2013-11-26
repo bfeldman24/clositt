@@ -55,13 +55,13 @@ var colorProcessor = {
 	   colorProcessor.getProducts(store.child('products').val());
 	},	
 	
-	getColorStore: function(store){
+	getColorStore: function(colorListing){
 	    var products = [];
 	    
 	    // Get flat product listing	 	
-	 	for(var color in store){	
-	 	     for(var sku in store[color]){
-	 	            products.push(store[color][sku]);
+	 	for(var color in colorListing){	
+	 	     for(var sku in colorListing[color]){
+	 	            products.push(sku);
 	 	     }
 	 	}
 	 	
@@ -200,7 +200,9 @@ var colorProcessor = {
          				  }else{
          						console.log("Color mapping was saved successfully. ");
          						$("body").append($("<div>").html("Color mapping was saved successfully."));
-         						$("body").append($("<div>").html("ALL DONE!!!"));         						
+         						$("body").append($("<div>").html("ALL DONE!!!"));      
+         						
+         						colorProcessor.firebase.child("store/colorCount").set(Object.keys(colorStore.colors).length);  
          				  }
          			});			
          		}else{
