@@ -1117,7 +1117,7 @@ footer .last{
 
 
 /* CLOSET PAGE */
-h1 #user-closet-title{
+h1 #user-closet-title, h1 #static-closet-title{
 	color: #434342;
     text-shadow: 3px 3px 3px #D0D0D0;	
     margin-left: 20px;

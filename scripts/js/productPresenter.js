@@ -105,12 +105,16 @@ var productPresenter = {
 	
 	getClosetItemTemplate: function(sku){
 	    var product = productPresenter.clothingStore[sku];	
-		var company = product.o;
-		var link = product.l;
-		var image = product.i;
-		var name = product.n;
-			 			
-		var html ='<div class="outfit item" pid="'+sku+'">';
+	    var html = '';
+	    
+	    if (product != null){
+	       
+    		var company = product.o;
+    		var link = product.l;
+    		var image = product.i;
+    		var name = product.n;
+    			 			
+    		html ='<div class="outfit item" pid="'+sku+'">';
 				html +='<div class="picture"><a href="'+link+'" target="_blank" ><img src="' + image + '" /></a></div>';							
 				html +='<div class="overlay">';
 					html +='<div class="bottom">';										
@@ -120,6 +124,7 @@ var productPresenter = {
 				html += '</div>';
 				html += '<div class="clear"></div>';				
 			html +='</div>';
+	    }
 			
 		return $(html);
 	},		

@@ -12,13 +12,7 @@
 
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
 <div id="main-content" class="container main-container" style="margin-top:80px">
-	<h1><span id="user-closet-title"></span></h1>
-	
-	<?php if(!isset($_GET['user'])){ ?>
-		<div id="closet-settings"><i class="minicon-single settings-minicon"></i></div>
-		<div id="closet-share"><i class="minicon-single share-freeiconsweb"></i></div>
-	<?php } ?>
-
+	<h1><span id="static-closet-title">Clositt's Holiday Guide</span></h1>
 	<div id="closet-list"></div>
 </div>
 
@@ -26,18 +20,12 @@
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 <div id="closetId" style="display:none;"><?php echo $_GET['user'];?></div>
 <script type="text/javascript">
-<?php if(isset($_GET['user'])){ ?>
+
 $(document).ready(function(){     
-    closetPresenter.setUser(<?php echo $_GET['user']; ?>);
+    closetPresenter.setUser(104);
     pagePresenter.init();    
     productPresenter.populateStore(closetPresenter.init);        		
  });
-<?php }else{ ?>
-function userDataReady(user){    
-    pagePresenter.init();    
-    productPresenter.populateStore(closetPresenter.init);        
-}
-<?php } ?>
 
 function loggedOut(){
 	location.href = "<?php echo HOME_ROOT; ?>";
@@ -45,7 +33,7 @@ function loggedOut(){
 
 
 $("#subheader-navbar li a").removeClass();
-$('#subheader-navbar li a[href="clositt.php"]').addClass("active");
+$('#subheader-navbar li a[href="holiday-guide.php"]').addClass("active");
 </script>
 
 </body>

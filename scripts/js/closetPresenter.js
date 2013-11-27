@@ -6,8 +6,11 @@ var closetPresenter = {
 	wishListClosetId: 2,
 
 	init: function(){
-		var u = closetPresenter.user == undefined ? undefined : closetPresenter.user.toString().replace(closetPresenter.share,'');
-		closetPresenter.getClosets(u);
+	    if (closetPresenter.user != null){
+		  closetPresenter.user =  closetPresenter.user.toString().replace(closetPresenter.share,'');
+	    }
+	    
+		closetPresenter.getClosets();
 		$(document).on("mousedown",".carousel-left", closetPresenter.leftAnimation);
 		$(document).on("mousedown",".carousel-right", closetPresenter.rightAnimation);
 		$(document).on("mouseup",".carousel-left", closetPresenter.stopCarouselLeft);
@@ -28,7 +31,9 @@ var closetPresenter = {
 		if(closetPresenter.user != undefined){
 			firebase.$.child(firebase.userPath).child(closetPresenter.user).child("closets").once('value', closetPresenter.showClosets);
 			firebase.$.child(firebase.userPath).child(closetPresenter.user).child("name").once('value', function(data){
-				$("#user-closet-title").text(data.val() + "'s Clositt");
+    			 if (data.val() != null){
+    				$("#user-closet-title").text(data.val() + "'s Clositt");
+    			 }
 			});
 		}else if(firebase.isLoggedIn){
 			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").once('value', closetPresenter.showClosets);		
