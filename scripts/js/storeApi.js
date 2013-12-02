@@ -29,9 +29,8 @@ storeApi = {
 		return newUrl;
 	},
 	
-	getProducts: function(company, data, url){
-		var home = url.substring(0,url.indexOf(".com")+4);
-		
+	getProducts: function(company, data, url){	   	   
+		var home = url.substring(0, url.indexOf("/", url.indexOf(".")));		
 		var products = "";
 		
 		switch(company.toLowerCase()){
@@ -472,6 +471,7 @@ storeApi = {
                 item.link = siteHome + $(this).find(".info a").first().attr("href");                
                 item.price = $(this).find(".info > .price.regular").text().trim();
                 item.price += " " + $(this).find(".info > .price.sale").text().trim();
+                item.price = item.price.trim();
                 item.name = $(this).find(".fashion-photo img").first().attr("alt");
 
                 if(item.image != undefined){
@@ -494,7 +494,7 @@ storeApi = {
 
                 item.image = $(this).find(".product-img").first().attr("src");
                 item.link = siteHome + $(this).find(".name a").first().attr("href");                
-                item.price = $(this).find(".pricing").text().trim();
+                item.price = $(this).find(".pricing").text().replace(/([a-zA-Z$ ])*(\s)+/g, ' ').trim();
                 item.name = $(this).find(".name a").first().text();
 
                 if(item.image != undefined){
@@ -519,6 +519,7 @@ storeApi = {
                 item.link = $(this).find("a.pro_img").first().attr("href");                
                 item.price = $(this).find(".pro_price_black").text().trim();
                 item.price += " " + $(this).find(".pro_price_red").text().replace(/[a-zA-Z]*/g,'').trim();
+                item.price = item.price.trim();
                 item.name = $(this).find(".pro_pic img").first().attr("alt");
 
                 if(item.image != undefined){
@@ -543,6 +544,7 @@ storeApi = {
                 item.link = $(this).find(".product-image a.thumb-link").first().attr("href");
                 item.price = $(this).find(".product-pricing .normal-price").text().trim();
                 item.price += " " + $(this).find(".product-pricing .product-sales-price").text().trim();
+                item.price = item.price.trim();
                 item.name = $(this).find(".product-image .thumb-link img").first().attr("alt");
 
                 if(item.image != undefined){

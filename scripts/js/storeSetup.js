@@ -58,7 +58,7 @@ var storeSetup = {
 							var product = productSnapshot.val();
 							
 							// get Price and filer price					
-							var priceArray = product.price.split(/[\s-]+/);
+							var priceArray = product.price.trim().split(/[\s-]+/);
 							var finalPrice = parseFloat(priceArray[priceArray.length - 1].replace(/[^0-9\.]+/g,""));
 							
 							var filterPrice = Math.floor(finalPrice/50)*50;
