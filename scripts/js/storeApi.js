@@ -515,7 +515,7 @@ storeApi = {
        $(data).find("#ProductsList #totproductsList").children("li").each(function(){
                 var item = new Object();
 
-                item.image = siteHome + $(this).find(".pro_pic img").first().attr("src");
+                item.image = $(this).find(".pro_pic img").first().attr("data-original");
                 item.link = $(this).find("a.pro_img").first().attr("href");                
                 item.price = $(this).find(".pro_price_black").text().trim();
                 item.price += " " + $(this).find(".pro_price_red").text().replace(/[a-zA-Z]*/g,'').trim();
@@ -566,8 +566,10 @@ storeApi = {
 
                 item.image = $(this).find(".img img").first().attr("src");
                 item.link = siteHome + $(this).find("a.img").first().attr("href");
-                item.price = $(this).find(".price").text().replace(/[a-zA-Z]*/g,'').trim();
                 item.name = $(this).find("h3 a").first().text().trim();
+                var price = $(this).find(".price").text().replace(/[a-zA-Z£$]*/g,'').trim();
+                priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
+    			item.price = priceArr[0];                                
 
                 if(item.image != undefined){
                    item.sku = 'ct' + $(this).attr("id");
