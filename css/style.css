@@ -1510,7 +1510,7 @@ input.closetNameInput[type="text"] {
     border: 5px solid #00BA6C;
     min-height: 400px;
     left: 200px;
-    position: absolute;
+    position: fixed;
     text-align: center;
     top: 75px;
     width: 900px;
