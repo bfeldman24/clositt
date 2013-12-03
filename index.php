@@ -35,6 +35,10 @@
       	</form>
     </div>
     
+    <div id="center-featured">
+        Check out our <a href="holiday-guide.php">Holiday Shopping Guide</a>
+    </div>
+    
     <div id="main-content" class="container main-container">
         <div id="loadingMainContent"><img src="css/images/loading.gif"/></div>
         <div id="product-grid"></div>

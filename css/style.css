@@ -1373,6 +1373,17 @@ input.closetNameInput[type="text"] {
     font-weight: 200;
 }
 
+
+#center-featured{
+    font-size: 30px; 
+    font-weight: lighter;   
+}
+
+#center-featured > a{
+    color: rgb(0, 158, 92); 
+    font-weight: bold;
+}
+
 /* --------- ER CODE -------- */
 #subheader-navbar li #soon{
     background-color: #00B058;
