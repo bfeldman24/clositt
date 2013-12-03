@@ -140,7 +140,6 @@ var gridPresenter = {
 				productPresenter.productIndex += numElements;				
 				$("#product-grid").append($items);								
 				gridPresenter.alignDefaultGrid();
-				$("#loadingMainContent").hide();	
 			}		
 		}
 	},

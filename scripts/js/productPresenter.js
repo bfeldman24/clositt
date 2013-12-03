@@ -1,4 +1,5 @@
 var productPresenter = {	
+    isLoaded: false,
 	splitValue: 30, 
 	productIndex: 0,
 	clothingStore: [], 

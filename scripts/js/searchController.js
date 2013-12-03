@@ -321,8 +321,7 @@ var searchController = {
     },    
     
     getProductsWithTag: function(tagName, callback){	                        
-		$("#product-grid").children().remove();
-		$("#loadingMainContent").show();
+		gridPresenter.beginTask();
 		    
 		firebase.$.child("store/tags").once('value',function(snapshot){
 		    var results = {};
@@ -357,7 +356,7 @@ var searchController = {
 	showResults: function(products){	  
 	    products = searchController.orderResults(products);	    
 		productPresenter.filterStore = products;
-		$("#loadingMainContent").hide();
+		gridPresenter.endTask();
 		
 		if( Object.keys(products).length > 0){
 		    productPresenter.refreshFilteredProducts();
@@ -456,8 +455,8 @@ var searchController = {
 	
 	clearSearch: function(el){
 		el.preventDefault();
-		$( "#search-bar" ).val("");
-		$("#loadingMainContent").show();
+		gridPresenter.beginTask();
+		$( "#search-bar" ).val("");		
 		$("#search-clear-btn").hide();
 		filterPresenter.clearFilters();
 		
