@@ -271,6 +271,144 @@ footer p{
 	margin-bottom: 0;
 }	
 
+footer{
+	position:fixed;
+	bottom:0;
+	height: 30px;
+	color: #FFFFFF;
+	border-top: none;
+    box-shadow: 0 1px 5px #888888;
+    margin-top: 0px;
+    padding: 0px;
+    z-index: 100;			
+	
+}
+
+footer .footer-item{
+	float:left;
+	position:relative;
+	left: -50%;
+	padding: 5px 10px;
+	border-left: 1px solid #009e5c;	
+}
+
+footer a{
+	color:#FFFFFF;
+}
+
+footer a:hover{
+	/* background-color: #14B770; */
+	color: #FFFFFF;		  
+	border-radius: 5px 5px 5px 5px;	
+}
+
+footer > #footer-filter{
+	cursor: pointer;
+    float: left;
+    height: 100%;
+    padding: 7px 10px;
+}
+
+footer > #footer-filter .icon-chevron-down{
+	opacity: 1;	
+	float: none;
+	margin:0;
+}
+	
+footer > .center{
+	margin-left:20%;	
+}
+
+footer .last{
+	border-right: 1px solid #009e5c;	
+}
+
+#footer {
+	width:100%;
+	height:80px;
+	position:absolute;
+	bottom:0;
+	left:0;
+	background:#ee5;
+}
+
+#footer-wrapper{
+	position: relative; 
+	float: left; 
+	left: 50%;
+}
+
+.feedback{
+    bottom: 3px;
+    position: fixed;
+    right: 5px;
+    width: 145px;   
+}
+
+.feedback-popup{
+    background: none repeat scroll 0 0 #444444;
+    bottom: 45px;
+    height: 105px;
+    position: absolute;
+    right: 5px;
+    width: 145px;
+    border-radius: 8px;
+}
+
+.feedback-popup > .feedback-textarea {
+    margin: 0 10px;
+    position: absolute;
+    top: 10px;
+    width: 125px;
+}
+
+.feedback .arrow-down {
+	border-left: 20px solid rgba(0, 0, 0, 0);
+    border-right: 20px solid rgba(0, 0, 0, 0);
+    border-top: 20px solid #444444;
+    bottom: 28px;
+    height: 0;
+    position: absolute;
+    right: 20px;
+    width: 0;
+    z-index: 999;
+}
+
+.feedback .feedback-submit-btn, .feedback .feedback-minimized-btn{
+    bottom: 1px;
+    position: absolute;
+    right: 15px;   
+}
+
+.feedbackMinimize {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 4px solid #444444;
+    border-radius: 15px;
+    bottom: 132px;
+    color: #666666;
+    cursor: pointer;
+    font-weight: bold;
+    height: 13px;
+    padding: 0 0 2px;
+    position: absolute;
+    right: -1px;
+    width: 15px;
+}
+
+.feedbackMinimize:hover {
+    background: none repeat scroll 0 0 #DFDFDF;
+}
+
+.feedbackMinimize:active {
+    background: none repeat scroll 0 0 #BFBFBF;
+}
+
+.minimize {
+    left: 5px;
+    position: relative;
+    top: -4px;   
+}
+
 /*** CUSTOM ICONS ***/
 
 .icon-bent-arrow-left-up {
@@ -656,15 +794,6 @@ footer p{
 	height: auto !important;
 }
 
-#footer {
-	width:100%;
-	height:80px;
-	position:absolute;
-	bottom:0;
-	left:0;
-	background:#ee5;
-}
-
 #left-nav{	
 	left: 20px;	
 	position: absolute;	
@@ -1004,58 +1133,6 @@ ul.review-comments span.review-comment-user{
 	background: url("images/star-large.png") no-repeat scroll 0 0 / 78px 25px transparent
 }
 
-footer{
-	position:fixed;
-	bottom:0;
-	height: 30px;
-	color: #FFFFFF;
-	border-top: none;
-    box-shadow: 0 1px 5px #888888;
-    margin-top: 0px;
-    padding: 0px;
-    z-index: 100;			
-	
-}
-
-footer > div > div{
-	float:left;
-	position:relative;
-	left: -50%;
-	padding: 5px 10px;
-	border-left: 1px solid #009e5c;	
-}
-
-footer a{
-	color:#FFFFFF;
-}
-
-footer a:hover{
-	/* background-color: #14B770; */
-	color: #FFFFFF;		  
-	border-radius: 5px 5px 5px 5px;	
-}
-
-footer > #footer-filter{
-	cursor: pointer;
-    float: left;
-    height: 100%;
-    padding: 7px 10px;
-}
-
-footer > #footer-filter .icon-chevron-down{
-	opacity: 1;	
-	float: none;
-	margin:0;
-}
-	
-footer > .center{
-	margin-left:20%;	
-}
-
-footer .last{
-	border-right: 1px solid #009e5c;	
-}
-
 .popover.override{
     left: 5px !important;
     position: fixed;
@@ -1093,12 +1170,6 @@ footer .last{
 #user-name{
 	font-size: 16px;
     text-shadow: none;
-}
-
-#footer-wrapper{
-	position: relative; 
-	float: left; 
-	left: 50%;
 }
 
 .pageEndSpacer{

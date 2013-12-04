@@ -10,7 +10,7 @@
 	            </ul>
 	            
 	            <div id="misc-header-links">
-    	            <a href="contact-us.php">Feedback</a>    	            
+    	            <?php /* <a href="contact-us.php">Feedback</a> */ ?>
 	            </div>        
 	            
 	            <div id="user-dropdown">
