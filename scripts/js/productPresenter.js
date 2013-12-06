@@ -1,5 +1,6 @@
 var productPresenter = {	
     isLoaded: false,
+    initialLoad: 150,
 	splitValue: 30, 
 	productIndex: 0,
 	clothingStore: [], 
@@ -7,14 +8,37 @@ var productPresenter = {
 	populateStoreCallback: null,	
 	
 	init: function(){		
-		firebase.$.child('clositt').once('value', productPresenter.setup);	 	 
+		firebase.$.child('clositt/filterdata').once('value', productPresenter.populateFilterData);	 
+		
+		//var starting = parseInt(Math.random() * 15000);	 
+		firebase.$.child('clositt/products').startAt().limit(productPresenter.initialLoad).once('value', productPresenter.showInitialProducts);		
 	},
 	
-	setup: function(snapshot){		
-		productPresenter.showCompanyProducts(snapshot);
+	populateFilterData: function(store){		
+		var companies = store.child("companies").val();
+	 	var customers = store.child("customers").val();
+	 	var categories = store.child("categories").val();
+	 	var prices = store.child("prices").val();										 		 	
+	 	filterPresenter.createFilters(companies, customers, categories, prices);		
+	},
+	
+	showInitialProducts: function(snapshot){		
+	    productPresenter.populateProducts(snapshot.val());
+		productPresenter.refreshProducts();
 	 	gridPresenter.alignDefaultGrid();
 		$('body').css("min-height",$(window).height());	
 		productPresenter.productIndex += productPresenter.splitValue;	
+		
+        // Get the rest of the products
+        $.getJSON(firebase.url + "/clositt/products.json?callback=?", function( data ) {
+            console.log("GO SHOP!");
+           productPresenter.populateProducts(data);
+        });
+	},
+	
+	populateProducts: function(store){
+	   productPresenter.clothingStore = store;	
+	   productPresenter.filterStore = productPresenter.clothingStore;
 	},
 	
 	populateStore: function(callback){
@@ -28,19 +52,7 @@ var productPresenter = {
 	   if (productPresenter.populateStoreCallback != null && typeof productPresenter.populateStoreCallback == 'function'){
 	       productPresenter.populateStoreCallback();
 	   }	   	   
-	},	
- 
- 	showCompanyProducts: function(store){	 		 	
-	 	productPresenter.clothingStore = store.child("products").val();	
-	 	productPresenter.filterStore = store.child("products").val();	
-	 	var companies = store.child("companies").val();
-	 	var customers = store.child("customers").val();
-	 	var categories = store.child("categories").val();
-	 	var prices = store.child("prices").val();									
-	 		 	
-        productPresenter.refreshProducts();	 	
-	 	filterPresenter.createFilters(companies, customers, categories, prices);
-	 },
+	},	  	
  
 	getProductTemplate: function(sku){
 	    sku = productPresenter.formatSku(sku);

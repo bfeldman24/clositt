@@ -9,6 +9,5 @@
 <script src="<?php echo HOME_ROOT; ?>lib/js/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="<?php echo HOME_ROOT; ?>lib/js/bootstrap.min.js"></script>
 
-
-<script src='https://cdn.firebase.com/v0/firebase.js'></script>
-<script type='text/javascript' src='https://cdn.firebase.com/v0/firebase-simple-login.js'></script>
+<script src='https://cdn.firebase.com/v0/firebase.js' type='text/javascript'></script>
+<script src='https://cdn.firebase.com/v0/firebase-simple-login.js' type='text/javascript'></script>

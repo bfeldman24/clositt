@@ -3,8 +3,12 @@ var storeSetup = {
 	success: "",
 	firebase: null,
 	clothingStore: null,
+	startTime: null,
+	endTime: null,
 
 	setup: function(){	    
+	    var d = new Date();
+	    storeSetup.startTime = d.getTime();
 		console.log("Initializing... Please be patient this could take a few minutes...");
 		$("body").append($("<div>").html("Initializing... Please be patient this could take a few minutes..."));
 		storeSetup.firebase = new Firebase('https://clothies.firebaseio.com');
@@ -15,13 +19,22 @@ var storeSetup = {
 	   // load current store
 	   storeSetup.clothingStore = store.child("products").val();
 	   
+	   var d = new Date();
+	   storeSetup.endTime = d.getTime();	   
+	   $("body").append($("<div>").html("Loaded previously saved products in " + ((storeSetup.endTime - storeSetup.startTime) / 1000) + " seconds"));
+	   	   	   
 	   // get new products and save
+	   storeSetup.startTime = storeSetup.endTime;
 	   storeSetup.firebase.child('store/products').once('value', storeSetup.getProducts);	 	 
 	},	
  
  	getProducts: function(store){	 
- 		console.log("Getting products...");
- 		$("body").append($("<div>").html("Getting products..."));
+ 	   var d = new Date();
+	   storeSetup.endTime = d.getTime();	   
+	   $("body").append($("<div>").html("Loaded new products in " + ((storeSetup.endTime - storeSetup.startTime) / 1000) + " seconds"));
+ 	  
+ 		console.log("Going over all of the products...");
+ 		$("body").append($("<div>").html("Going over all of the products..."));
 		var productListing = new Object();	
 	 	var companies = new Array();
 	 	var customers = new Array();
@@ -92,8 +105,8 @@ var storeSetup = {
 	 	d = new Date();
 	 	var endTime = d.getTime();
 	 	
-	 	console.log("Loaded " + productListing.length + " products in " + ((endTime - startTime) / 1000) + " seconds");
-	 	$("body").append($("<div>").html("Loaded " + productListing.length + " products in " + ((endTime - startTime) / 1000) + " seconds<br><br>"));
+	 	console.log("Went over " + Object.keys(productListing).length + " products in " + ((endTime - startTime) / 1000) + " seconds");
+	 	$("body").append($("<div>").html("Went over " + Object.keys(productListing).length + " products in " + ((endTime - startTime) / 1000) + " seconds<br><br>"));
 	 	
 	 	//storeSetup.randomize(productListing, companies, customers, categories, prices);
 	 	storeSetup.saveAllProducts(productListing, companies, customers, categories, prices);
@@ -117,17 +130,17 @@ var storeSetup = {
 	 saveAllProducts: function(products, companies, customers, categories, prices){
 	 	var i=1;
 	 	storeSetup.save("clositt/products", products, i++);
-		storeSetup.save("clositt/companies", companies.sort(), i++);
-		storeSetup.save("clositt/customers", customers.sort(), i++);
-		storeSetup.save("clositt/categories", categories.sort(), i++);
-		storeSetup.save("clositt/prices", prices.sort(), i++);		
+		storeSetup.save("clositt/filterdata/companies", companies.sort(), i++);
+		storeSetup.save("clositt/filterdata/customers", customers.sort(), i++);
+		storeSetup.save("clositt/filterdata/categories", categories.sort(), i++);
+		storeSetup.save("clositt/filterdata/prices", prices.sort(), i++);		
 
 		//var categoryStore = storeSetup.getCategoryStore(products);
 		//storeSetup.save("categoryStore", categoryStore, i++);		
 	 },
 	 
 	 save: function(name, obj, i){
-	    var cleanName = name.indexOf("/") >= 0 ? name.substring(name.indexOf("/") + 1) : name;
+	    var cleanName = name.indexOf("/") >= 0 ? name.substring(name.lastIndexOf("/") + 1) : name;
 	   
 	 	console.log(i + ") Saving " + Object.keys(obj).length + " " + cleanName  + "...");
 	 	$("body").append($("<div>").html(i + ") Saving " + Object.keys(obj).length + " " + cleanName + "..."));
