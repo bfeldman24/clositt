@@ -1515,6 +1515,23 @@ input.closetNameInput[type="text"] {
     -webkit-transform:rotate(90deg); /* Safari and Chrome */       
 }
 
+#scroll-to-top{
+    border-radius: 10px 10px 0 0;
+    bottom: 175px;
+    color: #FFFFFF;
+    cursor: pointer;
+    height: 22px;
+    padding: 7px 10px;
+    position: fixed;
+    right: -12px;
+    text-align: center;    
+    width: 25px;
+    z-index: 15;  
+    transform: rotate(-90deg);
+    -ms-transform:rotate(-90deg); /* IE 9 */
+    -webkit-transform:rotate(-90deg); /* Safari and Chrome */ 
+}
+
 #feed-grid{
     top: 100px;   
 }

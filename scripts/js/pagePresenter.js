@@ -4,6 +4,8 @@ var pagePresenter = {
         $("#subheader-navbar").show('fast');
    	    $("#brand").css("position", "fixed");
         $("#user-dropdown").css("position", "fixed");
+        
+        $("#scroll-to-top").on("click", pagePresenter.scrollToTop);
                         
         $(document).ready(function(){
             $(window).scroll(pagePresenter.handleScrollEvents);
@@ -17,7 +19,7 @@ var pagePresenter = {
 
         if(typeof gridEvents == 'object'){
             gridEvents.continuousScroll();          
-        }        
+        }                       
     },
     
     toggleHeader: function(){
@@ -37,6 +39,10 @@ var pagePresenter = {
 	       if ($("#feedSettings-float").length > 0){
 	           $("#feedSettings-float").css("top", defaultHeaderHeight + "px");	    
 	       }
+	       
+	       if($("#scroll-to-top").length > 0){
+               $("#scroll-to-top").show('fade');   
+           }
 	   } else if (scrollLocation <= defaultHeaderHeight){
 	       if ($("#filter-float").length > 0){
 	           $("#filter-float").css("top", (84 - scrollLocation) + "px");
@@ -52,6 +58,10 @@ var pagePresenter = {
     	       $("#subheader-navbar").css('top', '30px');	       
     	       $("#brand-fixed-background").hide("blind","fast");
 	       }
+	       
+	       if($("#scroll-to-top").length > 0){
+               $("#scroll-to-top").hide('fade');   
+           }
 	   } 
 	},
     
@@ -62,5 +72,9 @@ var pagePresenter = {
 //        $(e).parents(".outfit").replaceWith(productPresenter.getProductTemplate(randomSku));
         
         return true;
+    },
+    
+    scrollToTop: function(e){
+        window.scrollTo(0, 0);
     }
 };

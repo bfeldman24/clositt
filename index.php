@@ -48,6 +48,7 @@
 <br><br><br><br>
 <div id="filter-toggle" class="clositt-theme">Show Filter</div>
 <div id="filter-float" style="display:none;"></div>
+<div id="scroll-to-top" class="clositt-theme" style="display:none;"><i class="icon-white icon-arrow-right"></i></div>
 <div id="page-mask" style="display:none;"></div>
 <div id="product-module" style="display:none;"></div>
 
