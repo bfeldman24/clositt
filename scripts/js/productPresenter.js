@@ -1,17 +1,13 @@
 var productPresenter = {	
     isLoaded: false,
-    initialLoad: 150,
+    loadSize: 50,
 	splitValue: 30, 
 	productIndex: 0,
-	clothingStore: [], 
-	filterStore: [], 
-	populateStoreCallback: null,	
+	filterStore: null, 
+	populateStoreCallback: null,		
 	
 	init: function(){		
-		firebase.$.child('clositt/filterdata').once('value', productPresenter.populateFilterData);	 
-		
-		//var starting = parseInt(Math.random() * 15000);	 
-		firebase.$.child('clositt/products').startAt().limit(productPresenter.initialLoad).once('value', productPresenter.showInitialProducts);		
+		firebase.$.child('clositt/filterdata').once('value', productPresenter.populateFilterData);	 		
 	},
 	
 	populateFilterData: function(store){		
@@ -27,24 +23,12 @@ var productPresenter = {
 		productPresenter.refreshProducts();
 	 	gridPresenter.alignDefaultGrid();
 		$('body').css("min-height",$(window).height());	
-		productPresenter.productIndex += productPresenter.splitValue;	
-		
-        // Get the rest of the products
-        $.getJSON(firebase.url + "/clositt/products.json?callback=?", function( data ) {
-            console.log("GO SHOP!");
-           productPresenter.populateProducts(data);
-        });
+		productPresenter.productIndex += productPresenter.splitValue;			
 	},
 	
 	populateProducts: function(store){
-	   productPresenter.clothingStore = store;	
-	   productPresenter.filterStore = productPresenter.clothingStore;
-	},
-	
-	populateStore: function(callback){
-	    productPresenter.populateStoreCallback = callback;
-	    firebase.$.child('clositt').once('value', productPresenter.closetSetup);			 	 
-	},
+	   productPresenter.clothingStore = store;		  
+	},	
 	
 	closetSetup: function(store){
 	   productPresenter.clothingStore = store.child("products").val();
@@ -54,9 +38,12 @@ var productPresenter = {
 	   }	   	   
 	},	  	
  
-	getProductTemplate: function(sku){
-	    sku = productPresenter.formatSku(sku);
-	    var product = productPresenter.clothingStore[sku];
+	getProductTemplate: function(product){
+	    if (typeof(product) != "object"){      	
+	        var sku = productPresenter.formatSku(product);
+      	    product = productPresenter.clothingStore[sku];   
+	    }
+	    
 		var company = product.o;
 		var audience = product.u;
 		var category = product.a;
@@ -116,25 +103,80 @@ var productPresenter = {
 		return $(html);
 	},
 	
-	getClosetItemTemplate: function(sku){
-	    var product = productPresenter.clothingStore[sku];	
-	    var html = '';
+	getStoreProductTemplate: function(product){	    
 	    
-	    if (product != null){
-	       
-    		var company = product.o;
-    		var link = product.l;
-    		var image = product.i;
-    		var name = product.n;
-    			 			
-    		html ='<div class="outfit item" pid="'+sku+'">';
-				html +='<div class="picture"><a href="'+link+'" target="_blank" ><img src="' + image + '" /></a></div>';							
+	    var company = product.o;
+		var audience = product.u;
+		var category = product.a;
+		var link = product.link;
+		var image = product.image;
+		var name = product.name;		
+		var reviewCount = product.rc == null ? 0 : product.rc;
+		var closetCount = product.cc == null ? 0 : product.cc;
+		var closetCountPlural = closetCount == 1 ? "" : "s"; 
+		var id = product.sku;
+		var price = product.price == null || isNaN(product.price) ? "" : "$" + Math.round(product.price);		 	
+ 		var filterPrice = product.fp; 		 		
+ 		var feedOwner = product.owner;
+		var feedCloset = product.closet;
+
+		var rand = Math.floor(Math.random() * 3) + 1;
+		var shadow = "";
+		if(rand == 1){
+			shadow = 'shadow';	
+		}		
+			 			
+ 		//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
+ 		var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
+		var html ='<div class="outfit item" '+attr+' pid="'+id+'">';
+				html +='<div class="picture"><a class="productPage" target="_blank"><img src="' + image + '" class="'+shadow+'" onerror="return pagePresenter.handleImageNotFound(this)"/></a></div>';			
 				html +='<div class="overlay">';
-					html +='<div class="bottom">';										
+					html +='<div class="topleft">';										
+						html +='<div class="tagOutfitBtn" data-toggle="tooltip" data-placement="left" title="Tagitt"><i class="icon-tags icon-white"></i></div>';						 
+					html += '</div>';
+					html += '<div class="addTagForm" style="display:none;"></div>';
+					html +='<div class="topright">';										
+						html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Clositt"><img class="hanger-icon" src="css/images/hanger-icon-white.png" /><i class="icon-plus-sign icon-white hanger-plus"></i></div>';
+					html += '</div>';
+					html +='<div class="bottom">';						    					    
+					    html += '<div class="productActions" >';					    
+					       html += '<span data-toggle="tooltip" data-placement="top" title="Add to Wish List" class="addToWishList"><i class="icon-gift icon-white"></i></span>';
+					       html += '<span data-toggle="tooltip" data-placement="top" title="Show Comments" class="showComments numReviews"><span class="counter" >'+reviewCount+'</span><i class="icon-comment icon-white"></i></span>';
+					       html += '<span data-toggle="tooltip" data-placement="top" title="Added to '+closetCount+' Clositt'+closetCountPlural+'" class="numClosets"><span class="counter">'+closetCount+'</span><i class="icon-hanger-white"></i></span>';
+					    html += '</div>';									
+					    
+					    if(feedOwner != null && feedCloset != null){
+					       html += '<div class="productSubHeader" >';
+	   				            html += '<div class="outfitFeedOwner"><span class="outfitOwner">'+feedOwner+'\'s</span><span>&nbsp;\"'+feedCloset+'\" clositt</span></div>';
+    					    html += '</div>';  
+					    }
+					    					
 						html +='<div class="companyName">' + company + '</div>';
+						html +='<div class="price">' +  price + '</div>';
 						html +='<div class="name">' + name + '</div>';
 					html += '</div>';
+					html += '<div class="product-comments"></div>';
+					html += '<div class="addToClosetForm" style="display:none;"></div>';
 				html += '</div>';
+				html += '<div class="clear"></div>';				
+			html +='</div>';
+			
+		return $(html);
+	},
+	
+	getClosetItemTemplate: function(sku, image){	    
+	    var html = '';
+	    
+	    if (sku != null && image != null){	       
+	    	 			    			 			
+    		html ='<div class="outfit item" pid="'+sku+'">';
+				html +='<div class="picture"><a class="productPage" target="_blank" ><img src="' + image + '" /></a></div>';							
+//				html +='<div class="overlay">';
+//					html +='<div class="bottom">';										
+//						html +='<div class="companyName">' + company + '</div>';
+//						html +='<div class="name">' + name + '</div>';
+//					html += '</div>';
+//				html += '</div>';
 				html += '<div class="clear"></div>';				
 			html +='</div>';
 	    }
@@ -166,19 +208,10 @@ var productPresenter = {
 	},
 	
 	refreshProducts: function(){
-	    gridPresenter.beginTask();
-	    var grid = $("#product-grid");
-
-		for(var i=0; i<productPresenter.splitValue;i++){
-			var rand = Math.floor(Math.random() * Object.keys(productPresenter.clothingStore).length);
-			var outfit = productPresenter.getProductTemplate(Object.keys(productPresenter.clothingStore)[rand]);								
-			grid.append(outfit);		 								
-		}
-	 	 		 			 		 	
-	 	gridPresenter.endTask();
-	 	gridPresenter.alignDefaultGrid();	
+	    gridPresenter.endTask();
      	productPresenter.productIndex = 0;      	
-	 	productPresenter.filterStore = productPresenter.clothingStore;		 		 	
+	 	productPresenter.filterStore = null;		 		 	
+	 	gridPresenter.showContent(15);
 	},
 	
 	getProductsFromSkuList: function(skus){

@@ -20,9 +20,11 @@ var productPagePresenter = {
 	   }
 	},
 	
-	getProductPageTemplate: function(sku){
-	    sku = productPresenter.formatSku(sku);
-	    var product = productPresenter.clothingStore[sku];
+	getProductPageTemplate: function(product){	    
+        if (product == null){
+            return $("");    
+        }
+        
 		var company = product.o;
 		var audience = product.u;
 		var category = product.a;
@@ -109,10 +111,16 @@ var productPagePresenter = {
 	
 	show: function(sku){
 	   $("#page-mask").show();	  
-	   var item = productPagePresenter.getProductPageTemplate(sku);	   
-	   reviewsPresenter.populateProductPageReview(item, sku);
-	   $("#product-module").html(item);	   
-	   $("#product-module").show('fade');
+	   sku = productPresenter.formatSku(sku);
+	   
+	   firebase.$.child("clositt").child(firebase.productsPath).child(sku).once('value', function(snapshot){
+    	   var product = snapshot.val();
+    	   
+    	   var item = productPagePresenter.getProductPageTemplate(product);	   
+    	   reviewsPresenter.populateProductPageReview(item, snapshot.name());
+    	   $("#product-module").html(item);	   
+    	   $("#product-module").show('fade');
+	   });
 	   	   	   
 	},
 	

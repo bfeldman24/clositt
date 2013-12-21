@@ -122,6 +122,7 @@ storeApi = {
 							item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;	
 							item.name = this.name;
 							item.price = this.price.currentMinPrice;	
+							item.price = storeApiHelper.findPrice(item.price);
 							item.sku = 'g' + this.businessCatalogItemId;
 				
 							if(item.image != undefined){			
@@ -139,6 +140,7 @@ storeApi = {
 	                                                item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
 	                                                item.name = this.name;
 	                                                item.price = this.price.currentMinPrice;
+	                                                item.price = storeApiHelper.findPrice(item.price);
 	                                                item.sku = 'g' + this.businessCatalogItemId;
 	
 	                                                if(item.image != undefined){
@@ -157,6 +159,7 @@ storeApi = {
 	                                item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
 	                                item.name = this.name;
 	                                item.price = this.price.currentMinPrice;
+	                                item.price = storeApiHelper.findPrice(item.price);
 	                                item.sku = 'g' + this.businessCatalogItemId;
 	
 	                                if(item.image != undefined){
@@ -181,7 +184,8 @@ storeApi = {
 			item.name = $(this).find(".arrayProdName").find("a").text().trim();				
 			var price = $(this).find(".arrayProdPrice").text().trim();
 			priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
-			item.price = priceArr[priceArr.length -1];									     			
+			item.price = priceArr[priceArr.length -1];					
+			item.price = storeApiHelper.findPrice(item.price);				     			
 			
 			if(item.image != undefined){    
 			    item.sku = 'jc' + item.link.substring(item.link.lastIndexOf("/")+1, item.link.lastIndexOf("."));
@@ -204,6 +208,7 @@ storeApi = {
 			item.link = siteHome + $(this).find(".overlay > a.clickthrough").first().attr("href");			
 			item.name = $(this).find(".overlay > .fg > .description > .messaging > p").not(".POS").first().text().trim();		
 			item.price = $(this).find(".overlay > .fg > .description > .price > p").not(".was").first().text().trim();
+			item.price = storeApiHelper.findPrice(item.price);
 			
 			var url = item.link.substring(0, item.link.indexOf("?"));
             item.sku = 'at' + url.substring(url.lastIndexOf("/")+1);
@@ -228,6 +233,7 @@ storeApi = {
 			item.link = siteHome + $(this).find(".overlay > a.clickthrough").first().attr("href");			
 			item.name = $(this).find(".description > .messaging > p").not(".POS").first().text().trim();				
 			item.price = $(this).find(".description > .price > p").not(".was").first().text().trim();
+			item.price = storeApiHelper.findPrice(item.price);
 			
 			var url = item.link.substring(0, item.link.indexOf("?"));
             item.sku = 'l' + url.substring(url.lastIndexOf("/")+1);
@@ -250,7 +256,8 @@ storeApi = {
 			item.image = $(this).find(".category-product-image > a > img").first().attr("src");				
 			item.link = siteHome + $(this).find(".category-product-image > a").first().attr("href");			
 			item.name = $(this).find(".category-product-description > h2 > a").first().text().trim();				
-			item.price = $(this).find(".category-product-description > .price").first().text().trim();		        
+			item.price = $(this).find(".category-product-description > .price").first().text().trim();	
+			item.price = storeApiHelper.findPrice(item.price);	        
 	
 			if(item.image != undefined){
 			    item.sku = 'uo' + item.link.substring(item.link.indexOf("id=")+3, item.link.indexOf("&"));
@@ -274,6 +281,7 @@ storeApi = {
 			item.link = $(this).find("a.gaProductDetailsLink").first().attr("href");			
 			item.name = $(this).find(".product-info > a.name").first().text().trim();				
 			item.price = $(this).find(".product-info > .price").first().text().trim();
+			item.price = storeApiHelper.findPrice(item.price);
 			item.sku = 'z' + $(this).find("a.gaProductDetailsLink").first().attr("data-item");
 			
 			if(item.image != undefined){
@@ -295,6 +303,7 @@ storeApi = {
 			item.image = $(this).find(".image > img:nth-child(2)").first().attr("src");
 			item.link = $(this).find("a").first().attr("href");			
 			item.price = $(this).find("a > .price").first().text().trim();
+			item.price = storeApiHelper.findPrice(item.price);
 			$(this).find("a > .details > .price").first().remove();
 			item.name = $(this).find("a > .details").first().text().trim();	
 			item.sku = 'hm' + $(this).find("button.quicklook").first().attr("data-product");				
@@ -317,6 +326,7 @@ storeApi = {
 	                item.image = $(this).find(".image .product-image-primary").attr("src");
 	                item.link = $(this).find(".image").find("a").first().attr("href");
 	                item.price = $(this).find(".pricing > .price").first().text().trim();
+	                item.price = storeApiHelper.findPrice(item.price);
 	                item.name = $(this).find(".name").find("a").first().text().trim();	                
 	
 	                if(item.image != undefined){
@@ -342,6 +352,7 @@ storeApi = {
                 item.image = $(this).find(".imageWrapper img").first().attr("src");
                 item.link = siteHome + $(this).find(".imageWrapper a").first().attr("href");                
                 item.price = $(this).find(".item-description > .item-price > .price").first().text();
+                item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".item-description a").first().attr("title");
 
                 if(item.image != undefined){
@@ -365,6 +376,7 @@ storeApi = {
 
                 item.link = $(this).find(".productImages a").first().attr("href");                
                 item.price = $(this).find(".prices .netPrice").first().val();
+                item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".shortDescription a").first().text();
                 
                 var imageUrl = $(this).find(".productImages img").first().attr("src");                
@@ -400,6 +412,7 @@ storeApi = {
                 item.image = siteHome + $(this).find(".thumbcontainer img").first().attr("src");
                 item.link = siteHome + $(this).find(".thumbcontainer a").first().attr("href");                
                 item.price = $(this).find(".thumbInfo > .thumbPricing > #productPricing").first().text().trim();
+                item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".thumbcontainer img").first().attr("alt");
 
                 if(item.image != undefined){
@@ -424,6 +437,7 @@ storeApi = {
                 item.image = siteHome + $(this).find(".arrayImg img").first().attr("src");
                 item.link = siteHome + $(this).find(".arrayImg a").first().attr("href");                
                 item.price = $(this).find(".arrayCopy .arrayProdPrice").text().replace(/([a-zA-Z$ ])*(\s)+/g, ' ').trim();
+                item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".arrayImg img").first().attr("alt");
 
                 if(item.image != undefined){
@@ -448,6 +462,7 @@ storeApi = {
                 item.image = $(this).find(".product-image img").first().attr("src");
                 item.link = siteHome + $(this).find(".product-image a").first().attr("href");                
                 item.price = $(this).find(".product-pricing .price-value").text().trim();
+                item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".product-image a").first().attr("alt");
 
                 if(item.image != undefined){
@@ -472,6 +487,7 @@ storeApi = {
                 item.price = $(this).find(".info > .price.regular").text().trim();
                 item.price += " " + $(this).find(".info > .price.sale").text().trim();
                 item.price = item.price.trim();
+                item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".fashion-photo img").first().attr("alt");
 
                 if(item.image != undefined){
@@ -495,6 +511,7 @@ storeApi = {
                 item.image = $(this).find(".product-img").first().attr("src");
                 item.link = siteHome + $(this).find(".name a").first().attr("href");                
                 item.price = $(this).find(".pricing").text().replace(/([a-zA-Z$ ])*(\s)+/g, ' ').trim();
+                item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".name a").first().text();
 
                 if(item.image != undefined){
@@ -520,6 +537,7 @@ storeApi = {
                 item.price = $(this).find(".pro_price_black").text().trim();
                 item.price += " " + $(this).find(".pro_price_red").text().replace(/[a-zA-Z]*/g,'').trim();
                 item.price = item.price.trim();
+                item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".pro_pic img").first().attr("alt");
 
                 if(item.image != undefined){
@@ -545,6 +563,7 @@ storeApi = {
                 item.price = $(this).find(".product-pricing .normal-price").text().trim();
                 item.price += " " + $(this).find(".product-pricing .product-sales-price").text().trim();
                 item.price = item.price.trim();
+                item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".product-image .thumb-link img").first().attr("alt");
 
                 if(item.image != undefined){
@@ -569,7 +588,8 @@ storeApi = {
                 item.name = $(this).find("h3 a").first().text().trim();
                 var price = $(this).find(".price").text().replace(/[a-zA-Z£$]*/g,'').trim();
                 priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
-    			item.price = priceArr[0];                                
+    			item.price = priceArr[0];     
+    			item.price = storeApiHelper.findPrice(item.price);                           
 
                 if(item.image != undefined){
                    item.sku = 'ct' + $(this).attr("id");
@@ -591,7 +611,7 @@ storeApi = {
             
             $(this).find(".product-images > li").each(function(){
                 var item = new Object();
-                item.price = price;
+                item.price = storeApiHelper.findPrice(price);
                 item.name = name;
                 item.link = siteHome + $(this).find("a").first().attr("href");
                 item.image = $(this).find("img").first().attr("src");
@@ -610,4 +630,11 @@ storeApi = {
 
         return JSON.stringify(products);
 	}
+}
+
+storeApiHelper = {
+    findPrice: function(price){
+        var priceArray = (price + "").trim().split(/[\s-]+/);
+		return parseFloat(priceArray[priceArray.length - 1].replace(/[^0-9\.]+/g,""));   
+    }   
 }

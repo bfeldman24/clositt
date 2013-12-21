@@ -1,6 +1,8 @@
-var filterPresenter = {
-    
+var filterPresenter = {    
     allFilters: null,
+    companies: null,
+    customers: null,
+    categories: null,
 	
 	init: function(){		
 	    filterPresenter.allFilters = [];
@@ -13,9 +15,9 @@ var filterPresenter = {
  
 	createFilters:  function(companies, customers, categories, prices){
  		prices = prices.sort(function(a,b){return parseInt(a)-parseInt(b)});
- 		companies = companies.sort();
- 		customers = customers.sort();
- 		categories = categories.sort();
+ 		filterPresenter.companies = companies.sort();
+ 		filterPresenter.customers = customers.sort();
+ 		filterPresenter.categories = categories.sort();
  		
  		var priceBuckets = new Array();
  		
@@ -35,7 +37,7 @@ var filterPresenter = {
  		
  		$("#filter-float").append($("<h4>").html("Shop For:"));
  		
- 		$.each(customers, function(index, value) {
+ 		$.each(filterPresenter.customers, function(index, value) {
  		    filterPresenter.allFilters.push(value);
  		    
  			$("#filter-float").append(
@@ -49,7 +51,7 @@ var filterPresenter = {
  		
  		
  		$("#filter-float").append($("<br>")).append($("<h4>").html("Category:"));
- 		$.each(categories, function(index, value) {
+ 		$.each(filterPresenter.categories, function(index, value) {
  		    filterPresenter.allFilters.push(value);
  		     
  			$("#filter-float").append(
@@ -62,7 +64,7 @@ var filterPresenter = {
  		});  		 		
  		
  		$("#filter-float").append($("<br>")).append($("<h4>").html("Brands:"));
- 		$.each(companies, function(index, value) {
+ 		$.each(filterPresenter.companies, function(index, value) {
  		    filterPresenter.allFilters.push(value);
  		    
  			$("#filter-float").append(
@@ -142,6 +144,7 @@ var filterPresenter = {
             searchController.getProducts(criteria, null, searchController.showResults);
 	 	}else{
 	 	      $(".noresults").remove();
+	 	      $("#search-bar-sort-block").css("visibility","hidden");
 	 	      productPresenter.refreshProducts();
 	 	}	 		 	
  	},

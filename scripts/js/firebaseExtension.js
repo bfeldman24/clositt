@@ -8,6 +8,8 @@ var firebase = {
 	isLoggedIn: false,
 	url: 'https://clothies.firebaseio.com/',
 	userPath: 'userdata',
+	productsPath: "products",
+	storePath: "store",
 		
 	init: function(){
 		firebase.$ = new Firebase(firebase.url);	

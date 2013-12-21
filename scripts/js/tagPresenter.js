@@ -44,18 +44,31 @@ var tagPresenter = {
 				
 		if(tagInput.length > 0){								
 			try{		
-				firebase.$.child("store/tags").child(tagInput.toLowerCase()).child("items").push(itemid, function(error) {
-				  if (error) {
-						Messenger.error('Tag could not be saved. ' + error);
-				  } else {
-				  		Messenger.timeout = 1750;
-						Messenger.success('Tag \"'+tagInput+'\" was saved!');					
-						Messenger.timeout = Messenger.defaultTimeout;
-						$(element).parents(".item").find(".topright").show();
-						$(element).parents(".item").find(".addTagForm").html("").hide();
-						$(element).parents(".item").find(".addTagForm").tooltip('destroy');
-				  }
-				});	
+				firebase.$.child(firebase.storePath)
+				          .child("tags")
+				          .child(tagInput.toLowerCase())
+				          .child("items")
+				          .child(itemid)
+				          .transaction(function(currentData) {
+                              if (currentData === null) {
+                                    return 1;
+                              } else {
+                                    return currentData + 1;
+                              }
+                                                                
+                            }, function(error, committed, snapshot) {
+                              if (error)
+                                    Messenger.error('Tag could not be saved. ' + error);
+                              else if (!committed)
+                                    Messenger.error('Tag could not be saved. ' + error);
+                              else
+                                    Messenger.timeout = 1750;
+            						Messenger.success('Tag \"'+tagInput+'\" was saved!');					
+            						Messenger.timeout = Messenger.defaultTimeout;
+            						$(element).parents(".item").find(".topright").show();
+            						$(element).parents(".item").find(".addTagForm").html("").hide();
+            						$(element).parents(".item").find(".addTagForm").tooltip('destroy');
+                            });    				    				 	
 			}catch(err){
 				Messenger.error('Tag could not be saved. ' + err);
 				return false;

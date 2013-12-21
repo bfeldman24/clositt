@@ -1,6 +1,6 @@
 <footer class="clositt-theme">
 	<div id="footer-wrapper">
-		<div class="center footer-item">Clositt.com Inc &copy; 2013</div>
+		<div class="center footer-item">Clositt Inc &copy; 2013</div>
 		<div class="footer-item"><a href="contact-us.php">Contact Us</a></div>
 		<!--<div class="footer-item"><a href="#">About Us</a></div>-->
 		<div class="last footer-item"><a href="shout-outs.php">Shout Outs</a></div>

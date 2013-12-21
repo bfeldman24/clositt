@@ -78,7 +78,7 @@ var closetPresenter = {
 		
 		closet.child("items").forEach(function(item){
 			$itemlist.append(
-				productPresenter.getClosetItemTemplate(item.val()).prepend(
+				productPresenter.getClosetItemTemplate(item.name(),item.val()).prepend(
 					$("<div>").addClass("hanger").append(
 						$("<img>").attr("src","css/images/hanger.png")
 					)
@@ -271,7 +271,7 @@ var closetFormPresenter = {
 					closetNames[i] = closet.val().name;				    
 					
 					closet.child("items").forEach(function(item){					   					    
-						closetItems.push(item.val());					    
+						closetItems.push(item.name());					    
 						closetItemsMapping.push(closetNames[i]);							
 					});
 					
@@ -355,7 +355,7 @@ var closetFormPresenter = {
 	
 	addToCloset: function(el){
 		el.preventDefault();								
-		var sku = $(el.currentTarget).parents(".item").attr("pid");
+		var sku = $(el.currentTarget).parents(".item").attr("pid");		
 		
 		var closetName = $(el.currentTarget).find('input[name="newCloset"]').val();
 		var closetId = $(el.currentTarget).find('input[name="closet"]:checked').val();				
@@ -372,8 +372,9 @@ var closetFormPresenter = {
 			var index = closetFormPresenter.closetItems.indexOf(sku);
 			
 			if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){			
-			 
-				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetId).child("items").push(sku, function(error) {
+			    var img = $(el.currentTarget).parents(".item").find(".picture img").attr("src"); 
+			     
+				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetId).child("items").child(sku).set(img, function(error) {
 				  if (error) {
 						Messenger.error('Clositt could not be saved. ' + error);
 				  } else {
@@ -397,10 +398,11 @@ var closetFormPresenter = {
 		
 		var index = closetFormPresenter.closetItems.indexOf(sku);
 			
-		if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){			
-		 
+		if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){					 
+		    var img = $(el.currentTarget).parents(".item").find(".picture img").attr("src"); 
+		    
 			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets")
-			          .child(closetPresenter.wishListClosetId).child("items").push(sku, function(error) {
+			          .child(closetPresenter.wishListClosetId).child("items").child(sku).set(img, function(error) {
 			  if (error) {
 					Messenger.error('Clositt could not be saved. ' + error);
 			  } else {
@@ -425,17 +427,14 @@ var closetFormPresenter = {
 	updateClosetCount: function(el, sku){
 	    var targetOutfit = $(el.currentTarget).parents(".productActions");
 	    
-	 	firebase.$.child("clositt/products/"+sku+"/cc").transaction(function(value) {
+	 	firebase.$.child("clositt").child(firebase.productsPath).child(sku).child("cc").transaction(function(value) {
 	 	   var newValue = 1;
 	 	   
-	 	   if(value == null){		 	       
-	 	       firebase.$.child("clositt/products/"+sku+"/cc").set(newValue);
-	 	   }else{
+	 	   if(value != null){		 	       
 	 	        newValue = value +1;		 	        
 	 	   } 		 	            
 	 	   
 	 	   targetOutfit.find(".numClosets > .counter").text(newValue);
-	 	   productPresenter.clothingStore[sku].cc = newValue;
 	 	   var closetCountPlural = newValue == 1 ? "" : "s"; 
 	 	   targetOutfit.find(".numClosets").attr("title","Added to "+newValue+" Clositt"+closetCountPlural);
 	 	   targetOutfit.find(".numClosets").tooltip('destroy');

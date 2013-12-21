@@ -280,7 +280,7 @@ footer{
     box-shadow: 0 1px 5px #888888;
     margin-top: 0px;
     padding: 0px;
-    z-index: 100;			
+    z-index: 9999;			
 	
 }
 
@@ -605,10 +605,12 @@ footer .last{
 	
 
 
-.picture{
+#product-grid .picture{
 	max-width: 300px;
 	max-height: 400px;
-	overflow: hidden;	
+	overflow: hidden;
+	width: 200px;
+	height: 270px;	
 }
 
 //.outfit{
@@ -766,6 +768,12 @@ footer .last{
 	text-align:center;	
 }
 
+#product-grid{
+    position: relative; 
+    margin: 0 auto;
+    width: 900px;
+}
+
 #product-grid img.shadow{
 	box-shadow: 0 2px 9px #E1E1E1;	
 }
@@ -773,6 +781,8 @@ footer .last{
 #product-grid .outfit, #feed-grid .outfit{
 	background-color: #FFF;	
 }
+
+
 
 #wrapper {
 	min-height:100%;
@@ -1406,6 +1416,7 @@ input.closetNameInput[type="text"] {
 #search-bar-sort-block{
     display: inline;
     margin-left: 10px;
+    visibility: hidden;
 }
 
 #search-bar-sort{    

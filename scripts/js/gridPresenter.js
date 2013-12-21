@@ -1,8 +1,14 @@
-var gridPresenter = {	
+var gridPresenter = {
+    randomStartingPosition: 0,	
+    defaultCustomerCode: 'W',
+    productIndex: 0,
+    storeCount: 0,
 	
-	init: function(){				
+	init: function(){			
+	    gridPresenter.randomStartingPosition = parseInt(Math.random() * 15000);	
 		gridEvents.init();
-	},			
+		gridPresenter.showContent(15);				
+	},					
 
 	alignDefaultGrid: function(gridName){
 	    if (gridName == null){
@@ -111,7 +117,18 @@ var gridPresenter = {
     	     var newWidth = cellHeight / (imgHeight / imgWidth); 		    	     
              image.css("height", cellHeight + unit);  		    	     
     	}
-	},					
+	},		
+	
+	lazyLoad: function(products){
+	               
+        products.forEach(function(product){	                       
+			var $html = productPresenter.getProductTemplate(product.val());
+            $("#product-grid").append($html);						            			          						
+	   });
+			                   			   	   		
+	   gridPresenter.alignDefaultGrid(); 
+	   gridPresenter.endTask(); 
+	},			
 	
 	showContent: function(numElements){
 		var lastHeight = $("#product-grid").children("div[aligned=true]").last().css("top");
@@ -122,17 +139,23 @@ var gridPresenter = {
 			lastHeight = parseFloat(lastHeight,10);	
 		}
 		
-		if(lastHeight <= ($(window).height() + $(window).scrollTop() + 125)){			
+		if(lastHeight <= ($(window).height() + $(window).scrollTop() + 125)){						
+			var $items = $();
 			
-			if(productPresenter.filterStore != null){							
-				var $items = $();
+			if(productPresenter.filterStore == null){	
+			     gridPresenter.productIndex += productPresenter.loadSize;
+			     var startingPos = gridPresenter.defaultCustomerCode + (gridPresenter.randomStartingPosition + gridPresenter.productIndex);
+    		     firebase.$.child('clositt/' + firebase.productsPath)
+    		           .startAt(startingPos).limit(productPresenter.loadSize)
+	                   .once('value', gridPresenter.lazyLoad);          			     
+    		}else{				
 				var el=productPresenter.filterStore;
 				var index = productPresenter.productIndex;
 				
 				for(var i = index; i < index + numElements;i++){
 					
 					if(el[Object.keys(el)[i]] != null){
-						var html = productPresenter.getProductTemplate(Object.keys(el)[i]).css("position","absolute").css("left","-9999px");
+						var html = productPresenter.getStoreProductTemplate(el[Object.keys(el)[i]]).css("position","absolute").css("left","-9999px");
 						$items = $items.add(html);
 					}
 				}

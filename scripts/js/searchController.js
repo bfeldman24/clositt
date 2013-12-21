@@ -7,8 +7,8 @@ var searchController = {
         $("#search-bar").on("keypress", searchController.searchOnEnter);
         $("#search-form").submit(searchController.search);
 		$("#seach-bar-icon").on("click", searchController.searchBarSubmit);
-		$("#search-clear-btn").click(searchController.clearSearch);
-		$("#search-bar-sort").change(searchController.sortBy);
+		$("#search-clear-btn").click(searchController.clearSearch);		
+		$("#search-bar-sort").change(searchController.sortBy);	
     },
     
     searchOnEnter: function(el){        
@@ -162,7 +162,7 @@ var searchController = {
         searchController.getProducts(criteria, tags, searchController.showResults);
     },             
     
-    getProducts: function(criteria, tags, callback){     
+    getProductsDepricated: function(criteria, tags, callback){     
         var products = {};         
         
         gridPresenter.beginTask();                
@@ -183,7 +183,7 @@ var searchController = {
             var hasColors = criteria.colors != null && criteria.colors.length > 0;
             
             // search store for all matching products
-            firebase.$.child("store").once('value',function(store){                
+            firebase.$.child(firebase.storePath).once('value',function(store){                
                 
                 store.child("products").forEach(function(company) {
                     
@@ -318,12 +318,213 @@ var searchController = {
                 callback(products);
             });                                                 
         }
-    },    
+    },  
     
+    getProducts: function(criteria, tags, callback){                              
+        gridPresenter.beginTask();                        
+           
+        // criteria has -> "company","customer","category","price","underprice"        
+        if (criteria != null){                        
+            // search store for all matching products
+                        
+            var companies = criteria.company != null && criteria.company.length > 0 ? criteria.company : filterPresenter.companies;
+            var customers = criteria.customer != null && criteria.customer.length > 0 ? criteria.customer : filterPresenter.customers;
+            var categories = criteria.category != null && criteria.category.length > 0 ? criteria.category: filterPresenter.categories;
+                        
+            var returnCount = 0;
+            var expectedCount = companies.length * customers.length * categories.length;         
+            var mergedObject = {};            
+            
+            companies.forEach(function(company){
+                customers.forEach(function(customer){
+                    categories.forEach(function(category){
+
+                        firebase.$.child(firebase.storePath).child("products")
+                            .child(company.toLowerCase())
+                            .child(customer.toLowerCase())
+                            .child(category.toLowerCase())
+                            .once('value', 
+                                
+                                // success
+                                function (snap) {
+                                    // add it to the merged data
+                                    $.extend(mergedObject, snap.val());
+                                    
+                                    // when all paths have resolved, we invoke
+                                    // the callback (jQuery.when would be handy here)
+                                    if (++returnCount === expectedCount) {
+                                        searchController.searchForColors(null, mergedObject, criteria, tags, callback);
+                                    }
+                                },
+                                
+                                // error
+                                function (error) {
+                                    returnCount = expectedCount + 1; // abort counters
+                                    searchController.searchForColors(error, null, criteria, tags, callback);
+                                });  
+                                    
+                    });    
+                });    
+            }); 
+        }
+    },
+    
+    searchForColors: function(error, products, criteria, tags, callback){
+//        console.log("Error: " + error);
+//        console.log("Products: " + Object.keys(products).length);
+        
+        if (error){
+            return null;      
+        }                                                             
+                              
+        var hasColors = criteria.colors != null && criteria.colors.length > 0;                        
+                 
+        // matches color
+        var matchesColor = false;
+        if(hasColors){ 
+            var returnCount = 0;
+            var expectedCount = criteria.colors.length; 
+            var allColors = {};
+            
+            for(var i=0; i < criteria.colors.length; i++){
+                var color = criteria.colors[i].toLowerCase();                                
+                		    
+		        firebase.$.child(firebase.storePath).child("colors").child(color).once('value', 
+                                
+                // success
+                    function (snap) {
+                    // add it to the merged data
+                    $.extend(allColors, snap.val());
+                    
+                    // when all paths have resolved, we invoke
+                    // the callback (jQuery.when would be handy here)
+                    if (++returnCount === expectedCount) {
+                        searchController.searchForTags(allColors, tags, products, criteria);    
+                    }
+                },
+                
+                // error
+                function (error) {
+                    returnCount = expectedCount + 1; // abort counters
+                    searchController.searchForTags(allColors, tags, products, criteria);    
+                });    	        	
+	        }
+        }else{
+            searchController.searchForTags({}, tags, products, criteria);    
+        } 
+    },  
+    
+    searchForTags: function(allColors, tags, products, criteria){
+        // Get product with tags and add ranking
+        
+        var hasTags = tags != null && tags != "" && !(tags.length == 1 && tags[0] == "") && tags.length > 0;               
+        var tagsRegex = null;
+        
+        if (hasTags){
+            var tagsRegexString = tags.join("|").toLowerCase().trim();        
+            tagsRegex = new RegExp(searchController.regexEscape(tagsRegexString), 'gi');     
+        
+            firebase.$.child(firebase.storePath).child("tags").once('value', function(snapshot){
+                var allTags = {};
+                
+                // remove all non alphanumeric characters with a few exceptions                                
+                for(var i=0; i < tags.length; i++){                
+                    var tag = tags[i].replace(/[^A-Za-z0-9\w\s '\-\$\.]/gi,'').toLowerCase();
+                    var items = searchController.getMatchingChild(snapshot, tag);    
+    		    
+    		        if (items != null){
+                        $.extend(allTags, items.val());					
+    		        }
+                }
+                
+                searchController.getColorAndTagProducts(allColors, allTags, products, criteria, tagsRegex, hasTags); 
+            });
+        }else{                                        
+            searchController.getColorAndTagProducts(allColors, {}, products, criteria, tagsRegex, hasTags); 
+        }
+    },
+    
+    getColorAndTagProducts: function(allColors, allTags, products, criteria, tagsRegex, hasTags){        
+        var searchResults = {};                        
+        
+        // Get colors
+        for(var c=0; c < Object.keys(allColors).length; c++){
+      	    var sku = Object.keys(allColors)[c];
+      	    var percentConfidence = allColors[sku];    
+    	        	    
+    	    if (searchResults[sku] != null){                
+    			searchResults[sku].rank += percentConfidence; 	    			 
+            
+            }else if (products[sku] != null){                
+    			products[sku].rank += percentConfidence; 	    			
+    			searchResults[sku] = products[sku]; 
+            }                        		        
+        }
+        
+        // Get Tags
+        for(var t=0; t < Object.keys(allTags).length; t++){
+      	    var sku = Object.keys(allTags)[t];
+      	    var numTags = allTags[sku];    
+    	    
+    	    if (searchResults[sku] != null){                
+    			searchResults[sku].rank += numTags; 	    			 
+            
+            }else if (products[sku] != null){                
+    			products[sku].rank += numTags; 	    			
+    			searchResults[sku] = products[sku]; 
+            }                       		        
+        }
+        
+        if (Object.keys(allColors).length <= 0 && Object.keys(allTags).length <= 0){
+            searchResults = products;
+        }        
+        
+        searchController.filterSearchResultsByCriteria(searchResults, criteria, tagsRegex, hasTags);
+    },
+    
+    filterSearchResultsByCriteria: function(searchResults, criteria, tagsRegex, hasTags){
+        var filteredResults = {};
+        
+        if (searchResults != null){
+            
+            for (var i=0; i < Object.keys(searchResults).length; i++){
+                var sku = Object.keys(searchResults)[i];
+                var product = searchResults[sku];                                
+                                
+                if(product != null){                     
+                                        
+                    // matches price
+                    if((!criteria.belowPrice || product.price <= criteria.belowPrice) &&
+                            (!criteria.abovePrice || product.price >= criteria.abovePrice)){
+        
+                        // product name ranking    
+                        var foundMatchInName = false;          
+                        if(hasTags){                                         				    
+                            var matches = product.name.toLowerCase().match(tagsRegex);
+                            
+                            if (matches != null){
+                			        product.rank += matches.length * 2;
+                			        foundMatchInName = true;
+                            }
+                        }
+                        
+                        // Add product
+                        if(!hasTags || foundMatchInName){
+                                filteredResults[sku] = product;                                                       
+                        }
+                    }
+                }                                              	                                                                                            
+            }   		
+        }
+        
+        $("#search-bar-sort-block").css("visibility","visible");
+        searchController.showResults(filteredResults);
+    },    
+            
     getProductsWithTag: function(tagName, callback){	                        
 		gridPresenter.beginTask();
 		    
-		firebase.$.child("store/tags").once('value',function(snapshot){
+		firebase.$.child(firebase.storePath).child("tags").once('value',function(snapshot){
 		    var results = {};
 		    
 		    // remove all non alphanumeric characters with a few exceptions
@@ -423,7 +624,7 @@ var searchController = {
 	   rankedProducts.sort(sortFunction);
 	   
 	   for(var i=0; i < rankedProducts.length; i++){
-	          orderedProducts[i + "_" + rankedProducts[i]['s']] = rankedProducts[i];
+	          orderedProducts[i + "_" + rankedProducts[i]['sku']] = rankedProducts[i];
 	   } 
 
        return orderedProducts;
@@ -434,11 +635,11 @@ var searchController = {
 	},
 	
 	sortPriceLowToHigh: function(a, b){
-	   return a.p - b.p; 
+	   return a.p == null ? a.price - b.price : a.p - b.p; 
 	},
 	
 	sortPriceHighToLow: function(a, b){
-	   return b.p - a.p; 
+	   return a.p == null ? b.price - a.price : b.p - a.p; 
 	},
 	
 	sortMostPopular: function(a, b){
@@ -458,6 +659,7 @@ var searchController = {
 		gridPresenter.beginTask();
 		$( "#search-bar" ).val("");		
 		$("#search-clear-btn").hide();
+		$("#search-bar-sort-block").css("visibility","hidden");
 		filterPresenter.clearFilters();
 		
 		productPresenter.refreshProducts();
@@ -500,46 +702,46 @@ var searchController = {
 	    }
 	   
 	    if (snapshot.hasChild(tag)){
-            item = snapshot.child(tag + "/items");
+            item = snapshot.child(tag);
         
         // add 's'
         }else if (snapshot.hasChild(tag + 's')){
-            item = snapshot.child(tag + "s/items");
+            item = snapshot.child(tag + "s");
         
         // add 'es'
         }else if (snapshot.hasChild(tag + 'es')){
-            item = snapshot.child(tag + "es/items");                
+            item = snapshot.child(tag + "es");                
             
         // add 'ed'
         }else if (snapshot.hasChild(tag + 'ed')){
-            item = snapshot.child(tag + "ed/items");                    
+            item = snapshot.child(tag + "ed");                    
         
         // remove trailing 's' or 'y'
         }else if ((tag.charAt(tag.length - 1) == 's' || 
                    tag.charAt(tag.length - 1) == 'y') && 
                    snapshot.hasChild(tag.substring(0, tag.length - 1))){
                     
-            item = snapshot.child(tag.substring(0, tag.length - 1) + "/items");
+            item = snapshot.child(tag.substring(0, tag.length - 1));
         
         // remove trailing 'es'
         }else if (tag.lastIndexOf("es") == (tag.length - 2) && snapshot.hasChild(tag.substring(0, tag.length - 2))){
-            item = snapshot.child(tag.substring(0, tag.length - 2) + "/items");
+            item = snapshot.child(tag.substring(0, tag.length - 2));
         
         // remove trailing 'ed' and add an 'es'
         }else if (tag.lastIndexOf("ed") == (tag.length - 2) && snapshot.hasChild(tag.substring(0, tag.length - 2) + 'es')){
-            item = snapshot.child(tag.substring(0, tag.length - 2) + "es/items");                
+            item = snapshot.child(tag.substring(0, tag.length - 2) + "es");                
         
         // remove trailing 'y' and add an 's'
         }else if (tag.charAt(tag.length - 1) == 'y' && snapshot.hasChild(tag.substring(0, tag.length - 1) + 's')){
-            item = snapshot.child(tag.substring(0, tag.length - 1) + "s/items");
+            item = snapshot.child(tag.substring(0, tag.length - 1) + "s");
           
         
         // remove trailing 'y' and add an 'es'
         }else if (tag.charAt(tag.length - 1) == 'y' && snapshot.hasChild(tag.substring(0, tag.length - 1) + 'es')){
-            item = snapshot.child(tag.substring(0, tag.length - 1) + "es/items");
+            item = snapshot.child(tag.substring(0, tag.length - 1) + "es");
         }  
         
-        return item;
+        return item != null ? item.child("items") : null;
     },
     
     getAdditionalColorsFromTags: function(matchingColors, tags){          

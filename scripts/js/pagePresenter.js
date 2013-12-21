@@ -1,4 +1,7 @@
 var pagePresenter = {
+    lastExecTime: 0,    
+    waitTime: 500,
+    enableLazyLoading: true,
     
     init: function(){
         $("#subheader-navbar").show('fast');
@@ -17,8 +20,9 @@ var pagePresenter = {
     handleScrollEvents: function(){
         pagePresenter.toggleHeader();
 
-        if(typeof gridEvents == 'object'){
-            gridEvents.continuousScroll();          
+        if(pagePresenter.enableLazyLoading && typeof gridPresenter == 'object' && Date.now() - pagePresenter.lastExecTime > pagePresenter.waitTime){
+            pagePresenter.lastExecTime = Date.now();
+            gridPresenter.showContent(15);            
         }                       
     },
     
@@ -26,6 +30,10 @@ var pagePresenter = {
                 
 	   var defaultHeaderHeight = 45;
 	   var scrollLocation = $(window).scrollTop();	  
+	   
+	   if(scrollLocation > 300 && !$("#scroll-to-top").is(":visible") && $("#scroll-to-top").length > 0){
+            $("#scroll-to-top").show('fade');   
+        }
 	   
 	   if (scrollLocation > defaultHeaderHeight && $("#subheader-navbar").css('position') != 'fixed'){	       
 	       $("#subheader-navbar").css('position', 'fixed');
@@ -38,11 +46,7 @@ var pagePresenter = {
 	       
 	       if ($("#feedSettings-float").length > 0){
 	           $("#feedSettings-float").css("top", defaultHeaderHeight + "px");	    
-	       }
-	       
-	       if($("#scroll-to-top").length > 0){
-               $("#scroll-to-top").show('fade');   
-           }
+	       }	       	       
 	   } else if (scrollLocation <= defaultHeaderHeight){
 	       if ($("#filter-float").length > 0){
 	           $("#filter-float").css("top", (84 - scrollLocation) + "px");
@@ -75,6 +79,14 @@ var pagePresenter = {
     },
     
     scrollToTop: function(e){
-        window.scrollTo(0, 0);
-    }
+        e.preventDefault();
+        
+        //window.scrollTo(0, 0);
+        
+        $('body,html').animate({
+			scrollTop: 0
+		}, 800);
+			
+	   return false;
+    }    
 };

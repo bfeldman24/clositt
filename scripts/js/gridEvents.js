@@ -28,9 +28,5 @@ var gridEvents = {
 			     var sku = $(this).parents(".item").attr("pid");			     			     
 			     reviewsPresenter.hideReview(reviewsPresenter.getReviewBlock(sku));
 			}
-	}, 
-	
-	continuousScroll: function(){		 
-		gridPresenter.showContent(15);
-	}		
+	}	
 };

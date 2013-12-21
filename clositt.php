@@ -21,22 +21,32 @@
 
 	<div id="closet-list"></div>
 </div>
-
+<div id="page-mask" style="display:none;"></div>
+<div id="product-module" style="display:none;"></div>
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 <div id="closetId" style="display:none;"><?php echo $_GET['user'];?></div>
 <script type="text/javascript">
+
 <?php if(isset($_GET['user'])){ ?>
-$(document).ready(function(){     
-    closetPresenter.setUser(<?php echo $_GET['user']; ?>);
-    pagePresenter.init();    
-    productPresenter.populateStore(closetPresenter.init);        		
- });
+    $(document).ready(function(){
+        pagePresenter.enableLazyLoading = false;     
+        closetPresenter.setUser(<?php echo $_GET['user']; ?>);
+        pagePresenter.init();    
+        //productPresenter.populateStore(closetPresenter.init);
+        closetPresenter.init();        	
+        productPagePresenter.init();	
+        reviewsPresenter.init();
+     });
 <?php }else{ ?>
-function userDataReady(user){    
-    pagePresenter.init();    
-    productPresenter.populateStore(closetPresenter.init);        
-}
+    function userDataReady(user){    
+        pagePresenter.enableLazyLoading = false;
+        pagePresenter.init();    
+        //productPresenter.populateStore(closetPresenter.init);
+        closetPresenter.init();     
+        productPagePresenter.init();
+        reviewsPresenter.init();       
+    }
 <?php } ?>
 
 function loggedOut(){
