@@ -79,7 +79,7 @@ var tagPresenter = {
 	},
 	
 	getAllTagNames: function(){
-		firebase.$.child("store/tags").once('value',function(snapshot){
+		firebase.$.child(firebase.storePath).child("tags").once('value',function(snapshot){
 			tagPresenter.allTags = new Array();
 			
 			snapshot.forEach(function(tag){

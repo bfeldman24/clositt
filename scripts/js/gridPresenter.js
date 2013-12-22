@@ -117,18 +117,7 @@ var gridPresenter = {
     	     var newWidth = cellHeight / (imgHeight / imgWidth); 		    	     
              image.css("height", cellHeight + unit);  		    	     
     	}
-	},		
-	
-	lazyLoad: function(products){
-	               
-        products.forEach(function(product){	                       
-			var $html = productPresenter.getProductTemplate(product.val());
-            $("#product-grid").append($html);						            			          						
-	   });
-			                   			   	   		
-	   gridPresenter.alignDefaultGrid(); 
-	   gridPresenter.endTask(); 
-	},			
+	},						
 	
 	showContent: function(numElements){
 		var lastHeight = $("#product-grid").children("div[aligned=true]").last().css("top");
@@ -166,6 +155,17 @@ var gridPresenter = {
 			}		
 		}
 	},
+	
+	lazyLoad: function(products){
+	               
+        products.forEach(function(product){	                       
+			var $html = productPresenter.getProductTemplate(product.val());
+            $("#product-grid").append($html);						            			          						
+	   });
+			                   			   	   		
+	   gridPresenter.alignDefaultGrid(); 
+	   gridPresenter.endTask(); 
+	},	
 	
 	beginTask: function(){
 	   $("#product-grid").children().remove();	 		 	

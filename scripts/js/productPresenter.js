@@ -6,42 +6,12 @@ var productPresenter = {
 	filterStore: null, 
 	populateStoreCallback: null,		
 	
-	init: function(){		
-		firebase.$.child('clositt/filterdata').once('value', productPresenter.populateFilterData);	 		
-	},
-	
-	populateFilterData: function(store){		
-		var companies = store.child("companies").val();
-	 	var customers = store.child("customers").val();
-	 	var categories = store.child("categories").val();
-	 	var prices = store.child("prices").val();										 		 	
-	 	filterPresenter.createFilters(companies, customers, categories, prices);		
-	},
-	
-	showInitialProducts: function(snapshot){		
-	    productPresenter.populateProducts(snapshot.val());
-		productPresenter.refreshProducts();
-	 	gridPresenter.alignDefaultGrid();
-		$('body').css("min-height",$(window).height());	
-		productPresenter.productIndex += productPresenter.splitValue;			
-	},
-	
-	populateProducts: function(store){
-	   productPresenter.clothingStore = store;		  
-	},	
-	
-	closetSetup: function(store){
-	   productPresenter.clothingStore = store.child("products").val();
-	   
-	   if (productPresenter.populateStoreCallback != null && typeof productPresenter.populateStoreCallback == 'function'){
-	       productPresenter.populateStoreCallback();
-	   }	   	   
-	},	  	
+	init: function(){				
+	},		
  
 	getProductTemplate: function(product){
 	    if (typeof(product) != "object"){      	
-	        var sku = productPresenter.formatSku(product);
-      	    product = productPresenter.clothingStore[sku];   
+	       return $("");
 	    }
 	    
 		var company = product.o;
@@ -212,18 +182,7 @@ var productPresenter = {
      	productPresenter.productIndex = 0;      	
 	 	productPresenter.filterStore = null;		 		 	
 	 	gridPresenter.showContent(15);
-	},
-	
-	getProductsFromSkuList: function(skus){
-	     var products = new Object;
-	   
-         for(var i=0; i < skus.length; i++){
-             var sku = productPresenter.formatSku(skus[i]);
-	         products[skus[i]] = productPresenter.clothingStore[sku];
-         }
-         
-         return products;
-	},
+	},		
 	
 	formatSku: function(sku){
 	   return sku.substring(sku.indexOf("_") + 1);  

@@ -70,18 +70,12 @@ var pagePresenter = {
 	},
     
     handleImageNotFound:  function(e) {
-        $(e).attr( "src", "css/images/missing.png" );
-//        var randomSku = Object.keys(productPresenter.filterStore)[Object.keys(productPresenter.filterStore).length - 1];
-//        var sku = $(e).parent().attr("pid");
-//        $(e).parents(".outfit").replaceWith(productPresenter.getProductTemplate(randomSku));
-        
+        $(e).attr( "src", "css/images/missing.png" );        
         return true;
     },
     
     scrollToTop: function(e){
-        e.preventDefault();
-        
-        //window.scrollTo(0, 0);
+        e.preventDefault();        
         
         $('body,html').animate({
 			scrollTop: 0

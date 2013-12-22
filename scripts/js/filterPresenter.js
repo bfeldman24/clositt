@@ -10,7 +10,17 @@ var filterPresenter = {
 		$(document).on("click","#filter-toggle", filterPresenter.filterPanelToggle);
 		$("#filter-float").on("click","input", function(){
 			setTimeout(filterPresenter.onFilterSelect, 50);			
-		});				
+		});	
+		
+		firebase.$.child('clositt/filterdata').once('value', filterPresenter.populateFilterData);	 					
+	},
+	
+	populateFilterData: function(store){		
+		var companies = store.child("companies").val();
+	 	var customers = store.child("customers").val();
+	 	var categories = store.child("categories").val();
+	 	var prices = store.child("prices").val();										 		 	
+	 	filterPresenter.createFilters(companies, customers, categories, prices);		
 	},
  
 	createFilters:  function(companies, customers, categories, prices){

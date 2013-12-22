@@ -167,23 +167,29 @@ var closetPresenter = {
 				var $closetNameInput = $(this);
 				var success = true;
 								
-				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets/"+closetid+"/name").set(newName, function(error){
-					  if (error) {
-					    	Messenger.error('Item could not be removed.' + error);
-					    	success = false;
-		 			  } else {						
-							$closetNameInput.attr("original",newName);
-							$closetNameInput.attr("value",newName);
-																															
-							if ($closetNameInput.parent().parent().attr("last")){
-								if(success){
-									Messenger.success("Clositt Names were saved!");
-									closetPresenter.hideSettings();	
-								}else{
-									Messenger.error("Error! Clositt Names were not saved!");	
-								}
-							}	
-					  }									
+				firebase.$.child(firebase.userPath)
+		          .child(firebase.userid)
+		          .child("closets")
+		          .child(closetid)
+		          .child("name")
+		          .set(newName, function(error){
+    					  
+    					  if (error) {
+    					    	Messenger.error('Item could not be removed.' + error);
+    					    	success = false;
+    		 			  } else {						
+    							$closetNameInput.attr("original",newName);
+    							$closetNameInput.attr("value",newName);
+    																															
+    							if ($closetNameInput.parent().parent().attr("last")){
+    								if(success){
+    									Messenger.success("Clositt Names were saved!");
+    									closetPresenter.hideSettings();	
+    								}else{
+    									Messenger.error("Error! Clositt Names were not saved!");	
+    								}
+    							}	
+    					  }									
 				});																
 			});	
 		}			
@@ -203,16 +209,29 @@ var closetPresenter = {
 		var closetName = $(el.currentTarget).parent().parent().parent().parent().prev(".closetName").find("input").attr("original");
 		var closetId = $(el.currentTarget).parent().parent().parent().parent().prev(".closetName").find("input").attr("closetid");
 		
-		firebase.$.child(firebase.userPath).child(firebase.userid).child("closets/"+closetId+"/items").once('value', function(items){
+		firebase.$.child(firebase.userPath)
+		  .child(firebase.userid)
+		  .child("closets")
+		  .child(closetId)
+		  .child("items")
+		  .once('value', function(items){
+		      
 		      items.forEach(function(item){
 		          if(item.val() == sku){
-		              firebase.$.child(firebase.userPath).child(firebase.userid).child("closets/"+closetId+"/items/"+item.name()).remove(function(error){
-                		  if (error) {
-                		    	Messenger.error('Item could not be removed.' + error);
-                		  } else {
-                		  		$(el.currentTarget).parent().parent().css("display","none");
-                		    	Messenger.success('This item was removed from "' + closetName +'"');		    	
-                		  }
+		              firebase.$.child(firebase.userPath)
+		                  .child(firebase.userid)
+		                  .child("closets")
+		                  .child(closetId)
+		                  .child("items")
+		                  .child(item.name())
+		                  .remove(function(error){
+                    
+                    		  if (error) {
+                    		    	Messenger.error('Item could not be removed.' + error);
+                    		  } else {
+                    		  		$(el.currentTarget).parent().parent().css("display","none");
+                    		    	Messenger.success('This item was removed from "' + closetName +'"');		    	
+                    		  }
                 	  });
                 	  
                 	  return true;                 
@@ -374,14 +393,21 @@ var closetFormPresenter = {
 			if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){			
 			    var img = $(el.currentTarget).parents(".item").find(".picture img").attr("src"); 
 			     
-				firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetId).child("items").child(sku).set(img, function(error) {
-				  if (error) {
-						Messenger.error('Clositt could not be saved. ' + error);
-				  } else {
-						Messenger.success('This item was added to "' + closetName + '"');
-						closetFormPresenter.showClosetForm(el);
-						closetFormPresenter.updateClosetCount(sku);																		
-				  }
+				firebase.$.child(firebase.userPath)
+				    .child(firebase.userid)
+				    .child("closets")
+				    .child(closetId)
+				    .child("items")
+				    .child(sku)
+				    .set(img, function(error) {
+      
+        				  if (error) {
+        						Messenger.error('Clositt could not be saved. ' + error);
+        				  } else {
+        						Messenger.success('This item was added to "' + closetName + '"');
+        						closetFormPresenter.showClosetForm(el);
+        						closetFormPresenter.updateClosetCount(sku);																		
+        				  }
 				});
 			}else{
 				Messenger.success('This item is already in your clositt "' + closetName + '"');
@@ -401,14 +427,20 @@ var closetFormPresenter = {
 		if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){					 
 		    var img = $(el.currentTarget).parents(".item").find(".picture img").attr("src"); 
 		    
-			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets")
-			          .child(closetPresenter.wishListClosetId).child("items").child(sku).set(img, function(error) {
-			  if (error) {
-					Messenger.error('Clositt could not be saved. ' + error);
-			  } else {
-					Messenger.success('This item was added to your ' + closetName + '!');					
-					closetFormPresenter.updateClosetCount(el, sku);																		
-			  }
+			firebase.$.child(firebase.userPath)
+			     .child(firebase.userid)
+			     .child("closets")
+			      .child(closetPresenter.wishListClosetId)
+			      .child("items")
+			      .child(sku)
+			      .set(img, function(error) {
+         			  
+         			  if (error) {
+         					Messenger.error('Clositt could not be saved. ' + error);
+         			  } else {
+         					Messenger.success('This item was added to your ' + closetName + '!');					
+         					closetFormPresenter.updateClosetCount(el, sku);		
+         			  }
 			});
 		}else{
 			Messenger.success('This item is already in your "' + closetName + '"');

@@ -6,8 +6,7 @@ var productPagePresenter = {
         $(document).on("click",".productPageClose", productPagePresenter.hide);        
         $(document).on("click",".productPageClositt", productPagePresenter.showClosetForm); 
         $(document).on("click",".productPageTagitt", productPagePresenter.showTagForm);
-        $(document).on("click",".productPageComments", productPagePresenter.showReview);
-        
+        $(document).on("click",".productPageComments", productPagePresenter.showReview);   
         
         $(document).on("keydown", productPagePresenter.hideOnEsc);                     
 	},

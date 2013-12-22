@@ -372,8 +372,11 @@ var closetSearchController = {
             var closetName = closet.find(".closetName").text();  
             
                       
-            firebase.$.child(firebase.userPath).child(firebase.userid).child("feeds/main")
-                .child(closetSearchController.currentClosetsUser).child("username")
+            firebase.$.child(firebase.userPath)
+                .child(firebase.userid)
+                .child("feeds/main")
+                .child(closetSearchController.currentClosetsUser)
+                .child("username")
                 .set(closetSearchController.currentClosetsName, function(error){
             
                     if (error){

@@ -5,7 +5,6 @@ var reviewsPresenter = {
 	 init: function(){
 	    reviewsPresenter.cachedReviews = new Object();
 	    $(document).on("click",".showComments",reviewsPresenter.showReview);
-//	 	$(document).on("click", ".picture > a", reviewsPresenter.showReview);
 	 	$(document).on("click", ".review-add-btn", reviewsPresenter.saveReview);	
 	 	$(document).on("click", ".review-mask", reviewsPresenter.hideReview);		 		 
 	 	
@@ -29,7 +28,7 @@ var reviewsPresenter = {
       	 	   reviewsPresenter.refreshRating(reviewBlock, 0);
       	 	   //reviewsPresenter.showAverageRating(reviewBlock);
       	 	         	 	   	
-      	 	   reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);       	 	        	 	         	 	        	 	   
+      	 	   reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);
       	 	   reviewsPresenter.currentReviewFB.on('child_added', reviewsPresenter.addReview);	
       	 	   
       	 	   //reviewBlock.show('blind');
@@ -45,8 +44,7 @@ var reviewsPresenter = {
 	 	   reviewBlock.find(".review-rating").attr("userRating",0);      	 	   
 	 	   reviewsPresenter.refreshRating(reviewBlock, 0);	 	   	 	   
 
-	 	         	 	   	
-	 	   reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);       	 	        	 	         	 	        	 	   
+	 	   reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);
 	 	   reviewsPresenter.currentReviewFB.on('child_added', reviewsPresenter.addReviewForProductPage);	 
  	 	   
 	       //reviewBlock.show('blind');
@@ -65,7 +63,6 @@ var reviewsPresenter = {
 	 	 	   setTimeout(function() {
                   review.find(".review-comments").html("");
                 },300);
-	 	 	   
  	     }
 	 },	 	 
 
@@ -107,7 +104,6 @@ var reviewsPresenter = {
 		 	   
 		 	   $('.item[pid="'+sku+'"]').find(".numReviews > .counter").text(newValue);
 		 	   targetOutfit.find(".productPageCommentCount").text("("+newValue+")");
-		 	   productPresenter.clothingStore[sku].rc = newValue;
 		 	   return newValue;       
             });
 		 	
