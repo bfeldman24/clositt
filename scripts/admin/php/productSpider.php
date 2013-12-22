@@ -2,8 +2,8 @@
 <html>
 <head>
 <?php 
-require_once(dirname(__FILE__) . '/../../globals.php');
-include(dirname(__FILE__) . '/../../static/meta.php');   
+require_once(dirname(__FILE__) . '/../../../globals.php');
+include(dirname(__FILE__) . '/../../../static/meta.php');   
 ?>
 <style type="text/css">
 .company{
@@ -42,9 +42,9 @@ body{
 
 </head>
 <body>
-<?php include(dirname(__FILE__) . '/../../static/header.php');   ?>
+<?php include(dirname(__FILE__) . '/../../../static/header.php');   ?>
 <br><br><h2>Product Genie</h2><br>
-<div id="links"><img src="../../css/images/loading.gif" style="height:50px;"/></div>
+<div id="links"><img src="../../../css/images/loading.gif" style="height:50px;"/></div>
 <button id="selectall">Select All</button>
 <button id="deselectall">Deselect All</button><br><br>
 <button onclick="testProductsFromLinks()">Test Category</button>
@@ -163,26 +163,22 @@ body{
 <div id="json-output" style="display:none;"></div>
 <div id="sample-grid-container"><div id="sample-grid"></div></div>
 
-<?php include(dirname(__FILE__) . '/../../static/footer.php');   ?>
+<?php include(dirname(__FILE__) . '/../../../static/footer.php');   ?>
 
-<!--<script src="/lib/javascript/jquery-1.7.2.min.js"></script>-->
-<!--<script src='https://cdn.firebase.com/v0/firebase.js'></script>-->
 <?php echo CLOSITT_JS; ?>
 <script src="../js/storeApi.js"></script>
 <script src="../js/productSpider.js"></script>
 <script type="text/javascript">
-firebase.init();
+$(document).ready(function() {
+    getLinks();	
+});
+
 
 setTimeout(function(){
-if(firebase.userid == null){
-	alert("You must be logged in to save products. Go back to the login page and then come here.");
-}
+    if(firebase.userid == null){
+    	alert("You must be logged in to save products. Go back to the login page and then come here.");
+    }
 },7000);
-$(document).ready(function() {	
-	$.getJSON("../js/json/storeLinks.json", function(json){
-		getLinks(json);	
-	});
-});	
 	
 </script>
 </body>

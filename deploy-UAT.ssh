@@ -29,7 +29,7 @@ echo "Archived target directory"
 
 echo "Compiling all JS files..."
 mv scripts/java/clositt.js scripts/java/clositt.js.bak
-php -q scripts/php/jsCompiler.php
+php -q scripts/admin/php/jsCompiler.php
 
 echo ""
 echo "Minifying JS and CSS files... (Takes a minute)" 
@@ -49,11 +49,11 @@ cp -r lib/css ../$1/lib
 cp -r lib/js ../$1/lib
 cp -r lib/img ../$1/lib
 
+mkdir ../$1/app
 mkdir ../$1/scripts
-mkdir ../$1/scripts/php
 mkdir ../$1/scripts/js
 
-cp scripts/php/session.php ../$1/scripts/php
+cp app/session.php ../$1/app
 cp scripts/js/clositt.min.js ../$1/scripts/js
 cp scripts/js/clositt.min.e.js ../$1/scripts/js
 

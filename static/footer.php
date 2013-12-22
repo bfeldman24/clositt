@@ -8,7 +8,7 @@
 		<?php
 		if((isset($_GET['ben']) && $_GET['ben'] != "") || (isset($_GET['eli']) && $_GET['eli'] != "")){
 		?>
-		<div class="last footer-item"><a href="/scripts/php/productSpider.php" style="margin: 0 5px;">Upload</a></div>
+		<div class="last footer-item"><a href="/scripts/admin/php/productSpider.php" style="margin: 0 5px;">Upload</a></div>
 		<?php } ?>						
 	</div>
 	
@@ -30,8 +30,10 @@
 <?php echo CLOSITT_JS; ?>
 
 <script type="text/javascript">
-firebase.init();
-Messenger.init();
+$(document).ready(function() {
+    firebase.init();
+    Messenger.init();
+});
 
 $(".feedback .feedback-submit-btn").on("click",function(e){
 	e.preventDefault();

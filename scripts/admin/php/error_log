@@ -1,0 +1,382 @@
+[06-Mar-2013 19:33:24] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening '/home1/thewinn2/public_html/clothies/scripts/php/static/meta.php' for inclusion (include_path='.:/usr/lib64/php:/usr/lib/php:/usr/share/pear') in /home1/thewinn2/public_html/clothies/scripts/php/productSpider.php on line 4
+[06-Mar-2013 19:33:24] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening '/home1/thewinn2/public_html/clothies/scripts/php/static/header.php' for inclusion (include_path='.:/usr/lib64/php:/usr/lib/php:/usr/share/pear') in /home1/thewinn2/public_html/clothies/scripts/php/productSpider.php on line 34
+[06-Mar-2013 19:33:24] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening '/home1/thewinn2/public_html/clothies/scripts/php/static/footer.php' for inclusion (include_path='.:/usr/lib64/php:/usr/lib/php:/usr/share/pear') in /home1/thewinn2/public_html/clothies/scripts/php/productSpider.php on line 96
+[06-Mar-2013 19:34:44] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening '/home1/thewinn2/public_html/clothies/scripts/php/static/meta.php' for inclusion (include_path='.:/usr/lib64/php:/usr/lib/php:/usr/share/pear') in /home1/thewinn2/public_html/clothies/scripts/php/productSpider.php on line 4
+[06-Mar-2013 19:34:44] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening '/home1/thewinn2/public_html/clothies/scripts/php/static/header.php' for inclusion (include_path='.:/usr/lib64/php:/usr/lib/php:/usr/share/pear') in /home1/thewinn2/public_html/clothies/scripts/php/productSpider.php on line 34
+[06-Mar-2013 19:34:44] PHP Warning:  include() [<a href='function.include'>function.include</a>]: Failed opening '/home1/thewinn2/public_html/clothies/scripts/php/static/footer.php' for inclusion (include_path='.:/usr/lib64/php:/usr/lib/php:/usr/share/pear') in /home1/thewinn2/public_html/clothies/scripts/php/productSpider.php on line 96
+[14-Nov-2013 10:48:27] PHP Warning:  file_get_contents(\&quot;http://www.gap.com/resources/productSearch/v1/search?isFacetsEnabled=true&amp;pageId=0&amp;cid=5745&amp;globalShippingCountryCode=us&amp;locale=en_US) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: No such file or directory in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 3
+[14-Nov-2013 11:00:26] PHP Warning:  file_get_contents(http://www.zara.com/webapp/wcs/stores/servlet/category/us/en/zara-nam-S2013/358004/Shirts) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 404 Not Found
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 3
+[14-Nov-2013 11:00:49] PHP Warning:  file_get_contents(http://www.zara.com/webapp/wcs/stores/servlet/category/us/en/zara-nam-S2013/358004/Shirts) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 404 Not Found
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 3
+[17-Nov-2013 16:52:18] PHP Warning:  file_get_contents(http://www.zara.com/webapp/wcs/stores/servlet/category/us/en/zara-nam-S2013/358004/Shirts) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 404 Not Found
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 26
+[17-Nov-2013 21:02:35] PHP Parse error:  syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')' in /home1/thewinn2/public_html/clothies/scripts/php/jsCompiler.php on line 51
+[17-Nov-2013 21:46:40] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 25
+[17-Nov-2013 21:46:40] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[17-Nov-2013 21:46:40] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[17-Nov-2013 21:46:40] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[17-Nov-2013 21:46:40] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[17-Nov-2013 21:46:40] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[17-Nov-2013 21:46:40] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[17-Nov-2013 21:46:40] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[17-Nov-2013 21:46:40] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[17-Nov-2013 21:46:40] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[17-Nov-2013 21:46:53] PHP Warning:  file_get_contents(http://www.zara.com/webapp/wcs/stores/servlet/category/us/en/zara-nam-S2013/358004/Shirts) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 404 Not Found
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 25
+[17-Nov-2013 22:18:56] PHP Warning:  file_get_contents(http://www.zara.com/webapp/wcs/stores/servlet/category/us/en/zara-nam-S2013/358004/Shirts) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 404 Not Found
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 25
+[18-Nov-2013 18:08:47] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 25
+[18-Nov-2013 18:08:47] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:08:47] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:08:47] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:08:47] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:08:47] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:08:47] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:08:47] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:08:48] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:08:48] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:08:51] PHP Warning:  file_get_contents(http://www.zara.com/webapp/wcs/stores/servlet/category/us/en/zara-nam-S2013/358004/Shirts) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 404 Not Found
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 25
+[18-Nov-2013 18:49:53] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 25
+[18-Nov-2013 18:49:53] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:49:53] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:49:53] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:49:53] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:49:53] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:49:54] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:49:54] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:49:54] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:49:54] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:50:07] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 25
+[18-Nov-2013 18:50:07] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:50:07] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:50:07] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:50:07] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:50:07] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:50:07] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:50:07] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:50:07] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:50:07] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:51:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 25
+[18-Nov-2013 18:51:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:51:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:51:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:51:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:51:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:51:10] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:51:10] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:51:10] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:51:10] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:56:59] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 25
+[18-Nov-2013 18:56:59] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801\&amp;page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:56:59] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801\&amp;page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:56:59] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801\&amp;page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:56:59] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801\&amp;page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:56:59] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801\&amp;page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:56:59] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801\&amp;page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:56:59] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801\&amp;page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:56:59] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801\&amp;page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 18:56:59] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801\&amp;page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:13:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 25
+[18-Nov-2013 19:13:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:13:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:13:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:13:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:13:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:13:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:13:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:13:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:13:09] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:31] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 25
+[18-Nov-2013 19:14:32] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:32] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:32] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:32] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:32] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:32] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:32] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:32] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:32] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:44] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 25
+[18-Nov-2013 19:14:44] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:44] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:44] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:44] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:44] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:44] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:44] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:44] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:14:44] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:15:04] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 26
+[18-Nov-2013 19:15:04] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 5
+[18-Nov-2013 19:15:04] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 5
+[18-Nov-2013 19:15:05] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 5
+[18-Nov-2013 19:15:05] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 5
+[18-Nov-2013 19:15:05] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 5
+[18-Nov-2013 19:15:05] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 5
+[18-Nov-2013 19:15:05] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 5
+[18-Nov-2013 19:15:05] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 5
+[18-Nov-2013 19:15:05] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 5
+[18-Nov-2013 19:16:06] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 27
+[18-Nov-2013 19:16:06] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:16:06] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:16:06] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:16:06] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:16:06] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:16:06] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:16:06] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:16:06] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:16:06] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801%26page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:27:56] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 27
+[18-Nov-2013 19:27:56] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:27:56] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:27:56] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:27:56] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:27:56] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:27:56] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:27:56] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:27:56] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:27:56] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:31:16] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 27
+[18-Nov-2013 19:31:32] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 27
+[18-Nov-2013 19:32:11] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 27
+[18-Nov-2013 19:32:11] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop?page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:32:12] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop?page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:32:12] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop?page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:32:13] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop?page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:32:13] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop?page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:32:13] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop?page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:32:14] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop?page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:32:14] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop?page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:32:14] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop?page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[18-Nov-2013 19:32:36] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 27
+[18-Nov-2013 19:34:13] PHP Warning:  file_get_contents(http://shop.nordstrom.com/) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 27
+[18-Nov-2013 19:34:21] PHP Warning:  file_get_contents(http://nordstrom.com/) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 27
+[18-Nov-2013 19:34:26] PHP Warning:  file_get_contents(http://nordstrom.com) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 27
+[18-Nov-2013 19:37:07] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 116
+[18-Nov-2013 19:37:07] PHP Warning:  file_get_contents(https://shop.nordstrom.com/c/womens-dresses-shop) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 118
+[18-Nov-2013 19:37:07] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 120
+[18-Nov-2013 19:37:07] PHP Warning:  file_get_contents(http://shop.nordstrom.com) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 122
+[18-Nov-2013 19:48:41] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 116
+[18-Nov-2013 19:48:41] PHP Warning:  file_get_contents(https://shop.nordstrom.com/c/womens-dresses-shop) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 118
+[18-Nov-2013 19:48:41] PHP Warning:  file_get_contents(http://nordstrom.com/c/womens-dresses-shop) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 120
+[18-Nov-2013 19:48:41] PHP Warning:  file_get_contents(http://shop.nordstrom.com) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 122
+[18-Nov-2013 19:57:25] PHP Warning:  file_get_contents(http://www.zara.com/webapp/wcs/stores/servlet/category/us/en/zara-nam-S2013/358004/Shirts) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 404 Not Found
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 27
+[18-Nov-2013 19:57:38] PHP Warning:  file_get_contents(http://www.zara.com/webapp/wcs/stores/servlet/category/us/en/zara-nam-S2013/358004/Shirts) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 404 Not Found
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 27
+[18-Nov-2013 20:02:56] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 40
+[18-Nov-2013 20:04:59] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 51
+[18-Nov-2013 20:07:06] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 51
+[18-Nov-2013 20:07:28] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 51
+[18-Nov-2013 20:11:25] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 51
+[18-Nov-2013 20:16:43] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 58
+[18-Nov-2013 20:16:50] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 58
+[18-Nov-2013 20:20:30] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 45
+[18-Nov-2013 20:20:31] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:20:31] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:20:31] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:20:31] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:20:31] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:20:31] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:20:31] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:20:31] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:20:31] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:21:01] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 42
+[18-Nov-2013 20:21:02] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=2) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:21:02] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=3) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:21:02] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=4) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:21:02] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=5) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:21:02] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=6) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:21:02] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=7) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:21:02] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=8) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:21:02] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=9) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[18-Nov-2013 20:21:02] PHP Warning:  file_get_contents(http://shop.nordstrom.com/c/womens-dresses-shop?dept=60165801&amp;origin=topnav&amp;page=10) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 20
+[21-Nov-2013 22:06:58] PHP Warning:  file_get_contents(http://www.ctshirts.com/men\'s-shirts/men\'s-dress-shirts?q=usddefault|||||||407,||||||||&amp;cm_sp=Cat-_-FShirts-_-FitIllustrations-_-Slimfit-_-Illustration&amp;ppp=1000) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.1 999 No Hacking
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 42
+[21-Nov-2013 22:07:31] PHP Warning:  file_get_contents(http://www.ctshirts.com/men\'s-shirts/men\'s-dress-shirts?q=usddefault|||||||407,||||||||&amp;cm_sp=Cat-_-FShirts-_-FitIllustrations-_-Slimfit-_-Illustration&amp;ppp=1000) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.1 999 No Hacking
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 42
+[21-Nov-2013 22:07:38] PHP Warning:  file_get_contents(http://www.ctshirts.com/men\'s-shirts/men\'s-dress-shirts?q=usddefault|||||||407,||||||||&amp;cm_sp=Cat-_-FShirts-_-FitIllustrations-_-Slimfit-_-Illustration&amp;ppp=1000) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.1 999 No Hacking
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 42
+[22-Nov-2013 05:49:26] PHP Warning:  file_get_contents(http://www.ctshirts.com/men\'s-shirts/men\'s-dress-shirts?q=usddefault|||||||407,||||||||&amp;cm_sp=Cat-_-FShirts-_-FitIllustrations-_-Slimfit-_-Illustration&amp;ppp=1000) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.1 999 No Hacking
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 42
+[22-Nov-2013 05:50:15] PHP Warning:  file_get_contents(http://www.ctshirts.com/men\'s-shirts/men\'s-dress-shirts?q=usddefault|||||||407,||||||||) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: HTTP request failed! HTTP/1.1 999 No Hacking
+ in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 42
+[22-Nov-2013 05:56:20] PHP Parse error:  syntax error, unexpected ';' in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 4
+[22-Nov-2013 06:05:54] PHP Parse error:  syntax error, unexpected ';' in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 45
+[22-Nov-2013 06:06:06] PHP Parse error:  syntax error, unexpected ';' in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 46
+[22-Nov-2013 06:06:30] PHP Parse error:  syntax error, unexpected ';' in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 46
+[22-Nov-2013 06:06:37] PHP Parse error:  syntax error, unexpected ';' in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 46
+[22-Nov-2013 06:07:26] PHP Warning:  Wrong parameter count for substr() in /home1/thewinn2/public_html/clothies/scripts/php/webProxy.php on line 46

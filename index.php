@@ -1,4 +1,4 @@
-<?php require_once(dirname(__FILE__) . '/scripts/php/session.php'); ?>		
+<?php require_once(dirname(__FILE__) . '/app/session.php'); ?>		
 <!DOCTYPE>
 <html>
 <head>

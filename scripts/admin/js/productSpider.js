@@ -22,28 +22,7 @@ function getLinks(){
 	           });
 	       });
 	   });	  
-	});	
-	
-//	$.each( store, function( company, customers ) {			
-//		$("#links").append($("<div>").addClass("company").append($("<div>").html("&bull; " + company)));
-//			
-//		$.each( customers, function( customer, categories ) {					
-//			$("#links > .company").last().append($("<div>").addClass("customer").append($("<div>").html("&raquo; " + customer)));
-//				
-//			$.each( categories, function( category, url ) {
-//				$("#links > .company > .customer").last().append(
-//					$("<div>").addClass("category").append(
-//						$("<input>")
-//							.attr("type","checkbox")
-//							.attr("company",company)
-//							.attr("customer",customer)
-//							.attr("category",category)
-//							.attr("url",url)
-//						).append($("<a>").attr("href",url).html(category))
-//				);
-//			});
-//		});
-//	});		
+	});		
 }							
 				
 function getProductsFromLinks(save){
@@ -64,7 +43,14 @@ function getProductsFromLinks(save){
 			url = storeApi.getFullUrl(company, url);
 			
 			$.post("webProxy.php", {u:url}, function(data){														
-			    var storeProducts = storeApi.getProducts(company, data, url); 
+			    var storeProducts = storeApi.getProducts(company, data, url);
+			    
+			    for (var i=0; i < Object.keys(storeProducts).length; i++){
+			         var sku = Object.keys(storeProducts)[i];
+			         storeProducts[sku].o = company;
+			         storeProducts[sku].u = customer;
+			         storeProducts[sku].a = category; 
+			    }
 			 
 			    if (save){
     				$("#json-output").append(

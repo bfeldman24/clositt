@@ -799,6 +799,14 @@ footer .last{
     width: 100%;
 }
 
+#brand-fixed-background{
+    display:none;
+    width:300px;
+    height:43px;
+    position:fixed; 
+    box-shadow: 3px 0 0 #FFFFFF;
+}
+
 #main-content {
 	padding:10px 0 80px; // 80px = Height of the footer element
 	height: auto !important;
