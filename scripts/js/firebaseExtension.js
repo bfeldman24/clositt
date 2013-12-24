@@ -163,7 +163,7 @@ var firebase = {
  	logout: function(){
 		firebase.authClient.logout();	
 
-		$.post("/auth.php", function(){
+		$.post("/app/auth.php", function(){
 			location.href= "/";
 		}).fail(function() {
 			 $.post("auth.php", function(){

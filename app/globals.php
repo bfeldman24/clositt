@@ -31,4 +31,5 @@ define('CLOSITT_JS',$js);
 */
 //define('CLOSITT_JS','<script src="' . HOME_ROOT .'scripts/js/clositt.min.js"></script>');
 //define('CLOSITT_CSS',HOME_ROOT .'css/style.min.css');
+
 ?>

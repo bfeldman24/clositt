@@ -44,7 +44,7 @@ $(".feedback .feedback-submit-btn").on("click",function(e){
 	if(message.length > 0){
 	    var feedback = { e: firebase.email, n: firebase.username, i: firebase.userid, s: "CLOSITT FEEDBACK", m: message };
 	   
-		$.post("email.php", feedback, function(data) {
+		$.post("app/email.php", feedback, function(data) {
 			if(data == "success"){
 				Messenger.success("Thanks for your feedback!");
 

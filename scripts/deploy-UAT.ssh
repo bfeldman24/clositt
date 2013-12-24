@@ -53,9 +53,10 @@ mkdir ../$1/app
 mkdir ../$1/scripts
 mkdir ../$1/scripts/js
 
-cp app/session.php ../$1/app
+cp -r app ../$1/app
 cp scripts/js/clositt.min.js ../$1/scripts/js
 cp scripts/js/clositt.min.e.js ../$1/scripts/js
+cp scripts/deploy-PROD.ssh ../$1/scripts
 
 echo "Moved current directory to target directory"
 echo "DONE!"

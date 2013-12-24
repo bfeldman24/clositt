@@ -1,4 +1,4 @@
-<?php include(dirname(__FILE__) . '/globals.php'); ?> 
+<?php include(dirname(__FILE__) . '/app/globals.php'); ?> 
 <!DOCTYPE>
 <html>
 <head>
@@ -67,7 +67,7 @@ $("form").on("submit",function(event){
 	var message = $("#inputMessage").val();
 	
 	if(email.length > 0 && subject.length > 0 && name.length > 0 && message.length > 0){
-		$.post("email.php", { e: email, n: name, i: firebase.userid, s: subject, m: message }, function(data) {
+		$.post("app/email.php", { e: email, n: name, i: firebase.userid, s: subject, m: message }, function(data) {
 			if(data == "success"){
 				Messenger.alert("Your message was sent successfully! Thank you!");
 				$("#inputEmail").val("");

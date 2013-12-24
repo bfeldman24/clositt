@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/globals.php');
+require_once(dirname(__FILE__) . '/app/globals.php');
 
 if (!isset($_SESSION)) {
 	//any subdomains, including "www.mydomain.com" will be included in the session. 
@@ -79,7 +79,7 @@ function loggedIn(){
 	firebase.$.child("Auth/Token").on('value',function(snapshot){	
 			var token = snapshot.val();			
 			
-			$.post("auth.php", { auth: token, user: firebase.userid }, function(data) {
+			$.post("app/auth.php", { auth: token, user: firebase.userid }, function(data) {
 				if(data == "success"){
 					Messenger.success("You are now authorized to enter the site.");
 					setTimeout(function(){
