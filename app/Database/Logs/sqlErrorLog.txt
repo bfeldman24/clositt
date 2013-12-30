@@ -1,0 +1,40 @@
+
+12/28/13 09:32:11 - WARNING - (12876319[0]) - ID is null: 
+12/28/13 09:36:13 - WARNING - (12876319[0]) - ID is null: 
+12/28/13 09:39:11 - WARNING - (12876319[0]) - ID is null: 
+12/28/13 09:41:23 - WARNING - (12876319[0]) - ID is null: 
+12/28/13 09:42:07 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.LINK,  p.IMAGE,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (g918150002): 
+12/28/13 09:42:07 - ERROR - (3248272[0]) - MDB2 Error: not found: SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.LINK,  p.IMAGE,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ? 
+12/28/13 09:43:31 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (g918150002): 
+12/28/13 09:43:31 - ERROR - (3248272[0]) - MDB2 Error: not found: SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ? 
+12/28/13 09:48:29 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (g918150002): 
+12/28/13 09:49:48 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (g918150002): 
+12/28/13 09:51:36 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (g918150002): 
+12/28/13 09:52:03 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (g918150002): 
+12/28/13 09:54:21 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (g918150002): 
+12/28/13 10:00:55 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (Array
+(
+    [0] => g918150002
+)
+): 
+12/28/13 10:01:29 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (Array): 
+12/28/13 10:57:31 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (Array
+(
+    [0] => g918150002
+)
+): 
+12/28/13 10:58:19 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (Array
+(
+    [0] => g918150002
+)
+): 
+12/28/13 10:59:52 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (Array
+(
+    [0] => g918150002
+)
+): 
+12/28/13 11:06:12 - DEBUG - (3248272[0]) - SELECT  p.sku,  p.store,  p.customer,  p.category,  p.name,  p.link,  p.image,  p.price,  p.commentCount,  p.closittCount FROM Products p  WHERE p.sku = ?  (Array
+(
+    [0] => g918150002
+)
+): 
