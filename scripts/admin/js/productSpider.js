@@ -214,7 +214,8 @@ function saveAllProducts(){
                         result['updated'] != null && !isNaN(result['updated']) && 
                         result['historicalPrices'] != null && !isNaN(result['historicalPrices'])){
                         
-                            output += " Success! ";                          
+                            output += " Success! ";
+                            output += " Processed " + result['numProducts'] + " products! ";
                     }
                     
                     if (result['new'] == null || isNaN(result['new'])){

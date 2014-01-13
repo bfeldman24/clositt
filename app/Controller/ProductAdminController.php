@@ -21,7 +21,8 @@ class ProductAdminController {
 		// 2) into historical prices table (do join to get all exisiting products where the price has changed)
 		// 3) update existing products (links?, images?, name?, PRICE) (from #2) (do join to get all exisiting products??? (necessary))					
 		// 4) insert all new products (do left join to get all new products)	
-		
+
+        $results['numProducts'] = count((array)$products);
 		if(isset($products) && is_array($products) && count((array)$products) > 0){	
             // echo " 4) products are set. ";
 
