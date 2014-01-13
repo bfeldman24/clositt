@@ -7,10 +7,16 @@ Options -Indexes
 
 RewriteEngine On
 RewriteRule ^!(.*)$ clositt.php?user=$1
+
+# API
+RewriteRule ^p/([a-z0-9]*)$ app/Controller/ProductController.php?method=$1
+RewriteRule ^spider/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1
+RewriteRule ^p/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?method=$1&paramA=$2
+
 Redirect /smg /signup.php?beta=earlyaccess
 Redirect /scripts/php/productSpider.php /scripts/admin/php/productSpider.php
 
-RewriteRule ^(.*)log$ /whoops.php
+#RewriteRule ^(.*)log$ /whoops.php
 
 # ERROR CODES:
 #400 - Bad Request
@@ -38,27 +44,27 @@ RewriteRule ^(.*)log$ /whoops.php
 #504 - Gateway Timeout
 #505 - HTTP Version
 
-ErrorDocument 400 /whoops.php
-ErrorDocument 401 /whoops.php
-ErrorDocument 402 /whoops.php
-ErrorDocument 403 /whoops.php
-ErrorDocument 404 /whoops.php
-ErrorDocument 405 /whoops.php
-ErrorDocument 406 /whoops.php
-ErrorDocument 407 /whoops.php
-ErrorDocument 408 /whoops.php
-ErrorDocument 409 /whoops.php
-ErrorDocument 410 /whoops.php
-ErrorDocument 411 /whoops.php
-ErrorDocument 412 /whoops.php
-ErrorDocument 413 /whoops.php
-ErrorDocument 414 /whoops.php
-ErrorDocument 415 /whoops.php
-ErrorDocument 416 /whoops.php
-ErrorDocument 417 /whoops.php
-ErrorDocument 500 /whoops.php
-ErrorDocument 501 /whoops.php
-ErrorDocument 502 /whoops.php
-ErrorDocument 503 /whoops.php
-ErrorDocument 504 /whoops.php
-ErrorDocument 505 /whoops.php
+#ErrorDocument 400 /whoops.php
+#ErrorDocument 401 /whoops.php
+#ErrorDocument 402 /whoops.php
+#ErrorDocument 403 /whoops.php
+#ErrorDocument 404 /whoops.php
+#ErrorDocument 405 /whoops.php
+#ErrorDocument 406 /whoops.php
+#ErrorDocument 407 /whoops.php
+#ErrorDocument 408 /whoops.php
+#ErrorDocument 409 /whoops.php
+#ErrorDocument 410 /whoops.php
+#ErrorDocument 411 /whoops.php
+#ErrorDocument 412 /whoops.php
+#ErrorDocument 413 /whoops.php
+#ErrorDocument 414 /whoops.php
+#ErrorDocument 415 /whoops.php
+#ErrorDocument 416 /whoops.php
+#ErrorDocument 417 /whoops.php
+#ErrorDocument 500 /whoops.php
+#ErrorDocument 501 /whoops.php
+#ErrorDocument 502 /whoops.php
+#ErrorDocument 503 /whoops.php
+#ErrorDocument 504 /whoops.php
+#ErrorDocument 505 /whoops.php

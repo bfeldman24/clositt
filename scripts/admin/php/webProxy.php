@@ -1,7 +1,7 @@
 <?php 
 function file_get_contents_curl($url) {       
     $curl = curl_init($url);    
-    curl_setopt($curl, CURLOPT_USERAGENT, 'search/1.0 (www.search.com)'); //'Googlebot/2.1 (http://www.googlebot.com/bot.html)')
+//    curl_setopt($curl, CURLOPT_USERAGENT, 'search/1.0 (www.search.com)'); //'Googlebot/2.1 (http://www.googlebot.com/bot.html)')
     curl_setopt($curl, CURLOPT_AUTOREFERER, true);
     curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1 );
@@ -41,6 +41,7 @@ function combineMultipleUrls($file, $nextPage, $curl = false){
 if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){    
     $url = stripslashes($_REQUEST['u']);
     $file = file_get_contents($url);
+    
 	
 	if (strpos($_REQUEST['u'],"anthropologie")){
     	// Combine multiple url <body> into one

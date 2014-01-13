@@ -1,12 +1,17 @@
+// Gets the category links
 function getLinks(){
 	$("#links").html("");	
 	
 	firebase.$.child("spider").once('value', function(spider){
 	   spider.forEach(function(company){
-	       $("#links").append($("<div>").addClass("company").append($("<div>").html("&bull; " + company.name())));   
+	       $("#links").append(
+	           $("<div>").addClass("company").append(
+	               $("<div>").addClass("companyName").html("&bull; " + company.name())
+	            )
+	        );   
 	       
 	       company.forEach(function(customer){
-	           $("#links > .company").last().append($("<div>").addClass("customer").append($("<div>").html("&raquo; " + customer.name())));
+	           $("#links > .company").last().append($("<div>").addClass("customer").append($("<div>").addClass("customerName").html("&raquo; " + customer.name())));
 	           
 	           customer.forEach(function(category){
 	               $("#links > .company > .customer").last().append(
@@ -17,7 +22,11 @@ function getLinks(){
     							.attr("customer",customer.name())
     							.attr("category",category.name())
     							.attr("url",category.val())
-    						).append($("<a>").attr("href",category.val()).html(category.name()))
+    						).append(
+    						      $("<a>").attr("href",category.val()).html(category.name())
+    						).append(
+    						      $("<span>").addClass("removeCategory").html("x")
+    						)
     				);
 	           });
 	       });
@@ -25,6 +34,7 @@ function getLinks(){
 	});		
 }							
 				
+// Gets the products from the selected links and optionally saves them				
 function getProductsFromLinks(save){
 	$("#json-output").html("");
 	
@@ -42,24 +52,37 @@ function getProductsFromLinks(save){
 			var url = $(this).attr("url");
 			url = storeApi.getFullUrl(company, url);
 			
-			$.post("webProxy.php", {u:url}, function(data){														
-			    var storeProducts = storeApi.getProducts(company, data, url);
+			$.post("webProxy.php", {u:url}, function(data){		
+			    if (data == null || data.trim() == ""){
+			         console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");
+			     }
+			     												
+			    var jsonProducts = storeApi.getProducts(company, data, url);
+			    var storeProducts = $.parseJSON(jsonProducts);
 			    
 			    for (var i=0; i < Object.keys(storeProducts).length; i++){
 			         var sku = Object.keys(storeProducts)[i];
-			         storeProducts[sku].o = company;
-			         storeProducts[sku].u = customer;
-			         storeProducts[sku].a = category; 
+			         storeProducts[sku]['company'] = company;
+			         storeProducts[sku]['customer'] = customer;
+			         storeProducts[sku]['category'] = category; 
 			    }
 			 
 			    if (save){
+			        // Used for firebase
     				$("#json-output").append(
     					$("<div>")
     						.attr("company", company)
     						.attr("customer", customer)
     						.attr("category", category)
     						.html( storeProducts )
-    				);		
+    				);	
+    				
+    				// Used for database
+    				if ($("#json-products").text() != ""){
+        				var jsonProducts = $.parseJSON($("#json-products").text());
+        				$.extend(storeProducts, jsonProducts);        				
+    				}
+    				$("#json-products").text(JSON.stringify(storeProducts));	
     				
     				count++;
     				if(count == total){					
@@ -73,6 +96,7 @@ function getProductsFromLinks(save){
 	}
 }
 
+// Gets the checked prdocuts frm the link, validates them, and shows a sampling of them
 function testProductsFromLinks(showSample){
 	
 	var total = $("#links > .company > .customer > .category > input:checked").size();
@@ -92,7 +116,10 @@ function testProductsFromLinks(showSample){
 			var url = link.attr("url");
 			url = storeApi.getFullUrl(company, url);
 			
-			$.post("webProxy.php", {u:url}, function(data){																		
+			$.post("webProxy.php", {u:url}, function(data){																		    if (data == null || data.trim() == ""){
+			         console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");
+			     }   
+			 
 				var isValid = false;
 				var itemCount = 0;				
 				
@@ -110,7 +137,8 @@ function testProductsFromLinks(showSample){
 				            testProduct.name != null &&
 				            testProduct.sku != null){				 
 				                
-				                var price = parseFloat(testProduct.price.replace("$",""));
+				                var price = testProduct.price + "";
+				                price = parseFloat(price.replace("$",""));
         				        price = parseFloat(price);       
         				        
         				        if(!isNaN(price)){
@@ -122,6 +150,8 @@ function testProductsFromLinks(showSample){
             				            showSampleProducts(data, company, customer, category);   
             				        }
         				        }
+				            }else{
+				                console.log("one or more of the fields in the product entity are null");   
 				            }
 				    }
 				}catch(err){
@@ -161,6 +191,7 @@ function showSampleProducts(data, company, audience, category){
     }
 }
 
+// Saves the products
 function saveAllProducts(){
 	var total = $("#links > .company > .customer > .category > input:checked").size();
 	var fireBaseStore = new Firebase('https://clothies.firebaseio.com/store/products');
@@ -169,76 +200,69 @@ function saveAllProducts(){
  	if (total <= 0){
 		alert("There is nothing to save! Please add product data.");	
 	}else{ 	
-	 	$("#json-output").children().each(function(){			
-			fireBase = fireBaseStore.child($(this).attr("company").toLowerCase());		
-			fireBase = fireBase.child($(this).attr("customer").toLowerCase());
-			fireBase = fireBase.child($(this).attr("category").toLowerCase());
-			
-			var jsonObj = $.parseJSON($(this).text());
-			
-			// firebase.update
-			fireBase.set(jsonObj, function(error) {
-			  if (!error) {	
-			    success++;
-				
-				if(success == total){
-					alert("Data saved successfully for " + success + "/" + total + " links");
-				}
-			  }
-			});
-	 	});
-	 	
-	 	setTimeout(function(){
-	 		if(success != total){
-				alert("Data was not saved successfully! Saved " + success + "/" + total + " links");
-			}
-	 	},15000);
+	    $.post( window.HOME_ROOT + "spider/update", $.parseJSON($("#json-products").text()), function( result ) {                        
+            console.log(result);                       
+            
+            var output = "";
+            
+            if (result == null){
+                output += "Data was NOT saved successfully! ";
+            }else{
+                if (result['clearProducts'] != null && result['clearProducts']){
+
+                    if (result['new'] != null && !isNaN(result['new']) &&
+                        result['updated'] != null && !isNaN(result['updated']) && 
+                        result['historicalPrices'] != null && !isNaN(result['historicalPrices'])){
+                        
+                            output += " Success! ";                          
+                    }
+                    
+                    if (result['new'] == null || isNaN(result['new'])){
+                        output += "Error adding new products! ";
+                    }else{
+                        output += "Added " + result['new'] + " new products. ";    
+                    }
+                    
+                    if (result['updated'] == null || isNaN(result['updated'])){
+                        output += "Error updating existing products! ";
+                    }else{
+                        output += "Updated " + result['updated'] + " products! ";   
+                    }
+                    
+                    if (result['historicalPrices'] == null || isNaN(result['historicalPrices'])){
+                        output += "Error getting historical prices! ";
+                    }else{
+                        output += "Added " + result['historicalPrices'] + " historical prices! ";                        
+                    }
+                }else{
+                    output += "There was an issue saving the products. Data was NOT saved successfully! ";        
+                }                
+            }
+            
+            alert(output);
+        }
+        , "json"
+        );	   
 	}
 }
+
 
 $('form').submit(function(e) {
 	e.preventDefault();
 	
-	$.getJSON("../js/json/storeLinks.json", function(json){
-		var company = $("#inputCompany").val().toLowerCase().trim();
-		var customer = $("#inputAudience").val().toLowerCase().trim();
-		var category = $("#inputCategory").val().toLowerCase().trim();
-		var url = $("#inputLink").val();		
-				
-		if(json[company] == undefined){
-			json[company] = new Object();
-		}
-		
-		if(json[company][customer] == undefined){
-			json[company][customer] = new Object();
-		}			
-		
-		json[company][customer][category] = url;
-		
-		firebase.$.child("spider").child(company).child(customer).child(category).set(url, function(error){
-		  if (!error){
-		      getLinks();
-		      alert("Added!");		      
-   			  $("#inputLink").val("");
-   			  $("#inputCategory").val("");		
-		  }
-		});
-			
-		var store = JSON.stringify(json);	
-		$.post("updateStoreLinks.php", {j:store}, function(data){														
-			/*
-			if(data == 1){
-				getLinks(json);
-				alert("Added!");
-				$("#inputLink").val("");
-				$("#inputCategory").val("");		
-			}else{
-				alert(data);	
-			}
-			*/
-		});
+	var company = $("#inputCompany").val().toLowerCase().trim();
+	var customer = $("#inputAudience").val().toLowerCase().trim();
+	var category = $("#inputCategory").val().toLowerCase().trim();
+	var url = $("#inputLink").val();								
 	
-	});
+	firebase.$.child("spider").child(company).child(customer).child(category).set(url, function(error){
+	  if (!error){
+	      getLinks();
+	      alert("Added!");		      
+			  $("#inputLink").val("");
+			  $("#inputCategory").val("");		
+	  }
+	});					
 					
 	return false;
 });
@@ -253,7 +277,8 @@ function getProductTemplate(product, company, audience, category){
 	var image = product.image;
 	var name = product.name;		
 	var id = product.sku;
-	var price = "$" + Math.round(parseInt(product.price.replace("$","").trim()));		 	
+	var price = product.price + "";
+	price = "$" + Math.round(parseInt(price.replace("$","").trim()));		 	
 
 	var rand = Math.floor(Math.random() * 3) + 1;
 	var shadow = "";
@@ -288,6 +313,18 @@ function getProductTemplate(product, company, audience, category){
 	return $(html);
 }
 
+function getTotalProductCount(){
+    $.post( window.HOME_ROOT + "spider/count", function( result ) {                        
+            console.log(result);
+            
+            if (isNaN(result)){
+                alert("There was an error getting the total product count!");
+            }else{
+                alert("There are currently " + result + " products in the database");
+            }
+    });
+}
+
 
 $('#selectall').click(function () {
     $("#links").find(':checkbox').prop('checked', true);
@@ -296,3 +333,45 @@ $('#selectall').click(function () {
 $('#deselectall').click(function () {
     $("#links").find(':checkbox').prop('checked', false);
 });
+
+$(document).on("click",".companyName", function(el){
+    if ($(el.currentTarget).parent(".company").find(':checkbox').first().prop('checked')){
+        $(el.currentTarget).parent(".company").find(':checkbox').prop('checked', false);
+    }else{
+        $(el.currentTarget).parent(".company").find(':checkbox').prop('checked', true);
+    }
+});
+
+$(document).on("click",".customerName", function(el){
+    if ($(el.currentTarget).parent(".customer").find(':checkbox').first().prop('checked')){
+        $(el.currentTarget).parent(".customer").find(':checkbox').prop('checked', false);
+    }else{
+        $(el.currentTarget).parent(".customer").find(':checkbox').prop('checked', true);
+    }
+});
+
+$(document).on("click",".removeCategory", function(el){
+    var category = $(el.currentTarget).siblings(':checkbox');    
+    
+    var dialog = confirm("Are you sure you want to remove " + category.attr("company") + " -> " + category.attr("customer") + " -> " + category.attr("category") + "? ");
+      
+    if (dialog==true){
+        firebase.$.child("spider")
+                  .child(category.attr("company"))
+                  .child(category.attr("customer"))
+                  .child(category.attr("category"))
+                  .remove(function(error) {
+                      if (error){
+                        alert("There was a problem removing this category")
+                      }else{
+                        $(el.currentTarget).parents(".category").remove();   
+                        alert("Category was removed! (This only deletes the category. It does not delete products that were already added to this category)")
+                      }
+                   });        
+    }
+    
+});
+
+
+$(document).find(".feedback-maximize").hide('fade');
+$(document).find(".feedback-minimized").show('fade');

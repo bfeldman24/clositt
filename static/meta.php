@@ -11,3 +11,7 @@
 
 <script src='https://cdn.firebase.com/v0/firebase.js' type='text/javascript'></script>
 <script src='https://cdn.firebase.com/v0/firebase-simple-login.js' type='text/javascript'></script>
+
+<script type="text/javascript">
+    window.HOME_ROOT = "<?php echo HOME_ROOT; ?>";
+</script>

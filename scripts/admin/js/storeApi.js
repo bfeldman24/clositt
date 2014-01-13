@@ -605,7 +605,7 @@ storeApi = {
 	getLuLuLemon: function(data, siteHome){	   
 	   var products = new Object();
 	
-       $(data).find(".product").each(function(){            
+       $(data).find(".product").not(".video").each(function(){            
             var price = $(this).find(".amount").text().replace(/[a-zA-Z]*/g,'').trim();
             var name = $(this).attr("title").trim();
             
