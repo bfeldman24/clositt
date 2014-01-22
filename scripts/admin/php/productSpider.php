@@ -62,17 +62,22 @@ input{
     padding: 7px 5px;
     position: fixed;
     width: 100%;}
+    
+.isvalid{
+    font-size: 9px;   
+}        
 </style>
 
 </head>
 <body>
 <?php include(dirname(__FILE__) . '/../../../static/header.php');   ?>
 <div id="mainContent">
-    <br><br><h2>Product Genie</h2><br>
+    <br><h2>Product Genie</h2>
     <div id="links"><img src="../../../css/images/loading.gif" style="height:50px;"/></div>        
     
     <hr>
-    <h2>Add New Product Page Link:</h2>
+    <a name="addCategoryForm"></a>
+    <h2>Add New Category Link:</h2>
     <form class="form-horizontal" id="saveProducts">
     	    <div class="control-group">
     	   		<label class="control-label" for="inputCompany">Company</label>
@@ -100,6 +105,7 @@ input{
     				  <option value="nordstrom">Nordstrom</option>
     				  <option value="old navy">Old Navy (json link)</option>				  
     				  <option value="piperlime">Piperlime (json link)</option>
+    				  <option value="target">Target</option>	  				  
     				  <option value="tory burch">Tory Burch</option>	  				  
     				  <option value="urban outfitters">Urban Outfitters</option>
     				  <option value="zara">Zara</option>
@@ -182,13 +188,14 @@ input{
 </div>
 
 <div class="actionButtons">
-    <button id="selectall" class="btn">Select All</button>
-    <button id="deselectall" class="btn">Deselect All</button>
-    <button onclick="testProductsFromLinks()" class="btn btn-primary">Test Category</button>
-    <button onclick="getProductsFromLinks()" class="btn btn-primary">View Category Data</button>
-    <button onclick="testProductsFromLinks(true)" class="btn btn-primary" tooltip="(1 store at a time)">View Sample Products</button>    
-    <button onclick="getTotalProductCount()" class="btn btn-info">Get Total Product Count</button>
-    <button onclick="getProductsFromLinks(true)" class="btn btn-success">Get Products and Save</button>
+    <a href="#addCategoryForm" style="float: right; margin-right: 10px;"><button class="btn btn-danger btn-small">Upload Form</button></a>
+    <button id="selectall" class="btn btn-small">Select All</button>
+    <button id="deselectall" class="btn btn-small">Deselect All</button>
+    <button onclick="testProductsFromLinks()" class="btn btn-primary btn-small">Test Category</button>
+    <button onclick="getProductsFromLinks()" class="btn btn-primary btn-small">View Category Data</button>
+    <button onclick="testProductsFromLinks(true)" class="btn btn-primary btn-small" tooltip="(1 store at a time)">View Sample Products</button>    
+    <button onclick="getTotalProductCount()" class="btn btn-info btn-small">Get Total Product Count</button>
+    <button onclick="getProductsFromLinks(true)" class="btn btn-success btn-small">Save Products</button>        
         
     <!--<p>*** <a href="preload.php">UPDATE WEBSITE WITH NEW PRODUCTS</a> ***</p>-->
     <!--<p>*** <a href="colorProcessor.php">UPDATE NEW PRODUCT COLORS</a> ***</p>-->

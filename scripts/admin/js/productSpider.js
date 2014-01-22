@@ -1,3 +1,30 @@
+// Reorganizes the category links
+function reorganizeLinks(){
+	
+//	firebase.$.child("spider").once('value', function(spider){
+//	   spider.forEach(function(company){	       	       
+//	       company.forEach(function(customer){	          	           
+//	           customer.forEach(function(category){
+//	               var catObj = {url: category.val(), status: "works"};
+//	               
+//	               firebase.$.child("spider")
+//	                         .child(company.name())
+//	                         .child(customer.name())
+//	                         .child(category.name()).remove();
+//	                         
+//	               firebase.$.child("spider")
+//	                         .child(company.name())
+//	                         .child(customer.name())
+//	                         .child(category.name()).set(catObj);
+//	                         
+//	               console.log(company.name() + " -> " + customer.name() + " -> " + category.name());	               
+//	           });
+//	       });
+//	   });	  
+//	});		
+}							
+
+
 // Gets the category links
 function getLinks(){
 	$("#links").html("");	
@@ -14,6 +41,18 @@ function getLinks(){
 	           $("#links > .company").last().append($("<div>").addClass("customer").append($("<div>").addClass("customerName").html("&raquo; " + customer.name())));
 	           
 	           customer.forEach(function(category){
+	               var statusText = " - " + category.child("status").val();
+	               
+	               if (category.hasChild("count")){
+	                   statusText += ' (' + category.child("count").val() + ' products)';
+	               }
+	               
+	               var statusColor = "red";
+	               
+	               if (category.child("status").val() == "Works!" || category.child("status").val() == "works"){
+	                   statusColor = "green";
+	               }
+	               	               
 	               $("#links > .company > .customer").last().append(
     					$("<div>").addClass("category").append(
     						$("<input>")
@@ -21,9 +60,11 @@ function getLinks(){
     							.attr("company",company.name())
     							.attr("customer",customer.name())
     							.attr("category",category.name())
-    							.attr("url",category.val())
+    							.attr("url",category.child("url").val())
     						).append(
-    						      $("<a>").attr("href",category.val()).html(category.name())
+    						      $("<a>").attr("href",category.child("url").val()).html(category.name())
+    						).append(
+    						      $("<span>").addClass("isvalid").css("color",statusColor).html(statusText)
     						).append(
     						      $("<span>").addClass("removeCategory").html("x")
     						)
@@ -32,7 +73,7 @@ function getLinks(){
 	       });
 	   });	  
 	});		
-}							
+}	  				   				    						
 				
 // Gets the products from the selected links and optionally saves them				
 function getProductsFromLinks(save){
@@ -107,8 +148,9 @@ function testProductsFromLinks(showSample){
 		alert("Please select a product store > category");	
 	}else{
 				
-		$(".isvalid").remove();		
 		$("#links > .company > .customer > .category > input:checked").each(function(){	
+		    $(this).siblings(".isvalid").remove();
+		  
 		    var link = $(this);
 			var company = link.attr("company");
 			var customer = link.attr("customer");
@@ -161,8 +203,23 @@ function testProductsFromLinks(showSample){
 								
 				if (isValid){				    
 				    link.siblings("a").after('<span class="isvalid" style="color:green">&nbsp;- Works! ('+itemCount+' products)</span>');
+				    
+				    var statusObj = {status: "Works!", count: itemCount};
+				    
+				    firebase.$.child("spider")
+	                         .child(company)
+	                         .child(customer)
+	                         .child(category).update(statusObj);
+				    
 				}else{
 				    link.siblings("a").after('<span class="isvalid" style="color:red">&nbsp;- BROKEN :(</span>');
+				    
+				    var statusObj = {status: "BROKEN :(", count: itemCount};
+				    
+				    firebase.$.child("spider")
+	                         .child(company)
+	                         .child(customer)
+	                         .child(category).update(statusObj);
 				}
 				
 				count++;
@@ -254,9 +311,9 @@ $('form').submit(function(e) {
 	var company = $("#inputCompany").val().toLowerCase().trim();
 	var customer = $("#inputAudience").val().toLowerCase().trim();
 	var category = $("#inputCategory").val().toLowerCase().trim();
-	var url = $("#inputLink").val();								
+	var catObj = {url: $("#inputLink").val(), status: "works"};
 	
-	firebase.$.child("spider").child(company).child(customer).child(category).set(url, function(error){
+	firebase.$.child("spider").child(company).child(customer).child(category).set(catObj, function(error){
 	  if (!error){
 	      getLinks();
 	      alert("Added!");		      
