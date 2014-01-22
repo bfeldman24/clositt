@@ -311,7 +311,7 @@ $('form').submit(function(e) {
 	var company = $("#inputCompany").val().toLowerCase().trim();
 	var customer = $("#inputAudience").val().toLowerCase().trim();
 	var category = $("#inputCategory").val().toLowerCase().trim();
-	var catObj = {url: $("#inputLink").val(), status: "works"};
+	var catObj = {url: $("#inputLink").val(), status: "not tested"};
 	
 	firebase.$.child("spider").child(company).child(customer).child(category).set(catObj, function(error){
 	  if (!error){
