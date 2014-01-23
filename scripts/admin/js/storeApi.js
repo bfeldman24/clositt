@@ -130,44 +130,49 @@ storeApi = {
 	  		
 						$.each(this.childProducts, function(){								
 							var pid = this.businessCatalogItemId;
-						
-							var item = new Object();
-							item.image = this.quicklookImage.path;	
-							item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;	
-							item.name = this.name;
-							item.price = this.price.currentMinPrice;	
-							item.price = storeApiHelper.findPrice(item.price);
-							item.sku = 'g' + this.businessCatalogItemId;
-				
-							if(item.image != undefined){			
-								var itemid = item.sku.replace(/-\W/g, '');
-								products[itemid] = item;
-							}
+						      
+						    if (pid != null){
+    							var item = new Object();
+    							item.image = this.quicklookImage.path;	
+    							item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;	
+    							item.name = this.name;
+    							item.price = this.price.currentMinPrice;	
+    							item.price = storeApiHelper.findPrice(item.price);
+    							item.sku = 'g' + this.businessCatalogItemId;
+    				
+    							if(item.image != undefined){			
+    								var itemid = item.sku.replace(/-\W/g, '');
+    								products[itemid] = item;
+    							}
+						    }
 						});
 					});
 				}else if (json.productCategoryFacetedSearch.productCategory.childCategories.childProducts != null){
 					$.each(json.productCategoryFacetedSearch.productCategory.childCategories.childProducts, function(){
-	                                                var pid = this.businessCatalogItemId;
-	
-	                                                var item = new Object();
-	                                                item.image = this.quicklookImage.path;
-	                                                item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
-	                                                item.name = this.name;
-	                                                item.price = this.price.currentMinPrice;
-	                                                item.price = storeApiHelper.findPrice(item.price);
-	                                                item.sku = 'g' + this.businessCatalogItemId;
-	
-	                                                if(item.image != undefined){
-	                                                        var itemid = item.sku.replace(/-\W/g, '');
-	                                                        products[itemid] = item;
-	                                               }
+                                            var pid = this.businessCatalogItemId;
+                                            
+                                            if (pid != null){
+                                                var item = new Object();
+                                                item.image = this.quicklookImage.path;
+                                                item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
+                                                item.name = this.name;
+                                                item.price = this.price.currentMinPrice;
+                                                item.price = storeApiHelper.findPrice(item.price);
+                                                item.sku = 'g' + this.businessCatalogItemId;
+
+                                                if(item.image != undefined){
+                                                        var itemid = item.sku.replace(/-\W/g, '');
+                                                        products[itemid] = item;
+                                               }
+                                            }
 	                                       
 	                                });		
 				}
 			}else if(json.productCategoryFacetedSearch.productCategory.childProducts != null){
 				$.each(json.productCategoryFacetedSearch.productCategory.childProducts, function(){
 	                        	var pid = this.businessCatalogItemId;
-	
+	   
+	                            if (pid){
 	                                var item = new Object();
 	                                item.image = this.quicklookImage.path;
 	                                item.link = siteHome + "/browse/product.do?cid="+cid+"&vid="+vid+"&pid="+pid;
@@ -180,6 +185,7 @@ storeApi = {
 	                                	var itemid = item.sku.replace(/-\W/g, '');
 	                                        products[itemid] = item;
 	                                }
+	                            }
 	                        });
 			}
 	        
