@@ -72,6 +72,7 @@ input{
 <body>
 <?php include(dirname(__FILE__) . '/../../../static/header.php');   ?>
 <div id="mainContent">
+    <a href="#" name="top"></a>
     <br><h2>Product Genie</h2>
     <div id="links"><img src="../../../css/images/loading.gif" style="height:50px;"/></div>        
     
@@ -94,18 +95,22 @@ input{
     				  <option value="bloomingdales">Bloomingdales</option>
     				  <option value="brooks brothers">Brooks Brothers (json link)</option>
     				  <option value="charles tyrwhitt">Charles Tyrwhitt</option>				  
+    				  <option value="free people">Free People</option>
     				  <option value="gap">Gap (json link)</option>
     				  <option value="h&m">H&M (json link)</option>
     				  <option value="intermix">Intermix (json link)</option>
     				  <option value="j crew">JCrew</option>
+    				  <option value="kate spade">Kate Spade</option>
     				  <option value="loft">Loft</option>
     				  <option value="lululemon">LuLuLemon</option>				  
     				  <option value="lord and taylor">Lord And Taylor</option>				  
     				  <option value="madewell">Madewell</option>
+    				  <option value="neiman marcus">Neiman Marcus</option>
     				  <option value="nordstrom">Nordstrom</option>
     				  <option value="old navy">Old Navy (json link)</option>				  
     				  <option value="piperlime">Piperlime (json link)</option>
     				  <option value="target">Target</option>	  				  
+    				  <option value="top shop">Top Shop</option>	  				  
     				  <option value="tory burch">Tory Burch</option>	  				  
     				  <option value="urban outfitters">Urban Outfitters</option>
     				  <option value="zara">Zara</option>
@@ -189,6 +194,7 @@ input{
 
 <div class="actionButtons">
     <a href="#addCategoryForm" style="float: right; margin-right: 10px;"><button class="btn btn-danger btn-small">Upload Form</button></a>
+    <a href="#top" style="float: right; margin-right: 10px;"><button class="btn btn-danger btn-small">Top</button></a>
     <button id="selectall" class="btn btn-small">Select All</button>
     <button id="deselectall" class="btn btn-small">Deselect All</button>
     <button onclick="testProductsFromLinks()" class="btn btn-primary btn-small">Test Category</button>

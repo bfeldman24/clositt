@@ -33,6 +33,8 @@ function getLinks(){
 	   spider.forEach(function(company){
 	       $("#links").append(
 	           $("<div>").addClass("company").append(
+	               $("<a>").attr("name",company.name())
+	            ).append(
 	               $("<div>").addClass("companyName").html("&bull; " + company.name())
 	            )
 	        );   
@@ -317,8 +319,8 @@ $('form').submit(function(e) {
 	  if (!error){
 	      getLinks();
 	      alert("Added!");		      
-			  $("#inputLink").val("");
-			  $("#inputCategory").val("");		
+		  $("#inputLink").val("");
+	      $("#inputCategory").val("");		
 	  }
 	});					
 					
@@ -433,3 +435,27 @@ $(document).on("click",".removeCategory", function(el){
 
 $(document).find(".feedback-maximize").hide('fade');
 $(document).find(".feedback-minimized").show('fade');
+
+$(document).on("change", "#selectStores", function(e){
+   location.href = "#" + $("#selectStores").val(); 
+});
+
+$(document).ready(function(){
+    var storeSelect = $("#inputCompany").clone();
+    storeSelect.attr("id","selectStores");
+    
+    storeSelect.find("option").first().before(
+        $("<option>").attr("value","store").text("Go To")
+    );
+    
+    storeSelect.val("store");    
+    storeSelect.css("float","right")
+     .css("margin","0 10px 0 0")
+     .css("padding","2px 4px")
+     .css("height","26px")
+     .css("width","80px");         
+    
+    $(".actionButtons button").last().after(
+        storeSelect    
+    ); 
+});

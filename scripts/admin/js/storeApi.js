@@ -96,7 +96,21 @@ storeApi = {
 			case "lululemon":			 
     			products = storeApi.getLuLuLemon(data, home);
 			    break;  
-			 
+			case "target":
+			    products = storeApi.getTarget(data, home);
+			    break; 
+			case "top shop":
+			    products = storeApi.getTopShop(data, home);
+			    break;  
+			case "kate spade":			 
+			    products = storeApi.getKateSpade(data, home);
+			    break; 
+			case "neiman marcus": 			
+    			products = storeApi.getNeimanMarcus(data, home);
+			    break; 
+			case "free people":			
+			    products = storeApi.getFreePeople(data, home);
+			    break; 
 		}	
 		
 		return products;
@@ -279,9 +293,14 @@ storeApi = {
 			
 			item.image = $(this).find("a.gaProductDetailsLink > img").first().attr("data-src");
 			item.link = $(this).find("a.gaProductDetailsLink").first().attr("href");			
-			item.name = $(this).find(".product-info > a.name").first().text().trim();				
-			item.price = $(this).find(".product-info > .price").first().text().trim();
-			item.price = storeApiHelper.findPrice(item.price);
+			item.name = $(this).find(".product-info > a.name").first().text().trim();			
+			
+			var price = $(this).find(".product-info > .price span").first().attr("data-ecirp");
+			price = price.replace(/[a-zA-Z£$:]*/g,'').trim();
+            priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
+    	    item.price = storeApiHelper.getLowestPrice(priceArr);     
+    		item.price = storeApiHelper.findPrice(item.price);  
+							
 			item.sku = 'z' + $(this).find("a.gaProductDetailsLink").first().attr("data-item");
 			
 			if(item.image != undefined){
@@ -434,8 +453,8 @@ storeApi = {
        $(data).find(".arrayProdCell").each(function(){
                 var item = new Object();
 
-                item.image = siteHome + $(this).find(".arrayImg img").first().attr("src");
-                item.link = siteHome + $(this).find(".arrayImg a").first().attr("href");                
+                item.image = $(this).find(".arrayImg img").first().attr("src");
+                item.link = $(this).find(".arrayImg a").first().attr("href");                
                 item.price = $(this).find(".arrayCopy .arrayProdPrice").text().replace(/([a-zA-Z$ ])*(\s)+/g, ' ').trim();
                 item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".arrayImg img").first().attr("alt");
@@ -586,9 +605,9 @@ storeApi = {
                 item.image = $(this).find(".img img").first().attr("src");
                 item.link = siteHome + $(this).find("a.img").first().attr("href");
                 item.name = $(this).find("h3 a").first().text().trim();
-                var price = $(this).find(".price").text().replace(/[a-zA-Z£$]*/g,'').trim();
+                var price = $(this).find(".price").text().replace(/[a-zA-Z£$:]*/g,'').trim();
                 priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
-    			item.price = priceArr[0];     
+    			item.price = storeApiHelper.getLowestPrice(priceArr);     
     			item.price = storeApiHelper.findPrice(item.price);                           
 
                 if(item.image != undefined){
@@ -629,6 +648,147 @@ storeApi = {
         });
 
         return JSON.stringify(products);
+	},
+	
+	getTarget: function(data, siteHome){
+	   var products = new Object();
+	
+       $(data).find("#productListing .productsListView").each(function(){            
+            var item = new Object();
+
+            item.image = $(this).find(".tileImage img.tileImage").first().attr("original");
+            item.link = s$(this).find(".tileInfo .productTitle > a").first().attr("href");
+            item.name = $(this).find(".tileInfo .productTitle > a").first().text().trim();
+            var price = $(this).find(".tileInfo .pricecontainer .price").text().replace(/[a-zA-Z£$:]*/g,'').trim();
+            priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
+			item.price = storeApiHelper.getLowestPrice(priceArr);     
+			item.price = storeApiHelper.findPrice(item.price);                           
+
+            if(item.image != undefined){
+                //http://www.target.com/p/denizen-men-s-regular-fit-jeans/-/A-14711092#prodSlot=medium_1_1
+                
+                var id = item.link;
+                
+                if (item.link.indexOf("#") > 0){
+                    id = id.substring(0, id.indexOf("#"));
+                }
+                
+                if (item.link.indexOf("?") > 0){
+                    id = id.substring(0, id.indexOf("?"));
+                }
+                
+                id = id.substring(id.lastIndexOf("/"));
+                
+                item.sku = 't' + id;
+                
+		        var itemid = item.sku.replace(/-\W/g, '');
+                products[itemid] = item;
+            }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getTopShop: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find("#wrapper_page_content .product").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".product_image img").first().attr("src");
+                item.link = $(this).find(".product_image a").first().attr("href");
+                item.name = $(this).find(".product_description a").first().text().trim();
+                var price = $(this).find(".product_price").text().replace(/[a-zA-Z£$:]*/g,'').trim();
+                priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
+    			item.price = storeApiHelper.getLowestPrice(priceArr);     
+    			item.price = storeApiHelper.findPrice(item.price);                           
+
+                if(item.image != undefined){
+                   item.sku = 'ts' + $(this).find(".product_image a").first().attr("data-productid");
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getKateSpade: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find("#search-result-items .grid-tile .product-tile").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".product-image img.first-img").first().attr("data-baseurl");
+                item.link = $(this).find(".product-image a").first().attr("href");
+                item.name = $(this).find(".product-name a.name-link").first().text().trim();
+                var price = $(this).find(".product-name .product-price").text().replace(/[a-zA-Z£$:]*/g,'').trim();
+                priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
+    			item.price = storeApiHelper.getLowestPrice(priceArr);     
+    			item.price = storeApiHelper.findPrice(item.price);                           
+
+                if(item.image != undefined){
+                   item.sku = 'ks' + $(this).attr("data-itemid");
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getNeimanMarcus: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".products .product").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".productImageContainer img.productImage").first().attr("src");
+                item.link = siteHome + $(this).find(".productImageContainer a.prodImgLink").first().attr("href");
+                item.name = $(this).find(".details .productname a.recordTextLink").first().text().trim();
+                var price = $(this).find(".details .allpricing").text().replace(/[a-zA-Z£$:]*/g,'').trim();
+                priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
+    			item.price = storeApiHelper.getLowestPrice(priceArr);
+    			item.price = storeApiHelper.findPrice(item.price);           
+    			
+    			item.designer = $(this).find(".details .productdesigner a").first().text().trim();
+
+                if(item.image != undefined){
+                   item.sku = 'nm' + $(this).find(".qv-tip").attr("product_id");
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getFreePeople: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find("#products ul li").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".media img").first().attr("src");
+                item.link = $(this).find(".media a").first().attr("href");
+                item.name = $(this).find(".info .name a").first().text().trim();
+                var price = $(this).find(".info .offers .price").text().replace(/[a-zA-Z£$:]*/g,'').trim();
+                priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
+    			item.price = storeApiHelper.getLowestPrice(priceArr);     
+    			item.price = storeApiHelper.findPrice(item.price);               			
+
+                if(item.image != undefined){
+                   item.sku = 'fp' + $(this).find(".wl-product-thumbnail").attr("data-stylenumber");
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
 	}
 }
 
@@ -636,5 +796,16 @@ storeApiHelper = {
     findPrice: function(price){
         var priceArray = (price + "").trim().split(/[\s-]+/);
 		return parseFloat(priceArray[priceArray.length - 1].replace(/[^0-9\.]+/g,""));   
+    },
+    
+    getLowestPrice: function(priceArray){
+        var min = priceArray[0];
+        for (var i=0; i < priceArray.length; i++){
+               if (!isNaN(priceArray[i]) && priceArray[i] < min ){
+                    min = priceArray[i];
+               }
+        }   
+        
+        return min;
     }   
 }

@@ -1,7 +1,8 @@
 <?php 
 function file_get_contents_curl($url) {       
     $curl = curl_init($url);    
-//    curl_setopt($curl, CURLOPT_USERAGENT, 'search/1.0 (www.search.com)'); //'Googlebot/2.1 (http://www.googlebot.com/bot.html)')
+    //curl_setopt($curl, CURLOPT_USERAGENT, 'search/1.0 (www.search.com)'); //'Googlebot/2.1 (http://www.googlebot.com/bot.html)')
+    curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:26.0) Gecko/20100101 Firefox/26.0');    
     curl_setopt($curl, CURLOPT_AUTOREFERER, true);
     curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1 );
@@ -38,10 +39,13 @@ function combineMultipleUrls($file, $nextPage, $curl = false){
 }
 
 
-if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){    
-    $url = stripslashes($_REQUEST['u']);
-    $file = file_get_contents($url);
+if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){   
+    $url = stripslashes($_REQUEST['u']);   
+    $file = "";
     
+    if ($_REQUEST['d']){
+        echo "url: " . $url;
+    }    
 	
 	if (strpos($_REQUEST['u'],"anthropologie")){
     	// Combine multiple url <body> into one
@@ -109,6 +113,22 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
     	$file = combineMultipleUrls($file, $url . "?beginIndex=200");
     	$file = combineMultipleUrls($file, $url . "?beginIndex=300");
     	$file = combineMultipleUrls($file, $url . "?beginIndex=400");	
+	}
+	
+	else if (strpos($url,"topshop")){
+	   $file = file_get_contents_curl($url);   
+	   
+	   if ($_REQUEST['d']){
+           echo "contents: " . $file;
+       }
+	}
+	
+	else{
+	   $file = file_get_contents($url);   
+	   	
+	   if ($_REQUEST['d']){
+           echo "contents: " . $file;
+       }	   
 	}	
 
     // only strip starting and ending body if the body tag exists (could be in json format)	
@@ -123,7 +143,14 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
         		
 	echo $file;
 }
-else{
+else if(isset($_REQUEST['t']) && $_REQUEST['t'] != ""){ 
+    ?>
+    <form method="post">
+        <input type="text" name="u" />
+        <input type="submit" />
+    </form>
+    <?php
+}else{
  echo "Got nothing";   
 }
 
