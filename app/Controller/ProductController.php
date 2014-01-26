@@ -28,7 +28,27 @@ class ProductController {
 			}
 		}
 	
-		return $productEntity;
+	    //ProductTemplate::getProductGridTemplate($productEntity);
+        return json_encode($productEntity->toArray());
+	}
+	
+	public function getProducts($page, $limit){
+	    $searchResults = array();
+	    		
+		if(isset($page) && isset($limit)){	
+		      
+			$results = $this->productDao->getProducts($page, $limit);
+			
+			if(is_object($results)){
+				while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+				    $productEntity = new ProductEntity();						
+					ProductEntity::setProductFromDB($productEntity, $row);
+					$searchResults[] = $productEntity->toArray();
+				}
+			}
+		}
+	
+		return json_encode($searchResults);
 	}
     
     public function addProducts($products){	
@@ -79,35 +99,38 @@ class ProductController {
 
 	public function getFilteredProducts($criteria, $pageNumber, $numResultsPage){
 			
-			$productEntity = new ProductEntity();		
-			$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage);
-			
-			if(is_object($results)){
-				while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){
-					ProductEntity::setProductFromDB($productEntity, $row);
-					ProductTemplate::getProductGridTemplate($productEntity);
-				}
+		$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage);
+		$searchResults = array();
+		
+		if(is_object($results)){
+			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){
+			    $productEntity = new ProductEntity();
+				ProductEntity::setProductFromDB($productEntity, $row);
+				//ProductTemplate::getProductGridTemplate($productEntity);
+				$searchResults[] = $productEntity->toArray();
 			}
+		}
+		
+		return json_encode($searchResults);
 	}
 }
 
 
-if (isset($_GET['demo'])){
-	echo "demo";
-    $productController = new ProductController($mdb2);
-    $product = $productController->getProduct('g918150002');
-    ProductTemplate::getProductGridTemplate($product);
-}
-
-if (isset($_GET['test_get_page'])){
-	echo "test_get_page";
-    $productController = new ProductController($mdb2);
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
+    $productController = new ProductController($mdb2);              
     
-    $productCrit = new ProductCriteria();
-	//$productCrit->setCompanies(array('Gap'));	
-	$productCrit->setCategories(array('Sweaters'));	
-    $product = $productController->getFilteredProducts($productCrit, 1, 10);
-
+    if ($_GET['method'] == 'lookup' && isset($_POST['sku'])){
+         $product = $productController->getProduct($_POST['sku']);   
+    
+    }else if ($_GET['method'] == 'browse' && isset($_GET['page']) && isset($_GET['limit'])){
+        $product = $productController->getProducts($_GET['page'], $_GET['limit']);   
+        
+    }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page']) && isset($_GET['limit'])){                        
+    	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);	     	   	    
+        $product = $productController->getFilteredProducts($productCrit, $_GET['page'], $_GET['limit']);
+    }
+    
+    print_r($product);     
 }
 
 

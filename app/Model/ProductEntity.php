@@ -1,13 +1,13 @@
 <?php
 // JAVASCRIPT Products
-define("JS_PRODUCT_SKU","i");
+define("JS_PRODUCT_SKU","s");
 define("JS_PRODUCT_STORE","o");
 define("JS_PRODUCT_CUSTOMER","u");
 define("JS_PRODUCT_CATEGORY","a");
-define("JS_PRODUCT_NAME","t");
+define("JS_PRODUCT_NAME","n");
 define("JS_PRODUCT_LINK","l");
-define("JS_PRODUCT_IMAGE","p");
-define("JS_PRODUCT_PRICE","v");
+define("JS_PRODUCT_IMAGE","i");
+define("JS_PRODUCT_PRICE","p");
 define("JS_PRODUCT_COMMENT_COUNT","rc");
 define("JS_PRODUCT_CLOSITT_COUNT","cc");
 
@@ -117,7 +117,7 @@ class ProductEntity {
 		
 	/**** ************************** ****/
 		
-	public static function setProductFromDB($ProductEntity, $row){
+	public static function setProductFromDB($ProductEntity, $row){         
 		if (is_object($ProductEntity) && get_class($ProductEntity) == "ProductEntity"){
 			$ProductEntity->setId(stripslashes($row[PRODUCT_SKU]));
 			$ProductEntity->setStore(stripslashes($row[PRODUCT_STORE]));

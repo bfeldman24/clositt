@@ -688,13 +688,21 @@ footer .last{
 }
 
 .overlay > .topleft {
-  display: block;	
-	height: 25px;	
-	padding: 5px;	
-	position: absolute;	
-	left: 0;	
-	top: 0;	
-	width: 29px;
+    display: block;
+    height: 35px;
+    left: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    width: 39px;
+}
+
+.overlay .social-people-icon {
+    cursor: pointer;
+    height: 37px;
+    left: 0;
+    opacity: 0.98;
+    position: relative;
 }
 
 .overlay .hanger-icon{
@@ -1876,6 +1884,28 @@ input.closetNameInput[type="text"] {
     left: 475px;
     position: absolute;
     top: 305px;  
+}
+
+/**** SOCIAL BUTTONS ****/
+.social-btns{
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px dashed rgba(77, 77, 77, 0.6);
+    border-radius: 0 0 15px 15px;   
+    padding: 5px 0;
+    position: absolute;
+    top: 35px;
+    width: 37px;
+    z-index: 999;
+}
+
+.social-btns > a{
+    display: block;   
+}
+
+.social-btns > a > img.social-link{
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 5px;
+    height: 26px;
 }
 
 /***** CLOSITT COLOR THEME ****/

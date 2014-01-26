@@ -14,6 +14,7 @@ $js = '<script src="' . HOME_ROOT .'scripts/js/firebaseExtension.js"></script>' 
 '<script src="' . HOME_ROOT .'scripts/js/productPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/filterPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/tagPresenter.js"></script>' .
+'<script src="' . HOME_ROOT .'scripts/js/socialPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/searchController.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/reviewsPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/closetPresenter.js"></script>' .
@@ -32,4 +33,11 @@ define('CLOSITT_JS',$js);
 //define('CLOSITT_JS','<script src="' . HOME_ROOT .'scripts/js/clositt.min.js"></script>');
 //define('CLOSITT_CSS',HOME_ROOT .'css/style.min.css');
 
+
+
+
+// ALL
+define('META_PAGE', 'static/meta.php');
+
+define('WHOOPS_PAGE', 'whoops.php');
 ?>

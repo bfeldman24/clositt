@@ -112,14 +112,23 @@ var productPagePresenter = {
 	   $("#page-mask").show();	  
 	   sku = productPresenter.formatSku(sku);
 	   
-	   firebase.$.child("clositt").child(firebase.productsPath).child(sku).once('value', function(snapshot){
-    	   var product = snapshot.val();
-    	   
-    	   var item = productPagePresenter.getProductPageTemplate(product);	   
-    	   reviewsPresenter.populateProductPageReview(item, snapshot.name());
-    	   $("#product-module").html(item);	   
-    	   $("#product-module").show('fade');
-	   });
+	   $.post( window.HOME_ROOT + "p/lookup", {sku: sku}, function( product ) {
+            var item = productPagePresenter.getProductPageTemplate(product);	   
+    	    reviewsPresenter.populateProductPageReview(item, product.s);
+    	    $("#product-module").html(item);	   
+    	    $("#product-module").show('fade');
+        }
+        , "json"
+        );
+	   
+//	   firebase.$.child("clositt").child(firebase.productsPath).child(sku).once('value', function(snapshot){
+//    	   var product = snapshot.val();
+//    	   
+//    	   var item = productPagePresenter.getProductPageTemplate(product);	   
+//    	   reviewsPresenter.populateProductPageReview(item, snapshot.name());
+//    	   $("#product-module").html(item);	   
+//    	   $("#product-module").show('fade');
+//	   });
 	   	   	   
 	},
 	

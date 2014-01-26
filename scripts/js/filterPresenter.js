@@ -150,8 +150,10 @@ var filterPresenter = {
 	 	if (isSearch){
 	 	     searchController.search(criteria);
 	 	     
-	 	}else if (areAnyFiltersChecked){	 		 	 	 		 		 	
-            searchController.getProducts(criteria, null, searchController.showResults);
+	 	}else if (areAnyFiltersChecked){
+	 	    searchController.criteria = criteria;
+            searchController.pageIndex = 0; 	 		 		 	
+            searchController.getProducts();
 	 	}else{
 	 	      $(".noresults").remove();
 	 	      $("#search-bar-sort-block").css("visibility","hidden");

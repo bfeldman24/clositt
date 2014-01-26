@@ -34,7 +34,8 @@ class AbstractDao{
 						
 		if($this->debug){
 		    $parameters = print_r($params, true);
-			$this->logDebug($errorCode ,$sql . " (" . $parameters . ")" );
+		    $parameterTypes = print_r($paramTypes, true);
+			$this->logDebug($errorCode ,$sql . " (" . $parameters . "), (".$parameterTypes.")" );
 		}
 		
 		$results =& $stmt->execute($params);

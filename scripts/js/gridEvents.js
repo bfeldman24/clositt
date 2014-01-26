@@ -9,7 +9,8 @@ var gridEvents = {
 			$(el.currentTarget).closest("form").submit();
 		});		
 		
-		$(document).on("click",".tagOutfitBtn",tagPresenter.showTagForm);		
+		$(document).on("click",".tagOutfitBtn",tagPresenter.showTagForm);
+		$(document).on("click",".shareOutfitBtn",socialPresenter.showShareButtons);				
 		$(document).on("submit",".addTagForm > form",tagPresenter.addTag);				
 	},
 	

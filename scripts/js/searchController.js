@@ -1,6 +1,8 @@
 var searchController = {
     
     results: null,
+    criteria: null,
+    pageIndex: 0,
     
     init: function(){
         $("#search-bar").on("keyup", searchController.showClearBtn);
@@ -158,11 +160,43 @@ var searchController = {
                 criteria['colors'] = matchingColors;                                       
             }              
         }
-          
-        searchController.getProducts(criteria, tags, searchController.showResults);
-    },                    
+         
+        criteria['tags'] = tags;  
+        criteria['searchTerm'] = $( "#search-bar" ).val().trim();
+        
+        searchController.criteria = criteria;
+        searchController.pageIndex = 0;
+        searchController.getProducts(searchController.showResults);
+    },            
     
-    getProducts: function(criteria, tags, callback){                              
+    getProducts: function(){                                
+        
+        $.post( window.HOME_ROOT + "p/search/"+searchController.pageIndex+"/" + productPresenter.loadSize, searchController.criteria, function( data ) {            
+                        
+    		gridPresenter.endTask();
+    		
+    		if( Object.keys(data).length > 0){
+    		    gridPresenter.lazyLoad(data);     		    
+    		    searchController.pageIndex++;
+    		}else{
+    		    var searchTerm = $( "#search-bar" ).val().trim();
+    		    var errorMessage = '';
+    		    
+    		    if (searchTerm == ""){
+    		        errorMessage = "There are no macthing outfits!";
+    		    }else{
+    		        errorMessage = "There are no outfits that matched: \'" + searchTerm + "\'! Try using another way to describe what you are looking for.";
+    		    }
+    		  
+    			$("#product-grid").html($("<div>").text(errorMessage));
+    		}                        
+        }
+        , "json"
+        );
+                
+    },     
+    
+    getProductsOld: function(criteria, tags, callback){                              
         gridPresenter.beginTask();                        
            
         // criteria has -> "company","customer","category","price","underprice"        

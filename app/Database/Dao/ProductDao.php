@@ -28,7 +28,20 @@ class ProductDao extends AbstractDao {
 		$paramsTypes = array('text');		
 		$params = array($productId);	
 		return $this->getResults($sql, $params, $paramTypes, "3248272");
-	}            			
+	}  
+	
+	public function getProducts($page, $limit){					
+		$offset = $page * $limit;
+		
+		$sql = "SELECT * " .				
+				" FROM " . PRODUCTS .
+				" LIMIT ? OFFSET ?";								
+        
+		$paramsTypes = array('integer','integer');		
+		$params = array($limit, $offset);
+		
+		return $this->getResults($sql, $params, $paramTypes, "2309842");
+	}          			
 	
 	public function addProducts($products){
 	    if(!isset($products) || !is_array($products)){
@@ -54,7 +67,7 @@ class ProductDao extends AbstractDao {
         }
         
         return $results;
-	}
+	}		
 
 	/**
 	*
@@ -70,7 +83,7 @@ class ProductDao extends AbstractDao {
 			return false; 
 		}
 
-		$start = ($pageNumber - 1) * $numResultsPerPage;
+		$start = $pageNumber * $numResultsPerPage;
 		$params = array();
 		$paramTypes = array();
 		$firstClause = true;
@@ -112,7 +125,7 @@ class ProductDao extends AbstractDao {
 			$sql .= " p." . $columnName . " in ( ? )";
 			//TODO escape criteria objects here
 			array_push($params, implode(",", $criteria));
-			array_push($paramTypes, 'Text') ;
+			array_push($paramTypes, 'text') ;
 			$firstClause = false;
 		}
 	}		

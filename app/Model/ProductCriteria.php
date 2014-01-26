@@ -93,7 +93,20 @@ class ProductCriteria{
 		}
 	}
 
-
+    public static function setCriteriaFromPost($row){
+		$productCriteria = new ProductCriteria();
+		
+		$productCriteria->setCompanies($row['company']);
+		$productCriteria->setCustomers($row['customer']);
+		$productCriteria->setCategories($row['category']);
+		$productCriteria->setColors($row['colors']);
+		$productCriteria->setTags($row['tags']);
+		$productCriteria->setSearchString(trim($row['searchTerm']));
+		$productCriteria->setMinPrice($row['abovePrice']);
+		$productCriteria->setMaxPrice($row['belowPrice']);
+				    
+		return $productCriteria;
+	}
 }
 
 ?>

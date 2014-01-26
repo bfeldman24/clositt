@@ -18,7 +18,7 @@
         	 
         	<div id="leftContainer" class="homeGrid">
         		<div id="goback">
-        			<p>A special thanks to <a href="http://www.webalys.com/minicons">Minicons Free Vector Icons Pack</a>, <a href="http://glyphicons.com/">Glyphicons</a>, and <a href="https://www.iconfinder.com/iconsets/pictype-free-vector-icons">Timothy Miller</a> for the creative icons!</a>        			
+        			<p>A special thanks to <a href="http://www.webalys.com/minicons">Minicons Free Vector Icons Pack</a>, <a href="http://glyphicons.com/">Glyphicons</a>, <a href="https://www.iconfinder.com/iconsets/pictype-free-vector-icons">Timothy Miller</a>, and <a href="http://ionicons.com/">Ionicons</a> for the creative icons!</a>        			
         		</div>        	
         	</div>
         	

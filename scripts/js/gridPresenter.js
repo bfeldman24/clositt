@@ -131,27 +131,16 @@ var gridPresenter = {
 		if(lastHeight <= ($(window).height() + $(window).scrollTop() + 125)){						
 			var $items = $();
 			
-			if(productPresenter.filterStore == null){	
-			     gridPresenter.productIndex += productPresenter.loadSize;
-			     var startingPos = gridPresenter.defaultCustomerCode + (gridPresenter.randomStartingPosition + gridPresenter.productIndex);
-    		     firebase.$.child('clositt/' + firebase.productsPath)
-    		           .startAt(startingPos).limit(productPresenter.loadSize)
-	                   .once('value', gridPresenter.lazyLoad);          			     
-    		}else{				
-				var el=productPresenter.filterStore;
-				var index = productPresenter.productIndex;
-				
-				for(var i = index; i < index + numElements;i++){
-					
-					if(el[Object.keys(el)[i]] != null){
-						var html = productPresenter.getStoreProductTemplate(el[Object.keys(el)[i]]).css("position","absolute").css("left","-9999px");
-						$items = $items.add(html);
-					}
-				}
-				
-				productPresenter.productIndex += numElements;				
-				$("#product-grid").append($items);								
-				gridPresenter.alignDefaultGrid();
+			if(productPresenter.filterStore == null){				     
+			     $.post( window.HOME_ROOT + "p/browse/" + gridPresenter.productIndex + "/" + productPresenter.loadSize, {}, gridPresenter.lazyLoad, "json");
+			     gridPresenter.productIndex++;
+			     
+//    		     firebase.$.child('clositt/' + firebase.productsPath)
+//    		           .startAt(startingPos).limit(productPresenter.loadSize)
+//	                   .once('value', gridPresenter.lazyLoad);          			     
+    		}else{	
+    		    searchController.getProducts(gridPresenter.lazyLoad);   
+    		    gridPresenter.productIndex = 0; 		  			
 			}		
 		}
 	},
@@ -159,7 +148,7 @@ var gridPresenter = {
 	lazyLoad: function(products){
 	               
         products.forEach(function(product){	                       
-			var $html = productPresenter.getProductTemplate(product.val());
+			var $html = productPresenter.getProductTemplate(product);
             $("#product-grid").append($html);						            			          						
 	   });
 			                   			   	   		
@@ -183,5 +172,6 @@ var gridPresenter = {
 		$(".showComments").tooltip();
 		$(".numClosets").tooltip();
 		$(".addToWishList").tooltip();
+		$(".shareOutfitBtn").tooltip();
 	}
 };
