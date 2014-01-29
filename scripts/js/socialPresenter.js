@@ -12,7 +12,7 @@ var socialPresenter = {
 		}else{							  												
 		    var shortlink = $(element).parents(".item").attr("data-url");
 		    
-		    var productLink = "http://clothies.bprowd.com/@/"+shortlink;
+		    var productLink = window.HOME_URL + "@/"+shortlink;		    
 		    var productEncodeLink = encodeURIComponent(productLink);
 		    var imgLink = encodeURIComponent($(element).parents(".item").find(".picture img").attr("src"));
 		    var desc = encodeURIComponent("Found on Clositt.com");

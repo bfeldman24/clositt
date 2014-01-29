@@ -64,19 +64,26 @@ class ProductDao extends AbstractDao {
 				" INNER JOIN (SELECT " . PRODUCT_STORE . ", " . PRODUCT_CUSTOMER . ", " . PRODUCT_CATEGORY . 
 				" FROM " . PRODUCTS;
 		
-		if (substr_count($productId, "-") <= 1){
-		     $sql .= " WHERE " . PRODUCT_SKU . " = ? )";
-		}else{
-		     $sql .= " WHERE " . PRODUCT_SHORT_LINK . " = ? )";
-		}	
+              		if (substr_count($productId, "-") <= 1){
+              		     $sql .= " WHERE " . PRODUCT_SKU . " = ? )";
+              		}else{
+              		     $sql .= " WHERE " . PRODUCT_SHORT_LINK . " = ? )";
+              		}	
 		
 		$sql .=	" AS item ON p.".PRODUCT_STORE." = item.".PRODUCT_STORE .
 		               " AND p.".PRODUCT_CUSTOMER." = item.".PRODUCT_CUSTOMER .
-		               " AND p.".PRODUCT_CATEGORY." = item." . PRODUCT_CATEGORY .
-				" LIMIT ?";								
+		               " AND p.".PRODUCT_CATEGORY." = item." . PRODUCT_CATEGORY;       
+		               
+        if (substr_count($productId, "-") <= 1){
+		     $sql .= " WHERE p." . PRODUCT_SKU . " <> ? ";
+		}else{
+		     $sql .= " WHERE p." . PRODUCT_SHORT_LINK . " <> ? ";
+		}		               
+		               
+		$sql .= " LIMIT ?";								
         
-		$paramsTypes = array('text','integer');		
-		$params = array($productId, $limit);
+		$paramsTypes = array('text','text','integer');		
+		$params = array($productId, $productId, $limit);
 		
 		return $this->getResults($sql, $params, $paramTypes, "2309842");
 	}        			
