@@ -152,7 +152,8 @@ var filterPresenter = {
 	 	     
 	 	}else if (areAnyFiltersChecked){
 	 	    searchController.criteria = criteria;
-            searchController.pageIndex = 0; 	 		 		 	
+            searchController.pageIndex = 0; 
+            searchController.hasMoreProducts = true;	 		 		 	
             searchController.getProducts();
 	 	}else{
 	 	      $(".noresults").remove();

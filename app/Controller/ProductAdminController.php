@@ -7,10 +7,12 @@ require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 
 class ProductAdminController {	
 	private $productAdminDao = null;
+	private $productDao = null;
 	private $debug = false;
 	
 	public function __construct(&$mdb2){
 		$this->productAdminDao = new ProductAdminDao($mdb2);
+		$this->productDao = new ProductDao($mdb2);
 	}
     
     public function addAdminProducts($products){
@@ -25,6 +27,8 @@ class ProductAdminController {
         $results['numProducts'] = count((array)$products);
 		if(isset($products) && is_array($products) && count((array)$products) > 0){	
             // echo " 4) products are set. ";
+            
+            $this->createShortLinks($products);
 
 			// Clear temp table
 			$clearProducts = $this->productAdminDao->clearTempProducts();
@@ -101,7 +105,81 @@ class ProductAdminController {
 	public function getTotalProductsCount(){
 	   $result = $this->productAdminDao->getTotalProductsCount();	    
 	   return $result->fetchOne();
-	}       
+	}
+	
+	public function updateAllShortLinks(){
+	   echo "<br>Getting Products…";
+	   $products = array(); 
+	   $results = $this->productAdminDao->getProductsForUpdatingShortLinks(0, 200000);
+	   
+	   if(is_object($results)){
+			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+			    $productEntity = new ProductEntity();				
+				ProductEntity::setProductFromDB($productEntity, $row);				
+				$products[] = $productEntity;				
+			}
+		}
+	     
+	   if(count($products) > 0){	                    
+	        echo "<br>Creating Short Links…";
+            $this->createShortLinks($products);
+            echo "<br>Updating Short Links...";
+            return $this->productAdminDao->updateAllShortLinks($products);
+	   }else{
+	       echo "<br>ERROR: Didn't get products…";   
+	   }  
+	   
+	   return "DID NOT UPDATE SHORT LINKS";
+	} 
+	
+	private function createShortLinks(&$products){
+	   $links = array();
+	   $b=0;
+	   
+	   foreach($products as $key => $p){
+	       
+	       if ($p['s'] == null){	       
+	           $shortlink = str_replace(" ", "-", $p->getStore()) . "-" . str_replace(" ", "-", $p->getName());	       
+	       }else{
+	           $shortlink = str_replace(" ", "-", $p['o']) . "-" . str_replace(" ", "-", $p['n']);	       
+	       }
+	       
+	       $shortlink = strtolower($this->cleanUrl($shortlink));	
+	       	       
+	       echo "<br>$b)";
+	       if(in_array($shortlink, $links)){
+	           $count = 2;
+	           
+	           while(in_array($shortlink. "-" . $count, $links)){
+	               echo " $count";
+	               $count++;            
+	           }
+	           
+	           $shortlink .= "-" . $count;	           
+	       }
+	       	       
+	       echo " - " . $shortlink;
+	       $b++;	       	       
+	       
+	       $links[] = $shortlink;	     
+	       
+	       if ($p['s'] == null){ 
+	           $p->setShortLink($shortlink);	       	   
+	       }else{
+	           $p['sl'] = $shortlink;	       	   
+	       }
+	   }  
+	}	
+	
+	// Returns a url stripped of any characters that are not allowed in urls
+	private function cleanUrl($url) {
+      $url = preg_replace('~[^\\pL0-9_]+~u', '-', $url);
+      $url = trim($url, "-");
+      $url = iconv("utf-8", "us-ascii//TRANSLIT", $url);
+      $url = strtolower($url);
+      $url = preg_replace('~[^-a-z0-9_]+~', '', $url);
+      return $url;
+   }
 }
 
 
@@ -122,7 +200,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
         //echo " 2) count. ";
         $results = $productAdminController->getTotalProductsCount();   
         print_r($results);        
-    }    
+    
+    }   
+}else if ($_GET['method'] == 'updateshortlinks'){                                          
+    echo "Updating Short Links…";
+    $productAdminController = new ProductAdminController($mdb2);
+    $results = $productAdminController->updateAllShortLinks();   
+    print_r($results);        
 }
 
 ?>

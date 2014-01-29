@@ -4,8 +4,6 @@ require_once(dirname(__FILE__) . '/../Database/Dao/AbstractDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../View/ProductTemplate.php');
 
-define('COLORS', 'Colors');
-
 class ColorController extends AbstractDao{		
 	
 	public function addColors($colors){	

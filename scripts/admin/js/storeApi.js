@@ -558,7 +558,8 @@ storeApi = {
                 var item = new Object();
 
                 item.image = $(this).find(".pro_pic img").first().attr("data-original");
-                item.link = $(this).find("a.pro_img").first().attr("href");                
+                var js_link = $(this).find(".catEntryDisplayUrlScript").first().text();
+                item.link = js_link.substring( js_link.indexOf("http"), js_link.indexOf(")") -1);                                                                                 
                 item.price = $(this).find(".pro_price_black").text().trim();
                 item.price += " " + $(this).find(".pro_price_red").text().replace(/[a-zA-Z]*/g,'').trim();
                 item.price = item.price.trim();

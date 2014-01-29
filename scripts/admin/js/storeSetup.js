@@ -129,7 +129,7 @@ var storeSetup = {
 	 
 	 saveAllProducts: function(products, companies, customers, categories, prices){
 	 	var i=1;
-	 	storeSetup.save("clositt/devproducts", products, i++);
+	 	//storeSetup.save("clositt/devproducts", products, i++);
 		storeSetup.save("clositt/filterdata/companies", companies.sort(), i++);
 		storeSetup.save("clositt/filterdata/customers", customers.sort(), i++);
 		storeSetup.save("clositt/filterdata/categories", categories.sort(), i++);

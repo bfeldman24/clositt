@@ -39,12 +39,13 @@ class ProductAdminDao extends AbstractDao {
                       PRODUCT_IMAGE . "," . 
                       PRODUCT_PRICE . "," . 
                       PRODUCT_COMMENT_COUNT . "," . 
-                      PRODUCT_CLOSITT_COUNT . "," . 
+                      PRODUCT_CLOSITT_COUNT . "," .
+                      PRODUCT_SHORT_LINK . "," . 
                       PRODUCT_DATE_UPDATED . ")" .
 	           " VALUES (:sku, :company, :customer, " .
 	                    ":category, :name, :link, " .
 	                    ":image, :price, 0, " .
-	                    "0, NOW())";	                    	          
+	                    "0, :shortlink, NOW())";	                    	          
         
         if($this->debug){		    
 			$this->logDebug("873242" ,$sql );
@@ -127,7 +128,7 @@ class ProductAdminDao extends AbstractDao {
 		}	        
         
        return $affected;       
-	}
+	}		
 	
 	public function saveHistoricalPrices(){
 		
@@ -174,6 +175,51 @@ class ProductAdminDao extends AbstractDao {
 		}
 		
 		return $result;
+	}
+	
+	public function getProductsForUpdatingShortLinks($page, $limit){					
+		$offset = $page * $limit;
+		
+		$sql = "SELECT * " .				
+				" FROM " . PRODUCTS .
+				" ORDER BY " . PRODUCT_STORE . ", " . PRODUCT_NAME .
+				" LIMIT ? OFFSET ?";								
+        
+		$paramsTypes = array('integer','integer');		
+		$params = array($limit, $offset);
+		
+		return $this->getResults($sql, $params, $paramTypes, "2309842");
+	}
+	
+	public function updateAllShortLinks($products, $skipNulls = true){
+	   $sql = "UPDATE " . PRODUCTS .       	  
+              " SET " . PRODUCT_SHORT_LINK . " = ? " . 
+              " WHERE " . PRODUCT_SKU . " = ? ";
+              
+       if($skipNulls){        
+            $sql .= " AND COALESCE(" . PRODUCT_SHORT_LINK . ",'null') = 'null'"; 
+       }
+              
+       if($this->debug){		    
+			$this->logDebug("235235" ,$sql );
+		}
+        
+        $paramTypes = array('text', 'text');
+        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+        $affectedRows = 0;
+        foreach ($products as $key => $value) {
+            
+            try {                         
+                $params = array();
+                $params[] = $value->getShortLink();
+                $params[] = $value->getId();                     
+                $affectedRows += $stmt->execute($params);
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            }
+        }
+        
+        return $affectedRows;
 	}
 }
 ?>

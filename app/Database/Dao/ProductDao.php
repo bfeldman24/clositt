@@ -21,9 +21,15 @@ class ProductDao extends AbstractDao {
 				" p." . PRODUCT_IMAGE . ", " .
 				" p." . PRODUCT_PRICE . ", " .
 				" p." . PRODUCT_COMMENT_COUNT . ", " .
-				" p." . PRODUCT_CLOSITT_COUNT .
-				" FROM " . PRODUCTS . " p " . 				
-				" WHERE p." . PRODUCT_SKU . " = ? ";
+				" p." . PRODUCT_CLOSITT_COUNT . ", " .
+				" p." . PRODUCT_SHORT_LINK . 
+				" FROM " . PRODUCTS . " p ";
+		
+		if (substr_count($productId, "-") <= 1){
+		     $sql .= " WHERE p." . PRODUCT_SKU . " = ? ";
+		}else{
+		     $sql .= " WHERE p." . PRODUCT_SHORT_LINK . " = ? ";
+		}					 								
 		
 		$paramsTypes = array('text');		
 		$params = array($productId);	
@@ -41,7 +47,39 @@ class ProductDao extends AbstractDao {
 		$params = array($limit, $offset);
 		
 		return $this->getResults($sql, $params, $paramTypes, "2309842");
-	}          			
+	}  
+	
+	public function getSimilarProducts($productId, $limit){		
+		if(!isset($productId) || strlen($productId) <= 2){
+			$this->logWarning("12415123","ID is null");
+			return false; 
+		}
+		
+		if (!isset($limit) || $limit <= 0){
+		      $limit = 10;
+		}
+		
+		$sql = "SELECT * " .				
+				" FROM " . PRODUCTS . " p " .
+				" INNER JOIN (SELECT " . PRODUCT_STORE . ", " . PRODUCT_CUSTOMER . ", " . PRODUCT_CATEGORY . 
+				" FROM " . PRODUCTS;
+		
+		if (substr_count($productId, "-") <= 1){
+		     $sql .= " WHERE " . PRODUCT_SKU . " = ? )";
+		}else{
+		     $sql .= " WHERE " . PRODUCT_SHORT_LINK . " = ? )";
+		}	
+		
+		$sql .=	" AS item ON p.".PRODUCT_STORE." = item.".PRODUCT_STORE .
+		               " AND p.".PRODUCT_CUSTOMER." = item.".PRODUCT_CUSTOMER .
+		               " AND p.".PRODUCT_CATEGORY." = item." . PRODUCT_CATEGORY .
+				" LIMIT ?";								
+        
+		$paramsTypes = array('text','integer');		
+		$params = array($productId, $limit);
+		
+		return $this->getResults($sql, $params, $paramTypes, "2309842");
+	}        			
 	
 	public function addProducts($products){
 	    if(!isset($products) || !is_array($products)){
@@ -86,7 +124,7 @@ class ProductDao extends AbstractDao {
 		$start = $pageNumber * $numResultsPerPage;
 		$params = array();
 		$paramTypes = array();
-		$firstClause = true;
+		
 		$sql = "SELECT " .
 				" p." . PRODUCT_SKU . ", " .
 				" p." . PRODUCT_STORE . ", " .				
@@ -97,18 +135,50 @@ class ProductDao extends AbstractDao {
 				" p." . PRODUCT_IMAGE . ", " .
 				" p." . PRODUCT_PRICE . ", " .
 				" p." . PRODUCT_COMMENT_COUNT . ", " .
-				" p." . PRODUCT_CLOSITT_COUNT .
-				" FROM " . PRODUCTS . " p " . 				
+				" p." . PRODUCT_CLOSITT_COUNT . ", " .				
+				" p." . PRODUCT_SHORT_LINK . 
+				" FROM " . PRODUCTS . " p "; 				
+
+        if ($criteria->getColors() != null){
+            $sql .= " INNER JOIN " . COLORS . " c  ON c." . PRODUCT_SKU . " = p." . PRODUCT_SKU;
+        }
 
 		$filterSql = "";		
-		$this->addCriteriaToSql($filterSql, $criteria->getCompanies(), PRODUCT_STORE, $params, $paramTypes, $firstClause);	
-		$this->addCriteriaToSql($filterSql, $criteria->getCategories(), PRODUCT_CATEGORY, $params, $paramTypes, $firstClause);	
-		$this->addCriteriaToSql($filterSql, $criteria->getCustomers(), PRODUCT_CUSTOMER, $params, $paramTypes, $firstClause);	
+		$this->addCriteriaToSql($filterSql, $criteria->getCompanies(), "p." . PRODUCT_STORE, $params, $paramTypes);	
+		$this->addCriteriaToSql($filterSql, $criteria->getCategories(), "p." . PRODUCT_CATEGORY, $params, $paramTypes);	
+		$this->addCriteriaToSql($filterSql, $criteria->getCustomers(), "p." . PRODUCT_CUSTOMER, $params, $paramTypes);	
+		$this->addCriteriaToSql($filterSql, $criteria->getColors(), "c." . COLORS_COLOR, $params, $paramTypes);				
 		
+		// MIN PRICE
+		if ($criteria->getMinPrice() != null){			
+			$filterSql .= " AND p." . PRODUCT_PRICE . " >= ? ";
+			$params[] = $criteria->getMinPrice();
+			$paramTypes[] = 'integer';
+		}			
+		
+		// MAX PRICE
+		if ($criteria->getMaxPrice() != null){			
+			$filterSql .= " AND p." . PRODUCT_PRICE . " <= ? ";
+			$params[] = $criteria->getMaxPrice();
+			$paramTypes[] = 'integer';
+		}	
+		
+		// SEARCH STRING
+		// Should not be 'AND', but should just add to the ranking of the search
+		if ($criteria->getTags() != null){
+		     $filterSql .= " AND p." . PRODUCT_NAME . " = CONCAT('%',?,'%') ";  
+		     $params[] = implode(" ", $criteria->getTags());
+			 $paramTypes[] = 'text';
+		}		
 
-		if(!$firstClause){
+		if($filterSql && trim($filterSql) != ""){
+		    $filterSql = substr($filterSql, 4); // Removes first ' AND'
 			$sql .= " WHERE " . $filterSql;
 		}
+
+        if ($criteria->getColors() != null){
+            $sql .= " ORDER BY c." . COLORS_PERCENT . " DESC ";
+        }
 
 		$sql .= " LIMIT " . $numResultsPerPage . " OFFSET " . $start;
 
@@ -116,17 +186,18 @@ class ProductDao extends AbstractDao {
 
 	}
 
-	private function addCriteriaToSql(&$sql, $criteria, $columnName, &$params, &$paramTypes, &$firstClause){
-		if(is_array($criteria)){
-			if(!$firstClause) {
-				$sql .= " AND ";
-			}
-
-			$sql .= " p." . $columnName . " in ( ? )";
-			//TODO escape criteria objects here
-			array_push($params, implode(",", $criteria));
-			array_push($paramTypes, 'text') ;
-			$firstClause = false;
+	private function addCriteriaToSql(&$sql, $criteria, $columnName, &$params, &$paramTypes){
+		if(is_array($criteria)){            
+            $sql .= " AND " . $columnName . " in (";           
+            
+            foreach ($criteria as $value){	
+                 $sql .= "?,";		
+			     $params[] = $value;
+			     $paramTypes[] = 'text';
+            }
+            
+            // remove trailing comma
+            $sql = substr($sql, 0, strlen($sql) -1) . ")";
 		}
 	}		
 }

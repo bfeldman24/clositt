@@ -10,9 +10,9 @@ var socialPresenter = {
 //			$(element).parents(".item").find(".social-btns").tooltip('destroy');
 			$(element).parents(".item").find(".social-btns").html("").hide('blind');						
 		}else{							  												
-		    var pid = $(element).parents(".item").attr("pid");
+		    var shortlink = $(element).parents(".item").attr("data-url");
 		    
-		    var productLink = "http://clothies.bprowd.com/@/"+pid;
+		    var productLink = "http://clothies.bprowd.com/@/"+shortlink;
 		    var productEncodeLink = encodeURIComponent(productLink);
 		    var imgLink = encodeURIComponent($(element).parents(".item").find(".picture img").attr("src"));
 		    var desc = encodeURIComponent("Found on Clositt.com");

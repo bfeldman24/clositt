@@ -10,6 +10,7 @@ define("JS_PRODUCT_IMAGE","i");
 define("JS_PRODUCT_PRICE","p");
 define("JS_PRODUCT_COMMENT_COUNT","rc");
 define("JS_PRODUCT_CLOSITT_COUNT","cc");
+define("JS_PRODUCT_SHORT_LINK", "sl");
 
 class ProductEntity {
 
@@ -23,6 +24,7 @@ class ProductEntity {
 	private $price;
 	private $commentCount;		
 	private $closittCount;
+	private $shortLink;
 	
 	public function getId() {
 		return $this->id;
@@ -114,6 +116,15 @@ class ProductEntity {
 		}
 	}
 	
+	public function getShortLink() {
+		return $this->shortLink;
+	}
+	public function setShortLink($shortLink) {
+		if(isset($shortLink)){
+			$this->shortLink = $shortLink;
+		}
+	}		
+	
 		
 	/**** ************************** ****/
 		
@@ -129,6 +140,7 @@ class ProductEntity {
 			$ProductEntity->setPrice(stripslashes($row[PRODUCT_PRICE]));
 			$ProductEntity->setCommentCount(stripslashes($row[PRODUCT_COMMENT_COUNT]));
 			$ProductEntity->setClosittCount(stripslashes($row[PRODUCT_CLOSITT_COUNT]));	
+			$ProductEntity->setShortLink(stripslashes($row[PRODUCT_SHORT_LINK]));	
 		}
 	}		
 	
@@ -145,6 +157,7 @@ class ProductEntity {
 		$ProductEntity->setPrice(trim($row[JS_PRODUCT_PRICE]));
 		$ProductEntity->setCommentCount(trim($row[JS_PRODUCT_COMMENT_COUNT]));
 		$ProductEntity->setClosittCount(trim($row[JS_PRODUCT_CLOSITT_COUNT]));	
+		$ProductEntity->setShortLink(trim($row[JS_PRODUCT_SHORT_LINK]));
 				    
 		return $ProductEntity;
 	}
@@ -161,7 +174,8 @@ class ProductEntity {
 		$ProductArray[JS_PRODUCT_IMAGE] = $this->getImage();
 		$ProductArray[JS_PRODUCT_PRICE] = $this->getPrice();
 		$ProductArray[JS_PRODUCT_COMMENT_COUNT] = $this->getCommentCount();
-		$ProductArray[JS_PRODUCT_CLOSITT_COUNT] = $this->getClosittCount();						
+		$ProductArray[JS_PRODUCT_CLOSITT_COUNT] = $this->getClosittCount();	
+		$ProductArray[JS_PRODUCT_SHORT_LINK] = $this->getShortLink();
 		
 		foreach ($ProductArray as $key => $value){
 			if(!isset($value) || $value == ""){

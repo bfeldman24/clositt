@@ -138,8 +138,8 @@ var gridPresenter = {
 //    		     firebase.$.child('clositt/' + firebase.productsPath)
 //    		           .startAt(startingPos).limit(productPresenter.loadSize)
 //	                   .once('value', gridPresenter.lazyLoad);          			     
-    		}else{	
-    		    searchController.getProducts(gridPresenter.lazyLoad);   
+    		}else{	    		    
+    		    searchController.getProducts(gridPresenter.lazyLoad);       		              		        		    
     		    gridPresenter.productIndex = 0; 		  			
 			}		
 		}

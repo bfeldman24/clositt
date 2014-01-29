@@ -24,6 +24,7 @@ var productPresenter = {
 		var closetCount = product.cc == null ? 0 : product.cc;
 		var closetCountPlural = closetCount == 1 ? "" : "s"; 
 		var id = product.s;
+		var shortlink = product.sl;
 		var price = product.p == null || isNaN(product.p) ? "" : "$" + Math.round(product.p);		 	
  		var filterPrice = product.fp; 		 		
  		var feedOwner = product.owner;
@@ -37,7 +38,7 @@ var productPresenter = {
 			 			
  		//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
  		var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
-		var html ='<div class="outfit item" '+attr+' pid="'+id+'">';
+		var html ='<div class="outfit item" '+attr+' pid="'+id+'" data-url="'+shortlink+'">';
 				html +='<div class="picture"><a class="productPage" target="_blank"><img src="' + image + '" class="'+shadow+'" onerror="return pagePresenter.handleImageNotFound(this)"/></a></div>';			
 				html +='<div class="overlay">';
 					html +='<div class="topleft">';										

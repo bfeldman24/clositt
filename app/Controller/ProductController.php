@@ -19,7 +19,7 @@ class ProductController {
 		
 		if(isset($sku) && strlen($sku) > 2){	
 			
-			$results = $this->productDao->getProduct($sku);
+			$results = $this->productDao->getProduct($sku);						
 			
 			if(is_object($results)){
 				if($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){					
@@ -38,6 +38,25 @@ class ProductController {
 		if(isset($page) && isset($limit)){	
 		      
 			$results = $this->productDao->getProducts($page, $limit);
+			
+			if(is_object($results)){
+				while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+				    $productEntity = new ProductEntity();						
+					ProductEntity::setProductFromDB($productEntity, $row);
+					$searchResults[] = $productEntity->toArray();
+				}
+			}
+		}
+	
+		return json_encode($searchResults);
+	}
+	
+	public function getSimilarProducts($productId, $limit){
+	   $searchResults = array();
+	    		
+		if(isset($productId) && isset($limit)){	
+		      
+			$results = $this->productDao->getSimilarProducts($productId, $limit);
 			
 			if(is_object($results)){
 				while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
