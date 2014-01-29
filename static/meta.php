@@ -14,5 +14,5 @@
 
 <script type="text/javascript">
     window.HOME_ROOT = "<?php echo HOME_ROOT; ?>";
-    window.HOME_URL = "<?php echo "http://www." .  DOMAIN . HOME_ROOT; ?>";
+    window.HOME_URL = "<?php echo  DOMAIN . HOME_ROOT; ?>";
 </script>
