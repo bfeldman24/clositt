@@ -1140,7 +1140,7 @@ storeApi = {
                 item.link = $(this).attr("data-pdpurl");
                 item.name = $(this).find(".details .productname a").first().text().trim();                    
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".details .allPricing").text());
-    			item.designer = $(this).find(".details .productdesigner a).first().text().trim();
+    			item.designer = $(this).find(".details .productdesigner a").first().text().trim();
 
                 if(item.image != undefined){
                    item.sku = 'cu' + item.link.substring(item.link.indexOf("pid-")+4).replace(/\D/g, ''); // strip all non numeric chars;
@@ -1164,7 +1164,6 @@ storeApi = {
                 item.link = siteHome + $(this).attr("href");
                 item.name = $(this).text().trim();                                    
     			item.price = storeApiHelper.findPricesAndGetLowest(product.find(".normalsmall").text());
-    			item.designer = $(this).find(".details .productdesigner a).first().text().trim();
 
                 if(item.image != undefined){
                    item.sku = 'jj' + item.link.substring(item.link.indexOf("item=")+5, item.link.indexOf("&", item.link.indexOf("item="))).replace(/\D/g, ''); // strip all non numeric chars;
