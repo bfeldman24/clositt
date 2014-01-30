@@ -108,14 +108,24 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
 	
 	else if (strpos($url,"lordandtaylor")){
     	// Combine multiple url <body> into one
-    	$file = combineMultipleUrls($file, $url);
-    	$file = combineMultipleUrls($file, $url . "?beginIndex=100");
-    	$file = combineMultipleUrls($file, $url . "?beginIndex=200");
-    	$file = combineMultipleUrls($file, $url . "?beginIndex=300");
-    	$file = combineMultipleUrls($file, $url . "?beginIndex=400");	
+    	$file = file_get_contents_curl($url);
+//    	$file = combineMultipleUrls($file, $url);
+//    	$file = combineMultipleUrls($file, $url . "?beginIndex=100");
+//    	$file = combineMultipleUrls($file, $url . "?beginIndex=200");
+//    	$file = combineMultipleUrls($file, $url . "?beginIndex=300");
+//    	$file = combineMultipleUrls($file, $url . "?beginIndex=400");	
 	}
 	
-	else if (strpos($url,"topshop")){
+	else if (strpos($url,"kohls")){
+    	// Combine multiple url <body> into one
+    	$subUrl = substr($url, 0, strpos($url, "?"));
+    	$file = combineMultipleUrls($file, $subUrl . "?WS=96");
+    	$file = combineMultipleUrls($file, $subUrl . "?WS=192");
+    	$file = combineMultipleUrls($file, $subUrl . "?WS=288");
+    	$file = combineMultipleUrls($file, $subUrl . "?WS=382");
+	}
+	
+	else if (strpos($url,"topshop") || strpos($url,"target")){
 	   $file = file_get_contents_curl($url);   
 	   
 	   if ($_REQUEST['d']){

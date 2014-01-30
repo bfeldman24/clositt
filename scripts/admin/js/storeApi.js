@@ -21,6 +21,26 @@ storeApi = {
 		    case "charles tyrwhitt":
 		        newUrl = url + "&ppp=1000";																
 		        break;
+		    case "macys":
+		        newUrl = url + "&pageIndex=1&productsPerPage=1000";
+		        break;
+		    case "jcpenny":
+		        newUrl = url + "&Nao=96&pageSize=96&pN=1";
+		        break;
+		    case "nyandcompany":
+		    case "chicos":		    
+		        newUrl = url + "&viewAll=true";
+		        break;
+		    case "forever21":
+		    case "cusp":
+		        newUrl = url + "&page=1&pageSize=1000";
+		        break;
+		    case "nike":
+		        newUrl = url + "&sortOrder=viewAll|asc";
+		        break;
+		    case "jjill":
+		        newUrl = url + "&rpp=0";
+		        break;    
 			default:
 				newUrl = url;
 				break;			
@@ -110,6 +130,48 @@ storeApi = {
 			    break; 
 			case "free people":			
 			    products = storeApi.getFreePeople(data, home);
+			    break;
+			case "macys":			
+			    products = storeApi.getMacys(data, home);
+			    break;
+			case "jcpenny":			
+			    products = storeApi.getJCPenny(data, home);
+			    break; 
+			case "nyandcompany":
+			    products = storeApi.getNyAndCompany(data, home);
+			    break;
+			case "burberry":
+			    products = storeApi.getBurberry(data, home);
+			    break;
+			case "hollister":
+			    products = storeApi.getHollister(data, home);
+			    break; 
+			case "kohls":
+			    products = storeApi.getKohls(data, home);
+			    break;
+			case "forever21":
+			    products = storeApi.getForever21(data, home);
+			    break;
+			case "dillards":
+			    products = storeApi.getDillards(data, home);
+			    break;
+			case "americaneagle":
+			    products = storeApi.getAmericanEagle(data, home);
+			    break;
+			case "nike":
+			    products = storeApi.getNike(data, home);
+			    break;
+			case "michael kors":
+			    products = storeApi.getMichaelKors(data, home);
+			    break;
+			case "chicos":
+			    products = storeApi.getChicos(data, home);
+			    break;
+			case "cusp":
+			    products = storeApi.getCusp(data, home);
+			    break; 
+			case "jjill":
+			    products = storeApi.getJJill(data, home);
 			    break; 
 		}	
 		
@@ -796,10 +858,340 @@ storeApi = {
         });
 
         return JSON.stringify(products);
+	},
+	
+	getMacys: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find("#macysGlobalLayout #thumbnails .productThumbnail").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find("img.thumbnailMainImage").first().attr("src");
+                item.link = siteHome + $(this).find(".shortDescription a.productThumbnailLink").first().attr("href");
+                item.name = $(this).find(".shortDescription a.productThumbnailLink").first().text().trim();                
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".prices").text().trim());
+
+                if(item.image != undefined){
+                   item.sku = 'ma' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getJCPenny: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".product_gallery_holder2 .product_holder").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".product_image img").first().attr("src");
+                item.link = siteHome + $(this).find(".product_image a").first().attr("href");
+                item.name = $(this).find(".detail a").first().text().trim();                
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".gallery_page_price").text().trim());
+
+                if(item.image != undefined){
+                   item.sku = 'jp' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getNyAndCompany: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".items_wrapper ul li").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find("img").first().attr("src");
+                item.link = siteHome + $(this).find(".product-details a").first().attr("href");
+                item.name = $(this).find(".product-details a").first().text().trim();                
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".product-details .original_price").text().trim());
+
+                if(item.image != undefined){
+                   item.sku = 'ny' + item.image.substring(item.image.lastIndexOf("/")+1, item.image.indexOf("?")).replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getBurberry: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find("li.product").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".aspect-inner img").first().attr("data-src");
+                item.link = siteHome + $(this).find("a.product-link").first().attr("href");
+                item.name = $(this).find("a.product-link").first().text().trim();                
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".product-details .product-price").text().trim());
+
+                if(item.image != undefined){
+                   item.sku = 'bu' + $(this).find("a.product-link").first().attr('data-product-id').replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getHollister: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find("li.product-wrap").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(".image-wrap img:visible").first().attr("src");
+                item.link = siteHome + $(this).find(".product-info .name a").first().attr("href");
+                item.name = $(this).find(".product-info .name a").first().text().trim();                
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".product-info .price").text().trim());
+
+                if(item.image != undefined){
+                   item.sku = 'ho' + $(this).find("div").first().attr('data-productid').replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getKohls: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find("#product-matrix .product").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find("a.image-holder-s img").first().attr("src");
+                item.link = siteHome + $(this).find("a.image-holder-s").first().attr("href");
+                item.name = $(this).find(".pmi-wrap .product-info a").first().text().trim();                
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".pmi-wrap .product-info .price-original").text().trim());
+
+                if(item.image != undefined){
+                   item.sku = 'ko' + item.link.substring(item.link.indexOf("-")+1, item.link.indexOf("/", item.link.indexOf("-"))).replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getForever21: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".ItemImage").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find("a img").first().attr("src");
+                item.link = $(this).find("a").first().attr("href");
+                item.name = $(this).parents("table").first().find(".DisplayName").first().text().trim();                
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).parents("table").first().find(".price").text().trim());
+
+                if(item.image != undefined){
+                   item.sku = 'fo' + item.link.substring(item.link.indexOf("ProductID=")+10, item.link.indexOf("&", item.link.indexOf("ProductID"))).replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getDillards: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".item").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find("a.img img").first().attr("data-src_large");
+                item.link = siteHome + $(this).find("a.img").first().attr("href");
+                item.name = $(this).find(".info .productInfo .productName").first().text().trim();                
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".info .productInfo .price").text().trim());
+
+                if(item.image != undefined){
+                   item.sku = 'di' + $(this).find("a.img").attr("id").replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getAmericanEagle: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find("#facetResults .sProd").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find("a .image img").not(".hidden").first().attr("data-src");
+                item.link = siteHome + $(this).find("a").first().attr("href");
+                item.name = $(this).find("a .equity .name").first().text().trim();                
+    			var dollars = $(this).find("a .equity .price .dollars").text().trim();
+    			var cents = $(this).find("a .equity .price .cents").text().trim();
+    			item.price = storeApiHelper.findPricesAndGetLowest(dollars + "." + cents);
+                // var listedPrice = $(this).find("a .equity .listPrice").text().trim();
+
+                if(item.image != undefined){
+                   var id = $(this).attr("data-product-id") + "_" + $(this).attr("data-color-id");
+                   item.sku = 'ae' + id.replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getNike: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".product-wall .grid-item").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find("grid-item-image img").first().attr("src");
+                item.link = $(this).attr("data-pdpurl");
+                item.name = $(this).find(".grid-item-info-wrapper .product-name .griditem-display-name").first().text().trim();                    
+                var prices = $(this).find(".grid-item-info-wrapper .product-price-wrapper .prices");
+    			item.price = storeApiHelper.findPricesAndGetLowest(prices);
+
+                if(item.image != undefined){
+                   item.sku = 'ni' + item.link.substring(item.link.indexOf("pid-")+4).replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getMichaelKors: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".products .productstart").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find("grid-item-image img").first().attr("src");
+                item.link = $(this).attr("data-pdpurl");
+                item.name = $(this).find(".grid-item-info-wrapper .product-name .griditem-display-name").first().text().trim();                    
+                var prices = $(this).find(".grid-item-info-wrapper .product-price-wrapper .prices");
+    			item.price = storeApiHelper.findPricesAndGetLowest(prices);
+
+                if(item.image != undefined){
+                   item.sku = 'ni' + item.link.substring(item.link.indexOf("pid-")+4).replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getChicos: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find("#shelfProducts .product-capsule").each(function(){
+                var item = new Object();
+
+                item.image = siteHome + $(this).find("img.product-image").first().attr("src");
+                item.link = siteHome + $(this).find("a.prodImgLink").attr("href");
+                item.name = $(this).find("p .productlink").first().text().trim();                    
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find("p.priceadorn").text());
+
+                if(item.image != undefined){
+                   item.sku = 'ch' + item.link.substring(item.link.indexOf("productId=")+10, item.link.indexOf("&", item.link.indexOf("productId="))).replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getCusp: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".products .productstart").each(function(){
+                var item = new Object();
+
+                item.image = $(this).find("grid-item-image img").first().attr("src");
+                item.link = $(this).attr("data-pdpurl");
+                item.name = $(this).find(".details .productname a").first().text().trim();                    
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".details .allPricing").text());
+    			item.designer = $(this).find(".details .productdesigner a).first().text().trim();
+
+                if(item.image != undefined){
+                   item.sku = 'cu' + item.link.substring(item.link.indexOf("pid-")+4).replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
+	},
+	
+	getJJill: function(data, siteHome){	   
+	   var products = new Object();
+	
+       $(data).find(".itemlink").each(function(){
+                var item = new Object();
+                    
+                var product = $(this).parent();    
+                item.image = product.find("img").first().attr("src");
+                item.link = siteHome + $(this).attr("href");
+                item.name = $(this).text().trim();                                    
+    			item.price = storeApiHelper.findPricesAndGetLowest(product.find(".normalsmall").text());
+    			item.designer = $(this).find(".details .productdesigner a).first().text().trim();
+
+                if(item.image != undefined){
+                   item.sku = 'jj' + item.link.substring(item.link.indexOf("item=")+5, item.link.indexOf("&", item.link.indexOf("item="))).replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return JSON.stringify(products);
 	}
 }
 
-storeApiHelper = {
+storeApiHelper = {    
+    findPricesAndGetLowest: function(price){
+        if (price != null && price.trim() != ""){
+            price = price.replace(/[a-zA-Z£$:]*/g,'');
+            var priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
+        	price = storeApiHelper.getLowestPrice(priceArr);     
+        	price = storeApiHelper.findPrice(price); 
+        	
+        	return price;
+        }              	
+        
+        return null;		
+    },
+        
     findPrice: function(price){
         var priceArray = (price + "").trim().split(/[\s-]+/);
 		return parseFloat(priceArray[priceArray.length - 1].replace(/[^0-9\.]+/g,""));   
