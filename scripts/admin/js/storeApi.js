@@ -1201,6 +1201,8 @@ storeApiHelper = {
         for (var i=0; i < priceArray.length; i++){
                if (!isNaN(priceArray[i]) && priceArray[i] < min ){
                     min = priceArray[i];
+               }else if(i == 0){
+                    min = priceArray[i+1];
                }
         }   
         
