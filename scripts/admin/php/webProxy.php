@@ -118,11 +118,11 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
 	
 	else if (strpos($url,"kohls")){
     	// Combine multiple url <body> into one
-    	$subUrl = substr($url, 0, strpos($url, "?"));
-    	$file = combineMultipleUrls($file, $subUrl . "?WS=96");
-    	$file = combineMultipleUrls($file, $subUrl . "?WS=192");
-    	$file = combineMultipleUrls($file, $subUrl . "?WS=288");
-    	$file = combineMultipleUrls($file, $subUrl . "?WS=382");
+    	$file = combineMultipleUrls($file, $url . "&WS=0");
+    	$file = combineMultipleUrls($file, $url . "&WS=96");
+    	$file = combineMultipleUrls($file, $url . "&WS=192");
+    	$file = combineMultipleUrls($file, $url . "&WS=288");
+    	$file = combineMultipleUrls($file, $url . "&WS=382");
 	}
 	
 	else if (strpos($url,"topshop") || strpos($url,"target")){

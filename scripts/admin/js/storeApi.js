@@ -907,7 +907,7 @@ storeApi = {
 	getNyAndCompany: function(data, siteHome){	   
 	   var products = new Object();
 	
-       $(data).find(".items_wrapper ul li").each(function(){
+       $(data).find(".items_wrapper > ul > li").each(function(){
                 var item = new Object();
 
                 item.image = $(this).find("img").first().attr("src");
@@ -954,7 +954,7 @@ storeApi = {
        $(data).find("li.product-wrap").each(function(){
                 var item = new Object();
 
-                item.image = $(this).find(".image-wrap img:visible").first().attr("src");
+                item.image = $(this).find(".image-wrap img").first().attr("data-src");
                 item.link = siteHome + $(this).find(".product-info .name a").first().attr("href");
                 item.name = $(this).find(".product-info .name a").first().text().trim();                
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".product-info .price").text().trim());
@@ -1091,14 +1091,14 @@ storeApi = {
        $(data).find(".products .productstart").each(function(){
                 var item = new Object();
 
-                item.image = $(this).find("grid-item-image img").first().attr("src");
-                item.link = $(this).attr("data-pdpurl");
-                item.name = $(this).find(".grid-item-info-wrapper .product-name .griditem-display-name").first().text().trim();                    
-                var prices = $(this).find(".grid-item-info-wrapper .product-price-wrapper .prices");
+                item.image = $(this).find("a.prodImgLink .productImage").first().attr("src");
+                item.link = siteHome + $(this).find("a.prodImgLink").attr("href");
+                item.name = $(this).find("p.productlink").first().text().trim();                    
+                var prices = $(this).find("p.priceadorn").text().trim();
     			item.price = storeApiHelper.findPricesAndGetLowest(prices);
 
                 if(item.image != undefined){
-                   item.sku = 'ni' + item.link.substring(item.link.indexOf("pid-")+4).replace(/\D/g, ''); // strip all non numeric chars;
+                   item.sku = 'ni' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
@@ -1115,9 +1115,9 @@ storeApi = {
                 var item = new Object();
 
                 item.image = siteHome + $(this).find("img.product-image").first().attr("src");
-                item.link = siteHome + $(this).find("a.prodImgLink").attr("href");
-                item.name = $(this).find("p .productlink").first().text().trim();                    
-    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find("p.priceadorn").text());
+                item.link = siteHome + $(this).find(".product-information a.product-name").attr("href");
+                item.name = $(this).find(".product-information a.product-name").first().text().trim();                    
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".product-information .product-price").text());
 
                 if(item.image != undefined){
                    item.sku = 'ch' + item.link.substring(item.link.indexOf("productId=")+10, item.link.indexOf("&", item.link.indexOf("productId="))).replace(/\D/g, ''); // strip all non numeric chars;
@@ -1133,17 +1133,17 @@ storeApi = {
 	getCusp: function(data, siteHome){	   
 	   var products = new Object();
 	
-       $(data).find(".products .productstart").each(function(){
+       $(data).find(".products .product").each(function(){
                 var item = new Object();
 
-                item.image = $(this).find("grid-item-image img").first().attr("src");
-                item.link = $(this).attr("data-pdpurl");
+                item.image = $(this).find("a.prodImgLink .productImage").first().attr("src");
+                item.link = siteHome + $(this).find("a.prodImgLink").attr("href");
                 item.name = $(this).find(".details .productname a").first().text().trim();                    
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".details .allPricing").text());
     			item.designer = $(this).find(".details .productdesigner a").first().text().trim();
 
                 if(item.image != undefined){
-                   item.sku = 'cu' + item.link.substring(item.link.indexOf("pid-")+4).replace(/\D/g, ''); // strip all non numeric chars;
+                   item.sku = 'cu' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
@@ -1179,8 +1179,8 @@ storeApi = {
 
 storeApiHelper = {    
     findPricesAndGetLowest: function(price){
-        if (price != null && price.trim() != ""){
-            price = price.replace(/[a-zA-Z£$:]*/g,'');
+        if (price != null && (price + "").trim() != ""){
+            price = price.replace(/[a-zA-Z£$:,]*/g,'');
             var priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
         	price = storeApiHelper.getLowestPrice(priceArr);     
         	price = storeApiHelper.findPrice(price); 
@@ -1197,12 +1197,13 @@ storeApiHelper = {
     },
     
     getLowestPrice: function(priceArray){
-        var min = priceArray[0];
+        var min = parseFloat(priceArray[0]);
         for (var i=0; i < priceArray.length; i++){
-               if (!isNaN(priceArray[i]) && priceArray[i] < min ){
-                    min = priceArray[i];
-               }else if(i == 0){
-                    min = priceArray[i+1];
+               var num = parseFloat(priceArray[i]);
+               if (!isNaN(num) && num < min ){
+                    min = num;
+               }else if(i == 0 && !isNaN(parseFloat(priceArray[i+1]))){
+                    min = parseFloat(priceArray[i+1]);
                }
         }   
         

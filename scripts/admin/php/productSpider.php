@@ -99,7 +99,7 @@ input{
     				  <option value="charles tyrwhitt">Charles Tyrwhitt</option>
     				  <option value="chicos">Chicos</option>
     				  <option value="cusp">Cusp</option>
-    				  <option value="dillars">Dillards</option>
+    				  <option value="dillards">Dillards</option>
     				  <option value="forever21">Forever21</option>				  
     				  <option value="free people">Free People</option>
     				  <option value="gap">Gap (json link)</option>
