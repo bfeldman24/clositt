@@ -65,7 +65,24 @@ input{
     
 .isvalid{
     font-size: 9px;   
-}        
+}       
+
+#loadingMask{
+    background: none repeat scroll 0 0 rgba(70, 70, 70, 0.8);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;   
+} 
+
+#loadingMask img{
+    height: 50px;
+    left: 48%;
+    position: fixed;
+    top: 48%;
+    width: 50px;   
+}
 </style>
 
 </head>
@@ -219,6 +236,10 @@ input{
         
     <!--<p>*** <a href="preload.php">UPDATE WEBSITE WITH NEW PRODUCTS</a> ***</p>-->
     <!--<p>*** <a href="colorProcessor.php">UPDATE NEW PRODUCT COLORS</a> ***</p>-->
+</div>
+
+<div id="loadingMask" style="display:none;" >
+    <img src="../../../css/images/loading.gif"/>
 </div>
 
 <?php include(dirname(__FILE__) . '/../../../static/footer.php');   ?>

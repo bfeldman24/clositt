@@ -27,6 +27,7 @@ function reorganizeLinks(){
 
 // Gets the category links
 function getLinks(){
+    $("#loadingMask").show();
 	$("#links").html("");	
 	
 	firebase.$.child("spider").once('value', function(spider){
@@ -73,12 +74,15 @@ function getLinks(){
     				);
 	           });
 	       });
-	   });	  
+	   });
+	   
+	   $("#loadingMask").hide();	  
 	});		
 }	  				   				    						
 				
 // Gets the products from the selected links and optionally saves them				
 function getProductsFromLinks(save){
+    $("#loadingMask").show();
 	$("#json-output").html("");
 	
 	var total = $("#links > .company > .customer > .category > input:checked").size();
@@ -129,11 +133,13 @@ function getProductsFromLinks(save){
     				
     				count++;
     				if(count == total){					
-    				    saveAllProducts();
+    				    saveAllProducts();    				    
     				}		
 			    }else{
 			         alert(company + " > " + customer + " > " + category + ": " + storeProducts);		
 			    }						
+			    
+			    $("#loadingMask").hide();
 			});
 		});
 	}
@@ -141,6 +147,7 @@ function getProductsFromLinks(save){
 
 // Gets the checked prdocuts frm the link, validates them, and shows a sampling of them
 function testProductsFromLinks(showSample){
+	$("#loadingMask").show();
 	
 	var total = $("#links > .company > .customer > .category > input:checked").size();
 	var count = 0;
@@ -148,6 +155,7 @@ function testProductsFromLinks(showSample){
 	
 	if (total <= 0){
 		alert("Please select a product store > category");	
+		$("#loadingMask").hide();		
 	}else{
 				
 		$("#links > .company > .customer > .category > input:checked").each(function(){	
@@ -226,7 +234,8 @@ function testProductsFromLinks(showSample){
 				
 				count++;
 				if(count == total){
-					alert(validCount + "/" + total + " catgeories were valid");					
+					alert(validCount + "/" + total + " catgeories were valid");	
+					$("#loadingMask").hide();				
 				}														
 			});
 		});
