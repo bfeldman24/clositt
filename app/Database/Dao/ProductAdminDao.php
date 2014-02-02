@@ -2,8 +2,6 @@
 require_once(dirname(__FILE__) . '/AbstractDao.php');
 require_once('Date.php');
 
-define("TEMP_PRODUCTS", "TempProducts");
-
 class ProductAdminDao extends AbstractDao {     
     
     public function clearTempProducts(){
@@ -55,7 +53,8 @@ class ProductAdminDao extends AbstractDao {
         $affectedRows = 0;
         foreach ($products as $key => $value) {
             
-            try {                                              
+            try {   
+                //print_r($value);                                           
                 $affectedRows += $stmt->execute($value);
             } catch (Exception $e) {
                 echo 'Caught exception: ',  $e->getMessage(), "\n\n";

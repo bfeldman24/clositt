@@ -2,6 +2,7 @@
 
 // Products Table
 define("PRODUCTS","Products");
+define("TEMP_PRODUCTS", "TempProducts");
 define("PRODUCT_SKU","sku");
 define("PRODUCT_STORE","store");
 define("PRODUCT_CUSTOMER","customer");

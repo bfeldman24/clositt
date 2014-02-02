@@ -17,7 +17,7 @@ class ProductAdminController {
     
     public function addAdminProducts($products){
         $results = array();
-        // echo " 3) addAdminProducts. ";
+        /// echo " 3) addAdminProducts. ";
         	
 		// 1) insert products to temp table
 		// 2) into historical prices table (do join to get all exisiting products where the price has changed)
@@ -57,7 +57,7 @@ class ProductAdminController {
          			// Step 4
          			$addNewProductsResults = $this->productAdminDao->addNewProducts();         		
          			// echo " 9) Added New Products: " . $addNewProductsResults;   
-         			$results['new'] = $addNewProductsResults;      			         			         		
+         			$results['new'] = $addNewProductsResults;     	
          		}
 			}
 		}else{
@@ -136,38 +136,40 @@ class ProductAdminController {
 	   $links = array();
 	   $b=0;
 	   
-	   foreach($products as $key => $p){
+	   foreach($products as $sku => $p){
+	       	       
 	       
-	       if ($p['s'] == null){	       
-	           $shortlink = str_replace(" ", "-", $p->getStore()) . "-" . str_replace(" ", "-", $p->getName());	       
+	       if ($p['s'] != null){	       
+	           $shortlink = str_replace(" ", "-", $p['o']) . "-" . str_replace(" ", "-", $p['n']);	
+	       }else if ($p['sku'] != null){   
+	           $shortlink = str_replace(" ", "-", $p['company']) . "-" . str_replace(" ", "-", $p['name']);	
 	       }else{
-	           $shortlink = str_replace(" ", "-", $p['o']) . "-" . str_replace(" ", "-", $p['n']);	       
+	           $shortlink = str_replace(" ", "-", $p->getStore()) . "-" . str_replace(" ", "-", $p->getName());	
 	       }
 	       
 	       $shortlink = strtolower($this->cleanUrl($shortlink));	
 	       	       
-	       echo "<br>$b)";
 	       if(in_array($shortlink, $links)){
 	           $count = 2;
 	           
 	           while(in_array($shortlink. "-" . $count, $links)){
-	               echo " $count";
 	               $count++;            
 	           }
 	           
 	           $shortlink .= "-" . $count;	           
 	       }
 	       	       
-	       echo " - " . $shortlink;
 	       $b++;	       	       
 	       
 	       $links[] = $shortlink;	     
 	       
-	       if ($p['s'] == null){ 
-	           $p->setShortLink($shortlink);	       	   
+	       if ($p['s'] != null){ 
+	           $products[$sku]['sl'] = $shortlink;	       	    
+	       }else if($p['sku'] != null){
+	           $products[$sku]['shortlink'] = $shortlink;	       	    
 	       }else{
-	           $p['sl'] = $shortlink;	       	   
-	       }
+	           $products[$sku]->setShortLink($shortlink);	       	   
+	       }	       	       
 	   }  
 	}	
 	
