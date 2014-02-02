@@ -3,10 +3,6 @@ require_once(dirname(__FILE__) . '/../Database/DataAccess/check-login.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/AbstractDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 
-define('TAGS', 'Tags');
-define('TAG_STRING', 'tag');
-define('TAG_COUNT', 'count');
-
 class TagController extends AbstractDao{		
 	
 	public function addTag($tag){

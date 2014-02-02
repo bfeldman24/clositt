@@ -121,6 +121,7 @@ class ProductDao extends AbstractDao {
 	* @param $numResultsPerPage - how many results to return per page
 	**/
 	public function getProductsWithCriteria($criteria, $pageNumber, $numResultsPerPage){
+		$tagWeight = .1;
 		
 		//Validate that there is at least one valid filter set
 		if(!isset($criteria)){
@@ -170,21 +171,64 @@ class ProductDao extends AbstractDao {
 			$paramTypes[] = 'integer';
 		}	
 		
-		// SEARCH STRING
-		// Should not be 'AND', but should just add to the ranking of the search
-		if ($criteria->getTags() != null){
-		     $filterSql .= " AND p." . PRODUCT_NAME . " = CONCAT('%',?,'%') ";  
-		     $params[] = implode(" ", $criteria->getTags());
-			 $paramTypes[] = 'text';
-		}		
+		// SERACH TAGS
+		$searchTags = $criteria->getTags();
+		$hasTags = $searchTags != null && count($searchTags) > 0 && $searchTags[0] != null && $searchTags[0] != "";
+		
+		if ($hasTags){
+    			$filterSql .= " AND (";
+    			
+    			// Name matches tags
+    			$filterSql .= " Match(p.".PRODUCT_NAME.") Against (?) ";
+    			$params[] = implode(" ",$criteria->getTags());
+    			$paramTypes[] = 'text';
+    			
+    			// Remove if there is a performance hit  
+    			// Name regex matches tags
+    			$filterSql .= " OR p.".PRODUCT_NAME." REGEXP ? ";                
+    			$params[] = implode("|",$criteria->getTags());
+    			$paramTypes[] = 'text';
+    			
+    			// Remove if there is a performance hit  
+    			// Tags exist
+    			$filterSql .= " OR EXISTS(SELECT 1" .
+                            " FROM " . TAGS .
+                            " WHERE ".TAG_STRING." IN (" .
+                            $this->convertCriteriaToQueryParameters($criteria->getTags(), $params, $paramTypes) .
+                            ") AND SKU = p.".PRODUCT_SKU.")";                
+                            
+                $filterSql .= " ) ";            
+        }						
 
+        // WHERE CLAUSE
 		if($filterSql && trim($filterSql) != ""){
 		    $filterSql = substr($filterSql, 4); // Removes first ' AND'
 			$sql .= " WHERE " . $filterSql;
 		}
 
+        // 
+        $orderby = "";        
         if ($criteria->getColors() != null){
-            $sql .= " ORDER BY c." . COLORS_PERCENT . " DESC ";
+            $orderby .= " + c." . COLORS_PERCENT;
+        }
+        
+        if ($hasTags){
+            $orderby .= " + Match(p.".PRODUCT_NAME.") Against (?)";
+            $params[] = implode(" ",$criteria->getTags());
+			$paramTypes[] = 'text';
+            
+		    $orderby .= " + (SELECT COALESCE( SUM(".TAG_COUNT.") * " . $tagWeight . ", 0)" .
+                            " FROM " . TAGS .
+                            " WHERE ".TAG_STRING." IN (" .
+                            $this->convertCriteriaToQueryParameters($criteria->getTags(), $params, $paramTypes) .
+                            ") AND SKU = p.".PRODUCT_SKU.")";                            
+		}
+                
+        if ($orderby != ""){            
+            // remove first +
+            $orderby = substr($orderby, strpos($orderby, "+ ") + 2);
+            
+            $sql .= " ORDER BY " . $orderby . " DESC";
         }
 
 		$sql .= " LIMIT " . $numResultsPerPage . " OFFSET " . $start;
@@ -195,17 +239,27 @@ class ProductDao extends AbstractDao {
 
 	private function addCriteriaToSql(&$sql, $criteria, $columnName, &$params, &$paramTypes){
 		if(is_array($criteria)){            
-            $sql .= " AND " . $columnName . " in (";           
-            
-            foreach ($criteria as $value){	
+            $sql .= " AND " . $columnName . " IN (" .                                               
+                    $this->convertCriteriaToQueryParameters($criteria, $params, $paramTypes) . 
+                    ")";
+		}
+	}		
+	
+	private function convertCriteriaToQueryParameters($criteria, &$params, &$paramTypes){
+	    $sql = "";
+	    
+	    if(is_array($criteria)){ 
+    	    foreach ($criteria as $value){	
                  $sql .= "?,";		
-			     $params[] = $value;
-			     $paramTypes[] = 'text';
+    		     $params[] = $value;
+    		     $paramTypes[] = 'text';
             }
             
             // remove trailing comma
-            $sql = substr($sql, 0, strlen($sql) -1) . ")";
-		}
-	}		
+            $sql = substr($sql, 0, strlen($sql) -1);
+	    }
+        
+        return $sql;
+	}
 }
 ?>
