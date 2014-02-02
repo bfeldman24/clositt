@@ -101,27 +101,37 @@ h1.waitList{
 	margin-left:45px;
 }
 
-#login{
-	position:absolute;
+.login-form{
 	background:white;
 	top:27;
 	left:0;
 	width:233px;
-	height:130px;	
-	margin-top:145px;
-	padding:2em;
+	height:155px;	
+	padding: 1em 2em;
 }
-#email{
+
+.signup-form{
+	background:white;
+	top:27;
+	left:0;
+	width:233px;
+	height:195px;	
+	padding: 1em 2em;
+	margin-top:20px;
+}
+
+#email, #signup-name{
 	margin-top:-7px;
 }
-#inputEmail.inputBox{
-	height:35px;
+.inputBox{
+	height:35px !important;
+	margin-bottom: 5px !important;
 }
 #inputPassword.inputBox{
 	height:35px;
 }
-#loginButton{
-	margin-top:12px;
+.submitButton{
+	margin-top:10px;
 	margin-left:48px
 }
 h1.account{
@@ -135,7 +145,7 @@ h1.account{
 #rightBanner{
 	background: white;
 	position:relative;
-	height:302px;
+	height:370px;
 	width:605px;
 	top:0;
 	left:315px;
@@ -163,7 +173,7 @@ h1.stop{
 	font-size:3em;
 	font-weight:500;
 	margin-bottom:0px;
-	margin-top:0px;
+	margin-top:25px;
 }
 
 h1.start{
@@ -171,5 +181,17 @@ h1.start{
 	font-family: 'Monoton', cursive;
 	font-size:4em;
 	margin-top:30px;
+}
+
+#signup-password {
+    margin-left: 5px;   
+}
+
+.signup-password {
+    border-radius: 3px !important;
+    height: 35px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 108px !important;   
 }
 

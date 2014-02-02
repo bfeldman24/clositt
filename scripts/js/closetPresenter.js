@@ -417,33 +417,37 @@ var closetFormPresenter = {
 		return false;
 	},
 	
-	addToWishList: function(el){	    
-	    el.preventDefault();								
-		var sku = $(el.currentTarget).parents(".item").attr("pid");
-		var closetName = "Wish List";
-		
-		var index = closetFormPresenter.closetItems.indexOf(sku);
-			
-		if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){					 
-		    var img = $(el.currentTarget).parents(".item").find(".picture img").attr("src"); 
-		    
-			firebase.$.child(firebase.userPath)
-			     .child(firebase.userid)
-			     .child("closets")
-			      .child(closetPresenter.wishListClosetId)
-			      .child("items")
-			      .child(sku)
-			      .set(img, function(error) {
-         			  
-         			  if (error) {
-         					Messenger.error('Clositt could not be saved. ' + error);
-         			  } else {
-         					Messenger.success('This item was added to your ' + closetName + '!');					
-         					closetFormPresenter.updateClosetCount(el, sku);		
-         			  }
-			});
-		}else{
-			Messenger.success('This item is already in your "' + closetName + '"');
+	addToWishList: function(el){	
+	    if(!firebase.isLoggedIn){
+			Messenger.info("Please login or sign up to add items to your clositt!");	
+		}else{    
+    	    el.preventDefault();								
+    		var sku = $(el.currentTarget).parents(".item").attr("pid");
+    		var closetName = "Wish List";
+    		
+    		var index = closetFormPresenter.closetItems.indexOf(sku);
+    			
+    		if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){					 
+    		    var img = $(el.currentTarget).parents(".item").find(".picture img").attr("src"); 
+    		    
+    			firebase.$.child(firebase.userPath)
+    			     .child(firebase.userid)
+    			     .child("closets")
+    			      .child(closetPresenter.wishListClosetId)
+    			      .child("items")
+    			      .child(sku)
+    			      .set(img, function(error) {
+             			  
+             			  if (error) {
+             					Messenger.error('Clositt could not be saved. ' + error);
+             			  } else {
+             					Messenger.success('This item was added to your ' + closetName + '!');					
+             					closetFormPresenter.updateClosetCount(el, sku);		
+             			  }
+    			});
+    		}else{
+    			Messenger.success('This item is already in your "' + closetName + '"');
+    		}
 		}
 	},
 	

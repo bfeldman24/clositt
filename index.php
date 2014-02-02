@@ -36,7 +36,7 @@
     </div>
     
     <div id="center-featured">
-        Check out our <a href="holiday-guide.php">Holiday Shopping Guide</a>
+        Check out our <a href="shopping-guide.php">Shopping Guide</a>
     </div>
     
     <div id="main-content" class="container main-container">

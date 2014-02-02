@@ -67,49 +67,53 @@ var reviewsPresenter = {
 	 },	 	 
 
 	 saveReview: function(e){
-	    var targetOutfit = $(e.target).parents(".item");
-	   
-	 	var comment = targetOutfit.find(".review-add-comment").val();
-	 	
-	 	if(comment.trim() != ""){	 		
-		 	var now = new Date();
-		 	var ampm = now.getHours() >= 12 ? "PM" : "AM";
-		 	var hour = now.getHours() % 12;
-		 	hour = hour == 0 ? 12 : hour;
-		 	hour = reviewsPresenter.addZero(hour);
-		 	var minute = reviewsPresenter.addZero(now.getMinutes());
-		 	
-		 	var nowString = (now.getMonth() + 1) +"/"+ now.getDate() +"/"+ now.getFullYear() + " " + hour +":"+ minute + " " + ampm;
-		 	var user = firebase.username == null ? "Guest" : firebase.username;
-		 	var rating = targetOutfit.find(".review-rating").attr("userRating");
-		 	rating = rating == undefined ? 0 : rating;
-		 	
-		 	var sku = targetOutfit.attr("pid");
-		 	reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);	 	 	
-		 	reviewsPresenter.currentReviewFB.push({name:user, rating:rating, comment: comment, date:nowString, sku:sku});	 	
-		 	
-		 	targetOutfit.find(".review-add-comment").val("");		 	
-		 	var review = targetOutfit.find(".review-float");
-		 	reviewsPresenter.refreshRating(review, 0);
-		 	
-		 	// update review count
-		 	firebase.$.child("clositt/products/"+sku+"/rc").transaction(function(value) {
-		 	   var newValue = 1;
-		 	   
-		 	   if(value == null){		 	       
-    	 	       firebase.$.child("clositt/products/"+sku+"/rc").set(newValue);
-		 	   }else{
-		 	        newValue = value +1;		 	        
-		 	   } 		 	            
-		 	   
-		 	   $('.item[pid="'+sku+'"]').find(".numReviews > .counter").text(newValue);
-		 	   targetOutfit.find(".productPageCommentCount").text("("+newValue+")");
-		 	   return newValue;       
-            });
-		 	
-	 	}else{
-	 		Messenger.info("Please enter a comment");
-	 	}
+	    if(!firebase.isLoggedIn){
+			Messenger.info("Please login or sign up to add comments to this product!");	
+		}else{
+      	    var targetOutfit = $(e.target).parents(".item");
+      	   
+      	 	var comment = targetOutfit.find(".review-add-comment").val();
+      	 	
+      	 	if(comment.trim() != ""){	 		
+      		 	var now = new Date();
+      		 	var ampm = now.getHours() >= 12 ? "PM" : "AM";
+      		 	var hour = now.getHours() % 12;
+      		 	hour = hour == 0 ? 12 : hour;
+      		 	hour = reviewsPresenter.addZero(hour);
+      		 	var minute = reviewsPresenter.addZero(now.getMinutes());
+      		 	
+      		 	var nowString = (now.getMonth() + 1) +"/"+ now.getDate() +"/"+ now.getFullYear() + " " + hour +":"+ minute + " " + ampm;
+      		 	var user = firebase.username == null ? "Guest" : firebase.username;
+      		 	var rating = targetOutfit.find(".review-rating").attr("userRating");
+      		 	rating = rating == undefined ? 0 : rating;
+      		 	
+      		 	var sku = targetOutfit.attr("pid");
+      		 	reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);	 	 	
+      		 	reviewsPresenter.currentReviewFB.push({name:user, rating:rating, comment: comment, date:nowString, sku:sku});	 	
+      		 	
+      		 	targetOutfit.find(".review-add-comment").val("");		 	
+      		 	var review = targetOutfit.find(".review-float");
+      		 	reviewsPresenter.refreshRating(review, 0);
+      		 	
+      		 	// update review count
+      		 	firebase.$.child("clositt/products/"+sku+"/rc").transaction(function(value) {
+      		 	   var newValue = 1;
+      		 	   
+      		 	   if(value == null){		 	       
+          	 	       firebase.$.child("clositt/products/"+sku+"/rc").set(newValue);
+      		 	   }else{
+      		 	        newValue = value +1;		 	        
+      		 	   } 		 	            
+      		 	   
+      		 	   $('.item[pid="'+sku+'"]').find(".numReviews > .counter").text(newValue);
+      		 	   targetOutfit.find(".productPageCommentCount").text("("+newValue+")");
+      		 	   return newValue;       
+                  });
+      		 	
+      	 	}else{
+      	 		Messenger.info("Please enter a comment");
+      	 	}
+		}
 	 },
 	 
 	 addReview: function(snapshot){

@@ -50,7 +50,7 @@
 <?php } ?>
 
 function loggedOut(){
-	location.href = "<?php echo HOME_ROOT; ?>";
+	location.href = "<?php echo HOME_ROOT . 'signup.php'; ?>";
 }
 
 

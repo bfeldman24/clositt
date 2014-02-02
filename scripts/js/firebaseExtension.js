@@ -124,18 +124,14 @@ var firebase = {
 		if(typeof loggedOut == 'function')
 		{
 			loggedOut();
-		}  
-		
-		firebase.sendToWelcomePage();
+		}  		
 	},
 	
 	loggedOutErrorCallback: function(){	   
 		if(typeof loggedOutError == 'function')
 		{
 			loggedOutError();
-		}  
-		
-		firebase.sendToWelcomePage();
+		}  		
 	},
 	
 	userDataAvailableCallback: function(username){
@@ -155,35 +151,19 @@ var firebase = {
 	
 	updateLoggedOutDropdownMenu: function(){
 		$("#account-dropdown").html("")
-	  		.append($('<li><a href="login.php">Login</a></li>'))
-	    	.append($('<li class="divider"></li>'))
-	    	.append($('<li><a href="signup.php">Sign Up</a></li>'));
+	  		.append($('<li><a href="signup.php">Login or Sign Up</a></li>'))
 	},	
 
  	logout: function(){
 		firebase.authClient.logout();	
 
 		$.post("/app/auth.php", function(){
-			location.href= "/";
+			location.href= "/signup.php";
 		}).fail(function() {
 			 $.post("auth.php", function(){
                         	location.href= "./";
                 	}) 
 		});
-	},
-	
-	sendToWelcomePage: function(){
-	   if (location.href.indexOf("signup") < 0 &&
-	       location.href.indexOf("welcome") < 0 &&
-	       location.href.indexOf("login") < 0 &&
-	       location.href.indexOf("shout-outs") < 0 &&
-	       location.href.indexOf("whoops") < 0 && 
-	       location.href.indexOf("contact") < 0){        	               
-	       
-          	   if (location.href.indexOf("welcome.php") < 0){
-          	       location.href = "/welcome.php";
-          	   }
-      	}
 	}
 };
 

@@ -12,7 +12,7 @@
 
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
 <div id="main-content" class="container main-container" style="margin-top:80px">
-	<h1><span id="static-closet-title">Clositt's Holiday Guide</span></h1>	
+	<h1><span id="static-closet-title">Clositt's Style Guide</span></h1>	
     <?php /* <div id="loadingMainContent"><img src="css/images/loading.gif"/></div> */ ?>
     <div id="closet-list"></div>    
 </div>
@@ -31,10 +31,6 @@ $(document).ready(function(){
     productPagePresenter.init();	
     reviewsPresenter.init();
 });
-
-function loggedOut(){
-	location.href = "<?php echo HOME_ROOT; ?>";
-}
 
 
 $("#subheader-navbar li a").removeClass();
