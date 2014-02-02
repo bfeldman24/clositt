@@ -46,7 +46,7 @@ var productPagePresenter = {
 		var html ='<div class="productPageContainer item" pid="'+id+'" style="top:'+scrollLocation+'">';
 				html +='<div class="productPageClose">x</div>';
 				html +='<div class="productPageTop">';				
-				    html +='<div class="productPageImage">';				
+				    html +='<div class="productPageImage picture">';				
 				        html +='<a class="productPagePicture" target="_blank" href="'+link+'">';
 				            html += '<img src="'+image+'" onerror="return pagePresenter.handleImageNotFound(this)" />';	
 				        html += '</a>';

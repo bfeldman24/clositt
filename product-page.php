@@ -115,7 +115,7 @@ body{
 <div id="product-page-content" style="">
      <div class="productPageContainer item" pid="<?= $product->s ?>">
 				<div class="productPageTop">				
-				    <div class="productPageImage">				
+				    <div class="productPageImage picture">				
 				        <a class="productPagePicture" target="_blank" href="<?= $product->l ?>">
 				            <img src="<?= $product->i ?>" onerror="return pagePresenter.handleImageNotFound(this)" />	
 				        </a>
@@ -194,15 +194,12 @@ $(document).ready(function(){
     pagePresenter.init();	
     productPagePresenter.init();	
     reviewsPresenter.init();
+    gridEvents.init();    
     reviewsPresenter.populateProductPageReview($("#product-page-content"), "<?= $product->s ?>");
 });
 
 function loggedIn(){
 	closetFormPresenter.getClosetInfo();
-}
-
-function loggedOut(){
-	location.href = "<?php echo HOME_ROOT; ?>";
 }
 
 </script>

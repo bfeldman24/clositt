@@ -7,7 +7,7 @@ Options -Indexes
 
 RewriteEngine On
 RewriteRule ^!(.*)$ clositt.php?user=$1
-RewriteRule ^@/([a-z0-9\-]*)$ outfit.php?s=$1
+RewriteRule ^@/([a-z0-9\-]*)$ product-page.php?s=$1
 
 # API
 RewriteRule ^p/([a-z0-9]*)$ app/Controller/ProductController.php?method=$1

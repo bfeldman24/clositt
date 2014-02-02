@@ -52,8 +52,8 @@ var tagPresenter = {
 						Messenger.success('Tag \"'+tagInput+'\" was saved!');					
 						Messenger.timeout = Messenger.defaultTimeout;
 						$(element).parents(".item").find(".topright").show();
-						$(element).parents(".item").find(".addTagForm").html("").hide();
 						$(element).parents(".item").find(".addTagForm").tooltip('destroy');
+						$(element).parents(".item").find(".addTagForm").html("").hide();	
 			 	   }
 			 	});
 			 	

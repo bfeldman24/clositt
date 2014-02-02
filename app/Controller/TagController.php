@@ -12,12 +12,12 @@ class TagController extends AbstractDao{
 			$updatedTags = $this->tryUpdateTagDao($tag);									
 			
 			if(is_numeric($updatedTags) && $updatedTags > 0){
-				return true;
+				return "success";
 			}else{
 			    $insertedTags = $this->addNewTagDao($tag);	
 			    
 			    if(is_numeric($insertedTags) && $insertedTags > 0){
-				    return true;
+				    return "success";
 			    }
 			}
 		}
@@ -26,13 +26,13 @@ class TagController extends AbstractDao{
 	}
 	
 	public function addTags($tags){	
-		
+	   
 		if(isset($tags) && is_array($tags) && count($tags) > 0){	
-			
+		
 			$results = $this->addTagsDao($tags);			
-			
+		
 			if(is_numeric($results) && $results > 0){
-				return true;
+				return "success";
 			}
 		}
 	
@@ -49,14 +49,25 @@ class TagController extends AbstractDao{
 	           " SET " . TAG_COUNT  . " = " . TAG_COUNT . " + 1 " . 
 	           " WHERE " . TAG_STRING . " = :tag AND " . PRODUCT_SKU . " = :sku";
         
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->db->prepare($sql, array('text','text'), MDB2_PREPARE_MANIP);
                 
         try {
+            if($this->debug){
+                $tagParams = print_r($tag, true);
+    			$this->logDebug("127129321" ,$sql . " (" . $tagParams . ")" );
+    		}
+            
             $affected = $stmt->execute($tag);
+            $stmt->free();
         } catch (Exception $e) {
             echo 'Caught exception: ',  $e->getMessage(), "\n\n";
             print_r($tag);
-        }        
+        }       
+        
+        if($this->debug){            
+            $a = print_r($affected, true);
+			$this->logDebug("affected update" ,$a);
+		} 
         
         return $affected;
 
@@ -71,7 +82,7 @@ class TagController extends AbstractDao{
         $tagArray = array();
         $tagArray[] = $insertArray;
         
-        $this->addTagsDao($tagArray){	     
+        return $this->addTagsDao($tagArray);	     
 	}
 	
 	public function addTagsDao($tags){
@@ -81,18 +92,30 @@ class TagController extends AbstractDao{
 		}
 	 
 	    $sql = "INSERT INTO " . TAGS . 
-	           " VALUES (?, ?, ?)";
+	           " VALUES (?, ?, ?)";	           	           
         
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->db->prepare($sql, array('text','text','integer'), MDB2_PREPARE_MANIP);
         
         foreach ($tags as $row) {            
             try {
+                
+                if($this->debug){
+                    $tagParams = print_r($row, true);
+        			$this->logDebug("12712931" ,$sql . " (" . $tagParams . ")" );
+        		}
+                
                 $results = $stmt->execute($row);
+                $stmt->free();
             } catch (Exception $e) {
                 echo 'Caught exception: ',  $e->getMessage(), "\n\n";
                 print_r($row);
             }
         }
+        
+        if($this->debug){        
+            $r = print_r($results, true);    
+			$this->logDebug("affected results" ,$r);
+		} 
         
         return $results;
 	}
