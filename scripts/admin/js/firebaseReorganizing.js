@@ -339,5 +339,22 @@ var firebaseReorganizing = {
             
             console.log("Finished Reorganizing Tags");
         });
-    },       
+    },  
+    
+     popuateStore: function(){
+        firebase.$.child("clositt/products").once('value', function(products){
+            
+            products.forEach(function(product){
+                var item = product.val();
+                                
+                firebase.$.child("store/products").child(item.o).child(item.u).child(item.a).set(item, function(error){
+                   if (error){
+                            console.log(item.s + " FAILED");
+                        }else{
+                            console.log(item.s + " UPDATED");
+                        } 
+                });                
+            });              
+        });		
+    },     
 }
