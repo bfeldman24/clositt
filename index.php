@@ -3,6 +3,7 @@
 <html>
 <head>
 
+<link href="<?php echo HOME_ROOT; ?>lib/css/joyride-2.1.css" rel="stylesheet">
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
 
 </head>
@@ -53,6 +54,7 @@
 <div id="product-module" style="display:none;"></div>
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
+<script src="<?php echo HOME_ROOT; ?>lib/js/jquery.joyride-2.1.js"></script>
 
 <!-- Modal -->
     <div class="modal" id="welcomeModal" style="display:none;">
@@ -70,18 +72,63 @@ Once you find something you like, just click on the hanger icon and add it to yo
 
 		</div>
 		<div class="modal-footer">		    
-		    <button class="btn btn-success" onclick='contactUs()'>Contact Us</button>
-		    <button class="btn" data-dismiss="modal" aria-hidden="true">Get Started!</button>
+		    <button class="btn" onclick='contactUs()'>Contact Us</button>
+		    <button class="btn btn-success joyride-start" data-dismiss="modal" aria-hidden="true">Take the Tour</button>
+		    <button class="btn btn-info" data-dismiss="modal" aria-hidden="true">Get Started!</button>
 	    </div>
     </div>
 <!-- End Modal -->
 
 <div id="review-mask"></div>
 
+
+<!-- Joyride Content -->
+<ol id="joyRideTipContent">
+    <li data-id="search-bar" data-text="Next" class="custom">
+        <h2>Search </h2>
+        <p>You can search for EVERTYHING! Find your favorite product, style, or price. Go wild!</p>
+    </li>
+    <li data-id="filter-float" data-button="Next" data-options="tipLocation:right;tipAnimation:fade">
+        <h2>Filter</h2>
+        <p>Narrow down the products to find exactly what you are looking for!</p>
+    </li>
+    <li data-id="filter-toggle" data-button="Next" data-options="tipLocation:right">
+        <h2>Filter</h2>
+        <p>Hide the filter when you are not using it.</p>
+    </li>
+    <!--
+    <li data-button="Next">
+        <h2>Stop #4</h2>
+        <p>It works as a modal too!</p>
+    </li>
+    -->
+    <li data-id="joyride-item-addToClositt" data-button="Next" data-options="tipLocation:right">
+    <h2>Add to Your Clositt</h2>
+    <p>Save and organize the products you find in your Clositt! Once saved, go to the MyClositt link at the top of the page.</p>
+    </li>
+    <li data-id="joyride-item-showComments" data-button="Next"  data-options="tipLocation:bottom">
+        <h2>Comments and Reviews</h2>
+        <p>See what people are saying about this product and add your own review</p>
+    </li>
+    <li data-id="joyride-item-addToWishList" data-button="Next"  data-options="tipLocation:bottom">
+        <h2>Add to Your WishList</h2>
+        <p>Add this product to your wish list so people can know what you want.</p>
+    </li>
+    <li data-id="joyride-item-shareOutfitBtn" data-button="Next"  data-options="tipLocation:left">
+        <h2>Share</h2>
+        <p>Send this product to your friends to find out what they think about it.</p>
+    </li>
+    <li data-id="myClosittLink" data-button="Close and Start Shopping!"  data-options="tipLocation:bottom">
+        <h2>My Clositt</h2>
+        <p>Go to your Clositt to view and organize the products that you have saved.</p>
+    </li>
+
+</ol>
+
 <script type="text/javascript">
 $(document).ready(function() {
-	if(localStorage.welcomeClosit == undefined){
-		$('#welcomeModal').modal();
+	if(localStorage.welcomeClosit == undefined || true){
+		$('#welcomeModal').modal();		
 		localStorage.welcomeClosit = "true";
 	}
 	
@@ -94,6 +141,32 @@ $(document).ready(function() {
 	searchController.init();	
 	reviewsPresenter.init();		
 	colorPresenter.init();
+});
+
+$(".joyride-start").click(function(e){
+    $('#joyRideTipContent').joyride({
+          autoStart : true,
+          postStepCallback : function (index, tip) {
+          if (index == 0) {
+            var $item = $("#product-grid .item:nth-child(2)").first();
+            $item.find(".addToClosetBtn img").attr("id","joyride-item-addToClositt");
+            $item.find(".showComments i").attr("id","joyride-item-showComments");
+            $item.find(".addToWishList i").attr("id","joyride-item-addToWishList");
+            $item.find(".shareOutfitBtn img").attr("id","joyride-item-shareOutfitBtn");          
+          } else if (index == 2){
+            $('body,html').animate({
+    			scrollTop: 0
+    		}, 800);
+            
+            $("#product-grid .item:nth-child(2)").first().find(".overlay").addClass("alwaysVisible").show();                        
+          }          
+        },
+        postRideCallback : function (index, tip) {
+            $("#product-grid .item:nth-child(2)").first().find(".overlay").removeClass("alwaysVisible").hide();                        
+        },       
+        modal:false,
+        expose: false
+        });
 });
 
 function loggedIn(){

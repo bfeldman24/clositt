@@ -38,7 +38,7 @@
 	       <ul>
 	           <li><a href="/">Trending</a></li>
 	           <?php /*<li id="feed"><a>Feed <span id="soon">Coming Soon!</span></a></li> */ ?>
-	           <li><a href="/clositt.php">MyClositt</a></li>
+	           <li><a href="/clositt.php" id="myClosittLink">MyClositt</a></li>
 	       </ul>
 	   </div>
 	</div>

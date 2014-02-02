@@ -1971,3 +1971,40 @@ input.closetNameInput[type="text"] {
 .alwaysVisible, .alwaysVisible.active, .alwaysVisible:hover{
     display: block !important;   
 }
+
+/******* JOYRIDE ******/
+
+.joyride-tip-guide {
+    background: none repeat scroll 0 0 #CCCCCC;
+    color: #434343;
+}
+.joyride-tip-guide p {
+    color: #434343;
+}
+
+.joyride-tip-guide h3, .joyride-tip-guide h2 {
+    color: #0055D6;    
+}
+.joyride-close-tip {
+    color: #722F30 !important;
+}
+.joyride-close-tip:hover {
+    color: #BC2D2B !important;
+}
+.joyride-nub {
+    border-color: #CCCCCC !important;
+}
+
+.joyride-tip-guide span.joyride-nub.left {
+    border-color: rgba(0, 0, 0, 0) #CCCCCC rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) !important;
+    top: 5px;
+}
+
+.joyride-tip-guide span.joyride-nub.right {
+    border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #CCCCCC !important;
+    top: 5px;
+}
+
+.joyride-tip-guide span.joyride-nub {
+    left: 5px;
+}
