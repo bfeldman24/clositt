@@ -822,7 +822,7 @@ storeApi = {
     			item.price = storeApiHelper.getLowestPrice(priceArr);
     			item.price = storeApiHelper.findPrice(item.price);           
     			
-    			item.designer = $(this).find(".details .productdesigner a").first().text().trim();
+    			//item.designer = $(this).find(".details .productdesigner a").first().text().trim();
 
                 if(item.image != undefined){
                    item.sku = 'nm' + $(this).find(".qv-tip").attr("product_id");
@@ -1140,7 +1140,7 @@ storeApi = {
                 item.link = siteHome + $(this).find("a.prodImgLink").attr("href");
                 item.name = $(this).find(".details .productname a").first().text().trim();                    
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".details .allPricing").text());
-    			item.designer = $(this).find(".details .productdesigner a").first().text().trim();
+    			//item.designer = $(this).find(".details .productdesigner a").first().text().trim();
 
                 if(item.image != undefined){
                    item.sku = 'cu' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
