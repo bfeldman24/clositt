@@ -180,11 +180,12 @@ var productPresenter = {
 	},
 	
 	refreshProducts: function(){
-	    gridPresenter.endTask();
-     	productPresenter.productIndex = 0;      	
+	    gridPresenter.endTask();     	      	
 	 	productPresenter.filterStore = null;	
 	 	searchController.criteria = null;
-        searchController.pageIndex = 0; 	 		 	
+	 	productPresenter.productIndex = 0;
+        searchController.pageIndex = 0;
+        gridPresenter.productIndex = 0; 	 		 	
 	 	gridPresenter.showContent(15);
 	},		
 	

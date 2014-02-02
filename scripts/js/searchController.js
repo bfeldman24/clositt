@@ -95,7 +95,16 @@ var searchController = {
             // Get additional filters based on key words
             if(matchingFilters == null){
                 matchingFilters = [];   
-            }        
+            }else{
+                if ($.inArray("dress", matchingFilters)  >= 0 && $.inArray("shirt", matchingFilters)  >= 0){                                        
+                    
+                    matchingFilters = jQuery.grep(matchingFilters, function(value) {
+                      return value != 'dress' && value != 'shirt';
+                    });
+                                        
+                    matchingFilters.push('dress shirts');
+                }
+            }                                
                         
             searchController.getAdditionalFiltersFromTags(matchingFilters, tags);
                     
@@ -106,9 +115,15 @@ var searchController = {
                 searchController.getAdditionalFilters(matchingFilters);                                          
                 
                 for(var i=0; i < matchingFilters.length; i++){
-                   var filter = $("#filter-float").find('input[value^="' + searchController.toTitleCase(matchingFilters[i]) + '"]');
+                   var filter = $("#filter-float").find('input[value^="' + searchController.toTitleCase(matchingFilters[i]) + '"]');                                        
                 
-                   if (filter != null){
+                   if (filter != null){                     
+                       if (filter.length > 1 ){
+                        
+                            // TODO get best match                            
+                            filter = filter.last();                            
+                       }
+                        
                        filter.prop('checked', true);
                        var filterName = filter.attr("name").toLowerCase();
                        
@@ -163,30 +178,35 @@ var searchController = {
         }
          
         criteria['tags'] = tags;  
+        criteria['searchTerm'] = $( "#search-bar" ).val().trim();
         
         searchController.criteria = criteria;
         searchController.pageIndex = 0;
         searchController.hasMoreProducts = true;
+        $("#product-grid").html("");
         searchController.getProducts(searchController.showResults);
     },            
     
     getProducts: function(){                                
         
         if (searchController.hasMoreProducts){
-            $.post( window.HOME_ROOT + "p/search/"+searchController.pageIndex+"/" + productPresenter.loadSize, searchController.criteria, function( data ) {            
+            var pageIndex = searchController.pageIndex;
+            $.post( window.HOME_ROOT + "p/search/"+pageIndex+"/" + productPresenter.loadSize, searchController.criteria, function( data ) {            
                             
         		gridPresenter.endTask();
         		
-        		if( Object.keys(data).length > 0){
+        		if( Object.keys(data).length > 0){  
+        		    productPresenter.filterStore = data;
         		    gridPresenter.lazyLoad(data);     		        		    
-        		}else if (searchController.pageIndex <= 0){
-        		    var searchTerm = $( "#search-bar" ).val().trim();
+        		}else if (pageIndex <= 0){
+        		    productPresenter.filterStore = null;
+        		    
         		    var errorMessage = '';
         		    
-        		    if (searchTerm == ""){
+        		    if (searchController.criteria['searchTerm'] == ""){
         		        errorMessage = "There are no macthing outfits!";
         		    }else{
-        		        errorMessage = "There are no outfits that matched: \'" + searchTerm + "\'! Try using another way to describe what you are looking for.";
+        		        errorMessage = "There are no outfits that matched \'" + searchController.criteria['searchTerm'] + "\'! Try using another way to describe what you are looking for.";
         		    }
         		  
         			$("#product-grid").html($("<div>").text(errorMessage));
@@ -541,8 +561,7 @@ var searchController = {
 		$( "#search-bar" ).val("");		
 		$("#search-clear-btn").hide();
 		$("#search-bar-sort-block").css("visibility","hidden");
-		filterPresenter.clearFilters();
-		
+		filterPresenter.clearFilters();	       		
 		productPresenter.refreshProducts();
 	},
 	
