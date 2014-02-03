@@ -199,7 +199,7 @@ var searchController = {
         		    productPresenter.filterStore = data;
         		    gridPresenter.lazyLoad(data);     		        		    
         		}else if (pageIndex <= 0){
-        		    productPresenter.filterStore = null;
+        		    productPresenter.filterStore = {};
         		    
         		    var errorMessage = '';
         		    
