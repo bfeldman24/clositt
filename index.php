@@ -63,18 +63,15 @@
 		    <h3>Welcome to Clositt</h3>
 		</div>
 		<div class="modal-body">
-		    <p>Welcome to Clositt, the best way to discover, share, and compare clothing online.
-Looking for something specific? Use the filter on the left or the search bar to narrow down what you are looking for. 
-Browse the homepage to see the latest trends and styles from your favorite stores.
-Once you find something you like, just click on the hanger icon and add it to your Clositt.</p><br>
+		    <p>Clositt is the best way to discover, share, and compare clothing online.</p><br>
 
-	<p>Got questions or feedback? Let us know: <a href="mailto:info@clositt.com">info@clositt.com</a></p>
+	<p>We make <p2 style="color:green;font-weight:bold;">shopping</p2> online for clothes, </br> as fun as <p2 style="color:green; font-weight:bold;">buying</p2> clothes.</p>
 
 		</div>
 		<div class="modal-footer">		    
-		    <button class="btn" onclick='contactUs()'>Contact Us</button>
+		    <button class="btn" onclick="window.location.href='signup.php'">Login or Sign Up</button>
 		    <button class="btn btn-success joyride-start" data-dismiss="modal" aria-hidden="true">Take the Tour</button>
-		    <button class="btn btn-info" data-dismiss="modal" aria-hidden="true">Get Started!</button>
+		    <button class="btn btn-info" data-dismiss="modal" aria-hidden="true">Let me Shop!</button>
 	    </div>
     </div>
 <!-- End Modal -->
@@ -92,7 +89,7 @@ Once you find something you like, just click on the hanger icon and add it to yo
         <h2>Filter</h2>
         <p>Narrow down the products to find exactly what you are looking for!</p>
     </li>
-    <li data-id="filter-toggle" data-button="Next" data-options="tipLocation:right">
+    <li data-id="filter-toggle" data-button="Next" data-options="tipLocation:right" >
         <h2>Filter</h2>
         <p>Hide the filter when you are not using it.</p>
     </li>
@@ -104,7 +101,7 @@ Once you find something you like, just click on the hanger icon and add it to yo
     -->
     <li data-id="joyride-item-addToClositt" data-button="Next" data-options="tipLocation:right">
     <h2>Add to Your Clositt</h2>
-    <p>Save and organize the products you find in your Clositt! Once saved, go to the MyClositt link at the top of the page.</p>
+    <p>Save and organize the products you find on Clositt! Once saved, go to the MyClositt link at the top of the page.</p>
     </li>
     <li data-id="joyride-item-showComments" data-button="Next"  data-options="tipLocation:bottom">
         <h2>Comments and Reviews</h2>

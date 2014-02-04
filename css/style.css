@@ -1410,7 +1410,7 @@ input.closetNameInput[type="text"] {
    border-radius: 0 0 0 0;   
    border-style: double;   
    border-width: 1px;   
-   box-shadow: 3px 4px 4px #B7B7B7;   
+   box-shadow: 0px 0px 0px #B7B7B7;   
    color: #9A9A9A;   
    margin-bottom: 0;   
    padding-left: 14px;   
@@ -1975,33 +1975,34 @@ input.closetNameInput[type="text"] {
 /******* JOYRIDE ******/
 
 .joyride-tip-guide {
-    background: none repeat scroll 0 0 #CCCCCC;
-    color: #434343;
+    background: #FAFAFC;
+    border-radius:10px;
+	 
 }
 .joyride-tip-guide p {
-    color: #434343;
+    color: #5F5F5F;
 }
 
 .joyride-tip-guide h3, .joyride-tip-guide h2 {
-    color: #0055D6;    
+    color: #4B9B4B;    
 }
 .joyride-close-tip {
     color: #722F30 !important;
 }
 .joyride-close-tip:hover {
-    color: #BC2D2B !important;
+    color: #4B9B4B !important;
 }
 .joyride-nub {
-    border-color: #CCCCCC !important;
+    border-color: #FAFAFC !important;
 }
 
 .joyride-tip-guide span.joyride-nub.left {
-    border-color: rgba(0, 0, 0, 0) #CCCCCC rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) !important;
+    border-color: rgba(0, 0, 0, 0) #FAFAFC rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) !important;
     top: 5px;
 }
 
 .joyride-tip-guide span.joyride-nub.right {
-    border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #CCCCCC !important;
+    border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #FAFAFC !important;
     top: 5px;
 }
 
