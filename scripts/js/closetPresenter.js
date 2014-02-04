@@ -39,7 +39,7 @@ var closetPresenter = {
 			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").once('value', closetPresenter.showClosets);		
 			 $("#user-closet-title").text(firebase.username + "'s Clositt");
 		}else{
-			Messenger.info("Please login or sign up to add items to your clositt!");	
+			Messenger.info("We'd love to add that to your Clositt. Just sign in and we'll take care if it for you.");	
 		}
 	},
 	
@@ -308,7 +308,7 @@ var closetFormPresenter = {
 	
 	showClosetForm: function(el){
 		if(!firebase.isLoggedIn){
-			Messenger.info("Please login or sign up to add items to your clositt!");	
+			Messenger.info("We'd love to add that to your Clositt, but first you need to sign in.");	
 		}else{
 			if(closetFormPresenter.closetNames == null){
 				closetFormPresenter.getClosetInfo();
@@ -419,7 +419,7 @@ var closetFormPresenter = {
 	
 	addToWishList: function(el){	
 	    if(!firebase.isLoggedIn){
-			Messenger.info("Please login or sign up to add items to your clositt!");	
+			Messenger.info("We'd love to add that item to your wishlist, but first you need to sign in.");	
 		}else{    
     	    el.preventDefault();								
     		var sku = $(el.currentTarget).parents(".item").attr("pid");
