@@ -89,7 +89,7 @@
         <h2>Filter</h2>
         <p>Narrow down the products to find exactly what you are looking for!</p>
     </li>
-    <li data-id="filter-toggle" data-button="Next" data-options="tipLocation:right" >
+    <li data-id="filter-toggle" data-button="Next" data-options="tipLocation:right">
         <h2>Filter</h2>
         <p>Hide the filter when you are not using it.</p>
     </li>
@@ -143,7 +143,7 @@ $(document).ready(function() {
 $(".joyride-start").click(function(e){
     $('#joyRideTipContent').joyride({
           autoStart : true,
-          postStepCallback : function (index, tip) {
+          preStepCallback : function (index, tip) {
           if (index == 0) {
             var $item = $("#product-grid .item:nth-child(2)").first();
             $item.find(".addToClosetBtn img").attr("id","joyride-item-addToClositt");
@@ -151,17 +151,23 @@ $(".joyride-start").click(function(e){
             $item.find(".addToWishList i").attr("id","joyride-item-addToWishList");
             $item.find(".shareOutfitBtn img").attr("id","joyride-item-shareOutfitBtn");          
           } else if (index == 2){
+            $(tip).css("margin-left","-70px").css("margin-top","30px");
+            
             $('body,html').animate({
     			scrollTop: 0
     		}, 800);
             
             $("#product-grid .item:nth-child(2)").first().find(".overlay").addClass("alwaysVisible").show();                        
+          } else if (index == 4 || index == 5){
+              $(tip).css("margin-left","-7px");
+          } else if (index == 6){
+             $(tip).css("border-radius", "10px 0px 10px 10px"); 
           }          
         },
         postRideCallback : function (index, tip) {
             $("#product-grid .item:nth-child(2)").first().find(".overlay").removeClass("alwaysVisible").hide();                        
         },       
-        modal:false,
+        modal:true,
         expose: false
         });
 });
