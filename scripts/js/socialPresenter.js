@@ -12,7 +12,7 @@ var socialPresenter = {
 		}else{							  												
 		    var shortlink = $(element).parents(".item").attr("data-url");
 		    
-		    var productLink = window.HOME_URL + "@/"+shortlink;		    
+		    var productLink = window.HOME_URL + "!/"+shortlink;		    
 		    var productEncodeLink = encodeURIComponent(productLink);
 		    var imgLink = encodeURIComponent($(element).parents(".item").find(".picture img").attr("src"));
 		    var desc = encodeURIComponent("Found on Clositt.com");
@@ -42,7 +42,7 @@ var socialPresenter = {
         		      $("<img>").attr("src", "css/images/social/email-icon.png")
         		  )
         		).append(
-        		  $("<a>").addClass("socialbtn").attr("onclick",'window.prompt("Copy to clipboard: Ctrl+C, Enter", "'+productLink+'")').append(
+        		  $("<a>").addClass("socialbtn").attr("onclick",'window.prompt("Copy to clipboard: Ctrl+C", "'+productLink+'")').append(
         		      $("<img>").addClass("social-link").attr("src", "css/images/link.png")
         		  )
 			).show('blind');

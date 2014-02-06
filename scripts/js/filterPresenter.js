@@ -8,26 +8,38 @@ var filterPresenter = {
 	    filterPresenter.allFilters = [];
 	   
 		$(document).on("click","#filter-toggle", filterPresenter.filterPanelToggle);
+						
+		$("#filter-float").on("click",".filterHeader", filterPresenter.toggleFilterOptionsVisibility);
+		$("#filter-float").on("click",".selectedFilter-x", filterPresenter.removeFilter);
+		
 		$("#filter-float").on("click","input", function(){
 			setTimeout(filterPresenter.onFilterSelect, 50);			
 		});	
 		
-		firebase.$.child('clositt/filterdata').once('value', filterPresenter.populateFilterData);	 					
+		//firebase.$.child('clositt/filterdata').once('value', filterPresenter.populateFilterData);	 					
+		$.getJSON(window.HOME_ROOT + "s/filters", filterPresenter.populateFilterData);
 	},
 	
-	populateFilterData: function(store){		
+	populateFilterDataOld: function(store){		
 		var companies = store.child("companies").val();
 	 	var customers = store.child("customers").val();
 	 	var categories = store.child("categories").val();
 	 	var prices = store.child("prices").val();										 		 	
 	 	filterPresenter.createFilters(companies, customers, categories, prices);		
 	},
+	
+	populateFilterData: function(store){		
+		var companies = store["companies"];
+	 	var customers = store["customers"];
+	 	var categories = store["categories"];
+	 	var prices = store["prices"];
+	 	filterPresenter.createFilters(companies, customers, categories, prices);		
+	},
  
 	createFilters:  function(companies, customers, categories, prices){
- 		prices = prices.sort(function(a,b){return parseInt(a)-parseInt(b)});
- 		filterPresenter.companies = companies.sort();
- 		filterPresenter.customers = customers.sort();
- 		filterPresenter.categories = categories.sort();
+ 		filterPresenter.companies = companies;
+ 		filterPresenter.customers = customers;
+ 		filterPresenter.categories = categories;
  		
  		var priceBuckets = new Array();
  		
@@ -45,61 +57,71 @@ var filterPresenter = {
  		}
  		
  		
- 		$("#filter-float").append($("<h4>").html("Shop For:"));
+ 		$("#filter-float").append($("<h4>").html("Shop For").addClass("filterHeader"));
+ 		var customerOptions = $("<div>").addClass("filterOptions");
  		
  		$.each(filterPresenter.customers, function(index, value) {
  		    filterPresenter.allFilters.push(value);
  		    
- 			$("#filter-float").append(
+ 			customerOptions.append(
  				$("<div>").addClass("controls").append(
  					$("<label>").addClass("checkbox").append(
  						$("<input>").attr("type","checkbox").attr("name","customer").attr("value",value)
- 					).append($("<span>").html(value))
+ 					).append($("<span>").addClass("filterValueName").html(value))
  				)
  			)
- 		});
+ 		}); 		
+ 		$("#filter-float").append(customerOptions);
  		
  		
- 		$("#filter-float").append($("<br>")).append($("<h4>").html("Category:"));
+ 		$("#filter-float").append($("<h4>").html("Category").addClass("filterHeader"));
+ 		var categoryOptions = $("<div>").addClass("filterOptions");
  		$.each(filterPresenter.categories, function(index, value) {
  		    filterPresenter.allFilters.push(value);
  		     
- 			$("#filter-float").append(
+ 			categoryOptions.append(
  				$("<div>").addClass("controls").append(
  					$("<label>").addClass("checkbox").append(
  						$("<input>").attr("type","checkbox").attr("name","category").attr("value",value)
- 					).append($("<span>").html(value))
+ 					).append($("<span>").addClass("filterValueName").html(value))
  				)
  			)
- 		});  		 		
+ 		});  
+ 		$("#filter-float").append(categoryOptions);	 		
  		
- 		$("#filter-float").append($("<br>")).append($("<h4>").html("Brands:"));
+ 		$("#filter-float").append($("<h4>").html("Brand").addClass("filterHeader"));
+ 		var brandOptions = $("<div>").addClass("filterOptions");
  		$.each(filterPresenter.companies, function(index, value) {
  		    filterPresenter.allFilters.push(value);
  		    
- 			$("#filter-float").append(
+ 			brandOptions.append(
  				$("<div>").addClass("controls").append(
  					$("<label>").addClass("checkbox").append(
  						$("<input>").attr("type","checkbox").attr("name","company").attr("value",value)
- 					).append($("<span>").html(value))
+ 					).append($("<span>").addClass("filterValueName").html(value))
  				)
  			)
  		}); 
+ 		$("#filter-float").append(brandOptions);
  		
- 		$("#filter-float").append($("<br>")).append($("<h4>").html("Price:"));		 		 		
+ 		$("#filter-float").append($("<h4>").html("Price").addClass("filterHeader"));	
+ 		var priceOptions = $("<div>").addClass("filterOptions");	 		 		
  		for(var i=0;i<priceBuckets.length-1;i++){
- 			$("#filter-float").append(
+ 			priceOptions.append(
  				$("<div>").addClass("controls").append(
  					$("<label>").addClass("checkbox").append(
  						$("<input>").attr("type","checkbox").attr("name","filterprice").attr("value",priceBuckets[i]).attr("max",priceBuckets[i+1])
- 					).append($("<span>").html("$"+priceBuckets[i]+" - $"+priceBuckets[i+1]))
+ 					).append($("<span>").addClass("filterValueName").html("$"+priceBuckets[i]+" - $"+priceBuckets[i+1]))
  				)
  			)
  		}
+ 		$("#filter-float").append(priceOptions);
  		
- 		$("#filter-float").append($("<br>")).append($("<h4>").html("Colors:"));		 		 		 		
-		$("#filter-float").append(colorPresenter.getColorFilters());
- 		 		
+ 		$("#filter-float").append($("<h4>").html("Color").addClass("filterHeader"));
+ 		var colorOptions = $("<div>").addClass("filterOptions");	 		 				 		 		 		
+		$("#filter-float").append(colorOptions.append(colorPresenter.getColorFilters()));
+ 		
+ 		$("#filter-float").append($("<div>").attr("id","selectedFilters"));
  		$("#filter-float").append($("<br><br><br><br><br><br><br>"));
  		filterPresenter.showFilter();
  	},
@@ -108,7 +130,8 @@ var filterPresenter = {
  	onFilterSelect: function(){
  	    productPresenter.filterStore = [];
  	    window.scrollTo(0, 0);
- 	    gridPresenter.beginTask(); 	       	    
+ 	    gridPresenter.beginTask(); 	 
+ 	    $("#selectedFilters").html("");      	    
  	    
 	 	var criteria = new Object();
 	 	var isSearch = $( "#search-bar" ).val().trim().length > 0;
@@ -123,6 +146,7 @@ var filterPresenter = {
 		 		var name = $(this).attr("name");
 		 		var value = $(this).val().toLowerCase();
 		 		var value = value.replace(/'/g, "\\'");
+		 		filterPresenter.createSelectedFilter($(this).val(), $(this).next(".filterValueName").text());
 		 		
 		 		if(name == "filterprice"){
 		 			var abovePrice = parseInt(value);
@@ -138,8 +162,8 @@ var filterPresenter = {
 		 		}else{
 			 		criteria[filterName].push(value);
 		 		}
-		 	});	 	
-	 	});	 		 	
+		 	});
+	 	});
 	 		 	
 	 	criteria['colors'] = colorPresenter.getSelectedColors();
 	 	
@@ -179,6 +203,23 @@ var filterPresenter = {
  		return params;
  	},
  	
+ 	createSelectedFilter: function(filterid, filterValue){ 	       	  
+ 	      $("#selectedFilters").append(
+ 	          $("<div>").addClass("selectedFilter-wrapper").attr("filterid", filterid).append(
+ 	              $("<div>").addClass("selectedFilter-x").text("X")
+ 	          ).append(
+     	          $("<div>").addClass("selectedFilter-value").text(filterValue)
+ 	          )
+ 	      );
+ 	},
+ 	
+ 	removeFilter: function(e){
+ 	    var filterValue = $(e.currentTarget).parent().attr("filterid");
+ 	    
+ 	    $("#filter-float").find('input[value="'+filterValue+'"]').prop('checked', false);
+ 	    filterPresenter.onFilterSelect();
+ 	},
+ 	
  	filterPanelToggle: function(){
  	 		
 	 	 $("#filter-float").toggle('slide',1000);	 	 
@@ -214,5 +255,19 @@ var filterPresenter = {
 	 	 	$("#filter-toggle").animate({left: '165px'}, 500);
 	 	 	$("#filter-toggle").text('Hide Filter');    
 	   }
+	 },
+	 
+	 toggleFilterOptionsVisibility: function(){
+	       var filterOptions = $(this).next(".filterOptions").first(); 
+	       
+	       if (filterOptions != null){
+	           if (filterOptions.is(":visible")){
+	               $(this).removeClass("open");
+	           }else{
+	               $(this).addClass("open");   
+	           }
+	           
+	           filterOptions.toggle('blind');   
+	       }
 	 }
 };

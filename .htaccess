@@ -6,8 +6,8 @@ Options +SymLinksIfOwnerMatch
 Options -Indexes 
 
 RewriteEngine On
-RewriteRule ^!(.*)$ clositt.php?user=$1
-RewriteRule ^@/([a-z0-9\-]*)$ product-page.php?s=$1
+RewriteRule ^@(.*)$ clositt.php?user=$1
+RewriteRule ^!/([a-z0-9\-]*)$ product-page.php?s=$1
 
 # API
 RewriteRule ^p/([a-z0-9]*)$ app/Controller/ProductController.php?method=$1
@@ -15,6 +15,8 @@ RewriteRule ^p/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?met
 RewriteRule ^p/([a-z0-9]*)/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?method=$1&page=$2&limit=$3
 RewriteRule ^spider/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1
 RewriteRule ^t/([a-z0-9]*)$ app/Controller/TagController.php?method=$1
+RewriteRule ^c/([a-z0-9]*)$ app/Controller/ColorController.php?method=$1
+RewriteRule ^s/filters$ app/Data/filters.json
 
 #TESTING
 

@@ -83,62 +83,68 @@ $numColorsToTag = 2;
         // loop through all products and get image colors
         $colorStore = array();
         $colorStore['colors'] = array();
-        foreach($products as $sku => $image){                
+        foreach($products as $sku => $image){            
             
-            // Gets the top colors in the image            
-            $colors=$ex->Get_Color($image, $num_results, $reduce_brightness, $reduce_gradients, $delta, $focus_width, $focus_height);
-                                            
-            // For each top color, get the closest matching color in our fixed list of colors 
-            $productColors = array();
-            foreach ( $colors as $hex => $count ){
-            	if ( $count > 0 ){    	       	   
-            	   $percent = round($count * 100, 2);  
-            	   $rgb = html2rgb($hex.'');  	   
-            	   
-            	   $closestColor = findClosestColor($rgb, $basicColors); 
-            	   
-            	   // add the parent color of the closest color to the list of returned colors
-            	   if(!in_array($basicColors[$closestColor]['p'], $productColors)){   	   
-            	       $productColors[$basicColors[$closestColor]['p']] = $percent; 
-            	   }else{
-            	       $productColors[$basicColors[$closestColor]['p']] += $percent;   
-            	   }            	   
-            	}
-            }
-                        
-            // Add the top colors to the color store
-            foreach ( $productColors as $parentColor => $percent ){            
-               
-               if ($parentColor != null && trim($parentColor) != ""){                
-                   if(!array_key_exists($parentColor, $colorStore['colors'])){   	                   
-            	       $colorStore['colors'][$parentColor] = array();
-            	   }
-            	   
-            	   $colorStore['colors'][$parentColor][$sku] = $percent;            	   
-               }
-            }  
+            // Gets the top colors in the image  
+            try{          
+                $colors=$ex->Get_Color($image, $num_results, $reduce_brightness, $reduce_gradients, $delta, $focus_width, $focus_height);
+                
+                if (is_array($colors) && count($colors)){                                
+                    // For each top color, get the closest matching color in our fixed list of colors 
+                    $productColors = array();
+                    foreach ( $colors as $hex => $count ){
+                    	if ( $count > 0 ){    	       	   
+                    	   $percent = round($count * 100, 2);  
+                    	   $rgb = html2rgb($hex.'');  	   
+                    	   
+                    	   $closestColor = findClosestColor($rgb, $basicColors); 
+                    	   
+                    	   // add the parent color of the closest color to the list of returned colors
+                    	   if(!in_array($basicColors[$closestColor]['p'], $productColors)){   	   
+                    	       $productColors[$basicColors[$closestColor]['p']] = $percent; 
+                    	   }else{
+                    	       $productColors[$basicColors[$closestColor]['p']] += $percent;   
+                    	   }            	   
+                    	}
+                    }
+                                
+                    // Add the top colors to the color store
+                    foreach ( $productColors as $parentColor => $percent ){            
+                       
+                       if ($parentColor != null && trim($parentColor) != ""){                
+                           if(!array_key_exists($parentColor, $colorStore['colors'])){   	                   
+                    	       $colorStore['colors'][$parentColor] = array();
+                    	   }
+                    	   
+                    	   $colorStore['colors'][$parentColor][$sku] = $percent;            	   
+                       }
+                    }  
+                    
+                    $colorStore['numProducts'] = $i++;
+                    
+                    if (filesize("colorInspectorSaved.json") < 500000000){
+                        $file = fopen("colorInspectorSaved.json","w");
+                        fwrite($file,json_encode($colorStore));                       
+                        fclose($file);
+                    }
+                }else{
+                    $colorStore['colors']['error'][$sku] = -1;      
+                }
             
-            $colorStore['numProducts'] = $i++;
-            
-            if (filesize("colorInspectorSaved.json") < 500000000){
-                $file = fopen("colorInspectorSaved.json","w");
-                fwrite($file,json_encode($colorStore));                       
-                fclose($file);
+            }catch(Exception $e){
+                echo "Caught Error: " . $e->getMessage();
             }
         }        
                 
         return $colorStore;             
     }
-    
-    
-    
+            
     
 /********************
 * start script
 *********************/
-if (!isset($_POST['store'])){
-    echo "ERROR: NO DATA";
-}else{
+    
+if (isset($_POST['store'])){
     
     // Get data and convert to json
     $products = json_decode(stripslashes($_POST['store']),true);
@@ -157,4 +163,35 @@ if (!isset($_POST['store'])){
 
     echo json_encode($colorStoreResults);
  } 
+ 
+ class ColorInspector {
+    
+    public static function processImageColors($colorStore, $numColorsToTag){       
+       $delta = 24;
+       $reduce_brightness = false;
+       $reduce_gradients = false;            
+       $focus_width = .4;
+       $focus_height = .8;                       
+       $num_results = 5;  
+       $colorsFile = dirname(__FILE__) . "/colors.json";      
+        
+       // Get data
+       $products = $colorStore;
+       
+       // Get Color file    
+       $file = fopen($colorsFile, 'r');
+       $colorsJson = fread($file, filesize($colorsFile));
+       fclose($file);
+       $basicColors = json_decode($colorsJson, true);    
+       
+       if (isset($numColorsToTag) && is_numeric($numColorsToTag)){         
+           $colorStoreResults = getColors($products, $basicColors, $numColorsToTag, $num_results, $reduce_brightness, $reduce_gradients, $delta, $focus_width, $focus_height);
+           
+           return $colorStoreResults;
+       }else{
+           echo "Missing Parameters";   
+       }
+       
+    }
+ }
  ?>

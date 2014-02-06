@@ -245,7 +245,7 @@ var closetPresenter = {
 		if($("#share-url").length){
 			$("#share-url").remove();
 		}else{
-			var query = location.href.toString().replace("clositt.php",("!" + closetPresenter.share) + firebase.userid)
+			var query = location.href.toString().replace("clositt.php",("@" + closetPresenter.share) + firebase.userid)
 
 			$("#closet-share > .share-freeiconsweb").before(
       			  $('<input type="text">')

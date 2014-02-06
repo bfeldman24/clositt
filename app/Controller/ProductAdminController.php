@@ -107,6 +107,17 @@ class ProductAdminController {
 	   return $result->fetchOne();
 	}
 	
+	public function getFilters(){
+	   $filter = array();
+	   
+	   $filter['customers'] = $this->convertResultsToArray($this->productAdminDao->getCustomers());
+	   $filter['categories'] = $this->convertResultsToArray($this->productAdminDao->getCategories());
+	   $filter['companies'] = $this->convertResultsToArray($this->productAdminDao->getCompanies());
+       $filter['prices'] = array(0,50,100,150,200,250,2000);  
+
+       return $filter;
+	}
+	
 	public function updateAllShortLinks(){
 	   echo "<br>Getting Products…";
 	   $products = array(); 
@@ -173,6 +184,18 @@ class ProductAdminController {
 	   }  
 	}	
 	
+	private function convertResultsToArray($results){
+	   $arr = array();
+	   
+	   if(is_object($results)){
+			while($field = $results->fetchOne()){	
+				$arr[] = ucwords(strtolower($field));
+			}
+	   }  
+	   
+	   return $arr;
+	}
+	
 	// Returns a url stripped of any characters that are not allowed in urls
 	private function cleanUrl($url) {
       $url = preg_replace('~[^\\pL0-9_]+~u', '-', $url);
@@ -209,6 +232,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     $productAdminController = new ProductAdminController($mdb2);
     $results = $productAdminController->updateAllShortLinks();   
     print_r($results);        
-}
+}else if ($_GET['method'] == 'getfilters'){       
+                                   
+    $productAdminController = new ProductAdminController($mdb2);
+    $results = $productAdminController->getFilters();   
+    
+    $file = fopen(dirname(__FILE__) . "/../Data/filters.json","w");
+    fwrite($file, json_encode($results));                       
+    fclose($file);
+
+    print_r(json_encode($results));
+}    
 
 ?>

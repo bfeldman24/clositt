@@ -138,6 +138,11 @@ $(document).ready(function() {
 	searchController.init();	
 	reviewsPresenter.init();		
 	colorPresenter.init();
+	
+	$('#filter-float').perfectScrollbar({
+        wheelSpeed: 20,
+        wheelPropagation: false
+    });
 });
 
 $(".joyride-start").click(function(e){

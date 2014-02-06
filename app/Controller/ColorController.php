@@ -3,6 +3,7 @@ require_once(dirname(__FILE__) . '/../Database/DataAccess/check-login.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/AbstractDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../View/ProductTemplate.php');
+require_once(dirname(__FILE__) . '/../../scripts/admin/php/colorExtract/colorInspector.php');   
 
 class ColorController extends AbstractDao{		
 	
@@ -13,11 +14,13 @@ class ColorController extends AbstractDao{
 			$results = $this->addColorsDao($colors);			
 			
 			if(is_numeric($results) && $results > 0){
-				return true;
+				return "success";
+			}else{
+			     print_r($results);
 			}
 		}
 	
-		return false;
+		return "failed";
 	}
 	
 	public function addColorsDao($colors){
@@ -31,16 +34,31 @@ class ColorController extends AbstractDao{
         
         $stmt = $this->db->prepare($sql);
         
-        foreach ($colors as $row) {            
-            try {
-                $results = $stmt->execute($row);
-            } catch (Exception $e) {
-                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-                print_r($row);
+        $affected = 0;
+        
+        if ($colors['colors'] == null){
+            foreach ($colors as $color) {            
+                try {                
+                    $affected += $stmt->execute($color);
+                } catch (Exception $e) {
+                    echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+                    print_r($row);
+                }
+            }
+        }else{
+            foreach ($colors['colors'] as $color => $products) {            
+                foreach ($products as $sku => $percent) {   
+                    try {                
+                        $affected += $stmt->execute(array($color, $sku, $percent));
+                    } catch (Exception $e) {
+                        echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+                        print_r($row);
+                    }
+                }
             }
         }
         
-        return $results;
+        return $affected;
 	}
 
 	public function addColorsFromFile($colorFile){
@@ -70,10 +88,37 @@ class ColorController extends AbstractDao{
         echo "DONE: " . $i . ") " . $result;
         return $result;
 	}
+	
+	public function getColors(){
+	    $searchResults = array();
+	    		      
+		$results = $this->getColorsDao();
+		
+		if(is_object($results)){
+			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){					
+				$searchResults[stripslashes($row[PRODUCT_SKU])] = stripslashes($row[PRODUCT_IMAGE]);
+			}
+		}
+	
+		return $searchResults;
+	}
+	
+	public function getColorsDao(){
+	   $limit = 5000;					
+		
+		$sql = "SELECT " . PRODUCT_SKU . "," . PRODUCT_IMAGE .				
+				" FROM " . PRODUCTS . " p " .
+				" WHERE NOT EXISTS(SELECT 1 FROM " . COLORS . " c WHERE c." . PRODUCT_SKU . " = p." . PRODUCT_SKU . ")".
+				" LIMIT ?";								
+        
+		$paramsTypes = array('integer');		
+		$params = array($limit);
+		
+		return $this->getResults($sql, $params, $paramTypes, "1238123");
+	}
 }
      
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
+if( isset($_GET['method']) ){
     $colorController = new ColorController($mdb2);                  
     
     if ($_GET['method'] == 'addFromFile'){
@@ -88,6 +133,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
         $colorArray[] = $insertArray; 
         
         $results = $colorController->addColors($colorArray);
+    }else if ($_GET['method'] == 'get'){
+        $unprocessedColors = $colorController->getColors();                           
+        $colors = ColorInspector::processImageColors($unprocessedColors, 2);        
+        $results = $colorController->addColors($colors);
     }
     
     print_r($results);

@@ -15,19 +15,29 @@ var gridEvents = {
 	},
 	
 	overlayEvent: function(){
-		$(document).on("mouseenter",".outfit", gridEvents.showOverlay).on("mouseleave",".outfit", gridEvents.hideOverlay);	
+		$(document).on("mouseenter",".outfit", gridEvents.showOverlay).on("mouseleave",".outfit", gridEvents.hideAllOverlays);
 	},
 	
-	showOverlay: function() {			
-			$(this).children(".overlay").not(".alwaysVisible").first().fadeIn('slow');
+	showOverlay: function() {	
+            var overlay = $(this).children(".overlay").not(".alwaysVisible").first();
+						
+			if (overlay.length > 0 && !overlay.is(":visible")){			
+			     overlay.stop();
+			     overlay.fadeIn('fast');
+			}
 	},
 	
-	hideOverlay: function() {			
-			$(this).children(".overlay").not(".alwaysVisible").first().fadeOut('slow');
-			
+	hideAllOverlays: function() {	  	   
+	   
+       	$(".overlay:visible").not(".alwaysVisible").each(function(){		
+       	     
+            $(this).fadeOut('slow');
+		
 			if (reviewsPresenter != null){
 			     var sku = $(this).parents(".item").attr("pid");			     			     
 			     reviewsPresenter.hideReview(reviewsPresenter.getReviewBlock(sku));
 			}
+		
+       	});
 	}	
 };

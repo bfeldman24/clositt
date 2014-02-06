@@ -87,9 +87,9 @@ var firebase = {
 		 	userData['closets'][closetPresenter.wishListClosetId] = new Object();
 		 	userData['closets'][closetPresenter.wishListClosetId]['name'] = "Wish List";		 	
 		 	
-		 	firebase.$.child(firebase.userPath).child(user.id).set(userData);
-		 	
-		  	firebase.login(user.email, password, remember);		  			  	
+		 	firebase.$.child(firebase.userPath).child(user.id).set(userData);		 			 	
+		 	firebase.welcomeEmail(user.email, firstname);
+		  	firebase.login(user.email, password, remember);
 
 		  }else{		  	
 		  		Messenger.error(error);	
@@ -164,6 +164,18 @@ var firebase = {
                         	location.href= "./";
                 	}) 
 		});
+	},
+	
+	welcomeEmail: function(email, name){
+	    var userData = { e: email, n: name, t: "welcomeMessage" };
+	   
+		$.post("app/email.php", userData, function(data) {
+			if(data == "success"){
+				console.log("Message Sent!")
+			}else{
+				console.log("Message failed to send.")
+			}
+		});  
 	}
 };
 

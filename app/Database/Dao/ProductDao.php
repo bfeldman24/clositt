@@ -41,6 +41,7 @@ class ProductDao extends AbstractDao {
 		
 		$sql = "SELECT * " .				
 				" FROM " . PRODUCTS .
+				" WHERE " . PRODUCT_STATUS . " = 1 " . 
 				" LIMIT ? OFFSET ?";								
         
 		$paramsTypes = array('integer','integer');		
@@ -79,6 +80,8 @@ class ProductDao extends AbstractDao {
 		}else{
 		     $sql .= " WHERE p." . PRODUCT_SHORT_LINK . " <> ? ";
 		}		               
+		
+		$sql .= " AND p." . PRODUCT_STATUS . " = 1 ";
 		               
 		$sql .= " LIMIT ?";								
         
@@ -151,7 +154,7 @@ class ProductDao extends AbstractDao {
             $sql .= " INNER JOIN " . COLORS . " c  ON c." . PRODUCT_SKU . " = p." . PRODUCT_SKU;
         }
 
-		$filterSql = "";		
+		$filterSql = "p." . PRODUCT_STATUS . " = 1 ";		
 		$this->addCriteriaToSql($filterSql, $criteria->getCompanies(), "p." . PRODUCT_STORE, $params, $paramTypes);	
 		$this->addCriteriaToSql($filterSql, $criteria->getCategories(), "p." . PRODUCT_CATEGORY, $params, $paramTypes);	
 		$this->addCriteriaToSql($filterSql, $criteria->getCustomers(), "p." . PRODUCT_CUSTOMER, $params, $paramTypes);	
@@ -202,7 +205,6 @@ class ProductDao extends AbstractDao {
 
         // WHERE CLAUSE
 		if($filterSql && trim($filterSql) != ""){
-		    $filterSql = substr($filterSql, 4); // Removes first ' AND'
 			$sql .= " WHERE " . $filterSql;
 		}
 

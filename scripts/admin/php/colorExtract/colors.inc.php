@@ -34,7 +34,7 @@ class GetMostCommonColors
 	 */
 	function Get_Color( $img, $count=20, $reduce_brightness=true, $reduce_gradients=true, $delta=16, $focusWidthPercent=.4, $focusHeightPercent = .8 )
 	{
-		if (is_readable( $img ) || true)
+		if (is_readable( $img) || true )
 		{
 			if ( $delta > 2 )
 			{
@@ -46,162 +46,165 @@ class GetMostCommonColors
 			}
 			// WE HAVE TO RESIZE THE IMAGE, BECAUSE WE ONLY NEED THE MOST SIGNIFICANT COLORS.
 			$size = GetImageSize($img);
-			$scale = 1;
-			if ($size[0]>0)
-			$scale = min($this->PREVIEW_WIDTH/$size[0], $this->PREVIEW_HEIGHT/$size[1]);
-			if ($scale < 1)
-			{
-				$width = floor($scale*$size[0]);
-				$height = floor($scale*$size[1]);
-			}
-			else
-			{
-				$width = $size[0];
-				$height = $size[1];
-			}
-			$image_resized = imagecreatetruecolor($width, $height);
-			if ($size[2] == 1)
-			$image_orig = imagecreatefromgif($img);
-			if ($size[2] == 2)
-			$image_orig = imagecreatefromjpeg($img);
-			if ($size[2] == 3)
-			$image_orig = imagecreatefrompng($img);
-			// WE NEED NEAREST NEIGHBOR RESIZING, BECAUSE IT DOESN'T ALTER THE COLORS
-			imagecopyresampled($image_resized, $image_orig, 0, 0, 0, 0, $width, $height, $size[0], $size[1]);
-			$im = $image_resized;
-			$imgWidth = imagesx($im);
-			$imgHeight = imagesy($im);
-			$total_pixel_count = 0;
 			
-			// Only focusing on the middle of the image
-			$focusHeightAdjustment = $imgHeight * ((1 - $focusHeightPercent) / 2);
-			$focusWidthAdjustment = $imgWidth * ((1 - $focusWidthPercent) / 2); 
-			
-			for ($y=$focusHeightAdjustment; $y < $imgHeight - $focusHeightAdjustment; $y++)
-			{
-				for ($x=$focusWidthAdjustment; $x < $imgWidth - $focusWidthAdjustment; $x++)
-				{
-					$total_pixel_count++;
-					$index = imagecolorat($im,$x,$y);
-					$colors = imagecolorsforindex($im,$index);
-					// ROUND THE COLORS, TO REDUCE THE NUMBER OF DUPLICATE COLORS
-					if ( $delta > 1 )
-					{
-						$colors['red'] = intval((($colors['red'])+$half_delta)/$delta)*$delta;
-						$colors['green'] = intval((($colors['green'])+$half_delta)/$delta)*$delta;
-						$colors['blue'] = intval((($colors['blue'])+$half_delta)/$delta)*$delta;
-						if ($colors['red'] >= 256)
-						{
-							$colors['red'] = 255;
-						}
-						if ($colors['green'] >= 256)
-						{
-							$colors['green'] = 255;
-						}
-						if ($colors['blue'] >= 256)
-						{
-							$colors['blue'] = 255;
-						}
-
-					}
-
-					$hex = substr("0".dechex($colors['red']),-2).substr("0".dechex($colors['green']),-2).substr("0".dechex($colors['blue']),-2);
-
-					if ( ! isset( $hexarray[$hex] ) )
-					{
-						$hexarray[$hex] = 1;
-					}
-					else
-					{
-						$hexarray[$hex]++;
-					}
-				}
-			}
-
-			// Reduce gradient colors
-			if ( $reduce_gradients )
-			{
-				// if you want to *eliminate* gradient variations use:
-				// ksort( &$hexarray );
-				arsort( &$hexarray, SORT_NUMERIC );
-
-				$gradients = array();
-				foreach ($hexarray as $hex => $num)
-				{
-					if ( ! isset($gradients[$hex]) )
-					{
-						$new_hex = $this->_find_adjacent( $hex, $gradients, $delta );
-						$gradients[$hex] = $new_hex;
-					}
-					else
-					{
-						$new_hex = $gradients[$hex];
-					}
-
-					if ($hex != $new_hex)
-					{
-						$hexarray[$hex] = 0;
-						$hexarray[$new_hex] += $num;
-					}
-				}
-			}
-
-			// Reduce brightness variations
-			if ( $reduce_brightness )
-			{
-				// if you want to *eliminate* brightness variations use:
-				// ksort( &$hexarray );
-				arsort( &$hexarray, SORT_NUMERIC );
-
-				$brightness = array();
-				foreach ($hexarray as $hex => $num)
-				{
-					if ( ! isset($brightness[$hex]) )
-					{
-						$new_hex = $this->_normalize( $hex, $brightness, $delta );
-						$brightness[$hex] = $new_hex;
-					}
-					else
-					{
-						$new_hex = $brightness[$hex];
-					}
-
-					if ($hex != $new_hex)
-					{
-						$hexarray[$hex] = 0;
-						$hexarray[$new_hex] += $num;
-					}
-				}
-			}
-
-			arsort( &$hexarray, SORT_NUMERIC );
-
-			// convert counts to percentages
-			foreach ($hexarray as $key => $value)
-			{
-				$hexarray[$key] = (float)$value / $total_pixel_count;
-			}
-
-			if ( $count > 0 )
-			{
-				// only works in PHP5
-				// return array_slice( $hexarray, 0, $count, true );
-
-				$arr = array();
-				foreach ($hexarray as $key => $value)
-				{
-					if ($count == 0)
-					{
-						break;
-					}
-					$count--;
-					$arr[$key] = $value;
-				}
-				return $arr;
-			}
-			else
-			{
-				return $hexarray;
+			if ($size && is_array($size)){
+    			$scale = 1;
+    			if ($size[0]>0)
+    			$scale = min($this->PREVIEW_WIDTH/$size[0], $this->PREVIEW_HEIGHT/$size[1]);
+    			if ($scale < 1)
+    			{
+    				$width = floor($scale*$size[0]);
+    				$height = floor($scale*$size[1]);
+    			}
+    			else
+    			{
+    				$width = $size[0];
+    				$height = $size[1];
+    			}
+    			$image_resized = imagecreatetruecolor($width, $height);
+    			if ($size[2] == 1)
+    			$image_orig = imagecreatefromgif($img);
+    			if ($size[2] == 2)
+    			$image_orig = imagecreatefromjpeg($img);
+    			if ($size[2] == 3)
+    			$image_orig = imagecreatefrompng($img);
+    			// WE NEED NEAREST NEIGHBOR RESIZING, BECAUSE IT DOESN'T ALTER THE COLORS
+    			imagecopyresampled($image_resized, $image_orig, 0, 0, 0, 0, $width, $height, $size[0], $size[1]);
+    			$im = $image_resized;
+    			$imgWidth = imagesx($im);
+    			$imgHeight = imagesy($im);
+    			$total_pixel_count = 0;
+    			
+    			// Only focusing on the middle of the image
+    			$focusHeightAdjustment = $imgHeight * ((1 - $focusHeightPercent) / 2);
+    			$focusWidthAdjustment = $imgWidth * ((1 - $focusWidthPercent) / 2); 
+    			
+    			for ($y=$focusHeightAdjustment; $y < $imgHeight - $focusHeightAdjustment; $y++)
+    			{
+    				for ($x=$focusWidthAdjustment; $x < $imgWidth - $focusWidthAdjustment; $x++)
+    				{
+    					$total_pixel_count++;
+    					$index = imagecolorat($im,$x,$y);
+    					$colors = imagecolorsforindex($im,$index);
+    					// ROUND THE COLORS, TO REDUCE THE NUMBER OF DUPLICATE COLORS
+    					if ( $delta > 1 )
+    					{
+    						$colors['red'] = intval((($colors['red'])+$half_delta)/$delta)*$delta;
+    						$colors['green'] = intval((($colors['green'])+$half_delta)/$delta)*$delta;
+    						$colors['blue'] = intval((($colors['blue'])+$half_delta)/$delta)*$delta;
+    						if ($colors['red'] >= 256)
+    						{
+    							$colors['red'] = 255;
+    						}
+    						if ($colors['green'] >= 256)
+    						{
+    							$colors['green'] = 255;
+    						}
+    						if ($colors['blue'] >= 256)
+    						{
+    							$colors['blue'] = 255;
+    						}
+    
+    					}
+    
+    					$hex = substr("0".dechex($colors['red']),-2).substr("0".dechex($colors['green']),-2).substr("0".dechex($colors['blue']),-2);
+    
+    					if ( ! isset( $hexarray[$hex] ) )
+    					{
+    						$hexarray[$hex] = 1;
+    					}
+    					else
+    					{
+    						$hexarray[$hex]++;
+    					}
+    				}
+    			}
+    
+    			// Reduce gradient colors
+    			if ( $reduce_gradients )
+    			{
+    				// if you want to *eliminate* gradient variations use:
+    				// ksort( &$hexarray );
+    				arsort( &$hexarray, SORT_NUMERIC );
+    
+    				$gradients = array();
+    				foreach ($hexarray as $hex => $num)
+    				{
+    					if ( ! isset($gradients[$hex]) )
+    					{
+    						$new_hex = $this->_find_adjacent( $hex, $gradients, $delta );
+    						$gradients[$hex] = $new_hex;
+    					}
+    					else
+    					{
+    						$new_hex = $gradients[$hex];
+    					}
+    
+    					if ($hex != $new_hex)
+    					{
+    						$hexarray[$hex] = 0;
+    						$hexarray[$new_hex] += $num;
+    					}
+    				}
+    			}
+    
+    			// Reduce brightness variations
+    			if ( $reduce_brightness )
+    			{
+    				// if you want to *eliminate* brightness variations use:
+    				// ksort( &$hexarray );
+    				arsort( &$hexarray, SORT_NUMERIC );
+    
+    				$brightness = array();
+    				foreach ($hexarray as $hex => $num)
+    				{
+    					if ( ! isset($brightness[$hex]) )
+    					{
+    						$new_hex = $this->_normalize( $hex, $brightness, $delta );
+    						$brightness[$hex] = $new_hex;
+    					}
+    					else
+    					{
+    						$new_hex = $brightness[$hex];
+    					}
+    
+    					if ($hex != $new_hex)
+    					{
+    						$hexarray[$hex] = 0;
+    						$hexarray[$new_hex] += $num;
+    					}
+    				}
+    			}
+    
+    			arsort( &$hexarray, SORT_NUMERIC );
+    
+    			// convert counts to percentages
+    			foreach ($hexarray as $key => $value)
+    			{
+    				$hexarray[$key] = (float)$value / $total_pixel_count;
+    			}
+    
+    			if ( $count > 0 )
+    			{
+    				// only works in PHP5
+    				// return array_slice( $hexarray, 0, $count, true );
+    
+    				$arr = array();
+    				foreach ($hexarray as $key => $value)
+    				{
+    					if ($count == 0)
+    					{
+    						break;
+    					}
+    					$count--;
+    					$arr[$key] = $value;
+    				}
+    				return $arr;
+    			}
+    			else
+    			{
+    				return $hexarray;
+    			}
 			}
 
 		}

@@ -2,7 +2,8 @@
 <head>
 <?php 
 require_once(dirname(__FILE__) . '/../../../globals.php');
-include(dirname(__FILE__) . '/../../../static/meta.php');   
+include(dirname(__FILE__) . '/../../../static/meta.php');
+
 ?>
 </head>
 <body>
@@ -26,8 +27,10 @@ var colorProcessor = {
 	init: function(){	    
 		console.log("Initializing... Please be patient this could take several minutes...");
 		$("body").append($("<div>").html("Initializing... Please be patient this could take several minutes..."));
+		
 		colorProcessor.firebase = new Firebase('https://clothies.firebaseio.com');
 		colorProcessor.firebase.child('store').once('value', colorProcessor.start);	 	 
+		
 		$(document).on("click",".getColors", colorProcessor.getColorsFromSavedFile);
 	},
 	

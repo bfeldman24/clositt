@@ -136,7 +136,7 @@ function getProductsFromLinks(save){
     				    saveAllProducts();    				    
     				}		
 			    }else{
-			         alert(company + " > " + customer + " > " + category + ": " + storeProducts);		
+			         alert(company + " > " + customer + " > " + category + ": " + JSON.stringify(storeProducts));		
 			    }						
 			    
 			    $("#loadingMask").hide();
@@ -446,7 +446,8 @@ $(document).find(".feedback-maximize").hide('fade');
 $(document).find(".feedback-minimized").show('fade');
 
 $(document).on("change", "#selectStores", function(e){
-   location.href = "#" + $("#selectStores").val(); 
+   location.href = "#" + $("#selectStores").val();
+   $("#selectStores").val("Go To") 
 });
 
 $(document).ready(function(){

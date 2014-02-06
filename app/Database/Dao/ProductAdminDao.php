@@ -220,5 +220,38 @@ class ProductAdminDao extends AbstractDao {
         
         return $affectedRows;
 	}
+	
+	public function getCustomers(){	   
+	   $sql = "SELECT DISTINCT " . PRODUCT_CUSTOMER .
+				" FROM " . PRODUCTS .
+				" WHERE " . PRODUCT_STATUS . " = 1 " .
+				" ORDER BY " . PRODUCT_CUSTOMER;					
+        
+		$paramsTypes = array();		
+		$params = array();		
+		return $this->getResults($sql, $params, $paramTypes, "2387462");
+	}
+	
+	public function getCategories(){
+	   $sql = "SELECT DISTINCT " . PRODUCT_CATEGORY .
+				" FROM " . PRODUCTS .
+				" WHERE " . PRODUCT_STATUS . " = 1 " .
+				" ORDER BY " . PRODUCT_CATEGORY;					
+        
+		$paramsTypes = array();		
+		$params = array();		
+		return $this->getResults($sql, $params, $paramTypes, "232352352");
+	}
+	
+	public function getCompanies(){
+	   $sql = "SELECT DISTINCT " . PRODUCT_STORE .
+				" FROM " . PRODUCTS .
+				" WHERE " . PRODUCT_STATUS . " = 1 " .
+				" ORDER BY " . PRODUCT_STORE;					
+        
+		$paramsTypes = array();		
+		$params = array();		
+		return $this->getResults($sql, $params, $paramTypes, "98237923");
+	}		
 }
 ?>

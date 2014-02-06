@@ -16,31 +16,39 @@ storeApi = {
                 newUrl = "http://www.anntaylor.com/ann/catalog/category.jsp?pageSize=1000&goToPage=1&catid=" + catid;
 				break;
 		    case "bcbg":
-		        newUrl = url + "#start=0&sz=1000";
+		        newUrl = url + "#start=0&sz=1000";      
 		        break;	
-		    case "charles tyrwhitt":
-		        newUrl = url + "&ppp=1000";																
+		    case "charles tyrwhitt":										
+		        newUrl = storeApiHelper.replaceParameter(url, "ppp", "1000");
 		        break;
 		    case "macys":
-		        newUrl = url + "&pageIndex=1&productsPerPage=1000";
+		        newUrl = storeApiHelper.replaceParameter(url, "pageIndex", "1");
+		        newUrl = storeApiHelper.replaceParameter(url, "productsPerPage", "1000");
 		        break;
 		    case "jcpenny":
-		        newUrl = url + "&Nao=96&pageSize=96&pN=1";
+		        newUrl = storeApiHelper.replaceParameter(url, "Nao", "96");
+		        newUrl = storeApiHelper.replaceParameter(newUrl, "pageSize", "96");		        		        		        
+		        newUrl = storeApiHelper.replaceParameter(newUrl, "pN", "1");		        
 		        break;
 		    case "nyandcompany":
 		    case "chicos":		    
-		        newUrl = url + "&viewAll=true";
+		        newUrl = storeApiHelper.replaceParameter(url, "viewAll", "true");		        
 		        break;
 		    case "forever21":
 		    case "cusp":
-		        newUrl = url + "&page=1&pageSize=1000";
+		        newUrl = storeApiHelper.replaceParameter(url, "pageSize", "1000");
+		        newUrl = storeApiHelper.replaceParameter(newUrl, "page", "1");		        		        
 		        break;
 		    case "nike":
-		        newUrl = url + "&sortOrder=viewAll|asc";
+		        newUrl = storeApiHelper.replaceParameter(url, "sortOrder", "viewAll|asc");		        
 		        break;
 		    case "jjill":
-		        newUrl = url + "&rpp=0";
-		        break;    
+		        newUrl = storeApiHelper.replaceParameter(url, "rpp", "0");		        
+		        break; 
+		    case "michael kors":
+		        newUrl = storeApiHelper.replaceParameter(url, "navid", "viewAll");   
+		        newUrl = storeApiHelper.replaceParameter(newUrl, "view", "all");   
+		        break;
 			default:
 				newUrl = url;
 				break;			
@@ -1088,12 +1096,12 @@ storeApi = {
 	getMichaelKors: function(data, siteHome){	   
 	   var products = new Object();
 	
-       $(data).find(".products .productstart").each(function(){
+       $(data).find(".products .productstart, .products .product").each(function(){
                 var item = new Object();
 
                 item.image = $(this).find("a.prodImgLink .productImage").first().attr("src");
                 item.link = siteHome + $(this).find("a.prodImgLink").attr("href");
-                item.name = $(this).find("p.productlink").first().text().trim();                    
+                item.name = $(this).find("p .productlink").first().text().trim();                    
                 var prices = $(this).find("p.priceadorn").text().trim();
     			item.price = storeApiHelper.findPricesAndGetLowest(prices);
 
@@ -1208,5 +1216,32 @@ storeApiHelper = {
         }   
         
         return min;
+    },
+    
+    replaceParameter: function (url, paramName, paramValue){
+    	var start = url.indexOf(paramName + "=");	
+    	var end = url.indexOf("&", start);
+        var newurl;
+    
+    	if (start > 0){
+    		newurl = url.substring(0, start); 
+    		newurl += paramName + "=" + paramValue;
+    
+    		if (end > 0){
+    			newurl += url.substring(end);
+    		}
+    	}else{
+    		newurl = url;
+    
+    		if (url.indexOf("?") > 0){
+    			newurl += "&";
+    		}else{
+    			newurl += "?";
+    		}
+    
+    		newurl += paramName + "=" + paramValue;
+    	}
+    
+    	return newurl;
     }   
 }

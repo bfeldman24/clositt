@@ -1,8 +1,8 @@
 <footer class="clositt-theme">
 	<div id="footer-wrapper">
-		<div class="center footer-item">Clositt Inc &copy; 2013</div>
+		<div class="center footer-item">Clositt Inc &copy; 2014</div>
 		<div class="footer-item"><a href="contact-us.php">Contact Us</a></div>
-		<!--<div class="footer-item"><a href="#">About Us</a></div>-->
+		<div class="footer-item"><a href="terms-of-service.php">Terms</a></div>
 		<div class="last footer-item"><a href="shout-outs.php">Shout Outs</a></div>
 		
 		<?php
@@ -32,7 +32,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     firebase.init();
-    Messenger.init();
+    Messenger.init();       
 });
 
 $(".feedback .feedback-submit-btn").on("click",function(e){

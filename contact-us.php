@@ -35,12 +35,13 @@
 		    <label class="control-label" for="inputSubject">Subject</label>
 		    <div class="controls">		  	  
 			  <div class="input-prepend">
-				<span class="add-on"><i class="icon-envelope"></i></span>
+				<span class="add-on"><i class="icon-pencil"></i></span>
 				<input type="text" id="inputSubject" placeholder="Subject" class="input-xlarge">
 			  </div>
 		    </div>
 	    </div>
 	    <div class="control-group">
+	        <label class="control-label" for="inputMessage">Message</label>
 		    <div class="controls">
 		    	<textarea rows="5" id="inputMessage"></textarea>   		
 		    </div>

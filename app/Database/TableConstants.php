@@ -14,6 +14,7 @@ define("PRODUCT_PRICE","price");
 define("PRODUCT_COMMENT_COUNT","commentCount");
 define("PRODUCT_CLOSITT_COUNT","closittCount");
 define("PRODUCT_SHORT_LINK","shortlink");
+define("PRODUCT_STATUS","status");
 define("PRODUCT_DATE_UPDATED","updatedOn");
 
 
