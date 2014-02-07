@@ -32,12 +32,12 @@ class ProductController {
         return json_encode($productEntity->toArray());
 	}
 	
-	public function getProducts($page, $limit){
+	public function getProducts($productCrit, $page, $limit){
 	    $searchResults = array();
 	    		
 		if(isset($page) && isset($limit)){	
 		      
-			$results = $this->productDao->getProducts($page, $limit);
+			$results = $this->productDao->getProducts($productCrit, $page, $limit);
 			
 			if(is_object($results)){
 				while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
@@ -142,7 +142,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
          $product = $productController->getProduct($_POST['sku']);   
     
     }else if ($_GET['method'] == 'browse' && isset($_GET['page']) && isset($_GET['limit'])){
-        $product = $productController->getProducts($_GET['page'], $_GET['limit']);   
+        $productCrit = ProductCriteria::setCriteriaFromPost($_POST);
+        $product = $productController->getProducts($productCrit, $_GET['page'], $_GET['limit']);   
         
     }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page']) && isset($_GET['limit'])){                        
     	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);	     	   	    

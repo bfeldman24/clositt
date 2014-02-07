@@ -20,12 +20,17 @@ var colorPresenter = {
         var selectedColors = [];
         
         $(".selectedColor").each(function(){
+            filterPresenter.createSelectedFilter($(this).attr("data-original-title"), $(this).attr("data-original-title"));
             var color = $(this).attr("data-original-title").toLowerCase();
             selectedColors.push(color);
         });
         
         return selectedColors;
-    },        
+    },     
+    
+    removeSelectedColor: function(value){ 	    
+ 	    $("#filter-float").find('.selectedColor[data-original-title="'+value+'"]').removeClass("selectedColor");
+ 	},   
     
     getColorNames: function(){
         var colorNames = [];

@@ -3,6 +3,7 @@ var filterPresenter = {
     companies: null,
     customers: null,
     categories: null,
+    defaultCustomer: ["women"],
 	
 	init: function(){		
 	    filterPresenter.allFilters = [];
@@ -10,6 +11,7 @@ var filterPresenter = {
 		$(document).on("click","#filter-toggle", filterPresenter.filterPanelToggle);
 						
 		$("#filter-float").on("click",".filterHeader", filterPresenter.toggleFilterOptionsVisibility);
+		$("#filter-float").on("click",".filterHeader-Customer .customerOption", filterPresenter.selectCustomerFilter);		
 		$("#filter-float").on("click",".selectedFilter-x", filterPresenter.removeFilter);
 		
 		$("#filter-float").on("click","input", function(){
@@ -56,22 +58,30 @@ var filterPresenter = {
  			priceBuckets[i]	= (Math.round(prices[priceCount - 1] / 50) * 50) + 50;
  		}
  		
+ 		$("#filter-float").append($("<div>").attr("id","selectedFilters"));
  		
- 		$("#filter-float").append($("<h4>").html("Shop For").addClass("filterHeader"));
- 		var customerOptions = $("<div>").addClass("filterOptions");
- 		
- 		$.each(filterPresenter.customers, function(index, value) {
- 		    filterPresenter.allFilters.push(value);
- 		    
- 			customerOptions.append(
- 				$("<div>").addClass("controls").append(
- 					$("<label>").addClass("checkbox").append(
- 						$("<input>").attr("type","checkbox").attr("name","customer").attr("value",value)
- 					).append($("<span>").addClass("filterValueName").html(value))
- 				)
- 			)
- 		}); 		
- 		$("#filter-float").append(customerOptions);
+ 		var selectedWomen = filterPresenter.defaultCustomer[0] == "women" ? "selected" : "";
+ 		var selectedMen = filterPresenter.defaultCustomer[0] == "men" ? "selected" : "";
+ 		$("#filter-float").append($("<h4>").addClass("filterHeader-Customer").css("padding","0").append(
+ 		         $("<div>").addClass("customerOption " + selectedWomen).attr("filterid","women").text("Women")
+ 		     ).append(
+ 		         $("<div>").addClass("customerOption " + selectedMen).attr("filterid","men").text("Men")
+ 		     )
+ 		);
+// 		var customerOptions = $("<div>").addClass("filterOptions");
+// 		
+// 		$.each(filterPresenter.customers, function(index, value) {
+// 		    filterPresenter.allFilters.push(value);
+// 		    
+// 			customerOptions.append(
+// 				$("<div>").addClass("controls").append(
+// 					$("<label>").addClass("checkbox").append(
+// 						$("<input>").attr("type","checkbox").attr("name","customer").attr("value",value)
+// 					).append($("<span>").addClass("filterValueName").html(value))
+// 				)
+// 			)
+// 		}); 		
+// 		$("#filter-float").append(customerOptions);
  		
  		
  		$("#filter-float").append($("<h4>").html("Category").addClass("filterHeader"));
@@ -120,8 +130,7 @@ var filterPresenter = {
  		$("#filter-float").append($("<h4>").html("Color").addClass("filterHeader"));
  		var colorOptions = $("<div>").addClass("filterOptions");	 		 				 		 		 		
 		$("#filter-float").append(colorOptions.append(colorPresenter.getColorFilters()));
- 		
- 		$("#filter-float").append($("<div>").attr("id","selectedFilters"));
+ 		 		
  		$("#filter-float").append($("<br><br><br><br><br><br><br>"));
  		filterPresenter.showFilter();
  	},
@@ -136,7 +145,7 @@ var filterPresenter = {
 	 	var criteria = new Object();
 	 	var isSearch = $( "#search-bar" ).val().trim().length > 0;
 	 	var areAnyFiltersChecked = false;
-	 	var filters = new Array("customer","filterprice","category","company");
+	 	var filters = new Array("filterprice","category","company");
 	 	
 	 	$.each(filters, function(index, filterName) {
 	 		criteria[filterName] = new Array();
@@ -165,9 +174,11 @@ var filterPresenter = {
 		 	});
 	 	});
 	 		 	
+	 	criteria['customer'] = filterPresenter.getSelectedCustomer();	 	
 	 	criteria['colors'] = colorPresenter.getSelectedColors();
 	 	
-	 	if (criteria['colors'] != null && criteria['colors'].length > 0){     
+	 	if ((criteria['customer'] != null && criteria['customer'].length > 0) || 
+	 	    (criteria['colors'] != null && criteria['colors'].length > 0)){     
 	 	     areAnyFiltersChecked = true;
 	 	}
 	 	
@@ -203,6 +214,28 @@ var filterPresenter = {
  		return params;
  	},
  	
+ 	selectCustomerFilter: function(e){
+ 	      var selectedCustomer = $("#filter-float").find(".customerOption.selected").first();
+ 	      
+ 	      if (selectedCustomer != null){
+ 	          selectedCustomer.removeClass("selected");
+ 	      }
+ 	      
+ 	      // Do not reselect the customer if it was the one that was previously selected 
+ 	      // and then clicked
+ 	      if (selectedCustomer.attr("filterid") != $(e.currentTarget).attr("filterid")){         	      
+ 	          $(e.currentTarget).addClass("selected");
+ 	      }
+ 	      
+ 	      filterPresenter.onFilterSelect();
+ 	},
+ 	
+ 	getSelectedCustomer: function(){
+ 	      var customer = [];
+ 	      customer.push($("#filter-float").find(".customerOption.selected").first().attr("filterid"));
+ 	      return customer;
+ 	},
+ 	
  	createSelectedFilter: function(filterid, filterValue){ 	       	  
  	      $("#selectedFilters").append(
  	          $("<div>").addClass("selectedFilter-wrapper").attr("filterid", filterid).append(
@@ -216,7 +249,14 @@ var filterPresenter = {
  	removeFilter: function(e){
  	    var filterValue = $(e.currentTarget).parent().attr("filterid");
  	    
- 	    $("#filter-float").find('input[value="'+filterValue+'"]').prop('checked', false);
+ 	    var input = $("#filter-float").find('input[value="'+filterValue+'"]');
+ 	    
+ 	    if (input == null || input.length <= 0){
+ 	          colorPresenter.removeSelectedColor(filterValue);
+ 	    }else{
+ 	          input.prop('checked', false);  
+ 	    }
+ 	    
  	    filterPresenter.onFilterSelect();
  	},
  	

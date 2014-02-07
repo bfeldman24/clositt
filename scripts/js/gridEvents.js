@@ -15,22 +15,24 @@ var gridEvents = {
 	},
 	
 	overlayEvent: function(){
-		$(document).on("mouseenter",".outfit", gridEvents.showOverlay).on("mouseleave",".outfit", gridEvents.hideAllOverlays);
+		$(document).on("mousemove",".outfit", gridEvents.showOverlay).on("mouseleave",".outfit", gridEvents.hideAllOverlays);
 	},
 	
 	showOverlay: function() {	
             var overlay = $(this).children(".overlay").not(".alwaysVisible").first();
 						
-			if (overlay.length > 0 && !overlay.is(":visible")){			
-			     overlay.stop();
+			if (overlay.length > 0 && (!overlay.is(":visible") || overlay.data("fadingOut"))){			
+			     overlay.stop(true, true);			     
 			     overlay.fadeIn('fast');
+			     overlay.data("fadingOut", false);
 			}
 	},
 	
 	hideAllOverlays: function() {	  	   
 	   
-       	$(".overlay:visible").not(".alwaysVisible").each(function(){		
-       	     
+       	$(".overlay:visible").not(".alwaysVisible").each(function(){		       	    
+       	    
+       	    $(this).data("fadingOut", true); 
             $(this).fadeOut('slow');
 		
 			if (reviewsPresenter != null){

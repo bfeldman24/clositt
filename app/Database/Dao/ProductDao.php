@@ -36,16 +36,32 @@ class ProductDao extends AbstractDao {
 		return $this->getResults($sql, $params, $paramTypes, "3248272");
 	}  
 	
-	public function getProducts($page, $limit){					
+	public function getProducts($criteria, $page, $limit){					
 		$offset = $page * $limit;
 		
 		$sql = "SELECT * " .				
 				" FROM " . PRODUCTS .
-				" WHERE " . PRODUCT_STATUS . " = 1 " . 
-				" LIMIT ? OFFSET ?";								
-        
-		$paramsTypes = array('integer','integer');		
-		$params = array($limit, $offset);
+				" WHERE " . PRODUCT_STATUS . " = 1 ";			
+		
+		$params = array();
+		$paramTypes = array();
+								
+		if(isset($criteria)){ 
+		      $customer = $criteria->getCustomers();
+		      		      
+		      if(is_array($customer)){
+    		      $sql .= " AND " . PRODUCT_CUSTOMER . " = ? ";
+    		      
+    		      $params[] = $customer[0];
+            	  $paramsTypes[] = 'text';
+		      }
+		}		
+		
+		$sql .= " LIMIT ? OFFSET ?";
+		$params[] = $limit;
+		$params[] = $offset;
+		$paramsTypes[] = 'integer';
+		$paramsTypes[] = 'integer';		
 		
 		return $this->getResults($sql, $params, $paramTypes, "2309842");
 	}  
@@ -233,7 +249,12 @@ class ProductDao extends AbstractDao {
             $sql .= " ORDER BY " . $orderby . " DESC";
         }
 
-		$sql .= " LIMIT " . $numResultsPerPage . " OFFSET " . $start;
+		$sql .= " LIMIT ? OFFSET ? ";
+		
+		$params[] = $numResultsPerPage;
+		$paramTypes[] = 'integer';
+		$params[] = $start;
+		$paramTypes[] = 'integer';
 
 		return $this->getResults($sql, $params, $paramTypes, "3248272");
 

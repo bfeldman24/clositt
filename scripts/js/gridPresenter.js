@@ -132,7 +132,7 @@ var gridPresenter = {
 			var $items = $();
 			
 			if(productPresenter.filterStore == null){				     
-			     $.post( window.HOME_ROOT + "p/browse/" + gridPresenter.productIndex + "/" + productPresenter.loadSize, {}, gridPresenter.lazyLoad, "json");
+			     $.post( window.HOME_ROOT + "p/browse/" + gridPresenter.productIndex + "/" + productPresenter.loadSize, {'customer':filterPresenter.defaultCustomer}, gridPresenter.lazyLoad, "json");
 			     gridPresenter.productIndex++;
 			     
 //    		     firebase.$.child('clositt/' + firebase.productsPath)

@@ -894,7 +894,7 @@ footer .last{
 	padding-bottom: 0;
 }
 
-#filter-float .filterHeader, #feedSettings-float h4 {
+#filter-float .filterHeader, #filter-float .filterHeader-Customer, #feedSettings-float h4 {
     background: none repeat scroll 0 0 #E6E6E6;    
     padding: 15px 5px;
     color: #343434;
@@ -917,6 +917,7 @@ footer .last{
     border-radius: 20px;
     height: 21px;
     width: 180px;
+    margin-top: 5px;
 }
 
 #selectedFilters .selectedFilter-wrapper .selectedFilter-x{
@@ -929,9 +930,41 @@ footer .last{
     background: #EDEDED;
 }
 
+#selectedFilters .selectedFilter-wrapper .selectedFilter-x:hover{
+    background: #CDCDCD;
+}
+
+#selectedFilters .selectedFilter-wrapper .selectedFilter-x:active{
+    background: #BDBDBD;
+}
+
 #selectedFilters .selectedFilter-wrapper .selectedFilter-value{
     display: inline;
     margin-left: 10px;    
+}
+
+.customerOption{
+    display: inline-block;
+    padding: 15px 0;
+    text-align: center;
+    width: 50%;  
+}
+
+.customerOption.selected{
+    background: none repeat scroll 0 0 #CCCCCC;
+    box-shadow: 3px 3px 3px #AAAAAA inset;
+}
+
+.customerOption.selected:hover{
+    box-shadow: none;
+}
+
+.customerOption:hover{
+    background: none repeat scroll 0 0 #BBBBBB;
+}
+
+.customerOption:active{
+    background: none repeat scroll 0 0 #AAAAAA;
 }
 
 #feedSettings-float > ul{
@@ -1568,7 +1601,9 @@ input.closetNameInput[type="text"] {
 
 #filter-toggle, #feedSettings-toggle{
     border-radius: 10px 10px 0 0;
-    color: #FFFFFF;
+    background: #E6E6E6;
+    font-weight: lighter;
+    color: #343434;
     cursor: pointer;
     height: 22px;
     left: -37px;

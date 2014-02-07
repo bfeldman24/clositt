@@ -203,7 +203,7 @@ var searchController = {
         		    
         		    var errorMessage = '';
         		    
-        		    if (searchController.criteria['searchTerm'] == ""){
+        		    if (searchController.criteria['searchTerm'] == null || searchController.criteria['searchTerm'] == ""){
         		        errorMessage = "There are no macthing outfits!";
         		    }else{
         		        errorMessage = "There are no outfits that matched \'" + searchController.criteria['searchTerm'] + "\'! Try using another way to describe what you are looking for.";

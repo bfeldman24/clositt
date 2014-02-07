@@ -176,7 +176,7 @@ var productPresenter = {
 	    gridPresenter.endTask();
 	    productPresenter.productIndex = 0;
 	    searchController.pageIndex = 0;
-	    gridPresenter.showContent(15);	    
+	    gridPresenter.showContent(15);
 	},
 	
 	refreshProducts: function(){
