@@ -231,9 +231,13 @@ var filterPresenter = {
  	},
  	
  	getSelectedCustomer: function(){
- 	      var customer = [];
- 	      customer.push($("#filter-float").find(".customerOption.selected").first().attr("filterid"));
- 	      return customer;
+ 	      var selected = $("#filter-float").find(".customerOption.selected").first();
+ 	       	      
+ 	      if (selected.length > 0){
+ 	          return [selected.attr("filterid")];   
+ 	      }else{
+ 	          return filterPresenter.defaultCustomer;    
+ 	      } 	       	      
  	},
  	
  	createSelectedFilter: function(filterid, filterValue){ 	       	  
