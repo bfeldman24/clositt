@@ -3,7 +3,7 @@ var filterPresenter = {
     companies: null,
     customers: null,
     categories: null,
-    defaultCustomer: ["women"],
+    defaultCustomer: "women",
 	
 	init: function(){		
 	    filterPresenter.allFilters = [];
@@ -60,8 +60,8 @@ var filterPresenter = {
  		
  		$("#filter-float").append($("<div>").attr("id","selectedFilters"));
  		
- 		var selectedWomen = filterPresenter.defaultCustomer[0] == "women" ? "selected" : "";
- 		var selectedMen = filterPresenter.defaultCustomer[0] == "men" ? "selected" : "";
+ 		var selectedWomen = filterPresenter.defaultCustomer == "women" ? "selected" : "";
+ 		var selectedMen = filterPresenter.defaultCustomer == "men" ? "selected" : "";
  		$("#filter-float").append($("<h4>").addClass("filterHeader-Customer").css("padding","0").append(
  		         $("<div>").addClass("customerOption " + selectedWomen).attr("filterid","women").text("Women")
  		     ).append(
@@ -174,11 +174,14 @@ var filterPresenter = {
 		 	});
 	 	});
 	 		 	
-	 	criteria['customer'] = filterPresenter.getSelectedCustomer();	 	
+	 	var customer = filterPresenter.getSelectedCustomer();
+	 	
+	 	if (customer != null){
+	 	     criteria['customer'] = [customer];	 	
+	 	}
 	 	criteria['colors'] = colorPresenter.getSelectedColors();
 	 	
-	 	if ((criteria['customer'] != null && criteria['customer'].length > 0) || 
-	 	    (criteria['colors'] != null && criteria['colors'].length > 0)){     
+	 	if (criteria['colors'] != null && criteria['colors'].length > 0){     
 	 	     areAnyFiltersChecked = true;
 	 	}
 	 	
@@ -234,7 +237,9 @@ var filterPresenter = {
  	      var selected = $("#filter-float").find(".customerOption.selected").first();
  	       	      
  	      if (selected.length > 0){
- 	          return [selected.attr("filterid")];   
+ 	          return selected.attr("filterid");   
+ 	      }else if ($("#filter-float").find(".customerOption").length > 0){
+ 	          return null; 	          
  	      }else{
  	          return filterPresenter.defaultCustomer;    
  	      } 	       	      

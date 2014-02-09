@@ -251,6 +251,20 @@ a.notimplemented{
 	padding: 0 20px;	
 }
 
+/*** MODAL ***/ 
+.modal-footer {
+    text-align: center !important;
+}
+
+.modal-body {
+    font-size: 18px;
+    text-align: center;
+}
+
+.modal {
+    width: 460px;
+}
+
 /*** FOOTER ***/
 
 footer{
@@ -813,11 +827,11 @@ footer .last{
 }
 
 #brand-fixed-background{
-    display:none;
+    display:block;
     width:300px;
-    height:43px;
+    height:41px;
     position:fixed; 
-    box-shadow: 3px 0 0 #FFFFFF;
+    //box-shadow: 3px 0 0 #FFFFFF;
 }
 
 #main-content {
@@ -1290,7 +1304,6 @@ ul.review-comments span.review-comment-user{
 /* CLOSET PAGE */
 h1 #user-closet-title, h1 #static-closet-title{
 	color: #434342;
-    text-shadow: 3px 3px 3px #D0D0D0;	
     margin-left: 20px;
 }
 
@@ -1404,35 +1417,62 @@ h1 #user-closet-title, h1 #static-closet-title{
     z-index: 999;	
 }
 
-#closet-settings .settings-minicon{
-	cursor: pointer;
+#closet-settings{
+    cursor: pointer;
     position: absolute;
     right: 30px;
-    top: 100px;	    
+    top: 100px;	  
+    border-radius: 6px;
+}
+
+#closet-settings .settings-minicon{	  
     background-image: url("images/minicon_settings.png");
     background-position: 7px 7px;
     background-size: 30px auto;
     border-radius: 6px;
 }
 
-#closet-share .share-freeiconsweb{
+#closet-share .social-people-icon{
     cursor: pointer;
     position: absolute;
     right: 80px;
     top: 100px;
-    background-image: url("images/link.png");
-    background-position: 7px 7px;
-    background-size: 30px auto;
     border-radius: 6px;
 }
 
-#closet-settings .save-minicon {  background-image: url("images/minicon_floopy.png");  background-position: 12px 12px;  background-size: 20px auto;  border-radius: 6px 6px 6px 6px;  cursor: pointer;  position: absolute;  right: 80px;  top: 100px;}
+.dropdown-menu-right {
+    right: 0;
+    left: auto;
+    width: 95px;
+    min-width: 95px;
+}
 
-#closet-settings .settings-minicon:hover, #closet-settings .save-minicon:hover, #closet-share .share-freeiconsweb:hover{
+.dropdown-menu-right:before {
+    border-bottom: 7px solid rgba(0, 0, 0, 0.2);
+    border-left: 7px solid rgba(0, 0, 0, 0);
+    border-right: 7px solid rgba(0, 0, 0, 0);
+    content: "";
+    display: inline-block;
+    left: 65px;
+    position: absolute;
+    top: -7px;
+}
+.dropdown-menu-right:after {
+    border-bottom: 6px solid #FFFFFF;
+    border-left: 6px solid rgba(0, 0, 0, 0);
+    border-right: 6px solid rgba(0, 0, 0, 0);
+    content: "";
+    display: inline-block;
+    left: 66px;
+    position: absolute;
+    top: -6px;
+}
+
+#closet-settings:hover, #closet-share .social-people-icon:hover{
 	background-color: #DFDFDF;		
 }
 
-#closet-settings .settings-minicon:active, #closet-settings .save-minicon:active, #closet-settings .active, #closet-share .share-freeiconsweb:active{
+#closet-settings:active, #closet-share .social-people-icon:active{
 	background-color: #CFCFCF;		
 }
 
@@ -1972,6 +2012,12 @@ input.closetNameInput[type="text"] {
     top: 35px;
     width: 37px;
     z-index: 999;
+}
+
+#social-btns {
+    right: 87px;
+    top: 145px;
+    width: 32px;
 }
 
 .social-btns > a{

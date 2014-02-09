@@ -1,13 +1,14 @@
 var gridPresenter = {
     randomStartingPosition: 0,	
-    defaultCustomerCode: 'W',
     productIndex: 0,
-    storeCount: 0,
+    storeCount: 0,  
+    browsePages: [],    
 	
 	init: function(){			
 	    gridPresenter.randomStartingPosition = parseInt(Math.random() * 15000);	
 		gridEvents.init();
-		gridPresenter.showContent(15);				
+		gridPresenter.mixupBrowsePages();
+		gridPresenter.showContent(15);												
 	},					
 
 	alignDefaultGrid: function(gridName){
@@ -117,7 +118,17 @@ var gridPresenter = {
     	     var newWidth = cellHeight / (imgHeight / imgWidth); 		    	     
              image.css("height", cellHeight + unit);  		    	     
     	}
-	},						
+	},		
+	
+	mixupBrowsePages: function(){
+	    var max = 100;
+		for(var i=0; i < max; i++){
+		      var swap = Math.floor(Math.random() * max);
+		      var temp = gridPresenter.browsePages[i];
+		      gridPresenter.browsePages[i] = gridPresenter.browsePages[swap] == null ? swap : gridPresenter.browsePages[swap];
+		      gridPresenter.browsePages[swap] = temp == null ? i : temp;
+		}
+	},
 	
 	showContent: function(numElements){
 		var lastHeight = $("#product-grid").children("div[aligned=true]").last().css("top");
@@ -131,13 +142,24 @@ var gridPresenter = {
 		if(lastHeight <= ($(window).height() + $(window).scrollTop() + 125)){						
 			var $items = $();
 			
-			if(productPresenter.filterStore == null){				     
-			     $.post( window.HOME_ROOT + "p/browse/" + gridPresenter.productIndex + "/" + productPresenter.loadSize, {'customer':filterPresenter.defaultCustomer}, gridPresenter.lazyLoad, "json");
-			     gridPresenter.productIndex++;
+			if(productPresenter.filterStore == null){				     				     			 		 
+			     var c = filterPresenter.getSelectedCustomer();
 			     
-//    		     firebase.$.child('clositt/' + firebase.productsPath)
-//    		           .startAt(startingPos).limit(productPresenter.loadSize)
-//	                   .once('value', gridPresenter.lazyLoad);          			     
+			     if (c == null){
+			         c = "b";			         
+			     }else{
+    			     c = c.substring(0,1);
+			     }
+			     
+			     var page = gridPresenter.productIndex;
+			     
+			     if (gridPresenter.browsePages[page] != null){
+			         page = gridPresenter.browsePages[page];
+			     }
+			 
+			     $.post( window.HOME_ROOT + "b/" + c + "/" + page, gridPresenter.lazyLoad, "json");
+			     gridPresenter.productIndex++;
+			            			     
     		}else{	    		    
     		    searchController.getProducts(gridPresenter.lazyLoad);       		              		        		    
     		    gridPresenter.productIndex = 0; 		  			

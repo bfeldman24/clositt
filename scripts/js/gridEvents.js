@@ -10,7 +10,7 @@ var gridEvents = {
 		});		
 		
 		$(document).on("click",".tagOutfitBtn",tagPresenter.showTagForm);
-		$(document).on("click",".shareOutfitBtn",socialPresenter.showShareButtons);				
+		$(document).on("click",".shareOutfitBtn",socialPresenter.showProductShareButtons);				
 		$(document).on("submit",".addTagForm > form",tagPresenter.addTag);				
 	},
 	
@@ -38,6 +38,8 @@ var gridEvents = {
 			if (reviewsPresenter != null){
 			     var sku = $(this).parents(".item").attr("pid");			     			     
 			     reviewsPresenter.hideReview(reviewsPresenter.getReviewBlock(sku));
+			     $(this).parents(".item").find(".social-btns").html("").hide('blind');
+			     $(this).parents(".item").find(".addToClosetForm").html("").hide();
 			}
 		
        	});

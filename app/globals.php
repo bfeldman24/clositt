@@ -37,7 +37,9 @@ define('CLOSITT_JS',$js);
 
 
 // ALL
-define('META_PAGE', 'static/meta.php');
+define('QUERY_LIMIT',50);
 
-define('WHOOPS_PAGE', 'whoops.php');
+// TODO set pages as global vars
+//define('META_PAGE', 'static/meta.php');
+//define('WHOOPS_PAGE', 'whoops.php');
 ?>

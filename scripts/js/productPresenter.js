@@ -1,6 +1,5 @@
 var productPresenter = {	
-    isLoaded: false,
-    loadSize: 50,
+    isLoaded: false,    
 	splitValue: 30, 
 	productIndex: 0,
 	filterStore: null, 

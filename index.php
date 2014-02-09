@@ -119,14 +119,16 @@
         <h2>My Clositt</h2>
         <p>Go to your Clositt to view and organize the products that you have saved.</p>
     </li>
-
 </ol>
 
 <script type="text/javascript">
 $(document).ready(function() {
-	if(sessionStorage.welcomeClosit == undefined){
+	if(localStorage.welcomeClosit == undefined){
 		$('#welcomeModal').modal();		
-		sessionStorage.welcomeClosit = "true";
+		localStorage.welcomeClosit = 1;
+	}else if(!isNaN(localStorage.welcomeClosit) && localStorage.welcomeClosit <= 3){
+		$('#welcomeModal').modal();		
+		localStorage.welcomeClosit++;
 	}
 	
 	pagePresenter.init();
@@ -143,6 +145,8 @@ $(document).ready(function() {
         wheelSpeed: 20,
         wheelPropagation: false
     });
+    
+    $("#subheader-trending").addClass("active");
 });
 
 $(".joyride-start").click(function(e){

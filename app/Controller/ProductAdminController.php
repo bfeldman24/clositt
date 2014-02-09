@@ -3,16 +3,20 @@ require_once(dirname(__FILE__) . '/../Database/DataAccess/check-login.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductAdminDao.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
+require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
+require_once(dirname(__FILE__) . '/ProductController.php');
 
 
 class ProductAdminController {	
 	private $productAdminDao = null;
 	private $productDao = null;
 	private $debug = false;
+	private $productController = null;
 	
 	public function __construct(&$mdb2){
 		$this->productAdminDao = new ProductAdminDao($mdb2);
 		$this->productDao = new ProductDao($mdb2);
+		$this->productController = new ProductController($mdb2);
 	}
     
     public function addAdminProducts($products){
@@ -105,6 +109,67 @@ class ProductAdminController {
 	public function getTotalProductsCount(){
 	   $result = $this->productAdminDao->getTotalProductsCount();	    
 	   return $result->fetchOne();
+	}
+	
+	public function getBrowsePages(){
+	   $maxpages = 750;
+	   $limit = 50;
+	   $page = 0;	   	   
+	   
+	   // WOMEN
+	   $criteria = new ProductCriteria();	   
+	   $criteria->setCustomers(array("women"));	   	   
+	   
+	   $results = $this->productController->getProducts($criteria, $page, $limit);     	   	   
+	   $data = json_decode($results, true);
+	   
+	   while (!empty($data) && $page < $maxpages){	       	       
+    	   $file = fopen(dirname(__FILE__) . "/../Data/Browse/w-".$page.".json","w");
+           fwrite($file, $results);                       
+           fclose($file);
+           
+           echo "WOMEN $page<br> ";                     
+           $page++;
+           $results = $this->productController->getProducts($criteria, $page, $limit);     	   	   
+	       $data = json_decode($results, true);           
+	   }
+	   
+	   // MEN
+	   $page = 0;
+	   $criteria = new ProductCriteria();	   
+	   $criteria->setCustomers(array("men"));	   	   
+	   
+	   $results = $this->productController->getProducts($criteria, $page, $limit);     	   	   
+	   $data = json_decode($results, true);
+	   
+	   while (!empty($data) && $page < $maxpages){	       	       
+    	   $file = fopen(dirname(__FILE__) . "/../Data/Browse/m-".$page.".json","w");
+           fwrite($file, $results);                       
+           fclose($file);
+           
+           echo "MEN $page<br> ";                     
+           $page++;
+           $results = $this->productController->getProducts($criteria, $page, $limit);     	   	   
+	       $data = json_decode($results, true);           
+	   }	   	 
+	   
+	   // BOTH
+	   $page = 0;
+	   $criteria = new ProductCriteria();	   	   	   	   
+	   
+	   $results = $this->productController->getProducts($criteria, $page, $limit);     	   	   
+	   $data = json_decode($results, true);
+	   
+	   while (!empty($data) && $page < $maxpages){	       	       
+    	   $file = fopen(dirname(__FILE__) . "/../Data/Browse/b-".$page.".json","w");
+           fwrite($file, $results);                       
+           fclose($file);
+           
+           echo "BOTH $page<br> ";                     
+           $page++;
+           $results = $this->productController->getProducts($criteria, $page, $limit);     	   	   
+	       $data = json_decode($results, true);           
+	   }  
 	}
 	
 	public function getFilters(){
@@ -212,8 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     $productAdminController = new ProductAdminController($mdb2);
     
     //echo " 1) ProductAdmin. ";
-    //echo "Method: " . $_GET['method'];                
-    //echo "<br>Param: " . $_GET['paramA'];      
+    //echo "Method: " . $_GET['method'];                    
     //echo "<br>Criteria: " . print_r($_POST, true);                
     
     if ($_GET['method'] == 'update' && isset($_POST)){                                          
@@ -242,6 +306,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     fclose($file);
 
     print_r(json_encode($results));
-}    
+}else if ($_GET['method'] == 'getbrowsepages'){       
+                                   
+    $productAdminController = new ProductAdminController($mdb2);
+    $productAdminController->getBrowsePages();   
+}
 
 ?>

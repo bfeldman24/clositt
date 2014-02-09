@@ -1,5 +1,5 @@
 var closetPresenter = {
-	share: '1212000',	
+	share: 121200,	
 	carouselLeft: null,	
 	carouselRight: null,
 	user: null,
@@ -7,7 +7,7 @@ var closetPresenter = {
 
 	init: function(){
 	    if (closetPresenter.user != null){
-		  closetPresenter.user =  closetPresenter.user.toString().replace(closetPresenter.share,'');
+		  closetPresenter.user =  parseInt(closetPresenter.user) - parseInt(closetPresenter.share);
 	    }
 	    
 		closetPresenter.getClosets();
@@ -16,9 +16,10 @@ var closetPresenter = {
 		$(document).on("mouseup",".carousel-left", closetPresenter.stopCarouselLeft);
 		$(document).on("mouseup",".carousel-right", closetPresenter.stopCarouselRight);
 		
-		$("#closet-settings > .settings-minicon").on("click", closetPresenter.showSettings);
-		$(document).on("click", "#closet-settings > .save-minicon", closetPresenter.saveClosets);
-		$(document).on("click", "#closet-share > .share-freeiconsweb", closetPresenter.shareCloset);
+		$(document).on("click", "#closet-settings i", closetPresenter.showSettings);
+		$(document).on("click", "#closet-settings li a", closetPresenter.showSettings);
+		$(document).on("click", "#closet-settings li", closetPresenter.saveClosets);
+		$(document).on("click", "#closet-share", socialPresenter.showClosittShareButtons);
 		$(document).on("click",".delete-outfit", closetPresenter.removeOutfit);				
 		$(document).keypress(closetPresenter.saveClosetsOnEnter);				
 	},
@@ -80,7 +81,7 @@ var closetPresenter = {
 			$itemlist.append(
 				productPresenter.getClosetItemTemplate(item.name(),item.val()).prepend(
 					$("<div>").addClass("hanger").append(
-						$("<img>").attr("src","css/images/hanger.png")
+						$("<img>").attr("src",window.HOME_ROOT + "css/images/hanger.png")
 					)
 				)
 			); 				
@@ -108,16 +109,18 @@ var closetPresenter = {
 	},
 	
 	showSettings: function(){
-		if( !$(".settings-minicon").hasClass("active") && $(".outfit").length > 0){
-			$(".settings-minicon").addClass("active");
+	    $(".menu-save").parent().removeClass("disabled");
 
-			$("#closet-share > .share-freeiconsweb").animate({
-				right: '+=50'
-			}, 50);			
+		if( !$(".menu-settings").hasClass("active") && $(".outfit").length > 0){
+			$(".menu-settings").addClass("active");
+
+//			$("#closet-share > .share-freeiconsweb").animate({
+//				right: '+=50'
+//			}, 50);			
 	
-			$("#closet-settings").prepend(
-				$("<i>").addClass("minicon-single save-minicon")
-			);
+//			$("#closet-settings").prepend(
+//				$("<i>").addClass("minicon-single save-minicon")
+//			);
 			
 			$(".picture").append(
 				$("<div>").addClass("delete-outfit").append(
@@ -139,26 +142,29 @@ var closetPresenter = {
 		}
 	},
 	
-	hideSettings: function(){
-		if( $(".settings-minicon").hasClass("active") ){
-			$(".settings-minicon").removeClass("active");
+	hideSettings: function(){	    
+	   
+		if( $(".menu-settings").hasClass("active") ){
+			$(".menu-settings").removeClass("active");
 
-			$("#closet-settings .save-minicon").remove();
-
-			$("#closet-share > .share-freeiconsweb").animate({
-                                right: '-=50'
-                        }, 50);
+//			$("#closet-settings .save-minicon").remove();
+//
+//			$("#closet-share > .share-freeiconsweb").animate({
+//                                right: '-=50'
+//                        }, 50);
 			
 			$(".picture .delete-outfit").remove();
 				
 			$(".closetName > span").replaceWith(function() {
 				return $("<span>").attr("closetid",$(this).children("input").attr("closetid")).text($(this).children("input").attr("original"));
 			});			
+			
+			$(".menu-save").parent().addClass("disabled");
 		}
 	},
 	
-	saveClosets: function(){	
-		if( $(".settings-minicon").hasClass("active") ){			    
+	saveClosets: function(){		    
+		if( $(".menu-settings").hasClass("active") ){			    
 		  		
 			$(".closetName input").each(function(){
 				var closetid = $(this).attr("closetid");
@@ -197,7 +203,7 @@ var closetPresenter = {
 
 	saveClosetsOnEnter: function(e){
 		// 13 == Enter
-		if( $(".settings-minicon").hasClass("active") ){
+		if( $(".menu-settings").hasClass("active") ){
 			if(e.which == 13) {			
 				closetPresenter.saveClosets();
 			}	
@@ -239,28 +245,7 @@ var closetPresenter = {
 		      });
 		});
 			
-	},
-
-	shareCloset: function(){
-		if($("#share-url").length){
-			$("#share-url").remove();
-		}else{
-			var query = location.href.toString().replace("clositt.php",("@" + closetPresenter.share) + firebase.userid)
-
-			$("#closet-share > .share-freeiconsweb").before(
-      			  $('<input type="text">')
-            		 	.attr("id","share-url")
-            			.attr("value",query)
-            			.css("position","absolute")
-           			    .css("top","110px")
-            			.css("right","185px")
-            			.css("height","30px")
-            			.css("width","200px")
-        		);
-
-			$("#share-url").focus();
-		}
-	}
+	}	
 }
 
 
@@ -366,6 +351,7 @@ var closetFormPresenter = {
 				$(element).parents(".item").find(".addToClosetForm").show();
 				var $closetForm = $(element).parents(".item").find(".addToClosetForm");
 				
+				$(element).parents(".item").find(".social-btns").html("").hide('blind');
 				$closetForm.tooltip({title:"Press Enter to add item",placement:"bottom"});
 				$closetForm.show();
 			}

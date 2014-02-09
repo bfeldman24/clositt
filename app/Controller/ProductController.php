@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(__FILE__) . '/../globals.php');
 require_once(dirname(__FILE__) . '/../Database/DataAccess/check-login.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
@@ -141,13 +142,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     if ($_GET['method'] == 'lookup' && isset($_POST['sku'])){
          $product = $productController->getProduct($_POST['sku']);   
     
-    }else if ($_GET['method'] == 'browse' && isset($_GET['page']) && isset($_GET['limit'])){
+    }else if ($_GET['method'] == 'browse' && isset($_GET['page'])){
         $productCrit = ProductCriteria::setCriteriaFromPost($_POST);
-        $product = $productController->getProducts($productCrit, $_GET['page'], $_GET['limit']);   
+        $product = $productController->getProducts($productCrit, $_GET['page'], QUERY_LIMIT);   
         
-    }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page']) && isset($_GET['limit'])){                        
+    }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page'])){                        
     	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);	     	   	    
-        $product = $productController->getFilteredProducts($productCrit, $_GET['page'], $_GET['limit']);
+        $product = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT);
     }
     
     print_r($product);     

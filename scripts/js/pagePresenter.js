@@ -38,7 +38,7 @@ var pagePresenter = {
 	   if (scrollLocation > defaultHeaderHeight && $("#subheader-navbar").css('position') != 'fixed'){	       
 	       $("#subheader-navbar").css('position', 'fixed');
 	       $("#subheader-navbar").css('top', '0');	 	            	        	       
-	       $("#brand-fixed-background").show("blind","fast");      
+	       $("#brand-fixed-background").css("height", "44px");      
 	       
 	       if ($("#filter-float").length > 0){
 	           $("#filter-float").css("top", defaultHeaderHeight + "px");	    
@@ -60,7 +60,7 @@ var pagePresenter = {
 	       {
     	       $("#subheader-navbar").css('position', 'relative');
     	       $("#subheader-navbar").css('top', '30px');	       
-    	       $("#brand-fixed-background").hide("blind","fast");
+    	       $("#brand-fixed-background").css("height", "41px");
 	       }
 	       
 	       if($("#scroll-to-top").length > 0){

@@ -104,7 +104,7 @@ class ColorController extends AbstractDao{
 	}
 	
 	public function getColorsDao(){
-	   $limit = 5000;					
+	   $limit = 1000;					
 		
 		$sql = "SELECT " . PRODUCT_SKU . "," . PRODUCT_IMAGE .				
 				" FROM " . PRODUCTS . " p " .

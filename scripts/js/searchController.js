@@ -191,7 +191,7 @@ var searchController = {
         
         if (searchController.hasMoreProducts){
             var pageIndex = searchController.pageIndex;
-            $.post( window.HOME_ROOT + "p/search/"+pageIndex+"/" + productPresenter.loadSize, searchController.criteria, function( data ) {            
+            $.post( window.HOME_ROOT + "p/search/"+pageIndex, searchController.criteria, function( data ) {            
                             
         		gridPresenter.endTask();
         		
