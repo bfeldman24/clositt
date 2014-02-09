@@ -84,7 +84,7 @@ var filterPresenter = {
 // 		$("#filter-float").append(customerOptions);
  		
  		
- 		$("#filter-float").append($("<h4>").html("Category").addClass("filterHeader"));
+ 		$("#filter-float").append($("<h4>").html("Category").addClass("filterHeader").attr('id', 'category'));
  		var categoryOptions = $("<div>").addClass("filterOptions");
  		$.each(filterPresenter.categories, function(index, value) {
  		    filterPresenter.allFilters.push(value);
@@ -99,7 +99,7 @@ var filterPresenter = {
  		});  
  		$("#filter-float").append(categoryOptions);	 		
  		
- 		$("#filter-float").append($("<h4>").html("Brand").addClass("filterHeader"));
+ 		$("#filter-float").append($("<h4>").html("Brand").addClass("filterHeader").attr('id', 'brands'));
  		var brandOptions = $("<div>").addClass("filterOptions");
  		$.each(filterPresenter.companies, function(index, value) {
  		    filterPresenter.allFilters.push(value);
@@ -114,7 +114,7 @@ var filterPresenter = {
  		}); 
  		$("#filter-float").append(brandOptions);
  		
- 		$("#filter-float").append($("<h4>").html("Price").addClass("filterHeader"));	
+ 		$("#filter-float").append($("<h4>").html("Price").addClass("filterHeader").attr('id', 'price'));	
  		var priceOptions = $("<div>").addClass("filterOptions");	 		 		
  		for(var i=0;i<priceBuckets.length-1;i++){
  			priceOptions.append(
@@ -127,7 +127,7 @@ var filterPresenter = {
  		}
  		$("#filter-float").append(priceOptions);
  		
- 		$("#filter-float").append($("<h4>").html("Color").addClass("filterHeader"));
+ 		$("#filter-float").append($("<h4>").html("Color").addClass("filterHeader").attr('id', 'color'));
  		var colorOptions = $("<div>").addClass("filterOptions");	 		 				 		 		 		
 		$("#filter-float").append(colorOptions.append(colorPresenter.getColorFilters()));
  		 		
