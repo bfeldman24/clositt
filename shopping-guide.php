@@ -5,7 +5,14 @@
 
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
 <style type="text/css">
-#main-content {  padding: 10px 0px 80px;}
+    #main-content {  
+        padding: 10px 0px 80px;
+    }
+
+    #brand-fixed-background {
+        display: block;
+    }
+
 </style>
 </head>
 <body>
@@ -24,7 +31,7 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
-    closetPresenter.setUser(104);    
+    closetPresenter.setUser(closetPresenter.share + 104);    
     pagePresenter.enableLazyLoading = false;     
     pagePresenter.init();    
     closetPresenter.init();        	

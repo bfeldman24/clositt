@@ -920,6 +920,11 @@ footer .last{
     padding: 5px 10px;
 }
 
+#filter-float .filterSubheader:hover{
+    padding: 5px 10px;
+    background: none repeat scroll 0 0 #ccc;
+}
+
 #filter-float .filterHeader.open, #filter-float .filterSubheader.open, #feedSettings-float h4.open {
     border: 1px solid #CCCCCC;
     font-weight: bold;
