@@ -22,9 +22,7 @@
         						<b class="caret caret-white"></b>							
         					</a>
         					<ul id="account-dropdown" class="dropdown-menu">
-        						<li><a href="/login.php">Login</a></li>
-        						 <li class="divider"></li>
-        						<li><a href="/signup.php">Sign Up</a></li>
+        						<li><a href="/signup.php">Login or Sign Up</a></li>
         					</ul>
         				</li>	              	
                     </ul>

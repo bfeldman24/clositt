@@ -827,7 +827,7 @@ footer .last{
 }
 
 #brand-fixed-background{
-    display:block;
+    display:none;
     width:300px;
     height:41px;
     position:fixed; 
@@ -908,7 +908,7 @@ footer .last{
 	padding-bottom: 0;
 }
 
-#filter-float .filterHeader, #filter-float .filterHeader-Customer, #feedSettings-float h4 {
+#filter-float .filterHeader, #filter-float .filterSubheader, #filter-float .filterHeader-Customer, #feedSettings-float h4 {
     background: none repeat scroll 0 0 #E6E6E6;    
     padding: 15px 5px;
     color: #343434;
@@ -916,7 +916,11 @@ footer .last{
     cursor: pointer;
 }
 
-#filter-float .filterHeader.open, #feedSettings-float h4.open {
+#filter-float .filterSubheader{
+    padding: 5px 10px;
+}
+
+#filter-float .filterHeader.open, #filter-float .filterSubheader.open, #feedSettings-float h4.open {
     border: 1px solid #CCCCCC;
     font-weight: bold;
 }
@@ -924,6 +928,11 @@ footer .last{
 #filter-float .filterOptions{
     display: none;  
     margin: 0 10px 0 15px; 
+}
+
+#filter-float .subcategory{
+    display: none;       
+    margin: 0 10px 0 15px;     
 }
 
 #selectedFilters .selectedFilter-wrapper{
@@ -1433,19 +1442,14 @@ h1 #user-closet-title, h1 #static-closet-title{
     z-index: 999;	
 }
 
-#closet-settings{
+#closet-settings {
+    border-radius: 6px;
     cursor: pointer;
+    padding: 10px;
     position: absolute;
-    right: 30px;
-    top: 100px;	  
-    border-radius: 6px;
-}
-
-#closet-settings .settings-minicon{	  
-    background-image: url("images/minicon_settings.png");
-    background-position: 7px 7px;
-    background-size: 30px auto;
-    border-radius: 6px;
+    right: 35px;
+    text-align: center;
+    top: 102px;
 }
 
 #closet-share .social-people-icon{
@@ -1457,10 +1461,15 @@ h1 #user-closet-title, h1 #static-closet-title{
 }
 
 .dropdown-menu-right {
-    right: 0;
     left: auto;
-    width: 95px;
     min-width: 95px;
+    right: -12px;
+    top: 28px;
+    width: 95px;
+}
+
+.dropdown-menu-right a {    
+    padding: 3px 15px;
 }
 
 .dropdown-menu-right:before {
@@ -2019,11 +2028,11 @@ input.closetNameInput[type="text"] {
 }
 
 /**** SOCIAL BUTTONS ****/
-.social-btns{
+.social-btns {
     background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px dashed rgba(77, 77, 77, 0.6);
-    border-radius: 0 0 15px 15px;   
-    padding: 5px 0;
+    border: 1px solid rgba(77, 77, 77, 0.6);
+    border-radius: 0 0 15px 15px;
+    padding: 1px 0 5px;
     position: absolute;
     top: 35px;
     width: 37px;
@@ -2044,6 +2053,7 @@ input.closetNameInput[type="text"] {
     background: none repeat scroll 0 0 #FFFFFF;
     border-radius: 5px;
     height: 26px;
+    margin-left: 3px;
 }
 
 /***** CLOSITT COLOR THEME ****/

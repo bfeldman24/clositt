@@ -6,6 +6,12 @@
 <link href="<?php echo HOME_ROOT; ?>lib/css/joyride-2.1.css" rel="stylesheet">
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
 
+<style type="text/css">
+    #brand-fixed-background {
+        display: block;
+    }
+</style>
+
 </head>
 <body>
 

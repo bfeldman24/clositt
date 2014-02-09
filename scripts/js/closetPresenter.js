@@ -16,9 +16,6 @@ var closetPresenter = {
 		$(document).on("mouseup",".carousel-left", closetPresenter.stopCarouselLeft);
 		$(document).on("mouseup",".carousel-right", closetPresenter.stopCarouselRight);
 		
-		$(document).on("click", "#closet-settings i", closetPresenter.showSettings);
-		$(document).on("click", "#closet-settings li a", closetPresenter.showSettings);
-		$(document).on("click", "#closet-settings li", closetPresenter.saveClosets);
 		$(document).on("click", "#closet-share", socialPresenter.showClosittShareButtons);
 		$(document).on("click",".delete-outfit", closetPresenter.removeOutfit);				
 		$(document).keypress(closetPresenter.saveClosetsOnEnter);				
@@ -108,11 +105,14 @@ var closetPresenter = {
 		$(el.currentTarget).animate({opacity: 1},500);
 	},
 	
-	showSettings: function(){
-	    $(".menu-save").parent().removeClass("disabled");
+	showSettings: function(){	    
 
 		if( !$(".menu-settings").hasClass("active") && $(".outfit").length > 0){
 			$(".menu-settings").addClass("active");
+			
+			$(".menu-save").show();
+			$(".menu-cancel").show();
+			$(".menu-settings").hide();
 
 //			$("#closet-share > .share-freeiconsweb").animate({
 //				right: '+=50'
@@ -159,7 +159,9 @@ var closetPresenter = {
 				return $("<span>").attr("closetid",$(this).children("input").attr("closetid")).text($(this).children("input").attr("original"));
 			});			
 			
-			$(".menu-save").parent().addClass("disabled");
+			$(".menu-save").hide();
+			$(".menu-cancel").hide();
+			$(".menu-settings").show();
 		}
 	},
 	
