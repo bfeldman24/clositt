@@ -5,7 +5,14 @@
 
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
 <style type="text/css">
-#main-content {  padding: 10px 0px 80px;}
+    #main-content {  
+        padding: 10px 0px 80px;
+    }
+
+    #brand-fixed-background {
+        display: block;
+    }
+
 </style>
 </head>
 <body>
@@ -19,11 +26,13 @@
            <ul id="closet-settings" class="nav pull-right">                              	
         	 		<li class="dropdown">
         			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        				<i class="minicon-single settings-minicon"></i>							
+        				<!--<i class="minicon-single settings-minicon"></i> -->
+        				<img src="css/images/menu.png"/>
         			</a>
         			<ul class="dropdown-menu dropdown-menu-right">
-        			     <li class="menu-settings"><a class="menu-settings"><i class="icon-pencil"></i> Edit</a></li>
-                         <li class="disabled"><a class="menu-save"><i class="icon-ok"></i> Save</a></li>                  
+        			     <li class="menu-settings"><a  onclick="closetPresenter.showSettings()"><i class="icon-pencil"></i> Edit</a></li>
+                         <li class="menu-cancel" style="display:none;"><a onclick="closetPresenter.showSettings()"><i class="icon-remove"></i> Cancel</a></li>
+                         <li class="menu-save" style="display:none;"><a onclick="closetPresenter.saveClosets()"><i class="icon-ok"></i> Save</a></li>                  
         			</ul>
         		</li>	              	
             </ul>

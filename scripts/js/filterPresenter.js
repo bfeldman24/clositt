@@ -11,6 +11,7 @@ var filterPresenter = {
 		$(document).on("click","#filter-toggle", filterPresenter.filterPanelToggle);
 						
 		$("#filter-float").on("click",".filterHeader", filterPresenter.toggleFilterOptionsVisibility);
+		$("#filter-float").on("click",".filterSubheader", filterPresenter.toggleFilterSubOptionsVisibility);
 		$("#filter-float").on("click",".filterHeader-Customer .customerOption", filterPresenter.selectCustomerFilter);		
 		$("#filter-float").on("click",".selectedFilter-x", filterPresenter.removeFilter);
 		
@@ -86,16 +87,23 @@ var filterPresenter = {
  		
  		$("#filter-float").append($("<h4>").html("Category").addClass("filterHeader"));
  		var categoryOptions = $("<div>").addClass("filterOptions");
- 		$.each(filterPresenter.categories, function(index, value) {
- 		    filterPresenter.allFilters.push(value);
- 		     
- 			categoryOptions.append(
- 				$("<div>").addClass("controls").append(
- 					$("<label>").addClass("checkbox").append(
- 						$("<input>").attr("type","checkbox").attr("name","category").attr("value",value)
- 					).append($("<span>").addClass("filterValueName").html(value))
- 				)
- 			)
+ 		$.each(filterPresenter.categories, function(subindex, subcategory) {
+ 		    categoryOptions.append($("<h5>").addClass("filterSubheader").text(subindex));
+ 		    
+ 		    var subCategoryOptions = $("<div>").addClass("subcategory"); 		    
+ 		    $.each(subcategory, function(index, value) {  		     
+     		    filterPresenter.allFilters.push(value);
+     		     
+     			subCategoryOptions.append(
+     				$("<div>").addClass("controls").append(
+     					$("<label>").addClass("checkbox").append(
+     						$("<input>").attr("type","checkbox").attr("name","category").attr("value",value)
+     					).append($("<span>").addClass("filterValueName").html(value))
+     				)
+     			)
+ 		    });
+ 		    
+ 		    categoryOptions.append(subCategoryOptions);
  		});  
  		$("#filter-float").append(categoryOptions);	 		
  		
@@ -307,7 +315,21 @@ var filterPresenter = {
 	 },
 	 
 	 toggleFilterOptionsVisibility: function(){
-	       var filterOptions = $(this).next(".filterOptions").first(); 
+           var filterOptions = $(this).next(".filterOptions").first(); 
+	       
+	       if (filterOptions != null){
+	           if (filterOptions.is(":visible")){
+	               $(this).removeClass("open");
+	           }else{
+	               $(this).addClass("open");   
+	           }
+	           
+	           filterOptions.toggle('blind');   
+	       }
+	 },
+	 
+	 toggleFilterSubOptionsVisibility: function(){
+           var filterOptions = $(this).next(".subcategory").first(); 
 	       
 	       if (filterOptions != null){
 	           if (filterOptions.is(":visible")){

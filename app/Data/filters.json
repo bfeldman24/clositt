@@ -1,1 +1,111 @@
-{"customers":["Men","Women"],"categories":["Activewear","Blazers","Blouses","Bottoms","Button Down Shirts","Capris","Cardigans","Cashmere","Chinos","Coats","Collared Shirts","Denim","Dress Shirts","Dresses","Graphic T Shirts","Hoodies","Jackets","Jeans","Jumpsuits","Leather","Leggings","Loungewear","Outerwear","Pants","Polos","Shirts","Shorts","Skirts","Skirts + Shorts","Skorts","Sleepwear","Sport Coats","Sportcoats","Suits","Sweaters","Sweaters & Sweatshirts","Sweatpants","Sweatshirts","T Shirts","T's & Tops","Tank Tops","Tops","Trench Coats","Vests","Zip Ups"],"companies":["American Apparel","Ann Taylor","Anthropologie","Athleta","Banana Republic","Bcbg","Bloomingdales","Brooks Brothers","Burberry","Charles Tyrwhitt","Chicos","Cusp","Dillards","Forever21","Free People","Gap","H&M","Hollister","J Crew","JCPenny","J.Jill","Kate Spade","Kohls","Loft","Lord And Taylor","Lululemon","Macys","Madewell","Neiman Marcus","Nordstrom","Nyandcompany","Old Navy","Piperlime","Top Shop","Tory Burch","Urban Outfitters","Zara"],"prices":[0,50,100,150,200,250,2000]}
+{
+  "customers": [
+    "Men",
+    "Women"
+  ],
+  "categories": {
+    "Dresses":[
+        "Dresses",           
+        "Jumpsuits",
+        "Leather"
+    ],
+    "Shirts and Tops": [
+        "Blouses", 
+        "Button Down Shirts",
+        "Cardigans",
+        "Cashmere",
+        "Collared Shirts",
+        "Dress Shirts",
+        "Graphic T Shirts",
+        "Polos",
+        "Shirts",
+        "Sweaters",
+        "Sweaters & Sweatshirts", 
+        "T Shirts",
+        "T's & Tops",
+        "Tank Tops",
+        "Tops"
+    ],
+    "Skirts": [
+        "Skirts",
+        "Skirts + Shorts",
+        "Skorts"
+    ],
+    "Pants": [
+        "Bottoms",    
+        "Capris",
+        "Denim",
+        "Jeans",
+        "Leggings",
+        "Loungewear",
+        "Pants",        
+        "Shorts",        
+        "Sleepwear",
+        "Sweatpants"
+    ],    
+    "Suits": [
+        "Blazers",
+        "Sport Coats",        
+        "Suits"
+    ],
+    "Outerwear": [
+        "Activewear",
+        "Coats",
+        "Hoodies",
+        "Jackets", 
+        "Outerwear",
+        "Sweatshirts",        
+        "Trench Coats",
+        "Vests",
+        "Zip Ups"
+    ]                                                    
+  },
+  "companies": [
+    "American Apparel",
+    "Ann Taylor",
+    "Anthropologie",
+    "Athleta",
+    "Banana Republic",
+    "Bcbg",
+    "Bloomingdales",
+    "Brooks Brothers",
+    "Burberry",
+    "Charles Tyrwhitt",
+    "Chicos",
+    "Cusp",
+    "Dillards",
+    "Forever21",
+    "Free People",
+    "Gap",
+    "H&M",
+    "Hollister",
+    "J Crew",
+    "JCPenny",
+    "J.Jill",
+    "Kate Spade",
+    "Kohls",
+    "Loft",
+    "Lord And Taylor",
+    "Lululemon",
+    "Macys",
+    "Madewell",
+    "Neiman Marcus",
+    "Nordstrom",
+    "Nyandcompany",
+    "Old Navy",
+    "Piperlime",
+    "Top Shop",
+    "Tory Burch",
+    "Urban Outfitters",
+    "Zara"
+  ],
+  "prices": [
+    0,
+    50,
+    100,
+    150,
+    200,
+    250,
+    2000
+  ]
+}
