@@ -106,7 +106,7 @@ h1.waitList{
 	top:27;
 	left:0;
 	width:233px;
-	height:155px;	
+	height:165px;	
 	padding: 1em 2em;
 }
 
@@ -117,7 +117,7 @@ h1.waitList{
 	width:233px;
 	height:195px;	
 	padding: 1em 2em;
-	margin-top:20px;
+	margin-top:10px;
 }
 
 #email, #signup-name{
@@ -195,3 +195,12 @@ h1.start{
     width: 108px !important;   
 }
 
+.forgotpass {
+    color: #808080;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 2px;
+    position: absolute;
+    right: 20px;
+    text-decoration: underline;
+}

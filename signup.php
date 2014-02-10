@@ -39,6 +39,7 @@ $_SESSION['userid'] = 0;
         				</div>		   		
         				<div>	
         				    <button type="submit" id="loginButton" class="button submitButton">Login</button>
+        				    <div class="forgotpass">Forgot Password?</div>
         				</div>
         			</form> 
         		</div> 	
@@ -75,6 +76,22 @@ $_SESSION['userid'] = 0;
         </div>
     </div>
 </div>
+	
+	
+<!-- Modal -->
+<div id="forgotPassModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+        <h3 id="myModalLabel">Forgot Password</h3>
+    </div>
+    <div class="modal-body">
+        <p>Please enter your email address so we can send you a reset password email:</p>
+        <input type="text" id="forgotPasswordEmail" placeholder="Email" class="inputBox" />        
+    </div>
+    <div class="modal-footer">
+        <button id="resetPassButton" class="btn btn-success">Reset My Password</button>
+    </div>
+</div>	
 	
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 
@@ -137,6 +154,41 @@ $("#signup-form").on("submit",function(event){
 	}
 	
 	return false;
+});
+
+$(".forgotpass").on("click", function(e){
+   e.preventDefault(); 
+   
+   var email = $("#inputEmail").val();
+   
+   if (email != null){
+        $("#forgotPasswordEmail").val(email);
+   }
+   
+   $("#forgotPassModal").modal('show');
+});
+
+$("#resetPassButton").on("click", function(e){
+    e.preventDefault();
+    var email = $("#forgotPasswordEmail").val();
+    
+    if (email != null && email.indexOf("@") > 0){
+        $("#forgotPassModal").modal('hide');
+        
+        firebase.authClient.sendPasswordResetEmail(email, function(error, success) {
+            
+            
+          if (error) {
+                Messenger.error("Sorry. There was an error sending you a reset password email!");                
+                Messenger.error("Please contact us to reset your password.");
+          }else{
+                Messenger.success('We just sent you an email to reset your password.');
+                Messenger.success('Please check that email and follow its instructions. Thanks!');
+          }
+        });
+    }else{
+        Messenger.error("Please enter a valid email address!");
+    }
 });
 
 $("#waitinglist").on("submit",function(event){
