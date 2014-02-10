@@ -3,6 +3,7 @@
 <html>
 <head>
 
+<link href="<?php echo HOME_ROOT; ?>lib/css/joyride-2.1.css" rel="stylesheet">
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
 <style type="text/css">
     #main-content {  
@@ -52,7 +53,35 @@
 <div id="product-module" style="display:none;"></div>
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
+<script src="<?php echo HOME_ROOT; ?>lib/js/jquery.joyride-2.1.js"></script>
+
 <div id="closetId" style="display:none;"><?php echo $_GET['user'];?></div>
+
+<!-- Joyride Content -->
+<ol id="joyRideTipContent">
+    <li data-class="closetNameHeader" data-text="Next" class="custom">
+        <h2>Your Clositt </h2>
+        <p>Welcome to YOUR Clositt! This is where you keep stuff you like. We've already created a Clositt for you to get you started. Feel free to create as many Clositts as you'd like.</p>
+    </li>
+    <li data-class="carousel-left" data-button="Next" data-options="tipLocation:right;">
+        <h2>Scrolling</h2>
+        <p>Click on the arrows to scroll through your Clositt.</p>
+    </li>
+    <li data-class="social-people-icon" data-button="Next" data-options="tipLocation:left;">
+        <h2>Share</h2>
+        <p>Share your Clositt with anyone by clicking here.</p>
+    </li>    
+    <li data-id="closet-settings" data-button="Next" data-options="tipLocation:left;">
+        <h2>Edit</h2>
+        <p>You can delete items from your Clositt, or change your Clositt names by clicking here.</p>
+    </li>    
+    <li data-id="subheader-trending" data-button="Finish" >
+        <h2>Let me Shop!</h2>
+        <p>You can get back to shopping by clicking here.</p>
+    </li>    
+</ol>
+
+
 <script type="text/javascript">
 
 <?php if(isset($_GET['user'])){ ?>
@@ -73,13 +102,33 @@
         closetPresenter.init();     
         productPagePresenter.init();
         reviewsPresenter.init();       
-        $("#subheader-myclositt").addClass("active");
+        $("#subheader-myclositt").addClass("active");                
     }        
 <?php } ?>
 
 function loggedOut(){
 	location.href = "<?php echo HOME_ROOT . 'signup.php'; ?>";
 }
+
+function startClosittTour(){
+    if(localStorage.myClosit == undefined){
+    	$('#joyRideTipContent').joyride({
+            autoStart : true,                  
+            modal:true,
+            expose: false
+            });    	
+    			
+    	localStorage.myClosit = 1;
+    }else if(!isNaN(localStorage.myClosit) && localStorage.myClosit <= 2){
+    	$('#joyRideTipContent').joyride({
+            autoStart : true,                  
+            modal:true,
+            expose: false
+            });
+    			
+    	localStorage.myClosit++;
+    }
+}    
 
 
 </script>

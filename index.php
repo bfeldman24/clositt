@@ -98,16 +98,10 @@
     <li data-id="filter-toggle" data-button="Next" data-options="tipLocation:right">
         <h2>Filter</h2>
         <p>Hide the filter when you are not using it.</p>
-    </li>
-    <!--
-    <li data-button="Next">
-        <h2>Stop #4</h2>
-        <p>It works as a modal too!</p>
-    </li>
-    -->
+    </li> 
     <li data-id="joyride-item-addToClositt" data-button="Next" data-options="tipLocation:right">
-    <h2>Add to Your Clositt</h2>
-    <p>Save and organize the products you find on Clositt! Once saved, go to the MyClositt link at the top of the page.</p>
+        <h2>Add to Your Clositt</h2>
+        <p>Save and organize the products you find on Clositt! Once saved, go to the MyClositt link at the top of the page.</p>
     </li>
     <li data-id="joyride-item-showComments" data-button="Next"  data-options="tipLocation:bottom">
         <h2>Comments and Reviews</h2>
@@ -121,7 +115,7 @@
         <h2>Share</h2>
         <p>Send this product to your friends to find out what they think about it.</p>
     </li>
-    <li data-id="myClosittLink" data-button="Close and Start Shopping!"  data-options="tipLocation:bottom">
+    <li data-id="subheader-myclositt" data-button="Close and Start Shopping!"  data-options="tipLocation:bottom">
         <h2>My Clositt</h2>
         <p>Go to your Clositt to view and organize the products that you have saved.</p>
     </li>
@@ -173,10 +167,12 @@ $(".joyride-start").click(function(e){
     		}, 800);
             
             $("#product-grid .item:nth-child(2)").first().find(".overlay").addClass("alwaysVisible").show();                        
+          } else if (index == 3){
+              $(tip).css("margin-top","-25px");
           } else if (index == 4 || index == 5){
-              $(tip).css("margin-left","-7px");
+              $(tip).css("margin-left","-30px");
           } else if (index == 6){
-             $(tip).css("border-radius", "10px 0px 10px 10px"); 
+             $(tip).css("margin-top","-25px"); 
           }          
         },
         postRideCallback : function (index, tip) {

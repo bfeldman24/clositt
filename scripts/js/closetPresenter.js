@@ -47,6 +47,11 @@ var closetPresenter = {
 		});	
 		
 		$(".closetName").last().attr("last",true);
+		
+	   if(typeof startClosittTour == 'function')
+	   {
+		 startClosittTour();
+	   }
 	},		
 	
 	getClosetTemplate: function(parentId, closet, includeClosetName){
@@ -57,7 +62,7 @@ var closetPresenter = {
 		var closetHeader = null;
 		
 		if (includeClosetName){
-		  closetHeader = $("<h1>").addClass("closetName").append($("<span>").addClass(textColor).attr("closetid",closet.name()).text(closet.val().name));
+		  closetHeader = $("<h1>").addClass("closetName").append($("<span>").addClass(textColor + " closetNameHeader").attr("closetid",closet.name()).text(closet.val().name));
 		}
 		
 		$("#"+parentId).append($("<hr>")).append(		
