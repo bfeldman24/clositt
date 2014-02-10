@@ -53,7 +53,7 @@ mkdir ../$1/app
 mkdir ../$1/scripts
 mkdir ../$1/scripts/js
 
-cp -r app ../$1/app
+cp -r app ../$1/
 cp scripts/js/clositt.min.js ../$1/scripts/js
 cp scripts/js/clositt.min.e.js ../$1/scripts/js
 cp scripts/deploy-PROD.ssh ../$1/scripts
