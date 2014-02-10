@@ -27,7 +27,7 @@
 
   }
   
-  $dir = "../js";
+  $dir = "/../../js";
   
   
 //  // Gets all .js files in a directory  
@@ -69,10 +69,10 @@ $files = array("closetPresenter.js",
 
   $jsFiles = "";  
   for($i=0; $i < count($files); $i++){
-     $jsFiles .= file_get_contents($dir . "/" . $files[$i]);
+     $jsFiles .= file_get_contents(dirname(__FILE__) . $dir . "/" . $files[$i]);
   }
   
-  $file = fopen("../../java/clositt.js","w");
+  $file = fopen(dirname(__FILE__) . "/../../java/clositt.js","w");
   fwrite($file,$jsFiles);                       
   fclose($file);
   
