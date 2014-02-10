@@ -123,7 +123,12 @@ function startClosittTour(){
     	$('#joyRideTipContent').joyride({
             autoStart : true,                  
             modal:true,
-            expose: false
+            expose: false,
+            preStepCallback : function (index, tip) {
+              if (index == 0) {
+                $(tip).find(".joyride-close-tip").text("Skip Tour");
+              }
+            }
             });
     			
     	localStorage.myClosit++;
