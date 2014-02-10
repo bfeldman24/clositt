@@ -230,7 +230,7 @@ var closetPresenter = {
 		  .once('value', function(items){
 		      
 		      items.forEach(function(item){
-		          if(item.val() == sku){
+		          if(item.name() == sku){
 		              firebase.$.child(firebase.userPath)
 		                  .child(firebase.userid)
 		                  .child("closets")

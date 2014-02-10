@@ -3,7 +3,7 @@ body{
 }
 
 #mainContainer{
-	height: 690px;
+	height: 100%;
 	width: 100%;
 	background:#E6E6E6;
 	/*background-image: url(Images/blurrycrowd.jpg);*/
