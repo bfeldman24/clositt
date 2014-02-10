@@ -85,7 +85,7 @@ $_SESSION['userid'] = 0;
         <h3 id="myModalLabel">Forgot Password</h3>
     </div>
     <div class="modal-body">
-        <p>Please enter your email address so we can send you a reset password email:</p>
+        <p>Please enter your email address so we can send you an email to reset your password:</p>
         <input type="text" id="forgotPasswordEmail" placeholder="Email" class="inputBox" />        
     </div>
     <div class="modal-footer">

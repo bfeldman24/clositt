@@ -184,9 +184,9 @@ class ProductAdminController {
 	}
 	
 	public function updateAllShortLinks(){
-	   echo "<br>Getting Products…";
+	   echo "<br>Getting Products.";
 	   $products = array(); 
-	   $results = $this->productAdminDao->getProductsForUpdatingShortLinks(0, 200000);
+	   $results = $this->productAdminDao->getProductsForUpdatingShortLinks(0, 5000);
 	   
 	   if(is_object($results)){
 			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
@@ -197,12 +197,12 @@ class ProductAdminController {
 		}
 	     
 	   if(count($products) > 0){	                    
-	        echo "<br>Creating Short Links…";
+	        echo "<br>Creating Short Links.";
             $this->createShortLinks($products);
-            echo "<br>Updating Short Links...";
+            echo "<br>Updating Short Links.";
             return $this->productAdminDao->updateAllShortLinks($products);
 	   }else{
-	       echo "<br>ERROR: Didn't get products…";   
+	       echo "<br>ERROR: Didn't get products.";   
 	   }  
 	   
 	   return "DID NOT UPDATE SHORT LINKS";
@@ -214,13 +214,12 @@ class ProductAdminController {
 	   
 	   foreach($products as $sku => $p){
 	       	       
-	       
-	       if ($p['s'] != null){	       
-	           $shortlink = str_replace(" ", "-", $p['o']) . "-" . str_replace(" ", "-", $p['n']);	
-	       }else if ($p['sku'] != null){   
-	           $shortlink = str_replace(" ", "-", $p['company']) . "-" . str_replace(" ", "-", $p['name']);	
-	       }else{
+	       if ($p instanceof ProductEntity){
 	           $shortlink = str_replace(" ", "-", $p->getStore()) . "-" . str_replace(" ", "-", $p->getName());	
+	       }else if ($p['s'] != null){	       
+	           $shortlink = str_replace(" ", "-", $p['o']) . "-" . str_replace(" ", "-", $p['n']);	
+	       }else{   
+	           $shortlink = str_replace(" ", "-", $p['company']) . "-" . str_replace(" ", "-", $p['name']);	
 	       }
 	       
 	       $shortlink = strtolower($this->cleanUrl($shortlink));	
@@ -239,13 +238,13 @@ class ProductAdminController {
 	       
 	       $links[] = $shortlink;	     
 	       
-	       if ($p['s'] != null){ 
-	           $products[$sku]['sl'] = $shortlink;	       	    
-	       }else if($p['sku'] != null){
-	           $products[$sku]['shortlink'] = $shortlink;	       	    
-	       }else{
+	       if ($p instanceof ProductEntity){
 	           $products[$sku]->setShortLink($shortlink);	       	   
-	       }	       	       
+	       }else if ($p['s'] != null){ 
+	           $products[$sku]['sl'] = $shortlink;	       	    
+	       }else{
+	           $products[$sku]['shortlink'] = $shortlink;	       	    
+	       }
 	   }  
 	}	
 	

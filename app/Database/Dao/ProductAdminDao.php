@@ -180,7 +180,8 @@ class ProductAdminDao extends AbstractDao {
 		$offset = $page * $limit;
 		
 		$sql = "SELECT * " .				
-				" FROM " . PRODUCTS .
+				" FROM " . PRODUCTS .				
+				" WHERE COALESCE(" . PRODUCT_SHORT_LINK . ",'null') = 'null' " .
 				" ORDER BY " . PRODUCT_STORE . ", " . PRODUCT_NAME .
 				" LIMIT ? OFFSET ?";								
         
