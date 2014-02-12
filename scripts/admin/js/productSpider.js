@@ -80,70 +80,6 @@ function getLinks(){
 	});		
 }	  				   				    						
 				
-// Gets the products from the selected links and optionally saves them				
-function getProductsFromLinks(save){
-    $("#loadingMask").show();
-	$("#json-output").html("");
-	
-	var total = $("#links > .company > .customer > .category > input:checked").size();
-	var count = 0;
-	
-	if (total <= 0){
-		alert("Please select a product store > category");	
-	}else{
-				
-		$("#links > .company > .customer > .category > input:checked").each(function(){	
-			var company = $(this).attr("company");
-			var customer = $(this).attr("customer");
-			var category = $(this).attr("category");
-			var url = $(this).attr("url");
-			url = storeApi.getFullUrl(company, url);
-			
-			$.post("webProxy.php", {u:url}, function(data){		
-			    if (data == null || data.trim() == ""){
-			         console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");
-			     }
-			     												
-			    var jsonProducts = storeApi.getProducts(company, data, url);
-			    var storeProducts = $.parseJSON(jsonProducts);
-			    
-			    for (var i=0; i < Object.keys(storeProducts).length; i++){
-			         var sku = Object.keys(storeProducts)[i];
-			         storeProducts[sku]['company'] = company;
-			         storeProducts[sku]['customer'] = customer;
-			         storeProducts[sku]['category'] = category; 
-			    }
-			 
-			    if (save){
-			        // Used for firebase
-    				$("#json-output").append(
-    					$("<div>")
-    						.attr("company", company)
-    						.attr("customer", customer)
-    						.attr("category", category)
-    						.html( storeProducts )
-    				);	
-    				
-    				// Used for database
-    				if ($("#json-products").text() != ""){
-        				var jsonProducts = $.parseJSON($("#json-products").text());
-        				$.extend(storeProducts, jsonProducts);        				
-    				}
-    				$("#json-products").text(JSON.stringify(storeProducts));	
-    				
-    				count++;
-    				if(count == total){					
-    				    saveAllProducts();    				    
-    				}		
-			    }else{
-			         alert(company + " > " + customer + " > " + category + ": " + JSON.stringify(storeProducts));		
-			    }						
-			    
-			    $("#loadingMask").hide();
-			});
-		});
-	}
-}
 
 // Gets the checked prdocuts frm the link, validates them, and shows a sampling of them
 function testProductsFromLinks(showSample){
@@ -237,6 +173,71 @@ function testProductsFromLinks(showSample){
 					alert(validCount + "/" + total + " catgeories were valid");	
 					$("#loadingMask").hide();				
 				}														
+			});
+		});
+	}
+}
+
+// Gets the products from the selected links and optionally saves them				
+function getProductsFromLinks(save){
+    $("#loadingMask").show();
+	$("#json-output").html("");
+	
+	var total = $("#links > .company > .customer > .category > input:checked").size();
+	var count = 0;
+	
+	if (total <= 0){
+		alert("Please select a product store > category");	
+	}else{
+				
+		$("#links > .company > .customer > .category > input:checked").each(function(){	
+			var company = $(this).attr("company");
+			var customer = $(this).attr("customer");
+			var category = $(this).attr("category");
+			var url = $(this).attr("url");
+			url = storeApi.getFullUrl(company, url);
+			
+			$.post("webProxy.php", {u:url}, function(data){		
+			    if (data == null || data.trim() == ""){
+			         console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");
+			     }
+			     												
+			    var jsonProducts = storeApi.getProducts(company, data, url);
+			    var storeProducts = $.parseJSON(jsonProducts);
+			    
+			    for (var i=0; i < Object.keys(storeProducts).length; i++){
+			         var sku = Object.keys(storeProducts)[i];
+			         storeProducts[sku]['company'] = company;
+			         storeProducts[sku]['customer'] = customer;
+			         storeProducts[sku]['category'] = category; 
+			    }
+			 
+			    if (save){
+			        // Used for firebase
+    				$("#json-output").append(
+    					$("<div>")
+    						.attr("company", company)
+    						.attr("customer", customer)
+    						.attr("category", category)
+    						.html( storeProducts )
+    				);	
+    				
+    				// Used for database
+    				if ($("#json-products").text() != ""){
+        				var jsonProducts = $.parseJSON($("#json-products").text());
+        				$.extend(storeProducts, jsonProducts);        				
+    				}
+    				$("#json-products").text(JSON.stringify(storeProducts));	
+    				
+    				count++;
+    				if(count == total){					
+    				    saveAllProducts();    				    
+    				}		
+			    }else{
+			         alert(company + " > " + customer + " > " + category + ": " + JSON.stringify(storeProducts));		
+			    }						
+			    
+			    $("#loadingMask").hide();
 			});
 		});
 	}
