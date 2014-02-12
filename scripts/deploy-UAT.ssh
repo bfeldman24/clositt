@@ -40,6 +40,7 @@ echo "Minified JS and CSS finished"
 cp *.php ../$1/
 cp favicon.ico ../$1/
 cp .htaccess ../$1/
+cp php.ini ../$1/
 cp deploy-PROD.ssh ../$1/
 cp -r static/ ../$1/
 cp -r css/ ../$1/
@@ -54,6 +55,7 @@ mkdir ../$1/scripts
 mkdir ../$1/scripts/js
 
 cp -r app ../$1/
+rm -rf ../$1/app/admin
 cp scripts/js/clositt.min.js ../$1/scripts/js
 cp scripts/js/clositt.min.e.js ../$1/scripts/js
 cp scripts/deploy-PROD.ssh ../$1/scripts
