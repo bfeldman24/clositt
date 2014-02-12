@@ -28,7 +28,7 @@
         	 		<li class="dropdown">
         			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
         				<!--<i class="minicon-single settings-minicon"></i> -->
-        				<img src="css/images/menu.png"/>
+        				<img src="css/images/menu.png" class="clositt-menu-icon"/>
         			</a>
         			<ul class="dropdown-menu dropdown-menu-right">
         			     <li class="menu-settings"><a  onclick="closetPresenter.showSettings()"><i class="icon-pencil"></i> Edit</a></li>

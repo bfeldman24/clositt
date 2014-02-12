@@ -11,11 +11,11 @@ define("PRODUCT_NAME","name");
 define("PRODUCT_LINK","link");
 define("PRODUCT_IMAGE","image");
 define("PRODUCT_PRICE","price");
-define("PRODUCT_COMMENT_COUNT","commentCount");
-define("PRODUCT_CLOSITT_COUNT","closittCount");
+define("PRODUCT_COMMENT_COUNT","commentcount");
+define("PRODUCT_CLOSITT_COUNT","closittcount");
 define("PRODUCT_SHORT_LINK","shortlink");
 define("PRODUCT_STATUS","status");
-define("PRODUCT_DATE_UPDATED","updatedOn");
+define("PRODUCT_DATE_UPDATED","updatedon");
 
 
 // Historical Prices Table

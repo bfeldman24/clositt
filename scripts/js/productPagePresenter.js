@@ -99,7 +99,8 @@ var productPagePresenter = {
     				    html += '<div class="product-comments" style="display:none"></div>';			
     				html +='</div>';
     				
-    				html +='<div class="productPageClosittCount"><img class="productPageHanger" src="/css/images/hanger-icon.png" /> ' + closetCount;				
+    				html +='<div class="productPageClosittCount"><img class="productPageHanger" src="/css/images/hanger-icon.png" /> ';
+    				html += '<span class="counter">' + closetCount + '</span>';				
     				html +='</div>';
 				html +='</div>';
 			html +='</div>';	

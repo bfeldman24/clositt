@@ -96,19 +96,29 @@ var reviewsPresenter = {
       		 	reviewsPresenter.refreshRating(review, 0);
       		 	
       		 	// update review count
-      		 	firebase.$.child("clositt/products/"+sku+"/rc").transaction(function(value) {
-      		 	   var newValue = 1;
-      		 	   
-      		 	   if(value == null){		 	       
-          	 	       firebase.$.child("clositt/products/"+sku+"/rc").set(newValue);
-      		 	   }else{
-      		 	        newValue = value +1;		 	        
-      		 	   } 		 	            
-      		 	   
-      		 	   $('.item[pid="'+sku+'"]').find(".numReviews > .counter").text(newValue);
-      		 	   targetOutfit.find(".productPageCommentCount").text("("+newValue+")");
-      		 	   return newValue;       
-                  });
+      		 	$.post( window.HOME_ROOT + "p/rc", {sku: sku}, function(newValue){
+	       
+        	       if (!isNaN(newValue)){
+        	           var total = parseInt($('.item[pid="'+sku+'"]').find(".numReviews > .counter").text()) + parseInt(newValue);
+        	           
+            	       $('.item[pid="'+sku+'"]').find(".numReviews > .counter").text(total);
+          		 	   targetOutfit.find(".productPageCommentCount").text("("+total+")");
+            	    }
+        	    });
+      		 	
+//      		 	firebase.$.child("clositt/products/"+sku+"/rc").transaction(function(value) {
+//      		 	   var newValue = 1;
+//      		 	   
+//      		 	   if(value == null){		 	       
+//          	 	       firebase.$.child("clositt/products/"+sku+"/rc").set(newValue);
+//      		 	   }else{
+//      		 	        newValue = value +1;		 	        
+//      		 	   } 		 	            
+//      		 	   
+//      		 	   $('.item[pid="'+sku+'"]').find(".numReviews > .counter").text(newValue);
+//      		 	   targetOutfit.find(".productPageCommentCount").text("("+newValue+")");
+//      		 	   return newValue;       
+//                  });
       		 	
       	 	}else{
       	 		Messenger.info("Please enter a comment");

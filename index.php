@@ -144,7 +144,7 @@ $(document).ready(function() {
 	$('#filter-float').perfectScrollbar({
         wheelSpeed: 20,
         wheelPropagation: false
-    });
+    });        
     
     $("#subheader-trending").addClass("active");
 });
@@ -184,7 +184,7 @@ $(".joyride-start").click(function(e){
 });
 
 function loggedIn(){
-	closetFormPresenter.getClosetInfo();
+	closetFormPresenter.getClosetInfo();	
 }
 
 function contactUs(){

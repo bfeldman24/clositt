@@ -74,6 +74,16 @@ $(".feedback-minimized-btn").on("click", function(e){
     feedbackPopup.find(".feedback-minimized").hide('fade');
 });
 
+$("#subheader-myclositt").on('click', function(e){
+    if (firebase.isLoggedIn){
+        $("#subheader-myclositt").off('click');
+    }else{
+        e.preventDefault();
+        Messenger.error("You Must be logged in to access your clositt!");
+        return false;
+    } 
+});
+
 </script>
 
 <script type="text/javascript">

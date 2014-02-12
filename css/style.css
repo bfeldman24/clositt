@@ -1451,19 +1451,26 @@ h1 #user-closet-title, h1 #static-closet-title{
 }
 
 #closet-settings {
-    border-radius: 6px;
     cursor: pointer;
-    padding: 10px;
     position: absolute;
     right: 35px;
     text-align: center;
-    top: 102px;
+    top: 100px;
+    border-radius: 6px;
+}
+
+#closet-settings .dropdown-toggle{
+    border-radius: 6px;
+}
+
+.clositt-menu-icon{
+    padding: 12px;   
 }
 
 #closet-share .social-people-icon{
     cursor: pointer;
     position: absolute;
-    right: 80px;
+    right: 85px;
     top: 100px;
     border-radius: 6px;
 }
@@ -1471,8 +1478,8 @@ h1 #user-closet-title, h1 #static-closet-title{
 .dropdown-menu-right {
     left: auto;
     min-width: 95px;
-    right: -12px;
-    top: 28px;
+    right: 0;
+    top: 40px;
     width: 95px;
 }
 
@@ -1501,7 +1508,7 @@ h1 #user-closet-title, h1 #static-closet-title{
     top: -6px;
 }
 
-#closet-settings:hover, #closet-share .social-people-icon:hover{
+#closet-settings:hover, #closet-settings a:hover, #closet-share .social-people-icon:hover{
 	background-color: #DFDFDF;		
 }
 
@@ -2048,7 +2055,7 @@ input.closetNameInput[type="text"] {
 }
 
 #social-btns {
-    right: 87px;
+    right: 92px;
     top: 145px;
     width: 32px;
 }

@@ -366,7 +366,7 @@ var closetFormPresenter = {
 	},	
 	
 	addToCloset: function(el){
-		el.preventDefault();								
+		el.preventDefault();
 		var sku = $(el.currentTarget).parents(".item").attr("pid");		
 		
 		var closetName = $(el.currentTarget).find('input[name="newCloset"]').val();
@@ -399,7 +399,7 @@ var closetFormPresenter = {
         				  } else {
         						Messenger.success('This item was added to "' + closetName + '"');
         						closetFormPresenter.showClosetForm(el);
-        						closetFormPresenter.updateClosetCount(sku);																		
+        						closetFormPresenter.updateClosetCount(sku);	
         				  }
 				});
 			}else{
@@ -435,7 +435,7 @@ var closetFormPresenter = {
              					Messenger.error('Clositt could not be saved. ' + error);
              			  } else {
              					Messenger.success('This item was added to your ' + closetName + '!');					
-             					closetFormPresenter.updateClosetCount(el, sku);		
+             					closetFormPresenter.updateClosetCount(sku);		
              			  }
     			});
     		}else{
@@ -453,23 +453,38 @@ var closetFormPresenter = {
 		}
 	},
 	
-	updateClosetCount: function(el, sku){
-	    var targetOutfit = $(el.currentTarget).parents(".productActions");
+	updateClosetCount: function(sku){
 	    
-	 	firebase.$.child("clositt").child(firebase.productsPath).child(sku).child("cc").transaction(function(value) {
-	 	   var newValue = 1;
-	 	   
-	 	   if(value != null){		 	       
-	 	        newValue = value +1;		 	        
-	 	   } 		 	            
-	 	   
-	 	   targetOutfit.find(".numClosets > .counter").text(newValue);
-	 	   var closetCountPlural = newValue == 1 ? "" : "s"; 
-	 	   targetOutfit.find(".numClosets").attr("title","Added to "+newValue+" Clositt"+closetCountPlural);
-	 	   targetOutfit.find(".numClosets").tooltip('destroy');
-	 	   targetOutfit.find(".numClosets").tooltip();
-	 	   return newValue;       
-        });
+	    $.post( window.HOME_ROOT + "p/cc", {sku: sku}, function(newValue){
+	       
+	       if (!isNaN(newValue)){	                       
+	           var productTile = $('.item[pid="'+sku+'"] .numClosets');
+	                       
+	           var total = parseInt(productTile.find(".counter").text()) + parseInt(newValue);
+    	       productTile.find(".counter").text(total);
+    	       $('.item[pid="'+sku+'"] .productPageClosittCount .counter').text(total);
+    	       
+    	 	   var closetCountPlural = total == 1 ? "" : "s"; 
+    	 	   productTile.attr("title","Added to "+total+" Clositt"+closetCountPlural);
+    	 	   productTile.tooltip('destroy');
+    	 	   productTile.tooltip();
+    	    }
+	    });
+	    
+//	 	firebase.$.child("clositt").child(firebase.productsPath).child(sku).child("cc").transaction(function(value) {
+//	 	   var newValue = 1;
+//	 	   
+//	 	   if(value != null){		 	       
+//	 	        newValue = value +1;		 	        
+//	 	   } 		 	            
+//	 	   
+//	 	   targetOutfit.find(".numClosets > .counter").text(newValue);
+//	 	   var closetCountPlural = newValue == 1 ? "" : "s"; 
+//	 	   targetOutfit.find(".numClosets").attr("title","Added to "+newValue+" Clositt"+closetCountPlural);
+//	 	   targetOutfit.find(".numClosets").tooltip('destroy');
+//	 	   targetOutfit.find(".numClosets").tooltip();
+//	 	   return newValue;       
+//        });
 	}
 }
 

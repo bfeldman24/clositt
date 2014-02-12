@@ -105,7 +105,58 @@ class ProductDao extends AbstractDao {
 		$params = array($productId, $productId, $limit);
 		
 		return $this->getResults($sql, $params, $paramTypes, "2309842");
-	}        			
+	}        	
+	
+	public function updateClosittCounter($productId){
+	    if(!isset($productId)){
+			$this->logWarning("235982734","Nothing to update!");
+			return false; 
+		}
+	 
+	    $sql = "UPDATE " . PRODUCTS . 
+	           " SET " . PRODUCT_CLOSITT_COUNT . " = " . PRODUCT_CLOSITT_COUNT . " + 1 " .
+	           " WHERE " . PRODUCT_SKU . " = ?";
+        
+        $paramTypes = array('text');
+        $params = array($productId);
+        
+        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+            
+        try {
+            $affected = $stmt->execute($params);
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            print_r($params);
+        }
+        
+        return $affected;
+	}
+	
+	public function updateCommentCounter($productId){
+	     if(!isset($productId)){
+			$this->logWarning("2359842","Nothing to update!");
+			return false; 
+		}
+	 
+	    $sql = "UPDATE " . PRODUCTS . 
+	           " SET " . PRODUCT_COMMENT_COUNT . " = " . PRODUCT_COMMENT_COUNT . " + 1 " .
+	           " WHERE " . PRODUCT_SKU . " = ?";
+        
+        $paramTypes = array('text');
+        $params = array($productId);
+        
+        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+            
+        try {
+            $affected = $stmt->execute($params);
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            print_r($params);
+        }
+        
+        return $affected;
+	}
+		
 	
 	public function addProducts($products){
 	    if(!isset($products) || !is_array($products)){

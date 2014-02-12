@@ -52,8 +52,6 @@ body{
     border: medium none;
     min-height: 500px;
     position: relative;
-    top: 115px;
-    width: 100%;
 }
 
 .productPageComments {
@@ -90,24 +88,28 @@ body{
     color: black;       
 }
 
+#brand-fixed-background {
+    display: block;
+}
+
 </style>
 </head>
 <body>
 
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>	
-    <?php 
-        // 	{"s":"n3180237","o":"Nordstrom","u":"Men","a":"Outerwear","n":"The North Face 'Denali' Recycled Fleece Jacket","l":"http:\/\/shop.nordstrom.com\/s\/the-north-face-denali-recycled-fleece-jacket\/3180237?origin=category","i":"http:\/\/g.nordstromimage.com\/imagegallery\/store\/product\/Medium\/17\/_6597117.jpg","p":"199.00"} 
-        //print_r(json_decode($product)); 
-        
+    <?php         
         $shortLink = substr($product->l, 0, strpos($product->l, ".com") + 4);
         
-        if (strpos($shortLink, "://") > 0){
+        if (strpos($shortLink, "://") >= 0){
             $shortLink = substr($shortLink, strpos($shortLink, "://") + 3);
         }
         
-        if (strpos($shortLink, "www.") > 0){
+        if (strpos($shortLink, "www.") >= 0){
             $shortLink = substr($shortLink, strpos($shortLink, "www.") + 4);
-        }                                
+
+        }else if (strpos($shortLink, "www1.") >= 0){
+            $shortLink = substr($shortLink, strpos($shortLink, "www1.") + 5);
+        }
      ?>
 
 <a href='../' class="btn btn-success" style="border-radius: 40px; left: 35px; position: absolute; top: 110px; width: 110px;">See What Else <br> is Trending on Clositt</a> 

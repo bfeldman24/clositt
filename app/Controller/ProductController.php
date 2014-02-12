@@ -23,13 +23,13 @@ class ProductController {
 			$results = $this->productDao->getProduct($sku);						
 			
 			if(is_object($results)){
-				if($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){					
+				if($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){					    				
 					ProductEntity::setProductFromDB($productEntity, $row);
 				}
 			}
 		}
 	
-	    //ProductTemplate::getProductGridTemplate($productEntity);
+	    //ProductTemplate::getProductGridTemplate($productEntity);	    
         return json_encode($productEntity->toArray());
 	}
 	
@@ -70,6 +70,31 @@ class ProductController {
 	
 		return json_encode($searchResults);
 	}
+	
+	public function updateClosittCounter($productId){
+	     if(isset($productId) && strlen($productId) > 3){	
+			$results = $this->productDao->updateClosittCounter($productId);			
+			
+			if(is_numeric($results) && $results > 0){
+				return $results;
+			}
+		}
+	
+		return "failed";
+	}
+	
+	public function updateCommentCounter($productId){
+	     if(isset($productId) && strlen($productId) > 3){	
+			
+			$results = $this->productDao->updateCommentCounter($productId);			
+			
+			if(is_numeric($results) && $results > 0){
+				return $results;
+			}
+		}
+	
+		return "failed";
+	}
     
     public function addProducts($products){	
 		
@@ -78,11 +103,11 @@ class ProductController {
 			$results = $this->productDao->addProducts($products);			
 			
 			if(is_numeric($results) && $results > 0){
-				return true;
+				return $results;
 			}
 		}
 	
-		return false;
+		return "failed";
 	}
 	
 	public function addProductsFromFile($productFile){
@@ -149,7 +174,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page'])){                        
     	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);	     	   	    
         $product = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT);
+    
+    }else if ($_GET['method'] == 'cc' && isset($_POST['sku'])){     	   	    
+        $product = $productController->updateClosittCounter($_POST['sku']);
+    }else if ($_GET['method'] == 'rc' && isset($_POST['sku'])){                        	     	   	    
+        $product = $productController->updateCommentCounter($_POST['sku']);
     }
+    
     
     print_r($product);     
 }
