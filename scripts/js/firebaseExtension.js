@@ -113,14 +113,30 @@ var firebase = {
 	   }
 	},
 	
-	logginCallback: function(){	    	   
+	logginCallback: function(){	
+	    if (sessionStorage.isActiveUser == null || sessionStorage.isActiveUser == "null"){
+	       sessionStorage.isActiveUser = true;
+	       
+	       firebase.$.child("Auth/Token").on('value',function(snapshot){	
+        		var token = snapshot.val();			
+        		
+        		$.post(window.HOME_ROOT + "app/auth.php", { auth: token, user: firebase.userid }, function(){
+        		      if (sessionStorage.goToClositt){
+                            location.href = window.HOME_ROOT + "clositt.php"; 
+        		      }
+        		});
+        	});
+	    }
+	       	   
 		if(typeof loggedIn == 'function')
 		{
 			loggedIn();
 		}  
 	},
 	
-	loggedOutCallback: function(){	    	   
+	loggedOutCallback: function(){	
+        sessionStorage.isActiveUser = null;	   
+	       	   
 		if(typeof loggedOut == 'function')
 		{
 			loggedOut();
@@ -128,6 +144,8 @@ var firebase = {
 	},
 	
 	loggedOutErrorCallback: function(){	   
+	    sessionStorage.isActiveUser = null;
+	   
 		if(typeof loggedOutError == 'function')
 		{
 			loggedOutError();

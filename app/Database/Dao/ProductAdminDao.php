@@ -77,6 +77,7 @@ class ProductAdminDao extends AbstractDao {
                       PRODUCT_PRICE . "," . 
                       PRODUCT_COMMENT_COUNT . "," . 
                       PRODUCT_CLOSITT_COUNT . "," . 
+                      PRODUCT_STATUS . "," .
                       PRODUCT_DATE_UPDATED . ")" .
                " SELECT " . PRODUCT_SKU . "," .
                       PRODUCT_STORE . "," . 
@@ -88,6 +89,7 @@ class ProductAdminDao extends AbstractDao {
                       PRODUCT_PRICE . "," . 
                       PRODUCT_COMMENT_COUNT . "," . 
                       PRODUCT_CLOSITT_COUNT . "," . 
+                      " 4 ," .
                       "NOW()" .
                " FROM " . TEMP_PRODUCTS . " tp " .
 			   " WHERE " . PRODUCT_SKU . " NOT IN ( SELECT " . PRODUCT_SKU . " FROM " . PRODUCTS . " ) ";	           

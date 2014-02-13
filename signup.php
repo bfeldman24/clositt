@@ -78,36 +78,12 @@ $_SESSION['userid'] = 0;
 </div>
 	
 	
-<!-- Modal -->
-<div id="forgotPassModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-        <h3 id="myModalLabel">Forgot Password</h3>
-    </div>
-    <div class="modal-body">
-        <p>Please enter your email address so we can send you an email to reset your password:</p>
-        <input type="text" id="forgotPasswordEmail" placeholder="Email" class="inputBox" />        
-    </div>
-    <div class="modal-footer">
-        <button id="resetPassButton" class="btn btn-success">Reset My Password</button>
-    </div>
-</div>	
-	
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 
 
 <script type="text/javascript">
-function loggedIn(){	
-	
-	firebase.$.child("Auth/Token").on('value',function(snapshot){	
-			var token = snapshot.val();			
-			
-			$.post("app/auth.php", { auth: token, user: firebase.userid }, function(data) {
-				if(data == "success"){					
-				    location.href = "<?php echo HOME_ROOT; ?>";
-				}
-			});
-		});
+function loggedIn(){							
+    location.href = window.HOME_ROOT;
 }
 
 $("#signin").on("submit",function(event){
@@ -156,40 +132,40 @@ $("#signup-form").on("submit",function(event){
 	return false;
 });
 
-$(".forgotpass").on("click", function(e){
-   e.preventDefault(); 
-   
-   var email = $("#inputEmail").val();
-   
-   if (email != null){
-        $("#forgotPasswordEmail").val(email);
-   }
-   
-   $("#forgotPassModal").modal('show');
-});
-
-$("#resetPassButton").on("click", function(e){
-    e.preventDefault();
-    var email = $("#forgotPasswordEmail").val();
-    
-    if (email != null && email.indexOf("@") > 0){
-        $("#forgotPassModal").modal('hide');
-        
-        firebase.authClient.sendPasswordResetEmail(email, function(error, success) {
-            
-            
-          if (error) {
-                Messenger.error("Sorry. There was an error sending you a reset password email!");                
-                Messenger.error("Please contact us to reset your password.");
-          }else{
-                Messenger.success('We just sent you an email to reset your password.');
-                Messenger.success('Please check that email and follow its instructions. Thanks!');
-          }
-        });
-    }else{
-        Messenger.error("Please enter a valid email address!");
-    }
-});
+//$(".forgotpass").on("click", function(e){
+//   e.preventDefault(); 
+//   
+//   var email = $("#inputEmail").val();
+//   
+//   if (email != null){
+//        $("#forgotPasswordEmail").val(email);
+//   }
+//   
+//   $("#forgotPassModal").modal('show');
+//});
+//
+//$("#resetPassButton").on("click", function(e){
+//    e.preventDefault();
+//    var email = $("#forgotPasswordEmail").val();
+//    
+//    if (email != null && email.indexOf("@") > 0){
+//        $("#forgotPassModal").modal('hide');
+//        
+//        firebase.authClient.sendPasswordResetEmail(email, function(error, success) {
+//            
+//            
+//          if (error) {
+//                Messenger.error("Sorry. There was an error sending you a reset password email!");                
+//                Messenger.error("Please contact us to reset your password.");
+//          }else{
+//                Messenger.success('We just sent you an email to reset your password.');
+//                Messenger.success('Please check that email and follow its instructions. Thanks!');
+//          }
+//        });
+//    }else{
+//        Messenger.error("Please enter a valid email address!");
+//    }
+//});
 
 $("#waitinglist").on("submit",function(event){
 	event.preventDefault();

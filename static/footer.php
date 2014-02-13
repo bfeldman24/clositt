@@ -27,6 +27,76 @@
 	</div>
 </footer>
 
+
+<!-- Modal -->
+<div id="signinModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 id="myModalLabel">Log in or Sign up</h3>
+    </div>
+    <div class="modal-body">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#loginModalTab" data-toggle="tab">Log in</a></li>
+            <li><a href="#signupModalTab" data-toggle="tab">Sign Up</a></li>
+        </ul>
+      	
+      	<div class="tab-content">
+      	    <div id="loginModalTab" class="login-form tab-pane active">
+        		<form id="signin" class="form-horizontal" action="clositt.php">
+        			<h3 class="account">Got an Account? Log in.</h3>
+        			<div id="signinModalEmail">            			                         			  
+        			    <input type="text" id="loginModalTab-inputEmail" placeholder="Email" class="inputBox" />
+        			</div>
+        			<div id="password">	
+        				<input type="password" id="loginModalTab-inputPassword" placeholder="Password" class="inputBox" />		
+        			</div>		   		
+        			<div>	        			    
+        			    <div class="forgotpass">Forgot Password?</div>
+        			</div>
+        		</form> 
+        	</div> 	
+        
+        	<div id="signupModalTab" class="signup-form tab-pane">
+        		<form id="signup-form" class="form-horizontal" action="clositt.php">
+        			<h3 class="account">New to Clositt? Sign up.</h3>
+        			<div id="signinModalName">
+        			   <input type="text" id="signupModalTab-inputName" placeholder="Full Name" class="inputBox" />
+        			</div>
+        			<div id="signup-email">
+        			   <input type="text" id="signupModalTab-inputEmail" placeholder="Email" class="inputBox" />
+        			</div>
+        			<div id="signinModalPassword">	
+        			    <div class="input-prepend">                            
+                            <input type="password" id="signupModalTab-inputPassword" placeholder="Password" class="signup-password">
+                        </div>
+                        <div class="input-append">
+                            <input type="password" id="signupModalTab-inputPassword2" placeholder="Confirm" class="signup-password">
+                        </div>
+        			</div>		   		        			
+        		</form> 
+        	</div>
+      	</div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" id="signupModalLoginButton" class="btn btn-success">Login</button>
+    </div>
+</div>	
+
+<!-- Forgot Password Modal -->
+<div id="forgotPassModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 id="myModalLabel">Forgot Password</h3>
+    </div>
+    <div class="modal-body">
+        <p>Please enter your email address so we can send you an email to reset your password:</p>
+        <input type="text" id="forgotPasswordEmail" placeholder="Email" class="inputBox" />        
+    </div>
+    <div class="modal-footer">
+        <button id="resetPassButton" class="btn btn-success">Reset My Password</button>
+    </div>
+</div>	
+
 <?php echo CLOSITT_JS; ?>
 
 <script type="text/javascript">
@@ -79,9 +149,121 @@ $("#subheader-myclositt").on('click', function(e){
         $("#subheader-myclositt").off('click');
     }else{
         e.preventDefault();
-        Messenger.error("You Must be logged in to access your clositt!");
+        Messenger.error("We'd love to show you your Clositt, but first you need to sign in.");
+        $("#signinModal").modal('show');
         return false;
     } 
+});
+
+$('#signinModal a[data-toggle="tab"]').on('shown', function (e) {     
+    if($(e.target).attr("href") == "#loginModalTab"){
+        $("#signupModalLoginButton").text("Login");
+    }else{
+        $("#signupModalLoginButton").text("Sign Up");   
+    }        
+})
+
+$('#loginModalTab-inputPassword, #signupModalTab-inputPassword2, #signupModalTab-inputPassword').keyup(function(e) {
+    e.preventDefault();	 
+    
+    // on enter
+    if(e.keyCode == 13) {        
+        submitSigninModal();
+    }
+    
+    return false;
+});
+
+
+$("#signupModalLoginButton").on("click",function(event){
+	event.preventDefault();
+	submitSigninModal();	 	 	 	
+	return false;
+});
+
+function submitSigninModal(){
+    if ($('#signinModal li.active a[data-toggle="tab"]').attr("href") == "#loginModalTab"){
+            if($('#loginModalTab-inputPassword').val().length > 5){
+     
+         		var email = $("#loginModalTab-inputEmail").val();
+         		var password = $("#loginModalTab-inputPassword").val();
+         		var remember = false;		
+         					  	
+         		sessionStorage.goToClositt = true;			  	
+         	  	firebase.login(email,password,remember);		    
+         	  	$("#signupModalLoginButton").addClass("disabled").text("Logging in...");
+         	}else{
+         		Messenger.info("Login information is incorrect");	
+         	} 
+	       
+	 }else{	 	 
+	        var valid = false;
+	      
+	        
+            if($('#signupModalTab-inputPassword').val().length > 5 && $('#signupModalTab-inputPassword2').val().length > 5){
+                    if($('#signupModalTab-inputPassword2').val() == $('#signupModalTab-inputPassword').val()){                   
+                            valid = true;                    
+                    }else{					              	
+                            Messenger.error("Passwords do NOT match!");                     
+                    }
+            }else{
+                    Messenger.error("Passwords do NOT match!");        
+            }
+          
+          	if(valid){
+          		var email = $("#signupModalTab-inputEmail").val();
+          		var password = $("#signupModalTab-inputPassword").val();
+          		var remember = false;
+          		var name = $("#signupModalTab-inputName").val();
+          		var username = $("#signupModalTab-inputUsername").val();		
+          	
+          	    sessionStorage.goToClositt = true;
+          		firebase.signup(email, password,remember,name, username);
+          		$("#signupModalLoginButton").addClass("disabled").text("Signing up...");
+          	}else{
+          		console.log("invalid");	
+          	}
+	 }
+}
+
+$(".forgotpass").on("click", function(e){
+   e.preventDefault(); 
+   
+   var email = $("#inputEmail").val();
+   
+   if (email == null){
+        email = $("#loginModalTab-inputEmail").val();
+   }
+   
+   if (email != null){
+        $("#forgotPasswordEmail").val(email);
+   }
+   
+   $(".modal").modal('hide');
+   $("#forgotPassModal").modal('show');
+});
+
+$("#resetPassButton").on("click", function(e){
+    e.preventDefault();
+    var email = $("#forgotPasswordEmail").val();
+    
+    if (email != null && email.indexOf("@") > 0){
+        $("#forgotPassModal").modal('hide');
+        
+        firebase.authClient.sendPasswordResetEmail(email, function(error, success) {
+            
+            
+          if (error) {
+                Messenger.error("Sorry. There was an error sending you a reset password email!");                
+                Messenger.error("Please contact us to reset your password.");
+          }else{
+                Messenger.success('We just sent you an email to reset your password.');
+                Messenger.success('Please check that email and follow its instructions. Thanks!');
+          }
+        });
+    }else{
+        Messenger.error("Please enter a valid email address!");
+    }
 });
 
 </script>

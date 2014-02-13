@@ -27,9 +27,9 @@ var Messenger = {
 	
 	init: function(){
 		if(Messenger.align == 'center'){
-			var left = ($(document).width() / 2) - (Messenger.width / 2);
+			var left = 50;
 		}else{
-			var left = 100;
+			var left = 0;
 		}
 		
 		if(Messenger.position == 'top'){
@@ -42,7 +42,7 @@ var Messenger = {
 			.attr("id",Messenger.id)
 			.css("display","none")
 			.css("top",top + "px")
-			.css("left",left + "px")
+			.css("left",left + "%")
 			.css("min-width",Messenger.width + "px")
 		);
 	},
@@ -61,7 +61,8 @@ var Messenger = {
 		$alertMessage.children("div").first().addClass(status);
 		$alertMessage.find(".messenger-message-inner").first().text(msg);		
 		
-		$("#" + Messenger.id).append($alertMessage);
+		$("#" + Messenger.id).append($alertMessage);		
+		$("#" + Messenger.id).css("margin-left", "-" + ($("#" + Messenger.id).width() / 2) + "px");		
 		$("#" + Messenger.id).css("display","block");
 		
 		setTimeout(function(){

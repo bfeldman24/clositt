@@ -22,6 +22,16 @@ then
         exit 1
 fi
 
+# Update .htaccess
+echo 'Did you remove the comments from the .htaccess file? [y/n]'
+read g
+
+if [ $g = 'n' ]
+then
+        echo "Go back and remove the prod comments"
+        exit 1
+fi
+
 rm -rf ../$1/archive/*
 mkdir ../$1/archive
 mv ../$1/* ../$1/archive/
@@ -55,7 +65,8 @@ mkdir ../$1/scripts
 mkdir ../$1/scripts/js
 
 cp -r app ../$1/
-rm -rf ../$1/app/admin
+rm -f ../$1/app/Controller/*Admin*
+rm -f ../$1/app/Database/Dao/*Admin*
 cp scripts/js/clositt.min.js ../$1/scripts/js
 cp scripts/js/clositt.min.e.js ../$1/scripts/js
 cp scripts/deploy-PROD.ssh ../$1/scripts

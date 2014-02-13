@@ -1333,6 +1333,64 @@ ul.review-comments span.review-comment-user{
     z-index: 999;	
 }
 
+/* Signin Modal */
+
+#signinModal h3{
+	font-family: 'Roboto', serif;
+}
+
+#signinModal h3.account{
+	margin-top:-11px;
+    text-align:center;
+    color: grey;
+}
+
+
+#signinModal .inputBox, #forgotPassModal .inputBox{
+	margin-left:5px;
+	margin-bottom: 5px !important;	
+	width:220px;
+	height:35px !important;
+}
+
+#signinModalEmail, #signinModalName{
+	margin-top:-7px;
+}
+
+#signinModalpassword {
+    margin-left: 5px;   
+}
+
+.signup-password {
+    border-radius: 3px !important;
+    height: 35px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 108px !important;   
+}
+
+.forgotpass {
+    color: #808080;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 2px;
+    position: absolute;
+    right: 30px;
+    text-decoration: underline;
+}
+
+#signinModal .tab-content, #signinModal .nav-tabs > .active > a, #signinModal .nav-tabs > .active > a:hover {
+    background: none repeat scroll 0 0 #F5F5F5;
+}
+
+#signinModal .tab-content{
+    border: 1px solid #DDDDDD;
+    padding: 10px;
+}
+
+#signinModal .nav {
+    margin-bottom: 0;
+}
 
 /* CLOSET PAGE */
 h1 #user-closet-title, h1 #static-closet-title{
