@@ -6,7 +6,7 @@ var firebase = {
 	username: null,
 	email: null,
 	isLoggedIn: false,
-	url: 'https://clothies.firebaseio.com/',
+	url: 'https://clositt-team.firebaseio.com/',
 	userPath: 'userdata',
 	productsPath: "products",
 	storePath: "store",
