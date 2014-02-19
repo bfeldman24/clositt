@@ -300,11 +300,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     $productAdminController = new ProductAdminController($mdb2);
     $results = $productAdminController->getFilters();   
     
-    $file = fopen(dirname(__FILE__) . "/../Data/filters.json","w");
-    fwrite($file, json_encode($results));                       
-    fclose($file);
+//    $file = fopen(dirname(__FILE__) . "/../Data/filters.json","w");
+//    fwrite($file, json_encode($results));                       
+//    fclose($file);    
 
     print_r(json_encode($results));
+}else if ($_GET['method'] == 'getfiltersselect'){       
+                                   
+    $productAdminController = new ProductAdminController($mdb2);
+    $results = $productAdminController->getFilters();   
+    
+    foreach ($results['categories'] as $filter){
+           echo '<option value="'.$filter.'">'.$filter.'</option>';
+    }        
+    
 }else if ($_GET['method'] == 'getbrowsepages'){       
                                    
     $productAdminController = new ProductAdminController($mdb2);
