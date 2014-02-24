@@ -627,6 +627,7 @@ footer .last{
 	overflow: hidden;
 	width: 200px;
 	height: 270px;	
+	border: 1px solid #CBCBCB;
 }
 
 //.outfit{
@@ -646,6 +647,27 @@ footer .last{
 	cursor:pointer;	
 }
 
+.bottom-block{
+    font-weight: lighter; 
+    display: inline-block;
+    border-left: 1px solid #CBCBCB;
+    border-bottom: 1px solid #CBCBCB;
+    border-right: 1px solid #CBCBCB;
+    width: 200px;
+    height: 24px;
+    background: #EFEFEF;
+}
+
+.bottom-block .companyName{
+    float: left;
+    margin: 2px 5px;
+}
+
+.bottom-block .price{
+    float: right;
+    margin: 2px 5px;
+}
+
 .overlay{
 	display:none;
 	//background:RGBa(3,3,3,0.6);
@@ -657,7 +679,7 @@ footer .last{
 .overlay > .bottom, .overlay > .addToClosetForm{
 	width:95%;
 	position:absolute;
-	bottom: 0px;
+	bottom: 25px;
 	min-height: 20%;
 	padding:5px;	
 }	
@@ -674,7 +696,6 @@ footer .last{
 
 .overlay > .bottom > .name{
 	font-size: 12pt;
-	margin-bottom: 20px;
 	margin-top:5px;
 }
 
@@ -798,12 +819,12 @@ footer .last{
     width: 900px;
 }
 
-#product-grid img.shadow{
+#product-grid .outfit.shadow{
 	box-shadow: 0 2px 9px #E1E1E1;	
 }
 
 #product-grid .outfit, #feed-grid .outfit{
-	background-color: #FFF;	
+	background-color: #FAFAFA;	
 }
 
 

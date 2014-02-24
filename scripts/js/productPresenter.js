@@ -37,8 +37,13 @@ var productPresenter = {
 			 			
  		//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
  		var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
-		var html ='<div class="outfit item" '+attr+' pid="'+id+'" data-url="'+shortlink+'">';
-				html +='<div class="picture"><a class="productPage" target="_blank"><img data-src="' + image + '" src="css/images/loading.gif" class="'+shadow+'" onerror="return pagePresenter.handleImageNotFound(this)"/></a></div>';			
+		var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'">';
+				html +='<div class="picture"><a class="productPage" target="_blank"><img data-src="' + image + '" src="css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></a></div>';			
+				html += '<div class="bottom-block">';
+				    html +='<div class="companyName">' + company + '</div>';
+					html +='<div class="price">' +  price + '</div>';
+				html += '</div>';
+				
 				html +='<div class="overlay">';
 					html +='<div class="topleft">';										
 						html +='<div class="shareOutfitBtn" data-toggle="tooltip" data-placement="left" title="Share it!"><img class="social-people-icon" src="css/images/social/social-people-white.png" /></div>';						 
@@ -59,9 +64,9 @@ var productPresenter = {
 	   				            html += '<div class="outfitFeedOwner"><span class="outfitOwner">'+feedOwner+'\'s</span><span>&nbsp;\"'+feedCloset+'\" clositt</span></div>';
     					    html += '</div>';  
 					    }
-					    					
-						html +='<div class="companyName">' + company + '</div>';
-						html +='<div class="price">' +  price + '</div>';
+					    					    					
+						//html +='<div class="companyName">' + company + '</div>';
+						//html +='<div class="price">' +  price + '</div>';
 						html +='<div class="name">' + name + '</div>';
 					html += '</div>';
 					html += '<div class="product-comments"></div>';

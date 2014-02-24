@@ -19,7 +19,7 @@ var gridPresenter = {
 		var columns = gridPresenter.getDefaultColumns();
 		gridPresenter.showTooltips();
 					
-		gridPresenter.alignGrid(gridName, columns, 200, 270, 25);						
+		gridPresenter.alignGrid(gridName, columns, 200, 270, 50);						
 		closetFormPresenter.markUsersClositItems();
 	}, 
 	
