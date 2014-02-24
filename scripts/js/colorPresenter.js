@@ -2,6 +2,7 @@ var colorPresenter = {
     
     init: function(){
       $(document).on("click",".colorFilter", colorPresenter.filterColor);
+      $(document).on("click", "#product-grid .outfit", colorPresenter.correctColor);    
     },
     
     filterColor: function(el){
@@ -146,6 +147,103 @@ var colorPresenter = {
         }
         
         return position;                
+    },
+    
+    correctColor: function(e){ 
+       
+        if (e.altKey && e.shiftKey){
+            e.preventDefault();
+            e.stopPropagation();            
+
+            setTimeout(function(){
+                productPagePresenter.hide();
+            }, 500); 
+                        
+            var sku = $(e.currentTarget).attr("pid");            
+            var oldColor = $(".selectedColor").first().attr("data-original-title");
+            
+            if (sku != null && sku.length > 3 && oldColor != null && oldColor.length > 2){
+                oldColor = oldColor.toLowerCase();
+                
+                $.post( window.HOME_ROOT + "c/correct", {sku: sku, oldColor: oldColor}, function(data){
+                    console.log(data);
+                    
+                    if(isNaN(data)){
+                        Messenger.error("Color was NOT removed! " + data);
+                    }else{
+                        Messenger.success("REMOVED COLOR!");
+                    }
+                });           
+            }else{
+                Messenger.error("You must select a color!");
+            }
+    
+        }else if (e.altKey){
+            e.preventDefault();
+            e.stopPropagation();  
+            
+            setTimeout(function(){
+                productPagePresenter.hide();
+            }, 500);             
+            
+            var html = '<select id="selectCorrectColor" name="selectCorrectColor">';
+            html += '<option value="none">None</option>';
+        
+            var colors = [];
+            
+            for(var color in colorPresenter.allColors){
+                colors.push(color);
+            }
+            
+            colors.sort();
+        
+            for(var c in colors){
+                html += '<option value="'+colors[c]+'">'+colors[c]+'</option>';
+            }   
+                        
+            html += '</select>';     
+            
+            var sku = $(e.currentTarget).attr("pid");            
+    
+            bootbox.dialog({
+                message: html,
+                title: "Correct the Color",
+                buttons: {                
+                    main: {
+                        label: "Cancel",
+                        callback: function() {
+                            productPagePresenter.hide();                                                    
+                        }
+                    },
+                    success: {
+                      label: "Submit",
+                      className: "btn-success",
+                      callback: function() {                        
+                        
+                        var oldColor = $(".selectedColor").first().attr("data-original-title");
+                        var newColor = $("#selectCorrectColor").val().toLowerCase();
+                        
+                        if (sku != null && sku.length > 3 && oldColor != null && oldColor.length > 2){
+                            oldColor = oldColor.toLowerCase();                        
+                            
+                            $.post( window.HOME_ROOT + "c/correct", {sku: sku, oldColor: oldColor, newColor: newColor}, function(data){
+                                console.log(data);
+                                
+                                if(isNaN(data)){
+                                    Messenger.error("Color was NOT saved! " + data);
+                                }else{
+                                    Messenger.success("SAVED!");
+                                }
+                            });           
+                                         
+                          }else{
+                                Messenger.error("You must select a color!");
+                          }
+                      }
+                    },
+                }
+            });                             
+        }                                       
     },
            
     allColors: {

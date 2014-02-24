@@ -49,6 +49,7 @@ cp -rf * ../$1/
 cp .htaccess ../$1/
 rm ../$1/scripts/deploy-PROD.ssh
 rm -rf ../$1/archive
+rm ../$1/robots.txt
 
 echo "Please verify the release!"
 echo "DONE!"

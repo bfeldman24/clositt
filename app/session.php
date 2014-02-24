@@ -14,6 +14,7 @@ class ValidateSession {
 	
 	function session_defaults() {
 		$_SESSION['userid'] = 0;
+		$_SESSION['isAdmin'] = false;
 	}
 	
 	function checkSession(){

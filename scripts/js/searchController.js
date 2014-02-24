@@ -4,6 +4,7 @@ var searchController = {
     criteria: null,
     pageIndex: 0,
     hasMoreProducts: true,
+    tags: [],
     
     init: function(){
         $("#search-bar").on("keyup", searchController.showClearBtn);
@@ -26,11 +27,14 @@ var searchController = {
 		var searchTerm = $( "#search-bar" ).val().trim();
 		
 		if (searchTerm.charAt(0) == '#'){
+		  filterPresenter.clearFilters();
+		  
 		  var tag = searchTerm.substring(1);
 		  searchController.getProductsWithTag(tag, searchController.showResults);
 		}else if (searchTerm == ''){
 		  filterPresenter.onFilterSelect();
 		}else{
+		  filterPresenter.clearFilters();
 		  searchController.search();  
 		}		
     },
@@ -80,11 +84,12 @@ var searchController = {
         
         // remove common words
         cleanSearchTerm = cleanSearchTerm.replace(/(for|with|that|has|like)(\s|$)/gi,'');                
-        
-        var tags = cleanSearchTerm.split(" ");
+                
         var matchingFilters = null;
         
         if (criteria == null){
+            searchController.tags = cleanSearchTerm.split(" ");
+            
             var filters = filterPresenter.allFilters.join("|").toLowerCase().trim();
             filters = filters.replace(/s?(?=\s|\||$)/gi, ""); // remove trailing 's' form every word
             filters = filters.replace(/sse/gi, "ss"); // remove 'es' from applicable words        
@@ -106,7 +111,7 @@ var searchController = {
                 }
             }                                
                         
-            searchController.getAdditionalFiltersFromTags(matchingFilters, tags);
+            searchController.getAdditionalFiltersFromTags(matchingFilters, searchController.tags);
                     
             filterPresenter.clearFilters();
             criteria = {};
@@ -131,9 +136,20 @@ var searchController = {
                            criteria[filterName] = [];                    
                        }
                        
+                       filterPresenter.createSelectedFilter(filterName, filter.val());
                        criteria[filterName].push(filter.val().toLowerCase());
                    }
                }                      
+            }
+            
+            var customerRegex = new RegExp(searchController.regexEscape("women|men"), 'gi');
+            matchingCustomerFilters = cleanSearchTerm.match(customerRegex);
+            
+            if (matchingCustomerFilters != null && matchingCustomerFilters.length > 0){
+                filterPresenter.selectCustomerFilter(matchingCustomerFilters[0]);
+                criteria['customer'] = matchingCustomerFilters;
+                
+                cleanSearchTerm = cleanSearchTerm.replace(customerRegex, '');
             }
             
             if (abovePrice != null || belowPrice != null){
@@ -157,7 +173,7 @@ var searchController = {
                 cleanSearchTerm = cleanSearchTerm.replace(regex, '');
                 cleanSearchTerm = cleanSearchTerm.replace(/(\b(\w{1,2})\b(\s|$))/gi,''); // remove words less than 3 chars
                 cleanSearchTerm = cleanSearchTerm.trim(); 
-                tags = cleanSearchTerm.split(" ");       
+                searchController.tags = cleanSearchTerm.split(" ");       
             }
             
             
@@ -170,14 +186,14 @@ var searchController = {
                 matchingColors = [];   
             }   
             
-            searchController.getAdditionalColorsFromTags(matchingColors, tags);                                                
+            searchController.getAdditionalColorsFromTags(matchingColors, searchController.tags);                                                
             
             if (matchingColors != null && matchingColors.length > 0){
                 criteria['colors'] = matchingColors;                                       
             }              
         }
          
-        criteria['tags'] = tags;  
+        criteria['tags'] = searchController.tags;  
         criteria['searchTerm'] = $( "#search-bar" ).val().trim();
         
         searchController.criteria = criteria;
@@ -563,6 +579,7 @@ var searchController = {
 		$("#search-bar-sort-block").css("visibility","hidden");
 		filterPresenter.clearFilters();	       		
 		productPresenter.refreshProducts();
+		searchController.tags = [];
 	},
 	
 	getAdditionalFilters: function(matchingFilters){

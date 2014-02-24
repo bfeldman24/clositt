@@ -226,6 +226,8 @@ var filterPresenter = {
  	},
  	
  	selectCustomerFilter: function(e){
+ 	      var isFilter = false;
+ 	      
  	      var selectedCustomer = $("#filter-float").find(".customerOption.selected").first();
  	      
  	      if (selectedCustomer != null){
@@ -234,12 +236,22 @@ var filterPresenter = {
  	      
  	      // Do not reselect the customer if it was the one that was previously selected 
  	      // and then clicked
- 	      if (selectedCustomer.attr("filterid") != $(e.currentTarget).attr("filterid")){         	      
+ 	      if (e != null && e.currentTarget != null && selectedCustomer.attr("filterid") != $(e.currentTarget).attr("filterid")){   
+ 	                	      
  	          $(e.currentTarget).addClass("selected");
+ 	          isFilter = true;
+ 	          
+ 	      }else if (e == "men"){ 	      
+ 	          $('.customerOption[filterid="men"]').addClass("selected");
+ 	          
+ 	      }else if (e == "women"){ 	      
+ 	          $('.customerOption[filterid="women"]').addClass("selected");
  	      }
  	      
- 	      filterPresenter.onFilterSelect();
- 	},
+ 	      if (isFilter){
+ 	          filterPresenter.onFilterSelect();
+ 	      }
+ 	}, 	
  	
  	getSelectedCustomer: function(){
  	      var selected = $("#filter-float").find(".customerOption.selected").first();
@@ -294,6 +306,7 @@ var filterPresenter = {
 	 
 	 clearFilters: function(){
 	   $("#filter-float").find("input").prop("checked", false);
+	   $("#selectedFilters").html("");
 	 },
 	 
 	 hideFilterPanel: function(){

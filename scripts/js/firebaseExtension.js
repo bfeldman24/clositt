@@ -123,13 +123,12 @@ var firebase = {
         		$.post(window.HOME_ROOT + "app/auth.php", { auth: token, user: firebase.userid }, function(){
         		      if (sessionStorage.goToClositt){
                             location.href = window.HOME_ROOT + "clositt.php"; 
-        		      }
+        		      }else if(typeof loggedIn == 'function'){
+                            loggedIn();
+            		  }  
         		});
         	});
-	    }
-	       	   
-		if(typeof loggedIn == 'function')
-		{
+	    }else if(typeof loggedIn == 'function'){
 			loggedIn();
 		}  
 	},
@@ -178,10 +177,10 @@ var firebase = {
 		$.post("/app/auth.php", function(){
 			location.href= "/signup.php";
 		}).fail(function() {
-			 $.post("auth.php", function(){
-                        	location.href= "./";
-                	}) 
-		});
+			 $.post("/app/auth.php", function(){
+                	location.href= "/";
+        	}) 
+	    });
 	},
 	
 	welcomeEmail: function(email, name){

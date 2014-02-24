@@ -136,10 +136,10 @@ var gridPresenter = {
 		if(lastHeight == undefined || lastHeight == null || lastHeight.trim() == ""){
 			lastHeight = 0;
 		}else{
-			lastHeight = parseFloat(lastHeight,10);	
+			lastHeight = parseFloat(lastHeight, 10);	
 		}
 		
-		if(lastHeight <= ($(window).height() + $(window).scrollTop() + 125)){						
+		if(lastHeight <= ($(window).height() + $(window).scrollTop() + 325)){						
 			var $items = $();
 			
 			if(productPresenter.filterStore == null){				     				     			 		 
@@ -171,7 +171,13 @@ var gridPresenter = {
 	               
         products.forEach(function(product){	                       
 			var $html = productPresenter.getProductTemplate(product);
-            $("#product-grid").append($html);						            			          						
+            $("#product-grid").append($html);
+            
+            if ($("#product-grid .outfit").length < 30){                        
+                $html.find("img[data-src]").unveil(10000);
+            }else{
+                $html.find("img[data-src]").unveil(200);
+            }
 	   });
 			                   			   	   		
 	   gridPresenter.alignDefaultGrid(); 
@@ -179,7 +185,7 @@ var gridPresenter = {
 	},	
 	
 	beginTask: function(){
-	   $("#product-grid").children().remove();	 		 	
+	   $("#product-grid").children().remove();
        $("#product-grid").append($("<br><br><br><br>"));
        $("#loadingMainContent").show();	
 	},

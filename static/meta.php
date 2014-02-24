@@ -1,3 +1,6 @@
+<meta property="og:image" content="<?php echo HOME_ROOT; ?>css/images/clositt-twitter-header.jpg"/>
+<meta property="og:image:secure_url" content="<?php echo HOME_ROOT; ?>css/images/clositt-twitter-header.jpg" />
+
 <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,700,900' rel='stylesheet' type='text/css'>
 <link href="<?php echo HOME_ROOT; ?>lib/css/bootstrap.min.css" rel="stylesheet">
 <link href="<?php echo HOME_ROOT; ?>lib/css/messenger.css" rel="stylesheet">

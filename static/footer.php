@@ -107,6 +107,7 @@ $(document).ready(function() {
 
 $(".feedback .feedback-submit-btn").on("click",function(e){
 	e.preventDefault();
+	$(e.currentTarget).addClass("disabled").text("Submitting...");
 
 	var feedbackTextArea = $(e.currentTarget).parents(".feedback").find(".feedback-textarea");
 	var message = feedbackTextArea.val().trim();
@@ -124,6 +125,8 @@ $(".feedback .feedback-submit-btn").on("click",function(e){
 			}else{
 				Messenger.error("There was a problem sending your feedback. Please try again.");	
 			}
+			
+			$(e.currentTarget).removeClass("disabled").text("Submit");
 		});
 	}else{
 		Messenger.error("Type your feedback into the input!");	
