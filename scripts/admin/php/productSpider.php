@@ -218,6 +218,7 @@ input{
                         <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Trench Coats"/>Trench Coats
                         <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Vests"/>Vests
                         <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Zip Ups"/>Zip Ups
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sale"/>SALE
     	       </div>
     	    </div>
     	    <div class="control-group">
