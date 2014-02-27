@@ -69,7 +69,7 @@ function getLinks(){
 	               taglist = taglist.substring(0, taglist.length - 1);
 	               	               
 	               $("#links > .company > .customer").last().append(
-    					$("<div>").addClass("category").append(
+    					$("<div>").addClass("category").css("display","none").append(
     						$("<input>")
     							.attr("type","checkbox")
     							.attr("company",company.name())
@@ -467,17 +467,22 @@ function getTotalProductCount(){
 
 
 $('#selectall').click(function () {
-    $("#links").find(':checkbox').prop('checked', true);
+    $(".category").show();
+    $("#links").find(':checkbox').prop('checked', true);    
 });
 
 $('#deselectall').click(function () {
-    $("#links").find(':checkbox').prop('checked', false);
+    if ($("#links :checkbox:checked").length > 0){  
+        $("#links").find(':checkbox').prop('checked', false);
+    }else{                  
+        $(".category").hide();
+    }
 });
 
 $('#selectallvalid').click(function () {
     $("#links").find(':checkbox').prop('checked', false);
     
-    $("#links").find(':checkbox').each(function(){
+    $("#links").find(':checkbox:visible').each(function(){
         var valid = $(this).siblings(".isvalid").text();
         
         if (valid.indexOf("Works") > 0){
@@ -495,10 +500,20 @@ $(document).on("click",".companyName", function(el){
 });
 
 $(document).on("click",".customerName", function(el){
-    if ($(el.currentTarget).parent(".customer").find(':checkbox').first().prop('checked')){
-        $(el.currentTarget).parent(".customer").find(':checkbox').prop('checked', false);
+    if ($(el.currentTarget).next(".category").is(":visible")){    
+        if ($(el.currentTarget).parent(".customer").find(':checkbox').first().prop('checked')){
+            $(el.currentTarget).parent(".customer").find(':checkbox').prop('checked', false);
+            $(el.currentTarget).data("click",3);
+        }else if ($(el.currentTarget).data("click") < 2){
+            $(el.currentTarget).parent(".customer").find(':checkbox').prop('checked', true);
+            $(el.currentTarget).data("click",2);
+        }else{
+            $(el.currentTarget).siblings(".category").hide();    
+            $(el.currentTarget).data("click",0);
+        }
     }else{
-        $(el.currentTarget).parent(".customer").find(':checkbox').prop('checked', true);
+        $(el.currentTarget).siblings(".category").show();
+        $(el.currentTarget).data("click",1);
     }
 });
 

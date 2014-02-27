@@ -15,7 +15,7 @@ body{
 }
 
 .company{
-	margin: 0 0 20px 5px;	
+	margin: 0 0 10px 5px;	
 }
 
 .customer{
@@ -287,7 +287,7 @@ input{
     <a href="#addCategoryForm" style="float: right; margin-right: 10px;"><button class="btn btn-danger btn-small">Upload Form</button></a>
     <a href="#top" style="float: right; margin-right: 10px;"><button class="btn btn-danger btn-small">Top</button></a>
     <button id="selectall" class="btn btn-small">Select All</button>
-    <button id="selectallvalid" class="btn btn-small">Select Valid</button>        
+    <button id="selectallvalid" class="btn btn-small">Select Valid</button>    
     <button id="deselectall" class="btn btn-small">Deselect All</button>
     <button onclick="testProductsFromLinks()" class="btn btn-primary btn-small">Test Category</button>
     <button onclick="testProductsFromLinks(true, false, false)" class="btn btn-primary btn-small">View Category Data</button>

@@ -1,4 +1,4 @@
-/*
+/* 
 var jq = document.createElement('script');
 jq.src = "//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js";
 document.getElementsByTagName('head')[0].appendChild(jq);
@@ -1056,11 +1056,13 @@ storeApi = {
 	
 	getAmericanEagle: function(data, siteHome){	   
 	   var products = new Object();
+	   	   
+       var noscript = $(data).find("#facetResults noscript").text();        
 	
-       $(data).find("#facetResults .sProd").each(function(){
+       $(noscript).siblings(".sProd").each(function(){
                 var item = new Object();
 
-                item.image = $(this).find("a .image img").not(".hidden").first().attr("data-src");
+                item.image = $(this).find("a .image img").not(".hidden").first().attr("src");
                 item.link = siteHome + $(this).find("a").first().attr("href");
                 item.name = $(this).find("a .equity .name").first().text().trim();                
     			var dollars = $(this).find("a .equity .price .dollars").text().trim();
