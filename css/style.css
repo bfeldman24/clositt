@@ -671,17 +671,19 @@ footer .last{
 .overlay{
 	display:none;
 	//background:RGBa(3,3,3,0.6);
-	color:#FFFFFF;
+	color:#333;
+    font-weight: lighter;
 	///text-shadow: 1px 1px 1px #333333;		
 	text-align:center;		
 }	
 
 .overlay > .bottom, .overlay > .addToClosetForm{
-	width:95%;
-	position:absolute;
 	bottom: 25px;
-	min-height: 20%;
-	padding:5px;	
+    left: 1px;
+    min-height: 20%;
+    padding: 5px;
+    position: absolute;
+    width: 190px;	
 }	
 
 .selectCloset {
@@ -719,18 +721,18 @@ footer .last{
 	height: 25px;	
 	padding: 5px;	
 	position: absolute;	
-	right: 0;	
-	top: 0;	
+	right: 1px;	
+	top: 1px;	
 	width: 29px;	
 }
 
 .overlay > .topleft {
     display: block;
     height: 35px;
-    left: 0;
+    left: 1px;
     padding: 0;
     position: absolute;
-    top: 0;
+    top: 1px;
     width: 39px;
 }
 
@@ -806,7 +808,7 @@ footer .last{
 
 .overlay .productActions, .overlay .productSubHeader{
     cursor: pointer;
-     border-bottom: 1px solid rgb(255, 255, 255);
+     border-bottom: 1px solid #CBCBCB;
 }
 
 #main-content h2{
@@ -1098,7 +1100,7 @@ footer .last{
 }
 
 .bottom:hover{
-  box-shadow: 0px 2px 4px #999;
+  /* box-shadow: 0px 2px 4px #999; */
 }
 
 .middle:hover{
@@ -2154,7 +2156,8 @@ input.closetNameInput[type="text"] {
 
 .overlay > .bottom, .overlay > .topright, .overlay > .topleft, .overlay > .addToClosetForm, .overlay > .addTagForm {
 	/* background: RGBa(120,213,167,.65); Green */
-	background: RGBa(17,17,17,.65);			
+	/* background: RGBa(17,17,17,.65); */
+	background: #EFEFEF;
 }
 
 .feedCloset .arrow-down {
