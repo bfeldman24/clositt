@@ -27,6 +27,7 @@ class ProductAdminController {
 		// 2) into historical prices table (do join to get all exisiting products where the price has changed)
 		// 3) update existing products (links?, images?, name?, PRICE) (from #2) (do join to get all exisiting products??? (necessary))					
 		// 4) insert all new products (do left join to get all new products)	
+		// 5) insert all categories/tags into Tags table
 
         $results['numProducts'] = count((array)$products);
 		if(isset($products) && is_array($products) && count((array)$products) > 0){	
@@ -61,7 +62,13 @@ class ProductAdminController {
          			// Step 4
          			$addNewProductsResults = $this->productAdminDao->addNewProducts();         		
          			// echo " 9) Added New Products: " . $addNewProductsResults;   
-         			$results['new'] = $addNewProductsResults;     	
+         			$results['new'] = $addNewProductsResults;  
+         			
+         			// Step 5
+         			$addTagsForNewProductsResults = $this->productAdminDao->addTagsForNewProducts($products);
+         			// echo " 10) Added Tags for New Products: " . $addTagsForNewProductsResults;   
+         			$results['tags'] = $addTagsForNewProductsResults;  
+         			   	
          		}
 			}
 		}else{
@@ -279,9 +286,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     //echo "Method: " . $_GET['method'];                    
     //echo "<br>Criteria: " . print_r($_POST, true);                
     
-    if ($_GET['method'] == 'update' && isset($_POST)){                                          
+    if ($_GET['method'] == 'update' && isset($_POST['products'])){                                          
         //echo " 2) update. ";
-        $results = $productAdminController->addAdminProducts($_POST);   
+        $results = $productAdminController->addAdminProducts($_POST['products']);   
         echo json_encode($results);        
    
     }else if ($_GET['method'] == 'count'){                                          
@@ -300,7 +307,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     $productAdminController = new ProductAdminController($mdb2);
     $results = $productAdminController->getFilters();   
     
-//    $file = fopen(dirname(__FILE__) . "/../Data/filters.json","w");
+//    $file = fopen(dirname(__FILE__) . "/../Data/generated-filters.json","w");
 //    fwrite($file, json_encode($results));                       
 //    fclose($file);    
 

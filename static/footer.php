@@ -1,9 +1,9 @@
 <footer class="clositt-theme">
 	<div id="footer-wrapper">
 		<div class="center footer-item">Clositt Inc &copy; 2014</div>
-		<div class="footer-item"><a href="contact-us.php">Contact Us</a></div>
-		<div class="footer-item"><a href="terms-of-service.php">Terms</a></div>
-		<div class="last footer-item"><a href="shout-outs.php">Shout Outs</a></div>
+		<div class="footer-item"><a href="/contact-us.php">Contact Us</a></div>
+		<div class="footer-item"><a href="/terms-of-service.php">Terms</a></div>
+		<div class="last footer-item"><a href="/shout-outs.php">Shout Outs</a></div>
 		
 		<?php
 		if((isset($_GET['ben']) && $_GET['ben'] != "") || (isset($_GET['eli']) && $_GET['eli'] != "")){
@@ -115,7 +115,7 @@ $(".feedback .feedback-submit-btn").on("click",function(e){
 	if(message.length > 0){
 	    var feedback = { e: firebase.email, n: firebase.username, i: firebase.userid, s: "CLOSITT FEEDBACK", m: message };
 	   
-		$.post("app/email.php", feedback, function(data) {
+		$.post("/app/email.php", feedback, function(data) {
 			if(data == "success"){
 				Messenger.success("Thanks for your feedback!");
 

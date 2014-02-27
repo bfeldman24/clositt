@@ -15,6 +15,7 @@ RewriteRule ^p/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?met
 
     #Filter Data
 RewriteRule ^s/filters$ app/Data/filters.json
+RewriteRule ^s/menfilters$ app/Data/m-filters.json
 
     #Browse
 RewriteRule ^b/([a-z0-9]*)/([a-z0-9]*)$ app/Data/Browse/$1-$2.json

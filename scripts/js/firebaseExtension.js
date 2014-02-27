@@ -161,24 +161,24 @@ var firebase = {
 	updateLoggedInDropdownMenu: function(){
 		$("#account-dropdown").html("")
 	    	//.append($('<li><a href="clositt.php">MyClositt</a></li>'))    	
-	    	.append($('<li><a href="settings.php">Account Settings</a></li>'))
+	    	.append($('<li><a href="'+window.HOME_ROOT+'settings.php">Account Settings</a></li>'))
 	    	.append($('<li class="divider"></li>'))
 	    	.append($('<li><a href="javascript:firebase.logout();">Logout</a></li>')); 
 	},
 	
 	updateLoggedOutDropdownMenu: function(){
 		$("#account-dropdown").html("")
-	  		.append($('<li><a href="signup.php">Login or Sign Up</a></li>'))
+	  		.append($('<li><a href="'+window.HOME_ROOT+'signup.php">Login or Sign Up</a></li>'))
 	},	
 
  	logout: function(){
 		firebase.authClient.logout();	
 
 		$.post("/app/auth.php", function(){
-			location.href= "/signup.php";
+			location.href= window.HOME_ROOT+"signup.php";
 		}).fail(function() {
 			 $.post("/app/auth.php", function(){
-                	location.href= "/";
+                	location.href= window.HOME_ROOT;
         	}) 
 	    });
 	},
@@ -186,7 +186,7 @@ var firebase = {
 	welcomeEmail: function(email, name){
 	    var userData = { e: email, n: name, t: "welcomeMessage" };
 	   
-		$.post("app/email.php", userData, function(data) {
+		$.post(window.HOME_ROOT + "app/email.php", userData, function(data) {
 			if(data == "success"){
 				console.log("Message Sent!")
 			}else{

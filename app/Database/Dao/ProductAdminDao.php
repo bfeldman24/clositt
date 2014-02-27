@@ -54,7 +54,8 @@ class ProductAdminDao extends AbstractDao {
         foreach ($products as $key => $value) {
             
             try {   
-                //print_r($value);                                           
+                //print_r($value);    
+                unset($value['tags']);                                       
                 $affectedRows += $stmt->execute($value);
             } catch (Exception $e) {
                 echo 'Caught exception: ',  $e->getMessage(), "\n\n";
@@ -160,6 +161,38 @@ class ProductAdminDao extends AbstractDao {
 		
 		return $affected;
 	}  
+	
+	public function addTagsForNewProducts($products){
+	     if(!isset($products) || !is_array($products)){
+			$this->logWarning("1249871324","Nothing to add!");
+			return false; 
+		}
+	 
+	    $sql = "INSERT INTO " . TAGS . 
+	           " (" . TAG_STRING . "," .
+                      PRODUCT_SKU . "," .
+                      TAG_COUNT . ")" .
+	           " VALUES ( ?, ?, 1 )";	                    	          
+        
+        if($this->debug){		    
+			$this->logDebug("2135232" ,$sql );
+		}
+        
+        $stmt = $this->db->prepare($sql);
+        $affectedRows = 0;
+        foreach ($products as $sku => $product) {
+            foreach ($product['tags'] as $tag) {    
+                try {   
+                    //print_r($value);                                           
+                    $affectedRows += $stmt->execute(array($tag, $sku));
+                } catch (Exception $e) {
+                    echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+                }
+            }
+        }
+        
+        return $affectedRows;
+	}
 	
 	public function getTotalProductsCount(){
 	    $sql = "SELECT COUNT(1) FROM " . PRODUCTS;

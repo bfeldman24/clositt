@@ -3,39 +3,25 @@
     "Men",
     "Women"
   ],
-  "categories": {
-    "Dresses":[
-        "Dresses",  
-        "Evening Dresses",         
-        "Jumpsuits"
-    ],
-    "Shirts": [
-        "Blouses", 
+  "categories": {    
+    "Shirts": [ 
         "Button Downs",
         "Collared Shirts",
         "Dress Shirts",
         "Graphic T Shirts",
         "Polos",
-        "T Shirts",
-        "Tank Tops"
+        "T Shirts"
     ],
     "Shorts": [
-        "Shorts",
-        "Skorts"
-    ],
-    "Skirts": [
-        "Skirts"
+        "Shorts"
     ],
     "Sweaters / Sweatshirts": [
-        "Cardigans",
         "Hoodies",
         "Sweaters",
         "Sweatshirts",
         "Zip Ups"
     ],
     "Pants": [  
-        "Capris",
-        "Chinos",
         "Dress Pants",
         "Jeans",
         "Pants",        
@@ -59,11 +45,10 @@
         "Henleys",
         "Knit",
         "Leather",
-        "Leggings",
         "Loungewear",
         "Sleepwear",
         "Vests"
-    ]                                                   
+    ]                                                    
   },
   "companies": [
     "American Apparel",

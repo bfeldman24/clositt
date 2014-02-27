@@ -25,20 +25,50 @@ if (isset($_GET['s'])){
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
 <style type="text/css">
 body{
-    background: none repeat scroll 0 0 #E6E6E6;
+    background: none repeat scroll 0 0 #FAFAFA;
     min-height: 1150px;
 }
 
+h2 {
+    font-size: 21px;
+    font-weight: lighter;
+    line-height: 40px;
+    margin: 20px 0 0;
+}
+
+hr {
+ margin: 4px 0;   
+}
+
 #product-page-content {
-    background: none repeat scroll 0 0 #FFFFFF;
     font-family: 'Roboto',sans-serif;
     height: 400px;
-    left: 200px;
+    margin: 100px auto 15px;
     padding: 20px;
     position: relative;
     text-align: center;
-    top: 110px;
-    width: 900px;
+    width: 920px;
+}
+
+.productPageContainer{
+    background-color: #FFFFFF;
+    border: 1px solid #CBCBCB;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);       
+    width: 560px;    
+    padding: 20px;
+    min-height: 335px;
+}
+
+.productPageActions{
+    width: 300px;
+}
+
+.productPageActions .productPageBuy,.productPageActions .productPageClositt,.productPageActions .productPageTagitt{
+        border: 1px solid #CBCBCB;   
+}
+
+.productPageContent{
+    background: transparent;   
 }
 
 .productPageComments .product-comments .review-form, .productPageComments .product-comments ul.review-comments {
@@ -50,12 +80,40 @@ body{
 .productPageComments {
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
     border: medium none;
-    min-height: 500px;
-    position: relative;
 }
 
 .productPageComments {
     cursor: default;
+    left: 363px;
+    bottom: auto;    
+}
+
+.productPageComments .review-form {
+    width: 570px;    
+}
+
+.productPageComments ul.review-comments {
+    width: 580px;
+}
+
+.productPageComments .review-float {
+    width: 600px;
+    top: 0;
+    left: -348px;
+    border-left: 1px solid #CBCBCB;
+    border-bottom: 1px solid #CBCBCB;
+    border-right: 1px solid #CBCBCB;
+}
+
+.productPageComments .product-comments .review-rating {
+    left: auto;
+}
+
+.productPageClosittCount {
+    margin-top: -40px;
+    position: relative;
+    right: 0;
+    text-align: right;
 }
 
 .review-float {
@@ -67,14 +125,15 @@ body{
 }
 
 #similar{
-    margin-left: 45px;  
-    position: absolute;
-    top: 200px; 
+    margin: 0 auto;
+    text-align: center;
 }
 
 .similar-item{
-    margin-bottom: 20px;
-    width: 120px;           
+    display: inline-block;
+    margin: 5px;
+    vertical-align: top;
+    width: 120px;      
 }
 
 .similar-item .title{
@@ -92,6 +151,25 @@ body{
     display: block;
 }
 
+.see-whats-trending, .see-whats-trending:hover, .see-whats-trending:active {
+    color: inherit;
+    text-decoration: none; 
+    font-size: 25px;
+    text-align: center;   
+}
+
+.see-whats-trending div{
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CBCBCB;
+    height: 95px;
+    line-height: 30px;
+    margin-bottom: 5px;
+    padding: 40px 10px 0;
+    position: relative;
+}
+
+.see-whats-trending div:hover{
+    background: none repeat scroll 0 0 #F5F5F5;
 </style>
 </head>
 <body>
@@ -111,80 +189,82 @@ body{
             $shortLink = substr($shortLink, strpos($shortLink, "www1.") + 5);
         }
      ?>
-
-<a href='../' class="btn btn-success" style="border-radius: 40px; left: 35px; position: absolute; top: 110px; width: 110px;">See What Else <br> is Trending on Clositt</a> 
      
 <div id="product-page-content" style="">
      <div class="productPageContainer item" pid="<?= $product->s ?>">
-				<div class="productPageTop">				
-				    <div class="productPageImage picture">				
-				        <a class="productPagePicture" target="_blank" href="<?= $product->l ?>">
-				            <img src="<?= $product->i ?>" onerror="return pagePresenter.handleImageNotFound(this)" />	
-				        </a>
-    				</div>
+		<div class="productPageTop">				
+		    <div class="productPageImage picture">				
+		        <a class="productPagePicture" target="_blank" href="<?= $product->l ?>">
+		            <img src="<?= $product->i ?>" onerror="return pagePresenter.handleImageNotFound(this)" />	
+		        </a>
+			</div>
+			
+			<div class="productPageContent">
+				<div class="productPageDesc">
+				    <br />				
+				    <div class="productPageName"><?= $product->n ?></div>
     				
-    				<div class="productPageContent">
-        				<div class="productPageDesc">
+    				<div class="productPagePrice"><?= $product->p ?></div>
+    				
+    				<div class="productPageStore"><?= $product->o ?></div>
+				</div>        				        				
+			</div>
+		</div>
+		
+		<div class="productPageMiddle">		
+		    <?php /*		
+		    <div class="productPageRating">
+		        <span class="review-average-stars"></span>
+		        <span class="review-average"></span>
+			</div>
+			*/ ?>
+			
+			<div class="productPageClosittCount"><img class="productPageHanger" src="/css/images/hanger-icon.png" /> <?= $product->cc ?>				
+			</div>
+		</div>			
+		
+		<div class="productPageComments">
+            <div class="product-comments"></div>
+        </div>								
+	</div>
+			
+    <div class="productPageActions">
+        	
+        <a class="see-whats-trending" href='../' class="btn btn-success see-whats-trending">
+    		<div>See What Else is Trending on Clositt</div>
+		</a> 	
         				    				
-        				    <div class="productPageName"><?= $product->n ?></div>
-            				
-            				<div class="productPagePrice"><?= $product->p ?></div>
-            				
-            				<div class="productPageStore"><?= $product->o ?></div>
-        				</div>
-        				
-        				<div class="productPageActions">
-        				    				
-        				    <a class="productPageBuyLink" target="_blank" href="<?= $product->l ?>"><div class="productPageBuy"><img src="/css/images/cart-empty.png" /><span>SHOP IT</span><br><span class="productPageBuySiteName">on <?= $shortLink ?></span>				
-            				</div></a>
-            				
-            				<div class="productPageClositt"><img class="productPageHanger" src="/css/images/hanger-icon.png" /> <span>CLOSITT</span>
-            				    <div class="addToClosetForm" style="display:none;"></div>
-            				</div>
-            				
-            				<div class="productPageTagitt"><img src="/css/images/price-tag.png" /> <span>TAGITT</span>	   
-            				    <div class="addTagForm" style="display:none;"></div>         				    
-            				</div>
-        				</div>
-        			</div>
-				</div>
-				
-				<div class="productPageMiddle">				
-				    <div class="productPageRating">
-				        <span class="review-average-stars"></span>
-				        <span class="review-average"></span>
-    				</div>
-    				
-    				<div class="productPageOptions">				
-    				</div>
-				</div>
-				
-				<div class="productPageBottom">
-				    <div class="productPageSwatches">				
-    				</div>				    				    				
-    				
-    				<div class="productPageClosittCount"><img class="productPageHanger" src="/css/images/hanger-icon.png" /> <?= $product->cc ?>				
-    				</div>
-				</div>				
-				
-				<div class="productPageComments">
-				    <div class="product-comments"></div>
-				</div>
-			</div>			
-</div>						       
+	    <a class="productPageBuyLink" target="_blank" href="<?= $product->l ?>"><div class="productPageBuy"><img src="/css/images/cart-empty.png" /><span>SHOP IT</span><br><span class="productPageBuySiteName">on <?= $shortLink ?></span>				
+		</div></a>
+		
+		<div class="productPageClositt"><img class="productPageHanger" src="/css/images/hanger-icon.png" /> <span>CLOSITT</span>
+		    <div class="addToClosetForm" style="display:none;"></div>
+		</div>
+		
+		<div class="productPageTagitt"><img src="/css/images/price-tag.png" /> <span>TAGITT</span>	   
+		    <div class="addTagForm" style="display:none;"></div>         				    
+		</div>			
+		
+		<div id="similar">
+            <h2>Similar Products</h2>
+            <hr />
+            <div class="similarProducts">
+                <?php 
+                    foreach($similarProducts as $similarItem){ 
+                ?>
+                    <div class="similar-item">
+                        <a href="<?= $similarItem->sl ?>"><img src="<?= $similarItem->i ?>" /></a>        
+                        <div class="title"><a href="<?= $similarItem->sl ?>"><?= $similarItem->n ?></a></div>
+                    </div>                  
+                <?php  
+                    }
+                ?>
+            </div>
+        </div>	
+	</div>							
+</div>	
+				       
 
-<div id="similar">
-<?php 
-    foreach($similarProducts as $similarItem){ 
-?>
-    <div class="similar-item">
-        <a href="<?= $similarItem->sl ?>"><img src="<?= $similarItem->i ?>" /></a>        
-        <div class="title"><a href="<?= $similarItem->sl ?>"><?= $similarItem->n ?></a></div>
-    </div>                  
-<?php  
-    }
-?>
-</div>
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 

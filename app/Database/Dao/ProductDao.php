@@ -155,34 +155,7 @@ class ProductDao extends AbstractDao {
         }
         
         return $affected;
-	}
-		
-	
-	public function addProducts($products){
-	    if(!isset($products) || !is_array($products)){
-			$this->logWarning("12876319","Nothing to add!");
-			return false; 
-		}
-	 
-	    $sql = "INSERT INTO " . PRODUCTS . 
-	           " VALUES (?, ?, ?, " .
-	                    "?, ?, ?, " .
-	                    "?, ?, ?, " .
-	                    "?, NOW())";
-        
-        $stmt = $this->db->prepare($sql);
-        foreach ($products as $row) {
-            
-            try {
-                $stmt->execute($row);
-            } catch (Exception $e) {
-                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-                print_r($row);
-            }
-        }
-        
-        return $results;
-	}		
+	}					
 
 	/**
 	*
@@ -197,6 +170,18 @@ class ProductDao extends AbstractDao {
 		if(!isset($criteria)){
 			$this->logWarning("12876319","Criteria is null");
 			return false; 
+		}
+
+        $searchTags = $criteria->getTags();
+		$hasTags = $searchTags != null && count($searchTags) > 0 && $searchTags[0] != null && $searchTags[0] != "";
+		$categories = $criteria->getCategories();
+		
+		if (is_array($categories) && is_array($searchTags)){
+            $tags = array_merge($categories, $searchTags);
+		}else if (is_array($categories)){
+            $tags = $categories;
+		}else if(is_array($searchTags)){
+            $tags = $searchTags;
 		}
 
 		$start = $pageNumber * $numResultsPerPage;
@@ -220,12 +205,16 @@ class ProductDao extends AbstractDao {
         if ($criteria->getColors() != null){
             $sql .= " INNER JOIN " . COLORS . " c  ON c." . PRODUCT_SKU . " = p." . PRODUCT_SKU;
         }
+        
+        if ($categories != null || $hasTags){
+            $sql .= " INNER JOIN " . TAGS . " t  ON t." . PRODUCT_SKU . " = p." . PRODUCT_SKU;            	
+        }        
 
 		$filterSql = "p." . PRODUCT_STATUS . " = 1 ";		
 		$this->addCriteriaToSql($filterSql, $criteria->getCompanies(), "p." . PRODUCT_STORE, $params, $paramTypes);	
-		$this->addCriteriaToSql($filterSql, $criteria->getCategories(), "p." . PRODUCT_CATEGORY, $params, $paramTypes);	
+		$this->addCriteriaToSql($filterSql, $tags, "t." . TAG_STRING, $params, $paramTypes);
 		$this->addCriteriaToSql($filterSql, $criteria->getCustomers(), "p." . PRODUCT_CUSTOMER, $params, $paramTypes);	
-		$this->addCriteriaToSql($filterSql, $criteria->getColors(), "c." . COLORS_COLOR, $params, $paramTypes);				
+		$this->addCriteriaToSql($filterSql, $criteria->getColors(), "c." . COLORS_COLOR, $params, $paramTypes);			
 		
 		// MIN PRICE
 		if ($criteria->getMinPrice() != null){			
@@ -241,22 +230,19 @@ class ProductDao extends AbstractDao {
 			$paramTypes[] = 'integer';
 		}	
 		
-		// SERACH TAGS
-		$searchTags = $criteria->getTags();
-		$hasTags = $searchTags != null && count($searchTags) > 0 && $searchTags[0] != null && $searchTags[0] != "";
-		
+		// SERACH TAGS		
 		if ($hasTags){
     			$filterSql .= " AND (";
     			
     			// Name matches tags
     			$filterSql .= " Match(p.".PRODUCT_NAME.") Against (?) ";
-    			$params[] = implode(" ",$criteria->getTags());
+    			$params[] = implode(" ",$searchTags);
     			$paramTypes[] = 'text';
     			
     			// Remove if there is a performance hit  
     			// Name regex matches tags
     			$filterSql .= " OR p.".PRODUCT_NAME." REGEXP ? ";                
-    			$params[] = implode("|",$criteria->getTags());
+    			$params[] = implode("|",$searchTags);
     			$paramTypes[] = 'text';
     			
     			// Remove if there is a performance hit  
@@ -264,7 +250,7 @@ class ProductDao extends AbstractDao {
     			$filterSql .= " OR EXISTS(SELECT 1" .
                             " FROM " . TAGS .
                             " WHERE ".TAG_STRING." IN (" .
-                            $this->convertCriteriaToQueryParameters($criteria->getTags(), $params, $paramTypes) .
+                            $this->convertCriteriaToQueryParameters($searchTags, $params, $paramTypes) .
                             ") AND SKU = p.".PRODUCT_SKU.")";                
                             
                 $filterSql .= " ) ";            
@@ -273,6 +259,18 @@ class ProductDao extends AbstractDao {
         // WHERE CLAUSE
 		if($filterSql && trim($filterSql) != ""){
 			$sql .= " WHERE " . $filterSql;
+		}
+		
+		// GROUP BY 
+		if ($categories || $hasTags){
+		
+		    if (count($tags) > 1){		  
+    		    $sql .= " GROUP BY t." . PRODUCT_SKU;
+                $sql .= " HAVING COUNT(t.".PRODUCT_SKU.") = ?";                
+                
+                $params[] = count($tags);
+        		$paramTypes[] = 'integer';
+		    }
 		}
 
         // 
@@ -283,13 +281,13 @@ class ProductDao extends AbstractDao {
         
         if ($hasTags){
             $orderby .= " + Match(p.".PRODUCT_NAME.") Against (?)";
-            $params[] = implode(" ",$criteria->getTags());
+            $params[] = implode(" ", $searchTags);
 			$paramTypes[] = 'text';
             
 		    $orderby .= " + (SELECT COALESCE( SUM(".TAG_COUNT.") * " . $tagWeight . ", 0)" .
                             " FROM " . TAGS .
                             " WHERE ".TAG_STRING." IN (" .
-                            $this->convertCriteriaToQueryParameters($criteria->getTags(), $params, $paramTypes) .
+                            $this->convertCriteriaToQueryParameters($searchTags, $params, $paramTypes) .
                             ") AND SKU = p.".PRODUCT_SKU.")";                            
 		}
                 
@@ -312,10 +310,16 @@ class ProductDao extends AbstractDao {
 	}
 
 	private function addCriteriaToSql(&$sql, $criteria, $columnName, &$params, &$paramTypes){
-		if(is_array($criteria)){            
-            $sql .= " AND " . $columnName . " IN (" .                                               
-                    $this->convertCriteriaToQueryParameters($criteria, $params, $paramTypes) . 
-                    ")";
+		if(is_array($criteria)){   
+		    
+		    if (count($criteria) > 1){		           
+                $sql .= " AND " . $columnName . " IN (" .                                               
+                        $this->convertCriteriaToQueryParameters($criteria, $params, $paramTypes) . 
+                        ")";
+		    }else{
+    		    $sql .= " AND " . $columnName . " = " .                                               
+                        $this->convertCriteriaToQueryParameters($criteria, $params, $paramTypes);
+		    }
 		}
 	}		
 	

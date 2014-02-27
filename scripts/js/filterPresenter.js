@@ -59,6 +59,7 @@ var filterPresenter = {
  			priceBuckets[i]	= (Math.round(prices[priceCount - 1] / 50) * 50) + 50;
  		}
  		
+ 		$("#filter-float").html("");
  		$("#filter-float").append($("<div>").attr("id","selectedFilters"));
  		
  		var selectedWomen = filterPresenter.defaultCustomer == "women" ? "selected" : "";
@@ -248,6 +249,8 @@ var filterPresenter = {
  	          $('.customerOption[filterid="women"]').addClass("selected");
  	      }
  	      
+ 	      filterPresenter.refreshFilters();
+ 	      
  	      if (isFilter){
  	          filterPresenter.onFilterSelect();
  	      }
@@ -263,6 +266,18 @@ var filterPresenter = {
  	      }else{
  	          return filterPresenter.defaultCustomer;    
  	      } 	       	      
+ 	},
+ 	
+ 	refreshFilters: function(){
+ 	      var customer = filterPresenter.getSelectedCustomer();
+ 	      
+ 	      if (customer == "men"){
+ 	          filterPresenter.defaultCustomer = "men";
+ 	          $.getJSON(window.HOME_ROOT + "s/menfilters", filterPresenter.populateFilterData);
+ 	      }else{
+ 	          filterPresenter.defaultCustomer = "women";
+ 	          $.getJSON(window.HOME_ROOT + "s/filters", filterPresenter.populateFilterData);
+ 	      }
  	},
  	
  	createSelectedFilter: function(filterid, filterValue){ 	       	  

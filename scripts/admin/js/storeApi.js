@@ -425,10 +425,20 @@ storeApi = {
 	                item.name = $(this).find(".name").find("a").first().text().trim();	                
 	
 	                if(item.image != undefined){
-	                   item.sku = 'tb' + item.link.substring(item.link.lastIndexOf("/")+1,item.link.indexOf(","));
+	                   item.sku = item.link.substring(item.link.lastIndexOf("/")+1);
 	                   
-				        var itemid = item.sku.replace(/-\W/g, '');
-	                    products[itemid] = item;
+	                   if (item.sku.indexOf("?")){
+	                       item.sku = item.sku.substring(0, item.sku.indexOf("?"));
+	                   }
+	                   
+	                   if (item.sku.indexOf(".")){
+	                       item.sku = item.sku.substring(0, item.sku.indexOf("."));
+	                   }
+	                   
+	                   item.sku = 'tb' + item.sku;	                    
+	                   
+				       var itemid = item.sku.replace(/-\W/g, '');
+	                   products[itemid] = item;
 	                }
 	        });
 	

@@ -83,6 +83,15 @@ input{
     top: 48%;
     width: 50px;   
 }
+
+#saveProducts .tagCheckbox {
+    height: 25px !important;
+    margin-top: -3px !important;
+}
+
+.tags .label{
+    margin-left: 3px;   
+}
 </style>
 
 </head>
@@ -155,10 +164,61 @@ input{
     		    </div>
     	    </div>
     	    <div class="control-group">
-    		    <label class="control-label" for="inputCategory">Category</label>
+    		    <label class="control-label" for="inputCategory">Url Title</label>
     		    <div class="controls">
-    		   		<input type="text" id="inputCategory" placeholder="Category (i.e. Dresses, Pants, Shoes, Hats, etc...)" class="input-xxlarge" name="category" required>
+    		   		<input type="text" id="inputCategory" placeholder="(i.e. Dresses, Pants, Shoes, Hats, etc...)" class="input-xxlarge" name="category" required>    		   		
     		    </div>
+    	    </div>
+    	    <div class="control-group">
+    	       <label class="control-label">Categories</label>
+    	       <div class="controls">
+    				    <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Activewear"/>Activewear
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Blazers"/>Blazers
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Blouses"/>Blouses                                              
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Button Downs"/>Button Downs
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Capris"/>Capris
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Cardigans"/>Cardigans
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Cashmere"/>Cashmere
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Chinos"/>Chinos
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Coats"/>Coats
+                        <br />
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Collared Shirts"/>Collared Shirts
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Denim"/>Denim
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Dress Pants"/>Dress Pants
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Dress Shirts"/>Dress Shirts
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Dresses"/>Dresses
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Evening Dresses"/>Evening Dresses
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Graphic T Shirts"/>Graphic T Shirts
+                        <br />
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Henleys"/>Henleys
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Hoodies"/>Hoodies
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Jackets"/>Jackets
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Jeans"/>Jeans
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Jumpsuits"/>Jumpsuits
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Knit"/>Knit
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Leather"/>Leather
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Leggings"/>Leggings
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Loungewear"/>Loungewear
+                        <br />
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Outerwear"/>Outerwear
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Pants"/>Pants
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Polos"/>Polos                        
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Shorts"/>Shorts
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Skirts"/>Skirts
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Skorts"/>Skorts
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sleepwear"/>Sleepwear
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sport Coats"/>Sport Coats
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Suits"/>Suits
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sweaters"/>Sweaters
+                        <br />
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sweatpants"/>Sweatpants
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sweatshirts"/>Sweatshirts
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="T Shirts"/>T Shirts
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Tank Tops"/>Tank Tops
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Trench Coats"/>Trench Coats
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Vests"/>Vests
+                        <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Zip Ups"/>Zip Ups
+    	       </div>
     	    </div>
     	    <div class="control-group">
     		    <label class="control-label" for="inputLink">Link to Products Page</label>
@@ -227,12 +287,13 @@ input{
     <a href="#addCategoryForm" style="float: right; margin-right: 10px;"><button class="btn btn-danger btn-small">Upload Form</button></a>
     <a href="#top" style="float: right; margin-right: 10px;"><button class="btn btn-danger btn-small">Top</button></a>
     <button id="selectall" class="btn btn-small">Select All</button>
+    <button id="selectallvalid" class="btn btn-small">Select Valid</button>        
     <button id="deselectall" class="btn btn-small">Deselect All</button>
     <button onclick="testProductsFromLinks()" class="btn btn-primary btn-small">Test Category</button>
-    <button onclick="getProductsFromLinks()" class="btn btn-primary btn-small">View Category Data</button>
-    <button onclick="testProductsFromLinks(true)" class="btn btn-primary btn-small" tooltip="(1 store at a time)">View Sample Products</button>    
+    <button onclick="testProductsFromLinks(true, false, false)" class="btn btn-primary btn-small">View Category Data</button>
+    <button onclick="testProductsFromLinks(false, true, false)" class="btn btn-primary btn-small" tooltip="(1 store at a time)">View Sample Products</button>    
     <button onclick="getTotalProductCount()" class="btn btn-info btn-small">Get Total Product Count</button>
-    <button onclick="getProductsFromLinks(true)" class="btn btn-success btn-small">Save Products</button>        
+    <button onclick="testProductsFromLinks(false, false, true)" class="btn btn-success btn-small">Save Products</button>        
         
     <!--<p>*** <a href="preload.php">UPDATE WEBSITE WITH NEW PRODUCTS</a> ***</p>-->
     <!--<p>*** <a href="colorProcessor.php">UPDATE NEW PRODUCT COLORS</a> ***</p>-->
