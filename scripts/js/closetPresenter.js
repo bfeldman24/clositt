@@ -265,8 +265,7 @@ var closetFormPresenter = {
 	closetNames: null, 
 	closetItems: null,
 	closetItemsMapping: null,
-	darkHangerImg: "/css/images/hanger-icon.png",
-	lightHangerImg: "/css/images/hanger-icon-white.png",
+	inClosittHangerImg: "/css/images/hanger-icon-green.png",	
 	
 	getClosetInfo: function(){
 		if(closetFormPresenter.closetNames == null && firebase.isLoggedIn){
@@ -308,7 +307,7 @@ var closetFormPresenter = {
 			
 			var element = el.currentTarget;					
 			
-			if($(element).parents(".item").find(".addToClosetForm > form").length > 0){
+			if($(element).parents(".item").find(".addToClosetForm > form").length > 0){				
 				$(element).children(".hanger-plus").addClass("icon-white");
 				var $parent = $(element).parents(".item");
 				var $closittForm = $parent.find(".addToClosetForm");
@@ -447,7 +446,7 @@ var closetFormPresenter = {
 	markUsersClositItems: function(){
 		if(closetFormPresenter.closetItems != null && firebase.isLoggedIn){
 			var $closetItems = $("#hanger-" +  closetFormPresenter.closetItems.join(", #hanger-") );
-			$closetItems.attr("src",closetFormPresenter.darkHangerImg);
+			$closetItems.attr("src",closetFormPresenter.inClosittHangerImg);
 			$closetItems.parent().tooltip('destroy');
 			$closetItems.parent().tooltip({title:"In my Clositt"});	
 		}

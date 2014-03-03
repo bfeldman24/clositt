@@ -23,7 +23,7 @@ var socialPresenter = {
 			$(element).parents(".item").find(".addToClosetForm").html("").hide();
 //			$(element).parents(".item").find(".social-btns").tooltip('destroy');
 			$(element).parents(".item").find(".social-btns").html("").hide('blind');						
-		}else{							  												
+		}else{
 		    var shortlink = $(element).parents(".item").attr("data-url");		    
 		    var productLink = window.HOME_URL + "!/"+shortlink;		    		    
 		    var imgLink = encodeURIComponent($(element).parents(".item").find(".picture img").attr("src"));

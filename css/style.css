@@ -684,6 +684,15 @@ footer .last{
     padding: 5px;
     position: absolute;
     width: 190px;	
+}
+
+.overlay > .addToClosetForm{
+    max-height:225px;
+    overflow-y:scroll;
+}
+
+.overlay > .bottom{
+    border-top: 1px solid #CBCBCB;   
 }	
 
 .selectCloset {
@@ -723,7 +732,9 @@ footer .last{
 	position: absolute;	
 	right: 1px;	
 	top: 1px;	
-	width: 29px;	
+	width: 29px;
+	border-bottom: 1px solid #CBCBCB;
+	border-left: 1px solid #CBCBCB;	
 }
 
 .overlay > .topleft {
@@ -734,6 +745,8 @@ footer .last{
     position: absolute;
     top: 1px;
     width: 39px;
+    border-right: 1px solid #CBCBCB;
+    border-bottom: 1px solid #CBCBCB;
 }
 
 .overlay .social-people-icon {
@@ -917,7 +930,7 @@ footer .last{
     overflow: hidden;
     padding: 0 5px;
     position: fixed;
-    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.91);
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 1);
     z-index: 20;
     width: 194px;
 }
@@ -1113,7 +1126,7 @@ footer .last{
 
 .review-float{
 	z-index: 75;
-	width: 200px;
+	width: 202px;
 	padding: 0;
 	overflow-y: hidden;
 	position: absolute;
@@ -1148,7 +1161,7 @@ ul.review-comments li{
 }
 
 ul.review-comments span{
-	color: #FFFFFF;
+	color: #333;
 }
 
 
@@ -1260,6 +1273,7 @@ ul.review-comments span{
 ul.review-comments span.review-comment-user{
     color: #5BB75B;
     font-weight: bold;
+    font-size: 12px;
 }
 
 .star-small-empty, .star-small-half, .star-small-full{
@@ -1861,7 +1875,8 @@ input.closetNameInput[type="text"] {
     background: none repeat scroll 0 0 #E6E6E6;
     border: 5px solid #00BA6C;
     min-height: 400px;
-    left: 200px;
+    left: 50%;
+    margin-left: -475px;
     position: fixed;
     text-align: center;
     top: 75px;
@@ -2126,12 +2141,12 @@ input.closetNameInput[type="text"] {
 /**** SOCIAL BUTTONS ****/
 .social-btns {
     background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid rgba(77, 77, 77, 0.6);
+    border: 1px solid #CBCBCB;
     border-radius: 0 0 15px 15px;
     padding: 1px 0 5px;
     position: absolute;
     top: 35px;
-    width: 37px;
+    width: 39px;
     z-index: 999;
 }
 
@@ -2167,7 +2182,10 @@ input.closetNameInput[type="text"] {
 
 .review-form, ul.review-comments{
     /* background: none repeat scroll 0 0 rgba(120, 213, 167, 0.65); Green */
-    background: none repeat scroll 0 0 rgba(17, 17, 17, 0.65); 
+    /* background: none repeat scroll 0 0 rgba(17, 17, 17, 0.65); */
+    background: #EFEFEF;
+    border-left: 1px solid #CBCBCB;
+    border-right: 1px solid #CBCBCB;
 }
 
 /* black with gradient */
