@@ -114,7 +114,7 @@ function testProductsFromLinks(showData, showSample, save){
 		    $(this).siblings(".isvalid").remove();
 		  
 		    var link = $(this);
-			var company = link.attr("company").replace("_",".");
+			var company = link.attr("company");
 			var customer = link.attr("customer");
 			var category = link.attr("category");
 			var tags = link.attr("tags");
@@ -177,6 +177,8 @@ function testProductsFromLinks(showData, showSample, save){
     			 
     			    if (save){
     			        var storeProducts = data;
+    			     
+    			        company = company.replace("_",".");
     			     
     			        for (var i=0; i < Object.keys(storeProducts).length; i++){
         			         var sku = Object.keys(storeProducts)[i];
