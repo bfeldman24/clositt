@@ -114,7 +114,7 @@ function testProductsFromLinks(showData, showSample, save){
 		    $(this).siblings(".isvalid").remove();
 		  
 		    var link = $(this);
-			var company = link.attr("company");
+			var company = link.attr("company").replace("_",".");
 			var customer = link.attr("customer");
 			var category = link.attr("category");
 			var tags = link.attr("tags");
