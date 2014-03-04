@@ -36,7 +36,7 @@ function getLinks(){
 	           $("<div>").addClass("company").append(
 	               $("<a>").attr("name",company.name())
 	            ).append(
-	               $("<div>").addClass("companyName").html("&bull; " + company.name())
+	               $("<div>").addClass("companyName").html("&bull; " + company.name().replace("_","."))
 	            )
 	        );   
 	       
