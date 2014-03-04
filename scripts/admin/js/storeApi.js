@@ -30,7 +30,7 @@ storeApi = {
 		        newUrl = storeApiHelper.replaceParameter(newUrl, "pageSize", "96");		        		        		        
 		        newUrl = storeApiHelper.replaceParameter(newUrl, "pN", "1");		        
 		        break;
-		    case "nyandcompany":
+		    case "new york & company":
 		    case "chicos":		    
 		        newUrl = storeApiHelper.replaceParameter(url, "viewAll", "true");		        
 		        break;
@@ -42,7 +42,7 @@ storeApi = {
 		    case "nike":
 		        newUrl = storeApiHelper.replaceParameter(url, "sortOrder", "viewAll|asc");		        
 		        break;
-		    case "jjill":
+		    case "j.jill":
 		        newUrl = storeApiHelper.replaceParameter(url, "rpp", "0");		        
 		        break; 
 		    case "michael kors":
@@ -70,7 +70,7 @@ storeApi = {
 			case "athleta":
 				products = storeApi.getGapJson(data, home);
 				break;
-			case "j crew":
+			case "j.crew":
 				products = storeApi.getJcrew(data, home);
 				break;		
 			case "ann taylor":
@@ -112,7 +112,7 @@ storeApi = {
 			case "american apparel":			     
 			    products = storeApi.getAmericanApparel(data, home);
 			    break;  
-			case "lord and taylor":			         
+			case "lord & taylor":			         
 			    products = storeApi.getLordAndTaylor(data, home);
 			    break;  
 			case "bcbg":			
@@ -145,7 +145,7 @@ storeApi = {
 			case "jcpenny":			
 			    products = storeApi.getJCPenny(data, home);
 			    break; 
-			case "nyandcompany":
+			case "new york & company":
 			    products = storeApi.getNyAndCompany(data, home);
 			    break;
 			case "burberry":
@@ -163,7 +163,7 @@ storeApi = {
 			case "dillards":
 			    products = storeApi.getDillards(data, home);
 			    break;
-			case "americaneagle":
+			case "american eagle":
 			    products = storeApi.getAmericanEagle(data, home);
 			    break;
 			case "nike":
@@ -178,7 +178,7 @@ storeApi = {
 			case "cusp":
 			    products = storeApi.getCusp(data, home);
 			    break; 
-			case "jjill":
+			case "j.jill":
 			    products = storeApi.getJJill(data, home);
 			    break; 
 		}	

@@ -188,6 +188,13 @@ var firebaseReorganizing = {
                         console.log("Error updating node");
                     }else{
                         console.log("Successfully updated node");
+                        firebase.$.child(oldNode).remove(function(error){
+                            if (error){
+                                console.log("Error removing old node");
+                            }else{
+                                console.log("Successfully removed old node");        
+                            }
+                        });                
                     }
                 });
         });

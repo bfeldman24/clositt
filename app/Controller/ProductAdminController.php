@@ -260,7 +260,7 @@ class ProductAdminController {
 	   
 	   if(is_object($results)){
 			while($field = $results->fetchOne()){	
-				$arr[] = ucwords(strtolower($field));
+				$arr[] = $field;
 			}
 	   }  
 	   

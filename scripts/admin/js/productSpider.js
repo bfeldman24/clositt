@@ -383,7 +383,7 @@ function saveAllProducts(){
 $('form').submit(function(e) {
 	e.preventDefault();
 	
-	var company = $("#inputCompany").val().toLowerCase().trim();
+	var company = $("#inputCompany").val().trim();
 	var customer = $("#inputAudience").val().toLowerCase().trim();
 	var category = $("#inputCategory").val().toLowerCase().trim();		
 	
