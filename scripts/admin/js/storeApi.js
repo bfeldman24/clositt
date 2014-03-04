@@ -42,7 +42,7 @@ storeApi = {
 		    case "nike":
 		        newUrl = storeApiHelper.replaceParameter(url, "sortOrder", "viewAll|asc");		        
 		        break;
-		    case "j.jill":
+		    case "j_jill":
 		        newUrl = storeApiHelper.replaceParameter(url, "rpp", "0");		        
 		        break; 
 		    case "michael kors":
@@ -70,7 +70,7 @@ storeApi = {
 			case "athleta":
 				products = storeApi.getGapJson(data, home);
 				break;
-			case "j.crew":
+			case "j_crew":
 				products = storeApi.getJcrew(data, home);
 				break;		
 			case "ann taylor":
@@ -178,7 +178,7 @@ storeApi = {
 			case "cusp":
 			    products = storeApi.getCusp(data, home);
 			    break; 
-			case "j.jill":
+			case "j_jill":
 			    products = storeApi.getJJill(data, home);
 			    break; 
 		}	

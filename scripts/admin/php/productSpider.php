@@ -133,8 +133,8 @@ input{
     				  <option value="Hollister">Hollister</option>
     				  <option value="Intermix">Intermix (json link)</option>
     				  <option value="JCPenny">JCPenny</option>
-    				  <option value="J.Crew">JCrew</option>
-    				  <option value="J.Jill">J.Jill</option>
+    				  <option value="J_Crew">JCrew</option>
+    				  <option value="J_Jill">J.Jill</option>
     				  <option value="Kate Spade">Kate Spade</option>
     				  <option value="Kohls">Kohls</option>
     				  <option value="Loft">Loft</option>
