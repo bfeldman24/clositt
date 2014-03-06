@@ -67,6 +67,13 @@ function getLinks(){
 	               });
 	               
 	               taglist = taglist.substring(0, taglist.length - 1);
+	               
+	               if (category.hasChild("lastSaved")){	               
+	                   var lastUpdatedDate = new Date(category.child("lastSaved").val());
+	                   var lastUpdated = lastUpdatedDate.toLocaleDateString();
+	               }else{
+	                   var lastUpdated = "";   
+	               }
 	               	               
 	               $("#links > .company > .customer").last().append(
     					$("<div>").addClass("category").css("display","none").append(
@@ -76,11 +83,14 @@ function getLinks(){
     							.attr("customer",customer.name())
     							.attr("category",category.name())
     							.attr("tags", taglist)
+    							.attr("lastUpdated", lastUpdated)
     							.attr("url",category.child("url").val())
     						).append(
     						      $("<a>").attr("href",category.child("url").val()).html(category.name())
     						).append(
     						      $("<span>").addClass("isvalid").css("color",statusColor).html(statusText)
+    						).append(
+    						      $("<span>").addClass("lastUpdated").text(lastUpdated)
     						).append(
     						      $tags
     						).append(
@@ -99,9 +109,12 @@ function getLinks(){
 				
 
 // Gets the checked prdocuts frm the link, validates them, and shows a sampling of them
-function testProductsFromLinks(showData, showSample, save){
-	$("#loadingMask").show();
+function testProductsFromLinks(showData, showSample, save, saveCallback){	
 	$("#json-products").html("");
+	
+	if (saveCallback == null){
+	   $("#loadingMask").show();  
+	}
 	
 	var total = $("#links > .company > .customer > .category > input:checked").size();
 	var count = 0;
@@ -208,7 +221,7 @@ function testProductsFromLinks(showData, showSample, save){
         				$("#json-products").text(JSON.stringify(storeProducts));	
         				
         				if(count == total){					
-        				    saveAllProducts();    				    
+        				    saveAllProducts(saveCallback);    				    
         				}		
     			    }else{
 
@@ -228,8 +241,8 @@ function testProductsFromLinks(showData, showSample, save){
 	                         .child(category).update(statusObj);
 				}
 								
-				if(count == total){
-					alert(validCount + "/" + total + " catgeories were valid");	
+				if(saveCallback == null && count == total){
+					Messenger.info(validCount + "/" + total + " catgeories were valid");	
 					$("#loadingMask").hide();				
 				}														
 			});
@@ -255,7 +268,7 @@ function showSampleProducts(data, company, audience, category){
 }
 
 // Saves the products
-function saveAllProducts(){
+function saveAllProducts(saveCallback){
 	var total = $("#links > .company > .customer > .category > input:checked").size();
 	var fireBaseStore = new Firebase('https://clothies.firebaseio.com/store/products');
  	var success = 0;
@@ -308,9 +321,13 @@ function saveAllProducts(){
                 }else{
                     output += "There was an issue saving the products. Data was NOT saved successfully! ";        
                 }                
-            }
+            }                        
             
-            alert(output);
+            if (saveCallback == null){
+                Messenger.info(output);
+            }else{
+                saveCallback();   
+            }
         }
         , "json"
         );	   
@@ -335,7 +352,7 @@ $('form').submit(function(e) {
 	firebase.$.child("spider").child(company).child(customer).child(category).set(catObj, function(error){
 	  if (!error){
 	      getLinks();
-	      alert("Added!");		      
+	      Messenger.success("Added!");		      
 		  $(e.currentTarget).find("#inputLink").val("");
 	      $(e.currentTarget).find("#inputCategory").val("");	
 	      $(e.currentTarget).find(".tagCheckbox:checked").prop('checked', false);	
@@ -428,6 +445,84 @@ $('#selectallvalid').click(function () {
         } 
     });
 });
+
+function saveAllValid(){
+     // show  and uncheck all categories
+     $(".category").show();
+     $("#links").find(':checkbox').prop('checked', false);          
+     
+     window.totalToSave = $(".category").length;
+     var d = new Date();
+     var today = d.toLocaleDateString();
+     
+     $("#transparentLoadingMask").show(); 
+     Messenger.timeout = 15000;
+     
+     $("#links").find(':checkbox').each(function(){
+        var valid = $(this).siblings(".isvalid").text();
+        
+        if (valid.indexOf("Works") >= 0 || valid.indexOf("not tested") >= 0){
+            
+            if ($(this).attr("lastUpdated") == "" || $(this).attr("lastUpdated") != today){                                
+    
+                $(this).prop('checked', true);
+                
+                window.saveCounter = 0;
+                return false;       
+            }else{
+                window.totalToSave--;   
+            }                        
+        } 
+    });       
+                
+    testProductsFromLinks(false, false, true, saveNextValidCategory);    
+}
+
+function saveNextValidCategory(){
+    var foundValid = false;
+    var hasAnotherValid = false;
+    var currentCategory = null;
+    
+    $("#links").find(':checkbox').each(function(){
+        if (foundValid){
+            var valid = $(this).siblings(".isvalid").text();
+        
+            if (valid.indexOf("Works") >= 0 || valid.indexOf("not tested") >= 0){
+                $(this).prop('checked', true);
+                hasAnotherValid = true;                
+                return false;       
+            }   
+        }
+        
+        if ($(this).prop('checked')){
+            $(this).prop('checked', false);
+            currentCategory = $(this);            
+            foundValid = true;   
+        }                
+    }); 
+    
+    if (hasAnotherValid){
+        $('html, body').animate({
+            scrollTop: currentCategory.offset().top
+        }, 500);
+        
+        var company = currentCategory.attr("company");
+        var customer = currentCategory.attr("customer");
+        var category = currentCategory.attr("category");
+        
+        var d = new Date();        
+        firebase.$.child("spider").child(company).child(customer).child(category).child("lastSaved").set(d.toJSON());
+
+        window.saveCounter++;
+        Messenger.info(company + " " + customer + " " + category + " - " + window.saveCounter + "/" + window.totalToSave + " categories saved!");
+        
+        testProductsFromLinks(false, false, true, saveNextValidCategory);                
+    }else{
+        $("#transparentLoadingMask").hide();
+        Messenger.timeout = 4000;
+        alert("COMPLETE!!! " + window.saveCounter + "/" + window.totalToSave + " categories saved!");
+    }
+}
 
 $(document).on("click",".companyName", function(el){
     if ($(el.currentTarget).parent(".company").find(':checkbox').first().prop('checked')){

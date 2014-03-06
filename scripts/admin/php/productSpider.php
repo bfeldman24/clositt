@@ -76,7 +76,7 @@ input{
     width: 100%;   
 } 
 
-#loadingMask img{
+#loadingMask img, #transparentLoadingMask img{
     height: 50px;
     left: 48%;
     position: fixed;
@@ -107,6 +107,11 @@ input{
     position: relative;
     top: 5px;   
     cursor: pointer;
+}
+
+.lastUpdated{
+    font-size: 10px;
+    margin: 0 2px 0 5px;   
 }
 </style>
 
@@ -310,13 +315,17 @@ input{
     <button onclick="testProductsFromLinks(true, false, false)" class="btn btn-primary btn-small">View Category Data</button>
     <button onclick="testProductsFromLinks(false, true, false)" class="btn btn-primary btn-small" tooltip="(1 store at a time)">View Sample Products</button>    
     <button onclick="getTotalProductCount()" class="btn btn-info btn-small">Get Total Product Count</button>
-    <button onclick="testProductsFromLinks(false, false, true)" class="btn btn-success btn-small">Save Products</button>        
+    <button onclick="testProductsFromLinks(false, false, true)" class="btn btn-success btn-small">Save Selected</button>
+    <button onclick="saveAllValid()" class="btn btn-success btn-small">Save All Valid</button>        
         
     <!--<p>*** <a href="preload.php">UPDATE WEBSITE WITH NEW PRODUCTS</a> ***</p>-->
     <!--<p>*** <a href="colorProcessor.php">UPDATE NEW PRODUCT COLORS</a> ***</p>-->
 </div>
 
 <div id="loadingMask" style="display:none;" >
+    <img src="../../../css/images/loading.gif"/>
+</div>
+<div id="transparentLoadingMask" style="display:none;" >
     <img src="../../../css/images/loading.gif"/>
 </div>
 
