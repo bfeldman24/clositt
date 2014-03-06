@@ -33,12 +33,12 @@ class ProductController {
         return json_encode($productEntity->toArray());
 	}
 	
-	public function getProducts($productCrit, $page, $limit){
+	public function getProducts($productCrit, $page, $limit, $random = false){
 	    $searchResults = array();
 	    		
 		if(isset($page) && isset($limit)){	
 		      
-			$results = $this->productDao->getProducts($productCrit, $page, $limit);
+			$results = $this->productDao->getProducts($productCrit, $page, $limit, $random);
 			
 			if(is_object($results)){
 				while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	

@@ -36,7 +36,7 @@ class ProductDao extends AbstractDao {
 		return $this->getResults($sql, $params, $paramTypes, "3248272");
 	}  
 	
-	public function getProducts($criteria, $page, $limit){					
+	public function getProducts($criteria, $page, $limit, $random){					
 		$offset = $page * $limit;
 		
 		$sql = "SELECT * " .				
@@ -56,6 +56,10 @@ class ProductDao extends AbstractDao {
             	  $paramsTypes[] = 'text';
 		      }
 		}		
+		
+		if ($random){
+		      $sql .= " ORDER BY RAND() ";   
+		}
 		
 		$sql .= " LIMIT ? OFFSET ?";
 		$params[] = $limit;

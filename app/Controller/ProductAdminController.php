@@ -127,7 +127,7 @@ class ProductAdminController {
 	   $criteria = new ProductCriteria();	   
 	   $criteria->setCustomers(array("women"));	   	   
 	   
-	   $results = $this->productController->getProducts($criteria, $page, $limit);     	   	   
+	   $results = $this->productController->getProducts($criteria, $page, $limit, true);     	   	   
 	   $data = json_decode($results, true);
 	   
 	   while (!empty($data) && $page < $maxpages){	       	       
@@ -137,7 +137,7 @@ class ProductAdminController {
            
            echo "WOMEN $page<br> ";                     
            $page++;
-           $results = $this->productController->getProducts($criteria, $page, $limit);     	   	   
+           $results = $this->productController->getProducts($criteria, $page, $limit, true);     	   	   
 	       $data = json_decode($results, true);           
 	   }
 	   
@@ -146,7 +146,7 @@ class ProductAdminController {
 	   $criteria = new ProductCriteria();	   
 	   $criteria->setCustomers(array("men"));	   	   
 	   
-	   $results = $this->productController->getProducts($criteria, $page, $limit);     	   	   
+	   $results = $this->productController->getProducts($criteria, $page, $limit, true);     	   	   
 	   $data = json_decode($results, true);
 	   
 	   while (!empty($data) && $page < $maxpages){	       	       
@@ -156,7 +156,7 @@ class ProductAdminController {
            
            echo "MEN $page<br> ";                     
            $page++;
-           $results = $this->productController->getProducts($criteria, $page, $limit);     	   	   
+           $results = $this->productController->getProducts($criteria, $page, $limit, true);     	   	   
 	       $data = json_decode($results, true);           
 	   }	   	 
 	   
@@ -164,7 +164,7 @@ class ProductAdminController {
 	   $page = 0;
 	   $criteria = new ProductCriteria();	   	   	   	   
 	   
-	   $results = $this->productController->getProducts($criteria, $page, $limit);     	   	   
+	   $results = $this->productController->getProducts($criteria, $page, $limit, true);     	   	   
 	   $data = json_decode($results, true);
 	   
 	   while (!empty($data) && $page < $maxpages){	       	       
@@ -174,7 +174,7 @@ class ProductAdminController {
            
            echo "BOTH $page<br> ";                     
            $page++;
-           $results = $this->productController->getProducts($criteria, $page, $limit);     	   	   
+           $results = $this->productController->getProducts($criteria, $page, $limit, true);     	   	   
 	       $data = json_decode($results, true);           
 	   }  
 	}
