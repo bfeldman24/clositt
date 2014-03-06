@@ -3,7 +3,11 @@
 		<div class="center footer-item">Clositt Inc &copy; 2014</div>
 		<div class="footer-item"><a href="/contact-us.php">Contact Us</a></div>
 		<div class="footer-item"><a href="/terms-of-service.php">Terms</a></div>
-		<div class="last footer-item"><a href="/shout-outs.php">Shout Outs</a></div>
+		<div class="footer-item"><a href="/shout-outs.php">Shout Outs</a></div>
+		
+		<?php if ($_SERVER['PHP_SELF'] == "/index.php" || $_SERVER['PHP_SELF'] == "clositt.php"){ ?>
+    		<div class="last footer-item"><a class="joyride-start" href="#">Tour</a></div>						
+		<?php } ?>
 		
 		<?php
 		if((isset($_GET['ben']) && $_GET['ben'] != "") || (isset($_GET['eli']) && $_GET['eli'] != "")){
