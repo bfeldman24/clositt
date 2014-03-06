@@ -31,7 +31,7 @@ input{
 	margin-right:5px !important;	
 }
 
-#saveProducts input{
+#saveProducts input, #editCategoryForm input{
 	height: 30px !important;	
 }
 
@@ -84,13 +84,29 @@ input{
     width: 50px;   
 }
 
-#saveProducts .tagCheckbox {
+#saveProducts .tagCheckbox, #editCategoryForm .tagCheckbox{
     height: 25px !important;
     margin-top: -3px !important;
 }
 
 .tags .label{
     margin-left: 3px;   
+}
+
+.modal {
+    left: 500px;
+    width: 1060px;
+}
+
+.modal-body {
+    text-align: left;
+}
+
+.editCategory{
+    margin: 0 0 0 5px;
+    position: relative;
+    top: 5px;   
+    cursor: pointer;
 }
 </style>
 

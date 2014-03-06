@@ -84,6 +84,8 @@ function getLinks(){
     						).append(
     						      $tags
     						).append(
+    						      $("<span>").addClass("editCategory").html($("<i>").addClass("icon-pencil"))
+    						).append(
     						      $("<span>").addClass("removeCategory").html("x")
     						)
     				);
@@ -235,72 +237,6 @@ function testProductsFromLinks(showData, showSample, save){
 	}
 }
 
-// Gets the products from the selected links and optionally saves them				
-//function getProductsFromLinks(save){
-//    $("#loadingMask").show();
-//	$("#json-output").html("");
-//	
-//	var total = $("#links > .company > .customer > .category > input:checked").size();
-//	var count = 0;
-//	
-//	if (total <= 0){
-//		alert("Please select a product store > category");	
-//	}else{
-//				
-//		$("#links > .company > .customer > .category > input:checked").each(function(){	
-//			var company = $(this).attr("company");
-//			var customer = $(this).attr("customer");
-//			var category = $(this).attr("category");
-//			var url = $(this).attr("url");
-//			url = storeApi.getFullUrl(company, url);
-//			
-//			$.post("webProxy.php", {u:url}, function(data){		
-//			    if (data == null || data.trim() == ""){
-//			         console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");
-//			     }
-//			     												
-//			    var jsonProducts = storeApi.getProducts(company, data, url);
-//			    var storeProducts = $.parseJSON(jsonProducts);
-//			    
-//			    for (var i=0; i < Object.keys(storeProducts).length; i++){
-//			         var sku = Object.keys(storeProducts)[i];
-//			         storeProducts[sku]['company'] = company;
-//			         storeProducts[sku]['customer'] = customer;
-//			         storeProducts[sku]['category'] = category; 
-//			    }
-//			 
-//			    if (save){
-//			        // Used for firebase
-//    				$("#json-output").append(
-//    					$("<div>")
-//    						.attr("company", company)
-//    						.attr("customer", customer)
-//    						.attr("category", category)
-//    						.html( storeProducts )
-//    				);	
-//    				
-//    				// Used for database
-//    				if ($("#json-products").text() != ""){
-//        				var jsonProducts = $.parseJSON($("#json-products").text());
-//        				$.extend(storeProducts, jsonProducts);        				
-//    				}
-//    				    				
-//    				$("#json-products").text(JSON.stringify(storeProducts));	
-//    				
-//    				count++;
-//    				if(count == total){					
-//    				    saveAllProducts();    				    
-//    				}		
-//			    }else{
-//			         alert(company + " > " + customer + " > " + category + ": " + JSON.stringify(storeProducts));
-//			    }						
-//			    
-//			    $("#loadingMask").hide();
-//			});
-//		});
-//	}
-//}
-
 function showSampleProducts(data, company, audience, category){
     if (data != null && Object.keys(data).length > 0){
         gridPresenter.beginTask();
@@ -385,24 +321,24 @@ function saveAllProducts(){
 $('form').submit(function(e) {
 	e.preventDefault();
 	
-	var company = $("#inputCompany").val().trim();
-	var customer = $("#inputAudience").val().toLowerCase().trim();
-	var category = $("#inputCategory").val().toLowerCase().trim();		
+	var company = $(e.currentTarget).find("#inputCompany").val().trim();
+	var customer = $(e.currentTarget).find("#inputAudience").val().toLowerCase().trim();
+	var category = $(e.currentTarget).find("#inputCategory").val().toLowerCase().trim();		
 	
 	var tags = [];
-	$('.tagCheckbox:checked').each(function(){
+	$(e.currentTarget).find('.tagCheckbox:checked').each(function(){
 	   tags.push($(this).val());
 	});
 	
-	var catObj = {url: $("#inputLink").val(), status: "not tested", tags: tags};
+	var catObj = {url: $(e.currentTarget).find("#inputLink").val(), status: "not tested", tags: tags};
 	
 	firebase.$.child("spider").child(company).child(customer).child(category).set(catObj, function(error){
 	  if (!error){
 	      getLinks();
 	      alert("Added!");		      
-		  $("#inputLink").val("");
-	      $("#inputCategory").val("");	
-	      $(".tagCheckbox:checked").prop('checked', false);	
+		  $(e.currentTarget).find("#inputLink").val("");
+	      $(e.currentTarget).find("#inputCategory").val("");	
+	      $(e.currentTarget).find(".tagCheckbox:checked").prop('checked', false);	
 	  }
 	});					
 					
@@ -517,6 +453,51 @@ $(document).on("click",".customerName", function(el){
         $(el.currentTarget).siblings(".category").show();
         $(el.currentTarget).data("click",1);
     }
+});
+
+$(document).on("click",".editCategory", function(el){
+    var product = $(el.currentTarget).siblings("input").first();
+    
+    var productForm = $('#saveProducts').first().clone().attr("id","editCategoryForm");
+    productForm.find('select[name=company]').val(product.attr("company"));
+    productForm.find('input[name=consumer]').val(product.attr("customer"));
+    productForm.find('input[name=category]').val(product.attr("category"));
+    productForm.find('input[name=link]').val(product.attr("url"));
+    productForm.find("#save").remove();
+    
+    bootbox.dialog({
+        message: productForm,
+        title: "Edit the Category",
+        buttons: {                
+            main: {
+                label: "Cancel"
+            },
+            success: {
+                label: "Submit",
+                className: "btn-success",
+                callback: function() {                        
+                    var company = $("#editCategoryForm #inputCompany").val().trim();
+                  	var customer = $("#editCategoryForm #inputAudience").val().toLowerCase().trim();
+                  	var category = $("#editCategoryForm #inputCategory").val().toLowerCase().trim();		
+                  	
+                  	var tags = [];
+                  	$('#editCategoryForm .tagCheckbox:checked').each(function(){
+                  	   tags.push($(this).val());
+                  	});
+                  	
+                  	var catObj = {url: $("#editCategoryForm #inputLink").val(), status: "not tested", tags: tags};
+                  	
+                  	firebase.$.child("spider").child(company).child(customer).child(category).set(catObj, function(error){
+                  	  if (error){
+                  	     alert("Error: Category was NOT saved!");
+                  	  }else{
+                  	     Messenger.success("Saved! (Refresh to see changes)"); 
+                  	  }
+                  	});	
+                }
+            },
+        }
+    }); 
 });
 
 $(document).on("click",".removeCategory", function(el){
