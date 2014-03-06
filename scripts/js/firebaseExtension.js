@@ -6,6 +6,7 @@ var firebase = {
 	username: null,
 	email: null,
 	isLoggedIn: false,
+	loginCount: -1,
 	url: 'https://clositt-team.firebaseio.com/',
 	userPath: 'userdata',
 	productsPath: "products",
@@ -53,7 +54,23 @@ var firebase = {
 			  	firebase.userDataAvailableCallback(firebase.username);
 			}
 			
-			firebase.logginCallback();
+			if (sessionStorage.isActiveUser == null || sessionStorage.isActiveUser == "null"){			
+    			firebase.$.child(firebase.userPath).child(user.id).child("loginCount").transaction(function(value) {
+        	 	   var newValue = 1;
+        	 	   
+        	 	   if(value != null){		 	       
+        	 	        newValue = value +1;		 	        
+        	 	   } 		 	            
+        	 	   
+        	 	   firebase.loginCount = newValue;                	 	                   	 	   
+        	 	   return newValue;       
+                });
+			}
+            
+            var dateTime = new Date();            
+            firebase.$.child(firebase.userPath).child(user.id).child("lastActivity").set(dateTime.toJSON(), function(){        
+        	   firebase.logginCallback();
+            });
 		});
 	},
 	
@@ -75,8 +92,9 @@ var firebase = {
 	register: function(error, user, password, remember, name, username){
 		 if (!error) {		  			  			  
 		 	var firstname = stringFunctions.toTitleCase(name);
+		 	var dateTime = new Date();		 	
 		 	
-		 	var userData = {"email":user.email,"name":firstname};
+		 	var userData = {"email":user.email, "name":firstname, "signedUpDate": dateTime.toJSON(), "loginCount": 1 };
 		 	
 		 	if (username != null){
     		 	username = username.toLowerCase();
@@ -120,7 +138,8 @@ var firebase = {
 	       firebase.$.child("Auth/Token").on('value',function(snapshot){	
         		var token = snapshot.val();			
         		
-        		$.post(window.HOME_ROOT + "app/auth.php", { auth: token, user: firebase.userid }, function(){
+        		$.post(window.HOME_ROOT + "app/auth.php", { auth: token, user: firebase.userid }, function(){        		      
+        		      
         		      if (sessionStorage.goToClositt){
                             location.href = window.HOME_ROOT + "clositt.php"; 
         		      }else if(typeof loggedIn == 'function'){
@@ -176,10 +195,8 @@ var firebase = {
 
 		$.post("/app/auth.php", function(){
 			location.href= window.HOME_ROOT+"signup.php";
-		}).fail(function() {
-			 $.post("/app/auth.php", function(){
-                	location.href= window.HOME_ROOT;
-        	}) 
+		}).fail(function() {			 
+            location.href= window.HOME_ROOT;
 	    });
 	},
 	

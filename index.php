@@ -122,14 +122,7 @@
 </ol>
 
 <script type="text/javascript">
-$(document).ready(function() {
-	if(localStorage.welcomeClosit == undefined){
-		$('#welcomeModal').modal();		
-		localStorage.welcomeClosit = 1;
-	}else if(!isNaN(localStorage.welcomeClosit) && localStorage.welcomeClosit <= 3){
-		$('#welcomeModal').modal();		
-		localStorage.welcomeClosit++;
-	}
+$(document).ready(function() {	
 	
 	pagePresenter.init();
 	productPagePresenter.init();
@@ -183,8 +176,27 @@ $(".joyride-start").click(function(e){
         });
 });
 
-function loggedIn(){
-	closetFormPresenter.getClosetInfo();	
+function showWelcomeModal(){
+     if(firebase.loginCount <= 3){
+	    if (localStorage.welcomeClositt == undefined || localStorage.welcomeClositt == null){
+	       localStorage.welcomeClositt = 1;  
+	    }
+	   
+	    if (localStorage.welcomeClositt < 5){
+		  $('#welcomeModal').modal();			
+	    }
+	    
+	    localStorage.welcomeClositt++;	
+	}   
+}
+
+function loggedIn(){       
+    showWelcomeModal();
+	closetFormPresenter.getClosetInfo();			
+}
+
+function loggedOut(){
+    showWelcomeModal();
 }
 
 function contactUs(){

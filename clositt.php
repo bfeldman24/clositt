@@ -111,29 +111,32 @@ function loggedOut(){
 }
 
 function startClosittTour(){
-    if(localStorage.myClosit == undefined){
-    	$('#joyRideTipContent').joyride({
-            autoStart : true,                  
-            modal:true,
-            expose: false
-            });    	
-    			
-    	localStorage.myClosit = 1;
-    }else if(!isNaN(localStorage.myClosit) && localStorage.myClosit <= 2){
-    	$('#joyRideTipContent').joyride({
-            autoStart : true,                  
-            modal:true,
-            expose: false,
-            preStepCallback : function (index, tip) {
-              if (index == 0) {
-                $(tip).find(".joyride-close-tip").text("Skip Tour");
-              }
-            }
+    if(firebase.loginCount <= 3){
+        
+        if (localStorage.myClositt == undefined || localStorage.myClositt == null){
+            localStorage.myClositt = 1;   
+        }        
+        
+        if (localStorage.myClositt < 5){
+        	$('#joyRideTipContent').joyride({
+                autoStart : true,                  
+                modal:true,
+                expose: false,
+                preStepCallback : function (index, tip) {
+                  if (index == 0) {
+                    $(tip).find(".joyride-close-tip").text("Skip Tour");
+                  }
+                }
             });
+        }
     			
-    	localStorage.myClosit++;
+    	localStorage.myClositt++;
     }
-}    
+}
+
+$(".joyride-start").click(function(e){
+    startClosittTour();
+});    
 
 
 </script>
