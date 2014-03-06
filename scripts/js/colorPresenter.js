@@ -49,7 +49,7 @@ var colorPresenter = {
         var i=0;
         var total = Object.keys(colorPresenter.allColors).length;
         
-        for(var color in colorPresenter.allColors){            
+        for(var color in colorPresenter.allColors){                        
             if (i % 4 == 0){
                 $colorGroup = $("<div>").addClass("colorFilterGroup");
             }               

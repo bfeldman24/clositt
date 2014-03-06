@@ -88,41 +88,59 @@ var searchController = {
         var matchingFilters = null;
         
         if (criteria == null){
+            criteria = {};
             searchController.tags = cleanSearchTerm.split(" ");
+            
+            // Select the customer if applicable
+            var customerRegex = new RegExp(searchController.regexEscape("women|men"), 'gi');
+            matchingCustomerFilters = cleanSearchTerm.match(customerRegex);
+            
+            if (matchingCustomerFilters != null && matchingCustomerFilters.length > 0){
+                filterPresenter.selectCustomerFilter(matchingCustomerFilters[0]);
+                criteria['customer'] = matchingCustomerFilters;
+                
+                cleanSearchTerm = cleanSearchTerm.replace(customerRegex, '');
+            }
             
             var filters = filterPresenter.allFilters.join("|").toLowerCase().trim();
             filters = filters.replace(/s?(?=\s|\||$)/gi, ""); // remove trailing 's' form every word
             filters = filters.replace(/sse/gi, "ss"); // remove 'es' from applicable words        
             
             var regex = new RegExp(searchController.regexEscape(filters), 'gi');
-            matchingFilters = cleanSearchTerm.match(regex);
             
-            // Get additional filters based on key words
-            if(matchingFilters == null){
-                matchingFilters = [];   
-            }else{
-                if ($.inArray("dress", matchingFilters)  >= 0 && $.inArray("shirt", matchingFilters)  >= 0){                                        
-                    
-                    matchingFilters = jQuery.grep(matchingFilters, function(value) {
-                      return value != 'dress' && value != 'shirt';
-                    });
-                                        
-                    matchingFilters.push('dress shirts');
-                }
-            }                                
-                        
-            searchController.getAdditionalFiltersFromTags(matchingFilters, searchController.tags);
-                    
-            filterPresenter.clearFilters();
-            criteria = {};
-            if (matchingFilters != null && matchingFilters.length > 0){
+            matchingFilters = [];   
+            for (var i=0; i< filterPresenter.allFilters.length; i++) {
+                var filterValue = filterPresenter.allFilters[i].toLowerCase().replace(/[^A-Za-z0-9\w\s]/gi,'');
                 
-                searchController.getAdditionalFilters(matchingFilters);                                          
+                // Try matching original filter value
+                if (cleanSearchTerm.indexOf(filterValue) >= 0){
+                       matchingFilters.push(filterPresenter.allFilters[i].toLowerCase());
+                       cleanSearchTerm = cleanSearchTerm.replace(filterValue, "");
+                }else{
+                
+                    // strip plural suffix and try again
+                    if (filterValue.indexOf("es", filterValue.length - 2) >= 0){
+                        filterValue = filterValue.substring(0, filterValue.length - 2);
+                    }
+                    
+                    if (filterValue.indexOf("s", filterValue.length - 1) >= 0){
+                        filterValue = filterValue.substring(0, filterValue.length - 1);
+                    }
+                    
+                    if (cleanSearchTerm.indexOf(filterValue) >= 0){
+                           matchingFilters.push(filterPresenter.allFilters[i].toLowerCase());
+                           cleanSearchTerm = cleanSearchTerm.replace(filterValue, "");
+                    }
+                }
+            }                                                                 
+                    
+            filterPresenter.clearFilters();            
+            if (matchingFilters != null && matchingFilters.length > 0){                                                                        
                 
                 for(var i=0; i < matchingFilters.length; i++){
-                   var filter = $("#filter-float").find('input[value^="' + searchController.toTitleCase(matchingFilters[i]) + '"]');                                        
+                   var filter = $("#filter-float").find('input[value^="' + searchController.toTitleCase(matchingFilters[i]) + '"]');                                                            
                 
-                   if (filter != null){                     
+                   if (filter.length > 0){                     
                        if (filter.length > 1 ){
                         
                             // TODO get best match                            
@@ -140,17 +158,7 @@ var searchController = {
                        criteria[filterName].push(filter.val().toLowerCase());
                    }
                }                      
-            }
-            
-            var customerRegex = new RegExp(searchController.regexEscape("women|men"), 'gi');
-            matchingCustomerFilters = cleanSearchTerm.match(customerRegex);
-            
-            if (matchingCustomerFilters != null && matchingCustomerFilters.length > 0){
-                filterPresenter.selectCustomerFilter(matchingCustomerFilters[0]);
-                criteria['customer'] = matchingCustomerFilters;
-                
-                cleanSearchTerm = cleanSearchTerm.replace(customerRegex, '');
-            }
+            }                        
             
             if (abovePrice != null || belowPrice != null){
                 var filter = $("#filter-float").find('input[name="filterprice"]');                 
@@ -178,22 +186,37 @@ var searchController = {
             
             
             // Seach for colors
-            var colors = colorPresenter.getColorNames().join("|").toLowerCase().trim();            
-            var regex = new RegExp(searchController.regexEscape(colors), 'gi');
-            matchingColors = cleanSearchTerm.match(regex);
+            var colors = colorPresenter.getColorNames();                        
+            matchingColors = [];   
             
-            if(matchingColors == null){
-                matchingColors = [];   
-            }   
+            for (var i=0; i< colors.length; i++) {
+                var colorName = colors[i].toLowerCase();                                
+                
+                if (cleanSearchTerm.indexOf(colorName) >= 0){
+                       matchingColors.push(colorName);
+                       cleanSearchTerm = cleanSearchTerm.replace(colorName, "").trim();
+                       searchController.tags = cleanSearchTerm.split(" ");                        
+                       
+                       var colorFilter = $("#filter-float").find('.colorFilter.' + colorName);
+                
+                        if (colorFilter.length > 0){
+                            $(".selectedColor").removeClass("selectedColor");
+                            colorFilter.addClass("selectedColor");
+                            
+                            filterPresenter.createSelectedFilter(colorFilter.attr("data-original-title"), colorFilter.attr("data-original-title"));
+                        } 
+                }
+            }                                                                                 
             
-            searchController.getAdditionalColorsFromTags(matchingColors, searchController.tags);                                                
-            
-            if (matchingColors != null && matchingColors.length > 0){
+            if (matchingColors.length > 0){
                 criteria['colors'] = matchingColors;                                       
             }              
         }
          
-        criteria['tags'] = searchController.tags;  
+        if (searchController.tags.length <= 0){ 
+            criteria['tags'] =  searchController.tags;  
+        }
+        
         criteria['searchTerm'] = $( "#search-bar" ).val().trim();
         
         searchController.criteria = criteria;
@@ -580,36 +603,7 @@ var searchController = {
 		filterPresenter.clearFilters();	       		
 		productPresenter.refreshProducts();
 		searchController.tags = [];
-	},
-	
-	getAdditionalFilters: function(matchingFilters){
-	   
-	   if (($.inArray("dress", matchingFilters) >= 0 ||
-	        $.inArray("skirts", matchingFilters)  >= 0 ||
-	        $.inArray("ann taylor", matchingFilters)  >= 0 ||
-	        $.inArray("loft", matchingFilters) >= 0) &&
-	        $.inArray("women", matchingFilters)  < 0){
-	           
-	            matchingFilters.push("women");  
-	        }
-	},
-	
-	getAdditionalFiltersFromTags: function(matchingFilters, tags){
-	   if ($.inArray("top", tags) >= 0 || $.inArray("tops", tags) >= 0){	  	       	                
-            matchingFilters.push("polos");
-            matchingFilters.push("shirts");
-            matchingFilters.push("sweaters");
-            matchingFilters.push("t's & tops");
-            matchingFilters.push("top");  
-        }
-        
-        if ($.inArray("bottom", tags) >= 0 || $.inArray("bottoms", tags) >= 0){	           
-            matchingFilters.push("jeans");
-            matchingFilters.push("pants");
-            matchingFilters.push("skirts");
-            matchingFilters.push("bottom");  
-        }  
-	},
+	},		
 	
 	getMatchingChild: function(snapshot, tag){
 	    var item = null;
@@ -659,10 +653,7 @@ var searchController = {
         }  
         
         return item != null ? item.child("items") : null;
-    },
-    
-    getAdditionalColorsFromTags: function(matchingColors, tags){          
-    },
+    },   
     
     regexEscape: function(str) {
         return str.replace(/[-\/\\^$*+?.()[\]{}]/g, '\\$&')

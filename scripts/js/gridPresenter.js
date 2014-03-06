@@ -121,7 +121,7 @@ var gridPresenter = {
 	},		
 	
 	mixupBrowsePages: function(){
-	    var max = 100;
+	    var max = 300;
 		for(var i=0; i < max; i++){
 		      var swap = Math.floor(Math.random() * max);
 		      var temp = gridPresenter.browsePages[i];

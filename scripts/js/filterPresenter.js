@@ -141,6 +141,11 @@ var filterPresenter = {
 		$("#filter-float").append(colorOptions.append(colorPresenter.getColorFilters()));
  		 		
  		$("#filter-float").append($("<br><br><br><br><br><br><br>"));
+ 		
+ 		filterPresenter.allFilters.sort(function(a,b){
+ 		     return a.split(" ").length < b.split(" ").length;
+ 		});
+ 		
  		filterPresenter.showFilter();
  	},
  
@@ -237,11 +242,13 @@ var filterPresenter = {
  	      
  	      // Do not reselect the customer if it was the one that was previously selected 
  	      // and then clicked
- 	      if (e != null && e.currentTarget != null && selectedCustomer.attr("filterid") != $(e.currentTarget).attr("filterid")){   
- 	                	      
- 	          $(e.currentTarget).addClass("selected");
+ 	      if (e != null && e.currentTarget != null){   
  	          isFilter = true;
  	          
+ 	          if (selectedCustomer.attr("filterid") != $(e.currentTarget).attr("filterid")){      	      
+ 	              $(e.currentTarget).addClass("selected");
+ 	          } 	          
+ 	           	      
  	      }else if (e == "men"){ 	      
  	          $('.customerOption[filterid="men"]').addClass("selected");
  	          
@@ -273,10 +280,27 @@ var filterPresenter = {
  	      
  	      if (customer == "men"){
  	          filterPresenter.defaultCustomer = "men";
- 	          $.getJSON(window.HOME_ROOT + "s/menfilters", filterPresenter.populateFilterData);
+ 	           	          
+ 	          $.ajax({
+                dataType: "json",
+                url: window.HOME_ROOT + "s/menfilters",
+                async: false,
+                success: filterPresenter.populateFilterData
+              });
  	      }else{
- 	          filterPresenter.defaultCustomer = "women";
- 	          $.getJSON(window.HOME_ROOT + "s/filters", filterPresenter.populateFilterData);
+ 	          
+ 	          if (customer == "women"){
+ 	              filterPresenter.defaultCustomer = "women";
+ 	          }else{
+ 	              filterPresenter.defaultCustomer = "both";
+ 	          }
+ 	           	          
+ 	          $.ajax({
+                dataType: "json",
+                url: window.HOME_ROOT + "s/filters",
+                async: false,
+                success: filterPresenter.populateFilterData
+              });
  	      }
  	},
  	
@@ -321,6 +345,7 @@ var filterPresenter = {
 	 
 	 clearFilters: function(){
 	   $("#filter-float").find("input").prop("checked", false);
+	   $("#filter-float").find(".selectedColor").removeClass("selectedColor");
 	   $("#selectedFilters").html("");
 	 },
 	 
