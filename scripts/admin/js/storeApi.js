@@ -1186,7 +1186,7 @@ storeApi = {
     			item.price = storeApiHelper.findPricesAndGetLowest(product.find(".normalsmall").text());
 
                 if(item.image != undefined){
-                   item.sku = 'jj' + item.link.substring(item.link.indexOf("item=")+5, item.link.indexOf("&", item.link.indexOf("item="))).replace(/\D/g, ''); // strip all non numeric chars;
+                   item.sku = 'jj' + item.link.substring(item.link.indexOf("item=")+5, item.link.indexOf("&", item.link.indexOf("item="))); 
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;

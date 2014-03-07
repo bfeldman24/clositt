@@ -93,7 +93,7 @@ var spider = {
     },	  				   				    						
 				
 
-    // Gets the checked prdocuts frm the link, validates them, and shows a sampling of them
+    // Gets the checked prdocuts from the link, validates them, and shows a sampling of them
     testProductsFromLinks: function(showData, showSample, save, saveCallback){	
     	$("#json-products").html("");
     	
