@@ -42,8 +42,9 @@ var firebase = {
 	},
 	
 	handleUserData: function(user){
-		firebase.$.child(firebase.userPath).child(user.id).child('name').on('value',function(snapshot){	
-			firebase.username = snapshot.val();
+		firebase.$.child(firebase.userPath).child(user.id).once('value',function(snapshot){	
+			firebase.username = snapshot.child('name').val();
+			firebase.loginCount = snapshot.child('loginCount').val();
 			firebase.userid = user.id;
 			firebase.email = user.email;
 			
@@ -55,14 +56,15 @@ var firebase = {
 			}
 			
 			if (sessionStorage.isActiveUser == null || sessionStorage.isActiveUser == "null"){			
+			    
     			firebase.$.child(firebase.userPath).child(user.id).child("loginCount").transaction(function(value) {
         	 	   var newValue = 1;
         	 	   
         	 	   if(value != null){		 	       
-        	 	        newValue = value +1;		 	        
+        	 	        newValue = value + 1;		 	        
         	 	   } 		 	            
         	 	   
-        	 	   firebase.loginCount = newValue;                	 	                   	 	   
+        	 	   //firebase.loginCount = newValue;                	 	                   	 	   
         	 	   return newValue;       
                 });
 			}

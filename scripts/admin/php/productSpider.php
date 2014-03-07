@@ -42,6 +42,23 @@ input{
     width: 900px;   
 }
 
+#sample-grid .picture {
+    border: 1px solid #CBCBCB;
+    height: 270px;
+    max-height: 400px;
+    max-width: 300px;
+    overflow: hidden;
+    width: 200px;
+}
+
+.overlay .middle{
+    background: none repeat scroll 0 0 rgba(239, 239, 239, 0.8);
+    overflow: hidden;
+    position: absolute;
+    top: 100px;
+    width: 200px;   
+}
+
 .customerName, .companyName{
     cursor: pointer;   
 }
@@ -311,12 +328,12 @@ input{
     <button id="selectall" class="btn btn-small">Select All</button>
     <button id="selectallvalid" class="btn btn-small">Select Valid</button>    
     <button id="deselectall" class="btn btn-small">Deselect All</button>
-    <button onclick="testProductsFromLinks()" class="btn btn-primary btn-small">Test Category</button>
-    <button onclick="testProductsFromLinks(true, false, false)" class="btn btn-primary btn-small">View Category Data</button>
-    <button onclick="testProductsFromLinks(false, true, false)" class="btn btn-primary btn-small" tooltip="(1 store at a time)">View Sample Products</button>    
-    <button onclick="getTotalProductCount()" class="btn btn-info btn-small">Get Total Product Count</button>
-    <button onclick="testProductsFromLinks(false, false, true)" class="btn btn-success btn-small">Save Selected</button>
-    <button onclick="saveAllValid()" class="btn btn-success btn-small">Save All Valid</button>        
+    <button onclick="spider.testProductsFromLinks()" class="btn btn-primary btn-small">Test Category</button>
+    <button onclick="spider.testProductsFromLinks(true, false, false)" class="btn btn-primary btn-small">View Category Data</button>
+    <button onclick="spider.testProductsFromLinks(false, true, false)" class="btn btn-primary btn-small" tooltip="(1 store at a time)">View Sample Products</button>    
+    <button onclick="actionButtons.getTotalProductCount()" class="btn btn-info btn-small">Get Total Product Count</button>
+    <button onclick="spider.testProductsFromLinks(false, false, true)" class="btn btn-success btn-small">Save Selected</button>
+    <button onclick="actionButtons.saveAllValid()" class="btn btn-success btn-small">Save All Valid</button>        
         
     <!--<p>*** <a href="preload.php">UPDATE WEBSITE WITH NEW PRODUCTS</a> ***</p>-->
     <!--<p>*** <a href="colorProcessor.php">UPDATE NEW PRODUCT COLORS</a> ***</p>-->
@@ -335,10 +352,6 @@ input{
 <script src="../js/storeApi.js"></script>
 <script src="../js/productSpider.js"></script>
 <script type="text/javascript">
-$(document).ready(function() {
-    getLinks();	
-});
-
 
 setTimeout(function(){
     if(firebase.userid == null){
