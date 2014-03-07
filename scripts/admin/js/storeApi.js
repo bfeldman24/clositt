@@ -1118,7 +1118,7 @@ storeApi = {
     			item.price = storeApiHelper.findPricesAndGetLowest(prices);
 
                 if(item.image != undefined){
-                   item.sku = 'ni' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
+                   item.sku = 'mk' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;

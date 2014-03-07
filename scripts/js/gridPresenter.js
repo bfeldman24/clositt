@@ -92,7 +92,7 @@ var gridPresenter = {
 	    
 	    $("#" + id).append(
 	    	$("<div>").addClass("pageEndSpacer")	    		
-	    		.css("top", y + "px")
+	    		.css("top", (y + cellHeight) + "px")
 	    );
 	},
 	

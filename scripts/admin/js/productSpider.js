@@ -663,9 +663,9 @@ var actionButtons = {
             $("#transparentLoadingMask").hide();
             Messenger.timeout = 4000;
             var endTime = new Date().getTime();        
-            var executionTime = (endTime - window.saveValidStartTime) / 1000;
+            var executionTime = (endTime - window.saveValidStartTime) / 60000;
             
-            alert("COMPLETE!!! " + window.saveCounter + "/" + window.totalToSave + " categories saved in " + executionTime + " seconds!");
+            alert("COMPLETE!!! " + window.saveCounter + "/" + window.totalToSave + " categories saved in " + executionTime + " minutes!");
         }
     }
 };
@@ -769,5 +769,20 @@ $(document).ready(function(){
 });
 
 
+
+/***************************************
+* MISSING IMAGE CALLBACK FIXES
+* 
+* some sites have callbacks for missing images
+* if they get called while scraping, it will stop
+* stop the script. To prevent this, we just initialize
+* the callback function below so the script doesn't break
+****************************************/
 // Fix for Forever21 onerror issue
 var $j = $;
+
+// Fix for jcpenny
+var loadDefaultSwatchImage = $;
+
+// Fix for Michael Kors
+var shimImage = $;

@@ -52,8 +52,8 @@ class ProductAdminController {
                     // Step 2
          			$saveHistoricalPricesResults = $this->productAdminDao->saveHistoricalPrices();
          			// echo " 7) Save Historical Prices: " . $saveHistoricalPricesResults;
-         			$results['historicalPrices'] = $saveHistoricalPricesResults;
-
+         			$results['historicalPrices'] = $saveHistoricalPricesResults;         			
+    
                     // Step 3
          			$updateExistingProducts = $this->productAdminDao->updateExistingProducts();
          			// echo " 8) Update Existing Products: " . $updateExistingProducts;
@@ -68,7 +68,11 @@ class ProductAdminController {
          			$addTagsForNewProductsResults = $this->productAdminDao->addTagsForNewProducts($products);
          			// echo " 10) Added Tags for New Products: " . $addTagsForNewProductsResults;   
          			$results['tags'] = $addTagsForNewProductsResults;  
-         			   	
+         			
+         			// Step 6
+         			$updatedProductStatus = $this->productAdminDao->setMissingProductsToNotAvailable();
+                    // echo " 11) Update Products Statuses: " . $updatedProductStatus;
+                    $results['updatedStatus'] = $updatedProductStatus;         			   	
          		}
 			}
 		}else{

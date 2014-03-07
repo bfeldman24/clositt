@@ -78,6 +78,7 @@ class ProductAdminDao extends AbstractDao {
                       PRODUCT_PRICE . "," . 
                       PRODUCT_COMMENT_COUNT . "," . 
                       PRODUCT_CLOSITT_COUNT . "," . 
+                      PRODUCT_SHORT_LINK . "," . 
                       PRODUCT_STATUS . "," .
                       PRODUCT_DATE_UPDATED . ")" .
                " SELECT " . PRODUCT_SKU . "," .
@@ -90,6 +91,7 @@ class ProductAdminDao extends AbstractDao {
                       PRODUCT_PRICE . "," . 
                       PRODUCT_COMMENT_COUNT . "," . 
                       PRODUCT_CLOSITT_COUNT . "," . 
+                      PRODUCT_SHORT_LINK . "," . 
                       " 4 ," .
                       "NOW()" .
                " FROM " . TEMP_PRODUCTS . " tp " .
@@ -116,7 +118,9 @@ class ProductAdminDao extends AbstractDao {
               "p." .PRODUCT_NAME . " = tp." . PRODUCT_NAME . "," .
               "p." .PRODUCT_LINK . " = tp." . PRODUCT_LINK . "," .
               "p." .PRODUCT_IMAGE . " = tp." . PRODUCT_IMAGE . "," .
-              "p." .PRODUCT_PRICE . " = tp." . PRODUCT_PRICE;        
+              "p." .PRODUCT_PRICE . " = tp." . PRODUCT_PRICE . "," . 
+              "p." .PRODUCT_DATE_UPDATED. " = tp." . PRODUCT_DATE_UPDATED . "," .
+              "p." .PRODUCT_STATUS. " = CASE WHEN p.".PRODUCT_STATUS." = 3 THEN 4 ELSE p.".PRODUCT_STATUS." END";               
               
        if($this->debug){		    
 			$this->logDebug("923847293" ,$sql );
@@ -192,6 +196,28 @@ class ProductAdminDao extends AbstractDao {
         }
         
         return $affectedRows;
+	}
+	
+	public function setMissingProductsToNotAvailable(){
+	   $sql = "UPDATE " . PRODUCTS . " p " .
+              " LEFT JOIN " . TEMP_PRODUCTS . " tp ON tp." . PRODUCT_SKU . " = p." . PRODUCT_SKU .
+              " SET p." .PRODUCT_STATUS . " = 3 " .
+              " WHERE COALESCE(tp.".PRODUCT_SKU.",'n') = 'n' " .
+              " AND CONCAT(p.".PRODUCT_STORE.",p.".PRODUCT_CUSTOMER.",p.".PRODUCT_CATEGORY.") " .
+              " IN (SELECT DISTINCT CONCAT(".PRODUCT_STORE.",".PRODUCT_CUSTOMER.",".PRODUCT_CATEGORY.") FROM " . TEMP_PRODUCTS . ")";        
+              
+       if($this->debug){		    
+			$this->logDebug("09867746" ,$sql );
+		}
+        
+		$affected =& $this->db->exec($sql);                                		
+		
+		if (PEAR::isError($affected)) {
+			$this->logError("459608768" ,$affected->getMessage(),$sql);
+		    return false;
+		}	        
+        
+       return $affected;
 	}
 	
 	public function getTotalProductsCount(){
