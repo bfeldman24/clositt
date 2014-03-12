@@ -157,10 +157,14 @@ $("#subheader-myclositt").on('click', function(e){
     }else{
         e.preventDefault();
         Messenger.error("We'd love to show you your Clositt, but first you need to sign in.");
-        $("#signinModal").modal('show');
+        $("#signinModal").modal('show');        
         return false;
     } 
 });
+
+$('#signinModal').on('shown', function () {
+    $("#loginModalTab-inputEmail").focus();
+})
 
 $('#signinModal a[data-toggle="tab"]').on('shown', function (e) {     
     if($(e.target).attr("href") == "#loginModalTab"){
