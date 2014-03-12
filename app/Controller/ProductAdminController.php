@@ -186,9 +186,32 @@ class ProductAdminController {
 	public function getFilters(){
 	   $filter = array();
 	   
+	   // CUSTOMERS
 	   $filter['customers'] = $this->convertResultsToArray($this->productAdminDao->getCustomers());
-	   $filter['categories'] = $this->convertResultsToArray($this->productAdminDao->getCategories());
-	   $filter['companies'] = $this->convertResultsToArray($this->productAdminDao->getCompanies());
+	   
+	   // CATEGORIES
+	   $categoryResults = $this->productAdminDao->getCategories();
+	   $categories = array();
+	   
+	   if(is_object($categoryResults)){
+			while($row = $categoryResults->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+				$categories[] = array(stripslashes($row[PRODUCT_CATEGORY]), stripslashes($row[PRODUCT_CUSTOMER]));
+			}
+	   }  	   
+	   
+	   $filter['categories'] = $categories;
+	   
+	   // COMPANIES AND BRANDS
+	   $companyResults = $this->productAdminDao->getCompanies();
+	   $companies = array();
+	   
+	   if(is_object($companyResults)){
+			while($row = $companyResults->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+				$companies[] = array(stripslashes($row[PRODUCT_STORE]) , stripslashes($row[PRODUCT_CUSTOMER]));				
+			}
+	   }
+	   
+	   $filter['companies'] = $companies;
        $filter['prices'] = array(0,50,100,150,200,250,2000);  
 
        return $filter;
