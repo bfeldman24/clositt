@@ -38,7 +38,7 @@ var productPresenter = {
  		//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
  		var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
 		var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'">';
-				html +='<div class="picture"><a class="productPage" target="_blank"><img data-src="' + image + '" src="css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></a></div>';			
+				html +='<a class="productPage" target="_blank"><div class="picture"><img data-src="' + image + '" src="css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';			
 				html += '<div class="bottom-block">';
 				    html +='<div class="companyName">' + company + '</div>';
 					html +='<div class="price">' +  price + '</div>';
