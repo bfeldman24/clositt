@@ -819,9 +819,12 @@ footer .last{
     height: 20px;          
 }
 
-.overlay .productActions, .overlay .productSubHeader{
-    cursor: pointer;
+.overlay .productActions, .overlay .productSubHeader{    
      border-bottom: 1px solid #CBCBCB;
+}
+
+.overlay .productActions i{
+    cursor: pointer;   
 }
 
 #main-content h2{
