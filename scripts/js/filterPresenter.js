@@ -93,13 +93,13 @@ var filterPresenter = {
  		    
  		    var subCategoryOptions = $("<div>").addClass("subcategory"); 		    
  		    $.each(subcategory, function(index, value) {  		     
-     		    filterPresenter.allFilters.push(value);
+     		    filterPresenter.allFilters.push(value[0]);
      		     
      			subCategoryOptions.append(
-     				$("<div>").addClass("controls").append(
+     				$("<div>").addClass("controls").attr("filter-customer",value[1]).append(
      					$("<label>").addClass("checkbox").append(
-     						$("<input>").attr("type","checkbox").attr("name","category").attr("value",value)
-     					).append($("<span>").addClass("filterValueName").html(value))
+     						$("<input>").attr("type","checkbox").attr("name","category").attr("value",value[0])
+     					).append($("<span>").addClass("filterValueName").html(value[0]))
      				)
      			)
  		    });
@@ -111,13 +111,13 @@ var filterPresenter = {
  		$("#filter-float").append($("<h4>").html("Brand").addClass("filterHeader").attr('id', 'brands'));
  		var brandOptions = $("<div>").addClass("filterOptions");
  		$.each(filterPresenter.companies, function(index, value) {
- 		    filterPresenter.allFilters.push(value);
+ 		    filterPresenter.allFilters.push(value[0]);
  		    
  			brandOptions.append(
- 				$("<div>").addClass("controls").append(
+ 				$("<div>").addClass("controls").attr("filter-customer",value[1]).append(
  					$("<label>").addClass("checkbox").append(
- 						$("<input>").attr("type","checkbox").attr("name","company").attr("value",value)
- 					).append($("<span>").addClass("filterValueName").html(value))
+ 						$("<input>").attr("type","checkbox").attr("name","company").attr("value",value[0])
+ 					).append($("<span>").addClass("filterValueName").html(value[0]))
  				)
  			)
  		}); 
@@ -280,28 +280,51 @@ var filterPresenter = {
  	      
  	      if (customer == "men"){
  	          filterPresenter.defaultCustomer = "men";
- 	           	          
- 	          $.ajax({
-                dataType: "json",
-                url: window.HOME_ROOT + "s/menfilters",
-                async: false,
-                success: filterPresenter.populateFilterData
-              });
+ 	          
+ 	          // Need to use the callback because the animation visibility function does not hide hidden elements 	          
+ 	          $('.filterOptions .controls[filter-customer="Men"]').show('blind', 'slow', function(){ $(this).show(); });	          
+ 	          $('.filterOptions .controls[filter-customer="Women"]').hide('blind', 'slow', function(){ $(this).hide(); });
+ 	          
+ 	          filterPresenter.hideSubcategories("Women");
  	      }else{
  	          
  	          if (customer == "women"){
  	              filterPresenter.defaultCustomer = "women";
+ 	              
+ 	              $('.filterOptions .controls[filter-customer="Men"]').hide('blind', 'slow', function(){ $(this).hide(); });
+     	          $('.filterOptions .controls[filter-customer="Women"]').show('blind', 'slow', function(){ $(this).show(); });
+     	          
+     	          filterPresenter.hideSubcategories("Men");
  	          }else{
  	              filterPresenter.defaultCustomer = "both";
- 	          }
- 	           	          
- 	          $.ajax({
-                dataType: "json",
-                url: window.HOME_ROOT + "s/filters",
-                async: false,
-                success: filterPresenter.populateFilterData
-              });
- 	      }
+ 	              
+ 	              $('.filterOptions .controls[filter-customer="Men"]').show('blind', 'slow', function(){ $(this).show(); });
+     	          $('.filterOptions .controls[filter-customer="Women"]').show('blind', 'slow', function(){ $(this).show(); });
+     	          $('.filterOptions .filterSubheader').show('blind', 'slow', function(){ $(this).show(); });
+ 	          } 	           	           	          
+ 	      } 	       	      
+ 	      
+ 	},
+ 	
+ 	hideSubcategories: function(customer){
+    	 // Toggle Subcategories
+         $(".subcategory").each(function(){
+               var isAllOneCustomer = true;
+           
+               $(this).find(".controls[filter-customer]").each(function(){
+                   isAllOneCustomer = isAllOneCustomer && $(this).attr("filter-customer") == customer;
+               });
+               
+               if (isAllOneCustomer){                    
+                    $(this).prev().removeClass("open");
+                    $(this).prev().hide('blind', 'slow', function(){ $(this).hide(); });
+                    
+                    $(this).hide('blind', 'slow', function(){ $(this).hide(); });
+                    $(this).find(':checkbox').prop('checked', false);                                                            
+               }else{
+                    $(this).prev().show('blind', 'slow', function(){ $(this).show(); });                                        
+               }
+         });
  	},
  	
  	createSelectedFilter: function(filterid, filterValue){ 	       	  
