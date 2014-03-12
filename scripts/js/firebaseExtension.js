@@ -11,10 +11,14 @@ var firebase = {
 	userPath: 'userdata',
 	productsPath: "products",
 	storePath: "store",
+	connections: "connections",
+	isOnline: "isOnline",
+	lastOnline: "lastOnline",
+	connectedPath: ".info/connected",
 		
 	init: function(){
 		firebase.$ = new Firebase(firebase.url);	
-		firebase.authClient = new FirebaseSimpleLogin(firebase.$, firebase.checkActiveUser);
+		firebase.authClient = new FirebaseSimpleLogin(firebase.$, firebase.checkActiveUser);				
 	},
 		
 	checkActiveUser: function(error, user){
@@ -47,6 +51,7 @@ var firebase = {
 			firebase.loginCount = snapshot.child('loginCount').val();
 			firebase.userid = user.id;
 			firebase.email = user.email;
+			firebase.$.child(firebase.connectedPath).on('value', firebase.managePresence);
 			
 			if( firebase.username === null) {
 			    console.log("No User Found")
@@ -70,9 +75,7 @@ var firebase = {
 			}
             
             var dateTime = new Date();            
-            firebase.$.child(firebase.userPath).child(user.id).child("lastActivity").set(dateTime.toJSON(), function(){        
-        	   firebase.logginCallback();
-            });
+            firebase.logginCallback();
 		});
 	},
 	
@@ -114,6 +117,24 @@ var firebase = {
 		  }else{		  	
 		  		Messenger.error(error);	
 		  }
+	},
+	
+	managePresence: function(snap){
+    	   if (snap.val() === true && firebase.isLoggedIn && firebase.userid > 0) {
+                // We're connected (or reconnected)! Do anything here that should happen only if online (or on reconnect)
+        
+                // add this device to my connections list
+                // this value could contain info about the device or a timestamp too                
+                var connection = firebase.$.child(firebase.userPath).child(firebase.userid)
+                                                    .child(firebase.connections).push(Firebase.ServerValue.TIMESTAMP);                        
+        
+                // when I disconnect, remove this device
+                connection.onDisconnect().remove();
+        
+                // when I disconnect, update the last time I was seen online
+                firebase.$.child(firebase.userPath).child(firebase.userid).child(firebase.lastOnline)
+                                                    .onDisconnect().set(Firebase.ServerValue.TIMESTAMP);                                                                                                                                                         
+            }
 	},
 	
 	addToWaitingList: function(email, callback){
