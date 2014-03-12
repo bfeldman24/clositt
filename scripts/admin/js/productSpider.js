@@ -587,7 +587,16 @@ var actionButtons = {
          window.todaysDate = d.toLocaleDateString();
          
          $("#transparentLoadingMask").show(); 
-         Messenger.timeout = 15000;
+         Messenger.timeout = 15000;         
+         
+         // Reverse the company order every other day:
+         // This is so if the script goes through 1/2 of the products every 
+         // day before failing or browser crashes, then all of the products
+         // will get updated every 2 days. 
+         if (d.getDate() % 2 == 0){
+            Messenger.info("Reversing the company list (We do this every other day)");
+            $("#links").append($(".company").get().reverse());
+         }
          
          $("#links").find(':checkbox').each(function(){
             var valid = $(this).siblings(".isvalid").text();

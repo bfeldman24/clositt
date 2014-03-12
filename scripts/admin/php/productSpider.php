@@ -300,7 +300,7 @@ input{
         </li>
         <li><h3>Update product colors</h3>
             <ul>
-                <li>clik the link "UPDATE NEW PRODUCT COLORS"</li>
+                <li>clik the link <a href="colorProcessor.php">UPDATE NEW PRODUCT COLORS</a></li>
                 <li>This goes through all of the products that are saved, but are not live, detects the top 2 colors in the image, and stores them in a searchable format</li>
                 <li>Note: this script can take a while to complete depending on the number of images it has to process</li>
             </ul>
@@ -313,6 +313,8 @@ input{
             </ul>
         </li>    
     </ol>
+    
+        <!--<p>*** <a href="preload.php">UPDATE WEBSITE WITH NEW PRODUCTS</a> ***</p>-->
     <br><br><br>
     
     <div id="main-workspace" style="display:none;"></div>
@@ -329,14 +331,11 @@ input{
     <button id="selectallvalid" class="btn btn-small">Select Valid</button>    
     <button id="deselectall" class="btn btn-small">Deselect All</button>
     <button onclick="spider.testProductsFromLinks()" class="btn btn-primary btn-small">Test Category</button>
-    <button onclick="spider.testProductsFromLinks(true, false, false)" class="btn btn-primary btn-small">View Category Data</button>
+    <!--<button onclick="spider.testProductsFromLinks(true, false, false)" class="btn btn-primary btn-small">View Category Data</button>-->
     <button onclick="spider.testProductsFromLinks(false, true, false)" class="btn btn-primary btn-small" tooltip="(1 store at a time)">View Sample Products</button>    
     <button onclick="actionButtons.getTotalProductCount()" class="btn btn-info btn-small">Get Total Product Count</button>
     <button onclick="spider.testProductsFromLinks(false, false, true)" class="btn btn-success btn-small">Save Selected</button>
-    <button onclick="actionButtons.saveAllValid()" class="btn btn-success btn-small">Save All Valid</button>        
-        
-    <!--<p>*** <a href="preload.php">UPDATE WEBSITE WITH NEW PRODUCTS</a> ***</p>-->
-    <!--<p>*** <a href="colorProcessor.php">UPDATE NEW PRODUCT COLORS</a> ***</p>-->
+    <button onclick="actionButtons.saveAllValid()" class="btn btn-success btn-small">Save All Valid</button>                
 </div>
 
 <div id="loadingMask" style="display:none;" >
