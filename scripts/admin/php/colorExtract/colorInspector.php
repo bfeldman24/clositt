@@ -35,6 +35,24 @@ $numColorsToTag = 2;
         return array('r' => $r, 'g' => $g, 'b' => $b);
     }
     
+    function rgb2hex($rgb) {
+      $hex = "#";
+      $hex .= str_pad(dechex($rgb[0]), 2, "0", STR_PAD_LEFT);
+      $hex .= str_pad(dechex($rgb[1]), 2, "0", STR_PAD_LEFT);
+      $hex .= str_pad(dechex($rgb[2]), 2, "0", STR_PAD_LEFT);
+   
+      return $hex; // returns the hex value including the number sign (#)
+   }
+   
+   function rgbTohex($r,$g,$b) {
+      $rgb = array();
+      $rgb[] = $r;
+      $rgb[] = $g;
+      $rgb[] = $b;
+      
+      return rgb2hex($rgb);
+   }
+    
     
     // color1 and color 2
     function getColorDiff($c1, $c2, $weight = true){
@@ -89,22 +107,30 @@ $numColorsToTag = 2;
             try{          
                 $colors=$ex->Get_Color($image, $num_results, $reduce_brightness, $reduce_gradients, $delta, $focus_width, $focus_height);
                 
-                if (is_array($colors) && count($colors)){                                
+                if (is_array($colors) && count($colors) > 0){                                
+                    $backgroundColor = getImageBackgroundColor($image);
+                    
                     // For each top color, get the closest matching color in our fixed list of colors 
                     $productColors = array();
                     foreach ( $colors as $hex => $count ){
-                    	if ( $count > 0 ){    	       	   
-                    	   $percent = round($count * 100, 2);  
-                    	   $rgb = html2rgb($hex.'');  	   
-                    	   
-                    	   $closestColor = findClosestColor($rgb, $basicColors); 
-                    	   
-                    	   // add the parent color of the closest color to the list of returned colors
-                    	   if(!in_array($basicColors[$closestColor]['p'], $productColors)){   	   
-                    	       $productColors[$basicColors[$closestColor]['p']] = $percent; 
-                    	   }else{
-                    	       $productColors[$basicColors[$closestColor]['p']] += $percent;   
-                    	   }            	   
+                        
+                        if ($hex != $backgroundColor){
+                          	if ( $count > 0 ){    	       	   
+                          	   $percent = round($count * 100, 2);  
+                          	   $rgb = html2rgb($hex.'');  	   
+                          	   
+                          	   $closestColor = findClosestColor($rgb, $basicColors);                     	   
+                          	   
+                          	   if ($basicColors[$closestColor]['h'] !=  "#" . $backgroundColor){
+                          	   
+                            	   // add the parent color of the closest color to the list of returned colors
+                            	   if(!in_array($basicColors[$closestColor]['p'], $productColors)){   	   
+                            	       $productColors[$basicColors[$closestColor]['p']] = $percent; 
+                            	   }else{
+                            	       $productColors[$basicColors[$closestColor]['p']] += $percent;   
+                            	   }            	   
+                          	   }
+                          	}
                     	}
                     }
                                 
@@ -137,6 +163,48 @@ $numColorsToTag = 2;
         }        
                 
         return $colorStore;             
+    }
+    
+    /******************
+    * Gets the image corner colors
+    * If all corners are the same color,
+    * that is the background, otherwise no background
+    *******************/
+    function getImageBackgroundColor($image){
+                
+        $size = GetImageSize($image);
+        
+        if ($size[2] == 1)
+    	   $img = imagecreatefromgif($image);
+    	if ($size[2] == 2)
+    	   $img = imagecreatefromjpeg($image);
+    	if ($size[2] == 3)
+    	   $img = imagecreatefrompng($image);    
+        
+        
+        $topLeftRGB = imagecolorat($img,0,0);
+        $topLeft = imagecolorsforindex($img, $topLeftRGB);
+        $topLeftHex = rgbTohex($topLeft['red'],$topLeft['green'],$topLeft['blue']);
+        
+        $topRightRGB = imagecolorat($img,$size[0] - 1,0);
+        $topRight = imagecolorsforindex($img, $topRightRGB);
+        $topRightHex = rgbTohex($topRight['red'],$topRight['green'],$topRight['blue']);
+        
+        $bottomLeftRGB = imagecolorat($img,0,$size[1] - 1);
+        $bottomLeft = imagecolorsforindex($img, $bottomLeftRGB);
+        $bottomLeftHex = rgbTohex($bottomLeft['red'],$bottomLeft['green'],$bottomLeft['blue']);
+        
+        $bottomRightRGB = imagecolorat($img,$size[0] - 1,$size[1] - 1);
+        $bottomRight = imagecolorsforindex($img, $bottomRightRGB);
+        $bottomRightHex = rgbTohex($bottomRight['red'],$bottomRight['green'],$bottomRight['blue']);
+        
+        $sameColor = $topLeftHex == $topRightHex && $topRightHex == $bottomLeftHex && $bottomLeftHex == $bottomRightHex;
+        
+        if ($sameColor){            
+            return $colors[substr($topLeftHex,1)];
+        }   
+        
+        return null;
     }
             
     

@@ -202,7 +202,7 @@ class ProductAdminDao extends AbstractDao {
 	   $sql = "UPDATE " . PRODUCTS . " p " .
               " LEFT JOIN " . TEMP_PRODUCTS . " tp ON tp." . PRODUCT_SKU . " = p." . PRODUCT_SKU .
               " SET p." .PRODUCT_STATUS . " = 3 " .
-              " WHERE COALESCE(tp.".PRODUCT_SKU.",'n') = 'n' " .
+              " WHERE ISNULL(tp.".PRODUCT_SKU.") " .
               " AND CONCAT(p.".PRODUCT_STORE.",p.".PRODUCT_CUSTOMER.",p.".PRODUCT_CATEGORY.") " .
               " IN (SELECT DISTINCT CONCAT(".PRODUCT_STORE.",".PRODUCT_CUSTOMER.",".PRODUCT_CATEGORY.") FROM " . TEMP_PRODUCTS . ")";        
               
@@ -242,7 +242,7 @@ class ProductAdminDao extends AbstractDao {
 		
 		$sql = "SELECT * " .				
 				" FROM " . PRODUCTS .				
-				" WHERE COALESCE(" . PRODUCT_SHORT_LINK . ",'null') = 'null' " .
+				" WHERE ISNULL(" . PRODUCT_SHORT_LINK . ") " .
 				" ORDER BY " . PRODUCT_STORE . ", " . PRODUCT_NAME .
 				" LIMIT ? OFFSET ?";								
         
@@ -258,7 +258,7 @@ class ProductAdminDao extends AbstractDao {
               " WHERE " . PRODUCT_SKU . " = ? ";
               
        if($skipNulls){        
-            $sql .= " AND COALESCE(" . PRODUCT_SHORT_LINK . ",'null') = 'null'"; 
+            $sql .= " AND ISNULL(" . PRODUCT_SHORT_LINK . ")"; 
        }
               
        if($this->debug){		    
@@ -295,10 +295,10 @@ class ProductAdminDao extends AbstractDao {
 	}
 	
 	public function getCategories(){
-	   $sql = "SELECT DISTINCT " . PRODUCT_CATEGORY .
+	   $sql = "SELECT DISTINCT " . PRODUCT_CATEGORY . "," . PRODUCT_CUSTOMER .
 				" FROM " . PRODUCTS .
 				" WHERE " . PRODUCT_STATUS . " = 1 " .
-				" ORDER BY " . PRODUCT_CATEGORY;					
+				" ORDER BY " . PRODUCT_CATEGORY . "," . PRODUCT_CUSTOMER;					
         
 		$paramsTypes = array();		
 		$params = array();		
@@ -306,10 +306,10 @@ class ProductAdminDao extends AbstractDao {
 	}
 	
 	public function getCompanies(){
-	   $sql = "SELECT DISTINCT " . PRODUCT_STORE .
+	   $sql = "SELECT DISTINCT " . PRODUCT_STORE . "," . PRODUCT_CUSTOMER .
 				" FROM " . PRODUCTS .
 				" WHERE " . PRODUCT_STATUS . " = 1 " .
-				" ORDER BY " . PRODUCT_STORE;					
+				" ORDER BY " . PRODUCT_STORE . "," . PRODUCT_CUSTOMER;
         
 		$paramsTypes = array();		
 		$params = array();		

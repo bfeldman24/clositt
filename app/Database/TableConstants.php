@@ -27,6 +27,7 @@ define("HISTORICAL_DATE","date");
 define('COLORS', 'Colors');
 define('COLORS_COLOR', 'color');
 define('COLORS_PERCENT', 'percent');
+define('HAS_COLOR', 'HasColor');
 
 define('TAGS', 'Tags');
 define('TAG_STRING', 'tag');

@@ -62,6 +62,101 @@ function html2rgb($color)
     return array('r' => $r, 'g' => $g, 'b' => $b);
 }
 
+function rgb2hex($rgb) {
+   $hex = "#";
+   $hex .= str_pad(dechex($rgb[0]), 2, "0", STR_PAD_LEFT);
+   $hex .= str_pad(dechex($rgb[1]), 2, "0", STR_PAD_LEFT);
+   $hex .= str_pad(dechex($rgb[2]), 2, "0", STR_PAD_LEFT);
+
+   return $hex; // returns the hex value including the number sign (#)
+}
+
+function rgbTohex($r,$g,$b) {
+   $rgb = array();
+   $rgb[] = $r;
+   $rgb[] = $g;
+   $rgb[] = $b;
+   
+   return rgb2hex($rgb);
+}
+
+function RGB_TO_HSV ($R, $G, $B)  // RGB Values:Number 0-255
+{                                 // HSV Results:Number 0-1
+   $HSL = array();
+
+   $var_R = ($R / 255);
+   $var_G = ($G / 255);
+   $var_B = ($B / 255);
+
+   $var_Min = min($var_R, $var_G, $var_B);
+   $var_Max = max($var_R, $var_G, $var_B);
+   $del_Max = $var_Max - $var_Min;
+
+   $V = $var_Max;
+
+   if ($del_Max == 0)
+   {
+      $H = 0;
+      $S = 0;
+   }
+   else
+   {
+      $S = $del_Max / $var_Max;
+
+      $del_R = ( ( ( $max - $var_R ) / 6 ) + ( $del_Max / 2 ) ) / $del_Max;
+      $del_G = ( ( ( $max - $var_G ) / 6 ) + ( $del_Max / 2 ) ) / $del_Max;
+      $del_B = ( ( ( $max - $var_B ) / 6 ) + ( $del_Max / 2 ) ) / $del_Max;
+
+      if      ($var_R == $var_Max) $H = $del_B - $del_G;
+      else if ($var_G == $var_Max) $H = ( 1 / 3 ) + $del_R - $del_B;
+      else if ($var_B == $var_Max) $H = ( 2 / 3 ) + $del_G - $del_R;
+
+      if (H<0) $H++;
+      if (H>1) $H--;
+   }
+
+   $HSL['hue'] = $H * 255;
+   $HSL['sat'] = $S * 255;
+   $HSL['val'] = $V * 255;
+
+   return $HSL;
+}
+
+function HSV_TO_RGB ($H, $S, $V)  // HSV Values:Number 0-1
+{                                 // RGB Results:Number 0-255
+    $RGB = array();
+
+    if($S == 0)
+    {
+        $R = $G = $B = $V * 255;
+    }
+    else
+    {
+        $var_H = $H * 6;
+        $var_i = floor( $var_H );
+        $var_1 = $V * ( 1 - $S );
+        $var_2 = $V * ( 1 - $S * ( $var_H - $var_i ) );
+        $var_3 = $V * ( 1 - $S * (1 - ( $var_H - $var_i ) ) );
+
+        if       ($var_i == 0) { $var_R = $V     ; $var_G = $var_3  ; $var_B = $var_1 ; }
+        else if  ($var_i == 1) { $var_R = $var_2 ; $var_G = $V      ; $var_B = $var_1 ; }
+        else if  ($var_i == 2) { $var_R = $var_1 ; $var_G = $V      ; $var_B = $var_3 ; }
+        else if  ($var_i == 3) { $var_R = $var_1 ; $var_G = $var_2  ; $var_B = $V     ; }
+        else if  ($var_i == 4) { $var_R = $var_3 ; $var_G = $var_1  ; $var_B = $V     ; }
+        else                   { $var_R = $V     ; $var_G = $var_1  ; $var_B = $var_2 ; }
+
+        $R = $var_R * 255;
+        $G = $var_G * 255;
+        $B = $var_B * 255;
+    }
+
+    $RGB['R'] = $R;
+    $RGB['G'] = $G;
+    $RGB['B'] = $B;
+
+    return $RGB;
+} 
+
 
 // color1 and color 2
 function getColorDiff($c1, $c2, $weight = true){
@@ -80,6 +175,40 @@ function getColorDiff($c1, $c2, $weight = true){
            pow((intval($c1['g']) - intval($c2['g'])) * $greenWeight,2) + 
            pow((intval($c1['b']) - intval($c2['b'])) * $blueWeight,2);
 }
+
+/// <summary>
+/// Returns the nearest matching label color index available from the Label color list for a given color
+/// </summary>
+/// <param name="color">Whose match is to be found</param>
+/// <returns>Label Color Index</returns>
+function GetNearestColor($color, $ColorsHSB){    
+    
+    // adjust these values to place more or less importance on
+    // the differences between HSV components of the colors
+    $weightHue = 0.8;   
+    $weightSaturation = 0.1;    
+    $weightValue = 0.1;    
+    $minDistance = 999999;
+    $minColor = 0;
+    $targetHSB = RGB_TO_HSV($color['r'], $color['g'], $color['b']);    
+       
+    foreach ($ColorsHSB as $colorName => $colorAttr ){    
+    
+        $dH = $colorAttr['hue'] - $targetHSB['hue'];
+        $dS = $colorAttr['sat'] - $targetHSB['sat'];
+        $dV = $colorAttr['val'] - $targetHSB['val'];
+                
+        $curDistance = sqrt($weightHue * pow($dH, 2) + $weightSaturation * pow($dS, 2) + $weightValue * pow($dV, 2));
+        
+        if ($curDistance < $minDistance){        
+            $minDistance = $curDistance;            
+            $minColor = $colorName;                 
+        }
+    }
+    
+    return $minColor;
+}
+
 
 
 function findClosestColor($color, $colorSet){
@@ -117,9 +246,16 @@ foreach($products as $key => $value){
 
     <?php
         $colors=$ex->Get_Color($image, $num_results, $reduce_brightness, $reduce_gradients, $delta);
-    ?>
+        
+            ?>
     <table>
-    <tr><th>Color Code</th><th>Color</th><th>Color Name</th><th>Color Name Code</th><th>Parent Color</th><th>Percentage</th><td rowspan="<?php echo (($num_results > 0)?($num_results+1):22500);?>"><img src="<?php echo $image; ?>" alt="test image" /></td></tr>
+    <tr>
+        <th>Actual Color Code</th>
+        <th>Actual Color</th>
+        <th>Closest Color Name</th>
+        <th>Closest Color (HSV) Name</th>        
+        <th>Parent Color</th>
+        <th>Percentage</th><td rowspan="<?php echo (($num_results > 0)?($num_results+1):22500);?>"><img src="<?php echo $image; ?>" alt="test image" /></td></tr>
     <?php
     
     $productColors = array();
@@ -130,16 +266,35 @@ foreach($products as $key => $value){
     	   $percent = round($count * 100, 2);  
     	   $rgb = html2rgb($hex.'');  	   
     	   
-    	   $closestColor = findClosestColor($rgb, $basicColors); 
+    	   $closestColor = findClosestColor($rgb, $basicColors);
+    	   $closestColorHSV = GetNearestColor($rgb, $basicColors); 
     	   
     	   if(!in_array($basicColors[$closestColor]['p'], $productColors)){   	   
     	       $productColors[] = $basicColors[$closestColor]['p'];
-    	   }
+    	   }    	   
     	   
-    	   echo "<tr><td>".$hex."</td><td style=\"background-color:#".$hex.";\"></td><td style=\"background-color:".$basicColors[$closestColor]['h']."\"><b>".$closestColor."</b></td><td>".$basicColors[$closestColor]['h']."</td><td><b>".$basicColors[$closestColor]['p']."</b></td><td>".$percent."%</td></tr>";
+    	   echo "<tr><td>".$hex."</td>";
+    	   echo "<td style=\"background-color:#".$hex.";\"></td>";
+    	   
+    	   echo "<td style=\"background-color:".$basicColors[$closestColor]['h']."\"><b>".$closestColor."</b></td>";
+    	   
+    	   echo "<td style=\"background-color:".$basicColors[$closestColorHSV]['h']."\"><b>".$closestColorHSV."</b></td>";
+    	   
+    	   echo "<td><b>".$basicColors[$closestColor]['p']."</b></td>";
+    	   echo "<td>".$percent."%</td></tr>";
     	}
     }
-    echo "<h2>$i) </h2><span><b>" . implode(", ",$productColors) . "</b></span>";    
+    echo "<h2>$i) </h2><span><b>" . implode(", ",$productColors) . "</b></span>";  
+    
+    
+    // PRINT CORNER COLORS
+    echo "<br />";
+    echo "TopLeft: " . $topLeftHex;
+    echo " - TopRight: " . $topRightHex;
+    echo " - BottomLeft: " . $bottomLeftHex;
+    echo " - BottomRight: " . $bottomRightHex;
+    echo "<br />";
+    echo $sameColor ? "SAME CORNER COLORS" : "DIFFERENT CORNER COLORS";
     ?>
     </table>
     <br />

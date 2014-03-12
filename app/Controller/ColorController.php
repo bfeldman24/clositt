@@ -11,12 +11,14 @@ class ColorController extends AbstractDao{
 		
 		if(isset($colors) && is_array($colors) && count($colors) > 0){	
 			
-			$results = $this->addColorsDao($colors);			
+			$results = $this->addColorsDao($colors);
+			$results2 = $this->addHasColorsDao($colors);			
 			
 			if(is_numeric($results) && $results > 0){
 				return "success";
 			}else{
 			     print_r($results);
+			     print_r($results2);
 			}
 		}
 	
@@ -30,29 +32,61 @@ class ColorController extends AbstractDao{
 		}
 	 
 	    $sql = "INSERT INTO " . COLORS . 
-	           " VALUES (?, ?, ?)";
+	           " VALUES (?, ?, ?, NOW())";
         
         $stmt = $this->db->prepare($sql);
         
         $affected = 0;
         
-        if ($colors['colors'] == null){
+        if ($colors[0] != null){
             foreach ($colors as $color) {            
                 try {                
+                    echo "COLOR:";
+                    print_r($colors);
                     $affected += $stmt->execute($color);
                 } catch (Exception $e) {
-                    echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-                    print_r($row);
+                    echo 'Caught exception: ',  $e->getMessage(), "\n\n";                    
                 }
             }
-        }else{
+        }else if ($colors['colors'] != null){
             foreach ($colors['colors'] as $color => $products) {            
                 foreach ($products as $sku => $percent) {   
                     try {                
+                        echo " [COLOR: $color, SKU: $sku, PERCENT: $percent] ";
                         $affected += $stmt->execute(array($color, $sku, $percent));
                     } catch (Exception $e) {
-                        echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-                        print_r($row);
+                        echo 'Caught exception: ',  $e->getMessage(), "\n\n";                        
+                    }
+                }
+            }
+        }else{
+            print_r($colors);   
+        }
+        
+        return $affected;
+	}
+	
+	public function addHasColorsDao($colors){
+	    if(!isset($colors) || !is_array($colors)){
+			$this->logWarning("32522343","Nothing to add!");
+			return false; 
+		}
+	 
+	    $sql = "INSERT INTO " . HAS_COLOR . 
+	           " VALUES (?, NOW())";
+        
+        $stmt = $this->db->prepare($sql);
+        
+        $affected = 0;
+        
+        if ($colors['colors'] != null){
+            foreach ($colors['colors'] as $color => $products) {            
+                foreach ($products as $sku => $percent) {   
+                    try {                
+                        echo " [COLOR: $color] ";
+                        $affected += $stmt->execute(array($sku));
+                    } catch (Exception $e) {
+                        echo 'Caught exception: ',  $e->getMessage(), "\n\n";                        
                     }
                 }
             }
@@ -103,18 +137,42 @@ class ColorController extends AbstractDao{
 		return $searchResults;
 	}
 	
-	public function getColorsDao(){
-	    $limit = 100;					
+	public function getColorsDao(){			
 		
-		$sql = "SELECT " . PRODUCT_SKU . "," . PRODUCT_IMAGE .				
+		$sql = "SELECT p." . PRODUCT_SKU . ", p." . PRODUCT_IMAGE .				
 				" FROM " . PRODUCTS . " p " .
-				" WHERE NOT EXISTS(SELECT 1 FROM " . COLORS . " c WHERE c." . PRODUCT_SKU . " = p." . PRODUCT_SKU . ")".
-				" LIMIT ?";								
+				" LEFT JOIN ". HAS_COLOR . " c ON c." . PRODUCT_SKU . " = p." . PRODUCT_SKU .				
+				" WHERE p." . PRODUCT_STATUS . " IN (1,4) " .
+				" AND ISNULL(c." . PRODUCT_SKU . ") " . 				
+				" LIMIT 100";														
         
-		$paramsTypes = array('integer');		
-		$params = array($limit);
+		$paramsTypes = array();		
+		$params = array();
 		
 		return $this->getResults($sql, $params, $paramTypes, "1238123");
+	}
+	
+	public function getColorsCount(){	    		      
+		$results = $this->getColorsCountDao();
+		
+		if(is_object($results)){
+			if($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){					
+				return $row["count"];
+			}
+		}
+	
+		return -1;
+	}
+	
+	public function getColorsCountDao(){					
+		
+		$sql = "SELECT COUNT(1) as count " .
+				" FROM " . COLORS;								
+        
+		$paramsTypes = array();		
+		$params = array();
+		
+		return $this->getResults($sql, $params, $paramTypes, "322832");
 	}
 	
 	public function correctColor($sku, $oldColor, $newColor = null){	      	       
@@ -213,15 +271,15 @@ if( isset($_GET['method']) ){
         
         $results = $colorController->addColors($colorArray);
     }else if ($_GET['method'] == 'get'){
-        $limit = 1000;
-                
-        for ($i=0; $i < $limit; $i++){
             $unprocessedColors = $colorController->getColors();                           
             $colors = ColorInspector::processImageColors($unprocessedColors, 2);        
-            $results = $colorController->addColors($colors);
-            print_r("||| " . $limit . " |||");
+            $results = $colorController->addColors($colors);            
             print_r($results);
-        }
+            
+    }else if ($_GET['method'] == 'count'){
+            $colorCount = $colorController->getColorsCount();                                      
+            print_r($colorCount);
+    
     }else if ($_GET['method'] == 'correct' && isset($_POST['sku']) && isset($_POST['oldColor'])){
         
         if ($_SESSION['isAdmin']){
