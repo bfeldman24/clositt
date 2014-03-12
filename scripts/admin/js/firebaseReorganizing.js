@@ -363,5 +363,42 @@ var firebaseReorganizing = {
                 });                
             });              
         });		
-    },     
+    },
+    
+    removeUserDataNode: function(nodeName){
+        firebase.$.child("userdata").once('value', function(users){
+            
+            users.forEach(function(user){
+                                
+                if (user.hasChild(nodeName)){                                                
+                    firebase.$.child("userdata").child(user.name()).child(nodeName).remove(function(error){
+                       if (error){
+                                console.log("FAILED TO REMOVE " + nodeName);
+                        }else{
+                            console.log("REMOVED " + nodeName);
+                        } 
+                    });          
+                }      
+            });              
+        });		
+    },
+    
+    getOnlineUsers: function(){
+        firebase.$.child("userdata").once('value', function(users){
+            
+            users.forEach(function(user){
+                                
+                if (user.hasChild("connections")){                                                
+                    firebase.$.child("userdata").child(user.name()).child("connections").on('value', function(data){
+                       
+                       if (data.val()){
+                            console.log(user.name() + " is ONLINE");
+                        }else{
+                            console.log(user.name() + " is OFFLINE");
+                        } 
+                    });          
+                }      
+            });              
+        });
+    }     
 }
