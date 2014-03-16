@@ -248,6 +248,22 @@ var searchController = {
             );
               
             searchController.pageIndex++;        
+        }else{
+            if ($(".endResults").length <= 0){
+                var lastHeight = $("#product-grid").children("div[aligned=true]").last().css("top");
+    		
+        		if(lastHeight == undefined || lastHeight == null || lastHeight.trim() == ""){
+        			lastHeight = 0;
+        		}else{
+        			lastHeight = parseFloat(lastHeight, 10);	
+        		}
+                
+                $("#product-grid").append(
+                    $("<div>").addClass("endResults")
+                    .css("top", (lastHeight + 330) + "px")
+                    .text("End of Results")
+                );   
+            }
         }
     },     
     

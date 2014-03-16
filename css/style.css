@@ -1361,8 +1361,16 @@ ul.review-comments span.review-comment-user{
 
 .pageEndSpacer{
 	width:1px;
-	height:100px;
+	height:150px;
 	position:absolute;
+}
+
+.endResults{
+    color: #666666;
+    font-family: cursive;
+    font-size: 23px;
+    left: 35%;
+    position: absolute;   
 }
 
 #loadingMainContent > img, img.product-module-loading{
