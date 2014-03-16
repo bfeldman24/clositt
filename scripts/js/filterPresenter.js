@@ -370,6 +370,8 @@ var filterPresenter = {
 	   $("#filter-float").find("input").prop("checked", false);
 	   $("#filter-float").find(".selectedColor").removeClass("selectedColor");
 	   $("#selectedFilters").html("");
+	   
+	   $("#filter-float").find(".customerOption").removeClass("selected");
 	 },
 	 
 	 hideFilterPanel: function(){

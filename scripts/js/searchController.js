@@ -4,7 +4,6 @@ var searchController = {
     criteria: null,
     pageIndex: 0,
     hasMoreProducts: true,
-    tags: [],
     
     init: function(){
         $("#search-bar").on("keyup", searchController.showClearBtn);
@@ -41,9 +40,10 @@ var searchController = {
     
     search: function(criteria){
 		var searchTerm = $( "#search-bar" ).val().toLowerCase().trim();		
+		var cleanSearchTerm = searchTerm;
+		var tags = [];
 		var belowPrice = null;
 		var abovePrice = null;
-		var cleanSearchTerm = searchTerm;
 		
 		// log search term
 		var logSearchTerm = searchTerm.replace(/[^A-Za-z0-9\w\s]/gi,'');
@@ -76,20 +76,44 @@ var searchController = {
 		      cleanSearchTerm = cleanSearchTerm.replace(priceRegex,'').trim();		      
 		}
 		
-		// remove all non alphanumeric characters except spaces
-		cleanSearchTerm = cleanSearchTerm.replace(/[^A-Za-z0-9\w\s]/gi,''); 
+		// remove all non alphanumeric characters except spaces and # sign
+		cleanSearchTerm = cleanSearchTerm.replace(/[^A-Za-z0-9#\w\s]/gi,''); 
 		
 		// remove words less than 3 characters long
         cleanSearchTerm = cleanSearchTerm.replace(/(\b(\w{1,2})\b(\s|$))/gi,'');
         
         // remove common words
         cleanSearchTerm = cleanSearchTerm.replace(/(for|with|that|has|like)(\s|$)/gi,'');                
+    
+        var matchingFilters = [];            
+                   
+        // Get Tags Starting with #
+        while (cleanSearchTerm.indexOf("#") >= 0){  
+            var i = cleanSearchTerm.indexOf("#") + 1;
+            var tag = "";
+            
+            if (cleanSearchTerm.indexOf(" ", i) > 0){
+                tag = cleanSearchTerm.substring(i, cleanSearchTerm.indexOf(" ", i));
+            }else{
+                tag = cleanSearchTerm.substring(i);
+            }
+            
+            cleanSearchTerm = cleanSearchTerm.replace("#" + tag, "");
+            tags.push(tag);
+            
+            for (var i=0; i< filterPresenter.allFilters.length; i++) {
+                var filterValue = filterPresenter.allFilters[i].toLowerCase().replace(/[^A-Za-z0-9\w\s]/gi,'');
                 
-        var matchingFilters = null;
+                // Try matching original filter value
+                if (tag == filterValue){
+                        matchingFilters.push(filterPresenter.allFilters[i].toLowerCase());                           
+                        tags.splice(tags.length - 1, 1);
+                }
+            }
+        }                                
         
         if (criteria == null){
             criteria = {};
-            searchController.tags = cleanSearchTerm.split(" ");
             
             // Select the customer if applicable
             var customerRegex = new RegExp(searchController.regexEscape("women|men"), 'gi');
@@ -100,42 +124,11 @@ var searchController = {
                 criteria['customer'] = matchingCustomerFilters;
                 
                 cleanSearchTerm = cleanSearchTerm.replace(customerRegex, '');
-            }
-            
-            var filters = filterPresenter.allFilters.join("|").toLowerCase().trim();
-            filters = filters.replace(/s?(?=\s|\||$)/gi, ""); // remove trailing 's' form every word
-            filters = filters.replace(/sse/gi, "ss"); // remove 'es' from applicable words        
-            
-            var regex = new RegExp(searchController.regexEscape(filters), 'gi');
-            
-            matchingFilters = [];   
-            for (var i=0; i< filterPresenter.allFilters.length; i++) {
-                var filterValue = filterPresenter.allFilters[i].toLowerCase().replace(/[^A-Za-z0-9\w\s]/gi,'');
-                
-                // Try matching original filter value
-                if (cleanSearchTerm.indexOf(filterValue) >= 0){
-                       matchingFilters.push(filterPresenter.allFilters[i].toLowerCase());
-                       cleanSearchTerm = cleanSearchTerm.replace(filterValue, "");
-                }else{
-                
-                    // strip plural suffix and try again
-                    if (filterValue.indexOf("es", filterValue.length - 2) >= 0){
-                        filterValue = filterValue.substring(0, filterValue.length - 2);
-                    }
+            }                                                                        
                     
-                    if (filterValue.indexOf("s", filterValue.length - 1) >= 0){
-                        filterValue = filterValue.substring(0, filterValue.length - 1);
-                    }
-                    
-                    if (cleanSearchTerm.indexOf(filterValue) >= 0){
-                           matchingFilters.push(filterPresenter.allFilters[i].toLowerCase());
-                           cleanSearchTerm = cleanSearchTerm.replace(filterValue, "");
-                    }
-                }
-            }                                                                 
-                    
+            // Clear filters and reselct the matching filters        
             filterPresenter.clearFilters();            
-            if (matchingFilters != null && matchingFilters.length > 0){                                                                        
+            if (matchingFilters.length > 0){                                                                        
                 
                 for(var i=0; i < matchingFilters.length; i++){
                    var filter = $("#filter-float").find('input[value^="' + searchController.toTitleCase(matchingFilters[i]) + '"]');                                                            
@@ -175,14 +168,14 @@ var searchController = {
                 });               
             }
             
-            if (matchingFilters != null && matchingFilters.length > 0){
-                // remove filters in the search string
-                regex = new RegExp(searchController.regexEscape(matchingFilters.join('|')), 'gi');
-                cleanSearchTerm = cleanSearchTerm.replace(regex, '');
-                cleanSearchTerm = cleanSearchTerm.replace(/(\b(\w{1,2})\b(\s|$))/gi,''); // remove words less than 3 chars
-                cleanSearchTerm = cleanSearchTerm.trim(); 
-                searchController.tags = cleanSearchTerm.split(" ");       
-            }
+//            if (matchingFilters != null && matchingFilters.length > 0){
+//                // remove filters in the search string
+//                regex = new RegExp(searchController.regexEscape(matchingFilters.join('|')), 'gi');
+//                cleanSearchTerm = cleanSearchTerm.replace(regex, '');
+//                cleanSearchTerm = cleanSearchTerm.replace(/(\b(\w{1,2})\b(\s|$))/gi,''); // remove words less than 3 chars
+//                cleanSearchTerm = cleanSearchTerm.trim(); 
+//                tags = cleanSearchTerm.split(" ");       
+//            }
             
             
             // Seach for colors
@@ -194,8 +187,6 @@ var searchController = {
                 
                 if (cleanSearchTerm.indexOf(colorName) >= 0){
                        matchingColors.push(colorName);
-                       cleanSearchTerm = cleanSearchTerm.replace(colorName, "").trim();
-                       searchController.tags = cleanSearchTerm.split(" ");                        
                        
                        var colorFilter = $("#filter-float").find('.colorFilter.' + colorName);
                 
@@ -213,11 +204,11 @@ var searchController = {
             }              
         }
          
-        if (searchController.tags.length <= 0){ 
-            criteria['tags'] =  searchController.tags;  
+        if (tags.length > 0){ 
+            criteria['tags'] =  tags;  
         }
         
-        criteria['searchTerm'] = $( "#search-bar" ).val().trim();
+        criteria['searchTerm'] = $( "#search-bar" ).val().replace("#","").trim();
         
         searchController.criteria = criteria;
         searchController.pageIndex = 0;
@@ -602,7 +593,6 @@ var searchController = {
 		$("#search-bar-sort-block").css("visibility","hidden");
 		filterPresenter.clearFilters();	       		
 		productPresenter.refreshProducts();
-		searchController.tags = [];
 	},		
 	
 	getMatchingChild: function(snapshot, tag){

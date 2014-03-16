@@ -168,7 +168,7 @@ class ProductDao extends AbstractDao {
 	* @param $numResultsPerPage - how many results to return per page
 	**/
 	public function getProductsWithCriteria($criteria, $pageNumber, $numResultsPerPage){
-		$tagWeight = .1;
+		$tagWeight = .5;
 		
 		//Validate that there is at least one valid filter set
 		if(!isset($criteria)){
@@ -177,16 +177,10 @@ class ProductDao extends AbstractDao {
 		}
 
         $searchTags = $criteria->getTags();
+        $searchString = $criteria->getSearchString();
+        $hasSearchString = $searchString != null && trim($searchString) != "";
 		$hasTags = $searchTags != null && count($searchTags) > 0 && $searchTags[0] != null && $searchTags[0] != "";
-		$categories = $criteria->getCategories();
-		
-		if (is_array($categories) && is_array($searchTags)){
-            $tags = array_merge($categories, $searchTags);
-		}else if (is_array($categories)){
-            $tags = $categories;
-		}else if(is_array($searchTags)){
-            $tags = $searchTags;
-		}
+		$categories = $criteria->getCategories();				
 
 		$start = $pageNumber * $numResultsPerPage;
 		$params = array();
@@ -208,19 +202,33 @@ class ProductDao extends AbstractDao {
 
         if ($criteria->getColors() != null){
             $sql .= " INNER JOIN " . COLORS . " c  ON c." . PRODUCT_SKU . " = p." . PRODUCT_SKU;
+            $this->addCriteriaToSql($sql, $criteria->getColors(), "c." . COLORS_COLOR, $params, $paramTypes);
         }
         
-        if ($categories != null || $hasTags){
-            $sql .= " INNER JOIN " . TAGS . " t  ON t." . PRODUCT_SKU . " = p." . PRODUCT_SKU;            	
+        if ($categories != null){
+            $sql .= " INNER JOIN " . TAGS . " ct  ON ct." . PRODUCT_SKU . " = p." . PRODUCT_SKU;                      
+            $this->addCriteriaToSql($sql, $categories, "ct." . TAG_STRING, $params, $paramTypes);
         }        
+        
+        if($hasTags){
+            $sql .= " LEFT JOIN " . TAGS . " t  ON t." . PRODUCT_SKU . " = p." . PRODUCT_SKU;                      
+            $this->addCriteriaToSql($sql, $searchTags, "t." . TAG_STRING, $params, $paramTypes);
+        }
 
 		$filterSql = "p." . PRODUCT_STATUS . " = 1 ";		
-		$this->addCriteriaToSql($filterSql, $criteria->getCompanies(), "p." . PRODUCT_STORE, $params, $paramTypes);	
-		$this->addCriteriaToSql($filterSql, $tags, "t." . TAG_STRING, $params, $paramTypes);
-		$this->addCriteriaToSql($filterSql, $criteria->getCustomers(), "p." . PRODUCT_CUSTOMER, $params, $paramTypes);	
-		$this->addCriteriaToSql($filterSql, $criteria->getColors(), "c." . COLORS_COLOR, $params, $paramTypes);			
+		$this->addCriteriaToSql($filterSql, $criteria->getCompanies(), "p." . PRODUCT_STORE, $params, $paramTypes);			
+		$this->addCriteriaToSql($filterSql, $criteria->getCustomers(), "p." . PRODUCT_CUSTOMER, $params, $paramTypes);										
 		
-		// MIN PRICE
+		// SEARCH STRING
+        if ($hasSearchString){ 
+    			
+    			// Name matches tags
+    			$filterSql .= " AND Match(p.".PRODUCT_NAME.") Against (?) ";
+    			$params[] = $searchString;
+    			$paramTypes[] = 'text';    			    			    			                                        
+        }				         						
+        
+        // MIN PRICE
 		if ($criteria->getMinPrice() != null){			
 			$filterSql .= " AND p." . PRODUCT_PRICE . " >= ? ";
 			$params[] = $criteria->getMinPrice();
@@ -233,32 +241,6 @@ class ProductDao extends AbstractDao {
 			$params[] = $criteria->getMaxPrice();
 			$paramTypes[] = 'integer';
 		}	
-		
-		// SERACH TAGS		
-		if ($hasTags){
-    			$filterSql .= " AND (";
-    			
-    			// Name matches tags
-    			$filterSql .= " Match(p.".PRODUCT_NAME.") Against (?) ";
-    			$params[] = implode(" ",$searchTags);
-    			$paramTypes[] = 'text';
-    			
-    			// Remove if there is a performance hit  
-    			// Name regex matches tags
-    			$filterSql .= " OR p.".PRODUCT_NAME." REGEXP ? ";                
-    			$params[] = implode("|",$searchTags);
-    			$paramTypes[] = 'text';
-    			
-    			// Remove if there is a performance hit  
-    			// Tags exist
-    			$filterSql .= " OR EXISTS(SELECT 1" .
-                            " FROM " . TAGS .
-                            " WHERE ".TAG_STRING." IN (" .
-                            $this->convertCriteriaToQueryParameters($searchTags, $params, $paramTypes) .
-                            ") AND SKU = p.".PRODUCT_SKU.")";                
-                            
-                $filterSql .= " ) ";            
-        }						
 
         // WHERE CLAUSE
 		if($filterSql && trim($filterSql) != ""){
@@ -266,34 +248,50 @@ class ProductDao extends AbstractDao {
 		}
 		
 		// GROUP BY 
-		if ($categories || $hasTags){
+		if ($categories != null){
 		
-		    if (count($tags) > 1){		  
+		    if (count($categories) > 1){		  
+    		    $sql .= " GROUP BY ct." . PRODUCT_SKU;
+                $sql .= " HAVING COUNT(ct.".PRODUCT_SKU.") = ?";                
+                
+                $params[] = count($categories);
+        		$paramTypes[] = 'integer';
+		    }
+		}
+		
+		if ($hasTags){
+		
+		    if (count($searchTags) > 1){		  
     		    $sql .= " GROUP BY t." . PRODUCT_SKU;
                 $sql .= " HAVING COUNT(t.".PRODUCT_SKU.") = ?";                
                 
-                $params[] = count($tags);
+                $params[] = count($searchTags);
         		$paramTypes[] = 'integer';
 		    }
 		}
 
-        // 
-        $orderby = "";        
+        // ORDER BY (search string)
+        $orderby = "";
+        if ($hasSearchString){ 
+		    $orderby .= " + Match(p.".PRODUCT_NAME.") Against (?)";
+            $params[] = $searchString;
+			$paramTypes[] = 'text';            		                            
+		}
+
+        // ORDER BY (colors)               
         if ($criteria->getColors() != null){
             $orderby .= " + c." . COLORS_PERCENT;
         }
+                
+        // ORDER BY (categories)
+        if ($categories != null){                        
+		    $orderby .= " + ( COALESCE( ct.".TAG_COUNT.", 0) * " . $tagWeight . ")";
+		}			
         
-        if ($hasTags){
-            $orderby .= " + Match(p.".PRODUCT_NAME.") Against (?)";
-            $params[] = implode(" ", $searchTags);
-			$paramTypes[] = 'text';
-            
-		    $orderby .= " + (SELECT COALESCE( SUM(".TAG_COUNT.") * " . $tagWeight . ", 0)" .
-                            " FROM " . TAGS .
-                            " WHERE ".TAG_STRING." IN (" .
-                            $this->convertCriteriaToQueryParameters($searchTags, $params, $paramTypes) .
-                            ") AND SKU = p.".PRODUCT_SKU.")";                            
-		}
+        // ORDER BY (tags)
+        if ($hasTags){                        
+		    $orderby .= " + ( COALESCE(t.".TAG_COUNT.", 0) * " . $tagWeight . ")";
+		}			
                 
         if ($orderby != ""){            
             // remove first +
