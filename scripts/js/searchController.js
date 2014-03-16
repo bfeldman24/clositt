@@ -236,7 +236,7 @@ var searchController = {
         		    if (searchController.criteria['searchTerm'] == null || searchController.criteria['searchTerm'] == ""){
         		        errorMessage = "There are no macthing outfits!";
         		    }else{
-        		        errorMessage = "There are no outfits that matched \'" + searchController.criteria['searchTerm'] + "\'! Try using another way to describe what you are looking for.";
+        		        errorMessage = "There are no outfits that matched your search! Try using another way to describe what you are looking for.";
         		    }
         		  
         			$("#product-grid").html($("<div>").text(errorMessage));

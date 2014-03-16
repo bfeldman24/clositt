@@ -91,21 +91,36 @@ class ProductCriteria{
 		if(isset($maxPrice)){
 			$this->maxPrice = $maxPrice;
 		}
-	}
+	}		
 
     public static function setCriteriaFromPost($row){
 		$productCriteria = new ProductCriteria();
 		
 		$productCriteria->setCompanies($row['company']);
-		$productCriteria->setCustomers($row['customer']);
-		$productCriteria->setCategories($row['category']);
-		$productCriteria->setColors($row['colors']);
-		$productCriteria->setTags($row['tags']);
+		$productCriteria->setCustomers($row['customer']);		
+		$productCriteria->setColors($row['colors']);		
 		$productCriteria->setSearchString(trim($row['searchTerm']));
 		$productCriteria->setMinPrice($row['abovePrice']);
 		$productCriteria->setMaxPrice($row['belowPrice']);
+		
+		$productCriteria->setCategories(ProductCriteria::convertArrayToCamelCase($row['category']));
+		$productCriteria->setTags(ProductCriteria::convertArrayToCamelCase($row['tags']));		
 				    
 		return $productCriteria;
+	}
+	
+	private static function convertArrayToCamelCase($arr){
+	    for ($i=0; $i < count($arr); $i++){
+        	$arr[$i] = ProductCriteria::toCamelCase($arr[$i]);
+        }  
+        
+        return $arr;
+	}
+	
+	private static function toCamelCase($str){
+	       $str = ucwords(strtolower($str));
+           $str = preg_replace('/\s+/', '', $str); 
+           return $str;
 	}
 }
 
