@@ -96,15 +96,17 @@ class TagController extends AbstractDao{
         
         $stmt = $this->db->prepare($sql, array('text','text','integer'), MDB2_PREPARE_MANIP);
         
-        foreach ($tags as $row) {            
-            try {
+        foreach ($tags as $tag) {            
+            try {                
+                $tag = ucwords(strtolower($tag));
+                $tag = preg_replace('/\s+/', '', $tag);
                 
                 if($this->debug){
-                    $tagParams = print_r($row, true);
+                    $tagParams = print_r($tag, true);
         			$this->logDebug("12712931" ,$sql . " (" . $tagParams . ")" );
         		}
                 
-                $results = $stmt->execute($row);
+                $results = $stmt->execute($tag);
                 $stmt->free();
             } catch (Exception $e) {
                 echo 'Caught exception: ',  $e->getMessage(), "\n\n";
