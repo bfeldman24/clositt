@@ -36,6 +36,7 @@ var firebase = {
 	  	} else {
 		    // user is logged out		    
 		    console.log("logged out");
+		    firebase.$.child(firebase.connectedPath).on('value', firebase.managePresence);
 		    firebase.loggedOutCallback();
 		}
 	 
@@ -134,6 +135,15 @@ var firebase = {
                 // when I disconnect, update the last time I was seen online
                 firebase.$.child(firebase.userPath).child(firebase.userid).child(firebase.lastOnline)
                                                     .onDisconnect().set(Firebase.ServerValue.TIMESTAMP);                                                                                                                                                         
+            }else if (snap.val() === true) {
+                // We're connected (or reconnected)! Do anything here that should happen only if online (or on reconnect)
+        
+                // add this device to my connections list
+                // this value could contain info about the device or a timestamp too                
+                var connection = firebase.$.child("onlineGuests").push(Firebase.ServerValue.TIMESTAMP);                        
+        
+                // when I disconnect, remove this device
+                connection.onDisconnect().remove();                                                                                                                                                                
             }
 	},
 	
@@ -176,7 +186,7 @@ var firebase = {
 	},
 	
 	loggedOutCallback: function(){	
-        sessionStorage.isActiveUser = null;	   
+        sessionStorage.isActiveUser = null;	                   
 	       	   
 		if(typeof loggedOut == 'function')
 		{
@@ -213,14 +223,16 @@ var firebase = {
 	  		.append($('<li><a href="'+window.HOME_ROOT+'signup.php">Login or Sign Up</a></li>'))
 	},	
 
- 	logout: function(){
-		firebase.authClient.logout();	
-
-		$.post("/app/auth.php", function(){
-			location.href= window.HOME_ROOT+"signup.php";
-		}).fail(function() {			 
-            location.href= window.HOME_ROOT;
-	    });
+ 	logout: function(){				
+		firebase.$.child(firebase.userPath).child(firebase.userid).child(firebase.connections).remove(function(){
+		    firebase.authClient.logout();
+		  
+      		$.post("/app/auth.php", function(){      		    	
+      			location.href= window.HOME_ROOT+"signup.php";
+      		}).fail(function() {			 
+                  location.href= window.HOME_ROOT;
+      	    });
+		});				
 	},
 	
 	welcomeEmail: function(email, name){
