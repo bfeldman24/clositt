@@ -178,6 +178,16 @@
         "hue": 170,
         "sat": 255,
         "val": 128
+    }, 
+    "dark navy": {
+        "p": "blue",
+        "h": "#000030",
+        "r": 0,
+        "g": 0,
+        "b": 128,
+        "hue": 170,
+        "sat": 255,
+        "val": 128
     },          
     "light purple": {
         "p": "purple",

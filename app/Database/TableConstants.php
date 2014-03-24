@@ -11,6 +11,10 @@ define("PRODUCT_NAME","name");
 define("PRODUCT_LINK","link");
 define("PRODUCT_IMAGE","image");
 define("PRODUCT_PRICE","price");
+define("PRODUCT_COLOR_ONE","colorOne");
+define("PRODUCT_COLOR_ONE_PERCENT","colorOnePercent");
+define("PRODUCT_COLOR_TWO","colorTwo");
+define("PRODUCT_COLOR_TWO_PERCENT","colorTwoPercent");
 define("PRODUCT_COMMENT_COUNT","commentcount");
 define("PRODUCT_CLOSITT_COUNT","closittcount");
 define("PRODUCT_SHORT_LINK","shortlink");
@@ -32,4 +36,9 @@ define('HAS_COLOR', 'HasColor');
 define('TAGS', 'Tags');
 define('TAG_STRING', 'tag');
 define('TAG_COUNT', 'count');
+
+define('COLOR_MAPPING', 'ColorMapping');
+define('COLOR_MAPPING_COLOR', 'color');
+define('COLOR_MAPPING_PARENT', 'parent');
+define('COLOR_STATUS', 'status');
 ?>

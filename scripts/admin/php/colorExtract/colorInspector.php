@@ -107,42 +107,42 @@ $numColorsToTag = 2;
             try{          
                 $colors=$ex->Get_Color($image, $num_results, $reduce_brightness, $reduce_gradients, $delta, $focus_width, $focus_height);
                 
+                if(!array_key_exists($sku, $colorStore['colors'])){   	                   
+                    $colorStore['colors'][$sku] = array();
+        	    }
+        
                 if (is_array($colors) && count($colors) > 0){                                
                     $backgroundColor = getImageBackgroundColor($image);
+                    //echo "BACKROUND: " . $backgroundColor;
                     
-                    // For each top color, get the closest matching color in our fixed list of colors 
+                    // For each top color, add to the list of colors 
                     $productColors = array();
+                    $numColors=0;
                     foreach ( $colors as $hex => $count ){
                         
                         if ($hex != $backgroundColor){
                           	if ( $count > 0 ){    	       	   
                           	   $percent = round($count * 100, 2);  
-                          	   $rgb = html2rgb($hex.'');  	   
                           	   
-                          	   $closestColor = findClosestColor($rgb, $basicColors);                     	   
-                          	   
-                          	   if ($basicColors[$closestColor]['h'] !=  "#" . $backgroundColor){
-                          	   
-                            	   // add the parent color of the closest color to the list of returned colors
-                            	   if(!in_array($basicColors[$closestColor]['p'], $productColors)){   	   
-                            	       $productColors[$basicColors[$closestColor]['p']] = $percent; 
-                            	   }else{
-                            	       $productColors[$basicColors[$closestColor]['p']] += $percent;   
-                            	   }            	   
-                          	   }
+                        	   if(!in_array($hex, $productColors)){   	   
+                        	       $productColors[$hex] = $percent; 
+                        	   }else{
+                        	       $productColors[$hex] += $percent;   
+                        	   }            	   
                           	}
+                    	}
+                    	
+                    	$numColors++;                    	
+                    	if ($numColors >= $numColorsToTag){
+                    	   break;  
                     	}
                     }
                                 
                     // Add the top colors to the color store
-                    foreach ( $productColors as $parentColor => $percent ){            
+                    foreach ( $productColors as $mainColor => $percent ){            
                        
-                       if ($parentColor != null && trim($parentColor) != ""){                
-                           if(!array_key_exists($parentColor, $colorStore['colors'])){   	                   
-                    	       $colorStore['colors'][$parentColor] = array();
-                    	   }
-                    	   
-                    	   $colorStore['colors'][$parentColor][$sku] = $percent;            	   
+                       if ($mainColor != null && trim($mainColor) != ""){ 
+                    	   $colorStore['colors'][$sku][$mainColor] = $percent;            	   
                        }
                     }  
                     
@@ -154,11 +154,34 @@ $numColorsToTag = 2;
                         fclose($file);
                     }
                 }else{
-                    $colorStore['colors']['error'][$sku] = -1;      
+                    $colorStore['colors'][$sku]['error'] = -1;      
                 }
             
             }catch(Exception $e){
                 echo "Caught Error: " . $e->getMessage();
+            }
+        }        
+                
+        return $colorStore;             
+    }
+    
+    function findClosestColors($products, $basicColors){
+        $i=1;
+        $n=1;              
+        
+        // loop through all products and get image colors
+        $colorStore = array();
+        $colorStore['colors'] = array();
+        foreach($products as $color => $parent){           
+            
+            if ($parent == null || !$parent || trim($parent) == ""){
+                $rgb = html2rgb($color.'');  	                       	   
+                $closestColor = findClosestColor($rgb, $basicColors);                
+            	$colorStore['colors'][$color] = $closestColor;  
+            	$colorStore['numNewMappings'] = $i++;                      	            	
+            }else{
+                $colorStore['colors'][$color] = $parent;
+                $colorStore['numSkippedMappings'] = $n++;          	   
             }
         }        
                 
@@ -185,23 +208,27 @@ $numColorsToTag = 2;
         $topLeftRGB = imagecolorat($img,0,0);
         $topLeft = imagecolorsforindex($img, $topLeftRGB);
         $topLeftHex = rgbTohex($topLeft['red'],$topLeft['green'],$topLeft['blue']);
+        //echo " TL: " .$topLeftHex;
         
         $topRightRGB = imagecolorat($img,$size[0] - 1,0);
         $topRight = imagecolorsforindex($img, $topRightRGB);
         $topRightHex = rgbTohex($topRight['red'],$topRight['green'],$topRight['blue']);
+        //echo " TR: " .$topRightHex;
         
         $bottomLeftRGB = imagecolorat($img,0,$size[1] - 1);
         $bottomLeft = imagecolorsforindex($img, $bottomLeftRGB);
         $bottomLeftHex = rgbTohex($bottomLeft['red'],$bottomLeft['green'],$bottomLeft['blue']);
+        //echo " BL: " .$bottomLeftHex;
         
         $bottomRightRGB = imagecolorat($img,$size[0] - 1,$size[1] - 1);
         $bottomRight = imagecolorsforindex($img, $bottomRightRGB);
         $bottomRightHex = rgbTohex($bottomRight['red'],$bottomRight['green'],$bottomRight['blue']);
+        //echo " BR: " .$bottomRightHex;
         
         $sameColor = $topLeftHex == $topRightHex && $topRightHex == $bottomLeftHex && $bottomLeftHex == $bottomRightHex;
         
-        if ($sameColor){            
-            return $colors[substr($topLeftHex,1)];
+        if ($sameColor){        
+            return $colors[] = substr($topLeftHex,1);
         }   
         
         return null;
@@ -258,8 +285,21 @@ if (isset($_POST['store'])){
            return $colorStoreResults;
        }else{
            echo "Missing Parameters";   
-       }
+       }       
+    }
+    
+    public static function getClosestColors($colorStore){       
+       $colorsFile = dirname(__FILE__) . "/colors.json";              
        
+       // Get Color file    
+       $file = fopen($colorsFile, 'r');
+       $colorsJson = fread($file, filesize($colorsFile));
+       fclose($file);
+       $basicColors = json_decode($colorsJson, true);    
+       
+       $colorStoreResults = findClosestColors($colorStore, $basicColors);
+    
+       return $colorStoreResults;
     }
  }
  ?>

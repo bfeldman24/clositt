@@ -8,8 +8,9 @@ var colorProcessor = {
     stop: false,
 
 	init: function(){	    
-		$("body").append($("<div>").addClass("toggleScript btn btn-success").html("Start Color Script"));		
-		$(document).on("click", ".toggleScript", colorProcessor.toggleScript)										
+		$("body").append($("<div>").addClass("toggleScript btn btn-success").html("Process New Colors"));		
+		$("body").append($("<div>").addClass("verifymapping btn btn-info").html("Verify Color Mapping"));		
+		$(document).on("click", ".toggleScript", colorProcessor.toggleScript);												
 	},
 	
 	toggleScript: function(){
@@ -320,4 +321,139 @@ var colorProcessorSaveToFirebase = {
             $("body").append($("<div>").html("The colors for these products were already saved!"));
         }
     }
+};
+
+
+var colorMappingProcessor = {
+    parentOptions: null,
+    
+    init: function(){
+        $(document).on("click", ".verifymapping", colorMappingProcessor.getColorMapping);
+        $(document).on("click", ".approveColors", colorMappingProcessor.saveColorMapping);
+        $(document).on("click", ".toggleSelectAll", colorMappingProcessor.toggleSelectAll);        
+        $.getJSON( window.HOME_ROOT + "scripts/admin/php/colorExtract/colors.json", colorMappingProcessor.getParentOptions);
+    },
+    
+    getColorMapping: function(){
+        $(".verifymapping").attr("disabled","true");
+        $(document).off("click", ".verifymapping");
+        
+        Messenger.info("Getting Unapproved Colors...");
+        $.getJSON( window.HOME_ROOT + "c/createmappings", colorMappingProcessor.showColorMapping);
+    },        
+    
+    showColorMapping: function(colors){
+        if (colors.colors != null){
+            colors = colors.colors;   
+        }    
+        
+        for(var i=0; i < Object.keys(colors).length; i++){
+            var color = Object.keys(colors)[i];
+        
+            $("body").append(
+                $("<div>").addClass("colorMapping").append(
+                    $("<input>")
+                        .attr("type","checkbox")
+                        .addClass("colorMapping-approval")
+                        .prop("checked", true)
+                ).append(
+                    $("<span>")
+                        .css("background-color","#" + color)
+                        .addClass("colorMapping-color")
+                        .text(color)
+                ).append(
+                    $("<span>")
+                        .addClass("colorMapping-parent")
+                        .html(colorMappingProcessor.parentOptions.clone().val(colors[color]))
+                )
+            );
+        }
+        
+        $("body").append(
+            $("<button>").addClass("btn btn-large toggleSelectAll").text("Deselect All")
+        ).append(
+            $("<button>").addClass("btn btn-success btn-large approveColors").text("Approve Checked Colors")
+        );                
+    },                
+    
+    getParentOptions: function(colors){                
+        var select = $("<select>").addClass("parentOptions");                        
+        var allColors = [];
+        
+        for(var i=0; i < Object.keys(colors).length; i++){
+            allColors.push(Object.keys(colors)[i]);
+        }
+            
+        allColors.sort(); 
+        
+        for(var i=0; i < allColors.length; i++){
+            var color = allColors[i];
+            
+            select.append(
+                $("<option>").attr("value",color.toLowerCase()).text(color)
+            );
+        }
+        
+        colorMappingProcessor.parentOptions = select;               
+    },
+    
+    saveColorMapping: function(){
+        var colors = {};
+        
+        $(".colorMapping-color").each(function(){
+             var isApproved = $(this).siblings(".colorMapping-approval").prop("checked");
+             
+             if (isApproved){
+                 var color = $(this).text();
+                 var parent = $(this).siblings(".colorMapping-parent").find("select").val();
+                 
+                 colors[color] = parent;
+             }
+        });
+        
+        console.log(JSON.stringify(colors));
+        
+        Messenger.info("Saving...");
+        
+        $.post( window.HOME_ROOT + "c/savemappings", {colors: colors}, function(data){
+            console.log(data);
+            
+            if (data == "success"){
+                Messenger.success("Saved!!!");
+                    
+                // Clean up
+                $(".colorMapping").remove();
+                $(".approveColors").remove();
+                $(".toggleSelectAll").remove();
+                $(".verifymapping").removeAttr("disabled");
+                $(document).on("click", ".verifymapping", colorMappingProcessor.getColorMapping);
+                
+                $.post( window.HOME_ROOT + "c/getmappingcount", function(count){
+                    if (!isNaN(count)){
+                        Messenger.info("There are " + count + " more unapproved colors");
+                        Messenger.info('Click the "Verify Color Mapping" button to get the next batch');
+                    }else{
+                        Messenger.error("There was an error getting the number of unapproved colors");
+                        Messenger.error("Error: " + count);
+                    }
+                });
+                
+            }else{
+                Messenger.error("There was a problem saving the colors!");
+                Messenger.error("Error: " + data);
+            }
+        });                        
+    },
+    
+    toggleSelectAll: function(){
+        var isSelected = $("input").first().prop("checked");        
+        $("input").prop("checked",!isSelected);
+        
+        if(isSelected){
+            $(".toggleSelectAll").text("Select All");   
+        }else{
+            $(".toggleSelectAll").text("Deselect All");
+        }        
+    }
+           
 };

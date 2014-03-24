@@ -15,12 +15,36 @@ include(dirname(__FILE__) . '/../../../static/meta.php');
 .btn{
     margin: 5px;   
 }
+
+
+.colorMapping{
+    margin: 5px;    
+    height: 40px
+}
+
+.colorMapping-color{
+    color: #000000;
+    text-shadow: 1px 1px 0 #CCCCCC;   
+    padding: 10px 85px;     
+}
+
+.colorMapping-parent{
+    padding: 10px;
+    position: relative;
+    top: 2px;     
+}
+
+.colorMapping-approval{
+    margin: 0 10px !important;   
+}
+
 </style>
 </head>
 <body>
 
 <!--<script src="../../js/firebaseExtension.js" type="text/javascript"></script>-->
 <script src="../../js/messenger.js" type="text/javascript"></script>
+<script src="../../js/colorPresenter.js" type="text/javascript"></script>
 <script src="../js/colorProcessor.js" type="text/javascript"></script>
 
 
@@ -36,6 +60,7 @@ Messenger.init();
 	$(document).on("click",".getColors", colorProcessorSaveToFirebase.getColorsFromSavedFile);    
 <?php }else{ ?>
     colorProcessor.init();
+    colorMappingProcessor.init();
 <?php } ?>
 
 </script>

@@ -34,10 +34,15 @@ define('CLOSITT_JS',$js);
 - use output as clositt.min.e.js
 - change below to point to new file
 */
-//define('CLOSITT_JS','<script src="' . HOME_ROOT .'scripts/js/clositt.min.js"></script>');
-//define('CLOSITT_CSS',HOME_ROOT .'css/style.min.css');
 
+/*
+define('CLOSITT_CSS',HOME_ROOT .'css/style.min.css');
 
+$js = '<script src="' . HOME_ROOT .'scripts/js/clositt.min.js"></script>' .
+'<script src="' . HOME_ROOT .'lib/js/jquery.unveil.min.js"></script>';
+
+define('CLOSITT_JS',$js);
+*/
 
 
 // ALL
