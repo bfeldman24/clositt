@@ -2,7 +2,8 @@ var gridPresenter = {
     randomStartingPosition: 0,	
     productIndex: 0,
     storeCount: 0,  
-    browsePages: [],    
+    maxBrowsePages: 300,
+    browsePages: [],        
 	
 	init: function(){			
 	    gridPresenter.randomStartingPosition = parseInt(Math.random() * 15000);	
@@ -121,9 +122,8 @@ var gridPresenter = {
 	},		
 	
 	mixupBrowsePages: function(){
-	    var max = 300;
-		for(var i=0; i < max; i++){
-		      var swap = Math.floor(Math.random() * max);
+		for(var i=0; i < gridPresenter.maxBrowsePages; i++){
+		      var swap = Math.floor(Math.random() * gridPresenter.maxBrowsePages);
 		      var temp = gridPresenter.browsePages[i];
 		      gridPresenter.browsePages[i] = gridPresenter.browsePages[swap] == null ? swap : gridPresenter.browsePages[swap];
 		      gridPresenter.browsePages[swap] = temp == null ? i : temp;
