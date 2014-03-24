@@ -332,6 +332,7 @@ var colorMappingProcessor = {
         $(document).on("click", ".approveColors", colorMappingProcessor.saveColorMapping);
         $(document).on("click", ".toggleSelectAll", colorMappingProcessor.toggleSelectAll);        
         $.getJSON( window.HOME_ROOT + "scripts/admin/php/colorExtract/colors.json", colorMappingProcessor.getParentOptions);
+        $.post( window.HOME_ROOT + "c/getmappingcount", colorMappingProcessor.areAnyColorsLeft);
     },
     
     getColorMapping: function(){
@@ -443,6 +444,18 @@ var colorMappingProcessor = {
                 Messenger.error("Error: " + data);
             }
         });                        
+    },
+    
+    areAnyColorsLeft: function(count){
+        console.log(count);
+        
+        if (!isNaN(count)){
+            if (count <= 0){
+                Messenger.info("There are no more unapproved colors...");
+                $(".verifymapping").attr("disabled","true");
+                $(document).off("click", ".verifymapping");
+            }
+        }
     },
     
     toggleSelectAll: function(){
