@@ -115,6 +115,10 @@ input{
     width: 1060px;
 }
 
+#signinModal{
+    width: 460px;   
+}
+
 .modal-body {
     text-align: left;
 }
@@ -170,7 +174,7 @@ input{
     				  <option value="H&M">H&M (json link)</option>
     				  <option value="Hollister">Hollister</option>
     				  <option value="Intermix">Intermix (json link)</option>
-    				  <option value="JCPenny">JCPenny</option>
+    				  <option value="JCPenney">JCPenney</option>
     				  <option value="J_Crew">J.Crew</option>
     				  <option value="J_Jill">J.Jill</option>
     				  <option value="Kate Spade">Kate Spade</option>
@@ -354,7 +358,8 @@ input{
 
 setTimeout(function(){
     if(firebase.userid == null){
-    	alert("You must be logged in to save products. Go back to the login page and then come here.");
+    	Messenger.info("You must be logged in to save products.");
+    	$("#signinModal").modal('show');  
     }
 },7000);
 	

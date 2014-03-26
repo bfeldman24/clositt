@@ -25,7 +25,7 @@ storeApi = {
 		        newUrl = storeApiHelper.replaceParameter(url, "pageIndex", "1");
 		        newUrl = storeApiHelper.replaceParameter(url, "productsPerPage", "1000");
 		        break;
-		    case "jcpenny":
+		    case "jcpenney":
 		        newUrl = storeApiHelper.replaceParameter(url, "Nao", "96");
 		        newUrl = storeApiHelper.replaceParameter(newUrl, "pageSize", "96");		        		        		        
 		        newUrl = storeApiHelper.replaceParameter(newUrl, "pN", "1");		        
@@ -142,8 +142,8 @@ storeApi = {
 			case "macys":			
 			    products = storeApi.getMacys(data, home);
 			    break;
-			case "jcpenny":			
-			    products = storeApi.getJCPenny(data, home);
+			case "jcpenney":			
+			    products = storeApi.getJCPenney(data, home);
 			    break; 
 			case "new york & company":
 			    products = storeApi.getNyAndCompany(data, home);
@@ -210,7 +210,7 @@ storeApi = {
     							item.price = storeApiHelper.findPrice(item.price);
     							item.sku = 'g' + this.businessCatalogItemId;
     				
-    							if(item.image != undefined){			
+    							if(storeApiHelper.checkForProductImage(item.image)){			
     								var itemid = item.sku.replace(/-\W/g, '');
     								products[itemid] = item;
     							}
@@ -230,7 +230,7 @@ storeApi = {
                                                 item.price = storeApiHelper.findPrice(item.price);
                                                 item.sku = 'g' + this.businessCatalogItemId;
 
-                                                if(item.image != undefined){
+                                                if(storeApiHelper.checkForProductImage(item.image)){
                                                         var itemid = item.sku.replace(/-\W/g, '');
                                                         products[itemid] = item;
                                                }
@@ -251,7 +251,7 @@ storeApi = {
 	                                item.price = storeApiHelper.findPrice(item.price);
 	                                item.sku = 'g' + this.businessCatalogItemId;
 	
-	                                if(item.image != undefined){
+	                                if(storeApiHelper.checkForProductImage(item.image)){
 	                                	var itemid = item.sku.replace(/-\W/g, '');
 	                                        products[itemid] = item;
 	                                }
@@ -266,6 +266,8 @@ storeApi = {
 		siteHome += "?iNextCategory=-1";
 	  	var products = new Object();   		
 	  	
+	  	storeApiHelper.checkForProductListing("jc", $(data).find(".arrayProdCell"));
+	  	
 		$(data).find(".arrayProdCell").each(function(){
 			var item = new Object();	
 			
@@ -277,7 +279,7 @@ storeApi = {
 			item.price = priceArr[priceArr.length -1];					
 			item.price = storeApiHelper.findPrice(item.price);				     			
 			
-			if(item.image != undefined){    
+			if(storeApiHelper.checkForProductImage(item.image)){    
 			    item.sku = 'jc' + item.link.substring(item.link.lastIndexOf("/")+1, item.link.lastIndexOf("."));
 			    
 				var itemid = item.sku.replace(/-\W/g, '');			
@@ -290,6 +292,8 @@ storeApi = {
 	    
 	getAnnTaylor: function(data, siteHome){
 	 	var products = new Object();
+	 	
+	 	storeApiHelper.checkForProductListing("at", $(data).find(".product"));
 	 		   		
 		$(data).find(".product").each(function(){
 			var item = new Object();
@@ -303,7 +307,7 @@ storeApi = {
 			var url = item.link.substring(0, item.link.indexOf("?"));
             item.sku = 'at' + url.substring(url.lastIndexOf("/")+1);
 			
-			if(item.image != undefined){
+			if(storeApiHelper.checkForProductImage(item.image)){
 				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
@@ -315,6 +319,8 @@ storeApi = {
 	    
 	getLoft: function(data, siteHome){
 		 var products = new Object();
+		 
+		 storeApiHelper.checkForProductListing("loft", $(data).find(".products").find(".product"));
 		 		    		
 		$(data).find(".products").find(".product").each(function(){
 			var item = new Object();
@@ -328,7 +334,7 @@ storeApi = {
 			var url = item.link.substring(0, item.link.indexOf("?"));
             item.sku = 'l' + url.substring(url.lastIndexOf("/")+1);
 			
-			if(item.image != undefined){
+			if(storeApiHelper.checkForProductImage(item.image)){
 				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
@@ -339,6 +345,8 @@ storeApi = {
 	    	
 	getUrban: function(data, siteHome){
 	    var products = new Object();
+	    
+	    storeApiHelper.checkForProductListing("urban", $(data).find("#category-products").children());
 	    		    		
 		$(data).find("#category-products").children().each(function(){
 			var item = new Object();
@@ -349,7 +357,7 @@ storeApi = {
 			item.price = $(this).find(".category-product-description > .price").first().text().trim();	
 			item.price = storeApiHelper.findPrice(item.price);	        
 	
-			if(item.image != undefined){
+			if(storeApiHelper.checkForProductImage(item.image)){
 			    item.sku = 'uo' + item.link.substring(item.link.indexOf("id=")+3, item.link.indexOf("&"));
 			    
 				var itemid = item.sku.replace(/-\W/g, '');			
@@ -362,7 +370,9 @@ storeApi = {
 	    
 	getZara: function(data, siteHome){
 		var products = new Object();
-	    	$(".currency").html("");		
+	    	$(".currency").html("");
+	    	
+	    storeApiHelper.checkForProductListing("zara", $(data).find("#product-list").children(".product"));			
 	      	  		
 		$(data).find("#product-list").children(".product").each(function(){
 			var item = new Object();
@@ -379,7 +389,7 @@ storeApi = {
 							
 			item.sku = 'z' + $(this).find("a.gaProductDetailsLink").first().attr("data-item");
 			
-			if(item.image != undefined){
+			if(storeApiHelper.checkForProductImage(item.image)){
 				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
@@ -391,6 +401,8 @@ storeApi = {
 	getHM: function(data, siteHome){
 		siteHome += "&size=1000";
 		var products = new Object();
+		
+		storeApiHelper.checkForProductListing("hm", $(data).find("#list-products").children("li").not(".getTheLook"));
 	      	  		
 		$(data).find("#list-products").children("li").not(".getTheLook").each(function(){
 			var item = new Object();
@@ -403,7 +415,7 @@ storeApi = {
 			item.name = $(this).find("a > .details").first().text().trim();	
 			item.sku = 'hm' + $(this).find("button.quicklook").first().attr("data-product");				
 			
-			if(item.image != undefined){
+			if(storeApiHelper.checkForProductImage(item.image)){
 				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
@@ -414,6 +426,8 @@ storeApi = {
 	
 	getToryBurch: function(data, siteHome){
 	        var products = new Object();
+	        
+	        storeApiHelper.checkForProductListing("tb", $(data).find("#search > .productresultarea > .productlisting > .product"));
 	
 	        $(data).find("#search > .productresultarea > .productlisting > .product").each(function(){
 	                var item = new Object();
@@ -424,7 +438,7 @@ storeApi = {
 	                item.price = storeApiHelper.findPrice(item.price);
 	                item.name = $(this).find(".name").find("a").first().text().trim();	                
 	
-	                if(item.image != undefined){
+	                if(storeApiHelper.checkForProductImage(item.image)){
 	                   item.sku = item.link.substring(item.link.lastIndexOf("/")+1);
 	                   
 	                   if (item.sku.indexOf("?")){
@@ -450,17 +464,19 @@ storeApi = {
 	// &page=2&startValue=51
 	getAnthropologie: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("a", $(data).find(".category-item"));
 	
        $(data).find(".category-item").each(function(){
                 var item = new Object();
 
-                item.image = $(this).find(".imageWrapper img").first().attr("src");
+                item.image = $(this).find(".imageWrapper img").first().attr("data-original");
                 item.link = siteHome + $(this).find(".imageWrapper a").first().attr("href");                
                 item.price = $(this).find(".item-description > .item-price > .price").first().text();
                 item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".item-description a").first().attr("title");
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                     
                    var sku = $(this).find(".imageWrapper a").first().attr("id");  
                    item.sku = 'a' + sku.replace(/\D/g, ''); // strip all non numeric chars
@@ -475,6 +491,8 @@ storeApi = {
 	
 	getBloomingdales: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("b", $(data).find(".productThumbnail"));
 	
        $(data).find(".productThumbnail").each(function(){
                 var item = new Object();
@@ -495,7 +513,7 @@ storeApi = {
                     item.image = imageUrl;
                 }
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                     
                    var sku = $(this).attr("id");  
                    item.sku = 'b' + sku.replace(/\D/g, ''); // strip all non numeric chars
@@ -510,6 +528,8 @@ storeApi = {
 	
 	getIntermix: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("i", $(data).find(".thumbtext"));
 	
        $(data).find(".thumbtext").each(function(){
                 var item = new Object();
@@ -520,7 +540,7 @@ storeApi = {
                 item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".thumbcontainer img").first().attr("alt");
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                     
                    var sku = $(this).find(".qveThumbnail").attr("catpk");
                    item.sku = 'i' + sku.replace(/\D/g, ''); // strip all non numeric chars
@@ -535,6 +555,8 @@ storeApi = {
 	
 	getMadewell: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("m", $(data).find(".arrayProdCell"));
 	
        $(data).find(".arrayProdCell").each(function(){
                 var item = new Object();
@@ -545,7 +567,7 @@ storeApi = {
                 item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".arrayImg img").first().attr("alt");
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                                     
                    var sku = item.link.substring(item.link.lastIndexOf("/")+1, item.link.lastIndexOf("."));                    
                    item.sku = 'm' + sku.replace(/\D/g, ''); // strip all non numeric chars
@@ -560,6 +582,8 @@ storeApi = {
 	
 	getBrooksBrothers: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("bb", $(data).find(".grid-tile"));
 	
        $(data).find(".grid-tile").each(function(){
                 var item = new Object();
@@ -570,7 +594,7 @@ storeApi = {
                 item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".product-image a").first().attr("alt");
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'bb' + $(this).attr("data-item-id");
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -583,6 +607,8 @@ storeApi = {
 	
 	getNordstrom: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("n", $(data).find(".fashion-item"));
 	
        $(data).find(".fashion-item").each(function(){
                 var item = new Object();
@@ -595,7 +621,7 @@ storeApi = {
                 item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".fashion-photo img").first().attr("alt");
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    var sku = $(this).attr("id");
                    item.sku = 'n' + sku.replace(/\D/g, ''); // strip all non numeric chars
                    
@@ -609,6 +635,8 @@ storeApi = {
 	
 	getAmericanApparel: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("aa", $(data).find(".product"));
 	
        $(data).find(".product").each(function(){
                 var item = new Object();
@@ -619,7 +647,7 @@ storeApi = {
                 item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".name a").first().text();
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    var sku = $(this).find(".product-img").first().attr("id");                   
                    item.sku = 'aa' + sku.substring(sku.indexOf("_")+1); 
                    
@@ -633,6 +661,8 @@ storeApi = {
 	
     getLordAndTaylor: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("lt", $(data).find("#ProductsList #totproductsList").children("li"));
 	
        $(data).find("#ProductsList #totproductsList").children("li").each(function(){
                 var item = new Object();
@@ -646,7 +676,7 @@ storeApi = {
                 item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".pro_pic img").first().attr("alt");
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    var sku = $(this).find(".pro_pic").attr("id");
                    item.sku = 'll' + sku.replace(/\D/g, ''); // strip all non numeric chars
                    
@@ -660,6 +690,8 @@ storeApi = {
 	
 	getBCBG: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("bcbg", $(data).find(".grid-tile"));
 	
        $(data).find(".grid-tile").each(function(){
                 var item = new Object();
@@ -672,7 +704,7 @@ storeApi = {
                 item.price = storeApiHelper.findPrice(item.price);
                 item.name = $(this).find(".product-image .thumb-link img").first().attr("alt");
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'bcbg' + $(this).find(".product-tile").attr("data-itemid");
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -685,6 +717,8 @@ storeApi = {
 	
 	getCharlesTyrwhitt: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("ct", $(data).find(".prodcontainer"));
 	
        $(data).find(".prodcontainer").each(function(){
                 var item = new Object();
@@ -697,7 +731,7 @@ storeApi = {
     			item.price = storeApiHelper.getLowestPrice(priceArr);     
     			item.price = storeApiHelper.findPrice(item.price);                           
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'ct' + $(this).attr("id");
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -710,6 +744,8 @@ storeApi = {
 	
 	getLuLuLemon: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("lll", $(data).find(".product").not(".video"));
 	
        $(data).find(".product").not(".video").each(function(){            
             var price = $(this).find(".amount").text().replace(/[a-zA-Z]*/g,'').trim();
@@ -722,7 +758,7 @@ storeApi = {
                 item.link = siteHome + $(this).find("a").first().attr("href");
                 item.image = $(this).find("img").first().attr("src");
                 
-                if(item.image != undefined && item.image.indexOf("_1") > 0){
+                if(storeApiHelper.checkForProductImage(item.image) && item.image.indexOf("_1") > 0){
                     
                     item.sku = 'lll' + $(this).attr("class").replace(/\D/g, ''); // strip all non numeric chars
                     var itemid = item.sku.replace(/-\W/g, '');   
@@ -739,6 +775,8 @@ storeApi = {
 	
 	getTarget: function(data, siteHome){
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("t", $(data).find("#productListing .productsListView"));
 	
        $(data).find("#productListing .productsListView").each(function(){            
             var item = new Object();
@@ -751,7 +789,7 @@ storeApi = {
 			item.price = storeApiHelper.getLowestPrice(priceArr);     
 			item.price = storeApiHelper.findPrice(item.price);                           
 
-            if(item.image != undefined){
+            if(storeApiHelper.checkForProductImage(item.image)){
                 //http://www.target.com/p/denizen-men-s-regular-fit-jeans/-/A-14711092#prodSlot=medium_1_1
                 
                 var id = item.link;
@@ -778,6 +816,8 @@ storeApi = {
 	
 	getTopShop: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("ts", $(data).find("#wrapper_page_content .product"));
 	
        $(data).find("#wrapper_page_content .product").each(function(){
                 var item = new Object();
@@ -790,7 +830,7 @@ storeApi = {
     			item.price = storeApiHelper.getLowestPrice(priceArr);     
     			item.price = storeApiHelper.findPrice(item.price);                           
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'ts' + $(this).find(".product_image a").first().attr("data-productid");
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -803,6 +843,8 @@ storeApi = {
 	
 	getKateSpade: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("ks", $(data).find("#search-result-items .grid-tile .product-tile"));
 	
        $(data).find("#search-result-items .grid-tile .product-tile").each(function(){
                 var item = new Object();
@@ -815,7 +857,7 @@ storeApi = {
     			item.price = storeApiHelper.getLowestPrice(priceArr);     
     			item.price = storeApiHelper.findPrice(item.price);                           
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'ks' + $(this).attr("data-itemid");
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -828,6 +870,8 @@ storeApi = {
 	
 	getNeimanMarcus: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("nm", $(data).find(".products .product"));
 	
        $(data).find(".products .product").each(function(){
                 var item = new Object();
@@ -842,7 +886,7 @@ storeApi = {
     			
     			//item.designer = $(this).find(".details .productdesigner a").first().text().trim();
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'nm' + $(this).find(".qv-tip").attr("product_id");
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -855,6 +899,8 @@ storeApi = {
 	
 	getFreePeople: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("fp", $(data).find("#products ul li"));
 	
        $(data).find("#products ul li").each(function(){
                 var item = new Object();
@@ -867,7 +913,7 @@ storeApi = {
     			item.price = storeApiHelper.getLowestPrice(priceArr);     
     			item.price = storeApiHelper.findPrice(item.price);               			
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'fp' + $(this).find(".wl-product-thumbnail").attr("data-stylenumber");
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -880,6 +926,8 @@ storeApi = {
 	
 	getMacys: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("ma", $(data).find("#macysGlobalLayout #thumbnails .productThumbnail"));
 	
        $(data).find("#macysGlobalLayout #thumbnails .productThumbnail").each(function(){
                 var item = new Object();
@@ -889,7 +937,7 @@ storeApi = {
                 item.name = $(this).find(".shortDescription a.productThumbnailLink").first().text().trim();                
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".prices").text().trim());
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'ma' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -900,8 +948,10 @@ storeApi = {
         return JSON.stringify(products);
 	},
 	
-	getJCPenny: function(data, siteHome){	   
+	getJCPenney: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("jp", $(data).find(".product_gallery_holder2 .product_holder"));
 	
        $(data).find(".product_gallery_holder2 .product_holder").each(function(){
                 var item = new Object();
@@ -911,7 +961,7 @@ storeApi = {
                 item.name = $(this).find(".detail a").first().text().trim();                
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".gallery_page_price").text().trim());
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'jp' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -924,6 +974,8 @@ storeApi = {
 	
 	getNyAndCompany: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("ny", $(data).find(".items_wrapper > ul > li"));
 	
        $(data).find(".items_wrapper > ul > li").each(function(){
                 var item = new Object();
@@ -933,7 +985,7 @@ storeApi = {
                 item.name = $(this).find(".product-details a").first().text().trim();                
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".product-details .original_price").text().trim());
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'ny' + item.image.substring(item.image.lastIndexOf("/")+1, item.image.indexOf("?")).replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -946,6 +998,8 @@ storeApi = {
 	
 	getBurberry: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("bu", $(data).find("li.product"));
 	
        $(data).find("li.product").each(function(){
                 var item = new Object();
@@ -955,11 +1009,14 @@ storeApi = {
                 item.name = $(this).find("a.product-link").first().text().trim();                
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".product-details .product-price").text().trim());
 
-                if(item.image != undefined){
-                   item.sku = 'bu' + $(this).find("a.product-link").first().attr('data-product-id').replace(/\D/g, ''); // strip all non numeric chars;
-                   
-			        var itemid = item.sku.replace(/-\W/g, '');
-                    products[itemid] = item;
+                if(storeApiHelper.checkForProductImage(item.image)){
+                   if($(this).find("a.product-link").first().attr('data-product-id') != null){ 
+                    
+                       item.sku = 'bu' + $(this).find("a.product-link").first().attr('data-product-id').replace(/\D/g, ''); // strip all non numeric chars;
+                       
+    			        var itemid = item.sku.replace(/-\W/g, '');
+                        products[itemid] = item;
+                   }
                 }
         });
 
@@ -968,6 +1025,8 @@ storeApi = {
 	
 	getHollister: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("ho", $(data).find("li.product-wrap"));
 	
        $(data).find("li.product-wrap").each(function(){
                 var item = new Object();
@@ -977,7 +1036,7 @@ storeApi = {
                 item.name = $(this).find(".product-info .name a").first().text().trim();                
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".product-info .price").text().trim());
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'ho' + $(this).find("div").first().attr('data-productid').replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -990,6 +1049,8 @@ storeApi = {
 	
 	getKohls: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("ko", $(data).find("#product-matrix .product"));
 	
        $(data).find("#product-matrix .product").each(function(){
                 var item = new Object();
@@ -999,7 +1060,7 @@ storeApi = {
                 item.name = $(this).find(".pmi-wrap .product-info a").first().text().trim();                
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".pmi-wrap .product-info .price-original").text().trim());
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'ko' + item.link.substring(item.link.indexOf("-")+1, item.link.indexOf("/", item.link.indexOf("-"))).replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -1012,6 +1073,8 @@ storeApi = {
 	
 	getForever21: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("fo", $(data).find(".ItemImage"));
 	
        $(data).find(".ItemImage").each(function(){
                 var item = new Object();
@@ -1021,7 +1084,7 @@ storeApi = {
                 item.name = $(this).parents("table").first().find(".DisplayName").first().text().trim();                
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).parents("table").first().find(".price").text().trim());
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'fo' + item.link.substring(item.link.indexOf("ProductID=")+10, item.link.indexOf("&", item.link.indexOf("ProductID"))).replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -1034,6 +1097,8 @@ storeApi = {
 	
 	getDillards: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("di", $(data).find(".item"));
 	
        $(data).find(".item").each(function(){
                 var item = new Object();
@@ -1043,7 +1108,7 @@ storeApi = {
                 item.name = $(this).find(".info .productInfo .productName").first().text().trim();                
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".info .productInfo .price").text().trim());
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'di' + $(this).find("a.img").attr("id").replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -1055,11 +1120,18 @@ storeApi = {
 	},
 	
 	getAmericanEagle: function(data, siteHome){	   
-	   var products = new Object();
+	   var products = new Object();	   	   
 	   	   
-       var noscript = $(data).find("#facetResults noscript").text();        
+	   var productListing = $(data).find(".sProd");
+	   
+	   if (products.length <= 0){
+            var noscript = $(data).find("#facetResults noscript").text();  
+            productListing = $(noscript).siblings(".sProd");      
+	   }
+       
+       storeApiHelper.checkForProductListing("ae", productListing);
 	
-       $(noscript).siblings(".sProd").each(function(){
+       productListing.each(function(){
                 var item = new Object();
 
                 item.image = $(this).find("a .image img").not(".hidden").first().attr("src");
@@ -1070,7 +1142,7 @@ storeApi = {
     			item.price = storeApiHelper.findPricesAndGetLowest(dollars + "." + cents);
                 // var listedPrice = $(this).find("a .equity .listPrice").text().trim();
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    var id = $(this).attr("data-product-id") + "_" + $(this).attr("data-color-id");
                    item.sku = 'ae' + id.replace(/\D/g, ''); // strip all non numeric chars;
                    
@@ -1084,6 +1156,8 @@ storeApi = {
 	
 	getNike: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("ni", $(data).find(".product-wall .grid-item"));
 	
        $(data).find(".product-wall .grid-item").each(function(){
                 var item = new Object();
@@ -1094,7 +1168,7 @@ storeApi = {
                 var prices = $(this).find(".grid-item-info-wrapper .product-price-wrapper .prices");
     			item.price = storeApiHelper.findPricesAndGetLowest(prices);
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'ni' + item.link.substring(item.link.indexOf("pid-")+4).replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -1107,6 +1181,8 @@ storeApi = {
 	
 	getMichaelKors: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("mk", $(data).find(".products .productstart, .products .product"));
 	
        $(data).find(".products .productstart, .products .product").each(function(){
                 var item = new Object();
@@ -1117,7 +1193,7 @@ storeApi = {
                 var prices = $(this).find("p.priceadorn").text().trim();
     			item.price = storeApiHelper.findPricesAndGetLowest(prices);
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'mk' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -1130,6 +1206,8 @@ storeApi = {
 	
 	getChicos: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("ch", $(data).find("#shelfProducts .product-capsule"));
 	
        $(data).find("#shelfProducts .product-capsule").each(function(){
                 var item = new Object();
@@ -1139,7 +1217,7 @@ storeApi = {
                 item.name = $(this).find(".product-information a.product-name").first().text().trim();                    
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".product-information .product-price").text());
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'ch' + item.link.substring(item.link.indexOf("productId=")+10, item.link.indexOf("&", item.link.indexOf("productId="))).replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -1152,6 +1230,8 @@ storeApi = {
 	
 	getCusp: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("cu", $(data).find(".products .product"));
 	
        $(data).find(".products .product").each(function(){
                 var item = new Object();
@@ -1162,7 +1242,7 @@ storeApi = {
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".details .allPricing").text());
     			//item.designer = $(this).find(".details .productdesigner a").first().text().trim();
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'cu' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -1175,6 +1255,8 @@ storeApi = {
 	
 	getJJill: function(data, siteHome){	   
 	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("jj", $(data).find(".itemlink"));
 	
        $(data).find(".itemlink").each(function(){
                 var item = new Object();
@@ -1185,7 +1267,7 @@ storeApi = {
                 item.name = $(this).text().trim();                                    
     			item.price = storeApiHelper.findPricesAndGetLowest(product.find(".normalsmall").text());
 
-                if(item.image != undefined){
+                if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'jj' + item.link.substring(item.link.indexOf("item=")+5, item.link.indexOf("&", item.link.indexOf("item="))); 
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
@@ -1197,7 +1279,9 @@ storeApi = {
 	}
 }
 
-storeApiHelper = {    
+storeApiHelper = {  
+    debug: false,
+      
     findPricesAndGetLowest: function(price){
         if (price != null && (price + "").trim() != ""){
             price = price.replace(/[a-zA-Z£$:,]*/g,'');
@@ -1255,5 +1339,26 @@ storeApiHelper = {
     	}
     
     	return newurl;
-    }   
+    },
+    
+    checkForProductListing: function(storeCode, element){
+        if (element == null || element.length <= 0){
+            console.log(storeCode + ": Store api could NOT find product listing.");                           
+        }else{
+            console.log(storeCode + ": Store FOUND products listing!");   
+        }
+        
+        if (storeApiHelper.debug){
+            ;debugger;   
+        }
+    },
+    
+    checkForProductImage: function(image){
+           if (image != undefined && image != null){
+                return true;
+           }
+           
+           console.log("Image does not exist for this product");
+           return false;
+    } 
 }

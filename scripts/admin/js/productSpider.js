@@ -96,6 +96,7 @@ var spider = {
     // Gets the checked prdocuts from the link, validates them, and shows a sampling of them
     testProductsFromLinks: function(showData, showSample, save, saveCallback){	
     	$("#json-products").html("");
+    	$("#sample-grid").html("");
     	
     	if (saveCallback == null){
     	   $("#loadingMask").show();  
@@ -120,49 +121,75 @@ var spider = {
     			var tags = link.attr("tags");
     			var url = link.attr("url");
     			url = storeApi.getFullUrl(company, url);
+    			    			    			   			    			
     			
-    			$.post("webProxy.php", {u:url}, function(data){																		    if (data == null || data.trim() == ""){
-    			         console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");
-    			     }   
-    			 
-    				var isValid = false;
-    				var itemCount = 0;				
-    				
-    				try{
-    				    var dataString = storeApi.getProducts(company, data, url);
-    				    var data = $.parseJSON(dataString);
-    				    
-    				    if (data != null && data.constructor === {}.constructor){
-    				        var testProduct = data[Object.keys(data)[0]];				        				        
-    				        
-    				        if (testProduct != null &&
-    				            testProduct.price != null && 
-    				            testProduct.image != null && 
-    				            testProduct.link != null && 
-    				            testProduct.name != null &&
-    				            testProduct.sku != null){				 
-    				                
-    				                var price = testProduct.price + "";
-    				                price = parseFloat(price.replace("$",""));
-            				        price = parseFloat(price);       
-            				        
-            				        if(!isNaN(price)){
-                				        isValid = true;  
-                				        itemCount = Object.keys(data).length;
-                				        validCount++;
+    			$.post("webProxy.php", {url:url}, function(result){	
+    			    var isValid = false;
+        		    var itemCount = 0;
+    			 																	    
+    			    if (result == null || result.trim() == ""){
+    			         console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");    			         
+    			    }else{       			         								
+        				
+        				try{
+        				    var dataString = storeApi.getProducts(company, result, url);
+        				    var data = $.parseJSON(dataString);
+        				    
+        				    if (data != null && data.constructor === {}.constructor){
+        				        var testProduct = data[Object.keys(data)[0]];				        				        
+        				        
+        				        if (testProduct != null &&
+        				            testProduct.price != null && 
+        				            testProduct.image != null && 
+        				            testProduct.link != null && 
+        				            testProduct.name != null &&
+        				            testProduct.sku != null){				 
+        				                
+        				                var price = testProduct.price + "";
+        				                price = parseFloat(price.replace("$",""));
+                				        price = parseFloat(price);       
                 				        
-                				        if (showSample && validCount == 1){
-                				            spider.showSampleProducts(data, company, customer, category);   
+                				        if(!isNaN(price)){
+                    				        isValid = true;  
+                    				        itemCount = Object.keys(data).length;
+                    				        validCount++;
+                    				        
+                    				        if (showSample && validCount == 1){
+                    				            spider.showSampleProducts(data, company, customer, category);   
+                    				        }
                 				        }
-            				        }
-    				            }else{
-    				                console.log("one or more of the fields in the product entity are null");   
-    				            }
-    				    }
-    				}catch(err){
-    				    // do nothing
-    				    console.log("Whoops ran into a problem: " + err);
-    				}
+        				            }else{
+        				                if (testProduct == null){
+        				                    console.log("First product is null");    
+        				                }else{
+        				                
+            				                if (testProduct.price == null){
+            				                    console.log("Product price is null");    
+            				                }
+            				                
+            				                if (testProduct.image == null){
+            				                    console.log("Product image is null");    
+            				                }
+            				                
+            				                if (testProduct.link == null){
+            				                    console.log("Product link is null");    
+            				                }
+            				                
+            				                if (testProduct.name == null){
+            				                    console.log("Product name is null");    
+            				                }
+            				                
+            				                if (testProduct.sku == null){
+            				                    console.log("Product sku is null");    
+            				                }    
+        				                }				                
+        				            }
+        				    }
+        				}catch(err){
+        				    // do nothing
+        				    console.log("Whoops ran into a problem: " + err);
+        				}
+    			    }
     				
     				count++;				
     				if (isValid){				    
@@ -234,7 +261,7 @@ var spider = {
     					Messenger.info(validCount + "/" + total + " catgeories were valid");	
     					$("#loadingMask").hide();				
     				}														
-    			});
+    			},"json");
     		});
     	}
     },
@@ -737,6 +764,66 @@ var adminFunctions = {
         	   }
     	   });	          
         });   
+    },
+    
+    getNextBroken: function(){
+        
+        console.log("getting next broken link");
+        $("#links").find(':checkbox').each(function(){
+                var valid = $(this).siblings(".isvalid").text().toLowerCase();
+            
+                if (valid.indexOf("broken") >= 0){                                        
+                        $(this).prop('checked', true);      
+                        $(this).parents(".category").show();              
+                        
+                        $('html, body').animate({
+                            scrollTop: $(this).parents(".category").offset().top
+                        }, 500); 
+                        
+                        console.log("Found a broken link!");
+                        
+                        return false;       
+                }                                                                           
+        });                       
+    },
+    
+    debugWebProxy: function(url){
+        var url = "http://www.jcpenney.com/men/shirts/cat.jump?id=cat100240025&deptId=dept20000014&N=100250162&extDim=true";
+        
+        $.post("webProxy.php", {url:url}, function(data){	
+            
+            if($(data).find(".product_gallery_holder2 .product_holder").length > 0){
+            
+                Messenger.success("Finally we got products with POST!!!!");
+            }else{
+                Messenger.error("Nope. Still failed with POST!");
+            }
+        },"html");
+        
+        $.get("webProxy.php", {url:url}, function(data){	
+            
+            if($(data).find(".product_gallery_holder2 .product_holder").length > 0){
+            
+                Messenger.success("Finally we got products with GET!!!!");
+            }else{
+                Messenger.error("Nope. Still failed with GET!");
+            }
+        });
+        
+        $.ajax({
+            url: "webProxy.php",
+            type: "POST",
+            data: { url : url },
+            dataType: "html",
+            success: function(data){
+                if($(data).find(".product_gallery_holder2 .product_holder").length > 0){            
+                    Messenger.success("Finally we got products with AJAX!!!!");
+                }else{
+                    Messenger.error("Nope. Still failed with AJAX!");
+                }
+            }
+        });
+
     }					
 };
 

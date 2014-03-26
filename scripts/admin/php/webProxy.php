@@ -49,6 +49,7 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
 	
 	if (strpos($_REQUEST['u'],"anthropologie")){
     	// Combine multiple url <body> into one
+    	$file = combineMultipleUrls($file, $url);
     	$file = combineMultipleUrls($file, $url . "&page=2&startValue=51");
     	$file = combineMultipleUrls($file, $url . "&page=3&startValue=101");
     	$file = combineMultipleUrls($file, $url . "&page=4&startValue=151");
@@ -96,14 +97,18 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
 	}	 
 	
 	else if (strpos($url,"brooksbrothers")){
+	   
+	    $file = file_get_contents_curl($url);   	
+	    $file = "<html><body>" . $file . "</body></html>";   
+	   
     	// Combine multiple url <body> into one
-    	$subUrl = substr($url, 0, strpos($url, "?"));
-    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=0&sz=60&format=ajax");
-    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=61&sz=60&format=ajax");
-    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=121&sz=60&format=ajax");
-    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=181&sz=60&format=ajax");
-    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=241&sz=60&format=ajax");
-    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=301&sz=60&format=ajax");
+//    	$subUrl = substr($url, 0, strpos($url, "?"));
+//    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=0&sz=60&format=ajax");
+//    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=61&sz=60&format=ajax");
+//    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=121&sz=60&format=ajax");
+//    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=181&sz=60&format=ajax");
+//    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=241&sz=60&format=ajax");
+//    	$file = combineMultipleUrls($file, $subUrl . "?pmin=1&start=301&sz=60&format=ajax");
 	}	 		 
 	
 	else if (strpos($url,"lordandtaylor")){
@@ -125,7 +130,7 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
     	$file = combineMultipleUrls($file, $url . "&WS=382");
 	}
 	
-	else if (strpos($url,"topshop") || strpos($url,"target")){
+	else if (strpos($url,"topshop") || strpos($url,"target") || strpos($url,"anntaylor")){
 	   $file = file_get_contents_curl($url);   
 	   
 	   if ($_REQUEST['d']){
@@ -137,19 +142,24 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
 	   $file = file_get_contents($url);   
 	   	
 	   if ($_REQUEST['d']){
-           echo "contents: " . $file;
+	       $html = htmlspecialchars($file, ENT_QUOTES);
+           echo " contents: " . $html;
        }	   
 	}	
 
     // only strip starting and ending body if the body tag exists (could be in json format)	
-	if (strpos($file,"<body")){
-    	// strip before opening <body>
-        $file = trim(substr($file, strpos($file,"<body")));   
-        // strip ending </body> and after
-        $file = trim(substr($file,0,  strpos($file,"</body")));   
+	if (strpos($file,"<html")){
+    	// strip before opening <html>
+        $file = trim(substr($file, strpos($file,"<html")));   
         
-        $file = "<html>" . $file . "</body></html>";			
+        // strip ending </html> and after
+        $file = trim(substr($file,0,  strpos($file,"</html")));   
+        
+        $file = $file . "</html>";			
 	}
+	
+//	$file = str_replace("<noscript>","", $file);
+//	$file = str_replace("</noscript>","", $file);
         		
 	echo $file;
 }
