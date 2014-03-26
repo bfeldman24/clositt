@@ -1,0 +1,56 @@
+#!/bin/sh
+
+# Check parameters
+if [ $# -ne 1 ]
+then
+	echo "I need a directory to run. Pass a directory as the first and only parameter."
+	exit 1
+fi
+
+# Check correct current directory
+p=$(pwd)
+if [ $p != '/home1/thewinn2/public_html/pp' ]
+then
+    if [ $p != '/home1/thewinn2/public_html/uat' ]
+    then
+        if [ $p != '/home1/thewinn2/public_html/clothies' ]
+        then    
+        	echo "Current dir is $p! you must be in /pp, /uat, or /clothies to use this script"
+        	exit 1
+    	fi
+	fi
+fi
+
+# Check production update
+if [ $1 = 'clositt' ]
+then 
+	echo "Are you sure you want to update the production browse files? [y/n]"
+	read update
+	
+	if [ $update = 'n' ]
+	then
+		echo "Stopped!"
+		exit 1
+	fi
+fi 
+
+# Check updated globals
+echo  'Did you update the browse files? [y/n]'
+read x
+
+if [ $x = 'n' ]
+then 
+	echo "Go back and update the browse files"
+	exit 1
+fi
+
+# Deploy to target directory
+d=$(date +%d.%m.%y_%H.%M)
+echo "backup dir name will be ../prod-archive/$d"
+
+mkdir "../prod-browse-archive/$d"
+mv ../$1/app/Data/Browse/* "../prod-browse-archive/$d/"
+cp -f app/Data/Browse/* ../$1/app/Data/Browse/
+
+echo "Please verify the new browse files!"
+echo "DONE!"
