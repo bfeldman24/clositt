@@ -237,6 +237,21 @@ class ProductAdminDao extends AbstractDao {
 		return $result;
 	}
 	
+	public function getNonLiveProducts($page, $limit){
+	   $offset = $page * $limit;
+		
+		$sql = "SELECT * " .				
+				" FROM " . PRODUCTS .				
+				" WHERE " . PRODUCT_STATUS . " NOT IN (1,4) " .
+				" ORDER BY " . PRODUCT_STATUS . 
+				" LIMIT ? OFFSET ?";								
+        
+		$paramsTypes = array('integer','integer');		
+		$params = array($limit, $offset);
+		
+		return $this->getResults($sql, $params, $paramTypes, "24928342");
+	}
+	
 	public function getProductsForUpdatingShortLinks($page, $limit){					
 		$offset = $page * $limit;
 		
@@ -251,6 +266,7 @@ class ProductAdminDao extends AbstractDao {
 		
 		return $this->getResults($sql, $params, $paramTypes, "2309842");
 	}
+	
 	
 	public function updateAllShortLinks($products, $skipNulls = true){
 	   $sql = "UPDATE " . PRODUCTS .       	  
@@ -279,6 +295,29 @@ class ProductAdminDao extends AbstractDao {
                 echo 'Caught exception: ',  $e->getMessage(), "\n\n";
             }
         }
+        
+        return $affectedRows;
+	}
+	
+	public function deleteUnwantedProducts(){
+	     $sql = "UPDATE " . PRODUCTS .       	  
+              " SET " . PRODUCT_STATUS . " = 5 " . 
+              " WHERE " . PRODUCT_SKU . " IN (SELECT " . PRODUCT_SKU . " FROM " . TAGS . " WHERE " . TAG_STRING . " = 'delete')";
+                            
+       if($this->debug){		    
+			$this->logDebug("2309823" ,$sql );
+		}
+        
+        $params = array();
+        $paramTypes = array();
+        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+        $affectedRows = 0;
+                 
+        try {                              
+            $affectedRows = $stmt->execute($params);
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+        }     
         
         return $affectedRows;
 	}

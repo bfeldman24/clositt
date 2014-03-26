@@ -123,7 +123,7 @@ class ProductAdminController {
 	}
 	
 	public function getBrowsePages(){
-	   $maxpages = 750;
+	   $maxpages = 301;
 	   $limit = 50;
 	   $page = 0;	   	   
 	   
@@ -217,6 +217,31 @@ class ProductAdminController {
        return $filter;
 	}
 	
+	public function getNonLiveProducts($page, $limit){	    
+	           
+        $searchResults = array();
+	    		
+		if(isset($page) && isset($limit)){	
+		      
+			$results = $this->productAdminDao->getNonLiveProducts($page, $limit);
+			
+			if(is_object($results)){
+			 
+				while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+				    $productEntity = new ProductEntity();						
+					ProductEntity::setProductFromDB($productEntity, $row);
+					$searchResults[] = $productEntity->toArray();
+				}
+			}
+		}		
+	
+		return json_encode($searchResults);
+	}
+	
+	public function deleteUnwantedProducts(){
+	   return $this->productAdminDao->deleteUnwantedProducts();
+	}
+	
 	public function updateAllShortLinks(){
 	   echo "<br>Getting Products.";
 	   $products = array(); 
@@ -228,15 +253,16 @@ class ProductAdminController {
 				ProductEntity::setProductFromDB($productEntity, $row);				
 				$products[] = $productEntity;				
 			}
-		}
+	   }
 	     
 	   if(count($products) > 0){	                    
 	        echo "<br>Creating Short Links.";
             $this->createShortLinks($products);
+            //print_r($products);
             echo "<br>Updating Short Links.";
             return $this->productAdminDao->updateAllShortLinks($products);
 	   }else{
-	       echo "<br>ERROR: Didn't get products.";   
+	       echo "<br>No products to update! ";   
 	   }  
 	   
 	   return "DID NOT UPDATE SHORT LINKS";
@@ -269,6 +295,9 @@ class ProductAdminController {
 	       }
 	       	       
 	       $b++;	       	       
+	       
+	       // manual override:
+	       //$shortlink .= "-" . rand(0,10);
 	       
 	       $links[] = $shortlink;	     
 	       
@@ -323,12 +352,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
         $results = $productAdminController->getTotalProductsCount();   
         print_r($results);        
     
-    }   
+    }
+           
 }else if ($_GET['method'] == 'updateshortlinks'){                                          
     echo "Updating Short Links…";
     $productAdminController = new ProductAdminController($mdb2);
     $results = $productAdminController->updateAllShortLinks();   
-    print_r($results);        
+    print_r($results);    
+        
+}else if ($_GET['method'] == 'deleteunwanted'){
+    echo "Removing Unwanted Products... \n";
+    $productAdminController = new ProductAdminController($mdb2);
+    $results = $productAdminController->deleteUnwantedProducts();       
+    echo "Removed $results Products!";
+    
+}else if ($_GET['method'] == 'getnonliveproducts' && isset($_GET['page'])){
+    
+        $productAdminController = new ProductAdminController($mdb2);
+        $results = $productAdminController->getNonLiveProducts($_GET['page'], 50);   
+        print_r( json_encode($results) );
+   
 }else if ($_GET['method'] == 'getfilters'){       
                                    
     $productAdminController = new ProductAdminController($mdb2);
