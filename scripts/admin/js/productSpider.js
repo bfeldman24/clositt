@@ -119,11 +119,15 @@ var spider = {
     			var customer = link.attr("customer");
     			var category = link.attr("category");
     			var tags = link.attr("tags");
-    			var url = link.attr("url");
-    			url = storeApi.getFullUrl(company, url);
-    			    			    			   			    			
+    			var originalUrl = link.attr("url");
     			
-    			$.post("webProxy.php", {url:url}, function(result){	
+    			url = storeApi.getFullUrl(company, originalUrl);
+    			
+    			if (url != originalUrl){
+    			     console.log("Debugging: Just note that the url parameters were updated");
+    			}    			    			   			    			
+    			
+    			$.post("webProxy.php", {u:url}, function(result){	
     			    var isValid = false;
         		    var itemCount = 0;
     			 																	    
@@ -132,8 +136,7 @@ var spider = {
     			    }else{       			         								
         				
         				try{
-        				    var dataString = storeApi.getProducts(company, result, url);
-        				    var data = $.parseJSON(dataString);
+        				    var data = storeApi.getProducts(company, result, url);
         				    
         				    if (data != null && data.constructor === {}.constructor){
         				        var testProduct = data[Object.keys(data)[0]];				        				        
@@ -261,7 +264,7 @@ var spider = {
     					Messenger.info(validCount + "/" + total + " catgeories were valid");	
     					$("#loadingMask").hide();				
     				}														
-    			},"json");
+    			});
     		});
     	}
     },
@@ -601,14 +604,14 @@ var actionButtons = {
         $("#selectStores").val("Go To") 
     },
 
-    saveAllValid: function(){
+    saveAll: function(){
          // show  and uncheck all categories
          $(".category").show();
          $("#links").find(':checkbox').prop('checked', false);          
          
          window.totalToSave = $(".category").length;
          window.saveCounter = 0;
-         window.saveValidStartTime = new Date().getTime();
+         window.saveStartTime = new Date().getTime();
          
          var d = new Date();
          window.todaysDate = d.toLocaleDateString();
@@ -625,56 +628,44 @@ var actionButtons = {
             $("#links").append($(".company").get().reverse());
          }
          
-         $("#links").find(':checkbox').each(function(){
-            var valid = $(this).siblings(".isvalid").text();
-            
-            if (valid.indexOf("Works") >= 0 || valid.indexOf("not tested") >= 0){
-                
-                if ($(this).attr("lastUpdated") == "" || $(this).attr("lastUpdated") != window.todaysDate){                                
-        
-                    $(this).prop('checked', true);                                
-                    return false;       
-                }else{
-                    window.saveCounter++;   
-                }                        
-            } 
+         $("#links").find(':checkbox').each(function(){           
+                            
+            if ($(this).attr("lastUpdated") == "" || $(this).attr("lastUpdated") != window.todaysDate){                                
+    
+                $(this).prop('checked', true);                                
+                return false;       
+            }else{
+                window.saveCounter++;   
+            }                                     
         });       
                     
         if($("#links").find(':checkbox:checked').length > 0){            
-            spider.testProductsFromLinks(false, false, true, actionButtons.saveNextValidCategory);    
+            spider.testProductsFromLinks(false, false, true, actionButtons.saveNextCategory);    
         }else{
             alert("All working categories are saved for today! Try again tomorrow.");   
             $("#transparentLoadingMask").hide(); 
         }
     },
 
-    saveNextValidCategory: function(status){
-        var foundValid = false;
-        var hasAnotherValid = false;
+    saveNextCategory: function(status){
+        var areThereMoreCategories = false;
         var currentCategory = null;
         
         $("#links").find(':checkbox').each(function(){
-            if (foundValid){
-                var valid = $(this).siblings(".isvalid").text();
-            
-                if (valid.indexOf("Works") >= 0 || valid.indexOf("not tested") >= 0){
-                    
-                    if ($(this).attr("lastUpdated") == "" || $(this).attr("lastUpdated") != window.todaysDate){
-                        $(this).prop('checked', true);
-                        hasAnotherValid = true;                
-                        return false;       
-                    }
-                }   
-            }
+                                
+            if ($(this).attr("lastUpdated") == "" || $(this).attr("lastUpdated") != window.todaysDate){
+                $(this).prop('checked', true);  
+                areThereMoreCategories = true;            
+                return false;       
+            }        
             
             if ($(this).prop('checked')){
                 $(this).prop('checked', false);
                 currentCategory = $(this);            
-                foundValid = true;   
             }                
         }); 
         
-        if (hasAnotherValid){
+        if (areThereMoreCategories){
             $('html, body').animate({
                 scrollTop: currentCategory.offset().top
             }, 500);
@@ -694,12 +685,12 @@ var actionButtons = {
                 Messenger.error(company + " " + customer + " " + category + " - BROKEN LINK!");   
             }
             
-            spider.testProductsFromLinks(false, false, true, actionButtons.saveNextValidCategory);                
+            spider.testProductsFromLinks(false, false, true, actionButtons.saveNextCategory);                
         }else{
             $("#transparentLoadingMask").hide();
             Messenger.timeout = 4000;
             var endTime = new Date().getTime();        
-            var executionTime = (endTime - window.saveValidStartTime) / 60000;
+            var executionTime = (endTime - window.saveStartTime) / 60000;
             
             alert("COMPLETE!!! " + window.saveCounter + "/" + window.totalToSave + " categories saved in " + executionTime + " minutes!");
         }
@@ -787,44 +778,13 @@ var adminFunctions = {
         });                       
     },
     
-    debugWebProxy: function(url){
-        var url = "http://www.jcpenney.com/men/shirts/cat.jump?id=cat100240025&deptId=dept20000014&N=100250162&extDim=true";
-        
-        $.post("webProxy.php", {url:url}, function(data){	
-            
-            if($(data).find(".product_gallery_holder2 .product_holder").length > 0){
-            
-                Messenger.success("Finally we got products with POST!!!!");
-            }else{
-                Messenger.error("Nope. Still failed with POST!");
-            }
-        },"html");
-        
-        $.get("webProxy.php", {url:url}, function(data){	
-            
-            if($(data).find(".product_gallery_holder2 .product_holder").length > 0){
-            
-                Messenger.success("Finally we got products with GET!!!!");
-            }else{
-                Messenger.error("Nope. Still failed with GET!");
-            }
+    testNewStoreApi: function(company, url){
+        $.post("webProxy.php", {u:url}, function(result){	    			    
+			    var data = storeApi.getStore(company.replace(/[\s_&]/g,''), result, url);
+			    ;debugger;
         });
-        
-        $.ajax({
-            url: "webProxy.php",
-            type: "POST",
-            data: { url : url },
-            dataType: "html",
-            success: function(data){
-                if($(data).find(".product_gallery_holder2 .product_holder").length > 0){            
-                    Messenger.success("Finally we got products with AJAX!!!!");
-                }else{
-                    Messenger.error("Nope. Still failed with AJAX!");
-                }
-            }
-        });
-
-    }					
+   
+    }
 };
 
 

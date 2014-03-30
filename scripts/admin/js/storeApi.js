@@ -25,11 +25,6 @@ storeApi = {
 		        newUrl = storeApiHelper.replaceParameter(url, "pageIndex", "1");
 		        newUrl = storeApiHelper.replaceParameter(url, "productsPerPage", "1000");
 		        break;
-		    case "jcpenney":
-		        newUrl = storeApiHelper.replaceParameter(url, "Nao", "96");
-		        newUrl = storeApiHelper.replaceParameter(newUrl, "pageSize", "96");		        		        		        
-		        newUrl = storeApiHelper.replaceParameter(newUrl, "pN", "1");		        
-		        break;
 		    case "new york & company":
 		    case "chicos":		    
 		        newUrl = storeApiHelper.replaceParameter(url, "viewAll", "true");		        
@@ -61,126 +56,17 @@ storeApi = {
 		var home = url.substring(0, url.indexOf("/", url.indexOf(".")));		
 		var products = "";
 		
-		switch(company.toLowerCase()){
-			case "gap":
-			case "old navy":
-			case "banana":
-			case "banana republic":
-			case "piperlime":
-			case "athleta":
+		switch(company.replace(/[\s_&]/g,'')){
+			case "Gap":
+			case "Old Navy":
+			case "BananaRepublic":
+			case "Piperlime":
+			case "Athleta":
 				products = storeApi.getGapJson(data, home);
-				break;
-			case "j_crew":
-				products = storeApi.getJcrew(data, home);
-				break;		
-			case "ann taylor":
-				products = storeApi.getAnnTaylor(data, home);
-				break;
-			case "loft":
-				products = storeApi.getLoft(data, home);
-				break;
-			case "urban outfitters":
-				products = storeApi.getUrban(data, home);
-				break;
-			case "zara":
-				products = storeApi.getZara(data, home);
-				break;	
-			case "h&m":
-				products = storeApi.getHM(data, home);
-				break;
-			case "tory burch":
-				products = storeApi.getToryBurch(data, home);
-				break;
-			case "anthropologie":
-			    products = storeApi.getAnthropologie(data, home);
-			    break;
-			case "bloomingdales":
-    			products = storeApi.getBloomingdales(data, home);
-			    break;
-			case "intermix":
-			    products = storeApi.getIntermix(data, home);
-			    break;
-			case "madewell":
-			    products = storeApi.getMadewell(data, home);
-			    break;
-			case "brooks brothers":
-			    products = storeApi.getBrooksBrothers(data, home);
-			    break; 
-			case "nordstrom":
-			    products = storeApi.getNordstrom(data, home);
-			    break;  
-			case "american apparel":			     
-			    products = storeApi.getAmericanApparel(data, home);
-			    break;  
-			case "lord & taylor":			         
-			    products = storeApi.getLordAndTaylor(data, home);
-			    break;  
-			case "bcbg":			
-    			products = storeApi.getBCBG(data, home);
-			    break;  
-			case "charles tyrwhitt":
-				products = storeApi.getCharlesTyrwhitt(data, home);
-			    break;  
-			case "lululemon":			 
-    			products = storeApi.getLuLuLemon(data, home);
-			    break;  
-			case "target":
-			    products = storeApi.getTarget(data, home);
-			    break; 
-			case "top shop":
-			    products = storeApi.getTopShop(data, home);
-			    break;  
-			case "kate spade":			 
-			    products = storeApi.getKateSpade(data, home);
-			    break; 
-			case "neiman marcus": 			
-    			products = storeApi.getNeimanMarcus(data, home);
-			    break; 
-			case "free people":			
-			    products = storeApi.getFreePeople(data, home);
-			    break;
-			case "macys":			
-			    products = storeApi.getMacys(data, home);
-			    break;
-			case "jcpenney":			
-			    products = storeApi.getJCPenney(data, home);
-			    break; 
-			case "new york & company":
-			    products = storeApi.getNyAndCompany(data, home);
-			    break;
-			case "burberry":
-			    products = storeApi.getBurberry(data, home);
-			    break;
-			case "hollister":
-			    products = storeApi.getHollister(data, home);
-			    break; 
-			case "kohls":
-			    products = storeApi.getKohls(data, home);
-			    break;
-			case "forever21":
-			    products = storeApi.getForever21(data, home);
-			    break;
-			case "dillards":
-			    products = storeApi.getDillards(data, home);
-			    break;
-			case "american eagle":
-			    products = storeApi.getAmericanEagle(data, home);
-			    break;
-			case "nike":
-			    products = storeApi.getNike(data, home);
-			    break;
-			case "michael kors":
-			    products = storeApi.getMichaelKors(data, home);
-			    break;
-			case "chicos":
-			    products = storeApi.getChicos(data, home);
-			    break;
-			case "cusp":
-			    products = storeApi.getCusp(data, home);
-			    break; 
-			case "j_jill":
-			    products = storeApi.getJJill(data, home);
-			    break; 
+				break;			
+			default:
+			    products = storeApi['get' + company](data, home);
+			    break;										
 		}	
 		
 		return products;
@@ -259,10 +145,10 @@ storeApi = {
 	                        });
 			}
 	        
-		return JSON.stringify(products);
+		return products;
 	},
 	    
-	getJcrew: function(data, siteHome){	
+	getJCrew: function(data, siteHome){	
 		siteHome += "?iNextCategory=-1";
 	  	var products = new Object();   		
 	  	
@@ -287,7 +173,7 @@ storeApi = {
 			}
 		});
 											
-		return JSON.stringify(products);	
+		return products;	
 	},
 	    
 	getAnnTaylor: function(data, siteHome){
@@ -313,7 +199,7 @@ storeApi = {
 			}
 		});
 											
-		return JSON.stringify(products);
+		return products;
 	},
 	
 	    
@@ -340,10 +226,10 @@ storeApi = {
 			}
 		});
 											
-		return JSON.stringify(products);
+		return products;
 	},
 	    	
-	getUrban: function(data, siteHome){
+	getUrbanOutfitters: function(data, siteHome){
 	    var products = new Object();
 	    
 	    storeApiHelper.checkForProductListing("urban", $(data).find("#category-products").children());
@@ -365,7 +251,7 @@ storeApi = {
 			}
 		});
 											
-		return JSON.stringify(products);
+		return products;
 	},
 	    
 	getZara: function(data, siteHome){
@@ -395,7 +281,7 @@ storeApi = {
 			}
 		});
 											
-		return JSON.stringify(products);
+		return products;
 	},
 	
 	getHM: function(data, siteHome){
@@ -421,7 +307,7 @@ storeApi = {
 			}
 		});
 											
-		return JSON.stringify(products);
+		return products;
 	},
 	
 	getToryBurch: function(data, siteHome){
@@ -456,7 +342,7 @@ storeApi = {
 	                }
 	        });
 	
-	        return JSON.stringify(products);
+	        return products;
 	},
 	
 	
@@ -486,7 +372,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getBloomingdales: function(data, siteHome){	   
@@ -523,7 +409,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getIntermix: function(data, siteHome){	   
@@ -550,7 +436,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getMadewell: function(data, siteHome){	   
@@ -577,7 +463,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getBrooksBrothers: function(data, siteHome){	   
@@ -602,7 +488,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getNordstrom: function(data, siteHome){	   
@@ -630,7 +516,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getAmericanApparel: function(data, siteHome){	   
@@ -656,10 +542,10 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
-    getLordAndTaylor: function(data, siteHome){	   
+    getLordTaylor: function(data, siteHome){	   
 	   var products = new Object();
 	   
 	   storeApiHelper.checkForProductListing("lt", $(data).find("#ProductsList #totproductsList").children("li"));
@@ -685,7 +571,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getBCBG: function(data, siteHome){	   
@@ -712,7 +598,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getCharlesTyrwhitt: function(data, siteHome){	   
@@ -739,7 +625,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getLuLuLemon: function(data, siteHome){	   
@@ -770,7 +656,7 @@ storeApi = {
             });                                
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getTarget: function(data, siteHome){
@@ -811,7 +697,7 @@ storeApi = {
             }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getTopShop: function(data, siteHome){	   
@@ -838,7 +724,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getKateSpade: function(data, siteHome){	   
@@ -865,7 +751,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getNeimanMarcus: function(data, siteHome){	   
@@ -894,7 +780,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getFreePeople: function(data, siteHome){	   
@@ -921,7 +807,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getMacys: function(data, siteHome){	   
@@ -945,7 +831,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getJCPenney: function(data, siteHome){	   
@@ -969,10 +855,10 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
-	getNyAndCompany: function(data, siteHome){	   
+	getNewYorkCompany: function(data, siteHome){	   
 	   var products = new Object();
 	   
 	   storeApiHelper.checkForProductListing("ny", $(data).find(".items_wrapper > ul > li"));
@@ -993,7 +879,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getBurberry: function(data, siteHome){	   
@@ -1020,7 +906,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getHollister: function(data, siteHome){	   
@@ -1044,7 +930,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getKohls: function(data, siteHome){	   
@@ -1068,7 +954,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getForever21: function(data, siteHome){	   
@@ -1092,7 +978,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getDillards: function(data, siteHome){	   
@@ -1116,7 +1002,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getAmericanEagle: function(data, siteHome){	   
@@ -1151,7 +1037,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getNike: function(data, siteHome){	   
@@ -1176,7 +1062,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getMichaelKors: function(data, siteHome){	   
@@ -1201,7 +1087,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getChicos: function(data, siteHome){	   
@@ -1225,7 +1111,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getCusp: function(data, siteHome){	   
@@ -1250,7 +1136,7 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
 	},
 	
 	getJJill: function(data, siteHome){	   
@@ -1275,9 +1161,67 @@ storeApi = {
                 }
         });
 
-        return JSON.stringify(products);
+        return products;
+	},
+	
+	getStore: function(company, data, siteHome){	   
+	   var products = new Object();
+	   var store = Companies[company];
+	   
+	   storeApiHelper.checkForProductListing(store.id, $(data).find(store.itemListing));
+	
+       $(data).find(store.itemListing).each(function(){
+                var item = new Object();
+
+                item.image = $(this).find(store.image).first().attr(store.imageAttr);
+                item.link = siteHome + $(this).find(store.link).attr(store.linkAttr);
+                
+                var nameElement = store.name == null ? $(this) : $(this).find(store.name).first();
+                nameElement.attr("text",nameElement.text());
+                item.name = nameElement.attr(store.nameAttr).trim();   
+                
+                var priceElement = store.price == null ? $(this) : $(this).find(store.price);                 
+                priceElement.attr("text",priceElement.text())
+    			item.price = storeApiHelper.findPricesAndGetLowest(priceElement.attr(store.priceAttr));
+    			
+    			//item.designer = $(this).find(".details .productdesigner a").first().text().trim();
+
+                if(storeApiHelper.checkForProductImage(item.image)){
+                   var skuElement = store.sku == null ? $(this) : $(this).find(store.sku);
+                   item.sku = store.id + skuElement.attr(store.skuAttr).replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return products;
 	}
 }
+
+// TODO: MOVE ALL FUNCTIONS TO USE THIS COMPANY LISTING AND TO CALL storeApi.getStore()
+Companies = {
+    'Cusp': {
+        'id': 'cu',
+        'itemListing': '.products .product',
+        
+        'image': 'a.prodImgLink .productImage',
+        'imageAttr': 'src',
+        
+        'link': 'a.prodImgLink',
+        'linkAttr': 'href',
+        
+        'name': '.details .productname a',
+        'nameAttr': 'text',
+        
+        'price': '.details .allPricing',
+        'priceAttr': 'text',
+        
+        'sku': null,
+        'skuAttr': 'id',
+        'skuKeepOnlyNumeric': true        
+    }  
+};
 
 storeApiHelper = {  
     debug: false,
