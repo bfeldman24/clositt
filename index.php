@@ -101,7 +101,7 @@
           <div class="modal-body">
                 <p>Clositt is the best way to discover, share, and compare clothing online.</p>
       
-              	<p>We make <p2 style="color:green;font-weight:bold;">shopping</p2> online for clothes, </br> as fun as <p2 style="color:green; font-weight:bold;">buying</p2> clothes.</p>
+              	<p>We make <p2 style="color:green;font-weight:bold;">shopping</p2> online for clothes, as fun as <p2 style="color:green; font-weight:bold;">buying</p2> clothes.</p>
           </div>
           <div class="modal-footer">
             <button class="btn btn-default" onclick="window.location.href='signup.php'">Login or Sign Up</button>
@@ -191,7 +191,10 @@ $(".toggle-filter-nav").click(function(el){
         $("#wrapper").css("left","auto");        
         filterParent.hide();
         filterParent.addClass("hidden-xs").show();  
-        pagePresenter.scrollTo(100);              
+        
+        if (filterPresenter.needsRefresh){
+            pagePresenter.scrollTo(100);      
+        }        
     }
 });
 
