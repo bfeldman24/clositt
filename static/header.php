@@ -1,43 +1,32 @@
-<div id="header">
-	<div class="navbar top-navbar">
-		<div class="navbar-inner clositt-theme">
-			<div class="container">
-			    <div id="brand-fixed-background" class="clositt-theme"></div>			    
-  	            <a class="brand" id="brand" href="<?php echo HOME_ROOT;?>">Clositt <span class="logo-beta">beta</span></a>
-	            
-	            <ul class="nav navleft" id="user-project-nav">	               
-	            </ul>
-	            
-	            <div id="misc-header-links">
-    	            <?php /* <a href="/contact-us.php">Feedback</a> */ ?>
-	            </div>        
-	            
-	            <div id="user-dropdown">
-                    <ul class="nav navright unstyled" style="margin-top: 10px;">  
-                    	
-                	 		<li class="dropdown">
-        					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        						<i class="icon-user icon-white"></i>
-        						<span id="user-name"></span>
-        						<b class="caret caret-white"></b>							
-        					</a>
-        					<ul id="account-dropdown" class="dropdown-menu">
-        						<li><a href="/signup.php">Log in or Sign Up</a></li>
-        					</ul>
-        				</li>	              	
-                    </ul>
-	            </div>
-	        </div>
-		</div>
-	</div>
-	
-	<div id="subheader-navbar" style="display:none;">
-	   <div class="container">
-	       <ul>
-	           <li><a id="subheader-trending" href="/">Trending</a></li>
-	           <?php /*<li id="feed"><a>Feed <span id="soon">Coming Soon!</span></a></li> */ ?>
-	           <li><a id="subheader-myclositt" href="/clositt.php" id="myClosittLink">MyClositt</a></li>
-	       </ul>
-	   </div>
-	</div>
-</div>	    
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">            
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-main">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <button type="button" class="toggle-filter-nav navbar-toggle hidden">
+                <span class="sr-only">Toggle filter</span>
+                <span class="glyphicon glyphicon-filter"></span>
+            </button>
+            <a class="navbar-brand brand" id="brand" href="<?php echo HOME_ROOT;?>">Clositt <span class="logo-beta">beta</span></a>
+        </div>
+    
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse-main">
+            <ul class="nav navbar-nav">
+                <li><a href="<?php echo HOME_ROOT;?>" ><i class="browse-small-icon"></i>Browse</a></li>
+                <li><a href="<?php echo HOME_ROOT;?>clositt.php" id="subheader-myclositt"><i class="myclositt-small-icon"></i>MyClositt</a></li>                    
+            </ul>                 
+            <ul id="loginBtns" class="nav navbar-nav navbar-right">
+                <!--
+                <li><a class="btn btn-default" onclick="showSigninModal()">LOGIN</a></li>
+                <li><a class="btn btn-default inverse" href="<?php echo HOME_ROOT;?>signup.php" >SIGNUP</a></li>
+                -->
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>		

@@ -10,8 +10,7 @@ var gridEvents = {
 		});		
 		
 		$(document).on("click",".tagOutfitBtn",tagPresenter.showTagForm);
-		$(document).on("click",".shareOutfitBtn",socialPresenter.showProductShareButtons);				
-		$(document).on("submit",".addTagForm > form",tagPresenter.addTag);				
+		$(document).on("click",".shareOutfitBtn",socialPresenter.showProductShareButtons);										
 	},
 	
 	overlayEvent: function(){
@@ -29,19 +28,21 @@ var gridEvents = {
 	},
 	
 	hideAllOverlays: function() {	  	   
-	   
-       	$(".overlay:visible").not(".alwaysVisible").each(function(){		       	    
-       	    
-       	    $(this).data("fadingOut", true); 
-            $(this).fadeOut('slow');
-		
-			if (reviewsPresenter != null){
-			     var sku = $(this).parents(".item").attr("pid");			     			     
-			     reviewsPresenter.hideReview(reviewsPresenter.getReviewBlock(sku));
-			     $(this).parents(".item").find(".social-btns").html("").hide('blind');
-			     $(this).parents(".item").find(".addToClosetForm").html("").hide();
-			}
-		
-       	});
+	    
+	    if ($(window).width() > 767){
+           	$(".overlay:visible").not(".alwaysVisible").each(function(){		       	    
+           	    
+           	    $(this).data("fadingOut", true); 
+                $(this).fadeOut('slow');
+    		
+    			if (reviewsPresenter != null){
+    			     var sku = $(this).parents(".item").attr("pid");			     			     
+    			     reviewsPresenter.hideReview(reviewsPresenter.getReviewBlock(sku));
+    			     $(this).parents(".item").find(".social-btns").html("").hide('blind');
+    			     $(this).parents(".item").find(".addToClosetForm").html("").hide();
+    			}
+    		
+           	});
+	    }
 	}	
 };

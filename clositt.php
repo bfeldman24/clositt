@@ -13,6 +13,25 @@
     #brand-fixed-background {
         display: block;
     }
+    
+    h1{
+        margin-top: 0;   
+    }
+    
+    .clositt-menu-btns{
+        margin-right: 10px;   
+    }
+    
+    .clositt-menu-btns > div, .clositt-menu-btns > ul{
+        display: inline;   
+    }
+    
+    #social-btns {
+       margin-left: 7px;
+       right: auto;
+       top: 40px;
+       width: 32px;
+   }
 
 </style>
 </head>
@@ -20,31 +39,37 @@
 
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
 <div id="main-content" class="container main-container" style="margin-top:80px">
-	<h1><span id="user-closet-title"></span></h1>
-	
-	<?php if(!isset($_GET['user'])){ ?>	                 
-           
-           <ul id="closet-settings" class="nav pull-right">                              	
-        	 		<li class="dropdown">
-        			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        				<!--<i class="minicon-single settings-minicon"></i> -->
-        				<img src="css/images/menu.png" class="clositt-menu-icon"/>
-        			</a>
-        			<ul class="dropdown-menu dropdown-menu-right">
-        			     <li class="menu-settings"><a  onclick="closetPresenter.showSettings()"><i class="icon-pencil"></i> Edit</a></li>
-                         <li class="menu-cancel" style="display:none;"><a onclick="closetPresenter.showSettings()"><i class="icon-remove"></i> Cancel</a></li>
-                         <li class="menu-save" style="display:none;"><a onclick="closetPresenter.saveClosets()"><i class="icon-ok"></i> Save</a></li>                  
-        			</ul>
-        		</li>	              	
-            </ul>
-                  
-
-		    <div id="closet-share" data-toggle="tooltip" data-placement="left" title="Share it!">
-    		      <img class="social-people-icon" src="css/images/social/social-people.png" />
-    		</div>
-    		<div id="social-btns" class="social-btns" style="display:none;"></div>				
-        
-	<?php } ?>
+	<div class="row">
+	    <div class="col-xs-12 col-sm-8">
+          	<h1><span id="user-closet-title"></span></h1>
+      	</div>
+      	
+      	<?php if(!isset($_GET['user'])){ ?>	                 
+            <div class="col-xs-12 col-sm-2 col-sm-offset-2">   
+                <div class="clositt-menu-btns">
+                    <ul id="closet-settings" class="nav pull-right">                              	
+                	 		<li class="dropdown">
+                			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                				<!--<i class="minicon-single settings-minicon"></i> -->
+                				<img src="css/images/menu.png" class="clositt-menu-icon"/>
+                			</a>
+                			<ul class="dropdown-menu dropdown-menu-right">
+                			     <li class="menu-settings"><a  onclick="closetPresenter.showSettings()"><i class="icon-pencil"></i> Edit</a></li>
+                                <li class="menu-cancel" style="display:none;"><a onclick="closetPresenter.showSettings()"><i class="icon-remove"></i> Cancel</a></li>
+                                <li class="menu-save" style="display:none;"><a onclick="closetPresenter.saveClosets()"><i class="icon-ok"></i> Save</a></li>                  
+                			</ul>
+                		</li>	              	
+                    </ul>
+                    <div class="pull-right">
+            		    <div id="closet-share" data-toggle="tooltip" data-placement="left" title="Share it!">
+                		      <img class="social-people-icon" src="css/images/social/social-people.png" />
+                		</div>
+                		<div id="social-btns" class="social-btns" style="display:none;"></div>				
+                	</div>            		                    
+          		</div>
+            </div>      
+      	<?php } ?>
+	</div>
 
 	<div id="closet-list"></div>
 	<br /><br /><br /><br />

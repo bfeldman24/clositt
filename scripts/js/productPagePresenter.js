@@ -19,7 +19,7 @@ var productPagePresenter = {
 	   }
 	},
 	
-	getProductPageTemplate: function(product){	    
+	getProductPageTemplateOld: function(product){	    
         if (product == null){
             return $("");    
         }
@@ -42,8 +42,8 @@ var productPagePresenter = {
 		
 		var shortLink = link.substring(link.indexOf(".")+1, link.indexOf("/", link.indexOf(".") ));
 				
-			 			
-		var html ='<div class="productPageContainer item" pid="'+id+'" style="top:'+scrollLocation+'">';
+		var html = '<div class="row">';	 			
+		      html +='<div class="productPageContainer item col-xs-12 col-sm-10 col-sm-offset-1" pid="'+id+'" style="top:'+scrollLocation+'">';
 				html +='<div class="productPageClose">x</div>';
 				html +='<div class="productPageTop">';				
 				    html +='<div class="productPageImage picture">';				
@@ -103,21 +103,59 @@ var productPagePresenter = {
     				html += '<span class="counter">' + closetCount + '</span>';				
     				html +='</div>';
 				html +='</div>';
-			html +='</div>';	
+			 html +='</div>';	
+		  html +='</div>';		
 							
 		return $(html);
 	},
 	
 	
+	getProductPageTemplate: function(product){	    
+        if (product == null){
+            return $("");    
+        }
+        
+		var company = product.o;
+		var audience = product.u;
+		var category = product.a;
+		var link = product.l;
+		var image = product.i;
+		var name = product.n;		
+		var reviewCount = product.rc == null ? 0 : product.rc;
+		var closetCount = product.cc == null ? 0 : product.cc;
+		var closetCountPlural = closetCount == 1 ? "" : "s"; 
+		var id = product.s;
+		var price = product.p == null || isNaN(product.p) ? "" : "$" + Math.round(product.p);		 	
+ 		var filterPrice = product.fp; 		 		
+ 		var feedOwner = product.owner;
+		var feedCloset = product.closet;
+		var scrollLocation = $(window).scrollTop() + 100;
+		
+		var shortLink = link.substring(link.indexOf(".")+1, link.indexOf("/", link.indexOf(".") ));								  
+		
+		$("#productModal").attr("pid", id);  		
+		$("#productModal .modal-title").text(name);
+		$("#productModal .productPagePicture").attr("href",link);
+		$("#productModal .productPagePicture img").attr("src",image);
+		$("#productModal .productPageName").text(name);
+		$("#productModal .productPagePrice").text(price);
+		$("#productModal .productPageStore").text(company);
+		$("#productModal .productPageBuyLink").attr("href",link);		
+		$("#productModal .productPageBuySiteName").text("on " + shortLink);
+		$("#productModal .productPageCommentCount").text("(" + reviewCount + ")");
+		$("#productModal .productPageClosittCount .counter").text(closetCount);
+							
+		return $("#productModal");
+	},
+	
+	
 	show: function(sku){
-	   $("#page-mask").show();	  
 	   sku = productPresenter.formatSku(sku);
 	   
 	   $.post( window.HOME_ROOT + "p/lookup", {sku: sku}, function( product ) {
-            var item = productPagePresenter.getProductPageTemplate(product);	   
-    	    reviewsPresenter.populateProductPageReview(item, product.s);
-    	    $("#product-module").html(item);	   
-    	    $("#product-module").show('fade');
+            var productModal = productPagePresenter.getProductPageTemplate(product);	   
+    	    reviewsPresenter.populateProductPageReview(productModal, product.s);    	    
+    	    productModal.modal('show');
         }
         , "json"
         );
@@ -134,13 +172,12 @@ var productPagePresenter = {
 	},
 	
 	hide: function(){
-	   $("#page-mask").hide();
-	   $("#product-module").hide('fade');
+	   $("#productModal").modal('hide');
 	},
 	
 	hideOnEsc: function(e){	   	   
 	   
-	   if ($("#page-mask").is(":visible") && !$(e.target).is(":input")){
+	   if ($("#productModal").is(":visible") && !$(e.target).is(":input")){
 	       	   
     	   // Esc, Enter, or Spacebar respectively
     	   if (e.keyCode == 27 || e.keyCode == 13 || e.keyCode === 32){

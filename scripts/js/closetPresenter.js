@@ -18,7 +18,9 @@ var closetPresenter = {
 		
 		$(document).on("click", "#closet-share", socialPresenter.showClosittShareButtons);
 		$(document).on("click",".delete-outfit", closetPresenter.removeOutfit);				
-		$(document).keypress(closetPresenter.saveClosetsOnEnter);				
+		$(document).keypress(closetPresenter.saveClosetsOnEnter);
+		
+		closetFormPresenter.getClosetInfo();				
 	},
 	
 	setUser: function(user){
@@ -135,7 +137,7 @@ var closetPresenter = {
 				
 			$(".closetName > span").replaceWith(function() {
 				return $("<span>").append(
-						$("<input>").addClass("closetNameInput")
+						$("<input>").addClass("closetNameInput form-control")
 							.attr("type","text")
 							.attr("name","closetName")
 							.attr("closetid",$(this).attr("closetid"))
@@ -344,7 +346,7 @@ var closetFormPresenter = {
 					$("<form>").append(
 						$("<div>").addClass("controls").append(
 							$("<label>").addClass("control-label").text("New Clositt: ").append(						
-								$("<input>").attr("type","text").attr("name","newCloset").addClass("newCloset")
+								$("<input>").attr("type","text").attr("name","newCloset").addClass("newCloset form-control")
 							)
 						)
 					).append(

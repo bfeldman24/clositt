@@ -29,8 +29,7 @@ var firebase = {
 		    firebase.loggedOutErrorCallback();
 		} else if (user) {
 		    // user authenticated with Firebase		    
-		    firebase.handleUserData(user);		    				    			  			    
-	        firebase.updateLoggedInDropdownMenu();
+		    firebase.handleUserData(user);		    				    			  			    	        
 	        firebase.isLoggedIn = true;
 		       	       				
 	  	} else {
@@ -56,9 +55,9 @@ var firebase = {
 			
 			if( firebase.username === null) {
 			    console.log("No User Found")
-			} else {
-			  	$("#user-name").html(firebase.username.split(" ")[0]);	    			  	
+			} else {			  		    			  	
 			  	firebase.userDataAvailableCallback(firebase.username);
+			  	firebase.updateLoggedInDropdownMenu(firebase.username);
 			}
 			
 			if (sessionStorage.isActiveUser == null || sessionStorage.isActiveUser == "null"){			
@@ -210,17 +209,25 @@ var firebase = {
 		}   
 	},
 	
-	updateLoggedInDropdownMenu: function(){
-		$("#account-dropdown").html("")
-	    	//.append($('<li><a href="clositt.php">MyClositt</a></li>'))    	
-	    	.append($('<li><a href="'+window.HOME_ROOT+'settings.php">Account Settings</a></li>'))
-	    	.append($('<li class="divider"></li>'))
-	    	.append($('<li><a href="javascript:firebase.logout();">Logout</a></li>')); 
+	updateLoggedInDropdownMenu: function(username){
+	   var userFirstName = firebase.username.split(" ")[0];
+	   
+		$("#loginBtns").html("")	    	
+	    	.append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + "settings.php")
+    	    	.append(
+    	    	      $("<span>").addClass("glyphicon glyphicon-user")
+    	    	).append( 
+    	    	      $("<span>").text(" " + userFirstName)
+    	    	))
+    	    )
+	    	.append( $('<li>').append( $('<a>').attr('onclick', 'firebase.logout()').text('Logout')));
 	},
 	
 	updateLoggedOutDropdownMenu: function(){
-		$("#account-dropdown").html("")
-	  		.append($('<li><a href="'+window.HOME_ROOT+'signup.php">Login or Sign Up</a></li>'))
+	   
+		$("#loginBtns").html("")
+		    .append( $('<li>').addClass("loggedoutBtns").append( $('<a>').addClass("btn btn-default").attr('onclick','showSigninModal()').text('LOGIN')))
+		    .append( $('<li>').addClass("loggedoutBtns").append( $('<a>').addClass("btn btn-default inverse").attr('href',window.HOME_ROOT + 'signup.php').text('SIGNUP')));		
 	},	
 
  	logout: function(){				
