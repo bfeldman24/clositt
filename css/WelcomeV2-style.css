@@ -6,30 +6,17 @@ body{
 	height: 100%;
 	width: 100%;
 	background:#E6E6E6;
-	/*background-image: url(Images/blurrycrowd.jpg);*/
+	margin-top: 30px;
 	background-repeat: no-repeat;
 	
 }
 
-#contentContainer{
-	position:absolute;
-	/*background:grey;*/
-	margin:35px 20px 20px;
-	width:985px;
-	left:75px;
-}
-
 #topBanner{
 	background:white;
-	width:976px;
-	height:80px;
 	text-align:center;
-	margin-top:20px;
+	margin-top:40px;
 	margin-bottom:10px;
-	padding-top:1.5em;
-	padding-bottom:0em;
-	padding-right:0px;
-	padding-left:0px;
+	padding: 20px;
 }
 
 #bannerText{
@@ -41,43 +28,30 @@ body{
 
 .inputBox{
 	margin-left:5px;
-	width:220px;
 	height:35px;
 }
 .button{
 	background:#009e5c;
-	color:white;
-	width:150px;
+	color:white;	
 	height:30px;
+	padding: 3px 40px;
 }
 
 .button:hover{
 	background:#008e52;
 }
 
-#leftContainer{
-	position:absolute;
-	/*background:purple;*/
-	height:400px;
-	width:298px;
-}
-
 #join{
-	position:absolute;
 	background:white;
 	margin-top:0px;
-	width:233px;
 	height:90px;
 	padding:2em;
 }
 
 #goback{
-	position:absolute;
-	background:white;
-	margin-top:0px;
-	width:233px;
-	height:302px;
-	padding:2em;    
+	background: none repeat scroll 0 0 #FFFFFF;
+    min-height: 430px;
+    padding: 2em;
 }
 
 h1.waitList{
@@ -104,9 +78,7 @@ h1.waitList{
 .login-form{
 	background:white;
 	top:27;
-	left:0;
-	width:233px;
-	height:165px;	
+	left:0;		
 	padding: 1em 2em;
 }
 
@@ -114,8 +86,6 @@ h1.waitList{
 	background:white;
 	top:27;
 	left:0;
-	width:233px;
-	height:195px;	
 	padding: 1em 2em;
 	margin-top:10px;
 }
@@ -132,39 +102,21 @@ h1.waitList{
 }
 .submitButton{
 	margin-top:10px;
-	margin-left:48px
 }
 h1.account{
-	margin-top:-11px;
-	font-family: 'Roboto', serif;
-	font-size:1.3em;
-	color:grey;
-	text-align:center;
+	color: #808080;
+    font-family: 'Roboto',serif;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 0;
+    text-align: center;
 }
 
 #rightBanner{
-	background: white;
-	position:relative;
-	height:370px;
-	width:605px;
-	top:0;
-	left:315px;
-	padding:2em;
-	right:5px;
-}
-
-#bannerImage{
-	position:relative;
-	/*background:red;*/
-	background-image: url(images/Hangers_Fullsize.jpg);
-	background-repeat: no-repeat;
-	background-position:center;
-	background-size:100%;
-	height:190px;
-	width:100%;
-	float:right;
-	margin-top:17px;
-	
+	background: none repeat scroll 0 0 #FFFFFF;
+    min-height: 430px;
+    padding: 1em;
 }
 
 h1.stop{
@@ -177,10 +129,11 @@ h1.stop{
 }
 
 h1.start{
-	color:grey;
-	font-family: 'Monoton', cursive;
-	font-size:4em;
-	margin-top:30px;
+	color: #808080;
+    font-family: 'Monoton',cursive;
+    font-size: 4em;
+    font-weight: bold;
+    margin-top: 15px;
 }
 
 #signup-password {
@@ -188,11 +141,12 @@ h1.start{
 }
 
 .signup-password {
+    display: inline;
     border-radius: 3px !important;
     height: 35px !important;
     margin-left: 0 !important;
-    margin-right: 0 !important;
-    width: 108px !important;   
+    margin-right: 0 !important;   
+    width: 49%; 
 }
 
 .forgotpass {
@@ -201,6 +155,7 @@ h1.start{
     font-size: 12px;
     margin-top: 2px;
     position: absolute;
-    right: 20px;
+    right: 30px;
     text-decoration: underline;
 }
+

@@ -4,20 +4,18 @@ var filterPresenter = {
     customers: null,
     categories: null,
     defaultCustomer: "women",
+    pauseRefresh: false,
+    needsRefresh: false,
 	
 	init: function(){		
-	    filterPresenter.allFilters = [];
-	   
-		$(document).on("click","#filter-toggle", filterPresenter.filterPanelToggle);
+	    filterPresenter.allFilters = [];	  
 						
 		$("#filter-float").on("click",".filterHeader", filterPresenter.toggleFilterOptionsVisibility);
 		$("#filter-float").on("click",".filterSubheader", filterPresenter.toggleFilterSubOptionsVisibility);
 		$("#filter-float").on("click",".filterHeader-Customer .customerOption", filterPresenter.selectCustomerFilter);		
 		$("#filter-float").on("click",".selectedFilter-x", filterPresenter.removeFilter);
 		
-		$("#filter-float").on("click","input", function(){
-			setTimeout(filterPresenter.onFilterSelect, 50);			
-		});	
+		$("#filter-float").on("click","input", filterPresenter.onFilterInputChecked);	
 		
 		//firebase.$.child('clositt/filterdata').once('value', filterPresenter.populateFilterData);	 					
 		$.getJSON(window.HOME_ROOT + "s/filters", filterPresenter.populateFilterData);
@@ -138,9 +136,7 @@ var filterPresenter = {
  		
  		$("#filter-float").append($("<h4>").html("Color").addClass("filterHeader").attr('id', 'color'));
  		var colorOptions = $("<div>").addClass("filterOptions");	 		 				 		 		 		
-		$("#filter-float").append(colorOptions.append(colorPresenter.getColorFilters()));
- 		 		
- 		$("#filter-float").append($("<br><br><br><br><br><br><br>"));
+		$("#filter-float").append(colorOptions.append(colorPresenter.getColorFilters())); 		 		 		
  		
  		filterPresenter.allFilters.sort(function(a,b){
  		     return a.split(" ").length < b.split(" ").length;
@@ -148,12 +144,20 @@ var filterPresenter = {
  		
  		filterPresenter.showFilter();
  	},
- 
  	
- 	onFilterSelect: function(){
- 	    productPresenter.filterStore = [];
- 	    window.scrollTo(0, 0);
- 	    gridPresenter.beginTask(); 	 
+ 	refreshIfNeeded: function(){ 	        	  
+ 	      if (filterPresenter.needsRefresh && !filterPresenter.pauseRefresh){
+ 	          filterPresenter.onFilterSelect();
+ 	      }
+ 	},
+ 	
+ 	onFilterInputChecked: function(){
+ 	      filterPresenter.needsRefresh = true; 	   	      
+ 	      setTimeout(filterPresenter.onFilterSelect, 50); 	      
+ 	},
+ 	
+ 	onFilterSelect: function(){ 	    
+ 	   	    	 
  	    $("#selectedFilters").html("");      	    
  	    
 	 	var criteria = new Object();
@@ -198,20 +202,28 @@ var filterPresenter = {
 	 	if (criteria['colors'] != null && criteria['colors'].length > 0){     
 	 	     areAnyFiltersChecked = true;
 	 	}
-	 	
-	 	if (isSearch){
-	 	     searchController.search(criteria);
-	 	     
-	 	}else if (areAnyFiltersChecked){
-	 	    searchController.criteria = criteria;
-            searchController.pageIndex = 0; 
-            searchController.hasMoreProducts = true;	 		 		 	
-            searchController.getProducts();
-	 	}else{
-	 	      $(".noresults").remove();
-	 	      $("#search-bar-sort-block").css("visibility","hidden");
-	 	      productPresenter.refreshProducts();
-	 	}	 		 	
+	 		 	
+	 	if (!filterPresenter.pauseRefresh){
+	 	    productPresenter.filterStore = [];
+ 	        window.scrollTo(0, pagePresenter.defaultHeaderHeight);
+ 	        gridPresenter.beginTask(); 
+	 	 
+    	 	if (isSearch){
+    	 	     searchController.search(criteria);
+    	 	     
+    	 	}else if (areAnyFiltersChecked){
+    	 	    searchController.criteria = criteria;
+                searchController.pageIndex = 0; 
+                searchController.hasMoreProducts = true;	 		 		 	
+                searchController.getProducts();
+    	 	}else{
+    	 	      $(".noresults").remove();
+    	 	      $("#search-bar-sort-block").css("visibility","hidden");
+    	 	      productPresenter.refreshProducts();
+    	 	}
+    	 	
+    	 	filterPresenter.needsRefresh = false;	 		 	
+	 	}
  	},
  	
  	formatSelectedValued: function(group){ 
@@ -302,8 +314,7 @@ var filterPresenter = {
      	          $('.filterOptions .controls[filter-customer="Women"]').show('blind', 'slow', function(){ $(this).show(); });
      	          $('.filterOptions .filterSubheader').show('blind', 'slow', function(){ $(this).show(); });
  	          } 	           	           	          
- 	      } 	       	      
- 	      
+ 	      } 	       	       	      
  	},
  	
  	hideSubcategories: function(customer){
@@ -348,22 +359,12 @@ var filterPresenter = {
  	          input.prop('checked', false);  
  	    }
  	    
+ 	    filterPresenter.needsRefresh = true;
  	    filterPresenter.onFilterSelect();
  	},
  	
- 	filterPanelToggle: function(){
- 	 		
-	 	 $("#filter-float").toggle('slide',1000);	 	 
-			 
-	 	 if(isNaN(parseInt($("#product-grid").css("left"))) || parseInt($("#product-grid").css("left")) == 0){
-	 	 	$("#product-grid").animate({left: '100px'}, 1000);
-	 	 	$("#filter-toggle").animate({left: '165px'}, 1000);
-	 	 	$("#filter-toggle").text('Hide Filter');
-	 	 }else{
-	 	 	$("#product-grid").animate({left: '0px'}, 1000);
-	 	 	$("#filter-toggle").animate({left: '-37px'}, 1000);
-	 	 	$("#filter-toggle").text('Show Filter');
-	 	 } 		
+ 	filterPanelToggle: function(){ 		
+	 	 $("#filter-float").toggle('slide',1000);				 	 	 	
 	 },
 	 
 	 clearFilters: function(){
@@ -375,29 +376,23 @@ var filterPresenter = {
 	 },
 	 
 	 hideFilterPanel: function(){
-	 	if($("#filter-float").is(":visible")){
-		 	 $("#filter-float").hide('slide',500);
-		 	 $("#product-grid").animate({left: '0px'}, 500);
-		 	 $("#filter-toggle").animate({left: '-37px'}, 500);
-		 	 $("#filter-toggle").text('Show Filter');
-	 	}
+           $("#filter-float").hide('slide',500);
 	 },
 	 
-	 showFilter: function(){
-	   if(!$("#review-form").is(":visible")){ 
-	        $("#filter-float").show('slide',500);
-	 	 	$("#product-grid").animate({left: '100px'}, 500);
-	 	 	$("#filter-toggle").animate({left: '165px'}, 500);
-	 	 	$("#filter-toggle").text('Hide Filter');    
-	   }
+	 showFilter: function(){	   
+	       $("#filter-float").show('slide',500);	 	 	
 	 },
 	 
 	 toggleFilterOptionsVisibility: function(){
            var filterOptions = $(this).next(".filterOptions").first(); 
 	       
 	       if (filterOptions != null){
-	           if (filterOptions.is(":visible")){
+	           if (filterOptions.is(":visible")){	               
 	               $(this).removeClass("open");
+	               
+	               if ($('#filter-float .open').length <= 0){
+	                   $('#filter-float').scrollTop(0);
+	               }
 	           }else{
 	               $(this).addClass("open");   
 	           }

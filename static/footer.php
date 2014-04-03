@@ -2,8 +2,9 @@
 	<div id="footer-wrapper">
 		<div class="center footer-item">Clositt Inc &copy; 2014</div>
 		<div class="footer-item"><a href="/contact-us.php">Contact Us</a></div>
-		<div class="footer-item"><a href="/terms-of-service.php">Terms</a></div>
-		<div class="footer-item"><a href="/shout-outs.php">Shout Outs</a></div>
+		<div class="footer-item hidden-xs"><a href="/terms-of-service.php">Terms</a></div>
+		<div class="footer-item hidden-xs"><a href="/shout-outs.php">Shout Outs</a></div>
+		<div class="footer-item"><a href="http://blog.clositt.com">Blog</a></div>
 		
 		<?php if ($_SERVER['PHP_SELF'] == "/index.php" || $_SERVER['PHP_SELF'] == "clositt.php"){ ?>
     		<div class="last footer-item"><a class="joyride-start" href="#">Tour</a></div>						
@@ -16,17 +17,17 @@
 		<?php } ?>						
 	</div>
 	
-	<div class="feedback">
+	<div class="feedback hidden-xs">
 	   <div class="feedback-maximize">
     	   <div class="feedback-popup">
         	  <textarea class="feedback-textarea" rows="3" placeholder="What can we do better?"></textarea>
     	  </div>
     	  <div class="arrow-down"></div>
-    	  <button class="feedback-submit-btn btn btn-mini" type="button">Submit</button>
+    	  <button class="feedback-submit-btn btn btn-xs" type="button">Submit</button>
     	  <div class="feedbackMinimize"><div class="minimize">-</div></div>
 	  </div>
 	  <div class="feedback-minimized" style="display:none;">
-	      <button class="feedback-minimized-btn btn btn-success btn-mini" type="button">Feedback</button> 
+	      <button class="feedback-minimized-btn btn btn-success btn-xs" type="button">Feedback</button> 
 	  </div>
 	</div>
 </footer>
@@ -34,249 +35,189 @@
 
 <!-- Modal -->
 <div id="signinModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 id="myModalLabel">Log in or Sign up</h3>
-    </div>
-    <div class="modal-body">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#loginModalTab" data-toggle="tab">Log in</a></li>
-            <li><a href="#signupModalTab" data-toggle="tab">Sign Up</a></li>
-        </ul>
-      	
-      	<div class="tab-content">
-      	    <div id="loginModalTab" class="login-form tab-pane active">
-        		<form id="signin" class="form-horizontal" action="clositt.php">
-        			<h3 class="account">Got an Account? Log in.</h3>
-        			<div id="signinModalEmail">            			                         			  
-        			    <input type="text" id="loginModalTab-inputEmail" placeholder="Email" class="inputBox" />
-        			</div>
-        			<div id="password">	
-        				<input type="password" id="loginModalTab-inputPassword" placeholder="Password" class="inputBox" />		
-        			</div>		   		
-        			<div>	        			    
-        			    <div class="forgotpass">Forgot Password?</div>
-        			</div>
-        		</form> 
-        	</div> 	
-        
-        	<div id="signupModalTab" class="signup-form tab-pane">
-        		<form id="signup-form" class="form-horizontal" action="clositt.php">
-        			<h3 class="account">New to Clositt? Sign up.</h3>
-        			<div id="signinModalName">
-        			   <input type="text" id="signupModalTab-inputName" placeholder="Full Name" class="inputBox" />
-        			</div>
-        			<div id="signup-email">
-        			   <input type="text" id="signupModalTab-inputEmail" placeholder="Email" class="inputBox" />
-        			</div>
-        			<div id="signinModalPassword">	
-        			    <div class="input-prepend">                            
-                            <input type="password" id="signupModalTab-inputPassword" placeholder="Password" class="signup-password">
-                        </div>
-                        <div class="input-append">
-                            <input type="password" id="signupModalTab-inputPassword2" placeholder="Confirm" class="signup-password">
-                        </div>
-        			</div>		   		        			
-        		</form> 
-        	</div>
-      	</div>
-    </div>
-    <div class="modal-footer">
-        <button type="submit" id="signupModalLoginButton" class="btn btn-success">Login</button>
-    </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 id="myModalLabel">Log in or Sign up</h3>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#loginModalTab" data-toggle="tab">Log in</a></li>
+                    <li><a href="#signupModalTab" data-toggle="tab">Sign Up</a></li>
+                </ul>
+              	
+              	<div class="tab-content">
+              	    <div id="loginModalTab" class="tab-pane active">
+                		<form id="signin" class="form-horizontal" action="clositt.php">
+                			<h3 class="account">Got an Account? Log in.</h3>
+                			<div class="row">
+                    			<div id="signinModalEmail" class="col-xs-12 col-sm-6 col-sm-offset-3">            			                         			  
+                    			    <input type="text" id="loginModalTab-inputEmail" placeholder="Email" class="form-control inputBox" />
+                    			</div>
+                			</div>
+                			<div class="row">
+                    			<div id="password" class="col-xs-12 col-sm-6 col-sm-offset-3">	
+                    				<input type="password" id="loginModalTab-inputPassword" placeholder="Password" class="form-control inputBox" />		
+                    			</div>		   	
+                			</div>	
+                			<div>	        			    
+                			    <div class="forgotpass">Forgot Password?</div>
+                			</div>
+                		</form> 
+                	</div> 	
+                
+                	<div id="signupModalTab" class="tab-pane">
+                		<form id="signup-form" class="form-horizontal" action="clositt.php">
+                			<h3 class="account">New to Clositt? Sign up.</h3>
+                			<div class="row">
+                    			<div id="signinModalName" class="col-xs-12 col-sm-6 col-sm-offset-3" >
+                    			   <input type="text" id="signupModalTab-inputName" placeholder="Full Name" class="form-control inputBox" />
+                    			</div>
+                    	    </div>
+                    	    <div class="row">
+                    			<div id="signup-email" class="col-xs-12 col-sm-6 col-sm-offset-3">
+                    			   <input type="text" id="signupModalTab-inputEmail" placeholder="Email" class="form-control inputBox" />
+                    			</div>
+                			</div>
+                    	    <div class="row">                			
+                    			<div id="signinModalPassword" class="col-xs-12">	
+                                    <div class="row">
+                        			    <div class="col-xs-12 col-sm-3 col-sm-offset-3">                            
+                                            <input type="password" id="signupModalTab-inputPassword" placeholder="Password" class="form-control">                                
+                                        </div>
+                                        <div class="col-xs-12 col-sm-3">
+                                            <input type="password" id="signupModalTab-inputPassword2" placeholder="Confirm" class="form-control">
+                                        </div>
+                                    </div>
+                    			</div>		   	
+                			</div>	        			
+                		</form> 
+                	</div>
+              	</div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="signupModalLoginButton" class="btn btn-success">Login</button>
+            </div>      	
+        </div>          	
+    </div>    
 </div>	
 
 <!-- Forgot Password Modal -->
 <div id="forgotPassModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 id="myModalLabel">Forgot Password</h3>
-    </div>
-    <div class="modal-body">
-        <p>Please enter your email address so we can send you an email to reset your password:</p>
-        <input type="text" id="forgotPasswordEmail" placeholder="Email" class="inputBox" />        
-    </div>
-    <div class="modal-footer">
-        <button id="resetPassButton" class="btn btn-success">Reset My Password</button>
-    </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 id="myModalLabel">Forgot Password</h3>
+            </div>
+            <div class="modal-body">
+                <p>Please enter your email address so we can send you an email to reset your password:</p>
+                <input type="text" id="forgotPasswordEmail" placeholder="Email" class="inputBox form-control" />        
+            </div>
+            <div class="modal-footer">
+                <button id="resetPassButton" class="btn btn-success">Reset My Password</button>
+            </div>
+        </div>            
+    </div>            
 </div>	
 
-<?php echo CLOSITT_JS; ?>
 
+<!-- Product Popup -->
+<div id="productModal" class="modal fade item"> 
+    <div class="modal-dialog"> 
+        <div class="modal-content">             
+            <button type="button" class="productPageClose" data-dismiss="modal" aria-hidden="true">&times;</button>             
+            <div class="modal-body"> 
+            <div class="row"> 
+                <div class="col-xs-12 col-sm-4"> 
+                    <div class="productPageImage picture"> 
+    			        <a class="productPagePicture" target="_blank" > 
+    			            <img onerror="return pagePresenter.handleImageNotFound(this)" /> 
+    			        </a> 
+    				</div> 
+                </div> 
+                <div class="col-xs-12 col-sm-8">                             
+                        
+                    <div class="productPageContent"> 
+                        <div class="row"> 
+                            <div class="col-xs-12 col-sm-6"> 
+                				<div class="productPageDesc">             				    				
+                				    <div class="productPageName"></div>                 				
+                    				<div class="productPagePrice"></div>                 				
+                    				<div class="productPageStore"></div> 
+                				</div> 
+            				</div> 
+            				
+            				<div class="col-xs-12 col-sm-6"> 
+                				<div class="productPageActions">             				    				
+                				    <a class="productPageBuyLink" target="_blank"> 
+                				        <div class="productPageBuy"> 
+                				            <img src="/css/images/cart-empty.png" /> 
+                				                <span>SHOP IT</span> 
+                				                <br> 
+                				                <span class="productPageBuySiteName"></span> 
+                    				    </div> 
+                    				</a> 
+                    				
+                    				<div class="productPageClositt"> 
+                    				    <img class="productPageHanger" src="/css/images/hanger-icon.png" /> 
+                    				    <span>CLOSITT</span> 
+                    				    <div class="addToClosetForm" style="display:none;"></div> 
+                    				</div> 
+                    				
+                    				<div class="productPageTagitt"> 
+                    				    <img src="/css/images/price-tag.png" /> 
+                    				    <span>TAGITT</span>	
+                    				    <div class="addTagForm" style="display:none;"></div> 
+                    				</div> 
+                				</div> 
+                			</div>
+            			</div> 
+            		</div>                 			
+        			                        
+                </div> 
+            </div> 
+            <div class="productPageBottom"> 
+                <div class="row"> 
+                    <div class="col-xs-6 col-sm-offset-4">                                             				
+        				<div class="productPageComments">Talkitt 
+        				    <span class="productPageCommentCount"></span>         				    
+        				</div>                 				                				
+    				</div> 
+    				<div class="col-xs-4 col-xs-offset-1 col-sm-2 col-sm-offset-1"> 
+                        <div class="productPageClosittCount"> 
+                            <img class="productPageHanger" src="/css/images/hanger-icon.png" />  
+            				<span class="counter"></span> 				
+            			</div> 
+                    </div> 
+                </div>
+                <div class="row">
+                    <div class="product-comments" style="display:none"></div>
+                </div>
+            </div> 
+            
+            </div>                   
+        </div><!-- /.modal-content --> 
+    </div><!-- /.modal-dialog --> 
+</div><!-- /.modal -->  
+
+
+
+
+
+
+
+
+
+<?php echo CLOSITT_JS; ?>
+<script src="<?php echo HOME_ROOT;?>scripts/js/footer.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     firebase.init();
     Messenger.init();       
+    footer.init();
 });
-
-$(".feedback .feedback-submit-btn").on("click",function(e){
-	e.preventDefault();
-	$(e.currentTarget).addClass("disabled").text("Submitting...");
-
-	var feedbackTextArea = $(e.currentTarget).parents(".feedback").find(".feedback-textarea");
-	var message = feedbackTextArea.val().trim();
-	
-	if(message.length > 0){
-	    var feedback = { e: firebase.email, n: firebase.username, i: firebase.userid, s: "CLOSITT FEEDBACK", m: message };
-	   
-		$.post("/app/email.php", feedback, function(data) {
-			if(data == "success"){
-				Messenger.success("Thanks for your feedback!");
-
-				delete feedback.s;
-				firebase.$.child("feedback").push(feedback);
-				feedbackTextArea.val("");				
-			}else{
-				Messenger.error("There was a problem sending your feedback. Please try again.");	
-			}
-			
-			$(e.currentTarget).removeClass("disabled").text("Submit");
-		});
-	}else{
-		Messenger.error("Type your feedback into the input!");	
-	}
-	
-	return false;
-});
-
-$(".feedbackMinimize").on("click", function(e){
-    var feedbackPopup = $(e.currentTarget).parents(".feedback");
-    feedbackPopup.find(".feedback-maximize").hide('fade');
-    feedbackPopup.find(".feedback-minimized").show('fade');
-});
-
-$(".feedback-minimized-btn").on("click", function(e){
-    var feedbackPopup = $(e.currentTarget).parents(".feedback");
-    feedbackPopup.find(".feedback-maximize").show('fade');
-    feedbackPopup.find(".feedback-minimized").hide('fade');
-});
-
-$("#subheader-myclositt").on('click', function(e){
-    if (firebase.isLoggedIn){
-        $("#subheader-myclositt").off('click');
-    }else{
-        e.preventDefault();
-        Messenger.error("We'd love to show you your Clositt, but first you need to sign in.");
-        $("#signinModal").modal('show');        
-        return false;
-    } 
-});
-
-$('#signinModal').on('shown', function () {
-    $("#loginModalTab-inputEmail").focus();
-})
-
-$('#signinModal a[data-toggle="tab"]').on('shown', function (e) {     
-    if($(e.target).attr("href") == "#loginModalTab"){
-        $("#signupModalLoginButton").text("Login");
-    }else{
-        $("#signupModalLoginButton").text("Sign Up");   
-    }        
-})
-
-$('#loginModalTab-inputPassword, #signupModalTab-inputPassword2, #signupModalTab-inputPassword').keyup(function(e) {
-    e.preventDefault();	 
-    
-    // on enter
-    if(e.keyCode == 13) {        
-        submitSigninModal();
-    }
-    
-    return false;
-});
-
-
-$("#signupModalLoginButton").on("click",function(event){
-	event.preventDefault();
-	submitSigninModal();	 	 	 	
-	return false;
-});
-
-function submitSigninModal(){
-    if ($('#signinModal li.active a[data-toggle="tab"]').attr("href") == "#loginModalTab"){
-            if($('#loginModalTab-inputPassword').val().length > 5){
-     
-         		var email = $("#loginModalTab-inputEmail").val();
-         		var password = $("#loginModalTab-inputPassword").val();
-         		var remember = false;		
-         					  	
-         		sessionStorage.goToClositt = true;			  	
-         	  	firebase.login(email,password,remember);		    
-         	  	$("#signupModalLoginButton").addClass("disabled").text("Logging in...");
-         	}else{
-         		Messenger.info("Login information is incorrect");	
-         	} 
-	       
-	 }else{	 	 
-	        var valid = false;
-	      
-	        
-            if($('#signupModalTab-inputPassword').val().length > 5 && $('#signupModalTab-inputPassword2').val().length > 5){
-                    if($('#signupModalTab-inputPassword2').val() == $('#signupModalTab-inputPassword').val()){                   
-                            valid = true;                    
-                    }else{					              	
-                            Messenger.error("Passwords do NOT match!");                     
-                    }
-            }else{
-                    Messenger.error("Passwords do NOT match!");        
-            }
-          
-          	if(valid){
-          		var email = $("#signupModalTab-inputEmail").val();
-          		var password = $("#signupModalTab-inputPassword").val();
-          		var remember = false;
-          		var name = $("#signupModalTab-inputName").val();
-          		var username = $("#signupModalTab-inputUsername").val();		
-          	
-          	    sessionStorage.goToClositt = true;
-          		firebase.signup(email, password,remember,name, username);
-          		$("#signupModalLoginButton").addClass("disabled").text("Signing up...");
-          	}else{
-          		console.log("invalid");	
-          	}
-	 }
-}
-
-$(".forgotpass").on("click", function(e){
-   e.preventDefault(); 
-   
-   var email = $("#inputEmail").val();
-   
-   if (email == null){
-        email = $("#loginModalTab-inputEmail").val();
-   }
-   
-   if (email != null){
-        $("#forgotPasswordEmail").val(email);
-   }
-   
-   $(".modal").modal('hide');
-   $("#forgotPassModal").modal('show');
-});
-
-$("#resetPassButton").on("click", function(e){
-    e.preventDefault();
-    var email = $("#forgotPasswordEmail").val();
-    
-    if (email != null && email.indexOf("@") > 0){
-        $("#forgotPassModal").modal('hide');
-        
-        firebase.authClient.sendPasswordResetEmail(email, function(error, success) {
-            
-            
-          if (error) {
-                Messenger.error("Sorry. There was an error sending you a reset password email!");                
-                Messenger.error("Please contact us to reset your password.");
-          }else{
-                Messenger.success('We just sent you an email to reset your password.');
-                Messenger.success('Please check that email and follow its instructions. Thanks!');
-          }
-        });
-    }else{
-        Messenger.error("Please enter a valid email address!");
-    }
-});
-
 </script>
 
 <script type="text/javascript">

@@ -25,6 +25,10 @@ var searchController = {
 		el.preventDefault();
 		var searchTerm = $( "#search-bar" ).val().trim();
 		
+		$('body,html').animate({
+			scrollTop: 610
+		}, 800);
+		
 		if (searchTerm.charAt(0) == '#'){
 		  filterPresenter.clearFilters();
 		  
@@ -250,19 +254,13 @@ var searchController = {
             searchController.pageIndex++;        
         }else{
             if ($(".endResults").length <= 0){
-                var lastHeight = $("#product-grid").children("div[aligned=true]").last().css("top");
-    		
-        		if(lastHeight == undefined || lastHeight == null || lastHeight.trim() == ""){
-        			lastHeight = 0;
-        		}else{
-        			lastHeight = parseFloat(lastHeight, 10);	
-        		}
                 
-                $("#product-grid").append(
-                    $("<div>").addClass("endResults")
-                    .css("top", (lastHeight + 330) + "px")
-                    .text("End of Results")
-                );   
+                if ($("#product-grid .item").length > 0){
+                    $("#product-grid").append(
+                        $("<div>").addClass("endResults col-xs-6 col-sm-4 col-md-3 col-lg-2")
+                        .text("End of Results")
+                    );   
+                }
             }
         }
     },     

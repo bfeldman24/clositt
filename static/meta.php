@@ -1,3 +1,4 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta property="og:image" content="<?php echo HOME_ROOT; ?>css/images/clositt-twitter-header.jpg"/>
 <meta property="og:image:secure_url" content="<?php echo HOME_ROOT; ?>css/images/clositt-twitter-header.jpg" />
 
@@ -6,14 +7,14 @@
 <link href="<?php echo HOME_ROOT; ?>lib/css/messenger.css" rel="stylesheet">
 <link href="<?php echo HOME_ROOT; ?>lib/css/messenger-theme-future.css" rel="stylesheet">
 <link href="<?php echo HOME_ROOT; ?>lib/css/jquery-ui-1.10.1.custom.min.css" rel="stylesheet">
-<link href="<?php echo HOME_ROOT; ?>lib/css/perfect-scrollbar-0.4.8.min.css" rel="stylesheet">
+<link href="<?php echo HOME_ROOT; ?>lib/css/perfect-scrollbar-0.4.9.min.css" rel="stylesheet">
 <link href="<?php echo CLOSITT_CSS; ?>" rel="stylesheet">  
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="<?php echo HOME_ROOT; ?>lib/js/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="<?php echo HOME_ROOT; ?>lib/js/bootstrap.min.js"></script>
 
-<script src="<?php echo HOME_ROOT; ?>lib/js/perfect-scrollbar-0.4.8.with-mousewheel.min.js"></script>
+<script src="<?php echo HOME_ROOT; ?>lib/js/perfect-scrollbar-0.4.9.with-mousewheel.min.js"></script>
 
 <script src='https://cdn.firebase.com/js/client/1.0.6/firebase.js' type='text/javascript' ></script>
 <script src='https://cdn.firebase.com/js/simple-login/1.3.0/firebase-simple-login.js' type='text/javascript'></script>

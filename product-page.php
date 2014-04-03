@@ -40,27 +40,26 @@ hr {
  margin: 4px 0;   
 }
 
-#product-page-content {
-    font-family: 'Roboto',sans-serif;
-    height: 400px;
-    margin: 100px auto 15px;
-    padding: 20px;
+#product-page-content{
+    margin-top: 75px;   
+    margin-bottom: 75px;
+}
+
+#product-page-content .review-float{
     position: relative;
-    text-align: center;
-    width: 920px;
 }
 
 .productPageContainer{
     background-color: #FFFFFF;
     border: 1px solid #CBCBCB;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);       
-    width: 560px;    
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);           
     padding: 20px;
     min-height: 335px;
+    margin-bottom: 20px;
 }
 
 .productPageActions{
-    width: 300px;
+    max-width: 300px;
 }
 
 .productPageActions .productPageBuy,.productPageActions .productPageClositt,.productPageActions .productPageTagitt{
@@ -83,23 +82,19 @@ hr {
 }
 
 .productPageComments {
-    cursor: default;
-    left: 363px;
-    bottom: auto;    
+    cursor: default; 
+    margin: 20px -26px -32px;
 }
 
 .productPageComments .review-form {
-    width: 570px;    
+    width: 100%;    
 }
 
 .productPageComments ul.review-comments {
-    width: 580px;
+    width: 100%;
 }
 
-.productPageComments .review-float {
-    width: 600px;
-    top: 0;
-    left: -348px;
+.productPageComments .review-float {    
     border-left: 1px solid #CBCBCB;
     border-bottom: 1px solid #CBCBCB;
     border-right: 1px solid #CBCBCB;
@@ -114,10 +109,6 @@ hr {
     position: relative;
     right: 0;
     text-align: right;
-}
-
-.review-float {
-    position: relative;
 }
 
 .productPageComments ul.review-comments {
@@ -161,11 +152,11 @@ hr {
 .see-whats-trending div{
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #CBCBCB;
-    height: 95px;
+    height: 135px;
     line-height: 30px;
     margin-bottom: 5px;
     padding: 40px 10px 0;
-    position: relative;
+    position: relative;    
 }
 
 .see-whats-trending div:hover{
@@ -190,16 +181,17 @@ hr {
         }
      ?>
      
-<div id="product-page-content" style="">
-     <div class="productPageContainer item" pid="<?= $product->s ?>">
+<div id="product-page-content" class="row">
+     <div class="productPageContainer item col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1" pid="<?= $product->s ?>">        
 		<div class="productPageTop">				
-		    <div class="productPageImage picture">				
-		        <a class="productPagePicture" target="_blank" href="<?= $product->l ?>">
-		            <img src="<?= $product->i ?>" onerror="return pagePresenter.handleImageNotFound(this)" />	
-		        </a>
-			</div>
+		    <div class="row">
+    		    <div class="productPageImage picture col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-0">				
+    		        <a class="productPagePicture" target="_blank" href="<?= $product->l ?>">
+    		            <img src="<?= $product->i ?>" onerror="return pagePresenter.handleImageNotFound(this)" />	
+    		        </a>
+    			</div>
 			
-			<div class="productPageContent">
+			<div class="productPageContent col-xs-10 col-sm-4">
 				<div class="productPageDesc">
 				    <br />				
 				    <div class="productPageName"><?= $product->n ?></div>
@@ -209,9 +201,10 @@ hr {
     				<div class="productPageStore"><?= $product->o ?></div>
 				</div>        				        				
 			</div>
+			</div>
 		</div>
 		
-		<div class="productPageMiddle">		
+		<div class="productPageMiddle ">		
 		    <?php /*		
 		    <div class="productPageRating">
 		        <span class="review-average-stars"></span>
@@ -221,14 +214,14 @@ hr {
 			
 			<div class="productPageClosittCount"><img class="productPageHanger" src="/css/images/hanger-icon.png" /> <?= $product->cc ?>				
 			</div>
-		</div>			
+		</div>	      	
 		
 		<div class="productPageComments">
             <div class="product-comments"></div>
         </div>								
 	</div>
 			
-    <div class="productPageActions">
+    <div class="productPageActions col-xs-8 col-xs-offset-2 col-sm-3 col-sm-offset-1">
         	
         <a class="see-whats-trending" href='../' class="btn btn-success see-whats-trending">
     		<div>See What Else is Trending on Clositt</div>
@@ -276,6 +269,7 @@ $(document).ready(function(){
     pagePresenter.init();	
     productPagePresenter.init();	
     reviewsPresenter.init();
+    tagPresenter.init();
     gridEvents.init();    
     reviewsPresenter.populateProductPageReview($("#product-page-content"), "<?= $product->s ?>");
 });

@@ -6,25 +6,19 @@
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>	
 
 <style type="text/css">
-.form-horizontal .control-label {
-    padding-top: 9px !important;
-}
-
-.changeSettingCheckbox { 
-    margin-right: 10px !important;
-}
-
-.form-horizontal .controls {
-    margin-left: 150px;
+input[type='checkbox']{
+    margin-top:10px;   
 }
 
 .newPasswordGroup {
-    margin-left: 176px !important;
-    margin-top: 5px !important;
     display:none;
 }
 
-#inputPassword2{
+.newPasswordGroup input{
+     margin-bottom: 10px;   
+}
+
+#inputPassword, #inputPassword2{
     margin-left: 5px;
 }   
 </style>
@@ -34,58 +28,74 @@
 
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
 
-<div id="signup">
+<div class="row" style="margin-top:80px;">
+    <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-clositt-theme">
+            <div class="panel-heading">
+                  <h1 class="panel-title">Account Settings</h1>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label for="inputName" class="col-xs-12 col-sm-4 control-label">Change Name</label>
+                    <div class="col-xs-12 col-sm-7">       
+                        <div class="row">
+                            <div class="col-xs-2">
+                                  <input type="checkbox" id="changeName" class="changeSettingCheckbox" toggleInputId="inputName">
+                            </div>
+                            <div class="col-xs-10">      
+                                  <input type="text" id="inputName" placeholder="Name" class="input-xlarge form-control" disabled="disabled">                     
+                            </div>
+                        </div>      
+                    </div>
+                  </div>
+                  
+                  <?php /* ?>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-xs-12 col-sm-4 control-label">Change Email</label>
+                    <div class="col-xs-12 col-sm-7">       
+                        <div class="row">
+                            <div class="col-xs-2">
+                                  <input type="checkbox" id="changeEmail" class="changeSettingCheckbox" toggleInputId="inputEmail">
+                            </div>
+                            <div class="col-xs-10">      
+                                  <input type="text" id="inputEmail" placeholder="Email" class="input-xlarge form-control" disabled="disabled">                     
+                            </div>
+                        </div>      
+                    </div>
+                  </div>                                      
+                  <?php */ ?>
 
-<h1>Account Settings</h1>
-<br><br>
-    
-	<form class="form-horizontal">
-	    <div class="control-group">
-		    <label class="control-label" for="inputName">Change Name</label>
-		    <div class="controls">		  	
-		      <input type="checkbox" id="changeName" class="changeSettingCheckbox" toggleInputId="inputName">  
-			  <div class="input-prepend">
-				<span class="add-on"><i class="icon-user"></i></span>
-				<input type="text" id="inputName" placeholder="Name" class="input-xlarge" disabled="disabled">
-			  </div>
-		    </div>
-	    </div>	    
-	    <?php /* ?>
-	    <div class="control-group">
-		    <label class="control-label" for="inputEmail">Change Email</label>
-		    <div class="controls">		  	  
-		      <input type="checkbox" id="changeEmail" class="changeSettingCheckbox" toggleInputId="inputEmail">  
-			  <div class="input-prepend">
-				<span class="add-on"><i class="icon-envelope"></i></span>
-				<input type="text" id="inputEmail" placeholder="Email" class="input-xlarge" disabled="disabled">
-			  </div>
-		    </div>
-	    </div>
-	    <?php */ ?>
-	    <div class="control-group">	        		    
-		    <label class="control-label" for="inputPassword">Change Password</label>		    		    
-		    <div class="controls">
-		        <input type="checkbox" id="changePassword" class="changeSettingCheckbox" toggleInputId="inputOldPassword">  
-		    	<div class="input-prepend">
-					<span class="add-on"><i class="icon-lock"></i></span>										
-					<input type="password" id="inputOldPassword" placeholder="Old Password" class="input-xlarge" disabled="disabled">					
-			  	</div>		   		
-		    </div>
-		    <div class="controls newPasswordGroup">
-		    	<div class="input-prepend">
-					<span class="add-on"><i class="icon-lock"></i></span>										
-					<input type="password" id="inputPassword" placeholder="New Password" class="input-xlarge">
-					<input type="password" id="inputPassword2" placeholder="Confirm Password" class="input-xlarge">
-			  	</div>		   		
-		    </div>
-	    </div>
-	    <div class="control-group">
-		    <div class="controls">		   
-		    <button type="submit" class="btn btn-primary" id="save" disabled="disabled">Save</button>
-		    </div>
-	    </div>
-    </form>
-</div>
+                  <div class="form-group">
+                    <label for="inputOldPassword" class="col-xs-12 col-sm-4 control-label">Change Password</label>
+                    <div class="col-xs-12 col-sm-7">
+                        <div class="row">
+                            <div class="col-xs-2">
+                              <input type="checkbox" id="changePassword" class="changeSettingCheckbox" toggleInputId="inputOldPassword">  
+                            </div>
+                            <div class="col-xs-10">
+                              <input type="password" id="inputOldPassword" placeholder="Old Password" class="input-xlarge form-control" disabled="disabled">
+                            </div>
+                        </div>		
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-xs-12 col-sm-6 col-sm-offset-5 newPasswordGroup">							
+    					<input type="password" id="inputPassword" placeholder="New Password" class="input-xlarge form-control">
+    					<input type="password" id="inputPassword2" placeholder="Confirm Password" class="input-xlarge form-control">
+                    </div>
+                  </div>                                   
+                  <div class="form-group">
+                    <div>
+        		      <button type="submit" class="btn btn-clositt-theme center-block" id="save" disabled="disabled">Save</button>                      
+                    </div>
+                  </div>                                                      
+                </form>
+                
+            </div>
+        </div>	
+    </div>
+</div>  
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 

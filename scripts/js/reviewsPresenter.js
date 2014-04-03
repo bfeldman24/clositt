@@ -52,6 +52,7 @@ var reviewsPresenter = {
 	 },
 
 	 hideReview:function(review){
+	   
 	     if (reviewsPresenter.currentReviewFB != null){
      	     reviewsPresenter.currentReviewFB.off('child_added', reviewsPresenter.addReview);	
      	     reviewsPresenter.currentReviewFbUrl = null;
@@ -359,9 +360,9 @@ var reviewsPresenter = {
 	   	   
        var reviewBlock = $("<div>").attr("id",id + "-review-float").addClass("review-float").css("display","none").append(
             $("<div>").addClass("review-form").append(
-                $("<textarea>").addClass("review-add-comment").attr("rows","3").attr("placeholder","Add a Comment...")
+                $("<textarea>").addClass("review-add-comment form-control").attr("rows","3").attr("placeholder","Add a Comment...")
             ).append(reviewRating).append(
-                $("<button>").addClass("review-add-btn btn btn-success btn-mini").attr("type","button").text("Add Comment")
+                $("<button>").addClass("review-add-btn btn btn-success btn-xs").attr("type","button").text("Add Comment")
             )                       
        ).append(
             $("<ul>").addClass("review-comments")

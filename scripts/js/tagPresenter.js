@@ -4,6 +4,7 @@ var tagPresenter = {
 	
 	init: function(){		
 		tagPresenter.getAllTagNames();		
+		$(document).on("submit",".addTagForm > form", tagPresenter.addTag);
 	},
 	
 	showTagForm: function(el){
@@ -21,7 +22,7 @@ var tagPresenter = {
 			$(element).parents(".item").find(".addTagForm").append(
 				$("<form>").append(
 					$("<div>").addClass("controls").append(					
-						$("<input>").attr("type","text").attr("name","newTag").addClass("newTag")
+						$("<input>").attr("type","text").attr("name","newTag").addClass("newTag form-control")
 					)
 				).append(
 					$("<input>").attr("type","submit").css("display","none")				

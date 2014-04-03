@@ -3,56 +3,56 @@
 <html>
 <head>
 
-<?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
+<?php include(dirname(__FILE__) . '/static/meta.php'); ?>	
 </head>
 <body>
 
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
 
-<div id="signup">
 
-<h1>Contact Us</h1>
-	<form class="form-horizontal">
-	    <div class="control-group">
-		    <label class="control-label" for="inputName">Name</label>
-		    <div class="controls">		  	  
-			  <div class="input-prepend">
-				<span class="add-on"><i class="icon-user"></i></span>
-				<input type="text" id="inputName" placeholder="Name" class="input-xlarge">
-			  </div>
-		    </div>
-	    </div>
-	    <div class="control-group">
-		    <label class="control-label" for="inputEmail">Email</label>
-		    <div class="controls">		  	  
-			  <div class="input-prepend">
-				<span class="add-on"><i class="icon-envelope"></i></span>
-				<input type="text" id="inputEmail" placeholder="Email" class="input-xlarge">
-			  </div>
-		    </div>
-	    </div>
-	    <div class="control-group">
-		    <label class="control-label" for="inputSubject">Subject</label>
-		    <div class="controls">		  	  
-			  <div class="input-prepend">
-				<span class="add-on"><i class="icon-pencil"></i></span>
-				<input type="text" id="inputSubject" placeholder="Subject" class="input-xlarge">
-			  </div>
-		    </div>
-	    </div>
-	    <div class="control-group">
-	        <label class="control-label" for="inputMessage">Message</label>
-		    <div class="controls">
-		    	<textarea rows="5" id="inputMessage"></textarea>   		
-		    </div>
-	    </div>
-	    <div class="control-group">
-		    <div class="controls">		   
-		    <button type="submit" class="btn btn-primary">Send</button>
-		    </div>
-	    </div>
-    </form>
-</div>
+<div class="row" style="margin-top:80px;">
+    <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-clositt-theme">
+            <div class="panel-heading">
+                  <h1 class="panel-title">Contact Us</h1>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label for="inputName" class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control" id="inputName" placeholder="Name">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-5">
+                      <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputSubject" class="col-sm-2 control-label">Subject</label>
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control" id="inputSubject" placeholder="Subject">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputMessage" class="col-sm-2 control-label">Message</label>
+                    <div class="col-sm-10">
+                        <textarea rows="5" id="inputMessage" class="form-control"></textarea>
+                    </div>                    
+                  </div>                  
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button type="submit" id="submitBtn" class="btn btn-clositt-theme">Send</button>
+                    </div>
+                  </div>                                                      
+                </form>
+                
+            </div>
+        </div>	
+    </div>
+</div>    
 
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 
@@ -61,6 +61,7 @@
 
 $("form").on("submit",function(event){
 	 event.preventDefault();
+	 $("#submitBtn").addClass("disabled").text("Sending...");	 
 	 
 	var email = $("#inputEmail").val();
 	var subject = $("#inputSubject").val();
@@ -72,9 +73,10 @@ $("form").on("submit",function(event){
 			if(data == "success"){
 				Messenger.alert("Your message was sent successfully! Thank you!");
 				$("#inputEmail").val("");
-				$("inputSubject").val("");
+				$("#inputSubject").val("");
 				$("#inputName").val("");
-				$("#inputMessage").val("");				
+				$("#inputMessage").val("");
+				$("#submitBtn").removeClass("disabled").text("Send");				
 			}else{
 				Messenger.error("There was a problem sending that message. Please try again.");	
 			}
