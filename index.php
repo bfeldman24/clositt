@@ -126,11 +126,7 @@
     <li data-id="filter-float" data-button="Next" data-options="tipLocation:right;tipAnimation:fade">
         <h2>Filter</h2>
         <p>Narrow down the products to find exactly what you are looking for!</p>
-    </li>
-    <li data-id="filter-toggle" data-button="Next" data-options="tipLocation:right">
-        <h2>Filter</h2>
-        <p>Hide the filter when you are not using it.</p>
-    </li> 
+    </li>    
     <li data-id="joyride-item-addToClositt" data-button="Next" data-options="tipLocation:right">
         <h2>Add to Your Clositt</h2>
         <p>Save and organize the products you find on Clositt! Once saved, go to the MyClositt link at the top of the page.</p>
@@ -209,21 +205,23 @@ $(".joyride-start").click(function(e){
             $item.find(".showComments i").attr("id","joyride-item-showComments");
             $item.find(".addToWishList i").attr("id","joyride-item-addToWishList");
             $item.find(".shareOutfitBtn img").attr("id","joyride-item-shareOutfitBtn");          
-          } else if (index == 2){
-            $(tip).css("margin-left","-70px").css("margin-top","30px");
+          } else if (index == 1){            
             
             $('body,html').animate({
     			scrollTop: 0
     		}, 800);
             
             $("#product-grid .item:nth-child(2)").first().find(".overlay").addClass("alwaysVisible").show();                        
-          } else if (index == 3){
+          } else if (index == 2){
               $(tip).css("margin-top","-25px");
-          } else if (index == 4 || index == 5){
-              $(tip).css("margin-left","-30px");
-          } else if (index == 6){
+          } else if (index == 3 || index == 4){
+              $(tip).css("margin-left","-15px").css("margin-top","15px");
+          } else if (index == 5){
              $(tip).css("margin-top","-25px"); 
-          }          
+          }else if (index == 6){                
+        		scrollTop: 0        		        		
+                $(tip).css("z-index", 9999); 
+          }       
         },
         postRideCallback : function (index, tip) {
             $("#product-grid .item:nth-child(2)").first().find(".overlay").removeClass("alwaysVisible").hide();                        

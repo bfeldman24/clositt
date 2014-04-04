@@ -6,7 +6,7 @@
 		<div class="footer-item hidden-xs"><a href="/shout-outs.php">Shout Outs</a></div>
 		<div class="footer-item"><a href="http://blog.clositt.com">Blog</a></div>
 		
-		<?php if ($_SERVER['PHP_SELF'] == "/index.php" || $_SERVER['PHP_SELF'] == "clositt.php"){ ?>
+		<?php if ($_SERVER['PHP_SELF'] == "/index.php" || $_SERVER['PHP_SELF'] == "/clositt.php"){ ?>
     		<div class="last footer-item"><a class="joyride-start" href="#">Tour</a></div>						
 		<?php } ?>
 		

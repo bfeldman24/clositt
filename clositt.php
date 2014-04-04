@@ -135,8 +135,8 @@ function loggedOut(){
 	location.href = "<?php echo HOME_ROOT . 'signup.php'; ?>";
 }
 
-function startClosittTour(){
-    if(firebase.loginCount <= 3){
+function startClosittTour(manual){
+    if(manual || firebase.loginCount <= 3){
         
         if (localStorage.myClositt == undefined || localStorage.myClositt == null){
             localStorage.myClositt = 1;   
@@ -160,7 +160,7 @@ function startClosittTour(){
 }
 
 $(".joyride-start").click(function(e){
-    startClosittTour();
+    startClosittTour(true);
 });    
 
 
