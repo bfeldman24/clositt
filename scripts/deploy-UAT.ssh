@@ -58,6 +58,7 @@ mkdir ../$1/lib
 cp -r lib/css ../$1/lib
 cp -r lib/js ../$1/lib
 cp -r lib/img ../$1/lib
+cp -r lib/fonts ../$1/lib
 
 mkdir ../$1/app
 mkdir ../$1/scripts
