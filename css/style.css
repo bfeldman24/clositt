@@ -622,6 +622,9 @@ img {
 .icon-comment {
     background-position: -240px -120px;
 }
+.icon-ok {
+    background-position: -288px 0;
+}
 .icon-arrow-right {
     background-position: -264px -96px;
 }
