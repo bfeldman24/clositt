@@ -211,7 +211,6 @@
 
 
 <?php echo CLOSITT_JS; ?>
-<script src="<?php echo HOME_ROOT;?>scripts/js/footer.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     firebase.init();

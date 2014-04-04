@@ -15,6 +15,7 @@ $js = '<script src="' . HOME_ROOT .'scripts/js/firebaseExtension.js"></script>' 
 '<script src="' . HOME_ROOT .'scripts/js/gridEvents.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/productPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/filterPresenter.js"></script>' .
+'<script src="' . HOME_ROOT .'scripts/js/footer.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/tagPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/socialPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/searchController.js"></script>' .
