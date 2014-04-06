@@ -118,6 +118,7 @@
         closetPresenter.init();        	
         productPagePresenter.init();	
         reviewsPresenter.init();
+        tagPresenter.init();
      });
 <?php }else{ ?>
     function userDataReady(user){    
@@ -127,6 +128,7 @@
         closetPresenter.init();     
         productPagePresenter.init();
         reviewsPresenter.init();       
+        tagPresenter.init();
         $("#subheader-myclositt").addClass("active");                
     }        
 <?php } ?>

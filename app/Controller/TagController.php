@@ -97,10 +97,7 @@ class TagController extends AbstractDao{
         $stmt = $this->db->prepare($sql, array('text','text','integer'), MDB2_PREPARE_MANIP);
         
         foreach ($tags as $tag) {            
-            try {                
-                $tag = ucwords(strtolower($tag));
-                $tag = preg_replace('/\s+/', '', $tag);
-                
+            try {                                                
                 if($this->debug){
                     $tagParams = print_r($tag, true);
         			$this->logDebug("12712931" ,$sql . " (" . $tagParams . ")" );
@@ -134,6 +131,8 @@ class TagController extends AbstractDao{
         
         foreach ($tags as $tagName => $products){
             foreach ($products['items'] as $sku => $count){
+                 $tagName = ucwords(strtolower($tagName));
+                 $tagName = preg_replace('/\s+/', '', $tagName);
                  
                  $i++;                          
                  $insertArray = array();
@@ -159,6 +158,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
          $tagResults = $tagController->addTagsFromFile("../Data/clothies-tags-export.json");
     
     }else if ($_GET['method'] == 'add' && isset($_POST['tag']) && isset($_POST['sku'])){                        
+        $_POST['tag'] = ucwords(strtolower($_POST['tag']));
+        $_POST['tag'] = preg_replace('/\s+/', '', $_POST['tag']);
+        
         $tagResults = $tagController->addTag($_POST);
         
     }
