@@ -186,5 +186,23 @@ class ProductEntity {
 		return $ProductArray;
 	}
 	
+	public static function setProductFromElastic($ProductEntity, $row){
+		if (is_object($ProductEntity) && get_class($ProductEntity) == "ProductEntity"){
+
+			//TODO store names as consts
+			//$ProductEntity->setId(stripslashes($row[PRODUCT_SKU]));
+			$ProductEntity->setStore(stripslashes($row['store']));
+			$ProductEntity->setCustomer(stripslashes($row['customer']));
+			$ProductEntity->setCategory(stripslashes($row['category']));
+			$ProductEntity->setName(stripslashes($row['name']));
+			$ProductEntity->setLink(stripslashes($row['link']));
+			$ProductEntity->setImage(stripslashes($row['image']));
+			$ProductEntity->setPrice(stripslashes($row['price']));
+			$ProductEntity->setCommentCount(stripslashes($row['commentCount']));
+			$ProductEntity->setClosittCount(stripslashes($row['closittCount']));	
+			//$ProductEntity->setShortLink(stripslashes($row['shortLink']));	
+
+		}
+	}
 }
 ?>

@@ -5,13 +5,14 @@ require_once(dirname(__FILE__) . '/../Database/Dao/ProductDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
 require_once(dirname(__FILE__) . '/../View/ProductTemplate.php');
-
+require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
 
 class ProductController {	
 	private $productDao = null;
-	
+	private $elasticDao = null;
 	public function __construct(&$mdb2){
 		$this->productDao = new ProductDao($mdb2);
+		$this->elasticDao = new ElasticDao();
 	}
 	
 	public function getProduct($sku){
@@ -158,6 +159,27 @@ class ProductController {
 		
 		return json_encode($searchResults);
 	}
+
+	public function searchElastic($criteria, $pageNumber, $numResultsPage){
+
+        //check if elastic is healthy. If not, do old style search on DB
+        if(!$this->elasticDao->isHealthy()){
+            return $this->getFilteredProducts($criteria, $pageNumber, $numResultsPage);
+        }
+
+        $results = $this->elasticDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage);
+        $searchResults = array();
+
+		if(is_array($results)){
+			foreach ($results as $hit) {
+				
+			    $productEntity = new ProductEntity();
+				ProductEntity::setProductFromElastic($productEntity, $hit);
+				$searchResults[] = $productEntity->toArray();
+			}
+		}
+		return json_encode($searchResults);
+	}
 }
 
 
@@ -171,16 +193,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
         $productCrit = ProductCriteria::setCriteriaFromPost($_POST);
         $product = $productController->getProducts($productCrit, $_GET['page'], QUERY_LIMIT);   
         
-    }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page'])){                        
-    	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);	     	   	    
-        $product = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT);
+    }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page'])){      
+    	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
+        $product = $productController->searchElastic($productCrit, $_GET['page'], QUERY_LIMIT);
     
     }else if ($_GET['method'] == 'cc' && isset($_POST['sku'])){     	   	    
         $product = $productController->updateClosittCounter($_POST['sku']);
     }else if ($_GET['method'] == 'rc' && isset($_POST['sku'])){                        	     	   	    
         $product = $productController->updateCommentCounter($_POST['sku']);
     }
-    
     
     print_r($product);     
 }
