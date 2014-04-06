@@ -55,8 +55,9 @@ storeApi = {
 	getProducts: function(company, data, url){	   	   
 		var home = url.substring(0, url.indexOf("/", url.indexOf(".")));		
 		var products = "";
+		var companyScript = company.replace(/[\s_&]/g,'');
 		
-		switch(company.replace(/[\s_&]/g,'')){
+		switch(companyScript){
 			case "Gap":
 			case "Old Navy":
 			case "BananaRepublic":
@@ -65,7 +66,8 @@ storeApi = {
 				products = storeApi.getGapJson(data, home);
 				break;			
 			default:
-			    products = storeApi['get' + company](data, home);
+			    console.log(companyScript);			    
+			    products = storeApi['get' + companyScript](data, home);
 			    break;										
 		}	
 		

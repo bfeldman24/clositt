@@ -650,31 +650,35 @@ var actionButtons = {
     saveNextCategory: function(status){
         var areThereMoreCategories = false;
         var currentCategory = null;
+        var foundChecked = false;
         
         $("#links").find(':checkbox').each(function(){
-                                
-            if ($(this).attr("lastUpdated") == "" || $(this).attr("lastUpdated") != window.todaysDate){
-                $(this).prop('checked', true);  
-                areThereMoreCategories = true;            
-                return false;       
-            }        
+            if (foundChecked){                    
+                if ($(this).attr("lastUpdated") == "" || $(this).attr("lastUpdated") != window.todaysDate){
+                    $(this).prop('checked', true);  
+                    areThereMoreCategories = true;            
+                    return false;       
+                }        
+            }
             
             if ($(this).prop('checked')){
                 $(this).prop('checked', false);
-                currentCategory = $(this);            
-            }                
+                currentCategory = $(this);  
+                foundChecked = true;          
+            }               
+             
         }); 
         
         if (areThereMoreCategories){
             $('html, body').animate({
-                scrollTop: currentCategory.offset().top
+                scrollTop: currentCategory.offset().top - 100
             }, 500);
             
-            if (status != "failed"){
-                var company = currentCategory.attr("company");
-                var customer = currentCategory.attr("customer");
-                var category = currentCategory.attr("category");
-                
+            var company = currentCategory.attr("company");
+            var customer = currentCategory.attr("customer");
+            var category = currentCategory.attr("category");
+            
+            if (status != "failed"){                                
                 var d = new Date();        
                 firebase.$.child("spider").child(company).child(customer).child(category).child("lastSaved").set(d.toJSON());
                 currentCategory.siblings(".lastUpdated").text(d.toLocaleDateString());
