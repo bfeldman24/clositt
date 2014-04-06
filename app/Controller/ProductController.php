@@ -163,7 +163,15 @@ class ProductController {
 	public function searchElastic($criteria, $pageNumber, $numResultsPage){
 
         //check if elastic is healthy. If not, do old style search on DB
-        if(!$this->elasticDao->isHealthy()){
+        $elasticHealthy = false;
+        try{
+           $elasticHealthy = $this->elasticDao->isHealthy();
+        }
+        catch(Exception $e){
+            //TODO log errors here
+        }
+
+        if(!$elasticHealthy){
             return $this->getFilteredProducts($criteria, $pageNumber, $numResultsPage);
         }
 

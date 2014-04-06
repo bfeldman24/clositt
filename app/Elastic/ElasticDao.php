@@ -1,13 +1,12 @@
 <?php
-
+require_once('vendor/autoload.php'); //should be placed on non public path in php.ini
 require_once(dirname(__FILE__) . '/../globals.php');
-require_once('/Applications/MAMP/htdocs/testsearch/vendor/autoload.php'); //TODO put this in path of php.ini
 require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
 
 class ElasticDao{
 
 	private $client = null;
-    private $index = "products_v2";
+    private $index = "products"; //this will be an alias that always has current index
 
 	public function __construct(){
 		$this->client = new Elasticsearch\Client();
@@ -33,7 +32,7 @@ class ElasticDao{
 
 		//TODO CONFIGS!!!
 		$searchParams['index'] = $this->index;
-		$fields=array('nametokenized','nameoriginal','storeoriginal^4','storetokenized^2','category^2','color1^2', 'color2^2');
+		$fields=array('nametokenized','nameoriginal','storeoriginal^2','storetokenized','category^2','color1', 'color2');
 
 
         $customer = array('term'=>array('customer'=>$criteria->getCustomers()));
