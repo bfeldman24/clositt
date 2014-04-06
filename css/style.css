@@ -2017,7 +2017,8 @@ input.closetNameInput[type="text"] {
     border: 5px solid #00BA6C;        
     text-align: center;
     padding: 20px;
-    font-family: 'Roboto',sans-serif;    
+    font-family: 'Roboto',sans-serif;   
+    z-index: 99999; 
 }
 
 #productModal .modal-dialog {
