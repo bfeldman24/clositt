@@ -190,7 +190,7 @@ class ProductEntity {
 		if (is_object($ProductEntity) && get_class($ProductEntity) == "ProductEntity"){
 
 			//TODO store names as consts
-			//$ProductEntity->setId(stripslashes($row[PRODUCT_SKU]));
+			$ProductEntity->setId(stripslashes($row['sku']));
 			$ProductEntity->setStore(stripslashes($row['store']));
 			$ProductEntity->setCustomer(stripslashes($row['customer']));
 			$ProductEntity->setCategory(stripslashes($row['category']));
@@ -200,7 +200,7 @@ class ProductEntity {
 			$ProductEntity->setPrice(stripslashes($row['price']));
 			$ProductEntity->setCommentCount(stripslashes($row['commentCount']));
 			$ProductEntity->setClosittCount(stripslashes($row['closittCount']));	
-			//$ProductEntity->setShortLink(stripslashes($row['shortLink']));	
+		    $ProductEntity->setShortLink(stripslashes($row['shortlink']));
 
 		}
 	}
