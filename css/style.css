@@ -2012,13 +2012,16 @@ input.closetNameInput[type="text"] {
 }
 
 /** Product Page **/
+#productModal{
+    z-index: 99999;   
+}
+
 #productModal .modal-content{
     background: none repeat scroll 0 0 #E6E6E6;
     border: 5px solid #00BA6C;        
     text-align: center;
     padding: 20px;
-    font-family: 'Roboto',sans-serif;   
-    z-index: 99999; 
+    font-family: 'Roboto',sans-serif;        
 }
 
 #productModal .modal-dialog {
