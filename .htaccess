@@ -17,20 +17,25 @@ RewriteRule ^p/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?met
 RewriteRule ^s/filters$ app/Data/filters.json
 
     #Browse
-RewriteRule ^b/([a-z0-9]*)/([a-z0-9]*)$ app/Data/Browse/$1-$2.json
+RewriteRule ^b/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?method=browse&customer=$1&page=$2
+
+    #Tags
+RewriteRule ^t/([a-z0-9]*)$ app/Controller/TagController.php?method=$1
+
+    #Colors
+RewriteRule ^c/([a-z0-9]*)$ app/Controller/ColorController.php?method=$1
+
 
 # ADMIN API
-#RewriteRule ^spider/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1
-#RewriteRule ^spider/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1&page=$2
-#RewriteRule ^t/([a-z0-9]*)$ app/Controller/TagController.php?method=$1
-#RewriteRule ^c/([a-z0-9]*)$ app/Controller/ColorController.php?method=$1
-#Redirect /spiderAdmin /scripts/admin/php/productSpider.php
-#Redirect /colorAdmin /scripts/admin/php/colorProcessor.php
+RewriteRule ^spider/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1
+RewriteRule ^spider/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1&page=$2
+Redirect /spiderAdmin /scripts/admin/php/productSpider.php
+Redirect /colorAdmin /scripts/admin/php/colorProcessor.php
 
 
 
 # UNCOMMENT FOR PROD
-RewriteRule ^(.*)log$ /whoops.php
+#RewriteRule ^(.*)log$ /whoops.php
 
 # ERROR CODES:
 #400 - Bad Request

@@ -167,9 +167,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     if ($_GET['method'] == 'lookup' && isset($_POST['sku'])){
          $product = $productController->getProduct($_POST['sku']);   
     
-    }else if ($_GET['method'] == 'browse' && isset($_GET['page'])){
+    }else if ($_GET['method'] == 'browse' && isset($_GET['page']) && isset($_GET['customer'])){
         $productCrit = ProductCriteria::setCriteriaFromPost($_POST);
-        $product = $productController->getProducts($productCrit, $_GET['page'], QUERY_LIMIT);   
+        
+        if (!isset($_POST['customer'])){        
+            if ($_GET['customer'] == 'w'){
+                $customer = array();
+                $customer[] = 'women';          
+                         
+            }else if ($_GET['customer'] == 'm'){
+                $customer = array();
+                $customer[] = 'men';                   
+            }
+            
+            $productCrit->setCustomers($customer);
+        }
+        
+        $product = $productController->getProducts($productCrit, $_GET['page'], QUERY_LIMIT, true);   
         
     }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page'])){                        
     	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);	     	   	    
