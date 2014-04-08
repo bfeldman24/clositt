@@ -302,7 +302,7 @@ class ProductAdminDao extends AbstractDao {
 	public function deleteUnwantedProducts(){
 	     $sql = "UPDATE " . PRODUCTS .       	  
               " SET " . PRODUCT_STATUS . " = 5 " . 
-              " WHERE " . PRODUCT_SKU . " IN (SELECT " . PRODUCT_SKU . " FROM " . TAGS . " WHERE " . TAG_STRING . " = 'delete')";
+              " WHERE " . PRODUCT_SKU . " IN (SELECT " . PRODUCT_SKU . " FROM " . TAGS . " WHERE " . TAG_STRING . " IN ('delete','notclothes','remove') )";
                             
        if($this->debug){		    
 			$this->logDebug("2309823" ,$sql );

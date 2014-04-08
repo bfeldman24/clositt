@@ -2013,7 +2013,7 @@ input.closetNameInput[type="text"] {
 
 /** Product Page **/
 #productModal{
-    z-index: 99999;   
+    z-index: 9999;   
 }
 
 #productModal .modal-content{
