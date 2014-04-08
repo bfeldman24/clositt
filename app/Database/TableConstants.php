@@ -39,6 +39,10 @@ define('TAG_COUNT', 'count');
 
 define('COLOR_MAPPING', 'ColorMapping');
 define('COLOR_MAPPING_COLOR', 'color');
+define('COLOR_MAPPING_NAME', 'name');
 define('COLOR_MAPPING_PARENT', 'parent');
+define('COLOR_MAPPING_BRIGHTNESS', 'brightness');
+define('COLOR_MAPPING_SATURATION', 'saturation');
+define('COLOR_MAPPING_DESCRIPTION', 'description');
 define('COLOR_STATUS', 'status');
 ?>

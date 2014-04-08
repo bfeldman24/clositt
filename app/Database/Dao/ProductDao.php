@@ -200,9 +200,22 @@ class ProductDao extends AbstractDao {
 				" p." . PRODUCT_SHORT_LINK . 
 				" FROM " . PRODUCTS . " p "; 				
 
+        $filterSql = "p." . PRODUCT_STATUS . " = 1 ";
+        
         if ($criteria->getColors() != null){
-            $sql .= " INNER JOIN " . COLORS . " c  ON c." . PRODUCT_SKU . " = p." . PRODUCT_SKU;
-            $this->addCriteriaToSql($sql, $criteria->getColors(), "c." . COLORS_COLOR, $params, $paramTypes);
+            $sql .= " LEFT JOIN " . COLOR_MAPPING . " c  ON c.status = 1 AND c." . COLOR_MAPPING_COLOR . " = p." . PRODUCT_COLOR_ONE;                                                
+            $sql .= " LEFT JOIN " . COLOR_MAPPING . " c2  ON c2.status = 1 AND c2." . COLOR_MAPPING_COLOR . " = p." . PRODUCT_COLOR_TWO;
+            
+            $filterSql .= " AND CASE WHEN NOT ISNULL(c." . COLOR_MAPPING_PARENT . ") THEN c." .COLOR_MAPPING_PARENT . 
+                                   " ELSE c2." .COLOR_MAPPING_PARENT .
+                                   " END ";
+                           
+            $colors = $criteria->getColors();                       
+            if (count($colors) > 1){		           
+                $filterSql .= " IN (" . $this->convertCriteriaToQueryParameters($colors, $params, $paramTypes) . ")";
+		    }else{
+    		    $filterSql .= " = " . $this->convertCriteriaToQueryParameters($colors, $params, $paramTypes);
+		    }                       
         }
         
         if ($categories != null){
@@ -214,8 +227,7 @@ class ProductDao extends AbstractDao {
             $sql .= " LEFT JOIN " . TAGS . " t  ON t." . PRODUCT_SKU . " = p." . PRODUCT_SKU;                      
             $this->addCriteriaToSql($sql, $searchTags, "t." . TAG_STRING, $params, $paramTypes);
         }
-
-		$filterSql = "p." . PRODUCT_STATUS . " = 1 ";		
+				
 		$this->addCriteriaToSql($filterSql, $criteria->getCompanies(), "p." . PRODUCT_STORE, $params, $paramTypes);			
 		$this->addCriteriaToSql($filterSql, $criteria->getCustomers(), "p." . PRODUCT_CUSTOMER, $params, $paramTypes);										
 		
@@ -269,19 +281,25 @@ class ProductDao extends AbstractDao {
         		$paramTypes[] = 'integer';
 		    }
 		}
+		
+		// ORDER BY (colors) 
+		$orderby = "";              
+        if ($criteria->getColors() != null){
+            $orderby .= " CASE WHEN NOT ISNULL(p." . PRODUCT_COLOR_ONE . ")" .
+                                    " THEN c." . COLOR_MAPPING_BRIGHTNESS .
+                                " ELSE c2." . COLOR_MAPPING_BRIGHTNESS . " END, ";
+                                
+            $orderby .= " + CASE WHEN NOT ISNULL(p." . PRODUCT_COLOR_ONE . ")" .
+                                    " THEN p." . PRODUCT_COLOR_ONE_PERCENT .
+                                " ELSE p." . PRODUCT_COLOR_TWO_PERCENT . " END ";
+        }
 
-        // ORDER BY (search string)
-        $orderby = "";
+        // ORDER BY (search string)        
         if ($hasSearchString){ 
 		    $orderby .= " + Match(p.".PRODUCT_NAME.") Against (?)";
             $params[] = $searchString;
 			$paramTypes[] = 'text';            		                            
-		}
-
-        // ORDER BY (colors)               
-        if ($criteria->getColors() != null){
-            $orderby .= " + c." . COLORS_PERCENT;
-        }
+		}        
                 
         // ORDER BY (categories)
         if ($categories != null){                        
@@ -291,11 +309,11 @@ class ProductDao extends AbstractDao {
         // ORDER BY (tags)
         if ($hasTags){                        
 		    $orderby .= " + ( COALESCE(t.".TAG_COUNT.", 0) * " . $tagWeight . ")";
-		}			
+		}							
                 
         if ($orderby != ""){            
             // remove first +
-            $orderby = substr($orderby, strpos($orderby, "+ ") + 2);
+            $orderby = preg_replace('/\+/', '', $orderby, 1);
             
             $sql .= " ORDER BY " . $orderby . " DESC";
         }

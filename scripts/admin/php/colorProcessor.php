@@ -22,7 +22,7 @@ include(dirname(__FILE__) . '/../../../static/meta.php');
     height: 40px
 }
 
-.colorMapping-color{
+.colorMapping-color, .colorMapping-color a{
     color: #000000;
     text-shadow: 1px 1px 0 #CCCCCC;   
     padding: 10px 85px;     
@@ -36,6 +36,17 @@ include(dirname(__FILE__) . '/../../../static/meta.php');
 
 .colorMapping-approval{
     margin: 0 10px !important;   
+}
+
+.hexaInput {
+    height: 35px;
+    margin: 0 2px;
+    padding: 2px;
+    width: 100%;
+}
+
+td {
+    vertical-align: middle !important;   
 }
 
 </style>

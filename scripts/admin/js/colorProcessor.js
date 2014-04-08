@@ -8,7 +8,7 @@ var colorProcessor = {
     stop: false,
 
 	init: function(){	    
-		$("body").append($("<div>").addClass("toggleScript btn btn-success").html("Process New Colors"));		
+		$("body").append($("<div>").addClass("toggleScript btn btn-default btn-success").html("Process New Colors"));		
 		$("body").append($("<div>").addClass("verifymapping btn btn-info").html("Verify Color Mapping"));		
 		$(document).on("click", ".toggleScript", colorProcessor.toggleScript);												
 	},
@@ -324,6 +324,13 @@ var colorProcessorSaveToFirebase = {
 };
 
 
+
+
+
+/**********************
+* COLOR MAPPING
+********************/
+
 var colorMappingProcessor = {
     parentOptions: null,
     
@@ -348,30 +355,58 @@ var colorMappingProcessor = {
             colors = colors.colors;   
         }    
         
+        var table = $("<table>").addClass("table table-bordered");
+        table.append( 
+            $("<tr>").append(
+                $("<th>").text("Approve")
+            ).append(
+                $("<th>").text("Color")
+            ).append(
+                $("<th>").text("ColorHexa Description")
+            ).append(
+                $("<th>").text("Brightness")
+            ).append(
+                $("<th>").text("Saturation")
+            ).append(
+                $("<th>").text("Color Name")
+            ).append(
+                $("<th>").text("Parent")
+            )
+        );
+        $("body").append( table );
+        
         for(var i=0; i < Object.keys(colors).length; i++){
             var color = Object.keys(colors)[i];
         
-            $("body").append(
-                $("<div>").addClass("colorMapping").append(
-                    $("<input>")
-                        .attr("type","checkbox")
-                        .addClass("colorMapping-approval")
-                        .prop("checked", true)
+            table.append(
+                $("<tr>").addClass("colorMapping").css("background-color","#"+ color).append(
+                    $("<td>").append(
+                        $("<input>")
+                            .attr("type","checkbox")
+                            .addClass("colorMapping-approval")
+                            .prop("checked", true)
+                    )
                 ).append(
-                    $("<span>")
+                    $("<td>")
                         .css("background-color","#" + color)
                         .addClass("colorMapping-color")
-                        .text(color)
+                        .append( $("<a>").attr("href","http://www.colorhexa.com/" + color).text(color) )
+//                ).append(
+//                    $("<span>")
+//                        .addClass("colorMapping-parent")
+//                        .html(colorMappingProcessor.parentOptions.clone().val(colors[color]))
                 ).append(
-                    $("<span>")
-                        .addClass("colorMapping-parent")
-                        .html(colorMappingProcessor.parentOptions.clone().val(colors[color]))
+                    $("<td>")
+                        .addClass("colorMapping-name")
+                        .attr("id","colorMapping-name-" + color)
                 )
             );
+            
+            colorMappingProcessor.getColorName(color);
         }
         
         $("body").append(
-            $("<button>").addClass("btn btn-large toggleSelectAll").text("Deselect All")
+            $("<button>").addClass("btn btn-default btn-large toggleSelectAll").text("Deselect All")
         ).append(
             $("<button>").addClass("btn btn-success btn-large approveColors").text("Approve Checked Colors")
         );                
@@ -398,21 +433,101 @@ var colorMappingProcessor = {
         colorMappingProcessor.parentOptions = select;               
     },
     
+    getColorName: function(hex){
+        var colorHexaUrl = "http://www.colorhexa.com/" + hex;
+        
+        $.post( window.HOME_ROOT + "scripts/admin/php/webProxy.php", {u: colorHexaUrl}, function(data){
+               var colorName = $(data).find(".color-description strong").text().trim();            
+               var id = "#colorMapping-name-" + hex;
+               $(id).append( $("<input>").addClass("brightness hexaInput input-sm").val(colorName) );                              
+               
+               if (colorName.indexOf("(") >= 0){
+                    colorName = colorName.substring(0, colorName.indexOf("(")) + colorName.substring(colorName.indexOf(")") + 1);
+               }
+               
+               if (colorName.indexOf("[") >= 0){
+                    colorName = colorName.substring(0, colorName.indexOf("[")) + colorName.substring(colorName.indexOf("]") + 1);
+               }
+               
+               colorName = colorName.toLowerCase().trim();                                            
+               
+               // Dark, light, normal
+               var brightness = null;
+               if (colorName.indexOf("very dark") >= 0){
+                    brightness = "very dark";
+                    
+               }else if (colorName.indexOf("dark") >= 0){
+                    brightness = "dark";
+               }else if (colorName.indexOf("light") >= 0){
+                    brightness = "light";
+               }else if (colorName.indexOf("bright") >= 0){
+                    brightness = "bright";
+               }else if (colorName.indexOf("pale") >= 0){
+                    brightness = "pale";     
+               }else{
+                    brightness = "normal";
+               }    
+               
+               $(id).parent().append( $("<td>").append( $("<input>").addClass("brightness hexaInput input-sm").val(brightness) ));
+               colorName = colorName.replace(brightness,"");                          
+               
+               // moderdate, 
+               var saturation = null;
+               if (colorName.indexOf("moderate") >= 0){
+                    saturation = "moderate";                    
+               }else if (colorName.indexOf("sharp") >= 0){
+                    saturation = "sharp";               
+               }else if (colorName.indexOf("strong") >= 0){
+                    saturation = "strong";
+               }else if (colorName.indexOf("soft") >= 0){
+                    saturation = "soft";
+               }else if (colorName.indexOf("vivid") >= 0){
+                    saturation = "vivid";
+               }else{
+                    saturation = "normal";               
+               }       
+               
+               $(id).parent().append( $("<td>").append( $("<input>").addClass("saturation hexaInput input-sm").val(saturation) ));
+               colorName = colorName.replace(saturation,"");       
+                                             
+               // Parent color
+               var colorParts = colorName.split(" ");
+               var parentName = colorParts[colorParts.length - 1];
+               brightness = brightness.replace("normal","");
+               $(id).parent().append( $("<td>").append ($("<input>").addClass("hexaColorName hexaInput input-sm").val(brightness + " " + parentName) ));
+               $(id).parent().append( $("<td>").append ($("<input>").addClass("hexaColorParent hexaInput input-sm").css("font-weight","bold").val(parentName) ));
+        });
+    },
+    
     saveColorMapping: function(){
         var colors = {};
         
         $(".colorMapping-color").each(function(){
              var isApproved = $(this).siblings(".colorMapping-approval").prop("checked");
              
-             if (isApproved){
-                 var color = $(this).text();
-                 var parent = $(this).siblings(".colorMapping-parent").find("select").val();
+             if (isApproved){                                  
+                 var colorObj = {};
+                 colorObj.color = $(this).text();
+                 //colorObj.closestParent = $(this).siblings(".colorMapping-parent").find("select").val();
+                 colorObj.brightness = $(this).siblings(".colorMapping-name").find(".brightness").val();
+                 colorObj.saturation = $(this).siblings(".colorMapping-name").find(".saturation").val();
+                 colorObj.description = $(this).siblings(".colorMapping-name").clone().find("*").remove().end().text().trim();
+                 colorObj.name = $(this).siblings(".colorMapping-name").find(".hexaColorName").val();                 
+                 colorObj.parent = $(this).siblings(".colorMapping-name").find(".hexaColorParent").val(); 
                  
-                 colors[color] = parent;
+                 if (colorObj.brightness == "normal"){
+                    colorObj.brightness = null;  
+                 }
+                 
+                 if (colorObj.saturation == "normal"){
+                    colorObj.saturation = null;  
+                 }                                                  
+                 
+                 colors[colorObj.color] = colorObj;
              }
         });
         
-        console.log(JSON.stringify(colors));
+        console.log(JSON.stringify(colors));        
         
         Messenger.info("Saving...");
         

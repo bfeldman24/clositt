@@ -282,24 +282,25 @@ class ColorController extends AbstractDao{
 		
 	 
 	    $sql = "UPDATE " . COLOR_MAPPING . 
-	           " SET " . COLOR_MAPPING_PARENT . " = ? , " .
+	           " SET " . COLOR_MAPPING_PARENT . " = :parent , " .
+	                     COLOR_MAPPING_NAME . " = :name , " .
+	                     COLOR_MAPPING_BRIGHTNESS . " = :brightness , " .
+	                     COLOR_MAPPING_SATURATION . " = :saturation , " .
+	                     COLOR_MAPPING_DESCRIPTION . " = :description , " .
 	                     COLOR_STATUS . " = 1 " .	           
-	           " WHERE " . COLOR_MAPPING_COLOR . " = ? ";
+	           " WHERE " . COLOR_MAPPING_COLOR . " = :color ";
         
         $stmt = $this->db->prepare($sql);
         
-        $affected = 0;
+        $affected = 0;        
         
-        
-        foreach ($colors as $color => $parent) {            
+        foreach ($colors as $color => $attributes) {            
             try {                
-                //echo " [COLOR: $color] ";
-                $affected += $stmt->execute(array($parent, $color));
+                $affected += $stmt->execute($attributes);
             } catch (Exception $e) {
                 echo 'Caught exception: ',  $e->getMessage(), "\n\n";                        
             }
-        }
-        
+        }        
         
         return $affected;
 	}
