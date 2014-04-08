@@ -355,7 +355,7 @@ var colorMappingProcessor = {
             colors = colors.colors;   
         }    
         
-        var table = $("<table>").addClass("table table-bordered");
+        var table = $("<table>").addClass("colorTable table table-bordered");
         table.append( 
             $("<tr>").append(
                 $("<th>").text("Approve")
@@ -439,7 +439,7 @@ var colorMappingProcessor = {
         $.post( window.HOME_ROOT + "scripts/admin/php/webProxy.php", {u: colorHexaUrl}, function(data){
                var colorName = $(data).find(".color-description strong").text().trim();            
                var id = "#colorMapping-name-" + hex;
-               $(id).append( $("<input>").addClass("brightness hexaInput input-sm").val(colorName) );                              
+               $(id).append( $("<input>").addClass("hexaInput input-sm").val(colorName) );                              
                
                if (colorName.indexOf("(") >= 0){
                     colorName = colorName.substring(0, colorName.indexOf("(")) + colorName.substring(colorName.indexOf(")") + 1);
@@ -502,18 +502,18 @@ var colorMappingProcessor = {
     saveColorMapping: function(){
         var colors = {};
         
-        $(".colorMapping-color").each(function(){
-             var isApproved = $(this).siblings(".colorMapping-approval").prop("checked");
+        $(".colorMapping").each(function(){
+             var isApproved = $(this).find(".colorMapping-approval").prop("checked");
              
              if (isApproved){                                  
                  var colorObj = {};
-                 colorObj.color = $(this).text();
+                 colorObj.color = $(this).find(".colorMapping-color a").text().trim();
                  //colorObj.closestParent = $(this).siblings(".colorMapping-parent").find("select").val();
-                 colorObj.brightness = $(this).siblings(".colorMapping-name").find(".brightness").val();
-                 colorObj.saturation = $(this).siblings(".colorMapping-name").find(".saturation").val();
-                 colorObj.description = $(this).siblings(".colorMapping-name").clone().find("*").remove().end().text().trim();
-                 colorObj.name = $(this).siblings(".colorMapping-name").find(".hexaColorName").val();                 
-                 colorObj.parent = $(this).siblings(".colorMapping-name").find(".hexaColorParent").val(); 
+                 colorObj.brightness = $(this).find(".brightness").val().trim();
+                 colorObj.saturation = $(this).find(".saturation").val().trim();
+                 colorObj.description = $(this).find(".colorMapping-name input").val().trim();
+                 colorObj.name = $(this).find(".hexaColorName").val().trim();                 
+                 colorObj.parent = $(this).find(".hexaColorParent").val().trim(); 
                  
                  if (colorObj.brightness == "normal"){
                     colorObj.brightness = null;  
@@ -538,7 +538,7 @@ var colorMappingProcessor = {
                 Messenger.success("Saved!!!");
                     
                 // Clean up
-                $(".colorMapping").remove();
+                $(".colorTable").remove();
                 $(".approveColors").remove();
                 $(".toggleSelectAll").remove();
                 $(".verifymapping").removeAttr("disabled");
