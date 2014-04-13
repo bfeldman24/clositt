@@ -130,7 +130,7 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
     	$file = combineMultipleUrls($file, $url . "&WS=382");
 	}
 	
-	else if (strpos($url,"topshop") || strpos($url,"target") || strpos($url,"anntaylor")){
+	else if (strpos($url,"topshop") || strpos($url,"target") || strpos($url,"anntaylor") || strpos($url,"zara")){
 	   $file = file_get_contents_curl($url);   
 	   
 	   if ($_REQUEST['d']){
@@ -145,21 +145,32 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
 	       $html = htmlspecialchars($file, ENT_QUOTES);
            echo " contents: " . $html;
        }	   
-	}	
-
-    // only strip starting and ending body if the body tag exists (could be in json format)	
-	if (strpos($file,"<html")){
-    	// strip before opening <html>
-        $file = trim(substr($file, strpos($file,"<html")));   
-        
-        // strip ending </html> and after
-        $file = trim(substr($file,0,  strpos($file,"</html")));   
-        
-        $file = $file . "</html>";			
-	}
+	}	    
+		
 	
-//	$file = str_replace("<noscript>","", $file);
-//	$file = str_replace("</noscript>","", $file);
+	
+	// only strip starting and ending body if the body tag exists (could be in json format)	
+	if (strpos($file,"<body") && strpos($file,"{") != 0){
+	    $file = preg_replace("/<!--.*?-->/ms", "", $file);
+    	$file = preg_replace('#[\t\n\r]#i', "", $file);
+    	$file = str_replace("<noscript","<div", $file);
+    	$file = str_replace("</noscript>","</div>", $file);
+    	$file = preg_replace('#<script(.*?)>(.*?)</script>#is', "", $file);
+    	$file = preg_replace('#<style(.*?)>(.*?)</style>#is', "", $file);
+//    	
+//    	$file = strip_tags($file, '<p><a><img><strong><div><span><h1><h2><h3><h4><ul><li><ol><html><body>');
+	    //	$file = preg_replace('#<style(.*?)>(.*?)</style>#is', "", $file);
+        //	$file = preg_replace('#<head>(.*?)</head>#i', "", $file);   
+	   
+	   
+    	// strip before opening <html>
+//        $file = trim(substr($file, strpos($file,"<body")));   
+//        
+//        // strip ending </html> and after
+//        $file = trim(substr($file,0,  strpos($file,"</body")));   
+//        
+//        $file = $file . "</body>";			
+	}
         		
 	echo $file;
 }

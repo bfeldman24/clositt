@@ -41,7 +41,7 @@ var spider = {
     	               var taglist = "";
     	               category.child("tags").forEach(function(tag){
     	                   $tags.append(
-    	                       $('<span>').addClass("label").text(tag.val())
+    	                       $('<span>').addClass("label label-default").text(tag.val())
     	                   );
     	                   
     	                   taglist += tag.val() + ",";
@@ -132,7 +132,8 @@ var spider = {
         		    var itemCount = 0;
     			 																	    
     			    if (result == null || result.trim() == ""){
-    			         console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");    			         
+    			         console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");    		
+    			         Messenger.error("Error: Could read the product page. Check to make sure this link is still active.");	         
     			    }else{       			         								
         				
         				try{
@@ -160,6 +161,8 @@ var spider = {
                     				        if (showSample && validCount == 1){
                     				            spider.showSampleProducts(data, company, customer, category);   
                     				        }
+                				        }else{
+                				            console.log("Product price is not a number");    
                 				        }
         				            }else{
         				                if (testProduct == null){
@@ -306,7 +309,7 @@ var spider = {
     		 			
     	//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
  		var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
-		var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" >';
+		var html ='<div class="outfit item col-xs-5 col-xs-offset-1 col-sm-4 col-md-3 col-lg-2 '+shadow+'" '+attr+' pid="'+id+'" >';
 				html +='<div class="picture"><a class="productPage" target="_blank"><img src="' + image + '" /></a></div>';			
 				html += '<div class="bottom-block">';
 				    html +='<div class="companyName">' + company + '</div>';
@@ -510,7 +513,7 @@ var categoryMaintenance = {
                           if (error){
                             alert("There was a problem removing this category")
                           }else{
-                            $(el.currentTarget).parents(".category").remove();   
+                            category.parents(".category").remove();   
                             alert("Category was removed! (This only deletes the category. It does not delete products that were already added to this category)")
                           }
                        });        

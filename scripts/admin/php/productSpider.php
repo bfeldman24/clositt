@@ -51,12 +51,24 @@ input{
     width: 200px;
 }
 
+.overlay{
+    display: block;   
+}
+
 .overlay .middle{
     background: none repeat scroll 0 0 rgba(239, 239, 239, 0.8);
     overflow: hidden;
     position: absolute;
     top: 100px;
-    width: 200px;   
+    width: 198px;   
+}
+
+.overlay > .bottom { 
+    width: 198px;
+}
+
+.overlay > .bottom, .overlay > .topleft, .overlay > .topright { 
+    left: 16px;
 }
 
 .customerName, .companyName{
@@ -107,12 +119,8 @@ input{
 }
 
 .tags .label{
-    margin-left: 3px;   
-}
-
-.modal {
-    left: 500px;
-    width: 1060px;
+    margin-left: 3px; 
+    font-size: 9px;  
 }
 
 #signinModal{
@@ -310,7 +318,7 @@ input{
     <div id="main-workspace" style="display:none;"></div>
     <div id="json-output" style="display:none;"></div>
     <div id="json-products" style="display:none;"></div>
-    <div id="sample-grid-container"><div id="sample-grid"></div></div>
+    <div id="sample-grid-container"><div id="sample-grid" class="row"></div></div>
     
 </div>
 

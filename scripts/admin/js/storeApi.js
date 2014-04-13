@@ -10,11 +10,11 @@ storeApi = {
 		var newUrl = "";		
 		
 		switch(company.toLowerCase()){		
-			case "ann taylor":				
-				var catid = url.indexOf("?") > 0 ? url.substring(url.lastIndexOf("catid") + 6) : url.substring(url.lastIndexOf("/") + 1);
-                catid = url.indexOf("?") > 0 ? catid.substring(0, catid.indexOf("&")) : catid;
-                newUrl = "http://www.anntaylor.com/ann/catalog/category.jsp?pageSize=1000&goToPage=1&catid=" + catid;
-				break;
+//			case "ann taylor":				
+//				var catid = url.indexOf("?") > 0 ? url.substring(url.lastIndexOf("catid") + 6) : url.substring(url.lastIndexOf("/") + 1);
+//                catid = url.indexOf("?") > 0 ? catid.substring(0, catid.indexOf("&")) : catid;
+//                newUrl = "http://www.anntaylor.com/ann/catalog/category.jsp?pageSize=1000&goToPage=1&catid=" + catid;
+//				break;
 		    case "bcbg":
 		        newUrl = url + "#start=0&sz=1000";      
 		        break;	
@@ -25,7 +25,7 @@ storeApi = {
 		        newUrl = storeApiHelper.replaceParameter(url, "pageIndex", "1");
 		        newUrl = storeApiHelper.replaceParameter(url, "productsPerPage", "1000");
 		        break;
-		    case "new york & company":
+		    //case "new york & company":
 		    case "chicos":		    
 		        newUrl = storeApiHelper.replaceParameter(url, "viewAll", "true");		        
 		        break;
@@ -57,9 +57,13 @@ storeApi = {
 		var products = "";
 		var companyScript = company.replace(/[\s_&]/g,'');
 		
+		if (data.indexOf("{") != 0){
+		      data = $("<html>").html(data);
+		}
+		
 		switch(companyScript){
 			case "Gap":
-			case "Old Navy":
+			case "OldNavy":
 			case "BananaRepublic":
 			case "Piperlime":
 			case "Athleta":
@@ -270,10 +274,14 @@ storeApi = {
 			item.name = $(this).find(".product-info > a.name").first().text().trim();			
 			
 			var price = $(this).find(".product-info > .price span").first().attr("data-ecirp");
-			price = price.replace(/[a-zA-Z£$:]*/g,'').trim();
-            priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
-    	    item.price = storeApiHelper.getLowestPrice(priceArr);     
-    		item.price = storeApiHelper.findPrice(item.price);  
+			
+			if (price != null){			
+    			price = price.replace(/[a-zA-Z£$:]*/g,'').trim();
+                priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
+                
+        	    item.price = storeApiHelper.getLowestPrice(priceArr);     
+        		item.price = storeApiHelper.findPrice(item.price);  
+			}
 							
 			item.sku = 'z' + $(this).find("a.gaProductDetailsLink").first().attr("data-item");
 			
@@ -630,7 +638,7 @@ storeApi = {
         return products;
 	},
 	
-	getLuLuLemon: function(data, siteHome){	   
+	getLululemon: function(data, siteHome){	   
 	   var products = new Object();
 	   
 	   storeApiHelper.checkForProductListing("lll", $(data).find(".product").not(".video"));
@@ -664,13 +672,13 @@ storeApi = {
 	getTarget: function(data, siteHome){
 	   var products = new Object();
 	   
-	   storeApiHelper.checkForProductListing("t", $(data).find("#productListing .productsListView"));
+	   storeApiHelper.checkForProductListing("t", $(data).find("#productListing .tile"));
 	
-       $(data).find("#productListing .productsListView").each(function(){            
+       $(data).find("#productListing .tile").each(function(){            
             var item = new Object();
 
             item.image = $(this).find(".tileImage img.tileImage").first().attr("original");
-            item.link = s$(this).find(".tileInfo .productTitle > a").first().attr("href");
+            item.link = $(this).find(".tileInfo .productTitle > a").first().attr("href");
             item.name = $(this).find(".tileInfo .productTitle > a").first().text().trim();
             var price = $(this).find(".tileInfo .pricecontainer .price").text().replace(/[a-zA-Z£$:]*/g,'').trim();
             priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
@@ -863,18 +871,18 @@ storeApi = {
 	getNewYorkCompany: function(data, siteHome){	   
 	   var products = new Object();
 	   
-	   storeApiHelper.checkForProductListing("ny", $(data).find(".items_wrapper > ul > li"));
+	   storeApiHelper.checkForProductListing("ny", $(data).find(".product"));
 	
-       $(data).find(".items_wrapper > ul > li").each(function(){
+       $(data).find(".product").each(function(){
                 var item = new Object();
 
                 item.image = $(this).find("img").first().attr("src");
-                item.link = siteHome + $(this).find(".product-details a").first().attr("href");
-                item.name = $(this).find(".product-details a").first().text().trim();                
-    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".product-details .original_price").text().trim());
+                item.link = siteHome + $(this).find("a").first().attr("href");
+                item.name = $(this).find(".info-container .name > a").first().text().trim();                
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".info-container .price").text().trim());
 
                 if(storeApiHelper.checkForProductImage(item.image)){
-                   item.sku = 'ny' + item.image.substring(item.image.lastIndexOf("/")+1, item.image.indexOf("?")).replace(/\D/g, ''); // strip all non numeric chars;
+                   item.sku = 'ny' + item.link.substring(item.link.indexOf("-prod")+5).replace(/\D/g, ''); // strip all non numeric chars;
                    
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
@@ -1166,6 +1174,30 @@ storeApi = {
         return products;
 	},
 	
+	getNordstrom: function(data, siteHome){	   
+	   var products = new Object();
+	   
+	   storeApiHelper.checkForProductListing("no", $(data).find(".fashion-item"));
+	
+       $(data).find(".fashion-item").each(function(){                               
+                var item = new Object();
+
+                item.image = $(this).find(".fashion-photo img").first().attr("data-original");
+                item.link = siteHome + $(this).find("a.fashion-href").attr("href");
+                item.name = $(this).find(".title").first().text().trim();                    
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".price").text());    			
+
+                if(storeApiHelper.checkForProductImage(item.image)){
+                   item.sku = 'no' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
+                   
+			        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
+                }
+        });
+
+        return products;
+	},
+	
 	getStore: function(company, data, siteHome){	   
 	   var products = new Object();
 	   var store = Companies[company];
@@ -1247,7 +1279,7 @@ storeApiHelper = {
     },
     
     getLowestPrice: function(priceArray){
-        var min = parseFloat(priceArray[0]);
+        var min = 999999;
         for (var i=0; i < priceArray.length; i++){
                var num = parseFloat(priceArray[i]);
                if (!isNaN(num) && num < min ){
@@ -1290,6 +1322,7 @@ storeApiHelper = {
     checkForProductListing: function(storeCode, element){
         if (element == null || element.length <= 0){
             console.log(storeCode + ": Store api could NOT find product listing.");                           
+            Messenger.error("Error: Could not find any products. Check to make sure this link is still active.");
         }else{
             console.log(storeCode + ": Store FOUND products listing!");   
         }
