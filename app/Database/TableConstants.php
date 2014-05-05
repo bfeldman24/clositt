@@ -45,4 +45,17 @@ define('COLOR_MAPPING_BRIGHTNESS', 'brightness');
 define('COLOR_MAPPING_SATURATION', 'saturation');
 define('COLOR_MAPPING_DESCRIPTION', 'description');
 define('COLOR_STATUS', 'status');
+
+
+// Spider Table
+define("SPIDER","Spider");
+define("SPIDER_STORE","store");
+define("SPIDER_CUSTOMER","customer");
+define("SPIDER_CATEGORY","category");
+define("SPIDER_LINK","url");
+define("SPIDER_TAGS","tags");
+define("SPIDER_COUNT","count");
+define("SPIDER_STATUS","status");
+define("SPIDER_LAST_SAVED","lastsaved");
+
 ?>

@@ -952,6 +952,11 @@ storeApi = {
                 var item = new Object();
 
                 item.image = $(this).find("a.image-holder-s img").first().attr("src");
+                    
+                if (item.image == null || item.image.trim() == "" || item.image.indexOf("x.gif") > 0){
+                    item.image = $(this).find("a.image-holder-s img").first().attr("data-original");       
+                }
+                
                 item.link = siteHome + $(this).find("a.image-holder-s").first().attr("href");
                 item.name = $(this).find(".pmi-wrap .product-info a").first().text().trim();                
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".pmi-wrap .product-info .price-original").text().trim());

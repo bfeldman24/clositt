@@ -123,10 +123,6 @@ input{
     font-size: 9px;  
 }
 
-#signinModal{
-    width: 460px;   
-}
-
 .modal-body {
     text-align: left;
 }
@@ -154,6 +150,7 @@ input{
     
     <hr>
     <a name="addCategoryForm"></a>
+    <br/><br/>
     <h2>Add New Category Link:</h2>
     <form role="form" id="saveProducts">
         <div class="form-group">
@@ -350,12 +347,12 @@ input{
 <script src="../js/productSpider.js"></script>
 <script type="text/javascript">
 
-setTimeout(function(){
-    if(firebase.userid == null){
-    	Messenger.info("You must be logged in to save products.");
-    	$("#signinModal").modal('show');  
-    }
-},7000);
+//setTimeout(function(){
+//    if(firebase.userid == null){
+//    	Messenger.info("You must be logged in to save products.");
+//    	$("#signinModal").modal('show');  
+//    }
+//},7000);
 	
 </script>
 </body>

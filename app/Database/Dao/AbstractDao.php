@@ -16,6 +16,7 @@ class AbstractDao{
 	
 	public function __construct(&$db) {
 		$this->date = $GLOBALS['date'];
+		$this->sqlErrorLog = $this->sqlErrorLog . date("-Y-m-d");
 		$this->file = fopen($this->sqlErrorLog,"a");
 		$this->db = $db;	
 		$this->db->setErrorHandling(PEAR_ERROR_RETURN);
