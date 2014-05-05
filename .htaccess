@@ -64,7 +64,7 @@ Redirect /colorAdmin /scripts/admin/php/colorProcessor.php
 #505 - HTTP Version
 
 ErrorDocument 400 /whoops.php
-ErrorDocument 401 /whoops.php
+#ErrorDocument 401 /whoops.php
 ErrorDocument 402 /whoops.php
 ErrorDocument 403 /whoops.php
 ErrorDocument 404 /whoops.php
