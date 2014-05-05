@@ -32,7 +32,7 @@ class ElasticDao{
 
 		//TODO CONFIGS!!!
 		$searchParams['index'] = $this->index;
-		$fields=array('nametokenized','nameoriginal','storeoriginal^2','storetokenized','category^2','color1', 'color2');
+		$fields=array('name.partial','name','store^2','storetokenized','tag^2','tag.partial^2','color1', 'color2');
 
 
         $customer = array('term'=>array('customer'=>$criteria->getCustomers()));
