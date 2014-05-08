@@ -29,7 +29,7 @@ var spider = {
     	           $("#links > .company").last().append($("<div>").addClass("customer").append($("<div>").addClass("customerName").html("&raquo; " + customerName)));
     	       
     	           $.each( customer, function( categoryName, category ) {        
-    	               var statusText = " - " + (category["status"] == 1 ? "Works!" : "BROKEN :(");
+    	               var statusText = " - " + (category["status"] == 1 ? "Works!" : category["status"] == 2 ? "BROKEN :(" : "Not Tested");
     	               
     	               if (category["count"] != null){
     	                   statusText += ' (' + category["count"] + ' products)';

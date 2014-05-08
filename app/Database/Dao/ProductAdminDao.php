@@ -71,7 +71,7 @@ class ProductAdminDao extends AbstractDao {
 		}
         
         $stmt = $this->db->prepare($sql);
-        $affected =  $stmt->execute($criteria);                                   		
+        $affected = $stmt->execute($criteria);                                   		
 		
 		if (PEAR::isError($affected)) {
 			$this->logError("9438519" ,$affected->getMessage(),$sql);
@@ -83,8 +83,8 @@ class ProductAdminDao extends AbstractDao {
         
     public function updateSpiderLink($criteria){
         $sql = "UPDATE " . SPIDER .        	 
-                "SET ". SPIDER_LINK . " = :link ," . 
-                     SPIDER_TAGS . " = :tags )" .                 
+                " SET ". SPIDER_LINK . " = :link ," . 
+                     SPIDER_TAGS . " = :tags " .                 
                 " WHERE ".SPIDER_STORE." = :store AND ".SPIDER_CUSTOMER." = :customer AND ".SPIDER_CATEGORY." = :category";
                                 
         if($this->debug){		    
@@ -92,7 +92,7 @@ class ProductAdminDao extends AbstractDao {
 		}
         
         $stmt = $this->db->prepare($sql);
-        $affected =  $stmt->execute($criteria);                                   		
+        $affected = $stmt->execute($criteria);                                   		
 		
 		if (PEAR::isError($affected)) {
 			$this->logError("29384691" ,$affected->getMessage(),$sql);
@@ -239,7 +239,8 @@ class ProductAdminDao extends AbstractDao {
                       PRODUCT_CLOSITT_COUNT . "," . 
                       PRODUCT_SHORT_LINK . "," . 
                       PRODUCT_STATUS . "," .
-                      PRODUCT_DATE_UPDATED . ")" .
+                      PRODUCT_DATE_UPDATED . "," . 
+                      PRODUCT_CREATED_ON . ")" .
                " SELECT " . PRODUCT_SKU . "," .
                       PRODUCT_STORE . "," . 
                       PRODUCT_CUSTOMER . "," . 
@@ -252,7 +253,8 @@ class ProductAdminDao extends AbstractDao {
                       PRODUCT_CLOSITT_COUNT . "," . 
                       PRODUCT_SHORT_LINK . "," . 
                       " 1 ," .
-                      "NOW()" .
+                      "NOW() ," .
+                      "NOW() " .
                " FROM " . TEMP_PRODUCTS . " tp " .
 			   " WHERE " . PRODUCT_SKU . " NOT IN ( SELECT " . PRODUCT_SKU . " FROM " . PRODUCTS . " ) ";	           
         
