@@ -19,6 +19,7 @@ define("PRODUCT_COMMENT_COUNT","commentcount");
 define("PRODUCT_CLOSITT_COUNT","closittcount");
 define("PRODUCT_SHORT_LINK","shortlink");
 define("PRODUCT_STATUS","status");
+define("PRODUCT_RANDOM_INDEX","rand");
 define("PRODUCT_DATE_UPDATED","updatedon");
 define("PRODUCT_CREATED_ON","createdon");
 
