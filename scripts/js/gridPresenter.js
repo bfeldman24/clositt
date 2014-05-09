@@ -53,9 +53,7 @@ var gridPresenter = {
 	},
 	
 	showContent: function(numElements){
-	    console.log(gridPresenter.numberOfLoadingPages);
 	    if (gridPresenter.numberOfLoadingPages < gridPresenter.maxNumberOfPagesLoadingAtOnce){
-	       	console.log("trying to show content");       
 	       	
     		var lastHeight = $("#product-grid").children("div").last();
     		
