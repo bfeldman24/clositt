@@ -32,9 +32,11 @@ then
         exit 1
 fi
 
-sudo rm -rf /home/$1/archive/*
-sudo mkdir /home/$1/archive
-sudo mv /home/$1/* /home/$1/archive/
+d=$(date +%d.%m.%y_%H.%M)
+echo "backup dir name will be /home/$1/archive/$d"
+
+sudo mkdir "/home/$1/archive/$d"
+sudo mv /home/$1/* /home/$1/archive/$d/
 echo "Archived target directory"
 
 echo "Compiling all JS files..."
