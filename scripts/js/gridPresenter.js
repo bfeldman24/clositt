@@ -53,7 +53,7 @@ var gridPresenter = {
 	},
 	
 	showContent: function(numElements){
-	    if (gridPresenter.numberOfLoadingPages < gridPresenter.maxNumberOfPagesLoadingAtOnce){
+	    if (gridPresenter.numberOfLoadingPages < gridPresenter.maxNumberOfPagesLoadingAtOnce - 1){
 	       	
     		var lastHeight = $("#product-grid").children("div").last();
     		
@@ -66,8 +66,13 @@ var gridPresenter = {
     		if(lastHeight <= ($(window).height() + $(window).scrollTop() + 325)){						
     			var $items = $();
     			
-    			if(productPresenter.filterStore == null){				     				     			 		 
-    			     var c = filterPresenter.getSelectedCustomer();
+    			if(searchController.isSearchActive){
+    			    gridPresenter.numberOfLoadingPages++; 				     				     			 		 
+    			    searchController.getProducts(gridPresenter.lazyLoad);       		              		        		    
+        		    gridPresenter.productIndex = 0; 		  			
+        		    
+        		}else{	    		    
+                     var c = filterPresenter.getSelectedCustomer();
     			     
     			     if (c == null){
     			         c = "b";			         
@@ -83,11 +88,7 @@ var gridPresenter = {
     			 
     			     gridPresenter.numberOfLoadingPages++;
     			     $.post( window.HOME_ROOT + "b/" + c + "/" + page, gridPresenter.lazyLoad, "json");
-    			     gridPresenter.productIndex++;
-    			            			     
-        		}else{	    		    
-        		    searchController.getProducts(gridPresenter.lazyLoad);       		              		        		    
-        		    gridPresenter.productIndex = 0; 		  			
+    			     gridPresenter.productIndex++;    			            			             		    
     			}		
     		}
 	    }
