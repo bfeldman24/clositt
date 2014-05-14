@@ -31,6 +31,7 @@ RewriteRule ^spider/([a-z0-9]*)$ app/Controller/ProductAdminController.php?metho
 RewriteRule ^spider/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1&page=$2
 Redirect /spiderAdmin /scripts/admin/php/productSpider.php
 Redirect /colorAdmin /scripts/admin/php/colorProcessor.php
+Redirect /searchAdmin /scripts/admin/php/search.php
 
 
 
