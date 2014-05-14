@@ -8,7 +8,7 @@ then
 fi
 
 # Check production update
-if [ $1 = 'clositt' ]
+if [ $1 = 'clositt-public' ]
 then 
 	echo "Are you sure you want to update production? [y/n]"
 	read update
@@ -32,24 +32,24 @@ fi
 
 # Check correct current directory
 p=$(pwd)
-if [ $p != '/home1/thewinn2/public_html/pp' ]
+if [ $p != '/home/clositt-staging' ]
 then
-	echo "Current dir is $p! you must be in /pp to use this script"
+	echo "Current dir is $p! you must be in /home/clositt-staging to use this script"
 	exit 1
 fi
 
 # Deploy to target directory
 d=$(date +%d.%m.%y_%H.%M)
-echo "backup dir name will be ../prod-archive/$d"
+echo "backup dir name will be /home/clositt-archive/$d"
 
-mkdir "../prod-archive/$d"
-mv ../$1/* "../prod-archive/$d/"
-mv ../$1/.htaccess "../prod-archive/$d/"
-cp -rf * ../$1/
-cp .htaccess ../$1/
-rm ../$1/scripts/deploy-PROD.ssh
-rm -rf ../$1/archive
-rm ../$1/robots.txt
+sudo mkdir "/home/clositt-archive/$d"
+sudo mv /home/$1/* "/home/clositt-archive/$d/"
+sudo mv /home/$1/.htaccess "/home/clositt-archive/$d/"
+sudo cp -rf * /home/$1/
+sudo cp .htaccess /home/$1/
+sudo rm /home/$1/scripts/deploy-PROD.ssh
+sudo rm -rf /home/$1/archive
+sudo rm /home/$1/robots.txt
 
 echo "Please verify the release!"
 echo "DONE!"

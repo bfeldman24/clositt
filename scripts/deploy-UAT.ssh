@@ -6,7 +6,7 @@ echo "I need a directory to run. Pass a directory as the first and only paramete
 exit 1
 fi
 
-if [ $1 = 'clositt' ]
+if [ $1 = 'clositt-public' ]
 then
         echo "You cannot run this script for production"
         exit 1
@@ -32,9 +32,11 @@ then
         exit 1
 fi
 
-rm -rf ../$1/archive/*
-mkdir ../$1/archive
-mv ../$1/* ../$1/archive/
+d=$(date +%d.%m.%y_%H.%M)
+echo "backup dir name will be /home/$1/archive/$d"
+
+sudo mkdir "/home/$1/archive/$d"
+sudo mv /home/$1/* /home/$1/archive/$d/
 echo "Archived target directory"
 
 echo "Compiling all JS files..."
@@ -47,29 +49,29 @@ java -jar scripts/java/yuicompressor-2.4.8.jar scripts/java/clositt.js -o script
 java -jar scripts/java/yuicompressor-2.4.8.jar css/style.css -o css/style.min.css
 echo "Minified JS and CSS finished"
 
-cp *.php ../$1/
-cp favicon.ico ../$1/
-cp .htaccess ../$1/
-cp php.ini ../$1/
-cp -r static/ ../$1/
-cp -r css/ ../$1/
+sudo cp *.php /home/$1/
+sudo cp favicon.ico /home/$1/
+sudo cp .htaccess /home/$1/
+sudo cp php.ini /home/$1/
+sudo cp -r static/ /home/$1/
+sudo cp -r css/ /home/$1/
 
-mkdir ../$1/lib
-cp -r lib/css ../$1/lib
-cp -r lib/js ../$1/lib
-cp -r lib/img ../$1/lib
-cp -r lib/fonts ../$1/lib
+sudo mkdir /home/$1/lib
+sudo cp -r lib/css /home/$1/lib
+sudo cp -r lib/js /home/$1/lib
+sudo cp -r lib/img /home/$1/lib
+sudo cp -r lib/fonts /home/$1/lib
 
-mkdir ../$1/app
-mkdir ../$1/scripts
-mkdir ../$1/scripts/js
+sudo mkdir /home/$1/app
+sudo mkdir /home/$1/scripts
+sudo mkdir /home/$1/scripts/js
 
-cp -r app ../$1/
-rm -f ../$1/app/Controller/*Admin*
-rm -f ../$1/app/Database/Dao/*Admin*
-cp scripts/js/clositt.min.js ../$1/scripts/js
-cp scripts/js/clositt.min.e.js ../$1/scripts/js
-cp scripts/deploy-PROD.ssh ../$1/scripts
+sudo cp -r app /home/$1/
+sudo rm -f /home/$1/app/Controller/*Admin*
+sudo rm -f /home/$1/app/Database/Dao/*Admin*
+sudo cp scripts/js/clositt.min.js /home/$1/scripts/js
+sudo cp scripts/js/clositt.min.e.js /home/$1/scripts/js
+sudo cp scripts/deploy-PROD.ssh /home/$1/scripts
 
 echo "Moved current directory to target directory"
 echo "DONE!"
