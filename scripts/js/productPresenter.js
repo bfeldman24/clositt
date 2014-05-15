@@ -9,7 +9,7 @@ var productPresenter = {
 	},		
  
 	getProductTemplate: function(product){
-	    if (typeof(product) != "object"){      	
+	    if (product == null || typeof(product) != "object"){      	
 	       return $("");
 	    }
 	    
