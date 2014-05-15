@@ -952,9 +952,14 @@ storeApi = {
                 var item = new Object();
 
                 item.image = $(this).find("a.image-holder-s img").first().attr("src");
+                    
+                if (item.image == null || item.image.trim() == "" || item.image.indexOf("x.gif") > 0){
+                    item.image = $(this).find("a.image-holder-s img").first().attr("data-original");       
+                }
+                
                 item.link = siteHome + $(this).find("a.image-holder-s").first().attr("href");
                 item.name = $(this).find(".pmi-wrap .product-info a").first().text().trim();                
-    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".pmi-wrap .product-info .price-original").text().trim());
+    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".pmi-wrap .product-info").find(".price-original, .sale_add").text().trim());
 
                 if(storeApiHelper.checkForProductImage(item.image)){
                    item.sku = 'ko' + item.link.substring(item.link.indexOf("-")+1, item.link.indexOf("/", item.link.indexOf("-"))).replace(/\D/g, ''); // strip all non numeric chars;
@@ -1173,31 +1178,8 @@ storeApi = {
 
         return products;
 	},
-	
-	getNordstrom: function(data, siteHome){	   
-	   var products = new Object();
-	   
-	   storeApiHelper.checkForProductListing("no", $(data).find(".fashion-item"));
-	
-       $(data).find(".fashion-item").each(function(){                               
-                var item = new Object();
 
-                item.image = $(this).find(".fashion-photo img").first().attr("data-original");
-                item.link = siteHome + $(this).find("a.fashion-href").attr("href");
-                item.name = $(this).find(".title").first().text().trim();                    
-    			item.price = storeApiHelper.findPricesAndGetLowest($(this).find(".price").text());    			
 
-                if(storeApiHelper.checkForProductImage(item.image)){
-                   item.sku = 'no' + $(this).attr("id").replace(/\D/g, ''); // strip all non numeric chars;
-                   
-			        var itemid = item.sku.replace(/-\W/g, '');
-                    products[itemid] = item;
-                }
-        });
-
-        return products;
-	},
-	
 	getStore: function(company, data, siteHome){	   
 	   var products = new Object();
 	   var store = Companies[company];

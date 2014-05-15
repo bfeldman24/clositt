@@ -4,6 +4,165 @@ require_once('Date.php');
 
 class ProductAdminDao extends AbstractDao {     
     
+    public function getSpiderLinks(){
+		
+		$sql = "SELECT " .
+    		        SPIDER_STORE . "," .
+                    SPIDER_CUSTOMER . "," .
+                    SPIDER_CATEGORY . "," .
+                    SPIDER_LINK . "," .
+                    SPIDER_TAGS . "," .
+                    SPIDER_COUNT . "," .
+                    SPIDER_STATUS . "," .
+                    SPIDER_LAST_SAVED .
+				" FROM " . SPIDER .				
+				" ORDER BY " . 
+    				SPIDER_STORE . "," .
+                    SPIDER_CUSTOMER . "," .
+                    SPIDER_CATEGORY;;								
+        
+		$paramsTypes = array();		
+		$params = array();
+		
+		return $this->getResults($sql, $params, $paramTypes, "9348023903");
+	}
+	
+	public function updateSpiderStatus($criteria){
+        $sql = "UPDATE " . SPIDER .        	 
+                " SET " . 
+                    SPIDER_STATUS. " = :status ";
+        
+        if (isset($criteria['count'])){
+            $sql .= ", " . SPIDER_COUNT . " = :count ";        
+        }    
+        
+        if ($criteria['status'] == 1){
+            $sql .= ", " . SPIDER_LAST_SAVED . " = NOW() ";        
+        }    
+
+        $sql .= " WHERE ".SPIDER_STORE." = :store AND ".SPIDER_CUSTOMER." = :customer AND ".SPIDER_CATEGORY." = :category"; 
+                                
+        if($this->debug){		    
+			$this->logDebug("92374034" , $sql);
+		}
+        
+        $stmt = $this->db->prepare($sql);
+        $affected =  $stmt->execute($criteria);                                   		
+		
+		if (PEAR::isError($affected)) {
+			$this->logError("2383294" ,$affected->getMessage(),$sql);
+		    return false;
+		}	        
+        
+        return $affected; 
+    }
+        
+    public function addSpiderLink($criteria){
+        $sql = "INSERT INTO " . SPIDER .        	 
+                "(". SPIDER_STORE . "," . 
+                     SPIDER_CUSTOMER . "," . 
+                     SPIDER_CATEGORY . "," . 
+                     SPIDER_LINK . "," . 
+                     SPIDER_TAGS . ")" .                 
+                " VALUES (:store, :customer, :category, :link, :tags)";
+                                
+        if($this->debug){		    
+			$this->logDebug("392874293" , $sql);
+		}
+        
+        $stmt = $this->db->prepare($sql);
+        $affected = $stmt->execute($criteria);                                   		
+		
+		if (PEAR::isError($affected)) {
+			$this->logError("9438519" ,$affected->getMessage(),$sql);
+		    return false;
+		}	        
+        
+        return $affected; 
+    }
+        
+    public function updateSpiderLink($criteria){
+        $sql = "UPDATE " . SPIDER .        	 
+                " SET ". SPIDER_LINK . " = :link ," . 
+                     SPIDER_TAGS . " = :tags " .                 
+                " WHERE ".SPIDER_STORE." = :store AND ".SPIDER_CUSTOMER." = :customer AND ".SPIDER_CATEGORY." = :category";
+                                
+        if($this->debug){		    
+			$this->logDebug("92384729" , $sql);
+		}
+        
+        $stmt = $this->db->prepare($sql);
+        $affected = $stmt->execute($criteria);                                   		
+		
+		if (PEAR::isError($affected)) {
+			$this->logError("29384691" ,$affected->getMessage(),$sql);
+		    return false;
+		}	        
+        
+        return $affected; 
+    }
+        
+    public function removeSpiderLink($criteria){
+        $sql = "DELETE FROM " . SPIDER .        	                 
+                " WHERE ".SPIDER_STORE." = :store AND ".SPIDER_CUSTOMER." = :customer AND ".SPIDER_CATEGORY." = :category";
+                                
+        if($this->debug){		    
+			$this->logDebug("2342352" , $sql);
+		}
+        
+        $stmt = $this->db->prepare($sql);
+        $affected =  $stmt->execute($criteria);                                   		
+		
+		if (PEAR::isError($affected)) {
+			$this->logError("230472" ,$affected->getMessage(),$sql);
+		    return false;
+		}	        
+        
+        $affectedProducts = $this->removeSpiderLinkProducts($criteria);
+        return $affectedProducts + $affected; 
+    }
+    
+    public function removeSpiderLinkProducts($criteria){
+        $sql = "DELETE FROM " . PRODUCTS .        	                 
+                " WHERE ".PRODUCT_STORE." = :store AND ".PRODUCT_CUSTOMER." = :customer AND ".PRODUCT_CATEGORY." = :category";
+                                
+        if($this->debug){		    
+			$this->logDebug("2398472" , $sql);
+		}
+        
+        $stmt = $this->db->prepare($sql);
+        $affected =  $stmt->execute($criteria);                                   		
+		
+		if (PEAR::isError($affected)) {
+			$this->logError("2374629" ,$affected->getMessage(),$sql);
+		    return false;
+		}	        
+        
+        return $affected; 
+    }
+    
+    public function removeUncategorizedProducts(){
+           $sql = "DELETE p FROM " . PRODUCTS . " p " .
+                  " LEFT JOIN " . SPIDER . " s ON " .
+                       " s.".SPIDER_STORE." = p.".PRODUCT_STORE." AND " .
+                       " s.".SPIDER_CUSTOMER." = p.".PRODUCT_CUSTOMER." AND ".
+                       " s.".SPIDER_CATEGORY." = p.".PRODUCT_CATEGORY . 
+                  " WHERE COALESCE(s.".SPIDER_STORE.", 'n') = 'n'";
+                                
+        if($this->debug){		    
+			$this->logDebug("0123984710" , $sql);
+		}
+        
+        $affected =  $stmt->exec($sql);                                   		
+		
+		if (PEAR::isError($affected)) {
+			$this->logError("123087410" ,$affected->getMessage(),$sql);
+		    return false;
+		}	        
+        
+        return $affected;
+    }
+    
     public function clearTempProducts(){
         $sql = "TRUNCATE TABLE " . TEMP_PRODUCTS;
         
@@ -80,7 +239,8 @@ class ProductAdminDao extends AbstractDao {
                       PRODUCT_CLOSITT_COUNT . "," . 
                       PRODUCT_SHORT_LINK . "," . 
                       PRODUCT_STATUS . "," .
-                      PRODUCT_DATE_UPDATED . ")" .
+                      PRODUCT_DATE_UPDATED . "," . 
+                      PRODUCT_CREATED_ON . ")" .
                " SELECT " . PRODUCT_SKU . "," .
                       PRODUCT_STORE . "," . 
                       PRODUCT_CUSTOMER . "," . 
@@ -92,8 +252,9 @@ class ProductAdminDao extends AbstractDao {
                       PRODUCT_COMMENT_COUNT . "," . 
                       PRODUCT_CLOSITT_COUNT . "," . 
                       PRODUCT_SHORT_LINK . "," . 
-                      " 4 ," .
-                      "NOW()" .
+                      " 1 ," .
+                      "NOW() ," .
+                      "NOW() " .
                " FROM " . TEMP_PRODUCTS . " tp " .
 			   " WHERE " . PRODUCT_SKU . " NOT IN ( SELECT " . PRODUCT_SKU . " FROM " . PRODUCTS . " ) ";	           
         
@@ -120,7 +281,7 @@ class ProductAdminDao extends AbstractDao {
               "p." .PRODUCT_IMAGE . " = tp." . PRODUCT_IMAGE . "," .
               "p." .PRODUCT_PRICE . " = tp." . PRODUCT_PRICE . "," . 
               "p." .PRODUCT_DATE_UPDATED. " = tp." . PRODUCT_DATE_UPDATED . "," .
-              "p." .PRODUCT_STATUS. " = CASE WHEN p.".PRODUCT_STATUS." = 3 THEN 4 ELSE p.".PRODUCT_STATUS." END";               
+              "p." .PRODUCT_STATUS. " = CASE WHEN p.".PRODUCT_STATUS." = 3 THEN 1 ELSE p.".PRODUCT_STATUS." END";               
               
        if($this->debug){		    
 			$this->logDebug("923847293" ,$sql );

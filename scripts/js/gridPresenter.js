@@ -3,6 +3,8 @@ var gridPresenter = {
     productIndex: 0,
     storeCount: 0,  
     maxBrowsePages: 300,
+    numberOfLoadingPages: 0,
+    maxNumberOfPagesLoadingAtOnce: 2,
     browsePages: [],        
 	
 	init: function(){			
@@ -51,40 +53,45 @@ var gridPresenter = {
 	},
 	
 	showContent: function(numElements){
-		var lastHeight = $("#product-grid").children("div").last();
-		
-		if(lastHeight == undefined || lastHeight == null || lastHeight.length <= 0){
-			lastHeight = 0;
-		}else{
-			lastHeight = lastHeight.position().top;	
-		}
-		
-		if(lastHeight <= ($(window).height() + $(window).scrollTop() + 325)){						
-			var $items = $();
-			
-			if(productPresenter.filterStore == null){				     				     			 		 
-			     var c = filterPresenter.getSelectedCustomer();
-			     
-			     if (c == null){
-			         c = "b";			         
-			     }else{
-    			     c = c.substring(0,1);
-			     }
-			     
-			     var page = gridPresenter.productIndex;
-			     
-			     if (gridPresenter.browsePages[page] != null){
-			         page = gridPresenter.browsePages[page];
-			     }
-			 
-			     $.post( window.HOME_ROOT + "b/" + c + "/" + page, gridPresenter.lazyLoad, "json");
-			     gridPresenter.productIndex++;
-			            			     
-    		}else{	    		    
-    		    searchController.getProducts(gridPresenter.lazyLoad);       		              		        		    
-    		    gridPresenter.productIndex = 0; 		  			
-			}		
-		}
+	    if (gridPresenter.numberOfLoadingPages < gridPresenter.maxNumberOfPagesLoadingAtOnce - 1){
+	       	
+    		var lastHeight = $("#product-grid").children("div").last();
+    		
+    		if(lastHeight == undefined || lastHeight == null || lastHeight.length <= 0){
+    			lastHeight = 0;
+    		}else{
+    			lastHeight = lastHeight.position().top;	
+    		}
+    		
+    		if(lastHeight <= ($(window).height() + $(window).scrollTop() + 325)){						
+    			var $items = $();
+    			
+    			if(searchController.isSearchActive){
+    			    gridPresenter.numberOfLoadingPages++; 				     				     			 		 
+    			    searchController.getProducts(gridPresenter.lazyLoad);       		              		        		    
+        		    gridPresenter.productIndex = 0; 		  			
+        		    
+        		}else{	    		    
+                     var c = filterPresenter.getSelectedCustomer();
+    			     
+    			     if (c == null){
+    			         c = "b";			         
+    			     }else{
+        			     c = c.substring(0,1);
+    			     }
+    			     
+    			     var page = gridPresenter.productIndex;
+    			     
+    			     if (gridPresenter.browsePages[page] != null){
+    			         page = gridPresenter.browsePages[page];
+    			     }
+    			 
+    			     gridPresenter.numberOfLoadingPages++;
+    			     $.post( window.HOME_ROOT + "b/" + c + "/" + page, gridPresenter.lazyLoad, "json");
+    			     gridPresenter.productIndex++;    			            			             		    
+    			}		
+    		}
+	    }
 	},
 	
 	lazyLoad: function(products){
@@ -103,6 +110,7 @@ var gridPresenter = {
 			                   			   	   		
 	   gridPresenter.alignDefaultGrid(); 
 	   gridPresenter.endTask(); 
+	   gridPresenter.numberOfLoadingPages--;
 	},	
 	
 	beginTask: function(){

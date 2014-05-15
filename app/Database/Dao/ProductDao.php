@@ -58,7 +58,7 @@ class ProductDao extends AbstractDao {
 		}		
 		
 		if ($random){
-		      $sql .= " ORDER BY RAND() ";   
+		      $sql .= " ORDER BY " . PRODUCT_RANDOM_INDEX;   
 		}
 		
 		$sql .= " LIMIT ? OFFSET ?";

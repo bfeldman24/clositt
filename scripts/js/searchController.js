@@ -4,6 +4,7 @@ var searchController = {
     criteria: null,
     pageIndex: 0,
     hasMoreProducts: true,
+    isSearchActive: false,
     
     init: function(){
         $("#search-bar").on("keyup", searchController.showClearBtn);
@@ -24,6 +25,8 @@ var searchController = {
     searchBarSubmit: function(el){
 		el.preventDefault();
 		var searchTerm = $( "#search-bar" ).val().trim();
+		
+		searchController.isSearchActive = true;
 		
 		$('body,html').animate({
 			scrollTop: 610
@@ -607,6 +610,7 @@ var searchController = {
 		$("#search-bar-sort-block").css("visibility","hidden");
 		filterPresenter.clearFilters();	       		
 		productPresenter.refreshProducts();
+		searchController.isSearchActive = false; 
 	},		
 	
 	getMatchingChild: function(snapshot, tag){

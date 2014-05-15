@@ -1,3 +1,4 @@
+<title>Clositt Makes Searching for Clothes as Fun as Buying Clothes</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta property="og:image" content="<?php echo HOME_ROOT; ?>css/images/clositt-twitter-header.jpg"/>
 <meta property="og:image:secure_url" content="<?php echo HOME_ROOT; ?>css/images/clositt-twitter-header.jpg" />

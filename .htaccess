@@ -31,6 +31,7 @@ RewriteRule ^spider/([a-z0-9]*)$ app/Controller/ProductAdminController.php?metho
 RewriteRule ^spider/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1&page=$2
 Redirect /spiderAdmin /scripts/admin/php/productSpider.php
 Redirect /colorAdmin /scripts/admin/php/colorProcessor.php
+Redirect /searchAdmin /scripts/admin/php/search.php
 
 
 
@@ -64,7 +65,7 @@ Redirect /colorAdmin /scripts/admin/php/colorProcessor.php
 #505 - HTTP Version
 
 ErrorDocument 400 /whoops.php
-ErrorDocument 401 /whoops.php
+#ErrorDocument 401 /whoops.php
 ErrorDocument 402 /whoops.php
 ErrorDocument 403 /whoops.php
 ErrorDocument 404 /whoops.php

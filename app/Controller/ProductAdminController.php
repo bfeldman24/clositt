@@ -4,6 +4,7 @@ require_once(dirname(__FILE__) . '/../Database/Dao/ProductAdminDao.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
+require_once(dirname(__FILE__) . '/../Model/SpiderLinkEntity.php');
 require_once(dirname(__FILE__) . '/ProductController.php');
 
 
@@ -17,6 +18,74 @@ class ProductAdminController {
 		$this->productAdminDao = new ProductAdminDao($mdb2);
 		$this->productDao = new ProductDao($mdb2);
 		$this->productController = new ProductController($mdb2);
+	}
+	
+	public function getSpiderLinks(){	    	           
+        $spiderLinks = array();	    			      
+		$results = $this->productAdminDao->getSpiderLinks();
+		
+		if(is_object($results)){
+		 
+			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+			    $spiderLink = new SpiderLinkEntity();						
+				SpiderLinkEntity::setSpiderLinkFromDB($spiderLink, $row);
+				
+				$store = $spiderLink->getStore();
+				$cust = $spiderLink->getCustomer();				
+				$cat = $spiderLink->getCategory();				
+				
+				if (!is_array($spiderLinks[$store])){
+				    $spiderLinks[$store] = array();
+				}
+				
+				if (!is_array($spiderLinks[$store][$cust])){
+				    $spiderLinks[$store][$cust] = array();
+				}				
+				
+				$spiderLinks[$store][$cust][$cat] = $spiderLink->toArray();
+			}
+		}				
+	
+		return json_encode($spiderLinks);  
+	}
+	
+	public function updateSpiderStatus($criteria){
+	   if (isset($criteria) && is_array($criteria)){
+	       $results = $this->productAdminDao->updateSpiderStatus($criteria);	       
+	       return $results == 1 ? "success" : "failed";	              
+	   }else{
+	       return "Nothing to update";   
+	   }
+	}
+	
+	public function addSpiderLink($criteria){
+	   if (isset($criteria) && is_array($criteria)){
+	       $results = $this->productAdminDao->addSpiderLink($criteria);	       
+	       return $results == 1 ? "success" : "failed";	              
+	   }else{
+	       return "Nothing to add";   
+	   }
+	}
+		
+	public function updateSpiderLink($criteria){
+	   if (isset($criteria) && is_array($criteria)){
+	       $results = $this->productAdminDao->updateSpiderLink($criteria);	       
+	       return $results == 1 ? "success" : "failed";	              
+	   }else{
+	       return "Nothing to add";   
+	   }
+	}
+		
+	public function removeSpiderLink($criteria){
+	   if (isset($criteria) && is_array($criteria)){
+	       return $this->productAdminDao->removeSpiderLink($criteria);	               
+	   }else{
+	       return "Nothing to add";   
+	   }
+	}
+	
+	public function removeUncategorizedProducts(){
+	   return $this->productAdminDao->removeUncategorizedProducts();	               
 	}
     
     public function addAdminProducts($products){
@@ -275,11 +344,11 @@ class ProductAdminController {
 	   foreach($products as $sku => $p){
 	       	       
 	       if ($p instanceof ProductEntity){
-	           $shortlink = str_replace(" ", "-", $p->getStore()) . "-" . str_replace(" ", "-", $p->getName());	
+	           $shortlink = str_replace(" ", "-", $p->getStore()) . "-" . str_replace(" ", "-", $p->getCategory()) . "-" . str_replace(" ", "-", $p->getName());	
 	       }else if ($p['s'] != null){	       
-	           $shortlink = str_replace(" ", "-", $p['o']) . "-" . str_replace(" ", "-", $p['n']);	
+	           $shortlink = str_replace(" ", "-", $p['o']) . "-" . str_replace(" ", "-", $p['a']) . "-" . str_replace(" ", "-", $p['n']);	
 	       }else{   
-	           $shortlink = str_replace(" ", "-", $p['company']) . "-" . str_replace(" ", "-", $p['name']);	
+	           $shortlink = str_replace(" ", "-", $p['company']) . "-" . str_replace(" ", "-", $p['category']) . "-" . str_replace(" ", "-", $p['name']);	
 	       }
 	       
 	       $shortlink = strtolower($this->cleanUrl($shortlink));	
@@ -297,7 +366,7 @@ class ProductAdminController {
 	       $b++;	       	       
 	       
 	       // manual override:
-	       //$shortlink .= "-" . rand(0,10);
+	       $shortlink .= "-" . rand(0,100000);
 	       
 	       $links[] = $shortlink;	     
 	       
@@ -334,9 +403,8 @@ class ProductAdminController {
    }
 }
 
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
-    $productAdminController = new ProductAdminController($mdb2);
+$productAdminController = new ProductAdminController($mdb2);
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){    
     
     //echo " 1) ProductAdmin. ";
     //echo "Method: " . $_GET['method'];                    
@@ -352,29 +420,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
         $results = $productAdminController->getTotalProductsCount();   
         print_r($results);        
     
+    }else if ($_GET['method'] == 'updatestatus'){                                               
+        echo $productAdminController->updateSpiderStatus($_POST);    
+    
+    }else if ($_GET['method'] == 'addlink'){
+        echo $productAdminController->addSpiderLink($_POST);    
+    
+    }else if ($_GET['method'] == 'updatelink'){
+        echo $productAdminController->updateSpiderLink($_POST);    
+        
+    }else if ($_GET['method'] == 'removelink'){
+        echo $productAdminController->removeSpiderLink($_POST);    
+    
     }
            
 }else if ($_GET['method'] == 'updateshortlinks'){                                          
     echo "Updating Short Links…";
-    $productAdminController = new ProductAdminController($mdb2);
     $results = $productAdminController->updateAllShortLinks();   
     print_r($results);    
         
 }else if ($_GET['method'] == 'deleteunwanted'){
     echo "Removing Unwanted Products... \n";
-    $productAdminController = new ProductAdminController($mdb2);
     $results = $productAdminController->deleteUnwantedProducts();       
     echo "Removed $results Products!";
     
 }else if ($_GET['method'] == 'getnonliveproducts' && isset($_GET['page'])){
     
-        $productAdminController = new ProductAdminController($mdb2);
         $results = $productAdminController->getNonLiveProducts($_GET['page'], 50);   
         print_r( json_encode($results) );
    
 }else if ($_GET['method'] == 'getfilters'){       
                                    
-    $productAdminController = new ProductAdminController($mdb2);
     $results = $productAdminController->getFilters();   
     
 //    $file = fopen(dirname(__FILE__) . "/../Data/generated-filters.json","w");
@@ -384,17 +460,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     print_r(json_encode($results));
 }else if ($_GET['method'] == 'getfiltersselect'){       
                                    
-    $productAdminController = new ProductAdminController($mdb2);
     $results = $productAdminController->getFilters();   
     
     foreach ($results['categories'] as $filter){
            echo '<option value="'.$filter.'">'.$filter.'</option>';
     }        
     
-}else if ($_GET['method'] == 'getbrowsepages'){       
-                                   
-    $productAdminController = new ProductAdminController($mdb2);
+}else if ($_GET['method'] == 'getbrowsepages'){                                          
     $productAdminController->getBrowsePages();   
+
+}else if ($_GET['method'] == 'getlinks'){                                          
+    echo $productAdminController->getSpiderLinks();    
+
+}else if ($_GET['method'] == 'removeuncategorized'){
+    echo $productAdminController->removeUncategorizedProducts();    
 }
 
 ?>

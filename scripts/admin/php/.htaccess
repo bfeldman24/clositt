@@ -1,0 +1,4 @@
+AuthUserFile /home/thewinn2/public_html/clothies/scripts/admin/php/.htpasswd
+AuthType Basic
+AuthName "Clositt Auth"
+Require valid-user
