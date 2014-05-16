@@ -32,12 +32,9 @@ then
         exit 1
 fi
 
-d=$(date +%d.%m.%y_%H.%M)
-echo "backup dir name will be /home/$1/archive/$d"
 
-sudo mkdir "/home/$1/archive/$d"
-sudo mv /home/$1/* /home/$1/archive/$d/
-echo "Archived target directory"
+sudo rm -rf /home/$1/*
+echo "Cleared target directory"
 
 echo "Compiling all JS files..."
 mv scripts/java/clositt.js scripts/java/clositt.js.bak
