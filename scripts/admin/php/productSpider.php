@@ -214,48 +214,66 @@ input{
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Blazers"/>Blazers
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Blouses"/>Blouses                                              
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Button Downs"/>Button Downs
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Camisoles"/>Camisoles
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Capris"/>Capris
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Cardigans"/>Cardigans
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Cashmere"/>Cashmere
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Chinos"/>Chinos
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Coats"/>Coats
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Coats"/>Coats                  
                   <br />
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Cocktail Dresses"/>Cocktial Dresses
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Collared Shirts"/>Collared Shirts
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Crop Tops"/>Crop Tops
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Denim"/>Denim
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Dress Pants"/>Dress Pants
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Dress Shirts"/>Dress Shirts
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Dresses"/>Dresses
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Evening Dresses"/>Evening Dresses
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Graphic T Shirts"/>Graphic T Shirts
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Gowns"/>Gowns
                   <br />
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Henleys"/>Henleys
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Hoodies"/>Hoodies
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Jackets"/>Jackets
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Jeans"/>Jeans
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Jumpsuits"/>Jumpsuits
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Khakis"/>Khakis
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Knit"/>Knit
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Leather"/>Leather
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Leggings"/>Leggings
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Loungewear"/>Loungewear
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Long Sleeve Tops"/>Long Sleeve Tops
                   <br />
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Loungewear"/>Loungewear
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Mini Skirts"/>Mini Skirts
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Outerwear"/>Outerwear
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Overalls"/>Overalls
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Pants"/>Pants
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Polos"/>Polos                        
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Polos"/>Polos
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Pullovers"/>Pullovers
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Rompers"/>Rompers                        
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Shirts"/>Shirts
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Shorts"/>Shorts
+                  <br />
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Skirts"/>Skirts
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Skorts"/>Skorts
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sleepwear"/>Sleepwear
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sleeveless"/>Sleeveless
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sport Coats"/>Sport Coats
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Suits"/>Suits
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sweaters"/>Sweaters
-                  <br />
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sweatpants"/>Sweatpants
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sweatshirts"/>Sweatshirts
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="T Shirts"/>T Shirts
+                  <br />
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Tank Tops"/>Tank Tops
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Trench Coats"/>Trench Coats
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Tunics"/>Tunics
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Vests"/>Vests
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Zip Ups"/>Zip Ups
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Winter"/>Winter
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Spring"/>Spring
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Summer"/>Summer
+                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Fall"/>Fall
                   <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sale"/>SALE
                         
         </div>

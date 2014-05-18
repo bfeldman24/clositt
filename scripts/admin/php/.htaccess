@@ -1,4 +1,0 @@
-AuthUserFile /home/clositt-private/.htpasswd-admin
-AuthType Basic
-AuthName "Clositt Auth"
-Require valid-user
