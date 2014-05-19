@@ -209,72 +209,69 @@ input{
     		<input type="text" id="inputCategory" placeholder="(i.e. Dresses, Pants, Shoes, Hats, etc...)" class="form-control" name="category" required>    		   		
         </div>
         <div class="form-group">                		
-    		<label>Categories</label>
-    		      <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Activewear"/>Activewear
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Blazers"/>Blazers
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Blouses"/>Blouses                                              
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Button Downs"/>Button Downs
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Camisoles"/>Camisoles
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Capris"/>Capris
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Cardigans"/>Cardigans
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Cashmere"/>Cashmere
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Chinos"/>Chinos
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Coats"/>Coats                  
-                  <br />
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Cocktail Dresses"/>Cocktial Dresses
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Collared Shirts"/>Collared Shirts
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Crop Tops"/>Crop Tops
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Denim"/>Denim
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Dress Pants"/>Dress Pants
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Dress Shirts"/>Dress Shirts
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Dresses"/>Dresses
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Evening Dresses"/>Evening Dresses
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Graphic T Shirts"/>Graphic T Shirts
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Gowns"/>Gowns
-                  <br />
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Henleys"/>Henleys
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Hoodies"/>Hoodies
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Jackets"/>Jackets
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Jeans"/>Jeans
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Jumpsuits"/>Jumpsuits
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Khakis"/>Khakis
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Knit"/>Knit
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Leather"/>Leather
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Leggings"/>Leggings
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Long Sleeve Tops"/>Long Sleeve Tops
-                  <br />
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Loungewear"/>Loungewear
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Mini Skirts"/>Mini Skirts
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Outerwear"/>Outerwear
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Overalls"/>Overalls
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Pants"/>Pants
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Polos"/>Polos
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Pullovers"/>Pullovers
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Rompers"/>Rompers                        
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Shirts"/>Shirts
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Shorts"/>Shorts
-                  <br />
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Skirts"/>Skirts
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Skorts"/>Skorts
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sleepwear"/>Sleepwear
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sleeveless"/>Sleeveless
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sport Coats"/>Sport Coats
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Suits"/>Suits
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sweaters"/>Sweaters
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sweatpants"/>Sweatpants
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sweatshirts"/>Sweatshirts
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="T Shirts"/>T Shirts
-                  <br />
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Tank Tops"/>Tank Tops
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Trench Coats"/>Trench Coats
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Tunics"/>Tunics
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Vests"/>Vests
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Zip Ups"/>Zip Ups
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Winter"/>Winter
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Spring"/>Spring
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Summer"/>Summer
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Fall"/>Fall
-                  <input type="checkbox" class="tagCheckbox" name="categoryTag" value="Sale"/>SALE
+    		<label for="inputTags">Categories (Select Multiple)</label>
+    		   <select multiple class="form-control" name="tags" id="inputTags" >
+    		      <option value="Activewear"/>Activewear</option>
+                  <option value="Blazers"/>Blazers</option>
+                  <option value="Blouses"/>Blouses</option>
+                  <option value="Button Downs"/>Button Downs</option>
+                  <option value="Camisoles"/>Camisoles</option>
+                  <option value="Capris"/>Capris</option>
+                  <option value="Cardigans"/>Cardigans</option>
+                  <option value="Cashmere"/>Cashmere</option>
+                  <option value="Chinos"/>Chinos</option>
+                  <option value="Coats"/>Coats</option>          
+                  <option value="Cocktail Dresses"/>Cocktial Dresses</option>
+                  <option value="Collared Shirts"/>Collared Shirts</option>
+                  <option value="Crop Tops"/>Crop Tops</option>
+                  <option value="Denim"/>Denim</option>
+                  <option value="Dress Pants"/>Dress Pants</option>
+                  <option value="Dress Shirts"/>Dress Shirts</option>
+                  <option value="Dresses"/>Dresses</option>
+                  <option value="Evening Dresses"/>Evening Dresses</option>
+                  <option value="Graphic T Shirts"/>Graphic T Shirts</option>
+                  <option value="Gowns"/>Gowns</option>
+                  <option value="Henleys"/>Henleys</option>
+                  <option value="Hoodies"/>Hoodies</option>
+                  <option value="Jackets"/>Jackets</option>
+                  <option value="Jeans"/>Jeans</option>
+                  <option value="Jumpsuits"/>Jumpsuits</option>
+                  <option value="Khakis"/>Khakis</option>
+                  <option value="Knit"/>Knit</option>
+                  <option value="Leather"/>Leather</option>
+                  <option value="Leggings"/>Leggings</option>
+                  <option value="Long Sleeve Tops"/>Long Sleeve Tops</option>
+                  <option value="Loungewear"/>Loungewear</option>
+                  <option value="Mini Skirts"/>Mini Skirts</option>
+                  <option value="Outerwear"/>Outerwear</option>
+                  <option value="Overalls"/>Overalls</option>
+                  <option value="Pants"/>Pants</option>
+                  <option value="Polos"/>Polos</option>
+                  <option value="Pullovers"/>Pullovers</option>
+                  <option value="Rompers"/>Rompers</option>              
+                  <option value="Shirts"/>Shirts</option>
+                  <option value="Shorts"/>Shorts</option>
+                  <option value="Skirts"/>Skirts</option>
+                  <option value="Skorts"/>Skorts</option>
+                  <option value="Sleepwear"/>Sleepwear</option>
+                  <option value="Sleeveless"/>Sleeveless</option>
+                  <option value="Sport Coats"/>Sport Coats</option>
+                  <option value="Suits"/>Suits</option>
+                  <option value="Sweaters"/>Sweaters</option>
+                  <option value="Sweatpants"/>Sweatpants</option>
+                  <option value="Sweatshirts"/>Sweatshirts</option>
+                  <option value="T Shirts"/>T Shirts</option>
+                  <option value="Tank Tops"/>Tank Tops</option>
+                  <option value="Trench Coats"/>Trench Coats</option>
+                  <option value="Tunics"/>Tunics</option>
+                  <option value="Vests"/>Vests</option>
+                  <option value="Zip Ups"/>Zip Ups</option>
+                  <option value="Winter"/>Winter</option>
+                  <option value="Spring"/>Spring</option>
+                  <option value="Summer"/>Summer</option>
+                  <option value="Fall"/>Fall</option>
+                  <option value="Sale"/>SALE</option>
+              </select>
                         
         </div>
         <div class="form-group">                		
