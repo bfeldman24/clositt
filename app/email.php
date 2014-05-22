@@ -29,7 +29,7 @@ if ($messageType == "welcomeMessage" &&
     				
     $headers = "From: Clositt Team <Eli@Clositt.com> \r\n" .
     		    "Reply-To: Eli@Clositt.com \r\n" .
-    		    'Bcc: bfeldman24@gmail.com' . "\r\n";
+    		    'Bcc: ben@clositt.com, eli@clositt.com' . "\r\n";
     		        
     if(mail($email, $emailSubject, $emailMessage, $headers)){
     	$_SESSION['welcomeEmail'] = $_SERVER['REMOTE_ADDR'];

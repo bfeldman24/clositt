@@ -8,7 +8,7 @@ then
 fi
 
 # Check production update
-if [ $1 = 'clositt-public' ]
+if [ $1 = 'clositt-public' -o $1 = 'clositt-staging' ]
 then 
 	echo "Are you sure you want to update production? [y/n]"
 	read update
@@ -50,6 +50,9 @@ sudo cp .htaccess /home/$1/
 sudo rm /home/$1/scripts/deploy-PROD.ssh
 sudo rm -rf /home/$1/archive
 sudo rm /home/$1/robots.txt
+
+sudo rm /var/www/clositt.com
+sudo ln -s /home/$1 /var/www/clositt.com
 
 echo "Please verify the release!"
 echo "DONE!"
