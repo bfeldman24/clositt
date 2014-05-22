@@ -7,6 +7,7 @@ class ElasticDao{
 
 	private $client = null;
     private $index = "products"; //this will be an alias that always has current index
+    private $fields = array('name.partial','name','store^2','storetokenized','tag^2','tag.partial^2','color1', 'color2');
 
 	public function __construct(){
 		$this->client = new Elasticsearch\Client();
@@ -26,13 +27,57 @@ class ElasticDao{
 
     }
 
+    public function explainQueryResults($sku, $searchString){
+
+        $params['index'] = $this->index;
+        $params['type']='product';
+        $params['id']=$sku;
+
+
+        $query = array();
+        $query['multi_match']['fields'] = $this->fields;
+        $query['multi_match']['query'] = $searchString;
+        $query['multi_match']['type'] = "cross_fields";
+
+        $params['body']['query']['filtered'] = array(
+            "filter" => null,
+            "query" =>$query
+        );
+
+        $results = $this->client->explain($params);
+        return $results;
+    }
+
 	public function getProductsWithCriteria($criteria, $pageNumber, $numResultsPage){
 
-		$start = $pageNumber * $numResultsPage;
+		$searchParams = $this->buildQuery($criteria, $pageNumber, $numResultsPage);
+        $results = array();
 
-		//TODO CONFIGS!!!
-		$searchParams['index'] = $this->index;
-		$fields=array('name.partial','name','store^2','storetokenized','tag^2','tag.partial^2','color1', 'color2');
+        try {
+            $retDoc = $this->client->search($searchParams);
+        }
+        catch(Exception $e){
+            //TODO log error here
+        }
+
+		if (is_array($retDoc)){
+			foreach ($retDoc['hits']['hits'] as $hit) {
+				$doc = $hit['_source'];
+                $doc['score'] = $hit['_score'];
+				array_push($results, $doc);
+			}
+		}
+
+		return $results;
+	}
+
+
+    private function buildQuery($criteria, $pageNumber, $numResultsPage ){
+
+        $start = $pageNumber * $numResultsPage;
+
+        //TODO CONFIGS!!!
+        $searchParams['index'] = $this->index;
 
 
         $customer = array('term'=>array('customer'=>$criteria->getCustomers()));
@@ -78,42 +123,26 @@ class ElasticDao{
             $baseFilter = array('and'=>$filters);
         }
 
-
-		$query = array();
+        $query = array();
         if($criteria->getSearchString()){
-            $query['multi_match']['fields'] = $fields;
+            $query['multi_match']['fields'] = $this->fields;
             $query['multi_match']['query'] = $criteria->getSearchString();
             $query['multi_match']['type'] = "cross_fields";
         }
 
-
         $searchParams['body']['query']['filtered'] = array(
-			"filter" => $baseFilter,
-			"query" =>$query
-		);
+            "filter" => $baseFilter,
+            "query" =>$query
+        );
 
-		$searchParams['body']['from']=$start;
-		$searchParams['body']['size']=$numResultsPage;
+        $searchParams['body']['from']=$start;
+        $searchParams['body']['size']=$numResultsPage;
 
-        $results = array();
 
-        try {
-            $retDoc = $this->client->search($searchParams);
-        }
-        catch(Exception $e){
-            //TODO log error here
-        }
 
-		if (is_array($retDoc)){
-			foreach ($retDoc['hits']['hits'] as $hit) {
-				$doc = $hit['_source'];
-				array_push($results, $doc);
-			}
-		}
 
-		return $results;
-	}
-
+        return $searchParams;
+    }
 }
 
 ?>

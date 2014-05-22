@@ -11,6 +11,8 @@ define("JS_PRODUCT_PRICE","p");
 define("JS_PRODUCT_COMMENT_COUNT","rc");
 define("JS_PRODUCT_CLOSITT_COUNT","cc");
 define("JS_PRODUCT_SHORT_LINK", "sl");
+define("JS_PRODUCT_SCORE", "sc");
+define("JS_PRODUCT_COLORS", "co");
 
 class ProductEntity {
 
@@ -25,7 +27,9 @@ class ProductEntity {
 	private $commentCount;		
 	private $closittCount;
 	private $shortLink;
-	
+	private $score;
+    private $colors;
+
 	public function getId() {
 		return $this->id;
 	}
@@ -124,8 +128,27 @@ class ProductEntity {
 			$this->shortLink = $shortLink;
 		}
 	}		
-	
-		
+
+    public function getScore(){
+        return $this->score;
+    }
+
+    public function setScore($score) {
+        if(isset($score)){
+            $this->score= $score;
+        }
+    }
+
+    public function getColors(){
+        return $this->colors;
+    }
+
+    public function setColors($colors) {
+        if(isset($colors)){
+            $this->colors= $colors;
+        }
+    }
+
 	/**** ************************** ****/
 		
 	public static function setProductFromDB($ProductEntity, $row){         
@@ -176,7 +199,8 @@ class ProductEntity {
 		$ProductArray[JS_PRODUCT_COMMENT_COUNT] = $this->getCommentCount();
 		$ProductArray[JS_PRODUCT_CLOSITT_COUNT] = $this->getClosittCount();	
 		$ProductArray[JS_PRODUCT_SHORT_LINK] = $this->getShortLink();
-		
+        $ProductArray[JS_PRODUCT_SCORE] = $this->getScore();
+        $ProductArray[JS_PRODUCT_COLORS] = $this->getColors();
 		foreach ($ProductArray as $key => $value){
 			if(!isset($value) || $value == ""){
 				unset($ProductArray[$key]);
@@ -193,7 +217,23 @@ class ProductEntity {
 			$ProductEntity->setId(stripslashes($row['sku']));
 			$ProductEntity->setStore(stripslashes($row['store']));
 			$ProductEntity->setCustomer(stripslashes($row['customer']));
-			$ProductEntity->setCategory(stripslashes($row['category']));
+            if(is_array($row['tag'])){
+                $ProductEntity->setCategory(stripslashes(implode(", ",$row['tag'])));
+            }
+            else{
+                $ProductEntity->setCategory(stripslashes($row['tag']));
+            }
+
+            $colors = array();
+            if(isset($row['color'])){
+                array_push($colors, stripslashes($row['color']));
+            }
+
+            if(isset($row['color2'])){
+                array_push($colors, stripslashes($row['color2']));
+            }
+
+            $ProductEntity->setColors(implode(", ", $colors));
 			$ProductEntity->setName(stripslashes($row['name']));
 			$ProductEntity->setLink(stripslashes($row['link']));
 			$ProductEntity->setImage(stripslashes($row['image']));
@@ -201,7 +241,7 @@ class ProductEntity {
 			$ProductEntity->setCommentCount(stripslashes($row['commentCount']));
 			$ProductEntity->setClosittCount(stripslashes($row['closittCount']));	
 		    $ProductEntity->setShortLink(stripslashes($row['shortlink']));
-
+            $ProductEntity->setScore(stripslashes($row['score']));
 		}
 	}
 }
