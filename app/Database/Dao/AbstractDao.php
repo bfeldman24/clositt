@@ -2,21 +2,21 @@
 // LOGGING
 define('DEBUG',true);
 define('INFO',true);
-define('SQL_ERROR_LOG', dirname(__FILE__) . "/../Logs/sqlErrorLog.txt");
+define('SQL_ERROR_LOG', dirname(__FILE__) . "/../../Logs/sqlErrorLog");
 
 require_once(dirname(__FILE__) . '/../TableConstants.php');
 
 class AbstractDao{
-	var $db = null; // PEAR::MDB2 pointer
-	var $date; // current date GMT
-	var $sqlErrorLog = SQL_ERROR_LOG;
-	var $debug = DEBUG; // prints sql statements
-	var $info = false; // prints sql statements
+	public $db = null; // PEAR::MDB2 pointer
+	public $date; // current date GMT
+	public $debug = DEBUG; // prints sql statements
+	public $info = false; // prints sql statements
+	private $sqlErrorLog = SQL_ERROR_LOG;	
 	
 	
 	public function __construct(&$db) {
 		$this->date = $GLOBALS['date'];
-		$this->sqlErrorLog = $this->sqlErrorLog . date("-Y-m-d");
+		$this->sqlErrorLog = $this->sqlErrorLog . date("-Y-m-d") . ".txt";
 		$this->file = fopen($this->sqlErrorLog,"a");
 		$this->db = $db;	
 		$this->db->setErrorHandling(PEAR_ERROR_RETURN);

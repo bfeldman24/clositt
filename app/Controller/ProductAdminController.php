@@ -6,9 +6,11 @@ require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
 require_once(dirname(__FILE__) . '/../Model/SpiderLinkEntity.php');
 require_once(dirname(__FILE__) . '/ProductController.php');
+require_once(dirname(__FILE__) . '/Debugger.php');
 
 
-class ProductAdminController {	
+
+class ProductAdminController extends Debugger {
 	private $productAdminDao = null;
 	private $productDao = null;
 	private $debug = false;
@@ -88,7 +90,7 @@ class ProductAdminController {
 	   return $this->productAdminDao->removeUncategorizedProducts();	               
 	}
     
-    public function addAdminProducts($products){
+    public function addAdminProducts($products, $isLastInBatch){
         $results = array();
         /// echo " 3) addAdminProducts. ";
         	
@@ -105,43 +107,73 @@ class ProductAdminController {
             $this->createShortLinks($products);
 
 			// Clear temp table
-			$clearProducts = $this->productAdminDao->clearTempProducts();
-			$results['clearProducts'] = $clearProducts;		
+			$start = microtime();
+			$clearProducts = $this->productAdminDao->clearTempProducts($products);
+			$results['clearProductsTime'] = microtime() - $start;
+			$results['clearProducts'] = $clearProducts;	
+			$this->debug("ProductAdminController", "addAdminProducts", "clearProductsTime = " . $results['clearProductsTime']);				
+			$this->debug("ProductAdminController", "addAdminProducts", "clearProducts = " . $results['clearProducts']);				
 						
 			if ($clearProducts){
 			    // echo " 5) truncate table. "; 
 			      			
          		// Step 1         		
+         		$start = microtime();
          		$numberOfTempProducts = $this->productAdminDao->addTempProducts($products);			  
          		
          		if(is_numeric($numberOfTempProducts) && $numberOfTempProducts > 0){
          			// echo " 6) Inserted temp Products: " . $numberOfTempProducts;
-                    $results['tempProducts'] = $numberOfTempProducts;
+         			$results['tempProductsTime'] = microtime() - $start;
+                    $results['tempProducts'] = $numberOfTempProducts;   
+                    $this->debug("ProductAdminController", "addAdminProducts", "tempProductsTime = " . $results['tempProductsTime']);				
+        			$this->debug("ProductAdminController", "addAdminProducts", "tempProducts = " . $results['tempProducts']);                 
 
                     // Step 2
+                    $start = microtime();
          			$saveHistoricalPricesResults = $this->productAdminDao->saveHistoricalPrices();
          			// echo " 7) Save Historical Prices: " . $saveHistoricalPricesResults;
-         			$results['historicalPrices'] = $saveHistoricalPricesResults;         			
+         			$results['historicalPricesTime'] = microtime() - $start;
+         			$results['historicalPrices'] = $saveHistoricalPricesResults;
+         			$this->debug("ProductAdminController", "addAdminProducts", "historicalPricesTime = " . $results['historicalPricesTime']);				
+        			$this->debug("ProductAdminController", "addAdminProducts", "historicalPrices = " . $results['historicalPrices']);          			         			
     
                     // Step 3
+                    $start = microtime();
          			$updateExistingProducts = $this->productAdminDao->updateExistingProducts();
          			// echo " 8) Update Existing Products: " . $updateExistingProducts;
+                    $results['updatedTime'] = microtime() - $start;
          			$results['updated'] = $updateExistingProducts;
+         			$this->debug("ProductAdminController", "addAdminProducts", "updatedTime = " . $results['updatedTime']);				
+        			$this->debug("ProductAdminController", "addAdminProducts", "updated = " . $results['updated']);         			
          			
          			// Step 4
+         			$start = microtime();
          			$addNewProductsResults = $this->productAdminDao->addNewProducts();         		
          			// echo " 9) Added New Products: " . $addNewProductsResults;   
-         			$results['new'] = $addNewProductsResults;  
+         			$results['newTime'] = microtime() - $start;
+         			$results['new'] = $addNewProductsResults;
+         			$this->debug("ProductAdminController", "addAdminProducts", "newTime = " . $results['newTime']);				
+        			$this->debug("ProductAdminController", "addAdminProducts", "new = " . $results['new']);  
          			
          			// Step 5
+         			$start = microtime();
          			$addTagsForNewProductsResults = $this->productAdminDao->addTagsForNewProducts($products);
-         			// echo " 10) Added Tags for New Products: " . $addTagsForNewProductsResults;   
+         			// echo " 10) Added Tags for New Products: " . $addTagsForNewProductsResults;  
+         			$results['tagsTime'] = microtime() - $start;
          			$results['tags'] = $addTagsForNewProductsResults;  
+         			$this->debug("ProductAdminController", "addAdminProducts", "tagsTime = " . $results['tagsTime']);				
+        			$this->debug("ProductAdminController", "addAdminProducts", "tags = " . $results['tags']);
          			
          			// Step 6
-         			$updatedProductStatus = $this->productAdminDao->setMissingProductsToNotAvailable();
-                    // echo " 11) Update Products Statuses: " . $updatedProductStatus;
-                    $results['updatedStatus'] = $updatedProductStatus;         			   	
+         			if ($isLastInBatch){
+             			$start = microtime();
+             			$updatedProductStatus = $this->productAdminDao->setMissingProductsToNotAvailable($products);
+                        // echo " 11) Update Products Statuses: " . $updatedProductStatus;
+                        $results['updatedStatusTime'] = microtime() - $start;
+                        $results['updatedStatus'] = $updatedProductStatus;
+                        $this->debug("ProductAdminController", "addAdminProducts", "updatedStatusTime = " . $results['updatedStatusTime']);				
+            			$this->debug("ProductAdminController", "addAdminProducts", "updatedStatus = " . $results['updatedStatus']);
+         			}
          		}
 			}
 		}else{
@@ -412,7 +444,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     
     if ($_GET['method'] == 'update' && isset($_POST['products'])){                                          
         //echo " 2) update. ";
-        $results = $productAdminController->addAdminProducts($_POST['products']);   
+        $results = $productAdminController->addAdminProducts($_POST['products'], $_POST['isLastBatch']);   
         echo json_encode($results);        
    
     }else if ($_GET['method'] == 'count'){                                          

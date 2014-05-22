@@ -111,108 +111,7 @@ var spider = {
            }	  
     	});		
     },	
-
-    // Gets the category links
-//    getLinksOld: function(){
-//        $("#loadingMask").show();
-//    	$("#links").html("");	
-//    	spider.links = [];
-//    	
-//    	firebase.$.child("spider").once('value', function(data){
-//    	   data.forEach(function(company){
-//    	       $("#links").append(
-//    	           $("<div>").addClass("company").append(
-//    	               $("<a>").attr("name",company.name())
-//    	            ).append(
-//    	               $("<div>").addClass("companyName").html("&bull; " + company.name().replace("_","."))
-//    	            )
-//    	        );   
-//    	       
-//    	       company.forEach(function(customer){
-//    	           $("#links > .company").last().append($("<div>").addClass("customer").append($("<div>").addClass("customerName").html("&raquo; " + customer.name())));
-//    	           
-//    	           customer.forEach(function(category){
-//    	               var statusText = " - " + category.child("status").val();
-//    	               
-//    	               if (category.hasChild("count")){
-//    	                   statusText += ' (' + category.child("count").val() + ' products)';
-//    	               }
-//    	               
-//    	               var statusColor = "red";
-//    	               
-//    	               if (category.child("status").val() == "Works!" || category.child("status").val() == "works"){
-//    	                   statusColor = "green";
-//    	               }
-//    	               
-//    	               var $tags = $('<span>').addClass("tags");
-//    	               var taglist = "";
-//    	               category.child("tags").forEach(function(tag){
-//    	                   $tags.append(
-//    	                       $('<span>').addClass("label label-default").text(tag.val())
-//    	                   );
-//    	                   
-//    	                   taglist += tag.val() + ",";
-//    	               });
-//    	               
-//    	               taglist = taglist.substring(0, taglist.length - 1);
-//    	               
-//    	               if (category.hasChild("lastSaved")){	               
-//    	                   var lastUpdatedDate = new Date(category.child("lastSaved").val());
-//    	                   var lastUpdated = lastUpdatedDate.toLocaleDateString();
-//    	                   var lastUpdatedForDB = category.child("lastSaved").val();
-//    	               }else{
-//    	                   var lastUpdated = "";   
-//    	                   var lastUpdatedForDB = null;
-//    	               }
-//    	               
-//    	               var link = {};
-//    	               link.company = company.name().replace(/'/g, "\\'");
-//    	               link.customer = customer.name().replace(/'/g, "\\'");
-//    	               link.category = category.name().replace(/'/g, "\\'");
-//    	               link.url = category.child("url").val().replace(/'/g, "\\'");
-//    	               link.status = category.child("status").val() == 'Works!' ? 1 : 2;
-//    	               link.count = category.child("count").val();
-//    	               link.lastUpdated = lastUpdatedForDB;
-//    	               link.tags = taglist.replace(/'/g, "\\'");
-//    	               spider.links.push(link);
-//    	               	               
-//    	               $("#links > .company > .customer").last().append(
-//        					$("<div>").addClass("category").css("display","none").append(
-//        						$("<input>")
-//        							.attr("type","checkbox")
-//        							.attr("company", link.company)
-//        							.attr("customer", link.customer)
-//        							.attr("category", link.category)
-//        							.attr("tags", link.tags)
-//        							.attr("lastUpdated", link.lastUpdated)
-//        							.attr("url", link.url)
-//        						).append(
-//        						      $("<a>").attr("href", link.url).html(category.name())
-//        						).append(
-//        						      $("<span>").addClass("isvalid").css("color",statusColor).html(category.child("status").val())
-//        						).append(
-//        						      $("<span>").addClass("lastUpdated").text(link.lastUpdated)
-//        						).append(
-//        						      $tags
-//        						).append(
-//        						      $("<span>").addClass("editCategory").html($("<i>").addClass("icon-pencil"))
-//        						).append(
-//        						      $("<span>").addClass("removeCategory").html("x")
-//        						)
-//        				);
-//    	           });
-//    	       });
-//    	   });
-//    	   
-//    	   $("#loadingMask").hide();
-//    	   
-//    	   if (location.hash == "#saveAllValid"){
-//               actionButtons.saveAllValid();
-//           }	  
-//    	});		
-//    },	  				   				    						
-				
-
+    
     // Gets the checked prdocuts from the link, validates them, and shows a sampling of them
     testProductsFromLinks: function(showData, showSample, save, saveCallback){	
     	$("#json-products").html("");
@@ -245,163 +144,104 @@ var spider = {
     			
     			if (url != originalUrl){
     			     console.log("Debugging: Just note that the url parameters were updated");
-    			}    			    			   			    			
+    			}
     			
-    			$.post("webProxy.php", {u:url}, function(result){	
-    			    var isValid = false;
-        		    var itemCount = 0;
-    			 																	    
-    			    if (result == null || result.trim() == ""){
-    			         console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");    		
-    			         Messenger.error("Error: Could read the product page. Check to make sure this link is still active.");	         
-    			    }else{       			         								
-        				
-        				try{
-        				    var data = storeApi.getProducts(company, result, url);
-        				    
-        				    if (data != null && data.constructor === {}.constructor){
-        				        var testProduct = data[Object.keys(data)[0]];				        				        
-        				        
-        				        if (testProduct != null &&
-        				            testProduct.price != null && 
-        				            testProduct.image != null && 
-        				            testProduct.link != null && 
-        				            testProduct.name != null &&
-        				            testProduct.sku != null){				 
-        				                
-        				                var price = testProduct.price + "";
-        				                price = parseFloat(price.replace("$",""));
-                				        price = parseFloat(price);       
-                				        
-                				        if(!isNaN(price)){
-                    				        isValid = true;  
-                    				        itemCount = Object.keys(data).length;
-                    				        validCount++;
-                    				        
-                    				        if (showSample && validCount == 1){
-                    				            spider.showSampleProducts(data, company, customer, category);   
-                    				        }
-                				        }else{
-                				            console.log("Product price is not a number");    
-                				        }
-        				            }else{
-        				                if (testProduct == null){
-        				                    console.log("First product is null");    
-        				                }else{
-        				                
-            				                if (testProduct.price == null){
-            				                    console.log("Product price is null");    
-            				                }
-            				                
-            				                if (testProduct.image == null){
-            				                    console.log("Product image is null");    
-            				                }
-            				                
-            				                if (testProduct.link == null){
-            				                    console.log("Product link is null");    
-            				                }
-            				                
-            				                if (testProduct.name == null){
-            				                    console.log("Product name is null");    
-            				                }
-            				                
-            				                if (testProduct.sku == null){
-            				                    console.log("Product sku is null");    
-            				                }    
-        				                }				                
-        				            }
-        				    }
-        				}catch(err){
-        				    // do nothing
-        				    console.log("Whoops ran into a problem: " + err);
-        				}
-    			    }
-    				
-    				count++;				
-    				if (isValid){				    
-    				    link.siblings("a").after('<span class="isvalid" style="color:green">&nbsp;- Works! ('+itemCount+' products)</span>');
-    				    
-    				    var statusObj = {
-    				        store: company, 
-    				        customer: customer,
-    				        category: category,
-    				        status: 1, 
-    				        count: itemCount   				            				        
-    				    };
-    				    
-    				    $.post( window.HOME_ROOT + "spider/updatestatus", statusObj, function( data ) {
-    				        console.log(data);
-    				    });    				        				    
-        			 
-        			    if (save){
-        			        var storeProducts = data;
-        			     
-        			        company = company.replace("_",".");
-        			     
-        			        for (var i=0; i < Object.keys(storeProducts).length; i++){
-            			         var sku = Object.keys(storeProducts)[i];
-            			         storeProducts[sku]['company'] = company;
-            			         storeProducts[sku]['customer'] = customer;
-            			         storeProducts[sku]['category'] = category;
-            			         storeProducts[sku]['tags'] = tags.split(","); 
-            			    }
-        			     
-        			        // Used for firebase
-            				$("#json-output").append(
-            					$("<div>")
-            						.attr("company", company)
-            						.attr("customer", customer)
-            						.attr("category", category)
-            						.html( storeProducts )
-            				);	
-            				
-            				// Used for database
-            				if ($("#json-products").text() != ""){
-                				var jsonProducts = $.parseJSON($("#json-products").text());
-                				$.extend(storeProducts, jsonProducts);        				
-            				}
-            				    				
-            				$("#json-products").text(JSON.stringify(storeProducts));	
-            				
-            				if(count == total){					
-            				    spider.saveAllProducts(saveCallback);    				    
-            				}		
-        			    }else if (showData){
-    
-            				if(count == total){					
-        			             alert(company + " > " + customer + " > " + category + ": " + JSON.stringify(data));
-            				}
-        			    }         
-    				    
-    				}else{
-    				    link.siblings("a").after('<span class="isvalid" style="color:red">&nbsp;- BROKEN :(</span>');    				    
-    				    
-    				    var statusObj = {
-    				        store: company, 
-    				        customer: customer,
-    				        category: category,
-    				        status: 2, 
-    				        count: itemCount   				            				        
-    				    };
-    				    
-    				    $.post( window.HOME_ROOT + "spider/updatestatus", statusObj, function( data ) {
-    				        console.log(data);
-    				    });  
-    	                         
-    	                if (saveCallback != null){         
-    	                   saveCallback("failed");
-    	                }
-    				}
-    								
-    				if(saveCallback == null && count == total){
-    					Messenger.info(validCount + "/" + total + " catgeories were valid");	
-    					$("#loadingMask").hide();				
-    				}														
-    			});
+    			var categoryData = {
+    			     "company" : company,
+    			     "customer" : customer, 
+    			     "category" : category, 
+    			     "link" : link, 
+    			     "tags" : tags, 
+    			     "showData" : showData, 
+    			     "showSample" : showSample, 
+    			     "save": save, 
+    			     "saveCallback" : saveCallback
+    			};
+    			
+    			storeApi.getProducts(company, url, spider.handleProducts(categoryData));			    
     		});
     	}
     },
 
+    handleProducts: function(categoryData){
+        return function(data){
+            var itemCount = Object.keys(data).length;
+            var valid = "valid";
+            
+            if (data != null && itemCount > 0){
+                categoryData.link.siblings("a").after('<span class="isvalid" style="color:green">&nbsp;- Works! ('+itemCount+' products)</span>');
+			    
+			    var statusObj = {
+			        store: categoryData.company, 
+			        customer: categoryData.customer,
+			        category: categoryData.category,
+			        status: 1, 
+			        count: itemCount
+			    };
+			    
+			    $.post( window.HOME_ROOT + "spider/updatestatus", statusObj, function( data ) {
+			        console.log(data);
+			    }); 
+                
+                if (categoryData.showSample){
+                    spider.showSampleProducts(data, categoryData.company, categoryData.customer, categoryData.category);
+                
+                }else if (categoryData.showData){
+                    alert(categoryData.company + " > " + categoryData.customer + " > " + categoryData.category + ": " + JSON.stringify(data));
+    				
+                }else if (categoryData.save){
+                    var storeProducts = data;
+			     
+			        categoryData.company = categoryData.company.replace("_",".");
+			     
+			        for (var i=0; i < Object.keys(storeProducts).length; i++){
+    			         var sku = Object.keys(storeProducts)[i];
+    			         storeProducts[sku]['company'] = categoryData.company;
+    			         storeProducts[sku]['customer'] = categoryData.customer;
+    			         storeProducts[sku]['category'] = categoryData.category;
+    			         storeProducts[sku]['tags'] = categoryData.tags.split(","); 
+    			    }			     			        	
+    				
+    				// Used for database
+    				if ($("#json-products").text().trim() != ""){
+        				var jsonProducts = $.parseJSON($("#json-products").text());
+        				$.extend(storeProducts, jsonProducts);        				
+    				}
+    				    				
+    				$("#json-products").text(JSON.stringify(storeProducts));	
+    									
+    				spider.saveAllProducts(categoryData.saveCallback);    				        					
+                }   
+            
+			}else{
+			    valid = "not valid";
+			    
+			    categoryData.link.siblings("a").after('<span class="isvalid" style="color:red">&nbsp;- BROKEN :(</span>');    				    
+			    
+			    var statusObj = {
+			        store: categoryData.company, 
+			        customer: categoryData.customer,
+			        category: categoryData.category,
+			        status: 2, 
+			        count: itemCount   				            				        
+			    };
+			    
+			    $.post( window.HOME_ROOT + "spider/updatestatus", statusObj, function( data ) {
+			        console.log(data);
+			    });  
+                         
+                if (categoryData.saveCallback != null){         
+                   categoryData.saveCallback("failed");
+                }
+			}
+							
+			if(categoryData.saveCallback == null){
+				Messenger.info(categoryData.company + " > " + categoryData.customer + " > " + categoryData.category + " was " + valid);
+				$("#loadingMask").hide();				
+			}	
+        };
+    },
+    
     showSampleProducts: function (data, company, audience, category){
         if (data != null && Object.keys(data).length > 0){
             gridPresenter.beginTask();
@@ -413,8 +253,7 @@ var spider = {
         		grid.append(outfit);
         	}
          	 		 			 		 	
-         	gridPresenter.endTask();
-         	gridPresenter.alignGrid("sample-grid", 4, 200, 270, 50);	
+         	gridPresenter.endTask();	
          	$(document).on("mouseenter",".outfit", gridEvents.showOverlay);     	
         }
     },
@@ -481,18 +320,31 @@ var spider = {
     saveAllProducts: function (saveCallback){
     	var total = $("#links > .company > .customer > .category > input:checked").size();	
      	var success = 0;
+     	var batchLimit = 1000;
+     	var batch = {};
+     	var nextBatch = {};
      	
      	if (total <= 0){
     		alert("There is nothing to save! Please add product data.");	
     	}else{ 	
     	    var tags = {};
+    	    var isLastBatch = true;
     	    var products = $.parseJSON($("#json-products").text());
     	    
     	    for (var i=0; i < Object.keys(products).length; i++){
-    	           var product = products[Object.keys(products)[i]];
+    	           var sku = Object.keys(products)[i];
+    	           
+    	           if (i < batchLimit){
+    	               batch[sku] = products[sku];
+    	           }else{
+    	               nextBatch[sku] = products[sku];
+    	               isLastBatch = false;
+    	           }    	               	           
     	    }
+    	    
+    	    $("#json-products").text(JSON.stringify(nextBatch));	
     	   
-    	    $.post( window.HOME_ROOT + "spider/update", { products: products}, function( result ) {                        
+    	    $.post( window.HOME_ROOT + "spider/update", { products: batch, isLastBatch: isLastBatch}, function( result ) {                        
                 console.log(result);                       
                 
                 var output = "";
@@ -534,9 +386,14 @@ var spider = {
                 
                 Messenger.success(output);
                 
-                if (saveCallback != null){
-                    saveCallback();           
-                }    
+                if (Object.keys(nextBatch).length > 0){
+                    spider.saveAllProducts(saveCallback);
+                    
+                }else{
+                    if (saveCallback != null){
+                        saveCallback();           
+                    }    
+                }
             }
             , "json"
             );	   
@@ -615,12 +472,8 @@ var categoryMaintenance = {
                     callback: function() {                        
                         var company = $("#editCategoryForm #inputCompany").val().trim();
                       	var customer = $("#editCategoryForm #inputAudience").val().toLowerCase().trim();
-                      	var category = $("#editCategoryForm #inputCategory").val().toLowerCase().trim();		
-                      	
-                      	var tags = [];
-                      	$('#editCategoryForm .tagCheckbox:checked').each(function(){
-                      	   tags.push($(this).val());
-                      	});                      	                      	
+                      	var category = $("#editCategoryForm #inputCategory").val().toLowerCase().trim();	
+                      	var tags = $('#editCategoryForm #inputTags').val();
                       	
                       	var catObj = {
                     	       store: company, 
@@ -981,6 +834,12 @@ var adminFunctions = {
         
         sql = sql.replace(/'null'/g, "null");        
         console.log(sql);   
+    },
+    
+    removeUncheckedItems: function(){
+        $("#links").find(':checkbox').filter(function(){
+            return !$(this).prop('checked');
+        }).parents(".category").remove();   
     }
 };
 

@@ -27,7 +27,7 @@ class ProductAdminDao extends AbstractDao {
 		return $this->getResults($sql, $params, $paramTypes, "9348023903");
 	}
 	
-	public function updateSpiderStatus($criteria){
+	public function updateSpiderStatus($criteria){	   
         $sql = "UPDATE " . SPIDER .        	 
                 " SET " . 
                     SPIDER_STATUS. " = :status ";
@@ -163,14 +163,26 @@ class ProductAdminDao extends AbstractDao {
         return $affected;
     }
     
-    public function clearTempProducts(){
-        $sql = "TRUNCATE TABLE " . TEMP_PRODUCTS;
+    public function clearTempProducts($products){
+        $sql = "DELETE FROM " . TEMP_PRODUCTS . 
+                " WHERE ". PRODUCT_STORE . " <> ? OR " . 
+                      PRODUCT_CUSTOMER . " <> ? OR " . 
+                      PRODUCT_CATEGORY . " <> ?";                                        
         
-        if($this->debug){		    
-			$this->logDebug("98347223" ,$sql );
+        $stmt = $this->db->prepare($sql);
+        $affectedRows = 0;
+        list($firstProduct) = array_values($products);
+        
+        if($this->debug){		                
+            $prod = print_r($firstProduct, true);
+			$this->logDebug("98347223" ,$sql . " (" . $prod.")" );
 		}
-        
-		$result =& $this->db->exec($sql);                                		
+            
+        try {                                          
+            $affectedRows = $stmt->execute(array($firstProduct['company'], $firstProduct['customer'], $firstProduct['category']));
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+        }        
 		
 		if (PEAR::isError($result)) {
 			$this->logError("98347223" ,$result->getMessage(),$sql);
@@ -359,24 +371,27 @@ class ProductAdminDao extends AbstractDao {
         return $affectedRows;
 	}
 	
-	public function setMissingProductsToNotAvailable(){
+	public function setMissingProductsToNotAvailable($products){       
+
 	   $sql = "UPDATE " . PRODUCTS . " p " .
               " LEFT JOIN " . TEMP_PRODUCTS . " tp ON tp." . PRODUCT_SKU . " = p." . PRODUCT_SKU .
               " SET p." .PRODUCT_STATUS . " = 3 " .
-              " WHERE ISNULL(tp.".PRODUCT_SKU.") " .
-              " AND CONCAT(p.".PRODUCT_STORE.",p.".PRODUCT_CUSTOMER.",p.".PRODUCT_CATEGORY.") " .
-              " IN (SELECT DISTINCT CONCAT(".PRODUCT_STORE.",".PRODUCT_CUSTOMER.",".PRODUCT_CATEGORY.") FROM " . TEMP_PRODUCTS . ")";        
+              " WHERE ISNULL(tp.".PRODUCT_SKU.") AND " .
+              " p.".PRODUCT_STORE." = ? AND p.".PRODUCT_CUSTOMER." = ? AND p.".PRODUCT_CATEGORY." = ? ";        
               
        if($this->debug){		    
 			$this->logDebug("09867746" ,$sql );
 		}
-        
-		$affected =& $this->db->exec($sql);                                		
 		
-		if (PEAR::isError($affected)) {
-			$this->logError("459608768" ,$affected->getMessage(),$sql);
-		    return false;
-		}	        
+		$stmt = $this->db->prepare($sql);
+		list($firstProduct) = array_values($products);
+            
+        try {                                          
+            $affectedRows = $stmt->execute(array($firstProduct['company'], $firstProduct['customer'], $firstProduct['category']));
+            
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+        }        		                
         
        return $affected;
 	}
