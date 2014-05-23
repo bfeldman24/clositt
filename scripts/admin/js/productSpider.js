@@ -93,7 +93,7 @@ var spider = {
         						).append(
         						      $("<span>").addClass("lastUpdated").text(link.lastUpdated)
         						).append(
-        						      $tags
+        						      $("<span>").addClass("tagList").html($tags)
         						).append(
         						      $("<span>").addClass("editCategory").html($("<i>").addClass("icon-pencil"))
         						).append(
@@ -459,6 +459,13 @@ var categoryMaintenance = {
         productForm.find('input[name=link]').val(product.attr("url"));
         productForm.find("#save").remove();        
         
+        var tags = product.attr("tags").split(',');
+    	productForm.find('.tagCheckbox').each(function(){
+    	   if (tags.indexOf($(this).val()) >= 0){
+    	       $(this).prop("checked",true);
+    	   }
+    	});
+        
         bootbox.dialog({
             message: productForm,
             title: "Edit the Category",
@@ -473,7 +480,11 @@ var categoryMaintenance = {
                         var company = $("#editCategoryForm #inputCompany").val().trim();
                       	var customer = $("#editCategoryForm #inputAudience").val().toLowerCase().trim();
                       	var category = $("#editCategoryForm #inputCategory").val().toLowerCase().trim();	
-                      	var tags = $('#editCategoryForm #inputTags').val();
+                      	
+                      	var tags = [];
+                    	$('#editCategoryForm .tagCheckbox:checked').each(function(){
+                    	   tags.push($(this).val());
+                    	});
                       	
                       	var catObj = {
                     	       store: company, 
@@ -485,7 +496,21 @@ var categoryMaintenance = {
                 	    
                 	    $.post( window.HOME_ROOT + "spider/updatelink", catObj, function( data ) {
                 	          if (data == "success"){
-                          	     Messenger.success("Saved! (Refresh to see changes)"); 
+                          	     Messenger.success("Saved!"); 
+                          	     
+                          	     var $tags = $('<span>').addClass("tags");                	             
+                	               
+                	             if (tags != null){
+                    	               for(var i=0; i < tags.length; i++){       
+                    	                   $tags.append(
+                    	                       $('<span>').addClass("label label-default").text(tags[i])
+                    	                   );                    	                   
+                    	               }
+                    	               
+                    	               product.attr("tags",tags.toString().replace(/'/g, "\\'"));
+                    	               product.parent().find(".tagList").html($tags);
+                	             }                	                               	                               	                               	               
+                          	     
                           	  }else{
                           	     alert("Error: Category was NOT saved!");                          	     
                           	  }
