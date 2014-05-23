@@ -8,7 +8,7 @@ then
 fi
 
 # Check production update
-if [ $1 = 'clositt-public' -o $1 = 'clositt-staging' ]
+if [ $1 = 'clositt-public' -o $1 = 'clositt-public2' ]
 then 
 	echo "Are you sure you want to update production? [y/n]"
 	read update
