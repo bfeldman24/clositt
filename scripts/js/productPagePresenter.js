@@ -87,7 +87,7 @@ var productPagePresenter = {
 		}else{
 		      $("#productModal .historicalPrices .sparkChart").attr("values","");
 		      $("#productModal .historicalPrices .sparkChart").html("");
-		      $("#productModal .historicalPrices .chartTitle").html("");
+		      $("#productModal .historicalPrices .sparkChartTitle").html("");
 		}
 							
 		return $("#productModal");
