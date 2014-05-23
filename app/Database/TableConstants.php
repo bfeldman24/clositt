@@ -12,9 +12,9 @@ define("PRODUCT_LINK","link");
 define("PRODUCT_IMAGE","image");
 define("PRODUCT_PRICE","price");
 define("PRODUCT_COLOR_ONE","colorOne");
-define("PRODUCT_COLOR_ONE_PERCENT","colorOnePercent");
+define("PRODUCT_COLOR_ONE_PERCENT","coloronepercent");
 define("PRODUCT_COLOR_TWO","colorTwo");
-define("PRODUCT_COLOR_TWO_PERCENT","colorTwoPercent");
+define("PRODUCT_COLOR_TWO_PERCENT","colortwopercent");
 define("PRODUCT_COMMENT_COUNT","commentcount");
 define("PRODUCT_CLOSITT_COUNT","closittcount");
 define("PRODUCT_SHORT_LINK","shortlink");
@@ -26,14 +26,14 @@ define("PRODUCT_CREATED_ON","createdon");
 
 // Historical Prices Table
 define("HISTORICAL_PRICES","HistoricalPrices");
-define("HISTORICAL_OLD_PRICE","OldPrice");
-define("HISTORICAL_NEW_PRICE","NewPrice");
+define("HISTORICAL_OLD_PRICE","oldprice");
+define("HISTORICAL_NEW_PRICE","newprice");
 define("HISTORICAL_DATE","date");
 
 define('COLORS', 'Colors');
 define('COLORS_COLOR', 'color');
 define('COLORS_PERCENT', 'percent');
-define('HAS_COLOR', 'HasColor');
+define('HAS_COLOR', 'hascolor');
 
 define('TAGS', 'Tags');
 define('TAG_STRING', 'tag');

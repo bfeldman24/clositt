@@ -22,7 +22,8 @@ class ProductDao extends AbstractDao {
 				" p." . PRODUCT_PRICE . ", " .
 				" p." . PRODUCT_COMMENT_COUNT . ", " .
 				" p." . PRODUCT_CLOSITT_COUNT . ", " .
-				" p." . PRODUCT_SHORT_LINK . 
+				" p." . PRODUCT_SHORT_LINK . ", " .
+				" p." . PRODUCT_STATUS . 
 				" FROM " . PRODUCTS . " p ";
 		
 		if (substr_count($productId, "-") <= 1){
@@ -109,6 +110,33 @@ class ProductDao extends AbstractDao {
 		$params = array($productId, $productId, $limit);
 		
 		return $this->getResults($sql, $params, $paramTypes, "2309842");
+	}
+	
+	public function getHistoricalPrices($productId){
+		if(!isset($productId) || strlen($productId) <= 2){
+			$this->logWarning("3287629","ID is null");
+			return false; 
+		}				
+		
+		$sql = "SELECT " .
+				"h." . PRODUCT_SKU . ", " .
+				"h." . HISTORICAL_OLD_PRICE . ", " .				
+				"h." . HISTORICAL_NEW_PRICE . ", " .
+				"h." . HISTORICAL_DATE . 				
+				" FROM " . HISTORICAL_PRICES . " h ";
+		
+		if (substr_count($productId, "-") <= 1){
+		     $sql .= " WHERE h." . PRODUCT_SKU . " = ? ";
+		}else{
+		     $sql .= " INNER JOIN " . PRODUCTS . " p ON p.". PRODUCT_SKU . " = h. " . PRODUCT_SKU;
+		     $sql .= " WHERE p." . PRODUCT_SHORT_LINK . " = ? ";
+		}
+		
+		$sql .= " ORDER BY h." . HISTORICAL_DATE;					 								
+		
+		$paramsTypes = array('text');		
+		$params = array($productId);	
+		return $this->getResults($sql, $params, $paramTypes, "876594567");
 	}        	
 	
 	public function updateClosittCounter($productId){

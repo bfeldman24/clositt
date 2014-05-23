@@ -2073,13 +2073,13 @@ input.closetNameInput[type="text"] {
 
 .productPageName{
     font-weight: lighter;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 .productPagePrice{
     color: #808080;
     font-weight: bold;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 .productPageStore{
@@ -2602,4 +2602,35 @@ input.closetNameInput[type="text"] {
 
 .joyride-tip-guide span.joyride-nub{
     left: 10px;   
+}
+
+/******* SPARKLINES *******/
+.sparkTooltip{
+    width: 120px;
+    height: 40px;
+    background: #00BA6C !important;
+    border-radius: 4px;
+}
+
+.sparkTooltip .jqsfield, .sparkTooltip .jqsfield span{
+    color: #000 !important; 
+    font-weight: lighter;  
+}
+
+.sparkTooltip .jqsfield, .sparkTooltip .jqsfield span strong{
+    color: #FFF !important;
+    font-size: 16px;
+}
+
+.historicalPrices{
+    margin-bottom: 20px;   
+}
+
+.historicalPrices .sparkChartTitle{
+    font-size:14px;
+    color:green;   
+}
+
+.historicalPrices .sparkChart{
+    cursor: pointer;   
 }
