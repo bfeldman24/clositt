@@ -1,19 +1,19 @@
 <footer class="clositt-theme">
 	<div id="footer-wrapper">
 		<div class="center footer-item">Clositt Inc &copy; 2014</div>
-		<div class="footer-item"><a href="<?php echo HOME_ROOT; ?>/contact-us.php">Contact Us</a></div>
-		<div class="footer-item hidden-xs"><a href="<?php echo HOME_ROOT; ?>/terms-of-service.php">Terms</a></div>
-		<div class="footer-item hidden-xs"><a href="<?php echo HOME_ROOT; ?>/shout-outs.php">Shout Outs</a></div>
+		<div class="footer-item"><a href="<?php echo HOME_ROOT; ?>contact-us.php">Contact Us</a></div>
+		<div class="footer-item hidden-xs"><a href="<?php echo HOME_ROOT; ?>terms-of-service.php">Terms</a></div>
+		<div class="footer-item hidden-xs"><a href="<?php echo HOME_ROOT; ?>shout-outs.php">Shout Outs</a></div>
 		<div class="footer-item"><a href="http://blog.clositt.com">Blog</a></div>
 		
-		<?php if ($_SERVER['PHP_SELF'] == "<?php echo HOME_ROOT; ?>/index.php" || $_SERVER['PHP_SELF'] == "<?php echo HOME_ROOT; ?>/clositt.php"){ ?>
+		<?php if ($_SERVER['PHP_SELF'] == "<?php echo HOME_ROOT; ?>index.php" || $_SERVER['PHP_SELF'] == "<?php echo HOME_ROOT; ?>clositt.php"){ ?>
     		<div class="last footer-item"><a class="joyride-start" href="#">Tour</a></div>						
 		<?php } ?>
 		
 		<?php
 		if((isset($_GET['ben']) && $_GET['ben'] != "") || (isset($_GET['eli']) && $_GET['eli'] != "")){
 		?>
-		<div class="last footer-item"><a href="<?php echo HOME_ROOT; ?>/scripts/admin/php/productSpider.php" style="margin: 0 5px;">Upload</a></div>
+		<div class="last footer-item"><a href="<?php echo HOME_ROOT; ?>scripts/admin/php/productSpider.php" style="margin: 0 5px;">Upload</a></div>
 		<?php } ?>						
 	</div>
 	
@@ -157,7 +157,7 @@
                 				<div class="productPageActions">             				    				
                 				    <a class="productPageBuyLink" target="_blank"> 
                 				        <div class="productPageBuy"> 
-                				            <img src="<?php echo HOME_ROOT; ?>/css/images/cart-empty.png" /> 
+                				            <img src="<?php echo HOME_ROOT; ?>css/images/cart-empty.png" /> 
                 				                <span>SHOP IT</span> 
                 				                <br> 
                 				                <span class="productPageBuySiteName"></span> 
@@ -165,13 +165,13 @@
                     				</a> 
                     				
                     				<div class="productPageClositt"> 
-                    				    <img class="productPageHanger" src="<?php echo HOME_ROOT; ?>/css/images/hanger-icon.png" /> 
+                    				    <img class="productPageHanger" src="<?php echo HOME_ROOT; ?>css/images/hanger-icon.png" /> 
                     				    <span>CLOSITT</span> 
                     				    <div class="addToClosetForm" style="display:none;"></div> 
                     				</div> 
                     				
                     				<div class="productPageTagitt"> 
-                    				    <img src="<?php echo HOME_ROOT; ?>/css/images/price-tag.png" /> 
+                    				    <img src="<?php echo HOME_ROOT; ?>css/images/price-tag.png" /> 
                     				    <span>TAGITT</span>	
                     				    <div class="addTagForm" style="display:none;"></div> 
                     				</div> 
@@ -191,7 +191,7 @@
     				</div> 
     				<div class="col-xs-4 col-xs-offset-1 col-sm-2 col-sm-offset-1"> 
                         <div class="productPageClosittCount"> 
-                            <img class="productPageHanger" src="<?php echo HOME_ROOT; ?>/css/images/hanger-icon.png" />  
+                            <img class="productPageHanger" src="<?php echo HOME_ROOT; ?>css/images/hanger-icon.png" />  
             				<span class="counter"></span> 				
             			</div> 
                     </div> 
