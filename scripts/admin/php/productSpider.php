@@ -255,17 +255,36 @@ input{
         <div class="form-group">                		
     		<label for="inputTags">Tags</label>
     		  <table class="tagtable table table-bordered table-condensed table-responsive">
-    		      <?php
-    		          for($i=0; $i < count($tags); $i++){
-    		              if ($i % 5 == 0){
-    		                  echo "<tr>";   
+    		      <?php    		            		          
+    		          $table = array();  
+    		          $colNum = 5;        
+                      $numRows = ceil(count($tags) / $colNum);            
+				      $i = 0;        
+
+    		          for($c=0; $c < $colNum; $c++){
+                            for($r = 0; $r < $numRows; $r++){
+						          if ($i >= count($tags)){ break; }
+
+						          if (!isset($table[$r])){
+    		                   	      $table[$r] = array();
+    		                	  }	
+
+						          $table[$r][$c] = $tags[$i++]; 
+					        }
+					
+					        if ($i >= count($tags)){ break; }
+    		          }
+    		          
+    		          
+    		          for($r=0; $r < count($table); $r++){    		              
+    		              echo "<tr>";   
+    		              
+    		              for($c=0; $c < count($table[$r]); $c++){
+    		              
+    		                  echo '<td><input type="checkbox" class="tagCheckbox" name="tags" value="'.$table[$r][$c].'"/>'.$table[$r][$c].'</td>';    		              
     		              }
-    		              
-    		              echo '<td><input type="checkbox" class="tagCheckbox" name="tags" value="'.$tags[$i].'"/>'.$tags[$i].'</td>';
-    		              
-    		              if ($i % 5 == 4 || $i == count($tags) - 1){
-    		                  echo "</tr>";   
-    		              }   
+    		                  		              
+    		              echo "</tr>";       		              
     		          }
     		      
     		      ?>
