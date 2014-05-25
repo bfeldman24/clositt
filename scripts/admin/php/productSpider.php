@@ -242,7 +242,15 @@ input{
         </div>
         <div class="form-group">            
             <label for="inputAudience">Target Consumers</label>		    
-		   	<input type="text" id="inputAudience" placeholder="Target Consumers (i.e. Women, Men, Boys, Girls, etc...)"  class="form-control"  name="consumer" required>
+		   	<!-- <input type="text" id="inputAudience" placeholder="Target Consumers (i.e. Women, Men, Boys, Girls, etc...)"  class="form-control"  name="consumer" required> -->
+		   	<select id="inputAudience" name="consumer" class="form-control">    		    	
+      			  <option value="boys">Boys</option>
+      			  <option value="girls">Girls</option>
+      			  <option value="men">Men</option>
+      			  <!--<option value="toddlers">Toddlers</option>-->
+      			  <option value="women" selected="selected">Women</option>
+            </select>
+		   	
         </div>
         <div class="form-group">            
             <label for="inputCategory">Url Title (Only Used to Organize this Page)</label>

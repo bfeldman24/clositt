@@ -83,9 +83,13 @@ class ProductAdminDao extends AbstractDao {
         
     public function updateSpiderLink($criteria){
         $sql = "UPDATE " . SPIDER .        	 
-                " SET ". SPIDER_LINK . " = :link ," . 
-                     SPIDER_TAGS . " = :tags " .                 
-                " WHERE ".SPIDER_STORE." = :store AND ".SPIDER_CUSTOMER." = :customer AND ".SPIDER_CATEGORY." = :category";
+                " SET " .
+                    SPIDER_STORE." = :store , " .
+                    SPIDER_CUSTOMER." = :customer ," .
+                    SPIDER_CATEGORY." = :category ," .
+                    SPIDER_LINK . " = :link ," . 
+                    SPIDER_TAGS . " = :tags " .                 
+                " WHERE ".SPIDER_STORE." = :oldStore AND ".SPIDER_CUSTOMER." = :oldCustomer AND ".SPIDER_CATEGORY." = :oldCategory";
                                 
         if($this->debug){		    
 			$this->logDebug("92384729" , $sql);

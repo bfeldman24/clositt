@@ -453,9 +453,9 @@ var categoryMaintenance = {
         var product = $(el.currentTarget).siblings("input").first();
         
         var productForm = $('#saveProducts').first().clone().attr("id","editCategoryForm");
-        productForm.find('select[name=company]').val(product.attr("company")).addClass("disabled").attr("disabled","disabled");
-        productForm.find('input[name=consumer]').val(product.attr("customer")).addClass("disabled").attr("disabled","disabled");
-        productForm.find('input[name=category]').val(product.attr("category")).addClass("disabled").attr("disabled","disabled");
+        productForm.find('select[name=company]').val(product.attr("company")).attr("original", product.attr("company"));
+        productForm.find('select[name=consumer]').val(product.attr("customer")).attr("original", product.attr("customer"));
+        productForm.find('input[name=category]').val(product.attr("category")).attr("original", product.attr("category"));
         productForm.find('input[name=link]').val(product.attr("url"));
         productForm.find("#save").remove();        
         
@@ -479,7 +479,10 @@ var categoryMaintenance = {
                     callback: function() {                        
                         var company = $("#editCategoryForm #inputCompany").val().trim();
                       	var customer = $("#editCategoryForm #inputAudience").val().toLowerCase().trim();
-                      	var category = $("#editCategoryForm #inputCategory").val().toLowerCase().trim();	
+                      	var category = $("#editCategoryForm #inputCategory").val().toLowerCase().trim();
+                      	var oldCompany = $("#editCategoryForm #inputCompany").attr("original").trim();
+                      	var oldCustomer = $("#editCategoryForm #inputAudience").attr("original").toLowerCase().trim();
+                      	var oldCategory = $("#editCategoryForm #inputCategory").attr("original").toLowerCase().trim();	
                       	
                       	var tags = [];
                     	$('#editCategoryForm .tagCheckbox:checked').each(function(){
@@ -490,6 +493,9 @@ var categoryMaintenance = {
                     	       store: company, 
                     	       customer: customer, 
                     	       category: category,
+                    	       oldStore: oldCompany, 
+                    	       oldCustomer: oldCustomer, 
+                    	       oldCategory: oldCategory,
                     	       link: $("#editCategoryForm #inputLink").val(),     	       
                     	       tags: tags.toString()
                     	};    	
@@ -497,6 +503,12 @@ var categoryMaintenance = {
                 	    $.post( window.HOME_ROOT + "spider/updatelink", catObj, function( data ) {
                 	          if (data == "success"){
                           	     Messenger.success("Saved!"); 
+                          	     
+                          	     if (catObj.store != catObj.oldStore || catObj.customer != catObj.oldCustomer){
+                          	         location.reload(true);
+                          	     }
+                          	     
+                          	     product.parent().find("a").first().attr("href", catObj.link).html(category);
                           	     
                           	     var $tags = $('<span>').addClass("tags");                	             
                 	               
