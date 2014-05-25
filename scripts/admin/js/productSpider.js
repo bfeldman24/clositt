@@ -524,7 +524,11 @@ var categoryMaintenance = {
                 	             }                	                               	                               	                               	               
                           	     
                           	  }else{
-                          	     alert("Error: Category was NOT saved!");                          	     
+                          	     Messenger.error("Error: Category was NOT saved!"); 
+                          	     
+                          	     if (catObj.store != catObj.oldStore || catObj.customer != catObj.oldCustomer){
+                          	         Messenger.error("Make sure that the store, customer, and category are unique.");        
+                          	     }                         	     
                           	  }
                 	    });                      	                      	
                     }
