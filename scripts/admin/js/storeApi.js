@@ -1430,12 +1430,18 @@ storeApiHelper = {
     },
         
     findPrice: function(price){
+        if (price == null){
+            return null;   
+        }
+        
         var priceArray = (price + "").trim().split(/[\s-]+/);
 		return parseFloat(priceArray[priceArray.length - 1].replace(/[^0-9\.]+/g,""));   
     },
     
     getLowestPrice: function(priceArray){
-        var min = 999999;
+        var maxInt = 999999;
+        var min = maxInt;
+        
         for (var i=0; i < priceArray.length; i++){
                var num = parseFloat(priceArray[i]);
                if (!isNaN(num) && num < min ){
@@ -1445,7 +1451,7 @@ storeApiHelper = {
                }
         }   
         
-        return min;
+        return min == maxInt ? null : min;
     },
     
     replaceParameter: function (url, paramName, paramValue){
@@ -1500,8 +1506,7 @@ storeApiHelper = {
     isProductAvailable: function(product){        
         
         var unavailableKeyWords = $(product).find('p,div,a,span,i,strong,b,h1,h2,h3,h4,h5,h6').filter(function(){ 
-                return $(this).is(":visible") && 
-                       $(this).text().trim().length < 100 &&
+                return $(this).text().trim().length < 100 &&
                        new RegExp(storeApi.unavaiableTerms.join("|")).test($(this).text().toLowerCase());
         });
         
