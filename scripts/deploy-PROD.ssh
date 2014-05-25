@@ -54,5 +54,6 @@ sudo rm /home/$1/robots.txt
 sudo rm /var/www/clositt.com
 sudo ln -s /home/$1 /var/www/clositt.com
 
+echo "Make sure to update the private repo!"
 echo "Please verify the release!"
 echo "DONE!"
