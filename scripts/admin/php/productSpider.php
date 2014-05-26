@@ -4,6 +4,30 @@
 <?php 
 require_once(dirname(__FILE__) . '/../../../app/globals.php');
 include(dirname(__FILE__) . '/../../../static/meta.php');   
+
+
+
+$tags = array('Activewear',
+'Basic','Blazers','Blouses','Button Downs',
+'Camisoles','Capris','Cardigans','Cashmere','Casual','Chinos','Coats','Cocktial Dresses','Collared Shirts','Crop Tops', 'Corduroy',
+'Denim','Disco','Dress Pants','Dress Shirts','Dresses',
+'Evening Dresses','Graphic T Shirts', 'Graphic Tank Tops',
+'Gowns', 
+'Henleys','High Waisted','Hoodies',
+'Jackets','Jeans','Jumpsuits',
+'Khakis','Knee Length Dress','Knit',
+'Leather','Leggings','Long Sleeve Shirts','Long Sleeve Tops','Loungewear', 'Low Rise',
+'Maxi Dresses','Mini Dresses','Mini Skirts',
+'Outerwear','Overalls',
+'Pants','Polos','Prints and Stripes','Pullovers',
+'Regular Fit','Rompers',
+'Shirts','Shorts','Short Sleeve Shirts','Skater Dresses','Skinny Jeans','Skirts','Skorts','Sleepwear','Sleeveless','Slim Fit','Sport Coats','Suits','Summer Dresses','Sweaters','Sweatpants','Sweatshirts',
+'T Shirts','Tailored Fit','Tank Tops','Tennis Skirts','Trench Coats','Tunics',
+'Vests',
+'Zip Ups',
+'Winter','Spring','Summer','Fall','SALE');
+
+
 ?>
 <style type="text/css">
 body{
@@ -138,6 +162,22 @@ input{
     font-size: 10px;
     margin: 0 2px 0 5px;   
 }
+
+.tagtable tr, .tagtable tr td{
+    height: 22px;
+    font-size: 11px;
+    padding: 0;
+    margin: 0;   
+    white-space: nowrap;
+}
+
+#save{
+    width: 20%;   
+}
+
+#saveProducts .tagtable input, #editCategoryForm .tagtable input{
+     height: 12px !important;   
+}
 </style>
 
 </head>
@@ -202,15 +242,64 @@ input{
         </div>
         <div class="form-group">            
             <label for="inputAudience">Target Consumers</label>		    
-		   	<input type="text" id="inputAudience" placeholder="Target Consumers (i.e. Women, Men, Boys, Girls, etc...)"  class="form-control"  name="consumer" required>
+		   	<!-- <input type="text" id="inputAudience" placeholder="Target Consumers (i.e. Women, Men, Boys, Girls, etc...)"  class="form-control"  name="consumer" required> -->
+		   	<select id="inputAudience" name="consumer" class="form-control">    		    	
+      			  <option value="boys">Boys</option>
+      			  <option value="girls">Girls</option>
+      			  <option value="men">Men</option>
+      			  <!--<option value="toddlers">Toddlers</option>-->
+      			  <option value="women" selected="selected">Women</option>
+            </select>
+		   	
         </div>
         <div class="form-group">            
-            <label for="inputCategory">Url Title</label>
+            <label for="inputCategory">Url Title (Only Used to Organize this Page)</label>
     		<input type="text" id="inputCategory" placeholder="(i.e. Dresses, Pants, Shoes, Hats, etc...)" class="form-control" name="category" required>    		   		
         </div>
         <div class="form-group">                		
-    		<label for="inputTags">Categories (Select Multiple)</label>
-    		   <select multiple class="form-control" name="tags" id="inputTags" >
+    		<label for="inputLink">Link to Products Page</label>
+    		<input type="text" id="inputLink" placeholder="Link to Products Page" name="link" class="form-control" required>		   		
+        </div>
+        <div class="form-group">                		
+    		<label for="inputTags">Tags</label>
+    		  <table class="tagtable table table-bordered table-condensed table-responsive">
+    		      <?php    		            		          
+    		          $table = array();  
+    		          $colNum = 5;        
+                      $numRows = ceil(count($tags) / $colNum);            
+				      $i = 0;        
+
+    		          for($c=0; $c < $colNum; $c++){
+                            for($r = 0; $r < $numRows; $r++){
+						          if ($i >= count($tags)){ break; }
+
+						          if (!isset($table[$r])){
+    		                   	      $table[$r] = array();
+    		                	  }	
+
+						          $table[$r][$c] = $tags[$i++]; 
+					        }
+					
+					        if ($i >= count($tags)){ break; }
+    		          }
+    		          
+    		          
+    		          for($r=0; $r < count($table); $r++){    		              
+    		              echo "<tr>";   
+    		              
+    		              for($c=0; $c < count($table[$r]); $c++){
+    		              
+    		                  echo '<td><input type="checkbox" class="tagCheckbox" name="tags" value="'.$table[$r][$c].'"/>'.$table[$r][$c].'</td>';    		              
+    		              }
+    		                  		              
+    		              echo "</tr>";       		              
+    		          }
+    		      
+    		      ?>
+    		  </table>
+    		
+    		   <!--
+    		   <select multiple class="form-control" name="tags" id="inputTags" >    		      
     		      <option value="Activewear"/>Activewear</option>
                   <option value="Blazers"/>Blazers</option>
                   <option value="Blouses"/>Blouses</option>
@@ -272,12 +361,10 @@ input{
                   <option value="Fall"/>Fall</option>
                   <option value="Sale"/>SALE</option>
               </select>
+              -->
                         
         </div>
-        <div class="form-group">                		
-    		<label for="inputLink">Link to Products Page</label>
-    		<input type="text" id="inputLink" placeholder="Link to Products Page" name="link" class="form-control" required>		   		
-        </div>
+        
         <button type="submit" class="btn btn-success" id="save">Save</button>
     </form>
             
@@ -345,7 +432,7 @@ input{
     <button onclick="spider.testProductsFromLinks(false, true, false)" class="btn btn-primary btn-sm" tooltip="(1 store at a time)">View Sample Products</button>    
     <button onclick="actionButtons.getTotalProductCount()" class="btn btn-info btn-sm">Get Total Product Count</button>
     <button onclick="spider.testProductsFromLinks(false, false, true)" class="btn btn-success btn-sm">Save Selected</button>
-    <button onclick="actionButtons.saveAll()" class="btn btn-success btn-sm">Save All Valid</button>                
+    <button onclick="actionButtons.saveAll()" class="btn btn-success btn-sm">Save All</button>                
 </div>
 
 <div id="loadingMask" style="display:none;" >

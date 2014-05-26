@@ -1,6 +1,6 @@
 <?php 
-define('DOMAIN','clothies.bprowd.com');
-define('HOME_ROOT','/');
+define('DOMAIN','closetta.com');
+define('HOME_ROOT','/ben/');
 define('HOME_PAGE','http://' . DOMAIN . HOME_ROOT);
 $GLOBALS['ADMIN_LIST'] = array(2, 35, 94);
 
@@ -24,7 +24,8 @@ $js = '<script src="' . HOME_ROOT .'scripts/js/firebaseExtension.js"></script>' 
 '<script src="' . HOME_ROOT .'scripts/js/colorPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/admin/js/firebaseReorganizing.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/admin/js/lib/bootbox.min.js"></script>' .
-'<script src="' . HOME_ROOT .'lib/js/jquery.unveil.min.js"></script>';
+'<script src="' . HOME_ROOT .'lib/js/jquery.unveil.min.js"></script>'.
+'<script src="' . HOME_ROOT .'lib/js/jquery.sparkline_2.1.2.min.js"></script>';
 
 define('CLOSITT_JS',$js);
 
@@ -40,7 +41,8 @@ define('CLOSITT_JS',$js);
 define('CLOSITT_CSS',HOME_ROOT .'css/style.min.css');
 
 $js = '<script src="' . HOME_ROOT .'scripts/js/clositt.min.js"></script>' .
-'<script src="' . HOME_ROOT .'lib/js/jquery.unveil.min.js"></script>';
+'<script src="' . HOME_ROOT .'lib/js/jquery.unveil.min.js"></script>'.
+'<script src="' . HOME_ROOT .'lib/js/jquery.sparkline_2.1.2.min.js"></script>;
 
 define('CLOSITT_JS',$js);
 */

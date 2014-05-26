@@ -16,7 +16,7 @@ class ProductController {
 	}
 	
 	public function getProduct($sku){
-	
+	    $productResults = array();
 		$productEntity = new ProductEntity();		
 		
 		if(isset($sku) && strlen($sku) > 2){	
@@ -26,12 +26,43 @@ class ProductController {
 			if(is_object($results)){
 				if($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){					    				
 					ProductEntity::setProductFromDB($productEntity, $row);
+					$productResults['product'] = $productEntity->toArray();
+				}
+				
+				if (isset($productResults['product']) && $productResults['product'] != null){
+    				$historicalResults = $this->productDao->getHistoricalPrices($sku);
+    				
+    				if(is_object($historicalResults)){
+    				    $historicalPrices = array();
+    				    $historicalPrices['dates'] = array();
+    				    $historicalPrices['prices'] = array();
+    				    
+        				while($row = $historicalResults->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+        				    
+        				    if (count($historicalPrices['dates']) == 0){        				        
+            				    $historicalPrices['dates'][] = "< " . date_format(date_create(stripslashes($row[HISTORICAL_DATE])), "M jS Y");
+        				    }	
+        				    
+        				    $historicalPrices['dates'][] = $firstDatePrefix . date_format(date_create(stripslashes($row[HISTORICAL_DATE])), "M jS Y");
+                                				    
+        				    if (count($historicalPrices['prices']) == 0 || 
+        				            $historicalPrices['prices'][count($historicalPrices['prices']) - 1] != 
+        				            stripslashes($row[HISTORICAL_OLD_PRICE])){ 
+        				                    
+          					     $historicalPrices['prices'][] = stripslashes($row[HISTORICAL_OLD_PRICE]);
+        				    }
+        				    
+          					$historicalPrices['prices'][] = stripslashes($row[HISTORICAL_NEW_PRICE]);
+          				}
+          				          				
+          				$productResults['historicalPrices'] = $historicalPrices;
+    				}
 				}
 			}
 		}
 	
 	    //ProductTemplate::getProductGridTemplate($productEntity);	    
-        return json_encode($productEntity->toArray());
+        return json_encode($productResults);
 	}
 	
 	public function getProducts($productCrit, $page, $limit, $random = false){

@@ -5,7 +5,8 @@ document.getElementsByTagName('head')[0].appendChild(jq);
 */
 
 storeApi = {
-
+    unavaiableTerms: ['unavailable', 'not available', 'no longer available', 'out of stock', 'not in stock', 'no longer exist', 'does not exist', 'sold out'],
+    
 	getFullUrl: function(company, url){
 		var newUrl = "";		
 		
@@ -52,9 +53,61 @@ storeApi = {
 		return newUrl;
 	},
 	
-	getProducts: function(company, data, url){	   	   
+	getProducts: function(company, url, callback){
+	   storeApi.fetchProducts(company, url, 0, {}, callback);
+	},
+	
+	fetchProducts: function(company, url, pageNumber, products, callback){
+       $.post("webProxy.php", {u:url}, function(result){	
+         
+            if (result == null || result.trim() == ""){
+    			 console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");    		
+		         Messenger.error("Error: Could read the product page. Check to make sure this link is still active.");	         
+		    }else{       			         								
+				
+				try{
+				    // Get Product Data
+				    var data = storeApi.populateProducts(company, result, url);
+
+                    // Add valid products to list
+				    for (var i=0; i < Object.keys(data).length; i++){            
+       	                var testProduct = data[Object.keys(data)[i]];
+       	                
+    				    if (storeApiHelper.validateProduct(testProduct)){
+    				        products[testProduct.sku] = testProduct;   
+    				    }
+				    }
+				    
+				    // Get next page url 
+				    var nextPage = storeApiHelper.getNextPageUrl(company, result, url);
+				    
+				    if (pageNumber < 100 &&
+				        nextPage != null && 
+				        nextPage.length > 10 &&				        
+				        nextPage != url &&
+				        (nextPage.indexOf(".com") > 0 || nextPage.indexOf(".net") > 0 || nextPage.indexOf(".org") > 0)){
+				            
+				            pageNumber++;
+				            storeApi.fetchProducts(company, nextPage, pageNumber, products, callback); 
+				            
+				        } else {
+				            if (typeof(callback) == "function"){
+				                callback(products);   
+				            }
+				        }
+				        
+				    
+				}catch(err){
+				    // do nothing
+				    console.log("Whoops ran into a problem: " + err);
+				}
+		    }
+        });
+	},
+	
+	populateProducts: function(company, data, url){	   	   
 		var home = url.substring(0, url.indexOf("/", url.indexOf(".")));		
-		var products = "";
+		var products = {};
 		var companyScript = company.replace(/[\s_&]/g,'');
 		
 		if (data.indexOf("{") != 0){
@@ -161,6 +214,7 @@ storeApi = {
 	  	storeApiHelper.checkForProductListing("jc", $(data).find(".arrayProdCell"));
 	  	
 		$(data).find(".arrayProdCell").each(function(){
+		  if (storeApiHelper.isProductAvailable(this)){
 			var item = new Object();	
 			
 			item.image = $(this).find(".arrayImg").find("img").attr("src");			
@@ -177,6 +231,7 @@ storeApi = {
 				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
+		  }
 		});
 											
 		return products;	
@@ -188,6 +243,7 @@ storeApi = {
 	 	storeApiHelper.checkForProductListing("at", $(data).find(".product"));
 	 		   		
 		$(data).find(".product").each(function(){
+		  if (storeApiHelper.isProductAvailable(this)){
 			var item = new Object();
 			
 			item.image = $(this).find(".thumb").children("img").first().attr("src");
@@ -203,6 +259,7 @@ storeApi = {
 				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
+		  }
 		});
 											
 		return products;
@@ -215,6 +272,7 @@ storeApi = {
 		 storeApiHelper.checkForProductListing("loft", $(data).find(".products").find(".product"));
 		 		    		
 		$(data).find(".products").find(".product").each(function(){
+		  if (storeApiHelper.isProductAvailable(this)){
 			var item = new Object();
 			
 			item.image = $(this).find(".thumb").children("img").first().attr("src");				
@@ -230,6 +288,7 @@ storeApi = {
 				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
+		  }
 		});
 											
 		return products;
@@ -241,6 +300,7 @@ storeApi = {
 	    storeApiHelper.checkForProductListing("urban", $(data).find("#category-products").children());
 	    		    		
 		$(data).find("#category-products").children().each(function(){
+		  if (storeApiHelper.isProductAvailable(this)){
 			var item = new Object();
 					
 			item.image = $(this).find(".category-product-image > a > img").first().attr("src");				
@@ -255,6 +315,7 @@ storeApi = {
 				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
+		  }
 		});
 											
 		return products;
@@ -267,6 +328,7 @@ storeApi = {
 	    storeApiHelper.checkForProductListing("zara", $(data).find("#product-list").children(".product"));			
 	      	  		
 		$(data).find("#product-list").children(".product").each(function(){
+		  if (storeApiHelper.isProductAvailable(this)){
 			var item = new Object();
 			
 			item.image = $(this).find("a.gaProductDetailsLink > img").first().attr("data-src");
@@ -289,6 +351,7 @@ storeApi = {
 				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
+		  }
 		});
 											
 		return products;
@@ -301,6 +364,7 @@ storeApi = {
 		storeApiHelper.checkForProductListing("hm", $(data).find("#list-products").children("li").not(".getTheLook"));
 	      	  		
 		$(data).find("#list-products").children("li").not(".getTheLook").each(function(){
+		  if (storeApiHelper.isProductAvailable(this)){
 			var item = new Object();
 			
 			item.image = $(this).find(".image > img:nth-child(2)").first().attr("src");
@@ -315,6 +379,7 @@ storeApi = {
 				var itemid = item.sku.replace(/-\W/g, '');			
 				products[itemid] = item;
 			}
+		  }
 		});
 											
 		return products;
@@ -326,6 +391,7 @@ storeApi = {
 	        storeApiHelper.checkForProductListing("tb", $(data).find("#search > .productresultarea > .productlisting > .product"));
 	
 	        $(data).find("#search > .productresultarea > .productlisting > .product").each(function(){
+	           if (storeApiHelper.isProductAvailable(this)){
 	                var item = new Object();
 	
 	                item.image = $(this).find(".image .product-image-primary").attr("src");
@@ -350,6 +416,7 @@ storeApi = {
 				       var itemid = item.sku.replace(/-\W/g, '');
 	                   products[itemid] = item;
 	                }
+	           }
 	        });
 	
 	        return products;
@@ -364,6 +431,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("a", $(data).find(".category-item"));
 	
        $(data).find(".category-item").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".imageWrapper img").first().attr("data-original");
@@ -380,6 +448,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -391,6 +460,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("b", $(data).find(".productThumbnail"));
 	
        $(data).find(".productThumbnail").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.link = $(this).find(".productImages a").first().attr("href");                
@@ -417,6 +487,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -428,9 +499,10 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("i", $(data).find(".thumbtext"));
 	
        $(data).find(".thumbtext").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
-                item.image = siteHome + $(this).find(".thumbcontainer img").first().attr("src");
+                item.image = $(this).find(".thumbcontainer img").first().attr("src");
                 item.link = siteHome + $(this).find(".thumbcontainer a").first().attr("href");                
                 item.price = $(this).find(".thumbInfo > .thumbPricing > #productPricing").first().text().trim();
                 item.price = storeApiHelper.findPrice(item.price);
@@ -444,6 +516,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -455,6 +528,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("m", $(data).find(".arrayProdCell"));
 	
        $(data).find(".arrayProdCell").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".arrayImg img").first().attr("src");
@@ -471,6 +545,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -482,6 +557,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("bb", $(data).find(".grid-tile"));
 	
        $(data).find(".grid-tile").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".product-image img").first().attr("src");
@@ -496,6 +572,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -507,6 +584,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("n", $(data).find(".fashion-item"));
 	
        $(data).find(".fashion-item").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".fashion-photo img").first().attr("data-original");
@@ -524,6 +602,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -535,6 +614,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("aa", $(data).find(".product"));
 	
        $(data).find(".product").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".product-img").first().attr("src");
@@ -550,6 +630,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -561,6 +642,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("lt", $(data).find("#ProductsList #totproductsList").children("li"));
 	
        $(data).find("#ProductsList #totproductsList").children("li").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".pro_pic img").first().attr("data-original");
@@ -579,6 +661,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -590,6 +673,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("bcbg", $(data).find(".grid-tile"));
 	
        $(data).find(".grid-tile").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".product-image .thumb-link img").first().attr("src");
@@ -606,6 +690,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -617,6 +702,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("ct", $(data).find(".prodcontainer"));
 	
        $(data).find(".prodcontainer").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".img img").first().attr("src");
@@ -633,6 +719,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -643,26 +730,28 @@ storeApi = {
 	   
 	   storeApiHelper.checkForProductListing("lll", $(data).find(".product").not(".video"));
 	
-       $(data).find(".product").not(".video").each(function(){            
+       $(data).find(".product").not(".video").each(function(){                        
             var price = $(this).find(".amount").text().replace(/[a-zA-Z]*/g,'').trim();
             var name = $(this).attr("title").trim();
             
             $(this).find(".product-images > li").each(function(){
-                var item = new Object();
-                item.price = storeApiHelper.findPrice(price);
-                item.name = name;
-                item.link = siteHome + $(this).find("a").first().attr("href");
-                item.image = $(this).find("img").first().attr("src");
-                
-                if(storeApiHelper.checkForProductImage(item.image) && item.image.indexOf("_1") > 0){
+                if (storeApiHelper.isProductAvailable(this)){
+                    var item = new Object();
+                    item.price = storeApiHelper.findPrice(price);
+                    item.name = name;
+                    item.link = siteHome + $(this).find("a").first().attr("href");
+                    item.image = $(this).find("img").first().attr("src");
                     
-                    item.sku = 'lll' + $(this).attr("class").replace(/\D/g, ''); // strip all non numeric chars
-                    var itemid = item.sku.replace(/-\W/g, '');   
-			        
-			        if (products[itemid] == null){
-                        products[itemid] = item;
-			        }
-                } 
+                    if(storeApiHelper.checkForProductImage(item.image) && item.image.indexOf("_1") > 0){
+                        
+                        item.sku = 'lll' + $(this).attr("class").replace(/\D/g, ''); // strip all non numeric chars
+                        var itemid = item.sku.replace(/-\W/g, '');   
+    			        
+    			        if (products[itemid] == null){
+                            products[itemid] = item;
+    			        }
+                    } 
+                }
             });                                
         });
 
@@ -674,37 +763,39 @@ storeApi = {
 	   
 	   storeApiHelper.checkForProductListing("t", $(data).find("#productListing .tile"));
 	
-       $(data).find("#productListing .tile").each(function(){            
-            var item = new Object();
-
-            item.image = $(this).find(".tileImage img.tileImage").first().attr("original");
-            item.link = $(this).find(".tileInfo .productTitle > a").first().attr("href");
-            item.name = $(this).find(".tileInfo .productTitle > a").first().text().trim();
-            var price = $(this).find(".tileInfo .pricecontainer .price").text().replace(/[a-zA-Z£$:]*/g,'').trim();
-            priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
-			item.price = storeApiHelper.getLowestPrice(priceArr);     
-			item.price = storeApiHelper.findPrice(item.price);                           
-
-            if(storeApiHelper.checkForProductImage(item.image)){
-                //http://www.target.com/p/denizen-men-s-regular-fit-jeans/-/A-14711092#prodSlot=medium_1_1
-                
-                var id = item.link;
-                
-                if (item.link.indexOf("#") > 0){
-                    id = id.substring(0, id.indexOf("#"));
+       $(data).find("#productListing .tile").each(function(){     
+           if (storeApiHelper.isProductAvailable(this)){       
+                var item = new Object();
+    
+                item.image = $(this).find(".tileImage img.tileImage").first().attr("original");
+                item.link = $(this).find(".tileInfo .productTitle > a").first().attr("href");
+                item.name = $(this).find(".tileInfo .productTitle > a").first().text().trim();
+                var price = $(this).find(".tileInfo .pricecontainer .price").text().replace(/[a-zA-Z£$:]*/g,'').trim();
+                priceArr = price.replace(/([^0-9.])*(\s)+/g, ' ').split(" ");
+    			item.price = storeApiHelper.getLowestPrice(priceArr);     
+    			item.price = storeApiHelper.findPrice(item.price);                           
+    
+                if(storeApiHelper.checkForProductImage(item.image)){
+                    //http://www.target.com/p/denizen-men-s-regular-fit-jeans/-/A-14711092#prodSlot=medium_1_1
+                    
+                    var id = item.link;
+                    
+                    if (item.link.indexOf("#") > 0){
+                        id = id.substring(0, id.indexOf("#"));
+                    }
+                    
+                    if (item.link.indexOf("?") > 0){
+                        id = id.substring(0, id.indexOf("?"));
+                    }
+                    
+                    id = id.substring(id.lastIndexOf("/"));
+                    
+                    item.sku = 't' + id;
+                    
+    		        var itemid = item.sku.replace(/-\W/g, '');
+                    products[itemid] = item;
                 }
-                
-                if (item.link.indexOf("?") > 0){
-                    id = id.substring(0, id.indexOf("?"));
-                }
-                
-                id = id.substring(id.lastIndexOf("/"));
-                
-                item.sku = 't' + id;
-                
-		        var itemid = item.sku.replace(/-\W/g, '');
-                products[itemid] = item;
-            }
+           }
         });
 
         return products;
@@ -716,6 +807,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("ts", $(data).find("#wrapper_page_content .product"));
 	
        $(data).find("#wrapper_page_content .product").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".product_image img").first().attr("src");
@@ -732,6 +824,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -743,6 +836,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("ks", $(data).find("#search-result-items .grid-tile .product-tile"));
 	
        $(data).find("#search-result-items .grid-tile .product-tile").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".product-image img.first-img").first().attr("data-baseurl");
@@ -759,6 +853,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -770,6 +865,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("nm", $(data).find(".products .product"));
 	
        $(data).find(".products .product").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".productImageContainer img.productImage").first().attr("src");
@@ -788,6 +884,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -799,6 +896,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("fp", $(data).find("#products ul li"));
 	
        $(data).find("#products ul li").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".media img").first().attr("src");
@@ -815,6 +913,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -826,6 +925,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("ma", $(data).find("#macysGlobalLayout #thumbnails .productThumbnail"));
 	
        $(data).find("#macysGlobalLayout #thumbnails .productThumbnail").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find("img.thumbnailMainImage").first().attr("src");
@@ -839,6 +939,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -850,6 +951,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("jp", $(data).find(".product_gallery_holder2 .product_holder"));
 	
        $(data).find(".product_gallery_holder2 .product_holder").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".product_image img").first().attr("src");
@@ -863,6 +965,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -874,6 +977,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("ny", $(data).find(".product"));
 	
        $(data).find(".product").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find("img").first().attr("src");
@@ -887,6 +991,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -898,6 +1003,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("bu", $(data).find("li.product"));
 	
        $(data).find("li.product").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".aspect-inner img").first().attr("data-src");
@@ -914,6 +1020,7 @@ storeApi = {
                         products[itemid] = item;
                    }
                 }
+            }
         });
 
         return products;
@@ -925,6 +1032,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("ho", $(data).find("li.product-wrap"));
 	
        $(data).find("li.product-wrap").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(".image-wrap img").first().attr("data-src");
@@ -938,6 +1046,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -949,6 +1058,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("ko", $(data).find("#product-matrix .product"));
 	
        $(data).find("#product-matrix .product").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find("a.image-holder-s img").first().attr("src");
@@ -967,6 +1077,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -978,6 +1089,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("fo", $(data).find(".ItemImage"));
 	
        $(data).find(".ItemImage").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find("a img").first().attr("src");
@@ -991,6 +1103,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -1002,6 +1115,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("di", $(data).find(".item"));
 	
        $(data).find(".item").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find("a.img img").first().attr("data-src_large");
@@ -1015,6 +1129,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -1033,6 +1148,7 @@ storeApi = {
        storeApiHelper.checkForProductListing("ae", productListing);
 	
        productListing.each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find("a .image img").not(".hidden").first().attr("src");
@@ -1050,6 +1166,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -1061,6 +1178,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("ni", $(data).find(".product-wall .grid-item"));
 	
        $(data).find(".product-wall .grid-item").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find("grid-item-image img").first().attr("src");
@@ -1075,6 +1193,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -1086,6 +1205,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("mk", $(data).find(".products .productstart, .products .product"));
 	
        $(data).find(".products .productstart, .products .product").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find("a.prodImgLink .productImage").first().attr("src");
@@ -1100,6 +1220,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -1111,6 +1232,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("ch", $(data).find("#shelfProducts .product-capsule"));
 	
        $(data).find("#shelfProducts .product-capsule").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = siteHome + $(this).find("img.product-image").first().attr("src");
@@ -1124,6 +1246,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -1135,6 +1258,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("cu", $(data).find(".products .product"));
 	
        $(data).find(".products .product").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find("a.prodImgLink .productImage").first().attr("src");
@@ -1149,6 +1273,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -1160,6 +1285,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing("jj", $(data).find(".itemlink"));
 	
        $(data).find(".itemlink").each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
                     
                 var product = $(this).parent();    
@@ -1174,6 +1300,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -1187,6 +1314,7 @@ storeApi = {
 	   storeApiHelper.checkForProductListing(store.id, $(data).find(store.itemListing));
 	
        $(data).find(store.itemListing).each(function(){
+            if (storeApiHelper.isProductAvailable(this)){
                 var item = new Object();
 
                 item.image = $(this).find(store.image).first().attr(store.imageAttr);
@@ -1209,6 +1337,7 @@ storeApi = {
 			        var itemid = item.sku.replace(/-\W/g, '');
                     products[itemid] = item;
                 }
+            }
         });
 
         return products;
@@ -1239,6 +1368,51 @@ Companies = {
     }  
 };
 
+NextPageSelector = {    
+    "AmericanApparel": null,
+    "AmericanEagle": null,
+    "AnnTaylor": ".pages a.next",
+    "Anthropologie": null,
+    "Athleta": null,
+    "BananaRepublic": null,
+    "BCBG": ".first-last a.page-next",
+    "Bloomingdales": "#topRightArrow.nextArrow", 
+    "BrooksBrothers": null,
+    "Burberry": null,
+    "CharlesTyrwhitt": ".all",
+    "Chicos": "#pagination a.next",
+    "Cusp": null, // onclick event, but lots of pages 
+    "Dillards": ".next",
+    "Forever21": "img#arrowNext",
+    "FreePeople": ".next.page a.arrow",
+    "Gap": null,
+    "HM": ".pages .next",
+    "Hollister": null,
+    "Intermix": null,
+    "JCPenney": "#paginationIdTOP a[title='next page']",
+    "JCrew": ".paginationTop .pageNext",
+    "JJill": null, // ".result-nav #(end with _sNextTop) a",
+    "KateSpade": null,
+    "Kohls": "a.next-set",
+    "Loft": ".pages .next",
+    "Lululemon": null,
+    "LordTaylor": null,
+    "Macys": "#paginationTop .arrowRight",
+    "Madewell": null,
+    "MichaelKors": ".pagination .nextpage",
+    "NeimanMarcus": null, // "$(.nextarrow).prev()"
+    "Nike": null,
+    "Nordstrom": ".next",
+    "NewYorkCompany": ".nav .next",
+    "OldNavy": null,
+    "Piperlime": null,
+    "Target": ".pagination-item.next",
+    "TopShop": ".show_next",
+    "ToryBurch": null,
+    "UrbanOutfitters": null, // "$(.category-pagination-pages a).last()"
+    "Zara": null
+};
+
 storeApiHelper = {  
     debug: false,
       
@@ -1256,12 +1430,18 @@ storeApiHelper = {
     },
         
     findPrice: function(price){
+        if (price == null){
+            return null;   
+        }
+        
         var priceArray = (price + "").trim().split(/[\s-]+/);
 		return parseFloat(priceArray[priceArray.length - 1].replace(/[^0-9\.]+/g,""));   
     },
     
     getLowestPrice: function(priceArray){
-        var min = 999999;
+        var maxInt = 999999;
+        var min = maxInt;
+        
         for (var i=0; i < priceArray.length; i++){
                var num = parseFloat(priceArray[i]);
                if (!isNaN(num) && num < min ){
@@ -1271,7 +1451,7 @@ storeApiHelper = {
                }
         }   
         
-        return min;
+        return min == maxInt ? null : min;
     },
     
     replaceParameter: function (url, paramName, paramValue){
@@ -1321,5 +1501,96 @@ storeApiHelper = {
            
            console.log("Image does not exist for this product");
            return false;
+    },
+    
+    isProductAvailable: function(product){        
+        
+        var unavailableKeyWords = $(product).find('p,div,a,span,i,strong,b,h1,h2,h3,h4,h5,h6').filter(function(){ 
+                return $(this).text().trim().length < 100 &&
+                       new RegExp(storeApi.unavaiableTerms.join("|")).test($(this).text().toLowerCase());
+        });
+        
+        if (unavailableKeyWords.length > 0){
+           console.log("Product is out of stock");     
+        }
+                
+        return unavailableKeyWords.length <= 0;
+    },
+    
+    getNextPageUrl: function(company, data, url){
+        var companyName = company.replace(/[\s_&]/g,'');
+        var nextPage = $(data).find(NextPageSelector[companyName]).first().find("a").attr("href"); 
+        
+        if (nextPage == null){
+            nextPage = $(data).find(NextPageSelector[companyName]).first().attr("href");    
+            
+            if (nextPage == null){
+                nextPage = $(data).find(NextPageSelector[companyName]).first().parents("a").attr("href");    
+            }
+        }
+        
+        if (nextPage != null){
+            
+            // If its a relative url
+            if (nextPage.indexOf("//") != 0 &&  
+                nextPage.indexOf("http") != 0 &&
+                nextPage.indexOf("www.") != 0){
+                    var home = url.substring(0, url.indexOf("/", url.indexOf(".")));                    
+                    nextPage = home + nextPage;		
+                }
+        }
+        
+        return nextPage;            
+    },
+    
+    validateProduct: function(product){        
+        var isValid = false;
+                       	        
+        if (product != null &&
+            product.price != null && 
+            product.image != null && 
+            product.link != null && 
+            product.name != null &&
+            product.sku != null){				 
+                
+                var price = product.price + "";
+                price = parseFloat(price.replace("$",""));
+		        price = parseFloat(price);
+		        
+		        if(isNaN(price)){       				        
+			        console.log("Product ("+i+") price is not a number");           			            
+		        
+		        }else{       			          
+		            return true;	                				               				        
+		        }
+        }else{                                
+            if (product == null){
+                console.log("Product ("+i+") is null");    
+                
+            }else{
+            
+                if (product.price == null){
+                    console.log("Product ("+i+") price is null");    
+                }
+                
+                if (product.image == null){
+                    console.log("Product ("+i+") image is null");    
+                }
+                
+                if (product.link == null){
+                    console.log("Product ("+i+") link is null");    
+                }
+                
+                if (product.name == null){
+                    console.log("Product ("+i+") name is null");    
+                }
+                
+                if (product.sku == null){
+                    console.log("Product ("+i+") sku is null");    
+                }    
+            }                    				                
+        }
+    
+        return false;
     } 
 }
