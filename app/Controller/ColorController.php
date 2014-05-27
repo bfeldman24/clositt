@@ -1,4 +1,7 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
+
 require_once(dirname(__FILE__) . '/../Database/DataAccess/check-login.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/AbstractDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
@@ -222,12 +225,9 @@ class ColorController extends AbstractDao{
 				" WHERE p." . PRODUCT_STATUS . " IN (1,2,3,4) " .
 				" AND ISNULL(p." . PRODUCT_COLOR_ONE . ") " .
 				" AND ISNULL(p." . PRODUCT_COLOR_TWO . ") " .
-				" LIMIT 100";														
-        
-		$paramsTypes = array();		
-		$params = array();
+				" LIMIT 100";														        
 		
-		return $this->getResults($sql, $params, $paramTypes, "1238123");
+		return $this->getResults($sql, array(), array(), "1238123");
 	}
 	
 	public function getColorMapping(){
