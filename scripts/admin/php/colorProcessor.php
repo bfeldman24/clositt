@@ -53,14 +53,12 @@ td {
 </head>
 <body>
 
-<!--<script src="../../js/firebaseExtension.js" type="text/javascript"></script>-->
 <script src="../../js/messenger.js" type="text/javascript"></script>
 <script src="../../js/colorPresenter.js" type="text/javascript"></script>
 <script src="../js/colorProcessor.js" type="text/javascript"></script>
 
 
 <script type="text/javascript">
-//firebase.init();
 Messenger.init();
 
 <?php if ($_GET['manual'] == "y"){ ?>
