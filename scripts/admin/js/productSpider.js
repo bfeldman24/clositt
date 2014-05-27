@@ -7,6 +7,7 @@
 var spider = {
     links: null,
     stopSaveAll: false,
+    autoRunHash: '#autoSaveAll',
     
     // Gets the category links
     getLinks: function(){
@@ -72,7 +73,7 @@ var spider = {
     	               link.url = category["link"].replace(/'/g, "\\'");
     	               link.status = category["status"];
     	               link.count = category["count"];
-    	               link.lastUpdated = lastUpdatedForDB;
+    	               link.lastUpdated = lastUpdated;
     	               link.tags = taglist.replace(/'/g, "\\'");
     	               spider.links.push(link);
     	               	               
@@ -84,8 +85,9 @@ var spider = {
         							.attr("customer", link.customer)
         							.attr("category", link.category)
         							.attr("tags", link.tags)
-        							.attr("lastUpdated", link.lastUpdated)
+        							.attr("lastUpdated", link.lastUpdated)        							
         							.attr("url", link.url)
+        							.attr("status", statusText)
         						).append(
         						      $("<a>").attr("href", link.url).html(categoryName)
         						).append(
@@ -106,8 +108,8 @@ var spider = {
     	   
     	   $("#loadingMask").hide();
     	   
-    	   if (location.hash == "#saveAllValid"){
-               actionButtons.saveAllValid();
+    	   if (location.hash == spider.autoRunHash){
+    	       spider.autoRun();               
            }	  
     	});		
     },	
@@ -126,7 +128,7 @@ var spider = {
     	var validCount = 0;
     	
     	if (total <= 0){
-    		alert("Please select a product store > category");	
+    		Messenger.info("Please select a product store > category");	
     		$("#loadingMask").hide();		
     	}else{
     				
@@ -180,14 +182,14 @@ var spider = {
 			    };
 			    
 			    $.post( window.HOME_ROOT + "spider/updatestatus", statusObj, function( data ) {
-			        console.log(data);
+			        console.log(JSON.stringify(data));
 			    }); 
                 
                 if (categoryData.showSample){
                     spider.showSampleProducts(data, categoryData.company, categoryData.customer, categoryData.category);
                 
                 }else if (categoryData.showData){
-                    alert(categoryData.company + " > " + categoryData.customer + " > " + categoryData.category + ": " + JSON.stringify(data));
+                    Messenger.info(categoryData.company + " > " + categoryData.customer + " > " + categoryData.category + ": " + JSON.stringify(data));
     				
                 }else if (categoryData.save){
                     var storeProducts = data;
@@ -227,7 +229,7 @@ var spider = {
 			    };
 			    
 			    $.post( window.HOME_ROOT + "spider/updatestatus", statusObj, function( data ) {
-			        console.log(data);
+			        console.log(JSON.stringify(data));
 			    });  
                          
                 if (categoryData.saveCallback != null){         
@@ -325,10 +327,10 @@ var spider = {
      	var nextBatch = {};
      	
      	if (total <= 0){
-    		alert("There is nothing to save! Please add product data.");	
+    		Messenger.info("There is nothing to save! Please add product data.");	
     	}else{ 	
     	    var tags = {};
-    	    var isLastBatch = true;
+    	      	  var isLastBatch = true;
     	    var products = $.parseJSON($("#json-products").text());
     	    
     	    for (var i=0; i < Object.keys(products).length; i++){
@@ -344,8 +346,8 @@ var spider = {
     	    
     	    $("#json-products").text(JSON.stringify(nextBatch));	
     	   
-    	    $.post( window.HOME_ROOT + "spider/update", { products: batch, isLastBatch: isLastBatch}, function( result ) {                        
-                console.log(result);                       
+    $.post( window.HOME_ROOT + "spider/update", { products: batch, isLastBatch: isLastBatch}, function( result ) {                        
+                console.log(JSON.stringify(result));                       
                 
                 var output = "";
                 
@@ -398,6 +400,11 @@ var spider = {
             , "json"
             );	   
     	}
+    },
+    
+    autoRun: function(){        
+        console.log("Auto Run...");        
+        actionButtons.saveAll();
     }
 };
 
@@ -442,7 +449,7 @@ var categoryMaintenance = {
         	      $(e.currentTarget).find("#inputCategory").val("");	
         	      $(e.currentTarget).find(".tagCheckbox:checked").prop('checked', false);	
         	  }else{
-        	       console.log(data);
+        	       console.log(JSON.stringify(data));
         	  }
 	    }); 
 	    					
@@ -552,10 +559,10 @@ var categoryMaintenance = {
     	    
     	    $.post( window.HOME_ROOT + "spider/removelink", catObj, function( data ) {
     	          if (isNaN(data)){
-                	      alert("There was a problem removing this category")
+                	      Messenger.error("There was a problem removing this category")
                 	  }else{                	       
                 	      category.parents(".category").remove();   
-                          alert("Category and all of its products were removed! Affected " + (data - 1) + " products!")
+                          Messenger.success("Category and all of its products were removed! Affected " + (data - 1) + " products!")
                 	  }                	  
     	    });            
         }
@@ -582,12 +589,12 @@ var actionButtons = {
 
     getTotalProductCount: function(){
         $.post( window.HOME_ROOT + "spider/count", function( result ) {                        
-                console.log(result);
+                console.log(JSON.stringify(result));
                 
                 if (isNaN(result)){
-                    alert("There was an error getting the total product count!");
+                    Messenger.error("There was an error getting the total product count!");
                 }else{
-                    alert("There are currently " + result + " products in the database");
+                    Messenger.info("There are currently " + result + " products in the database");
                 }
         });
     },
@@ -681,12 +688,17 @@ var actionButtons = {
             }else{
                 window.saveCounter++;   
             }                                     
+        });
+        
+        var nonBrokenLinksNotUpdatedToday = $("#links").find(':checkbox').filter(function(){
+             return ($(this).attr("lastUpdated") == "" || $(this).attr("lastUpdated") != window.todaysDate) && 
+                    $(this).attr("status").indexOf("Works") >= 0;
         });       
                     
-        if($("#links").find(':checkbox:checked').length > 0){            
+        if(nonBrokenLinksNotUpdatedToday.length > 0 && $("#links").find(':checkbox:checked').length > 0){            
             spider.testProductsFromLinks(false, false, true, actionButtons.saveNextCategory);    
         }else{
-            alert("All working categories are saved for today! Try again tomorrow.");   
+            Messenger.info("All working categories are saved for today! Try again tomorrow.");   
             $("#transparentLoadingMask").hide(); 
         }
     },
@@ -731,7 +743,7 @@ var actionButtons = {
 			    };
 			    
 			    $.post( window.HOME_ROOT + "spider/updatestatus", statusObj, function( data ) {
-			        console.log(data);
+			        console.log(JSON.stringify(data));
 			    });
             
                 var d = new Date();
@@ -753,8 +765,44 @@ var actionButtons = {
             var executionTime = (endTime - window.saveStartTime) / 60000;
                           
             $.get( window.HOME_ROOT + "spider/removeuncategorized", function( data ) {
-		        console.log(data);
-		        alert("COMPLETE!!! " + window.saveCounter + "/" + window.totalToSave + " categories saved in " + executionTime + " minutes!");
+		        console.log(JSON.stringify(data));
+		        Messenger.success("COMPLETE!!! " + window.saveCounter + "/" + window.totalToSave + " categories saved in " + executionTime + " minutes!");
+		    });		    		    		    		    
+		    
+		    
+		    /* Construct email notification */		    
+		    var message = [];		    
+		    message.push(new Date().toString());
+		    message.push(window.saveCounter + "/" + window.totalToSave + " categories saved in " + executionTime + " minutes!");		    		    
+		    message.push($(".isvalid").length + " total categories.");
+
+            var works = $(".isvalid").filter(function(){
+                return $(this).text().indexOf("Works") > 0;
+            });
+            
+            message.push(works.length + " ran successfully.");
+            
+            var broken = $(".isvalid").filter(function(){
+                return $(this).text().indexOf("BROKEN") > 0;
+            });
+            
+            message.push(broken.length + " are broken.");
+            
+            message.push("");
+            message.push("Broken Categories:");
+            
+            broken.each(function(){
+                var company = $(this).siblings("input[type=checkbox]").attr("company");
+                var customer = $(this).siblings("input[type=checkbox]").attr("customer");
+                var category = $(this).siblings("input[type=checkbox]").attr("category");
+                var lastUpdated = $(this).siblings("input[type=checkbox]").attr("lastupdated");
+            
+                message.push(company + " -> " + customer + " -> " + category + " (" + lastUpdated + ")");
+            });
+		    
+		    console.log("Sending email...");
+		    $.post( window.HOME_ROOT + "notify", {message: message}, function( success ) {
+		        console.log("Email status: " + success);
 		    });    				        				                                                                          
         }
     }
@@ -916,9 +964,11 @@ $(document).ready(function(){
         );                                 
     
     // Initialize the functions
+    Messenger.debug = true;
     categoryMaintenance.init();
     actionButtons.init();
     spider.getLinks();
+        
 });
 
 
