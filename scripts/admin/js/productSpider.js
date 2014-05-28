@@ -801,6 +801,10 @@ var actionButtons = {
             });
 		    
 		    console.log("Sending email...");
+		    for (var i=0; i < message.length; i++){
+			console.log(message[i]);
+		    }
+
 		    $.post( window.HOME_ROOT + "notify", {message: message}, function( success ) {
 		        console.log("Email status: " + success);
 		    });    				        				                                                                          
