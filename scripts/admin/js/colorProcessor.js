@@ -12,6 +12,7 @@ var colorProcessor = {
 		$("body").append($("<div>").addClass("toggleScript btn btn-default btn-success").html("Process New Colors"));		
 		$("body").append($("<div>").addClass("verifymapping btn btn-info").html("Verify Color Mapping"));		
 		$(document).on("click", ".toggleScript", colorProcessor.toggleScript);												
+		Messenger.debug = true;
 		
 		if (location.hash == colorProcessor.autoRunHash){
 	       colorProcessor.toggleScript();               
@@ -58,12 +59,14 @@ var colorProcessor = {
     	     }else{    	           
     	           var numberOfNewColors = parseInt(data) - colorProcessor.lastColorCount;
     	           colorProcessor.stop = colorProcessor.stop || numberOfNewColors <= 0;    	           
-    	           $("body").append($("<div>").html(colorProcessor.count + ") " + numberOfNewColors + " Colors added in this batch"));    	             	           
+    	           $("body").append($("<div>").html(colorProcessor.count + ") " + numberOfNewColors + " Colors added in this batch"));
+		   console.log(colorProcessor.count + ") " + numberOfNewColors + " Colors added in this batch");
     	               	           
     	           colorProcessor.lastColorCount = parseInt(data);
     	           var totalColorCount = colorProcessor.lastColorCount - colorProcessor.initialColorCount;     	   
     	           
-    	           $("body").append($("<div>").html(colorProcessor.count + ") " + totalColorCount + " Total Colors added so far"));    
+    	           $("body").append($("<div>").html(colorProcessor.count + ") " + totalColorCount + " Total Colors added so far")); 
+		   console.log(colorProcessor.count + ") " + totalColorCount + " Total Colors added so far");   
     	     }
 	       
     	     $("body").append($("<br>"));    	         	         	         	         	     
@@ -102,7 +105,9 @@ var colorProcessor = {
 	    
 	     $("body").append($("<div>").html(colorProcessor.count + ") Finished processing in " + executionTime + " seconds"));
 	     $("body").append($("<div>").html(colorProcessor.count + ") Total processing time: " + totalExecutionTime + " minutes"));	     
-	    	    
+	     console.log(colorProcessor.count + ") Finished processing in " + executionTime + " seconds");
+	     console.log(colorProcessor.count + ") Total processing time: " + totalExecutionTime + " minutes");	    	    
+
 	    $.post( window.HOME_ROOT + "c/count", colorProcessor.readColorCount);
 	},
 	
