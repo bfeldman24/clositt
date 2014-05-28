@@ -108,7 +108,7 @@ productPresenter.getProductTemplate = function(product){
 	var feedOwner = product.owner;
 	var feedCloset = product.closet;
     var score = product.sc;
-    var explainUrl = window.HOME_ROOT + '/scripts/admin/php/explain.php?sku=' + id + '&query=' + encodeURIComponent($( "#search-bar" ).val()).replace("#","").trim();
+    var explainUrl = window.HOME_URL + 'scripts/admin/php/explain.php?sku=' + id + '&query=' + encodeURIComponent($( "#search-bar" ).val()).replace("#","").trim();
     var colors = product.co;
 
 	var rand = Math.floor(Math.random() * 3) + 1;
