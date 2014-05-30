@@ -249,7 +249,8 @@ class ColorController extends AbstractDao{
 		$sql = "SELECT " . COLOR_MAPPING_COLOR . ", " . COLOR_MAPPING_PARENT .				
 				" FROM " . COLOR_MAPPING .				
 				" WHERE " . COLOR_STATUS . " = 2 " .
-				" LIMIT 100";														
+				" ORDER BY " . COLOR_MAPPING_COLOR .
+				" LIMIT 25";														
         
 		$paramsTypes = array();		
 		$params = array();
