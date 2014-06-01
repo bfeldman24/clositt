@@ -10,6 +10,7 @@ class ProductCriteria{
 	private $searchString;
 	private $minPrice;
 	private $maxPrice;
+    private $fieldWeightings;
 
 	//Getters and Setters
 	public function getCompanies() {
@@ -91,7 +92,17 @@ class ProductCriteria{
 		if(isset($maxPrice)){
 			$this->maxPrice = $maxPrice;
 		}
-	}		
+	}
+
+    public function getFieldWeightings() {
+        return $this->fieldWeightings;
+    }
+
+    public function setFieldWeightings($fieldWeightings) {
+        if(isset($fieldWeightings)){
+            $this->fieldWeightings = $fieldWeightings;
+        }
+    }
 
     public static function setCriteriaFromPost($row){
 		$productCriteria = new ProductCriteria();
@@ -105,7 +116,28 @@ class ProductCriteria{
 		
 		$productCriteria->setCategories(ProductCriteria::convertArrayToCamelCase($row['category']));
 		$productCriteria->setTags(ProductCriteria::convertArrayToCamelCase($row['tags']));		
-				    
+
+        $weightings = array();
+        if(!empty($row['tagWeight'])){
+            $weightings['tags'] = $row['tagWeight'];
+        }
+
+        if(!empty($row['storeWeight'])){
+            $weightings['store'] = $row['storeWeight'];
+        }
+
+        if(!empty($row['colorWeight'])){
+            $weightings['color'] = $row['colorWeight'];
+        }
+
+        if(!empty($row['titleWeight'])){
+            $weightings['title'] = $row['titleWeight'];
+        }
+        if(!empty($weightings)){
+            $productCriteria->setFieldWeightings($weightings);
+        }
+
+
 		return $productCriteria;
 	}
 	

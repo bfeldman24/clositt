@@ -249,7 +249,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page'])){      
     	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
         $product = $productController->searchElastic($productCrit, $_GET['page'], QUERY_LIMIT);
-    
     }else if ($_GET['method'] == 'cc' && isset($_POST['sku'])){     	   	    
         $product = $productController->updateClosittCounter($_POST['sku']);
     }else if ($_GET['method'] == 'rc' && isset($_POST['sku'])){                        	     	   	    

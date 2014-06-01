@@ -57,6 +57,25 @@ body{
             <div class="btn btn-success" id="seach-bar-icon">Search</div>
         </div>
     </div>
+    <br/>
+    <div class="row">
+        <div class="col-xs-12 col-sm-2 form-group">
+            <label for="tags-weight">Weight for Tags</label>
+            <input type="text" class="form-control" id="tags-weight"></input>
+        </div>
+        <div class="col-xs-12 col-sm-2 form-group">
+            <label for="title-weight">Weight for Title</label>
+            <input type="text" class="form-control" id="title-weight" ></input>
+        </div>
+        <div class="col-xs-12 col-sm-2 form-group">
+            <label for="store-weight">Weight for store name</label>
+            <input type="text" class="form-control" id="store-weight" ></input>
+        </div>
+        <div class="col-xs-12 col-sm-2 form-group">
+            <label for="colors-weight">Weight for Colors</label>
+            <input type="text" class="form-control" id="colors-weight"></input>
+        </div>
+    </div>
     <hr>
     
     <div id="main-workspace" style="display:none;"></div>    
@@ -68,6 +87,33 @@ body{
 
 <?php echo CLOSITT_JS; ?>
 <script type="text/javascript">
+
+
+    searchController.searchBarSubmit = function(el){
+        el.preventDefault();
+
+        var search ={};
+        search.searchTerm = $( "#search-bar" ).val().trim();
+        search.tagWeight =  $( "#tags-weight").val().trim();
+        search.colorWeight =  $( "#colors-weight").val().trim();
+        search.storeWeight =  $( "#store-weight").val().trim();
+        search.titleWeight =  $( "#title-weight").val().trim();
+        searchController.isSearchActive = true;
+        searchController.hasMoreProducts = true
+
+        $.post(window.HOME_ROOT + "p/search/1", search, function( products ) {
+
+                if( Object.keys(products).length > 0){
+                    $("#product-grid").children().remove();
+                    gridPresenter.lazyLoad(products);
+                } else {
+                    alert("No products found!");
+                }
+            }
+            , "json" // remove this if you don't want to return the data in json format
+        );
+    };
+
 $(document).ready(function() {
     searchController.isSearchActive = true;
     firebase.init();
