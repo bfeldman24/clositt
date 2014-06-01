@@ -146,18 +146,22 @@ class ProductAdminDao extends AbstractDao {
     }
     
     public function removeUncategorizedProducts(){
-           $sql = "DELETE p FROM " . PRODUCTS . " p " .
+           $sql = "SET SQL_SAFE_UPDATES='OFF'; ";
+        
+           $sql .= "DELETE p FROM " . PRODUCTS . " p " .
                   " LEFT JOIN " . SPIDER . " s ON " .
                        " s.".SPIDER_STORE." = p.".PRODUCT_STORE." AND " .
                        " s.".SPIDER_CUSTOMER." = p.".PRODUCT_CUSTOMER." AND ".
                        " s.".SPIDER_CATEGORY." = p.".PRODUCT_CATEGORY . 
-                  " WHERE COALESCE(s.".SPIDER_STORE.", 'n') = 'n'";
+                  " WHERE COALESCE(s.".SPIDER_STORE.", 'n') = 'n';";
+                  
+          $sql .= " SET SQL_SAFE_UPDATES='ON'; ";        
                                 
         if($this->debug){		    
 			$this->logDebug("0123984710" , $sql);
 		}
-        
-        $affected =  $stmt->exec($sql);                                   		
+                                        		
+        $affected = $this->db->exec($sql);
 		
 		if (PEAR::isError($affected)) {
 			$this->logError("123087410" ,$affected->getMessage(),$sql);
@@ -255,7 +259,8 @@ class ProductAdminDao extends AbstractDao {
                       PRODUCT_CLOSITT_COUNT . "," . 
                       PRODUCT_SHORT_LINK . "," . 
                       PRODUCT_STATUS . "," .
-                      PRODUCT_DATE_UPDATED . "," . 
+                      PRODUCT_RANDOM_INDEX . "," .
+                      PRODUCT_DATE_UPDATED . "," .                       
                       PRODUCT_CREATED_ON . ")" .
                " SELECT " . PRODUCT_SKU . "," .
                       PRODUCT_STORE . "," . 
@@ -269,6 +274,7 @@ class ProductAdminDao extends AbstractDao {
                       PRODUCT_CLOSITT_COUNT . "," . 
                       PRODUCT_SHORT_LINK . "," . 
                       " 1 ," .
+                      " RAND() ," .
                       "NOW() ," .
                       "NOW() " .
                " FROM " . TEMP_PRODUCTS . " tp " .

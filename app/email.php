@@ -1,11 +1,7 @@
 <?php
-require_once(dirname(__FILE__) . '/globals.php');
-
-if (!isset($_SESSION)) {
-	//any subdomains, including "www.mydomain.com" will be included in the session. 
-	session_set_cookie_params('', '/', '.' . DOMAIN, 0);
-	session_start();
-}
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
+//ini_set("log_errors", 1);
 
 $email = $_REQUEST['e'];
 $name = $_REQUEST['n'];
@@ -29,9 +25,9 @@ if ($messageType == "welcomeMessage" &&
     				
     $headers = "From: Clositt Team <Eli@Clositt.com> \r\n" .
     		    "Reply-To: Eli@Clositt.com \r\n" .
-    		    'Bcc: ben@clositt.com, eli@clositt.com' . "\r\n";
+    		    'Bcc: bfeldman24@gmail.com, eli@clositt.com' . "\r\n";
     		        
-    if(mail($email, $emailSubject, $emailMessage, $headers)){
+    if(mail($email, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){
     	$_SESSION['welcomeEmail'] = $_SERVER['REMOTE_ADDR'];
     	echo "success";	    	
     }else{
@@ -40,7 +36,7 @@ if ($messageType == "welcomeMessage" &&
     
 }else{
     $to = 'eli@clositt.com';
-    
+
     $emailSubject = 'CLOSITT CONTACT FORM: ' . $subject;
     
     $emailMessage = "Name: " . $name . "\r\n" . 
@@ -49,12 +45,12 @@ if ($messageType == "welcomeMessage" &&
     				"Subject: " . $subject . "\r\n" . 
     				"Message: " . $message . "\r\n"; 
     				
-    $headers = 'From: '. $email . "\r\n" .
+    $headers = "From: Ben@clositt.com \r\n" .
     		    'Reply-To: '. $email . "\r\n" .
-    		    'Bcc: ben@clositt.com' . "\r\n";
+    		    'Bcc: bfeldman24@gmail.com' . "\r\n";
     		    
     
-    if(mail($to, $emailSubject, $emailMessage, $headers)){
+    if(mail($to, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){
     	echo "success";	
     }else{
     	echo "failed";	

@@ -79,6 +79,7 @@ $("form").on("submit",function(event){
 				$("#submitBtn").removeClass("disabled").text("Send");				
 			}else{
 				Messenger.error("There was a problem sending that message. Please try again.");	
+				$("#submitBtn").removeClass("disabled").text("Send");
 			}
 		});
 	}else{

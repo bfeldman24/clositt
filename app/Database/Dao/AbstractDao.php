@@ -8,14 +8,12 @@ require_once(dirname(__FILE__) . '/../TableConstants.php');
 
 class AbstractDao{
 	public $db = null; // PEAR::MDB2 pointer
-	public $date; // current date GMT
 	public $debug = DEBUG; // prints sql statements
 	public $info = false; // prints sql statements
 	private $sqlErrorLog = SQL_ERROR_LOG;	
 	
 	
 	public function __construct(&$db) {
-		$this->date = $GLOBALS['date'];
 		$this->sqlErrorLog = $this->sqlErrorLog . date("-Y-m-d") . ".txt";
 		$this->file = fopen($this->sqlErrorLog,"a");
 		$this->db = $db;	
