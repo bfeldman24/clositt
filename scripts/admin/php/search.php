@@ -191,12 +191,12 @@ productPresenter.getProductTemplate = function(product){
                     html += '</div>';
 
                     if(category !=undefined){
-                        html += '<div class="productActions" >';
+                        html += '<div class="productActions" style="height:auto;" >';
                         html += 'Tags = ' + category ;
                         html += '</div>';
                     }
 
-                    html += '<div class="productActions" >';
+                    html += '<div class="productActions" style="height:auto;">';
                     html += 'Colors = ' + colors;
                     html += '</div>';
 
