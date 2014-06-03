@@ -57,8 +57,17 @@ body{
             <div class="btn btn-success" id="seach-bar-icon">Search</div>
         </div>
     </div>
+
+    <!-- search type-->
     <br/>
     <div class="row">
+        <div class="col-xs-12 col-sm-2 form-group">
+            <label for="search-type">Search Type</label>
+            <select class="form-control" id="search-type">
+                <option value="multimatch">Multi Match</option>
+                <option value="querystring">Query String</option>
+            </select>
+        </div>
         <div class="col-xs-12 col-sm-2 form-group">
             <label for="tags-weight">Weight for Tags</label>
             <input type="text" class="form-control" id="tags-weight"></input>
@@ -98,10 +107,11 @@ body{
         search.colorWeight =  $( "#colors-weight").val().trim();
         search.storeWeight =  $( "#store-weight").val().trim();
         search.titleWeight =  $( "#title-weight").val().trim();
+        search.queryType = $( "#search-type").val().trim();
         searchController.isSearchActive = true;
         searchController.hasMoreProducts = true
 
-        $.post(window.HOME_ROOT + "p/search/1", search, function( products ) {
+        $.post(window.HOME_ROOT + "p/search/0", search, function( products ) {
 
                 if( Object.keys(products).length > 0){
                     $("#product-grid").children().remove();
@@ -154,7 +164,7 @@ productPresenter.getProductTemplate = function(product){
 	var feedOwner = product.owner;
 	var feedCloset = product.closet;
     var score = product.sc;
-    var explainUrl = window.HOME_URL + 'scripts/admin/php/explain.php?sku=' + id + '&query=' + encodeURIComponent($( "#search-bar" ).val()).replace("#","").trim();
+    var explainUrl = window.HOME_ROOT + 'scripts/admin/php/explain.php?sku=' + id + '&query=' + encodeURIComponent($( "#search-bar" ).val()).replace("#","").trim();
     var colors = product.co;
 
 	var rand = Math.floor(Math.random() * 3) + 1;

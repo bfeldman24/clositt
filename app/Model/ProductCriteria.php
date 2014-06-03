@@ -11,6 +11,7 @@ class ProductCriteria{
 	private $minPrice;
 	private $maxPrice;
     private $fieldWeightings;
+    private $queryType;
 
 	//Getters and Setters
 	public function getCompanies() {
@@ -104,6 +105,16 @@ class ProductCriteria{
         }
     }
 
+    public function getQueryType() {
+        return $this->queryType;
+    }
+
+    public function setQueryType($queryType) {
+        if(isset($queryType)){
+            $this->queryType = $queryType;
+        }
+    }
+
     public static function setCriteriaFromPost($row){
 		$productCriteria = new ProductCriteria();
 		
@@ -133,10 +144,14 @@ class ProductCriteria{
         if(!empty($row['titleWeight'])){
             $weightings['title'] = $row['titleWeight'];
         }
+
         if(!empty($weightings)){
             $productCriteria->setFieldWeightings($weightings);
         }
 
+        if(!empty($row['queryType'])){
+            $productCriteria->setQueryType($row['queryType']);
+        }
 
 		return $productCriteria;
 	}

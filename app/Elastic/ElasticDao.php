@@ -7,8 +7,8 @@ class ElasticDao{
 
 	private $client = null;
     private $index = "products"; //this will be an alias that always has current index
+    //private $fields = array('name.partial','name','store','tag','tag.partial','color', 'color2');
     private $fields = array('name.partial','name','store','tag','tag.partial','color', 'color2');
-
 	public function __construct(){
 		$this->client = new Elasticsearch\Client();
 	}
@@ -124,11 +124,11 @@ class ElasticDao{
         }
 
         $query = array();
+        $fields = array();
+
         if($criteria->getSearchString()){
 
-
             if(is_array($criteria->getFieldWeightings())){
-                $fields = array();
                 $userWeights = $criteria->getFieldWeightings();
 
                 $tagBoost = !empty($userWeights['tags']) ? "^" . $userWeights['tags'] : "";
@@ -147,27 +147,30 @@ class ElasticDao{
                 array_push($fields, "name" . $titleBoost) ;
                 array_push($fields, "name.partial" . $titleBoost) ;
 
-                $query['multi_match']['fields'] = $fields;
             }
             else{
-                $query['multi_match']['fields'] = $this->fields;
+                $fields = $this->fields;
             }
 
-
-            $query['multi_match']['query'] = $criteria->getSearchString();
-            $query['multi_match']['type'] = "cross_fields";
         }
 
-        $searchParams['body']['query']['filtered'] = array(
-            "filter" => $baseFilter,
-            "query" =>$query
-        );
+        $queryType =$criteria->getQueryType();
+        if (!empty($queryType) && $queryType=="querystring"){
+            $searchParams['body']['query']['query_string'] = array( "query" => $criteria->getSearchString() ,"fields" => $fields);
+        }
+        else{//($queryType=="multimatch"){
+            $query['multi_match']['fields'] = $fields;
+            $query['multi_match']['query'] = $criteria->getSearchString();
+            $query['multi_match']['type'] = "cross_fields";
+
+            $searchParams['body']['query']['filtered'] = array(
+                "filter" => $baseFilter,
+                "query" =>$query
+            );
+        }
 
         $searchParams['body']['from']=$start;
         $searchParams['body']['size']=$numResultsPage;
-
-
-
 
         return $searchParams;
     }
