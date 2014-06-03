@@ -7,6 +7,7 @@ var Messenger = {
 	defaultTimeout: 4000,
 	width: 300, 
 	height: 75,
+	debug: false,
 	
 	messageBoxTemplate: $('<ul class="messenger messenger-fixed messenger-theme-future"></ul>'),
 				
@@ -64,6 +65,10 @@ var Messenger = {
 		$("#" + Messenger.id).append($alertMessage);		
 		$("#" + Messenger.id).css("margin-left", "-" + ($("#" + Messenger.id).width() / 2) + "px");		
 		$("#" + Messenger.id).css("display","block");
+		
+		if (Messenger.debug){
+		      console.log(msg);
+		}
 		
 		setTimeout(function(){
 			$alertMessage.remove();

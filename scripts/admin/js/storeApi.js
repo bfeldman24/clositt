@@ -62,44 +62,59 @@ storeApi = {
          
             if (result == null || result.trim() == ""){
     			 console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");    		
-		         Messenger.error("Error: Could read the product page. Check to make sure this link is still active.");	         
+		         Messenger.error("Error: Could not read the product page. Check to make sure this link is still active.");	         
+		         
+		         if (typeof(callback) == "function"){
+			        callback(products);   
+			     }
 		    }else{       			         								
 				
 				try{
 				    // Get Product Data
 				    var data = storeApi.populateProducts(company, result, url);
+                    
+                    if (data == null || Object.keys(data).length <= 0){
+                        if (typeof(callback) == "function"){
+         			        callback(products);   
+         			    }
+                    }else{ 
 
-                    // Add valid products to list
-				    for (var i=0; i < Object.keys(data).length; i++){            
-       	                var testProduct = data[Object.keys(data)[i]];
-       	                
-    				    if (storeApiHelper.validateProduct(testProduct)){
-    				        products[testProduct.sku] = testProduct;   
+                        // Add valid products to list
+    				    for (var i=0; i < Object.keys(data).length; i++){            
+           	                var testProduct = data[Object.keys(data)[i]];
+           	                
+        				    if (storeApiHelper.validateProduct(testProduct)){
+        				        products[testProduct.sku] = testProduct;   
+        				    }
     				    }
-				    }
-				    
-				    // Get next page url 
-				    var nextPage = storeApiHelper.getNextPageUrl(company, result, url);
-				    
-				    if (pageNumber < 100 &&
-				        nextPage != null && 
-				        nextPage.length > 10 &&				        
-				        nextPage != url &&
-				        (nextPage.indexOf(".com") > 0 || nextPage.indexOf(".net") > 0 || nextPage.indexOf(".org") > 0)){
-				            
-				            pageNumber++;
-				            storeApi.fetchProducts(company, nextPage, pageNumber, products, callback); 
-				            
-				        } else {
-				            if (typeof(callback) == "function"){
-				                callback(products);   
-				            }
-				        }
+    				    
+    				    // Get next page url 
+    				    var nextPage = storeApiHelper.getNextPageUrl(company, result, url);
+    				    
+    				    if (pageNumber < 100 &&
+    				        nextPage != null && 
+    				        nextPage.length > 10 &&				        
+    				        nextPage != url &&
+    				        (nextPage.indexOf(".com") > 0 || nextPage.indexOf(".net") > 0 || nextPage.indexOf(".org") > 0)){
+    				            
+    				            pageNumber++;
+    				            storeApi.fetchProducts(company, nextPage, pageNumber, products, callback); 
+    				            
+    			        } else {
+    			            if (typeof(callback) == "function"){
+    			                callback(products);   
+    			            }
+    			        }
+                    }
 				        
 				    
 				}catch(err){
 				    // do nothing
 				    console.log("Whoops ran into a problem: " + err);
+				    
+				    if (typeof(callback) == "function"){
+				        callback(products);   
+				    }
 				}
 		    }
         });

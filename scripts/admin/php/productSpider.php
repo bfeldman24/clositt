@@ -425,7 +425,7 @@ input{
     <a href="#addCategoryForm" style="float: right; margin-right: 10px;"><button class="btn btn-danger btn-small">Upload Form</button></a>
     <a href="#top" style="float: right; margin-right: 10px;"><button class="btn btn-danger btn-small">Top</button></a>
     <button id="selectall" class="btn btn-default btn-sm">Select All</button>
-    <button id="selectallvalid" class="btn btn-default btn-sm">Select Valid</button>    
+<!--    <button id="selectallvalid" class="btn btn-default btn-sm">Select Valid</button>    -->
     <button id="deselectall" class="btn btn-default btn-sm">Deselect All</button>
     <button onclick="spider.testProductsFromLinks()" class="btn btn-primary btn-sm">Test Category</button>
     <!--<button onclick="spider.testProductsFromLinks(true, false, false)" class="btn btn-primary btn-sm">View Category Data</button>-->
@@ -447,15 +447,5 @@ input{
 <?php echo CLOSITT_JS; ?>
 <script src="../js/storeApi.js"></script>
 <script src="../js/productSpider.js"></script>
-<script type="text/javascript">
-
-//setTimeout(function(){
-//    if(firebase.userid == null){
-//    	Messenger.info("You must be logged in to save products.");
-//    	$("#signinModal").modal('show');  
-//    }
-//},7000);
-	
-</script>
 </body>
 </html>
