@@ -1,4 +1,6 @@
 <?php
+require_once(dirname(__FILE__) . '/../globals.php');
+
 // LOGGING
 define('DEBUG_LOG', dirname(__FILE__) . "/../Logs/Debugger");
 
@@ -22,11 +24,20 @@ class Debugger{
 	* Appends the sql error to the end of the file ($this->file)
     */		
 	public function debugger($msg){
-		$message = "\n" . date("m/d/y h:i:s") . " - " . $msg;
+		if (DEBUG){
+			$fileName = null;
+			$message = "\n" . date("m/d/y h:i:s") . " - " . $msg;
 		
-		$file = fopen($this->debugLog,"a");
-		fwrite($file, $message);
-		fclose($file);
+			if(isset($this->debugLog) && $this->debugLog != null){
+				$fileName = $this->debugLog;
+			}else{	
+				$fileName = dirname(__FILE__) . "/../Logs/Debugger" . date("-Y-m-d") . ".txt";	
+			}
+
+			$file = fopen($fileName,"a");
+			fwrite($file, $message);
+			fclose($file);
+		}
 	}
 }
 ?>
