@@ -1,10 +1,11 @@
 <?php 
 define('DOMAIN','closetta.com');
-define('HOME_ROOT','/ben/');
+define('HOME_ROOT','/');
 define('HOME_PAGE','http://' . DOMAIN . HOME_ROOT);
 $GLOBALS['ADMIN_LIST'] = array(2, 35, 94);
 
 // DEV
+define('DEBUG', false);
 define('CLOSITT_CSS',HOME_ROOT .'css/style.css');
 
 $js = '<script src="' . HOME_ROOT .'scripts/js/firebaseExtension.js"></script>' .
