@@ -92,6 +92,17 @@ class ProductCriteria{
 			$this->maxPrice = $maxPrice;
 		}
 	}		
+	
+	public function isEmpty(){
+	   return  !isset($this->maxPrice) &&
+	           !isset($this->minPrice) &&
+	           !isset($this->searchString) &&
+	           !isset($this->tags) &&
+	           !isset($this->colors) &&
+	           !isset($this->categories) &&
+	           !isset($this->customers) &&
+	           !isset($this->companies);
+	}
 
     public static function setCriteriaFromPost($row){
 		$productCriteria = new ProductCriteria();
@@ -107,7 +118,7 @@ class ProductCriteria{
 		$productCriteria->setTags(ProductCriteria::convertArrayToCamelCase($row['tags']));		
 				    
 		return $productCriteria;
-	}
+	}	
 	
 	private static function convertArrayToCamelCase($arr){
 	    for ($i=0; $i < count($arr); $i++){
@@ -119,8 +130,8 @@ class ProductCriteria{
 	
 	private static function toCamelCase($str){
 	       $str = ucwords(strtolower($str));
-           $str = preg_replace('/\s+/', '', $str); 
-           return $str;
+           //$str = preg_replace('/\s+/', '', $str); 
+           return trim($str);
 	}
 }
 

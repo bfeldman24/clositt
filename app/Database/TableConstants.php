@@ -38,6 +38,8 @@ define('HAS_COLOR', 'hascolor');
 define('TAGS', 'Tags');
 define('TAG_STRING', 'tag');
 define('TAG_COUNT', 'count');
+define('TAG_STATUS', 'status');
+define('TAG_APPROVED', 'approved');
 
 define('COLOR_MAPPING', 'ColorMapping');
 define('COLOR_MAPPING_COLOR', 'color');

@@ -195,7 +195,7 @@ class ProductDao extends AbstractDao {
 	* @param $pageNumber - when paginating, which page is being requested
 	* @param $numResultsPerPage - how many results to return per page
 	**/
-	public function getProductsWithCriteria($criteria, $pageNumber, $numResultsPerPage){
+	public function getProductsWithCriteria($criteria, $pageNumber, $numResultsPerPage, $tagAdmin = false){
 		$tagWeight = .5;
 		
 		//Validate that there is at least one valid filter set
@@ -247,12 +247,22 @@ class ProductDao extends AbstractDao {
         }
         
         if ($categories != null){
-            $sql .= " INNER JOIN " . TAGS . " ct  ON ct." . PRODUCT_SKU . " = p." . PRODUCT_SKU;                      
+            $sql .= " INNER JOIN " . TAGS . " ct  ON ct." . PRODUCT_SKU . " = p." . PRODUCT_SKU . " AND ct." . TAG_STATUS . " = 1 ";                                                          
+            
+            if ($tagAdmin){
+                $sql .= " AND ct." . TAG_APPROVED . " = 0 ";    
+            }
+            
             $this->addCriteriaToSql($sql, $categories, "ct." . TAG_STRING, $params, $paramTypes);
         }        
         
         if($hasTags){
-            $sql .= " LEFT JOIN " . TAGS . " t  ON t." . PRODUCT_SKU . " = p." . PRODUCT_SKU;                      
+            $sql .= " LEFT JOIN " . TAGS . " t  ON t." . PRODUCT_SKU . " = p." . PRODUCT_SKU . " AND t." . TAG_STATUS . " = 1 ";             
+            
+            if ($tagAdmin){
+                $sql .= " AND t." . TAG_APPROVED . " = 0 ";    
+            }
+            
             $this->addCriteriaToSql($sql, $searchTags, "t." . TAG_STRING, $params, $paramTypes);
         }
 				
@@ -315,35 +325,35 @@ class ProductDao extends AbstractDao {
         if ($criteria->getColors() != null){
             $orderby .= " CASE WHEN NOT ISNULL(p." . PRODUCT_COLOR_ONE . ")" .
                                     " THEN c." . COLOR_MAPPING_BRIGHTNESS .
-                                " ELSE c2." . COLOR_MAPPING_BRIGHTNESS . " END, ";
+                                " ELSE c2." . COLOR_MAPPING_BRIGHTNESS . " END DESC, ";
                                 
             $orderby .= " + CASE WHEN NOT ISNULL(p." . PRODUCT_COLOR_ONE . ")" .
                                     " THEN p." . PRODUCT_COLOR_ONE_PERCENT .
-                                " ELSE p." . PRODUCT_COLOR_TWO_PERCENT . " END ";
+                                " ELSE p." . PRODUCT_COLOR_TWO_PERCENT . " END DESC";
         }
 
         // ORDER BY (search string)        
         if ($hasSearchString){ 
-		    $orderby .= " + Match(p.".PRODUCT_NAME.") Against (?)";
+		    $orderby .= " + Match(p.".PRODUCT_NAME.") Against (?) DESC";
             $params[] = $searchString;
 			$paramTypes[] = 'text';            		                            
 		}        
                 
         // ORDER BY (categories)
         if ($categories != null){                        
-		    $orderby .= " + ( COALESCE( ct.".TAG_COUNT.", 0) * " . $tagWeight . ")";
+		    $orderby .= " + ( COALESCE( ct.".TAG_COUNT.", 0) * " . $tagWeight . ") DESC";		    
 		}			
         
         // ORDER BY (tags)
         if ($hasTags){                        
-		    $orderby .= " + ( COALESCE(t.".TAG_COUNT.", 0) * " . $tagWeight . ")";
+		    $orderby .= " + ( COALESCE(t.".TAG_COUNT.", 0) * " . $tagWeight . ") DESC";		    		    		    
 		}							
                 
         if ($orderby != ""){            
             // remove first +
             $orderby = preg_replace('/\+/', '', $orderby, 1);
             
-            $sql .= " ORDER BY " . $orderby . " DESC";
+            $sql .= " ORDER BY " . $orderby;
         }
 
 		$sql .= " LIMIT ? OFFSET ? ";

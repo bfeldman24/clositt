@@ -1,4 +1,7 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
+
 require_once(dirname(__FILE__) . '/AbstractDao.php');
 require_once('Date.php');
 
@@ -539,6 +542,114 @@ class ProductAdminDao extends AbstractDao {
 		$paramsTypes = array();		
 		$params = array();		
 		return $this->getResults($sql, $params, $paramTypes, "98237923");
-	}		
+	}	
+	
+	public function getUniqueTags(){
+	   $sql = "SELECT DISTINCT " . TAG_STRING . 
+				" FROM " . TAGS . " t " .
+				" LEFT JOIN " . PRODUCTS . " p ON p." . PRODUCT_SKU . " = t." . PRODUCT_SKU .
+				" WHERE " . TAG_APPROVED . " = 0 " .
+				" AND p." . PRODUCT_STATUS . " = 1 " . 			
+				" ORDER BY " . TAG_STRING;
+        
+		$paramsTypes = array();		
+		$params = array();		
+		return $this->getResults($sql, $params, $paramTypes, "2342837429");
+	}	
+	
+	public function removeTags($skus, $tag){
+	   if (!isset($skus) || $skus == null || !is_array($skus) || count($skus) <= 0 || $tag == null){
+	       return -1;   
+	   }
+	   
+	   $sql = "UPDATE " . TAGS .       	  
+              " SET " . TAG_STATUS . " = 2 ," .
+                        TAG_APPROVED . " = 1 " . 
+              " WHERE " . TAG_STRING . " = ? ";
+                            
+       if($this->debug){		    
+			$this->logDebug("92864192401" ,$sql . " { $sku , $tag } ");
+		}
+        
+        $params = array($tag);
+        $paramTypes = array('text'); 
+        $skuPlaceholders = '';               
+        
+        foreach ($skus as $sku) {    
+            try {   
+                $params[] = $sku;
+                $paramTypes[] = 'text';  
+                
+                if ($skuPlaceholders != ''){
+                    $skuPlaceholders .= ",";   
+                }
+                
+                $skuPlaceholders .= "?";
+                      
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            }
+        }
+        
+        $sql .= " AND " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")"; 
+
+        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+        $affectedRows = 0;
+                 
+        try {                              
+            $affectedRows = $stmt->execute($params);
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+        }     
+        
+        return $affectedRows;
+	}
+	
+	public function approveTags($skus, $tag){
+	   if (!isset($skus) || $skus == null || !is_array($skus) || count($skus) <= 0 || $tag == null){
+	       return -1;   
+	   }
+	   
+	   $sql = "UPDATE " . TAGS .       	  
+              " SET " . TAG_APPROVED . " = 1 " . 
+              " WHERE " . TAG_STRING . " = ? ";
+                            
+       if($this->debug){
+			$this->logDebug("238479232" ,$sql . " { $sku , $tag } ");
+		}
+        
+        $params = array($tag);
+        $paramTypes = array('text'); 
+        $skuPlaceholders = '';               
+        
+        foreach ($skus as $sku) {    
+            try {   
+                $params[] = $sku;
+                $paramTypes[] = 'text';  
+                
+                if ($skuPlaceholders != ''){
+                    $skuPlaceholders .= ",";   
+                }
+                
+                $skuPlaceholders .= "?";
+                      
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            }
+        }
+        
+        $sql .= " AND " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")";       
+        
+        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+        $affectedRows = 0;
+                 
+        try {                              
+            $affectedRows = $stmt->execute($params);
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+        }     
+        
+        return $affectedRows;
+	}
 }
 ?>

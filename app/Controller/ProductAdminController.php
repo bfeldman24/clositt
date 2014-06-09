@@ -1,4 +1,7 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
+
 require_once(dirname(__FILE__) . '/../Database/DataAccess/check-login.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductAdminDao.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductDao.php');
@@ -186,6 +189,23 @@ class ProductAdminController extends Debugger {
 		return $results;
 	}
 	
+	public function getFilteredProducts($criteria, $pageNumber, $numResultsPage){
+			
+		$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage);
+		$searchResults = array();
+		
+		if(is_object($results)){
+			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){
+			    $productEntity = new ProductEntity();
+				ProductEntity::setProductFromDB($productEntity, $row);
+				//ProductTemplate::getProductGridTemplate($productEntity);
+				$searchResults[] = $productEntity->toArray();
+			}
+		}
+		
+		return json_encode($searchResults);
+	}
+	
 	public function addProductsFromFile($productFile){
 	    // Get Products from file    
         $file = fopen($productFile, 'r');
@@ -339,6 +359,47 @@ class ProductAdminController extends Debugger {
 		return json_encode($searchResults);
 	}
 	
+	public function getUniqueTags(){	   
+	    $tags = array();	    			      
+		$results = $this->productAdminDao->getUniqueTags(); 
+		
+		if(is_object($results)){
+		 
+			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){				    
+				$tags[] = stripslashes($row[TAG_STRING]);
+			}
+		}
+	
+		return json_encode($tags);
+	}
+	
+	public function removeTag($criteria){
+	   if (!isset($criteria) || !isset($criteria['sku']) || strlen($criteria['sku']) < 3 || !isset($criteria['tag']) || strlen($criteria['tag']) < 3){
+	       return "Missing info. Can't proceed";   
+	   }  
+	   
+	   $criteria['skus'] = array($criteria['sku']);
+	   return $this->removeTags($criteria);
+	}
+	
+	public function removeTags($criteria){
+	   if (!isset($criteria) || !isset($criteria['skus']) || !is_array($criteria['skus']) || !isset($criteria['tag']) || strlen($criteria['tag']) < 3){
+	       return "Missing info. Can't proceed";   
+	   }  
+	   
+	   $affectedRows = $this->productAdminDao->removeTags($criteria['skus'], $criteria['tag']); 
+	   return $affectedRows > 0 ? "success" : "failed";
+	}
+	
+	public function approveTags($criteria){
+	   if (!isset($criteria) || !isset($criteria['skus']) || !is_array($criteria['skus']) || !isset($criteria['tag']) || strlen($criteria['tag']) < 3){
+	       return "Missing info. Can't proceed";   
+	   }  
+	   
+	   $affectedRows = $this->productAdminDao->approveTags($criteria['skus'], $criteria['tag']); 
+	   return $affectedRows > 0 ? "success" : "failed";
+	}
+	
 	public function deleteUnwantedProducts(){
 	   return $this->productAdminDao->deleteUnwantedProducts();
 	}
@@ -464,7 +525,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     }else if ($_GET['method'] == 'removelink'){
         echo $productAdminController->removeSpiderLink($_POST);    
     
-    }
+    }else if ($_GET['method'] == 'removetag'){
+        echo $productAdminController->removeTag($_POST);    
+        
+    }else if ($_GET['method'] == 'removetags'){
+        echo $productAdminController->removeTags($_POST);    
+    
+    }else if ($_GET['method'] == 'approvetags'){
+        echo $productAdminController->approveTags($_POST);        
+    
+    }else if ($_GET['method'] == 'searchdb' && isset($_GET['page'])){      
+        
+        if(isset($_POST) && $_POST != null){            
+          	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
+          	
+          	if (!$productCrit->isEmpty()){
+                  $products = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT);
+                  print_r($products);
+          	}
+        }
+    }else if ($_GET['method'] == 'searchunapprovedtags' && isset($_GET['page'])){      
+        if(isset($_POST) && $_POST != null && (isset($_POST['category']) || isset($_POST['tags']))){
+            
+          	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
+          	$getOnlyUnapprovedTags = true;          	
+          	
+          	if (!$productCrit->isEmpty()){
+                  $products = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT, $getOnlyUnapprovedTags);
+                  print_r($products);
+          	}
+        }
+    }    
+    
            
 }else if ($_GET['method'] == 'updateshortlinks'){                                          
     echo "Updating Short Links…";
@@ -506,6 +598,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
 
 }else if ($_GET['method'] == 'removeuncategorized'){
     echo $productAdminController->removeUncategorizedProducts();    
+
+}else if ($_GET['method'] == 'getuniquetags'){
+    echo $productAdminController->getUniqueTags();    
 }
+
 
 ?>

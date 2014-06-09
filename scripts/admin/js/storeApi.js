@@ -1575,6 +1575,12 @@ storeApiHelper = {
 		        if(isNaN(price)){       				        
 			        console.log("Product ("+i+") price is not a number");           			            
 		        
+		        }else if(price < 3){
+		          console.log("Product ("+i+") price seems too small");           			            
+		        
+		        }else if(price > 20000){
+		          console.log("Product ("+i+") price seems too large");           			            
+		            
 		        }else{       			          
 		            return true;	                				               				        
 		        }
