@@ -11,6 +11,10 @@ define("PRODUCT_NAME","name");
 define("PRODUCT_LINK","link");
 define("PRODUCT_IMAGE","image");
 define("PRODUCT_PRICE","price");
+define("PRODUCT_SUMMARY","summary");
+define("PRODUCT_DETAILS","details");
+define("PRODUCT_PROMOTION","promotion");
+define("PRODUCT_PROMOTION_TWO","promotiontwo");
 define("PRODUCT_COLOR_ONE","colorOne");
 define("PRODUCT_COLOR_ONE_PERCENT","coloronepercent");
 define("PRODUCT_COLOR_TWO","colorTwo");
@@ -21,6 +25,7 @@ define("PRODUCT_SHORT_LINK","shortlink");
 define("PRODUCT_STATUS","status");
 define("PRODUCT_RANDOM_INDEX","rand");
 define("PRODUCT_DATE_UPDATED","updatedon");
+define("PRODUCT_DETAIL_UPDATED","detailsupdatedon");
 define("PRODUCT_CREATED_ON","createdon");
 
 

@@ -8,12 +8,61 @@ var spider = {
     links: null,
     stopSaveAll: false,
     autoRunHash: '#autoSaveAll',
+    testNewProductsHash: '#testNew',
     
     // Gets the category links
     getLinks: function(){
         $("#loadingMask").show();
     	$("#links").html("");	
     	spider.links = [];
+    	
+    	if (location.hash == spider.testNewProductsHash){
+    	   for(var i=0; i < Object.keys(Companies).length; i++){
+    	       var companyName = Object.keys(Companies)[i];
+    	       var customerName = "gender";
+    	       var categoryName = "test";
+    	       var category = Companies[companyName]; 
+    	       
+    	       $("#links").append(
+    	           $("<div>").addClass("company").append(
+    	               $("<a>").attr("name",companyName)
+    	            ).append(
+    	               $("<div>").addClass("companyName").html("&bull; " + companyName.replace("_","."))
+    	            )
+    	        );   
+    	           	       
+	            $("#links > .company").last().append($("<div>").addClass("customer").append($("<div>").addClass("customerName").html("&raquo; " + customerName)));
+	       	                          
+               var link = {};
+               link.company = companyName.replace(/'/g, "\\'");
+               link.customer = customerName.replace(/'/g, "\\'");
+               link.category = categoryName.replace(/'/g, "\\'");
+               link.url = category["url"].replace(/'/g, "\\'");
+               spider.links.push(link);
+               	               
+               $("#links > .company > .customer").last().append(
+					$("<div>").addClass("category").css("display","none").append(
+						$("<input>")
+							.attr("type","checkbox")
+							.attr("company", link.company)
+							.attr("customer", link.customer)
+							.attr("category", link.category)
+							.attr("lastUpdated", '')        							
+							.attr("url", link.url)
+							.attr("status", '')
+						).append(
+						      $("<a>").attr("href", "webProxy.php?u=" + link.url).attr("target","_blank").html(categoryName)
+						).append(
+						      $("<span>").addClass("isvalid")
+						).append(
+						      $("<span>").addClass("lastUpdated")
+						)
+				); 	   
+    	   }
+    	 
+    	   $("#loadingMask").hide();  
+    	   return true;
+    	}
     	
     	$.getJSON( window.HOME_ROOT + "spider/getlinks", function( data ) {
     	
@@ -269,8 +318,7 @@ var spider = {
     	var image = product.image;
     	var name = product.name;		
     	var id = product.sku;
-    	var price = product.price + "";
-    	price = "$" + Math.round(parseInt(price.replace("$","").trim()));		 	
+    	var price = product.price == null || isNaN(product.price) ? "" : "$" + Math.round(product.price);		 			 	
     
     	var rand = Math.floor(Math.random() * 3) + 1;
     	var shadow = "";
@@ -296,7 +344,8 @@ var spider = {
 						html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Clositt"><img class="hanger-icon" src="/css/images/hanger-icon.png" /><i class="icon-plus-sign hanger-plus"></i></div>';
 					html += '</div>';
 					html +='<div class="middle">';										
-						html +='<div class="link">Link: '+link+'</div>';
+						html +='<div class="sku">Sku: '+id+'</div>';
+						html +='<div class="link">Link: <a href="'+link+'">'+link+'</a></div>';
 					html += '</div>';
 					html +='<div class="bottom">';						    					    
 					    html += '<div class="productActions" >';					    
@@ -416,7 +465,8 @@ var spider = {
 ****************************************/
 var categoryMaintenance = {
     init: function(){
-        $('form').submit(categoryMaintenance.saveCategory);    
+        $('form#saveProducts').submit(categoryMaintenance.saveCategory);    
+        $('form#saveCategories').submit(categoryMaintenance.getCategories);    
         $(document).on("click",".editCategory", categoryMaintenance.editCategory);
         $(document).on("click",".removeCategory", categoryMaintenance.removeCategory);
     },
@@ -567,6 +617,164 @@ var categoryMaintenance = {
     	    });            
         }
         
+    },
+    
+    getCategories: function(e){
+        e.preventDefault();
+        $("#loadingMask").show();
+        var selectedStore = $("#autoCompanySelect").val();        
+        var home = null;
+                
+        var dictionary = ['shirt','pant','dresses','polo','knit','suit','blazer','coat',
+                          'sweater','vest','sleepwear','swim','loungewear','outerwear',
+                          'shorts','blouse','jacket','skirt','petities','trouser','cardigan',
+                          'turtleneck','jean','denim','activewear','hoodie','tees','romper',
+                          'clothes','apparel','jersey'];
+        var category = new RegExp(dictionary.join("|"));                         
+               
+        var store = Companies[selectedStore];
+        
+        if (store == null){
+            home = prompt("Sorry. We don't have that store's homepage url stored, but you can enter it here:");
+        }else{       
+            home = store.url.substring(0, store.url.indexOf("/",store.url.indexOf("//") + 2));
+        }
+        
+        if (home == null) return false;
+        
+        $.post("webProxy.php", {u:home}, function(data){	
+         
+            if (data == null || data.trim() == ""){
+    			 console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");    		
+		         Messenger.error("Error: Could not read the store home page. Check to make sure this link is still active.");		         
+		    }else{ 
+		         var $links = $("<ul>").addClass("links");
+		         var linkSet = [];
+		         var uniqueCats = [];
+		      
+		         $(data).find("a[href]:not(:has(*))").each(function(){
+		              var url = $(this).attr("href").toLowerCase();	
+		              
+		              var womenRegex = new RegExp("women|gal");
+                      var menRegex = new RegExp("men|dude|guy");	                      
+                      
+                      var isForMen = menRegex.test(url);
+                      var isForWomen = womenRegex.test(url);
+	                  var menWomen = isForWomen ? "women" : isForMen ? "men" : '';
+	                  var absolute = '';
+	                  
+	                  if (url.indexOf("/") == 0 && url.indexOf("//") != 0){
+	                      absolute = home;
+	                  }
+		              	              
+		          
+		              if (url != null && url.trim() != "" && url.indexOf("java") < 0 &&
+		                  linkSet.indexOf($(this).attr("href")) <= 0){
+		                      		                      
+	                      linkSet.push($(this).attr("href"));		              
+	                      var cat;	    
+	                      var uniqueId = '';                   
+	                      var isChecked = category.test(url) && menWomen != '';
+	                      
+	                      var matchesCategories = url.match(category);
+	                      
+	                      if (matchesCategories == null || matchesCategories.length <= 0){
+	                           matchesCategories = $(this).text().match(category);
+	                      }
+	                      
+	                      if (matchesCategories != null && matchesCategories.length > 0){
+	                           cat = matchesCategories[0];
+	                           
+	                           if (matchesCategories.length > 1){
+	                               if (cat == "apparel" || cat == "clothes"){
+	                                   cat = matchesCategories[1]; 
+	                               }
+	                               
+	                               console.log("More than 1 category detected!")
+	                               console.log(matchesCategories);
+	                           }
+	                      }
+	                      
+	                      
+	                      if (cat != null){
+    	                      // Make cats unique
+    	                      while (uniqueCats.indexOf(menWomen + cat + $(this).text() + uniqueId) >= 0){
+    	                           uniqueId = parseInt(uniqueId);
+    	                               	                       
+    	                           if (isNaN(uniqueId)){
+    	                               uniqueId = 1;   
+    	                           }else{
+    	                               uniqueId++;
+    	                           }
+    	                      }
+    	                      
+    	                      uniqueCats.push(menWomen + cat + $(this).text() + uniqueId);
+	                      
+	                          cat += " - ";
+	                      }else{
+	                           cat = '';
+	                      }	                      
+	                      	                      		          
+    		              $links.append(
+    		                  $("<li>").addClass("link").append(
+    		                      $("<input>").addClass("useLink").prop("checked",isChecked)
+    		                      .attr("type","checkbox")
+    		                      .attr("store", selectedStore)
+    		                      .attr("customer", menWomen)
+    		                      .attr("category", cat + $(this).text() + uniqueId)
+    		                      .attr("link", absolute + $(this).attr("href"))
+    		                  ).append(
+    		                      $("<span>").addClass("linkCustomer").text(menWomen + " ")
+    		                  ).append(
+    		                      $("<span>").addClass("linkCategory").text(cat + " - ")
+    		                  ).append(
+    		                      $("<span>").addClass("linkText").text($(this).text() + uniqueId + " = ")
+    		                  ).append(
+    		                      $("<a>").addClass("linkUrl").attr("target","_blank").attr("href",absolute + $(this).attr("href")).text($(this).attr("href"))
+    		                  )
+    		              ); 		          		       
+		              }       
+		         });
+		         
+		         $("#loadingMask").hide();
+		         
+		         bootbox.dialog({
+                     message: $links,
+                     title: "Add Categories",
+                     buttons: {                
+                         main: {
+                             label: "Cancel"
+                         },
+                         success: {
+                             label: "Submit",
+                             className: "btn-success",
+                             callback: function() {   
+                                                                                                                     
+                                var cats = [];
+                                
+                                $("ul.links input:checked").each(function(){
+                                    cats.push({
+                                        store: $(this).attr("store"),
+                                        customer: $(this).attr("customer"),
+                                        category: $(this).attr("category"),
+                                        link: $(this).attr("link"),
+                                        tags: null
+                                    }); 
+                                });                                                              
+                                
+                                $.post( window.HOME_ROOT + "spider/addlinks" ,{links: cats}, function(results){
+                                    
+                                     Messenger.info("Saved " + results + " out of " + $("ul.links input:checked").length + " links");                        
+                                });
+                                
+                             }
+                         },
+                     }
+                 }); 		          
+		    }
+        });
+        
+        return false;
     }
 };
 
@@ -949,23 +1157,28 @@ $(document).ready(function(){
     $(document).find(".feedback-minimized").show('fade');    
     
     // Clone the form store dropdown to the action bar
-        var storeSelect = $("#inputCompany").clone();
-        storeSelect.attr("id","selectStores");
-        
-        storeSelect.find("option").first().before(
-            $("<option>").attr("value","store").text("Go To")
-        );
-        
-        storeSelect.val("store");    
-        storeSelect.css("float","right")
-         .css("margin","0 10px 0 0")
-         .css("padding","2px 4px")
-         .css("height","26px")
-         .css("width","80px");         
-        
-        $(".actionButtons button").last().after(
-            storeSelect    
-        );                                 
+    var storeSelect = $("#inputCompany").clone();
+    storeSelect.attr("id","selectStores");
+    
+    storeSelect.find("option").first().before(
+        $("<option>").attr("value","store").text("Go To")
+    );
+    
+    storeSelect.val("store");    
+    storeSelect.css("float","right")
+        .css("margin","0 10px 0 0")
+        .css("padding","2px 4px")
+        .css("height","26px")
+        .css("width","80px");         
+    
+    $(".actionButtons button").last().after(
+        storeSelect    
+    );   
+    
+    var storeAutoSelect = storeSelect.clone();
+    storeAutoSelect.children().first().remove();
+    $("#autoCompanySelect").append( storeAutoSelect.children() );
+    $("#autoCompanySelect").val(0);
     
     // Initialize the functions
     Messenger.debug = true;

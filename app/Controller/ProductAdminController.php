@@ -12,7 +12,6 @@ require_once(dirname(__FILE__) . '/ProductController.php');
 require_once(dirname(__FILE__) . '/Debugger.php');
 
 
-
 class ProductAdminController extends Debugger {
 	private $productAdminDao = null;
 	private $productDao = null;
@@ -63,6 +62,22 @@ class ProductAdminController extends Debugger {
 	   }
 	}
 	
+	public function addSpiderLinks($criteriaList){
+	   if (isset($criteriaList) && is_array($criteriaList)){
+	       $successfullyAdded = 0;
+	       
+	       foreach ($criteriaList as $criteria) {    
+	           if (isset($criteria) && is_array($criteria)){
+	               $successfullyAdded += $this->productAdminDao->addSpiderLink($criteria);
+	           }
+	       }	       
+	       
+	       return $successfullyAdded;	              
+	   }else{
+	       return "Nothing to add";   
+	   }
+	}
+	
 	public function addSpiderLink($criteria){
 	   if (isset($criteria) && is_array($criteria)){
 	       $results = $this->productAdminDao->addSpiderLink($criteria);	       
@@ -70,7 +85,7 @@ class ProductAdminController extends Debugger {
 	   }else{
 	       return "Nothing to add";   
 	   }
-	}
+	}		
 		
 	public function updateSpiderLink($criteria){
 	   if (isset($criteria) && is_array($criteria)){
@@ -473,6 +488,52 @@ class ProductAdminController extends Debugger {
 	   }  
 	}	
 	
+	public function getProductDetailCount(){
+	   $status = array();	    			      
+	   $notScrapedCount = $this->productAdminDao->getProductDetailCount(); 
+		
+	   if(is_object($notScrapedCount)){		 
+            $status[] = $notScrapedCount->fetchOne();
+	   }
+	   
+	   $scrapedCount = $this->productAdminDao->getTotalLiveProductsCount(); 
+		
+	   if(is_object($scrapedCount)){
+            $status[] = $scrapedCount->fetchOne();
+	   }	   
+	
+	   return json_encode($status);
+	}
+	
+	public function getNextProductDetailUrls($stores, $limit = 1){	  
+	    if ($stores == null || !isset($stores) || !is_array($stores)){
+	       return "No Stores";  
+	    }
+	    
+	    $results = $this->productAdminDao->getNextProductDetailUrls($stores, $limit);
+		$searchResults = array();
+		
+		if(is_object($results)){
+			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){
+			    $productEntity = new ProductEntity();
+				ProductEntity::setProductFromDB($productEntity, $row);
+				$searchResults[] = $productEntity->toArray();
+			}
+		}
+		
+		return json_encode($searchResults);
+	}
+	
+	public function saveProductDetails($criteria){
+	   
+	   if (isset($criteria) && is_array($criteria)){
+	       $results = $this->productAdminDao->saveProductDetails($criteria);	       
+	       return $results == 1 ? "success" : "failed";	              
+	   }else{
+	       return "Nothing to add";   
+	   }
+	}
+	
 	private function convertResultsToArray($results){
 	   $arr = array();
 	   
@@ -494,6 +555,7 @@ class ProductAdminController extends Debugger {
       $url = preg_replace('~[^-a-z0-9_]+~', '', $url);
       return $url;
    }
+   
 }
 
 $productAdminController = new ProductAdminController($mdb2);
@@ -518,6 +580,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     
     }else if ($_GET['method'] == 'addlink'){
         echo $productAdminController->addSpiderLink($_POST);    
+    
+    }else if ($_GET['method'] == 'addlinks'){
+        echo $productAdminController->addSpiderLinks($_POST['links']);    
     
     }else if ($_GET['method'] == 'updatelink'){
         echo $productAdminController->updateSpiderLink($_POST);    
@@ -555,8 +620,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
                   print_r($products);
           	}
         }
-    }    
     
+    }else if ($_GET['method'] == 'getnextproductdetailurls'){
+        print_r($productAdminController->getNextProductDetailUrls($_POST['stores'], $_GET['page']));    
+    
+    }else if ($_GET['method'] == 'saveproductdetails'){
+        echo $productAdminController->saveProductDetails($_POST);    
+    }         
            
 }else if ($_GET['method'] == 'updateshortlinks'){                                          
     echo "Updating Short Links…";
@@ -601,6 +671,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
 
 }else if ($_GET['method'] == 'getuniquetags'){
     echo $productAdminController->getUniqueTags();    
+
+}else if ($_GET['method'] == 'getproductdetailstatus'){
+    echo $productAdminController->getProductDetailCount();    
+
 }
 
 

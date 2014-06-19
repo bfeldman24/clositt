@@ -426,6 +426,23 @@ class ProductAdminDao extends AbstractDao {
 		return $result;
 	}
 	
+	public function getTotalLiveProductsCount(){
+	    $sql = "SELECT COUNT(1) as count FROM " . PRODUCTS . " WHERE status = 1";
+		
+		if($this->debug){		    
+			$this->logDebug("2398429" ,$sql );
+		}		
+				
+		$result =& $this->db->query($sql);
+		
+		if (PEAR::isError($result)) {
+			$this->logError("23482", $result->getMessage(),$sql);
+		    return false;
+		}
+		
+		return $result;
+	}
+	
 	public function getNonLiveProducts($page, $limit){
 	   $offset = $page * $limit;
 		
@@ -556,6 +573,89 @@ class ProductAdminDao extends AbstractDao {
 		$params = array();		
 		return $this->getResults($sql, $params, $paramTypes, "2342837429");
 	}	
+	
+	public function getProductDetailCount(){
+	   $sql = "SELECT count(1) as count" .
+				" FROM " . PRODUCTS .
+				" WHERE status = 1 AND " . PRODUCT_DETAIL_UPDATED . " >= DATE_SUB(NOW(), INTERVAL 3 MONTH)";
+        
+		return $this->getResults($sql, array(), array(), "29837492");
+	}	
+	
+	public function getNextProductDetailUrls($stores, $limit){
+		if (!isset($stores) || !is_array($stores) || count($stores) <= 0){
+		      return null; 
+		}
+		
+		$sql = "SELECT " .				
+    		        PRODUCT_SKU . "," .
+    		        PRODUCT_STORE . "," .
+    		        PRODUCT_LINK . 		        
+				" FROM " . PRODUCTS .				
+				" WHERE ".PRODUCT_STATUS." = 1 AND " . 
+				    PRODUCT_DETAIL_UPDATED . " < DATE_SUB(NOW(), INTERVAL 3 MONTH)";
+		
+		$paramsTypes = array();		
+		$params = array();
+		$storePlaceholders = '';
+		
+		foreach ($stores as $store) {    
+            try {   
+                $params[] = $store;
+                $paramTypes[] = 'text';  
+                
+                if ($storePlaceholders != ''){
+                    $storePlaceholders .= ",";   
+                }
+                
+                $storePlaceholders .= "?";
+                      
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            }
+        }	   
+        
+        $sql .= " AND ".PRODUCT_STORE." IN (" . $storePlaceholders . ")" .
+				" LIMIT ?";
+        
+        $paramsTypes[] = 'integer';		
+		$params[] = $limit;     
+		
+		return $this->getResults($sql, $params, $paramTypes, "235252462");
+	}
+	
+	public function saveProductDetails($criteria){
+	   $sql = "UPDATE " . PRODUCTS .        	 
+                " SET " .
+                    PRODUCT_SUMMARY." = :summary , " .
+                    PRODUCT_DETAILS." = :details ," .
+                    PRODUCT_PROMOTION." = :promotion ," .
+                    PRODUCT_PROMOTION_TWO . " = :promotionTwo ," .
+                    PRODUCT_DETAIL_UPDATED . " = NOW() " .
+                " WHERE ".PRODUCT_SKU." = :sku";
+                                
+        if($this->debug){		    
+			$this->logDebug("239875203" , $sql);
+		}
+        
+        $stmt = $this->db->prepare($sql);
+        
+        $product = array();
+        $product['summary'] = $criteria['summary'];
+        $product['details'] = $criteria['details'];
+        $product['promotion'] = $criteria['promotion'];
+        $product['promotionTwo'] = $criteria['promotionTwo'];
+        $product['sku'] = $criteria['sku'];
+        
+        $affected = $stmt->execute($product);                                   		
+		
+		if (PEAR::isError($affected)) {
+			$this->logError("2309472074" ,$affected->getMessage(),$sql);
+		    return false;
+		}	        
+        
+        return $affected;
+	}
 	
 	public function removeTags($skus, $tag){
 	   if (!isset($skus) || $skus == null || !is_array($skus) || count($skus) <= 0 || $tag == null){

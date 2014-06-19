@@ -45,7 +45,16 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
     
     if ($_REQUEST['d']){
         echo "url: " . $url;
-    }    
+    }
+
+    if ($_REQUEST['phantom']){
+	$phantom = "phantomjs";
+        $phantomScript = "/home/ben/clositt-private/phantomjs/phantomWebProxy.js";
+        $command = $phantom . " " . $phantomScript . " " . $url;
+        
+        exec($command, $output);
+        $file = implode("", $output);
+    }else{    
 	
 	if (strpos($_REQUEST['u'],"anthropologie")){
     	// Combine multiple url <body> into one
@@ -139,7 +148,11 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
 	}
 	
 	else{
-	   $file = file_get_contents($url);   
+	   $file = file_get_contents($url); 
+	   
+	   if ($file == null || trim($file) == ""){
+	       $file = file_get_contents_curl($url);
+	   }  
 	   	
 	   if ($_REQUEST['d']){
 	       $html = htmlspecialchars($file, ENT_QUOTES);
@@ -147,17 +160,17 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
        }	   
 	}	    
 		
-	
+	}
 	
 	// only strip starting and ending body if the body tag exists (could be in json format)	
 	if (strpos($file,"<body") && strpos($file,"{") != 0){
 	    $file = preg_replace("/<!--.*?-->/ms", "", $file);
-    	$file = preg_replace('#[\t\n\r]#i', "", $file);
-    	$file = str_replace("<noscript","<div", $file);
+    	//$file = preg_replace('#[\t\n\r]#i', "", $file);
+    	$file = str_replace("<noscript","<div ", $file);
     	$file = str_replace("</noscript>","</div>", $file);
     	$file = preg_replace('#<script(.*?)>(.*?)</script>#is', "", $file);
     	$file = preg_replace('#<style(.*?)>(.*?)</style>#is', "", $file);
-//    	
+
 //    	$file = strip_tags($file, '<p><a><img><strong><div><span><h1><h2><h3><h4><ul><li><ol><html><body>');
 	    //	$file = preg_replace('#<style(.*?)>(.*?)</style>#is', "", $file);
         //	$file = preg_replace('#<head>(.*?)</head>#i', "", $file);   
