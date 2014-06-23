@@ -73,6 +73,12 @@ input{
     position: absolute;
     right: 5px;
 }
+
+.testStores{
+    float: right;
+    margin-right: 30px;
+    width: 150px;
+}
 </style>
 
 </head>
@@ -88,8 +94,7 @@ input{
 <div class="actionButtons">
     <button onclick="clearPage()" class="btn btn-default btn-sm">Clear Page</button>
     <button onclick="productDetailSpider.getProducts()" class="btn btn-success btn-sm">Get All Product Details</button>
-    <button onclick="productDetailSpider.testProducts()" class="btn btn-success btn-sm">Test Next Product Detail</button> 
-    <button onclick="productDetailSpider.togglePause()" class="btn btn-success btn-sm">Pause After Batch</button>    
+    <button class="btn btn-success btn-sm pause">Pause After Current Batch</button>        
 </div>
 
 <div id="loadingMask" style="display:none;" >
@@ -102,6 +107,7 @@ input{
 <?php include(dirname(__FILE__) . '/../../../static/footer.php');   ?>
 
 <?php echo CLOSITT_JS; ?>
+<script src="../js/storeApi.js"></script>
 <script src="../js/productDetailApi.js"></script>
 <script type="text/javascript">
 /***************************************
@@ -129,28 +135,38 @@ function clearPage(){
         limit: 10,
         products: null,
         index: 0,    
-        totalIndex: 0,    
+        totalIndex: 0,  
+        totalLiveProducts: null,
+        startTime: null,
         
-        init: function(){
+        init: function(){  
+            productDetailSpider.getStoreDropdown();
+            $(document).on("change", ".testStores", productDetailSpider.testProducts); 
+            $(document).on("click",".pause", productDetailSpider.togglePause);
+                                  
             $.get( window.HOME_ROOT + "spider/getproductdetailstatus", function(data){
                var detailStatus = JSON.parse(data); 
                var scraped = detailStatus[0] == null ? 0 : detailStatus[0];
-               var totalLiveProducts = detailStatus[1] == null ? 0 : detailStatus[1];
+               productDetailSpider.totalLiveProducts = detailStatus[1] == null ? 0 : detailStatus[1];
                               
                $("#detailCount").append(
                     $("<span>").attr("id","numberScraped").text(scraped)
                ).append(
-                    $("<span>").text("/" + totalLiveProducts)
+                    $("<span>").text("/" + productDetailSpider.totalLiveProducts)
                );
                
                console.log(scraped + " scraped product details");
-               console.log(totalLiveProducts + " total live products");
+               console.log(productDetailSpider.totalLiveProducts + " total live products");
             }); 
         },
         
         getProducts: function(){   
             productDetailSpider.index = 0;
-            productDetailSpider.products = null;                                    
+            productDetailSpider.products = null;    
+            
+            if (productDetailSpider.startTime == null){
+                productDetailSpider.startTime = Date.now();
+            }                                
                                                          
             $.post( window.HOME_ROOT + "spider/getnextproductdetailurls/" + productDetailSpider.limit, {stores: Object.keys(productDetailApi)}, function(data){
                 productDetailSpider.products = JSON.parse(data);
@@ -158,10 +174,19 @@ function clearPage(){
             });
         },
         
-        testProducts: function(){
-            var store = prompt("Please enter the store to test");
-
-            if (store==null) {
+        testProducts: function(e){
+            var store = null;
+            $("#productDetailOutput").html("");
+            $("#loadingMask").show();
+            
+            if (e == null || $(e.currentTarget).length <= 0){
+                store = prompt("Please enter the store to test");
+            }else{
+                store = $(e.currentTarget).val();                 
+                $(".actionButtons select").val("Test a Store");                  
+            }
+            
+            if (store == null || store == "") {
                 return;   
             }
             
@@ -173,7 +198,7 @@ function clearPage(){
                                                          
             $.post( window.HOME_ROOT + "spider/getnextproductdetailurls/" + productDetailSpider.limit, {stores: stores}, function(data){
                 productDetailSpider.products = JSON.parse(data);
-                productDetailSpider.getProductDetails(productDetailSpider.handleProductDetails);
+                productDetailSpider.getProductDetails(productDetailSpider.handleProductDetails);                
             });
         },
         
@@ -190,21 +215,30 @@ function clearPage(){
                 productDetail.getDetails(item.o, item.s, item.l, callback);
             }else{
                 Messenger.info("No more products");
+                $("#loadingMask").hide();
             }
         },
         
         saveProductDetails: function(product){
 
             $.post( window.HOME_ROOT + "spider/saveproductdetails", product, function(data){
-                if (data == "success"){
-                    Messenger.success("Saved Product Details: " + product.sku); 
+                if (data == "success"){                                                                                
+                    productDetailSpider.index++;
+                    productDetailSpider.totalIndex++;                    
                     
                     var numberScraped = $("#numberScraped").text().trim();
                     numberScraped = parseInt(numberScraped) + 1;
                     $("#numberScraped").text(numberScraped);
-                      
-                    productDetailSpider.index++;
-                    productDetailSpider.totalIndex++;
+                    
+                    var elapsedSeconds = parseInt((Date.now() - productDetailSpider.startTime) / 1000);                    
+                    var secondPerPage = Math.round((elapsedSeconds / productDetailSpider.totalIndex) * 100) / 100;
+                    
+                    var minutesLeft = Math.round(((productDetailSpider.totalLiveProducts - numberScraped) * secondPerPage) / 60);                   
+                    
+                    Messenger.success("Saved Product Details: " + product.sku + ".      rate = " + secondPerPage + " seconds per page. (" + minutesLeft + " mins left)"); 
+                    
+                    
+                                          
                     productDetailSpider.handleProductDetails(product);                                        
                     
                     if (productDetailSpider.index < productDetailSpider.products.length){
@@ -235,17 +269,21 @@ function clearPage(){
                         $("<span>").addClass("label label-primary").text(productDetailSpider.totalIndex)
                     )
                 ).append(
-                    $("<div>").append($("<h4>").html("Sku:&nbsp;")).append( $("<a>").attr("href",product.url).text(product.sku))
+                    $("<div>").append($("<h4>").html("Sku:&nbsp;")).append( $("<a>").attr("href",product.url).attr("target","_blank").text(product.sku))
                 ).append(
-                    $("<p>").html("<h4>Details:</h4> " + product.details)
+                    $("<p>").html("<h4>Name:</h4> " + (product.name ? product.name : ''))
                 ).append(
-                    $("<div>").html("<h4>Listed Price:</h4> " + (product.originalPrice == null || product.originalPrice == "" ? "None" : "$" + product.originalPrice))
+                    $("<p>").html("<h4>Summary:</h4> " + (product.summary ? product.summary : ''))
                 ).append(
-                    $("<div>").html("<h4>Sale Price:</h4> $" + product.price)
+                    $("<p>").html("<h4>Details:</h4> " + (product.details ? product.details : ''))
                 ).append(
-                    $("<div>").html("<h4>Promotion/ Misc:</h4> " + product.promotion)
+                    $("<div>").html("<h4>Listed Price:</h4> " + (product.originalPrice ? product.originalPrice : ''))
                 ).append(
-                    $("<div>").html("<h4>Shipping Promotion:</h4> " + product.PromotionTwo)
+                    $("<div>").html("<h4>Sale Price:</h4> $" + (product.price ? product.price : ''))
+                ).append(
+                    $("<div>").html("<h4>Promotion/ Misc:</h4> " + (product.promotion ? product.promotion : ''))
+                ).append(
+                    $("<div>").html("<h4>Shipping Promotion:</h4> " + (product.PromotionTwo ? product.PromotionTwo : ''))
                 );
                 
                 $colors = $("<ul>");
@@ -254,13 +292,13 @@ function clearPage(){
                         $colors.append(
                             $("<li>").append( 
                                 $("<a>").attr("href",color.url).text(color.name).append(
-                                    $("<img>").attr("src",color.img)
+                                    $("<img>").attr("src",color.img).attr("alt",color.name)
                                 )
                             )
                         );       
                     });                    
                 }
-                $productDiv.append( $("<h4>").text("Related Products:") ).append($colors);                
+                $productDiv.append( $("<h4>").text("Colors:") ).append($colors);                
                 
                 $swatches = $("<div>");
                 if (product.swatches != null && product.swatches.length > 0){                    
@@ -280,25 +318,44 @@ function clearPage(){
                             $("<span>").addClass("label label-default").text(size)
                         );       
                     });
-                }else{
-                    $sizes.append(
-                        $("<span>").addClass("label label-default size").text("No Sizes")
-                    );
                 }
                 $productDiv.append( $("<h4>").text("Sizes:") ).append($sizes);
             }
             
             $("#productDetailOutput").prepend( $productDiv );
+            $("#loadingMask").hide();
         },
         
         togglePause: function(e){
             if ($(e.currentTarget).hasClass("active")){
+                productDetailSpider.loop = true;
                 $(e.currentTarget).removeClass("active")
-                productDetailSpider.loop = false;       
+                
             }else{
+                productDetailSpider.loop = false;
                 $(e.currentTarget).addClass("active")
-                productDetailSpider.loop = true;       
             }   
+        },
+        
+        getStoreDropdown: function(){
+            $stores = $("<select>").addClass("testStores form-control");
+            
+            $stores.append(
+	           $("<option>").attr("value", "").text("Test a Store")
+	       );
+            
+            var companies = Object.keys(productDetailApi).sort();
+            
+            for(var i=0; i < companies.length; i++){
+    	       var companyName = companies[i];
+    	       var product = productDetailApi[companyName]; 
+    	       
+    	       $stores.append(
+    	           $("<option>").attr("value", companyName).text(companyName)
+    	       );	       	    	   
+    	   }
+    	   
+    	   $(".actionButtons").append($stores);    	    
         }        
     };
     

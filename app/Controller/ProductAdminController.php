@@ -528,7 +528,7 @@ class ProductAdminController extends Debugger {
 	   
 	   if (isset($criteria) && is_array($criteria)){
 	       $results = $this->productAdminDao->saveProductDetails($criteria);	       
-	       return $results == 1 ? "success" : "failed";	              
+	       return is_numeric($results) && $results > 0 ? "success" : "failed";	              
 	   }else{
 	       return "Nothing to add";   
 	   }

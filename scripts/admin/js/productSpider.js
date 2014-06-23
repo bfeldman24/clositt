@@ -452,6 +452,30 @@ var spider = {
     },
     
     autoRun: function(){        
+        console.log("Sorting Categories by last saved date...");        
+        var cats = $(".company").sort(function(a, b){
+            var textDateA = $(a).find(".lastUpdated").first().text();
+            var textDateB = $(b).find(".lastUpdated").first().text();
+            
+            if (textDateA == null || textDateA == ""){
+                textDateA = 0;
+            }
+            
+            if (textDateB == null || textDateB == ""){
+                textDateB = 0;
+            }
+            
+            var dateA = new Date(textDateA);
+            var dateB = new Date(textDateB);    
+            
+            return dateA - dateB;
+        });
+                    
+        cats = cats.clone();
+        $("#links").html("");
+        $("#links").append(cats);
+              
+        
         console.log("Auto Run...");        
         actionButtons.saveAll();
     }
@@ -629,30 +653,34 @@ var categoryMaintenance = {
                           'sweater','vest','sleepwear','swim','loungewear','outerwear',
                           'shorts','blouse','jacket','skirt','petities','trouser','cardigan',
                           'turtleneck','jean','denim','activewear','hoodie','tees','romper',
-                          'clothes','apparel','jersey'];
+                          'clothes','apparel','jersey','khaki','capris'];
         var category = new RegExp(dictionary.join("|"));                         
                
         var store = Companies[selectedStore];
         
-        if (store == null){
-            home = prompt("Sorry. We don't have that store's homepage url stored, but you can enter it here:");
-        }else{       
+        if (store != null){
             home = store.url.substring(0, store.url.indexOf("/",store.url.indexOf("//") + 2));
         }
+
+        home = prompt("Please enter the store's homepage url:", home ? home : '');        
         
-        if (home == null) return false;
+        if (home == null){
+             $("#loadingMask").hide();
+             return false;
+        }
         
         $.post("webProxy.php", {u:home}, function(data){	
          
             if (data == null || data.trim() == ""){
     			 console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");    		
-		         Messenger.error("Error: Could not read the store home page. Check to make sure this link is still active.");		         
+		         Messenger.error("Error: Could not read the store home page. Check to make sure this link is still active.");
+		         $("#loadingMask").hide();		         
 		    }else{ 
 		         var $links = $("<ul>").addClass("links");
 		         var linkSet = [];
 		         var uniqueCats = [];
 		      
-		         $(data).find("a[href]:not(:has(*))").each(function(){
+		         $("<html>").html(data).find("a[href]:not(:has(*))").each(function(){
 		              var url = $(this).attr("href").toLowerCase();	
 		              
 		              var womenRegex = new RegExp("women|gal");

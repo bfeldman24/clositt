@@ -12,7 +12,7 @@ var productDetailApi = {
         colorsNamesAttr: "title",   
         swatches: ".productSet .imgThumbSwap img", 
         swatchesAttr: "src",
-        sizes: ".sizeField option",
+        sizes: ".sizeField option:not(:first)",
         sizesAttr: "text",
         promotion: ".mainEquity .pMarketing",
         promotionTwo: ".testPromotionNo"
@@ -34,7 +34,8 @@ var productDetailApi = {
     	"swatches": "div>.slide>img",
     	"swatchesAttr": "src",
     	"sizes": "div>ul>li.size",
-    	"sizesAttr": "text"
+    	"sizesAttr": "text",
+    	"usePhantomjs": true
     },
     
     'Ann Taylor': {
@@ -45,7 +46,7 @@ var productDetailApi = {
     	"nameAttr": "text",
     	"details": "div>.gu>p",
     	"detailsAttr": "text",
-    	"price": ".sale>.Oprice>span",
+    	"price": ".price",
     	"priceAttr": "text",
     	"promotion": ".gu>.info-product>p.note-pos",
     	"promotionAttr": "text",
@@ -72,8 +73,9 @@ var productDetailApi = {
     	"colorsNamesAttr": "title",
     	"swatches": "#imgSlider img",
     	"swatchesAttr": "ng-src",
-    	"sizes": ".ng-pristine>.size>select.size-dropdown>option",
-    	"sizesAttr": "text"
+    	"sizes": ".ng-pristine>.size>select.size-dropdown:first>option:not(:first)",
+    	"sizesAttr": "text",
+    	"usePhantomjs": true
     },
     'Gap': {
     	"url": "http://www.gap.com/browse/product.do?cid=1007498&vid=1&pid=960403012",
@@ -94,7 +96,8 @@ var productDetailApi = {
     	"swatches": "#imageThumbs input",
     	"swatchesAttr": "src",
     	"sizes": "div>div>button.normal",
-    	"sizesAttr": "text"
+    	"sizesAttr": "text",
+    	"usePhantomjs": true
     },
     'BCBG': {
     	"url": "http://www.bcbg.com/Leslie-Twist-Back-Tank/WCJ1R998-N6N,default,pd.html?dwvar_WCJ1R998-N6N_color=N6N&cgid=clothing-by-category-tops#start=2",
@@ -430,7 +433,7 @@ var productDetailApi = {
     	"url": "http://www.kohls.com/product/prd-1534280/nike-striped-dri-fit-performance-polo-men.jsp",
     	"id": "ko",
     	"date": "Sun Jun 15 10:37:31 2014",
-    	"name": ".column_content>.column_content_container>h1.title",
+    	"name": ".column_content>.column_content_container>h1.productTitleName",
     	"nameAttr": "text",
     	"details": ".product-cd>div>div.prod_description1",
     	"detailsAttr": "text",
@@ -441,7 +444,8 @@ var productDetailApi = {
     	"swatches": ".hor-carousel>ul>li>a>img",
     	"swatchesAttr": "src",
     	"sizes": ".size-waist>.size_off_left1>a.size_off1",
-    	"sizesAttr": "text"
+    	"sizesAttr": "text",
+    	"usePhantomjs": true
     },
     'Loft': {
     	"url": "http://www.loft.com/crossover-tank-dress/329520?colorExplode=false&skuId=16643864&catid=catl000013&productPageType=fullPriceProducts&defaultColor=4632",
@@ -506,13 +510,15 @@ var productDetailApi = {
     	"url": "http://www1.macys.com/shop/product/alfani-spectrum-slim-fit-dress-shirt?ID=1285068&CategoryID=20635#fn=sp%3D1%26spc%3D1152%26ruleId%3D78%26slotId%3D2",
     	"id": "ma",
     	"date": "Sun Jun 15 11:01:52 2014",
-    	"name": ".onlyAtMacysProdInfo>div>h1.productTitle",
+    	"name": "#productDescription h1.productTitle",
     	"nameAttr": "text",
-    	"details": "#productDetails",
+    	"details": "#prdDesc",
     	"detailsAttr": "text",
+    	"price": ".standardProdPricingGroup",
+    	"priceAttr": "text",
     	"promotion": "div>.badge>span.badgePromoCode:first",
     	"promotionAttr": "text",
-    	"promotionTwo": "div>.badge>span.badgePromoCode:last",
+    	"promotionTwo": ".freeShipping",
     	"promotionTwoAttr": "text",
     	"colorsImages": ".colors li>img.colorSwatch",
     	"colorsImagesAttr": "style",
@@ -564,7 +570,7 @@ var productDetailApi = {
     	"date": "Sun Jun 15 11:16:59 2014",
     	"name": "div>.details>h1",
     	"nameAttr": "text",
-    	"details": "h2>ul",
+    	"details": ".moreDetail .suiteProducts:first",
     	"detailsAttr": "text",
     	"price": ".lineItemData>.lineItemInfo>span",
     	"priceAttr": "text",
@@ -683,7 +689,8 @@ var productDetailApi = {
     	"swatches": "a.image_thumb img",
     	"swatchesAttr": "src",
     	"sizes": ".field>.product_size_grid>li",
-    	"sizesAttr": "text"
+    	"sizesAttr": "text",
+    	"usePhantomjs": true
     },
     'Tory Burch': {
     	"url": "http://www.toryburch.com/rimona-dress/31141465.html?dwvar_31141465_color=411&start=2&cgid=clothing-dresses",
@@ -767,7 +774,8 @@ var productDetailApi = {
     	"swatches": ".pp-image-viewer-gallery:first>li>a>img.default",
     	"swatchesAttr": "src",
     	"sizes": ".pp-wide>li>a.pp-available",
-    	"sizesAttr": "text"
+    	"sizesAttr": "text",
+    	"usePhantomjs": true
     },
     'Calvin Klein': {
     	"url": "http://www.calvinklein.com/webapp/wcs/stores/servlet/SearchDisplay?Color=WATER+MILL&showResultsPage=true&langId=-1&beginIndex=0&productId=226316&sType=SimpleSearch&pageSize=16&pageView=image&catalogId=12101&errorViewName=ProductDisplayErrorView&categoryId=48725&storeId=10751&viewAll=N&ddkey=http:en/ck/mens-dress-shirts/22054236",
@@ -794,7 +802,8 @@ var productDetailApi = {
     	"swatches": ".prodThumbnails>.cloud-zoom-gallery>img",
     	"swatchesAttr": "src",
     	"sizes": "#dk_container_sizeAttrValue .dk_options ul>li>a",
-    	"sizesAttr": "text"
+    	"sizesAttr": "text",
+    	"usePhantomjs": true
     },
     'Vineyard Vines': {
     	"url": "http://www.vineyardvines.com/womens-dresses/whale-tail-jacquard-shift-dress/2Q0365,default,pd.html?dwvar_2Q0365_color=406&start=1&cgid=Womens-Dresses-Skirts",
@@ -916,7 +925,7 @@ var productDetailApi = {
     	"date": "Sun Jun 15 13:54:56 2014",
     	"name": ".item>.descriptionContainer>h2.productName",
     	"nameAttr": "text",
-    	"details": ".tabs>.open>div.descriptionContent",
+    	"details": ".tabs div.descriptionContent",
     	"detailsAttr": "text",
     	"originalPrice": ".itemBoxPrice>.oldprice>span.priceValue",
     	"originalPriceAttr": "text",
@@ -935,7 +944,7 @@ var productDetailApi = {
     	"date": "Sun Jun 15 14:08:35 2014",
     	"name": ".product-detail-white>div>h2",
     	"nameAttr": "text",
-    	"details": "div>.ui-accordion>div.ui-accordion-content",
+    	"details": "#accordion",
     	"detailsAttr": "text",
     	"originalPrice": ".saleprice>font>strike",
     	"originalPriceAttr": "text",
@@ -1346,7 +1355,7 @@ var productDetailApi = {
     	"detailsAttr": "text",
     	"originalPrice": ".productDetailSection>.productPrice>span:nth-child(1)",
     	"originalPriceAttr": "text",
-    	"price": ".productDetailSection>.productPrice>span.salePrice",
+    	"price": ".productDetailSection>.productPrice>span:nth-child(2)",
     	"priceAttr": "text",
     	"promotionTwo": ".breadCrumbItems>.pdpPromoMessage>span",
     	"promotionTwoAttr": "text",
@@ -1357,7 +1366,8 @@ var productDetailApi = {
     	"swatches": "#altImages img",
     	"swatchesAttr": "src",
     	"sizes": ".productSizeList>ul>li",
-    	"sizesAttr": "text"
+    	"sizesAttr": "text",
+    	"usePhantomjs": true
     },
     'New Balance': {
     	"url": "http://www3.newbalance.com/MRT4117.html?dwvar_MRT4117_color=Black#color=Black",
@@ -1378,7 +1388,8 @@ var productDetailApi = {
     	"colorsNames": ".variant-select.color div.swatch",
     	"colorsNamesAttr": "title",
     	"swatches": ".swiper-wrapper>.swiper-slide>img",
-    	"swatchesAttr": "src"
+    	"swatchesAttr": "src",
+    	"usePhantomjs": true
     },
     'Lucky Brand': {
     	"url": "http://www.luckybrand.com/wiley-1-pocket-shirt/7M41433.html?dwvar_7M41433_color=960&cgid=m-clothing-tops-shirts",
@@ -1386,7 +1397,7 @@ var productDetailApi = {
     	"date": "Sun Jun 15 22:11:12 2014",
     	"name": ".pdp-main>.product-col-2>h1.product-name",
     	"nameAttr": "text",
-    	"details": ".jspContainer>.jspPane>div.scrollable",
+    	"details": ".product-tabs div.scrollable",
     	"detailsAttr": "text",
     	"originalPrice": ".product-main-pricing>.product-price>span.product-standard-price-strike",
     	"originalPriceAttr": "text",
@@ -1422,8 +1433,14 @@ var productDetail = {
     debug: false,
     
     getDetails: function(company, sku, url, callback){
+        var webProxyData = {u:url};
+	    company = company.substring(0,1).toUpperCase() + company.substring(1);
+	   
+	   if (productDetailApi[company] != null && productDetailApi[company].usePhantomjs){
+	          webProxyData["phantom"] = true;
+	   }
         
-        $.post("webProxy.php", {u:url}, function(results){	
+        $.post("webProxy.php", webProxyData, function(results){	
             if (results == null){
                 console.log("Got no data back from " + url);
             }else{
@@ -1436,50 +1453,60 @@ var productDetail = {
         if (productDetail.debug) { ;debugger; }
         
         try{
-            var product = {};        
+            var product = {}; 
+            data = $("<html>").html(data);
+                   
             //company = company.replace(/[\s_&]/g,'');
             var s = productDetailApi[company]; // s for selectors
             var home = url.substring(0, url.indexOf("/", url.indexOf(".")));
             
             if(s == null){ 
-                console.log("Store is not in the API"); 
+                Messenger.error("Store ["+ company +"] is not in the API"); 
                 return null;
             }
             
             product.sku = sku;  
-            product.url = url;
+            product.url = url;                        
             
             if (s.container != null){
                 data = $(data).find(s.container).first(); 
             }                
             
-            if (s.summary != null){
-                if (s.summaryAttr == null || s.summaryAttr == "text"){
-                    product.summary = $(data).find(s.summary).first().text().trim();
+            if (s.name != null){
+                if (s.nameAttr == null || s.nameAttr == "text"){
+                    product.name = $(data).find(s.name).first().text();
                 }else{
-                    product.summary = $(data).find(s.summary).first().attr(s.summaryAttr).trim();   
+                    product.name = $(data).find(s.name).first().attr(s.nameAttr);   
                 }
             }
             
-            if (s.details != null){
+            if (s.summary != null){
+                if (s.summaryAttr == null || s.summaryAttr == "text"){
+                    product.summary = $(data).find(s.summary).first().text();
+                }else{
+                    product.summary = $(data).find(s.summary).first().attr(s.summaryAttr);   
+                }
+            }
+            
+            if (s.details != null && $(data).find(s.details).length > 0){                
                 product.details = $(data).find(s.details).first().wrap("<div></div>").parent().find("*").replaceWith(function() {
                     return $('<' + this.nodeName + '>').append( $(this).html() );
-                }).find("script").remove().end().html().trim();                                
+                }).find("script").remove().end().html();                                
             }
             
             if (s.promotion != null){
                 if (s.promotionAttr == null || s.promotionAttr == "text"){
-                    product.promotion = $(data).find(s.promotion).first().text().trim();   
+                    product.promotion = $(data).find(s.promotion).first().text();   
                 }else{
-                    product.promotion = $(data).find(s.promotion).first().attr(s.promotionAttr).trim();   
+                    product.promotion = $(data).find(s.promotion).first().attr(s.promotionAttr);   
                 }
             }
             
             if (s.promotionTwo != null){
                 if (s.promotionTwoAttr == null || s.promotionTwoAttr == "text"){
-                    product.promotionTwo = $(data).find(s.promotionTwo).first().find("*").remove().end().text().trim();
+                    product.promotionTwo = $(data).find(s.promotionTwo).first().find("*").remove().end().text();
                 }else{
-                    product.promotionTwo = $(data).find(s.promotionTwo).first().find("*").remove().end().attr(s.promotionTwoAttr).trim();                
+                    product.promotionTwo = $(data).find(s.promotionTwo).first().find("*").remove().end().attr(s.promotionTwoAttr);                
                 }
             }
             
@@ -1514,11 +1541,11 @@ var productDetail = {
                 var img = null;
                 
                 if (s.colorsNamesAttr != null){
-                    name = s.colorsNamesAttr == "text" ? $(this).text() : $(this).attr(s.colorsNamesAttr).trim();
+                    name = s.colorsNamesAttr == "text" ? $(this).text() : $(this).attr(s.colorsNamesAttr);
                 }
                 
                 if (s.colorsAttr){
-                    url = $(this).attr(s.colorsAttr).trim();
+                    url = $(this).attr(s.colorsAttr);
                     url = storeApiHelper.getAbsoluteUrl(url, home);
                 }
                 
@@ -1533,20 +1560,23 @@ var productDetail = {
                                       
                     if (s.colorsImagesAttr.indexOf("style-") == 0){          
                         var attr = s.colorsImagesAttr.substring(6); // strip "style-"
-                        img = $(imgData).css(attr).trim();                
-                        img = img.substring(img.indexOf("(") + 1, img.indexOf(")")); // parse out the img src
-                        img = img.replace(/[\"\']/g,''); // removes quotes
+                        img = $(imgData).css(attr);  
+                        
+                        if (img){              
+                            img = img.substring(img.indexOf("(") + 1, img.indexOf(")")); // parse out the img src
+                            img = img.replace(/[\"\']/g,''); // removes quotes
+                        }
                     }else{
-                        img = $(imgData).attr(s.colorsImagesAttr).trim();
+                        img = $(imgData).attr(s.colorsImagesAttr);
                     }
                                         
                     img = storeApiHelper.getAbsoluteUrl(img, home);
                 }                                
     
                 product.colors.push({
-                    name: name,
-                    url: url,
-                    img: img
+                    name: $.trim(name),
+                    url: $.trim(url),
+                    img: $.trim(img)
                 });
             });
                                                 
@@ -1561,8 +1591,8 @@ var productDetail = {
             $(data).find(s.sizes).each(function(){                                
                 var size = s.sizesAttr == "text" ? $(this).text() : $(this).attr(s.sizesAttr);
                 
-                if (product.sizes.indexOf(size.trim()) < 0){
-                    product.sizes.push(size.trim());
+                if (product.sizes.indexOf($.trim(size)) < 0){
+                    product.sizes.push($.trim(size));
                 }
             }); 
             //product.sizes.sort();  
@@ -1576,16 +1606,17 @@ var productDetail = {
         }catch(err){
             console.log("whoops ran into an error!");
             console.log(err.lineNumber + ": " + err.message);   
+            Messenger.error(err.lineNumber + ": " + err.message);   
         }                      
     },
     
     cleanProduct: function (product){                  
-        product.summary = productDetail.setEmptyToNull(product.summary);
-        product.details = productDetail.setEmptyToNull(product.details);        
-        product.promotion = productDetail.setEmptyToNull(product.promotion);
-        product.promotionTwo = productDetail.setEmptyToNull(product.promotionTwo);
-        product.originalPrice = productDetail.setEmptyToNull(product.originalPrice);
-        product.price = productDetail.setEmptyToNull(product.price);                        
+        product.summary = productDetail.setEmptyToNull($.trim(product.summary));
+        product.details = productDetail.setEmptyToNull($.trim(product.details));        
+        product.promotion = productDetail.setEmptyToNull($.trim(product.promotion));
+        product.promotionTwo = productDetail.setEmptyToNull($.trim(product.promotionTwo));
+        product.originalPrice = productDetail.setEmptyToNull($.trim(product.originalPrice));
+        product.price = productDetail.setEmptyToNull($.trim(product.price));                        
                                             
         product.colors = productDetail.removeNullOrEmptyItems(product.colors);        
         product.swatches = productDetail.removeNullOrEmptyItems(product.swatches);        
@@ -1624,7 +1655,5 @@ var productDetail = {
              }
 
         return home + url;
-    }
-    
-    
+    }       
 };

@@ -593,7 +593,9 @@ class ProductAdminDao extends AbstractDao {
     		        PRODUCT_LINK . 		        
 				" FROM " . PRODUCTS .				
 				" WHERE ".PRODUCT_STATUS." = 1 AND " . 
-				    PRODUCT_DETAIL_UPDATED . " < DATE_SUB(NOW(), INTERVAL 3 MONTH)";
+				    "(" . PRODUCT_DETAIL_UPDATED . " is null OR ".
+				          PRODUCT_DETAIL_UPDATED . " < DATE_SUB(NOW(), INTERVAL 3 MONTH)" .
+				    ") ";
 		
 		$paramsTypes = array();		
 		$params = array();
@@ -652,9 +654,100 @@ class ProductAdminDao extends AbstractDao {
 		if (PEAR::isError($affected)) {
 			$this->logError("2309472074" ,$affected->getMessage(),$sql);
 		    return false;
-		}	        
+		}	    
+						    
+        $affectedSwatches = $this->saveProductDetailSwatches($criteria);
+        $affectedSizes = $this->saveProductDetailSizes($criteria);
+                
+        return $affected + $affectedSwatches + $affectedSizes;
+	}
+	
+	public function saveProductDetailSwatches($criteria){
+	    if (!isset($criteria['swatches']) || 
+	         $criteria['swatches'] == null || 
+	         !is_array($criteria['swatches']) || 
+	         count($criteria['swatches']) <= 0 || 
+	         $criteria['sku'] == null){
+
+	       return 0;   
+	    }
+	   
+	   $sql = "INSERT INTO " . SWATCHES . 
+	          " (" . PRODUCT_SKU . "," . SWATCHES_IMAGE . ")" .       	  
+              " VALUES (?,?) ";
+                            
+       if($this->debug){	
+            $swatches = print_r($criteria['swatches'], true);	    
+			$this->logDebug("98327492" ,$sql . " { " .$criteria['sku']. " , $swatches } ");
+		}
         
-        return $affected;
+        
+        $paramTypes = array('text', 'text');         
+        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+        $totalAffectedRows = 0;
+        
+        foreach ($criteria['swatches'] as $swatch) {                            
+            try {   
+                $params = array($criteria['sku'], $swatch);                               
+                $affectedRows = $stmt->execute($params); 
+                
+                if (PEAR::isError($affected)) {
+        			$this->logError("928372923" ,$affectedRows->getMessage(),$sql);
+        		    return false;
+        		} 
+                        
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            }
+            
+            $totalAffectedRows += $affectedRows;
+        }                        
+        
+        return $totalAffectedRows;
+	}
+	
+	public function saveProductDetailSizes($criteria){
+	    if (!isset($criteria['sizes']) || 
+	         $criteria['sizes'] == null || 
+	         !is_array($criteria['sizes']) || 
+	         count($criteria['sizes']) <= 0 || 
+	         $criteria['sku'] == null){
+
+	       return 0;   
+	    }
+	   
+	   $sql = "INSERT INTO " . SIZES . 
+	          " (" . PRODUCT_SKU . "," . SIZES_SIZE . ")" .       	  
+              " VALUES (?,?) ";
+                            
+       if($this->debug){	
+            $sizes = print_r($criteria['sizes'], true);	    
+			$this->logDebug("939482942" ,$sql . " { " .$criteria['sku']. " , $sizes } ");
+		}
+        
+        
+        $paramTypes = array('text', 'text');         
+        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+        $totalAffectedRows = 0;
+        
+        foreach ($criteria['sizes'] as $size) {                            
+            try {   
+                $params = array($criteria['sku'], $size);                               
+                $affectedRows = $stmt->execute($params); 
+                
+                if (PEAR::isError($affected)) {
+        			$this->logError("65223423" ,$affectedRows->getMessage(),$sql);
+        		    return false;
+        		} 
+                        
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            }
+            
+            $totalAffectedRows += $affectedRows;
+        }                        
+        
+        return $totalAffectedRows;
 	}
 	
 	public function removeTags($skus, $tag){

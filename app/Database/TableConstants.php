@@ -67,4 +67,12 @@ define("SPIDER_COUNT","count");
 define("SPIDER_STATUS","status");
 define("SPIDER_LAST_SAVED","lastsaved");
 
+
+// Swatches
+define("SWATCHES","Swatches");
+define("SWATCHES_IMAGE","image");
+
+// Sizes
+define("SIZES","Sizes");
+define("SIZES_SIZE","size");
 ?>

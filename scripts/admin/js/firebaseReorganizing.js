@@ -400,5 +400,30 @@ var firebaseReorganizing = {
                 }      
             });              
         });
+    },
+    
+    getUsersLastedLoggedInDate: function(){
+        
+        
+        firebase.$.child("userdata").once('value', function(userProfiles){
+            var users = [];
+                
+            userProfiles.forEach(function(user){
+                var p = {};                
+                p.email = user.child("email").val();
+                p.name = user.child("name").val();
+                var lastOnline = user.child("lastOnline").val();
+                p.lastOnline = lastOnline ? new Date(lastOnline) : null;
+                var dateSignedUp = user.child("signedUpDate").val();
+                p.dateSignedUp = dateSignedUp ? new Date(dateSignedUp) : null;
+                
+                users.push(p);
+                
+                var csv = p.email + "," + p.name + "," + p.lastOnline + "," + p.dateSignedUp;
+                console.log(csv);
+            });              
+            
+            console.log(JSON.stringify(users));
+        });
     }     
 }
