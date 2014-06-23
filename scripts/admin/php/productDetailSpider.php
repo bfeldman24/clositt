@@ -130,6 +130,7 @@ function clearPage(){
         
 
     var productDetailSpider = {
+	autoRunHash: '#autoRun',
         showData: false,
         loop: true,
         limit: 10,
@@ -157,6 +158,10 @@ function clearPage(){
                
                console.log(scraped + " scraped product details");
                console.log(productDetailSpider.totalLiveProducts + " total live products");
+
+		if (location.hash == productDetailSpider.autoRunHash){
+           	    productDetailSpider.getProducts();
+           	}
             }); 
         },
         
