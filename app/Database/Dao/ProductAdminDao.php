@@ -1,4 +1,7 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
+
 require_once(dirname(__FILE__) . '/AbstractDao.php');
 require_once('Date.php');
 
@@ -423,6 +426,23 @@ class ProductAdminDao extends AbstractDao {
 		return $result;
 	}
 	
+	public function getTotalLiveProductsCount(){
+	    $sql = "SELECT COUNT(1) as count FROM " . PRODUCTS . " WHERE status = 1";
+		
+		if($this->debug){		    
+			$this->logDebug("2398429" ,$sql );
+		}		
+				
+		$result =& $this->db->query($sql);
+		
+		if (PEAR::isError($result)) {
+			$this->logError("23482", $result->getMessage(),$sql);
+		    return false;
+		}
+		
+		return $result;
+	}
+	
 	public function getNonLiveProducts($page, $limit){
 	   $offset = $page * $limit;
 		
@@ -539,6 +559,290 @@ class ProductAdminDao extends AbstractDao {
 		$paramsTypes = array();		
 		$params = array();		
 		return $this->getResults($sql, $params, $paramTypes, "98237923");
-	}		
+	}	
+	
+	public function getUniqueTags(){
+	   $sql = "SELECT DISTINCT " . TAG_STRING . 
+				" FROM " . TAGS . " t " .
+				" LEFT JOIN " . PRODUCTS . " p ON p." . PRODUCT_SKU . " = t." . PRODUCT_SKU .
+				" WHERE " . TAG_APPROVED . " = 0 " .
+				" AND p." . PRODUCT_STATUS . " = 1 " . 			
+				" ORDER BY " . TAG_STRING;
+        
+		$paramsTypes = array();		
+		$params = array();		
+		return $this->getResults($sql, $params, $paramTypes, "2342837429");
+	}	
+	
+	public function getProductDetailCount(){
+	   $sql = "SELECT count(1) as count" .
+				" FROM " . PRODUCTS .
+				" WHERE status = 1 AND " . PRODUCT_DETAIL_UPDATED . " >= DATE_SUB(NOW(), INTERVAL 3 MONTH)";
+        
+		return $this->getResults($sql, array(), array(), "29837492");
+	}	
+	
+	public function getNextProductDetailUrls($stores, $limit){
+		if (!isset($stores) || !is_array($stores) || count($stores) <= 0){
+		      return null; 
+		}
+		
+		$sql = "SELECT " .				
+    		        PRODUCT_SKU . "," .
+    		        PRODUCT_STORE . "," .
+    		        PRODUCT_LINK . 		        
+				" FROM " . PRODUCTS .				
+				" WHERE ".PRODUCT_STATUS." = 1 AND " . 
+				    "(" . PRODUCT_DETAIL_UPDATED . " is null OR ".
+				          PRODUCT_DETAIL_UPDATED . " < DATE_SUB(NOW(), INTERVAL 3 MONTH)" .
+				    ") ";
+		
+		$paramsTypes = array();		
+		$params = array();
+		$storePlaceholders = '';
+		
+		foreach ($stores as $store) {    
+            try {   
+                $params[] = $store;
+                $paramTypes[] = 'text';  
+                
+                if ($storePlaceholders != ''){
+                    $storePlaceholders .= ",";   
+                }
+                
+                $storePlaceholders .= "?";
+                      
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            }
+        }	   
+        
+        $sql .= " AND ".PRODUCT_STORE." IN (" . $storePlaceholders . ")" .
+				" LIMIT ?";
+        
+        $paramsTypes[] = 'integer';		
+		$params[] = $limit;     
+		
+		return $this->getResults($sql, $params, $paramTypes, "235252462");
+	}
+	
+	public function saveProductDetails($criteria){
+	   $sql = "UPDATE " . PRODUCTS .        	 
+                " SET " .
+                    PRODUCT_SUMMARY." = :summary , " .
+                    PRODUCT_DETAILS." = :details ," .
+                    PRODUCT_PROMOTION." = :promotion ," .
+                    PRODUCT_PROMOTION_TWO . " = :promotionTwo ," .
+                    PRODUCT_DETAIL_UPDATED . " = NOW() " .
+                " WHERE ".PRODUCT_SKU." = :sku";
+                                
+        if($this->debug){		    
+			$this->logDebug("239875203" , $sql);
+		}
+        
+        $stmt = $this->db->prepare($sql);
+        
+        $product = array();
+        $product['summary'] = $criteria['summary'];
+        $product['details'] = $criteria['details'];
+        $product['promotion'] = $criteria['promotion'];
+        $product['promotionTwo'] = $criteria['promotionTwo'];
+        $product['sku'] = $criteria['sku'];
+        
+        $affected = $stmt->execute($product);                                   		
+		
+		if (PEAR::isError($affected)) {
+			$this->logError("2309472074" ,$affected->getMessage(),$sql);
+		    return false;
+		}	    
+						    
+        $affectedSwatches = $this->saveProductDetailSwatches($criteria);
+        $affectedSizes = $this->saveProductDetailSizes($criteria);
+                
+        return $affected + $affectedSwatches + $affectedSizes;
+	}
+	
+	public function saveProductDetailSwatches($criteria){
+	    if (!isset($criteria['swatches']) || 
+	         $criteria['swatches'] == null || 
+	         !is_array($criteria['swatches']) || 
+	         count($criteria['swatches']) <= 0 || 
+	         $criteria['sku'] == null){
+
+	       return 0;   
+	    }
+	   
+	   $sql = "INSERT INTO " . SWATCHES . 
+	          " (" . PRODUCT_SKU . "," . SWATCHES_IMAGE . ")" .       	  
+              " VALUES (?,?) ";
+                            
+       if($this->debug){	
+            $swatches = print_r($criteria['swatches'], true);	    
+			$this->logDebug("98327492" ,$sql . " { " .$criteria['sku']. " , $swatches } ");
+		}
+        
+        
+        $paramTypes = array('text', 'text');         
+        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+        $totalAffectedRows = 0;
+        
+        foreach ($criteria['swatches'] as $swatch) {                            
+            try {   
+                $params = array($criteria['sku'], $swatch);                               
+                $affectedRows = $stmt->execute($params); 
+                
+                if (PEAR::isError($affected)) {
+        			$this->logError("928372923" ,$affectedRows->getMessage(),$sql);
+        		    return false;
+        		} 
+                        
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            }
+            
+            $totalAffectedRows += $affectedRows;
+        }                        
+        
+        return $totalAffectedRows;
+	}
+	
+	public function saveProductDetailSizes($criteria){
+	    if (!isset($criteria['sizes']) || 
+	         $criteria['sizes'] == null || 
+	         !is_array($criteria['sizes']) || 
+	         count($criteria['sizes']) <= 0 || 
+	         $criteria['sku'] == null){
+
+	       return 0;   
+	    }
+	   
+	   $sql = "INSERT INTO " . SIZES . 
+	          " (" . PRODUCT_SKU . "," . SIZES_SIZE . ")" .       	  
+              " VALUES (?,?) ";
+                            
+       if($this->debug){	
+            $sizes = print_r($criteria['sizes'], true);	    
+			$this->logDebug("939482942" ,$sql . " { " .$criteria['sku']. " , $sizes } ");
+		}
+        
+        
+        $paramTypes = array('text', 'text');         
+        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+        $totalAffectedRows = 0;
+        
+        foreach ($criteria['sizes'] as $size) {                            
+            try {   
+                $params = array($criteria['sku'], $size);                               
+                $affectedRows = $stmt->execute($params); 
+                
+                if (PEAR::isError($affected)) {
+        			$this->logError("65223423" ,$affectedRows->getMessage(),$sql);
+        		    return false;
+        		} 
+                        
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            }
+            
+            $totalAffectedRows += $affectedRows;
+        }                        
+        
+        return $totalAffectedRows;
+	}
+	
+	public function removeTags($skus, $tag){
+	   if (!isset($skus) || $skus == null || !is_array($skus) || count($skus) <= 0 || $tag == null){
+	       return -1;   
+	   }
+	   
+	   $sql = "UPDATE " . TAGS .       	  
+              " SET " . TAG_STATUS . " = 2 ," .
+                        TAG_APPROVED . " = 1 " . 
+              " WHERE " . TAG_STRING . " = ? ";
+                            
+       if($this->debug){		    
+			$this->logDebug("92864192401" ,$sql . " { $sku , $tag } ");
+		}
+        
+        $params = array($tag);
+        $paramTypes = array('text'); 
+        $skuPlaceholders = '';               
+        
+        foreach ($skus as $sku) {    
+            try {   
+                $params[] = $sku;
+                $paramTypes[] = 'text';  
+                
+                if ($skuPlaceholders != ''){
+                    $skuPlaceholders .= ",";   
+                }
+                
+                $skuPlaceholders .= "?";
+                      
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            }
+        }
+        
+        $sql .= " AND " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")"; 
+
+        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+        $affectedRows = 0;
+                 
+        try {                              
+            $affectedRows = $stmt->execute($params);
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+        }     
+        
+        return $affectedRows;
+	}
+	
+	public function approveTags($skus, $tag){
+	   if (!isset($skus) || $skus == null || !is_array($skus) || count($skus) <= 0 || $tag == null){
+	       return -1;   
+	   }
+	   
+	   $sql = "UPDATE " . TAGS .       	  
+              " SET " . TAG_APPROVED . " = 1 " . 
+              " WHERE " . TAG_STRING . " = ? ";
+                            
+       if($this->debug){
+			$this->logDebug("238479232" ,$sql . " { $sku , $tag } ");
+		}
+        
+        $params = array($tag);
+        $paramTypes = array('text'); 
+        $skuPlaceholders = '';               
+        
+        foreach ($skus as $sku) {    
+            try {   
+                $params[] = $sku;
+                $paramTypes[] = 'text';  
+                
+                if ($skuPlaceholders != ''){
+                    $skuPlaceholders .= ",";   
+                }
+                
+                $skuPlaceholders .= "?";
+                      
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            }
+        }
+        
+        $sql .= " AND " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")";       
+        
+        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+        $affectedRows = 0;
+                 
+        try {                              
+            $affectedRows = $stmt->execute($params);
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+        }     
+        
+        return $affectedRows;
+	}
 }
 ?>

@@ -8,20 +8,21 @@ include(dirname(__FILE__) . '/../../../static/meta.php');
 
 
 $tags = array('Activewear',
-'Basic','Blazers','Blouses','Button Downs',
+'Basic','Blazers','Blouses','Boyfriend','Button Downs',
 'Camisoles','Capris','Cardigans','Cashmere','Casual','Chinos','Coats','Cocktial Dresses','Collared Shirts','Crop Tops', 'Corduroy',
 'Denim','Disco','Dress Pants','Dress Shirts','Dresses',
 'Evening Dresses','Graphic T Shirts', 'Graphic Tank Tops',
+'Flowing','Formal',
 'Gowns', 
 'Henleys','High Waisted','Hoodies',
 'Jackets','Jeans','Jumpsuits',
-'Khakis','Knee Length Dress','Knit',
-'Leather','Leggings','Long Sleeve Shirts','Long Sleeve Tops','Loungewear', 'Low Rise',
-'Maxi Dresses','Mini Dresses','Mini Skirts',
+'Khakis','Knee Length','Knee Length Dress','Knit',
+'Leather','Leggings','Linen','Loose Fit','Long Sleeve Shirts','Long Sleeve Tops','Loungewear', 'Low Rise',
+'Maxi','Maxi Dresses','Mid-length','Midi','Mini Dresses','Mini Skirts',
 'Outerwear','Overalls',
-'Pants','Polos','Prints and Stripes','Pullovers',
+'Pants','Pleats','Polos','Print','Printed','Prints and Stripes','Pullovers',
 'Regular Fit','Rompers',
-'Shirts','Shorts','Short Sleeve Shirts','Skater Dresses','Skinny Jeans','Skirts','Skorts','Sleepwear','Sleeveless','Slim Fit','Sport Coats','Suits','Summer Dresses','Sweaters','Sweatpants','Sweatshirts',
+'Shirts','Shorts','Short Sleeve Shirts','Skater Dresses','Skinny','Skinny Jeans','Skirts','Skorts','Sleepwear','Sleeveless','Slim Fit','Sport Coats','Suits','Summer Dresses','Sweaters','Sweatpants','Sweatshirts',
 'T Shirts','Tailored Fit','Tank Tops','Tennis Skirts','Trench Coats','Tunics',
 'Vests',
 'Zip Ups',
@@ -85,6 +86,11 @@ input{
     position: absolute;
     top: 100px;
     width: 198px;   
+}
+
+.overlay .middle .link, .overlay .middle .sku{
+    font-size: 9px;
+    word-wrap: break-word;   
 }
 
 .overlay > .bottom { 
@@ -178,6 +184,10 @@ input{
 #saveProducts .tagtable input, #editCategoryForm .tagtable input{
      height: 12px !important;   
 }
+
+.links{
+    font-size: 10px;   
+}
 </style>
 
 </head>
@@ -195,48 +205,83 @@ input{
     <form role="form" id="saveProducts">
         <div class="form-group">
             <label for="inputCompany">Company</label>
-            <select id="inputCompany" name="company" class="form-control">    		    	
+            <select id="inputCompany" name="company" class="form-control">              
+                  <option value="7 For All Mankind">7 For All Mankind</option> 
+                  <option value="Adidas">Adidas</option> 		    	
+                  <option value="Aeropostale">Aeropostale</option>
       			  <option value="American Apparel">American Apparel</option>
       			  <option value="American Eagle">American Eagle</option>
       			  <option value="Ann Taylor">Ann Taylor</option>
       			  <option value="Anthropologie">Anthropologie</option>
+      			  <option value="Armani">Armani</option>
       			  <option value="Athleta">Athleta (json link)</option>
+      			  <option value="Balenciaga">Balenciaga</option>
       			  <option value="Banana Republic">Banana Repulic (json link)</option>
+      			  <option value="Betsey Johnson">Betsey Johnson</option>
       			  <option value="BCBG">BCBG</option>    				  
       			  <option value="Bloomingdales">Bloomingdales</option>
       			  <option value="Brooks Brothers">Brooks Brothers (json link)</option>
       			  <option value="Burberry">Burberry</option>
+      			  <option value="Calvin Klein">Calvin Klein</option>
+      			  <option value="Canada Goose">Canada Goose</option>
       			  <option value="Charles Tyrwhitt">Charles Tyrwhitt</option>
       			  <option value="Chicos">Chicos</option>
       			  <option value="Cusp">Cusp</option>
+      			  <option value="Diesel">Diesel</option>
       			  <option value="Dillards">Dillards</option>
+      			  <option value="DKNY">DKNY</option>
+      			  <option value="Dockers">Dockers</option>
+      			  <option value="Express">Express</option>
       			  <option value="Forever21">Forever21</option>				  
       			  <option value="Free People">Free People</option>
       			  <option value="Gap">Gap (json link)</option>
+      			  <option value="Gucci">Gucci</option>
+      			  <option value="GUESS">GUESS</option>
       			  <option value="H&M">H&M (json link)</option>
       			  <option value="Hollister">Hollister</option>
+      			  <option value="Hugo Boss">Hugo Boss</option>
       			  <option value="Intermix">Intermix (json link)</option>
       			  <option value="JCPenney">JCPenney</option>
       			  <option value="J_Crew">J.Crew</option>
       			  <option value="J_Jill">J.Jill</option>
       			  <option value="Kate Spade">Kate Spade</option>
       			  <option value="Kohls">Kohls</option>
+      			  <option value="Lands End">Lands End</option>
+      			  <option value="Jockey">Jockey</option>
       			  <option value="Loft">Loft</option>
-      			  <option value="Lululemon">LuLuLemon</option>				  
+      			  <option value="Lucky Brand">Lucky Brand</option>
+      			  <option value="Lululemon">LuLuLemon</option>			      			  	  
       			  <option value="Lord & Taylor">Lord And Taylor</option>	
       			  <option value="Macys">Macys</option>			      				  
       			  <option value="Madewell">Madewell</option>
+      			  <option value="Marc Jacobs">Marc Jacobs</option>
       			  <option value="Michael Kors">Michael Kors</option>
       			  <option value="Neiman Marcus">Neiman Marcus</option>
+      			  <option value="New Balance">New Balance</option>
       			  <option value="Nike">Nike</option>
       			  <option value="Nordstrom">Nordstrom</option>
       			  <option value="New York & Company">NY and Company</option>
-      			  <option value="Old Navy">Old Navy (json link)</option>				  
+      			  <option value="Oakley">Oakley</option>
+      			  <option value="Old Navy">Old Navy (json link)</option>	
+      			  <option value="Perry Ellis">Perry Ellis</option>			  
       			  <option value="Piperlime">Piperlime (json link)</option>
-      			  <option value="Target">Target</option>	  				  
-      			  <option value="Top Shop">Top Shop</option>	  				  
-      			  <option value="Tory Burch">Tory Burch</option>	  				  
+      			  <option value="Puma">Puma</option>
+      			  <option value="Rag Bone">Rag Bone</option>
+      			  <option value="Ralph Lauren">Ralph Lauren</option>
+      			  <option value="REI">REI</option>
+      			  <option value="Saks Fifth Avenue">Saks Fifth Avenue</option>
+      			  <option value="Target">Target</option>	
+      			  <option value="The North Face">The North Face</option>
+      			  <option value="Tommy Hilfiger">Tommy Hilfiger</option>      			    				  
+      			  <option value="Top Shop">Top Shop</option>      			  	  				  
+      			  <option value="Tory Burch">Tory Burch</option>
+      			  <option value="True Religion">True Religion</option>
+      			  <option value="Ugg Australia">Ugg Australia</option>	  		
+      			  <option value="Under Armour">Under Armour</option>		  
       			  <option value="Urban Outfitters">Urban Outfitters</option>
+      			  <option value="Van Heusen">Van Heusen</option>
+      			  <option value="Victorias Secret">Victorias Secret</option>
+      			  <option value="Vineyard Vines">Vineyard Vines</option>
       			  <option value="Zara">Zara</option>
       			</select>
         </div>
@@ -367,6 +412,21 @@ input{
         
         <button type="submit" class="btn btn-success" id="save">Save</button>
     </form>
+           
+    
+    
+    <hr>
+    <a name="populateCategoriesForm"></a>
+    <br/><br/>
+    <h2>Auto Populate Categories:</h2>
+    <form role="form" id="saveCategories">
+        <div class="form-group">
+            <label for="inputCompany">Company</label>
+            <select id="autoCompanySelect" name="company" class="form-control"></select>
+        </div>                        
+        
+        <button type="submit" class="btn btn-success" id="getCats">Get Categories</button>
+    </form>                    
             
     <hr>
     <h2>Workflow:</h2>
@@ -447,5 +507,6 @@ input{
 <?php echo CLOSITT_JS; ?>
 <script src="../js/storeApi.js"></script>
 <script src="../js/productSpider.js"></script>
+<script src="../js/storeSelectors.js"></script>
 </body>
 </html>

@@ -174,9 +174,9 @@ class ProductController {
         return $result;
 	}
 
-	public function getFilteredProducts($criteria, $pageNumber, $numResultsPage){
-			
-		$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage);
+	public function getFilteredProducts($criteria, $pageNumber, $numResultsPage, $tagAdmin = false){
+						
+		$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage, $tagAdmin);
 		$searchResults = array();
 		
 		if(is_object($results)){
@@ -255,7 +255,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
         $product = $productController->updateCommentCounter($_POST['sku']);
     }
     
-    print_r($product);     
+    if (isset($product) && $product != null){
+        print_r($product);     
+    }
 }
 
 

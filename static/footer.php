@@ -223,6 +223,7 @@ $(document).ready(function() {
 });
 </script>
 
+<?php if( defined(DEBUG) && DEBUG){ ?>
 <script type="text/javascript">
   var vglnk = { api_url: '//api.viglink.com/api',
                 key: 'ace9fa11ba4e122d7318924968832a6d' };
@@ -245,3 +246,4 @@ $(document).ready(function() {
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 </script>
+<?php } ?>

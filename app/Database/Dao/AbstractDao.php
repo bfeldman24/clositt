@@ -1,6 +1,5 @@
 <?php
 // LOGGING
-define('DEBUG',true);
 define('INFO',true);
 define('SQL_ERROR_LOG', dirname(__FILE__) . "/../../Logs/sqlErrorLog");
 

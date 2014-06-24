@@ -33,7 +33,8 @@ RewriteRule ^notify$ scripts/admin/php/notify.php
 Redirect /admin/spider /scripts/admin/php/productSpider.php
 Redirect /admin/color /scripts/admin/php/colorProcessor.php
 Redirect /admin/search /scripts/admin/php/search.php
-
+Redirect /admin/tags /scripts/admin/php/tags.php
+Redirect /admin/details /scripts/admin/php/productDetailSpider.php
 
 
 # UNCOMMENT FOR PROD

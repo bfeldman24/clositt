@@ -11,6 +11,10 @@ define("PRODUCT_NAME","name");
 define("PRODUCT_LINK","link");
 define("PRODUCT_IMAGE","image");
 define("PRODUCT_PRICE","price");
+define("PRODUCT_SUMMARY","summary");
+define("PRODUCT_DETAILS","details");
+define("PRODUCT_PROMOTION","promotion");
+define("PRODUCT_PROMOTION_TWO","promotiontwo");
 define("PRODUCT_COLOR_ONE","colorOne");
 define("PRODUCT_COLOR_ONE_PERCENT","coloronepercent");
 define("PRODUCT_COLOR_TWO","colorTwo");
@@ -21,6 +25,7 @@ define("PRODUCT_SHORT_LINK","shortlink");
 define("PRODUCT_STATUS","status");
 define("PRODUCT_RANDOM_INDEX","rand");
 define("PRODUCT_DATE_UPDATED","updatedon");
+define("PRODUCT_DETAIL_UPDATED","detailsupdatedon");
 define("PRODUCT_CREATED_ON","createdon");
 
 
@@ -38,6 +43,8 @@ define('HAS_COLOR', 'hascolor');
 define('TAGS', 'Tags');
 define('TAG_STRING', 'tag');
 define('TAG_COUNT', 'count');
+define('TAG_STATUS', 'status');
+define('TAG_APPROVED', 'approved');
 
 define('COLOR_MAPPING', 'ColorMapping');
 define('COLOR_MAPPING_COLOR', 'color');
@@ -60,4 +67,12 @@ define("SPIDER_COUNT","count");
 define("SPIDER_STATUS","status");
 define("SPIDER_LAST_SAVED","lastsaved");
 
+
+// Swatches
+define("SWATCHES","Swatches");
+define("SWATCHES_IMAGE","image");
+
+// Sizes
+define("SIZES","Sizes");
+define("SIZES_SIZE","size");
 ?>

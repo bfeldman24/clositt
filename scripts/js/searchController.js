@@ -1,5 +1,5 @@
 var searchController = {
-    
+    url: "p/search/",
     results: null,
     criteria: null,
     pageIndex: 0,
@@ -228,7 +228,7 @@ var searchController = {
         
         if (searchController.hasMoreProducts){
             var pageIndex = searchController.pageIndex;
-            $.post( window.HOME_ROOT + "p/search/"+pageIndex, searchController.criteria, function( data ) {            
+            $.post( window.HOME_ROOT + searchController.url +pageIndex, searchController.criteria, function( data ) {            
                             
         		gridPresenter.endTask();
         		
@@ -603,7 +603,9 @@ var searchController = {
 	},		
 	
 	clearSearch: function(el){
-		el.preventDefault();
+	   
+	    if (el != null){ el.preventDefault(); }
+	    
 		gridPresenter.beginTask();
 		$( "#search-bar" ).val("");		
 		$("#search-clear-btn").hide();

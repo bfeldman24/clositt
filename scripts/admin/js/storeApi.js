@@ -58,7 +58,13 @@ storeApi = {
 	},
 	
 	fetchProducts: function(company, url, pageNumber, products, callback){
-       $.post("webProxy.php", {u:url}, function(result){	
+	   var webProxyData = {u:url};
+	   
+	   if (Companies[company] != null && Companies[company].usePhantomjs){
+	          webProxyData["phantom"] = true;
+	   }
+	   
+       $.post("webProxy.php", webProxyData, function(result){	
          
             if (result == null || result.trim() == ""){
     			 console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");    		
@@ -83,10 +89,12 @@ storeApi = {
     				    for (var i=0; i < Object.keys(data).length; i++){            
            	                var testProduct = data[Object.keys(data)[i]];
            	                
-        				    if (storeApiHelper.validateProduct(testProduct)){
+        				    if (storeApiHelper.validateProduct(testProduct, i)){
         				        products[testProduct.sku] = testProduct;   
         				    }
     				    }
+    				    
+    				    Messenger.success("Populated " + Object.keys(products).length + " products!");
     				    
     				    // Get next page url 
     				    var nextPage = storeApiHelper.getNextPageUrl(company, result, url);
@@ -110,7 +118,9 @@ storeApi = {
 				    
 				}catch(err){
 				    // do nothing
-				    console.log("Whoops ran into a problem: " + err);
+				    var msg = err.message.replace("\n"," ");				    
+				    msg = msg.length > 100 ? msg.substring(0,100) + "..." : msg; 
+				    console.log("Whoops ran into a problem: (" + err.lineNumber + ") " + msg);
 				    
 				    if (typeof(callback) == "function"){
 				        callback(products);   
@@ -127,20 +137,22 @@ storeApi = {
 		
 		if (data.indexOf("{") != 0){
 		      data = $("<html>").html(data);
-		}
+		}				
 		
-		switch(companyScript){
-			case "Gap":
-			case "OldNavy":
-			case "BananaRepublic":
-			case "Piperlime":
-			case "Athleta":
-				products = storeApi.getGapJson(data, home);
-				break;			
-			default:
-			    console.log(companyScript);			    
-			    products = storeApi['get' + companyScript](data, home);
-			    break;										
+		if (companyScript == "Gap" ||
+		    companyScript == "OldNavy" ||
+			companyScript == "BananaRepublic" ||
+			companyScript == "Piperlime" ||
+			companyScript == "Athleta"){
+		
+				products = storeApi.getGapJson(data, home);		
+
+		} else if(typeof storeApi['get' + companyScript] == "function"){
+		    console.log("get" + companyScript);			    
+		    products = storeApi['get' + companyScript](data, home);		
+
+		} else if (typeof Companies[company] == "object"){		
+		    products = storeApi.getGenericStore(company, data, home, url);				
 		}	
 		
 		return products;
@@ -1322,35 +1334,109 @@ storeApi = {
 	},
 
 
-	getStore: function(company, data, siteHome){	   
+	getGenericStore: function(company, data, siteHome, url){	   
 	   var products = new Object();
 	   var store = Companies[company];
 	   
-	   storeApiHelper.checkForProductListing(store.id, $(data).find(store.itemListing));
+	   storeApiHelper.checkForProductListing(store.id, $(data).find(store.listing));
 	
-       $(data).find(store.itemListing).each(function(){
+       $(data).find(store.listing).each(function(){
             if (storeApiHelper.isProductAvailable(this)){
+                // required fields
+                if (storeApiHelper.areAnyRequiredAttributesMissing(store)){                                        
+                    console.log(store); 
+                    return true; // continue;       
+                }
+                
                 var item = new Object();
-
-                item.image = $(this).find(store.image).first().attr(store.imageAttr);
-                item.link = siteHome + $(this).find(store.link).attr(store.linkAttr);
                 
-                var nameElement = store.name == null ? $(this) : $(this).find(store.name).first();
-                nameElement.attr("text",nameElement.text());
-                item.name = nameElement.attr(store.nameAttr).trim();   
+                // IMAGE
+                var lazyImage = null;
+                if (store.imageLazyAttr != null){
+                       lazyImage = $(this).find(store.image + "["+store.imageLazyAttr+"]").first().attr(store.imageLazyAttr);                                              
+                }
                 
-                var priceElement = store.price == null ? $(this) : $(this).find(store.price);                 
-                priceElement.attr("text",priceElement.text())
-    			item.price = storeApiHelper.findPricesAndGetLowest(priceElement.attr(store.priceAttr));
+                if (lazyImage == null){
+                    item.image = $(this).find(store.image + "["+store.imageAttr+"]").first().attr(store.imageAttr);            
+                }else{
+                    item.image = lazyImage;
+                }
+                
+                item.image = storeApiHelper.getAbsoluteUrl(item.image, siteHome, url);
+                
+                // LINK
+                if (store.link == store.listing){
+                    item.link = $(this).attr(store.linkAttr);
+                }else{
+                    item.link = $(this).find(store.link + "["+store.linkAttr+"]").first().attr(store.linkAttr);
+                }                
+                item.link = storeApiHelper.getAbsoluteUrl(item.link, siteHome, url);                                                
+                
+                // PRICE
+                if (store.price){
+                    var priceElement = $(this).find(store.price);                 
+                    if (store.priceAttr == "text"){
+                        item.price = storeApiHelper.findPricesAndGetLowest(priceElement.find("*").after(" ").end().text().trim());
+                    }else{   
+        			     item.price = storeApiHelper.findPricesAndGetLowest(priceElement.attr(store.priceAttr));
+                    }
+                }else if (store.noPrice){
+                    item.noPrice = true;
+                }
+                
+                // NAME
+                if (store.name){
+                    var nameElement = $(this).find(store.name).first();
+                    if (store.nameAttr == "text"){
+                        item.name = nameElement.find("*").remove().end().text().trim();
+                    }else{
+                        item.name = nameElement.attr(store.nameAttr).trim();   
+                    }
+                }else if (store.noName){
+                    item.noName = true;
+                }
     			
-    			//item.designer = $(this).find(".details .productdesigner a").first().text().trim();
+    			// DESIGNER
+    			if (store.designer != null && store.designerAttr != null){
+    			      var designer = $(this).find(store.designer).first();
+    			      
+    			      if (store.designerAttr == "text"){
+    			         item.designer = designer.text().trim();
+    			      }else{
+    			         item.designer = designer.attr(store.designerAttr);
+    			      }
+    			}
 
                 if(storeApiHelper.checkForProductImage(item.image)){
-                   var skuElement = store.sku == null ? $(this) : $(this).find(store.sku);
-                   item.sku = store.id + skuElement.attr(store.skuAttr).replace(/\D/g, ''); // strip all non numeric chars;
+                   // SKU 
+                   var skuElement = $(this).find(store.sku);
                    
-			        var itemid = item.sku.replace(/-\W/g, '');
-                    products[itemid] = item;
+                   if (skuElement.length == 0){
+                       skuElement = $("<div>").html(this).find(store.sku); 
+                   }
+                   
+                   if (skuElement.length == 1){
+                       var sku = skuElement.attr(store.skuAttr);                       
+                       
+                       if (typeof store.getSku == "function"){
+                            sku = store.getSku(sku);
+                       }
+                       
+                       if (store.styleNumber != null){
+                            var styleNumber = $("<div>").html(this).find(store.styleNumber).attr(store.styleNumberAttr); 
+                                                                                        
+                            if (styleNumber != null){
+                                sku += styleNumber;   
+                            }
+                       }
+                       
+                       item.sku = store.id + sku;                                              
+                       
+    			        var itemid = item.sku.replace(/-\W/g, ''); // removes white space
+                        products[itemid] = item;
+                   }else{
+                        console.log("We could not find the product sku!");
+                   }
                 }
             }
         });
@@ -1359,74 +1445,7 @@ storeApi = {
 	}
 }
 
-// TODO: MOVE ALL FUNCTIONS TO USE THIS COMPANY LISTING AND TO CALL storeApi.getStore()
-Companies = {
-    'Cusp': {
-        'id': 'cu',
-        'itemListing': '.products .product',
-        
-        'image': 'a.prodImgLink .productImage',
-        'imageAttr': 'src',
-        
-        'link': 'a.prodImgLink',
-        'linkAttr': 'href',
-        
-        'name': '.details .productname a',
-        'nameAttr': 'text',
-        
-        'price': '.details .allPricing',
-        'priceAttr': 'text',
-        
-        'sku': null,
-        'skuAttr': 'id',
-        'skuKeepOnlyNumeric': true        
-    }  
-};
 
-NextPageSelector = {    
-    "AmericanApparel": null,
-    "AmericanEagle": null,
-    "AnnTaylor": ".pages a.next",
-    "Anthropologie": null,
-    "Athleta": null,
-    "BananaRepublic": null,
-    "BCBG": ".first-last a.page-next",
-    "Bloomingdales": "#topRightArrow.nextArrow", 
-    "BrooksBrothers": null,
-    "Burberry": null,
-    "CharlesTyrwhitt": ".all",
-    "Chicos": "#pagination a.next",
-    "Cusp": null, // onclick event, but lots of pages 
-    "Dillards": ".next",
-    "Forever21": "img#arrowNext",
-    "FreePeople": ".next.page a.arrow",
-    "Gap": null,
-    "HM": ".pages .next",
-    "Hollister": null,
-    "Intermix": null,
-    "JCPenney": "#paginationIdTOP a[title='next page']",
-    "JCrew": ".paginationTop .pageNext",
-    "JJill": null, // ".result-nav #(end with _sNextTop) a",
-    "KateSpade": null,
-    "Kohls": "a.next-set",
-    "Loft": ".pages .next",
-    "Lululemon": null,
-    "LordTaylor": null,
-    "Macys": "#paginationTop .arrowRight",
-    "Madewell": null,
-    "MichaelKors": ".pagination .nextpage",
-    "NeimanMarcus": null, // "$(.nextarrow).prev()"
-    "Nike": null,
-    "Nordstrom": ".next",
-    "NewYorkCompany": ".nav .next",
-    "OldNavy": null,
-    "Piperlime": null,
-    "Target": ".pagination-item.next",
-    "TopShop": ".show_next",
-    "ToryBurch": null,
-    "UrbanOutfitters": null, // "$(.category-pagination-pages a).last()"
-    "Zara": null
-};
 
 storeApiHelper = {  
     debug: false,
@@ -1501,7 +1520,7 @@ storeApiHelper = {
             console.log(storeCode + ": Store api could NOT find product listing.");                           
             Messenger.error("Error: Could not find any products. Check to make sure this link is still active.");
         }else{
-            console.log(storeCode + ": Store FOUND products listing!");   
+            Messenger.success(storeCode + ": Store FOUND " + element.length + " products in listing!");   
         }
         
         if (storeApiHelper.debug){
@@ -1518,6 +1537,34 @@ storeApiHelper = {
            return false;
     },
     
+    getAbsoluteUrl: function(url, home, currentAbsoluteUrl){
+        var absUrl = null;
+        
+        if (url == null) return null;
+        
+        if ( (url.indexOf("//") >= 0 && url.indexOf("//") < 10) ||
+             (url.indexOf("www.") >= 0 && url.indexOf("www.") < 15) ||
+             (url.indexOf(".com/") >= 0 && url.indexOf(".com/") < 50) ||
+             (url.indexOf(".net/") >= 0 && url.indexOf(".net/") < 50)){
+                absUrl = url;
+        
+        }else if (url.indexOf("/") == 0 || url.indexOf("../") == 0){        
+            // handles urls that start with "/" and urls that start with "../" 
+            absUrl = home + url.substring(url.indexOf("/"));        
+
+        }else if (currentAbsoluteUrl != null){
+            if (url.indexOf("?") == 0){
+                if (currentAbsoluteUrl.lastIndexOf("?") > 0){
+                    absUrl = currentAbsoluteUrl.substring(0,currentAbsoluteUrl.lastIndexOf("?")) + url;        
+                }
+            }
+            
+            absUrl = absUrl ? absUrl : currentAbsoluteUrl + url;
+        }
+        
+        return absUrl ? absUrl : home + url;
+    },
+    
     isProductAvailable: function(product){        
         
         var unavailableKeyWords = $(product).find('p,div,a,span,i,strong,b,h1,h2,h3,h4,h5,h6').filter(function(){ 
@@ -1532,76 +1579,137 @@ storeApiHelper = {
         return unavailableKeyWords.length <= 0;
     },
     
-    getNextPageUrl: function(company, data, url){
-        var companyName = company.replace(/[\s_&]/g,'');
-        var nextPage = $(data).find(NextPageSelector[companyName]).first().find("a").attr("href"); 
+    areAnyRequiredAttributesMissing: function(store){
+        var hasMissingAttributes = false;
+        var storeID = "(ID: " + store.id + ")";
         
-        if (nextPage == null){
-            nextPage = $(data).find(NextPageSelector[companyName]).first().attr("href");    
+        if (store.image == null || store.imageAttr == null){
+            Messenger.error("Missing Image Attribute " + storeID);
+            hasMissingAttributes = true;
+        }
+        
+        if (store.link == null || store.linkAttr == null){
+            Messenger.error("Missing Link Attribute " + storeID);
+            hasMissingAttributes = true;
+        }
+        
+        if (store.name == null || store.nameAttr == null){
+            if (!store.noName){
+                Messenger.error("Missing Name Attribute " + storeID);
+                hasMissingAttributes = true;
+            }    
+        }
+        
+        if (store.price == null || store.priceAttr == null){
+            if (!store.noPrice){
+                Messenger.error("Missing Price Attribute " + storeID);
+                hasMissingAttributes = true;
+            }    
+        }
+        
+        if (store.sku == null || store.skuAttr == null){             
+            Messenger.error("Missing SKU Attribute " + storeID);
+            hasMissingAttributes = true;
+        }
+        
+        return hasMissingAttributes;
+    },
+    
+    getNextPageUrl: function(company, data, url){
+        if (data.indexOf("{") != 0){
+		      data = $("<html>").html(data);
+		}
+        
+        var nextPage = null;
+        var companyName = company.replace(/[\s_&]/g,'');        
+        
+        if (NextPageSelector[companyName] != null){
+            nextPage = $(data).find(NextPageSelector[companyName]).first().find("a").attr("href"); 
             
             if (nextPage == null){
-                nextPage = $(data).find(NextPageSelector[companyName]).first().parents("a").attr("href");    
+                nextPage = $(data).find(NextPageSelector[companyName]).last().attr("href");    
+                
+                if (nextPage == null){
+                    nextPage = $(data).find(NextPageSelector[companyName]).last().parents("a").attr("href");    
+                }
             }
+            
+        }else if (Companies[company] != null && Companies[company].nextPage != null){
+           var nextPageAttr = Companies[company].nextPageAttr ? Companies[company].nextPageAttr : "href";
+            
+            nextPage = $(data).find(Companies[company].nextPage).last().attr(nextPageAttr);                
         }
         
         if (nextPage != null){
             
-            // If its a relative url
-            if (nextPage.indexOf("//") != 0 &&  
-                nextPage.indexOf("http") != 0 &&
-                nextPage.indexOf("www.") != 0){
-                    var home = url.substring(0, url.indexOf("/", url.indexOf(".")));                    
-                    nextPage = home + nextPage;		
-                }
+            var home = url.substring(0, url.indexOf("/", url.indexOf(".")));                    
+            nextPage = storeApiHelper.getAbsoluteUrl(nextPage, home, url);            
+            
+            // remove link if its a javascript event
+            if (nextPage.toLowerCase().indexOf("javascript") >= 0){
+                nextPage = null;   
+            }
         }
         
         return nextPage;            
     },
     
-    validateProduct: function(product){        
-        var isValid = false;
+    validateProduct: function(product, i){        
                        	        
         if (product != null &&
-            product.price != null && 
+            product.sku != null &&
             product.image != null && 
             product.link != null && 
-            product.name != null &&
-            product.sku != null){				 
+            (product.name != null || product.noName) &&
+            (product.price != null || product.noPrice)){	                			                                 
                 
-                var price = product.price + "";
-                price = parseFloat(price.replace("$",""));
-		        price = parseFloat(price);
-		        
-		        if(isNaN(price)){       				        
-			        console.log("Product ("+i+") price is not a number");           			            
-		        
-		        }else{       			          
-		            return true;	                				               				        
-		        }
+                if (product.link.toLowerCase().indexOf("javascript") >= 0){
+                    Messenger.error("Product ("+i+") link is a javascript link");           			            
+                    return false;                    
+                }
+                
+                if (!product.noPrice){
+                    var price = product.price + "";
+                    price = parseFloat(price.replace("$",""));
+    		        price = parseFloat(price);
+                    
+                    if(isNaN(price)){       				        
+    			        Messenger.error("Product ("+i+") price is not a number");           			            
+    		            return false;                         
+    		        }else if(price < 3){
+    		            Messenger.error("Product ("+i+") price seems too small");           			            
+    		            return false;
+    		        }else if(price > 20000){
+    		            Messenger.error("Product ("+i+") price seems too large");           			            
+    		            return false;
+    		        }
+                }
+		            
+		        return true;   
         }else{                                
             if (product == null){
-                console.log("Product ("+i+") is null");    
+                Messenger.error("Product ("+i+") is null");    
                 
             }else{
             
-                if (product.price == null){
-                    console.log("Product ("+i+") price is null");    
+                if (product.price == null && product.noPrice != true){
+                    Messenger.error("Product ("+i+") price is null");    
                 }
                 
                 if (product.image == null){
-                    console.log("Product ("+i+") image is null");    
+                    Messenger.error("Product ("+i+") image is null");    
                 }
                 
                 if (product.link == null){
-                    console.log("Product ("+i+") link is null");    
+                    Messenger.error("Product ("+i+") link is null");    
                 }
                 
-                if (product.name == null){
-                    console.log("Product ("+i+") name is null");    
+                if (product.name == null && product.noName != true){
+                    Messenger.error("Product ("+i+") name is null");    
                 }
                 
                 if (product.sku == null){
-                    console.log("Product ("+i+") sku is null");    
+                    Messenger.error("Product ("+i+") sku is null");    
                 }    
             }                    				                
         }

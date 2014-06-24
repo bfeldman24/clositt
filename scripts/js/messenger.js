@@ -67,7 +67,9 @@ var Messenger = {
 		$("#" + Messenger.id).css("display","block");
 		
 		if (Messenger.debug){
-		      console.log(msg);
+		      var d = new Date();
+		      var logTime = (d.getMonth() + 1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + " - ";
+		      console.log(logTime + msg);
 		}
 		
 		setTimeout(function(){
