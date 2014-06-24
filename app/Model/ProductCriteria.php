@@ -115,6 +115,17 @@ class ProductCriteria{
         }
     }
 
+    public function isEmpty(){
+        return  !isset($this->maxPrice) &&
+        !isset($this->minPrice) &&
+        !isset($this->searchString) &&
+        !isset($this->tags) &&
+        !isset($this->colors) &&
+        !isset($this->categories) &&
+        !isset($this->customers) &&
+        !isset($this->companies);
+    }
+    
     public static function setCriteriaFromPost($row){
 		$productCriteria = new ProductCriteria();
 		

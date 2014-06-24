@@ -1,0 +1,4 @@
+AuthUserFile /Applications/MAMP/htdocs/clositt-fork/scripts/admin/php/.htpasswd
+AuthType Basic
+AuthName "Clositt Auth"
+Require valid-user
