@@ -110,6 +110,7 @@ body{
         search.queryType = $( "#search-type").val().trim();
         searchController.isSearchActive = true;
         searchController.hasMoreProducts = true
+        searchController.criteria = search;
 
         $.post(window.HOME_ROOT + "p/search/0", search, function( products ) {
 
