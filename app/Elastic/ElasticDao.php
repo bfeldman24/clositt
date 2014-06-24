@@ -7,8 +7,8 @@ class ElasticDao{
 
 	private $client = null;
     private $index = "products"; //this will be an alias that always has current index
-    private $fields = array('name.partial','name','store^2','storetokenized','tag^2','tag.partial^2','color1', 'color2');
-
+    //private $fields = array('name.partial','name','store','tag','tag.partial','color', 'color2');
+    private $fields = array('name.partial','name','store','tag','tag.partial','color', 'color2');
 	public function __construct(){
 		$this->client = new Elasticsearch\Client();
 	}
@@ -124,22 +124,53 @@ class ElasticDao{
         }
 
         $query = array();
+        $fields = array();
+
         if($criteria->getSearchString()){
-            $query['multi_match']['fields'] = $this->fields;
-            $query['multi_match']['query'] = $criteria->getSearchString();
-            $query['multi_match']['type'] = "cross_fields";
+
+            if(is_array($criteria->getFieldWeightings())){
+                $userWeights = $criteria->getFieldWeightings();
+
+                $tagBoost = !empty($userWeights['tags']) ? "^" . $userWeights['tags'] : "";
+                $storeBoost = !empty($userWeights['store']) ? "^" . $userWeights['store'] : "";
+                $colorBoost = !empty($userWeights['color']) ? "^" . $userWeights['color'] : "";
+                $titleBoost = !empty($userWeights['title']) ? "^" . $userWeights['title'] : "";
+
+                array_push($fields, "tag" . $tagBoost);
+                array_push($fields, "tag.partial" . $tagBoost);
+
+                array_push($fields, "store" . $storeBoost);
+
+                array_push($fields, "color" . $colorBoost) ;
+                array_push($fields, "color2" . $colorBoost) ;
+
+                array_push($fields, "name" . $titleBoost) ;
+                array_push($fields, "name.partial" . $titleBoost) ;
+
+            }
+            else{
+                $fields = $this->fields;
+            }
+
         }
 
-        $searchParams['body']['query']['filtered'] = array(
-            "filter" => $baseFilter,
-            "query" =>$query
-        );
+        $queryType =$criteria->getQueryType();
+        if (!empty($queryType) && $queryType=="querystring"){
+            $searchParams['body']['query']['query_string'] = array( "query" => $criteria->getSearchString() ,"fields" => $fields);
+        }
+        else{//($queryType=="multimatch"){
+            $query['multi_match']['fields'] = $fields;
+            $query['multi_match']['query'] = $criteria->getSearchString();
+            $query['multi_match']['type'] = "cross_fields";
+
+            $searchParams['body']['query']['filtered'] = array(
+                "filter" => $baseFilter,
+                "query" =>$query
+            );
+        }
 
         $searchParams['body']['from']=$start;
         $searchParams['body']['size']=$numResultsPage;
-
-
-
 
         return $searchParams;
     }
