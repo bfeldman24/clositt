@@ -113,7 +113,7 @@ body{
         searchController.criteria = search;
 
         $.post(window.HOME_ROOT + "p/search/0", search, function( products ) {
-
+                products = products.products;
                 if( Object.keys(products).length > 0){
                     $("#product-grid").children().remove();
                     gridPresenter.lazyLoad(products);
