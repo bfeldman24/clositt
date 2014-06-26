@@ -703,6 +703,7 @@ var categoryMaintenance = {
 	      
 		         $("<html>").html(data).find("a[href]:not(:has(*))").each(function(){
 		              var url = $(this).attr("href").toLowerCase();	
+		              var stripedText = $(this).text().replace(/\W/g, ''); 
 		              
 		              var womenRegex = new RegExp("women|gal");
                       var menRegex = new RegExp("men|dude|guy");	                      
@@ -720,7 +721,7 @@ var categoryMaintenance = {
 		                  linkSet.indexOf($(this).attr("href")) <= 0){
 		                      		                      
 	                      linkSet.push($(this).attr("href"));		              
-	                      var cat;	    
+	                      var cat = null;	    
 	                      var uniqueId = '';                   
 	                      var isChecked = category.test(url) && menWomen != '';
 	                      
@@ -744,19 +745,19 @@ var categoryMaintenance = {
 	                      }
 	                      
 	                      
-	                      if (cat != null){
+	                      if (cat != null){	                           	                       
     	                      // Make cats unique
-    	                      while (uniqueCats.indexOf(menWomen + cat + $(this).text() + uniqueId) >= 0){
+    	                      while (uniqueCats.indexOf(menWomen + cat + stripedText + uniqueId) >= 0){
     	                           uniqueId = parseInt(uniqueId);
     	                               	                       
     	                           if (isNaN(uniqueId)){
-    	                               uniqueId = 1;   
+    	                               uniqueId = 2;   
     	                           }else{
     	                               uniqueId++;
     	                           }
     	                      }
     	                      
-    	                      uniqueCats.push(menWomen + cat + $(this).text() + uniqueId);
+    	                      uniqueCats.push(menWomen + cat + stripedText + uniqueId);
 	                      
 	                          cat += " - ";
 	                      }else{
@@ -769,7 +770,7 @@ var categoryMaintenance = {
     		                      .attr("type","checkbox")
     		                      .attr("store", selectedStore)
     		                      .attr("customer", menWomen)
-    		                      .attr("category", cat + $(this).text() + uniqueId)
+    		                      .attr("category", cat + stripedText + uniqueId)
     		                      .attr("link", absolute + $(this).attr("href"))
     		                  ).append(
     		                      $("<span>").addClass("linkCustomer").text(menWomen + " ")
@@ -823,13 +824,14 @@ var categoryMaintenance = {
     },
     
     saveCategories: function(customer){
-        var cats = [];
-        customer = customer ? customer : $(this).attr("customer");
+        var cats = [];        
                         
         $("ul.links input:checked").each(function(){
+            var client = customer ? customer : $(this).attr("customer");
+            
             cats.push({
                 store: $(this).attr("store"),
-                customer: customer,
+                customer: client,
                 category: $(this).attr("category"),
                 link: $(this).attr("link"),
                 tags: null
@@ -946,7 +948,7 @@ var actionButtons = {
          // This is so if the script goes through 1/2 of the products every 
          // day before failing or browser crashes, then all of the products
          // will get updated every 2 days. 
-         if (d.getDate() % 2 == 0){
+         if (location.hash != spider.autoRunHash && d.getDate() % 2 == 0){
             Messenger.info("Reversing the company list (We do this every other day)");
             $("#links").append($(".company").get().reverse());
          }
