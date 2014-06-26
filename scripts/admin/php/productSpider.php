@@ -188,6 +188,10 @@ input{
 .links{
     font-size: 10px;   
 }
+
+#brokenLinks{
+    display:none;   
+}
 </style>
 
 </head>
@@ -197,6 +201,7 @@ input{
     <a href="#" name="top"></a>
     <br><h2>Product Genie</h2>
     <div id="links"><img src="../../../css/images/loading.gif" style="height:50px;"/></div>        
+    <div id="brokenLinks"></div>
     
     <hr>
     <a name="addCategoryForm"></a>

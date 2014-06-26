@@ -452,10 +452,27 @@ var spider = {
     },
     
     autoRun: function(){        
-        console.log("Sorting Categories by last saved date...");        
+        console.log("Sorting Categories by last saved date...");
+        
+        // Remove Broken Links for AutoRun
+        $brokenLinks = $(".category").filter(function(){
+            return $(this).find(".isvalid").text().indexOf("BROKEN") >= 0; 
+        });
+        
+        $("#brokenLinks").append($brokenLinks);        
+                
         var cats = $(".company").sort(function(a, b){
-            var textDateA = $(a).find(".lastUpdated").first().text();
-            var textDateB = $(b).find(".lastUpdated").first().text();
+            
+            var $aWorks = $(a).find(".isvalid").filter(function(){
+                return $(this).text().indexOf("Works") >= 0;
+            });
+            
+            var $bWorks = $(b).find(".isvalid").filter(function(){
+                return $(this).text().indexOf("Works") >= 0;
+            });
+            
+            var textDateA = $aWorks.next(".lastUpdated").first().text();
+            var textDateB = $bWorks.next(".lastUpdated").first().text();
             
             if (textDateA == null || textDateA == ""){
                 textDateA = 0;
@@ -516,8 +533,7 @@ var categoryMaintenance = {
     	};    	
 	    
 	    $.post( window.HOME_ROOT + "spider/addlink", catObj, function( data ) {
-	          if (data == "success"){
-        	      spider.getLinks();
+	          if (data == "success"){        	      
         	      Messenger.success("Added!");		      
         		  $(e.currentTarget).find("#inputLink").val("");
         	      $(e.currentTarget).find("#inputCategory").val("");	
@@ -654,6 +670,7 @@ var categoryMaintenance = {
                           'shorts','blouse','jacket','skirt','petities','trouser','cardigan',
                           'turtleneck','jean','denim','activewear','hoodie','tees','romper',
                           'clothes','apparel','jersey','khaki','capris'];
+                          
         var category = new RegExp(dictionary.join("|"));                         
                
         var store = Companies[selectedStore];
@@ -679,7 +696,11 @@ var categoryMaintenance = {
 		         var $links = $("<ul>").addClass("links");
 		         var linkSet = [];
 		         var uniqueCats = [];
-		      
+		         
+		         if (home.indexOf("/", home.indexOf(".")) > 0){
+                       home = home.substring(0, home.indexOf("/", home.indexOf(".")));
+                  }
+	      
 		         $("<html>").html(data).find("a[href]:not(:has(*))").each(function(){
 		              var url = $(this).attr("href").toLowerCase();	
 		              
@@ -691,10 +712,9 @@ var categoryMaintenance = {
 	                  var menWomen = isForWomen ? "women" : isForMen ? "men" : '';
 	                  var absolute = '';
 	                  
-	                  if (url.indexOf("/") == 0 && url.indexOf("//") != 0){
-	                      absolute = home;
-	                  }
-		              	              
+	                  if (url.indexOf("/") == 0 && url.indexOf("//") != 0){	                   	                          	                  
+    	                  absolute = home;
+	                  }		              	              
 		          
 		              if (url != null && url.trim() != "" && url.indexOf("java") < 0 &&
 		                  linkSet.indexOf($(this).attr("href")) <= 0){
@@ -777,24 +797,21 @@ var categoryMaintenance = {
                              label: "Submit",
                              className: "btn-success",
                              callback: function() {   
-                                                                                                                     
-                                var cats = [];
-                                
-                                $("ul.links input:checked").each(function(){
-                                    cats.push({
-                                        store: $(this).attr("store"),
-                                        customer: $(this).attr("customer"),
-                                        category: $(this).attr("category"),
-                                        link: $(this).attr("link"),
-                                        tags: null
-                                    }); 
-                                });                                                              
-                                
-                                $.post( window.HOME_ROOT + "spider/addlinks" ,{links: cats}, function(results){
-                                    
-                                     Messenger.info("Saved " + results + " out of " + $("ul.links input:checked").length + " links");                        
-                                });
-                                
+                                   categoryMaintenance.saveCategories();                                          
+                             }
+                         },
+                         successMen: {
+                             label: "Submit All As Men",
+                             className: "btn-success",
+                             callback: function() {   
+                                   categoryMaintenance.saveCategories("men");
+                             }
+                         },
+                         successWomen: {
+                             label: "Submit All As Women",
+                             className: "btn-success",
+                             callback: function() {   
+                                   categoryMaintenance.saveCategories("women");
                              }
                          },
                      }
@@ -803,11 +820,30 @@ var categoryMaintenance = {
         });
         
         return false;
+    },
+    
+    saveCategories: function(customer){
+        var cats = [];
+        customer = customer ? customer : $(this).attr("customer");
+                        
+        $("ul.links input:checked").each(function(){
+            cats.push({
+                store: $(this).attr("store"),
+                customer: customer,
+                category: $(this).attr("category"),
+                link: $(this).attr("link"),
+                tags: null
+            }); 
+        });                                                              
+        
+        $.post( window.HOME_ROOT + "spider/addlinks" ,{links: cats}, function(results){            
+                Messenger.info("Saved " + results + " out of " + $("ul.links input:checked").length + " links");                        
+        });
     }
 };
-
-
-/***************************************
+    
+    
+    /***************************************
 * ACTION BUTTONS
 * 
 * handles the buttons on the bottom bar
