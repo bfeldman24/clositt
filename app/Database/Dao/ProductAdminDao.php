@@ -22,7 +22,7 @@ class ProductAdminDao extends AbstractDao {
 				" ORDER BY " . 
     				SPIDER_STORE . "," .
                     SPIDER_CUSTOMER . "," .
-                    SPIDER_CATEGORY;;								
+                    SPIDER_CATEGORY;							
         
 		$paramsTypes = array();		
 		$params = array();
@@ -222,10 +222,10 @@ class ProductAdminDao extends AbstractDao {
                       PRODUCT_CLOSITT_COUNT . "," .
                       PRODUCT_SHORT_LINK . "," . 
                       PRODUCT_DATE_UPDATED . ")" .
-	           " VALUES (:sku, :company, :customer, " .
-	                    ":category, :name, :link, " .
-	                    ":image, :price, 0, " .
-	                    "0, :shortlink, NOW())";	                    	          
+	           " VALUES (?, ?, ?, " .
+	                    "?, ?, ?, " .
+	                    "?, ?, 0, " .
+	                    "0, ?, NOW())";	                    	          
         
         if($this->debug){		    
 			$this->logDebug("873242" ,$sql );
@@ -235,10 +235,18 @@ class ProductAdminDao extends AbstractDao {
         $affectedRows = 0;
         foreach ($products as $key => $value) {
             
-            try {   
-                //print_r($value);    
-                unset($value['tags']);                                       
-                $affectedRows += $stmt->execute($value);
+            try {                                         
+                $params = array($value['sku'],
+                                $value['company'],
+                                $value['customer'],
+                                $value['category'],
+                                $value['name'],
+                                $value['link'],
+                                $value['image'],
+                                $value['price'],
+                                $value['shortlink']);
+                
+                $affectedRows += $stmt->execute($params);
             } catch (Exception $e) {
                 echo 'Caught exception: ',  $e->getMessage(), "\n\n";
             }
@@ -843,6 +851,18 @@ class ProductAdminDao extends AbstractDao {
         }     
         
         return $affectedRows;
+	}
+	
+	public function getStoreProductCount(){                    
+        $sql = "SELECT " . PRODUCT_STORE . ", COUNT(1) as count FROM " . PRODUCTS .
+                " WHERE " . PRODUCT_STATUS . " IN (1,2,4) " .
+                " GROUP BY " . PRODUCT_STORE . 
+                " ORDER BY " . PRODUCT_STORE;
+							        
+		$paramsTypes = array();		
+		$params = array();		
+		
+		return $this->getResults($sql, $params, $paramTypes, "23920342023");	   
 	}
 }
 ?>
