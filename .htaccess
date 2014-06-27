@@ -30,6 +30,7 @@ RewriteRule ^c/([a-z0-9]*)$ app/Controller/ColorController.php?method=$1
 RewriteRule ^spider/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1
 RewriteRule ^spider/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1&page=$2
 RewriteRule ^notify$ scripts/admin/php/notify.php
+Redirect /admin /scripts/admin/
 Redirect /admin/spider /scripts/admin/php/productSpider.php
 Redirect /admin/color /scripts/admin/php/colorProcessor.php
 Redirect /admin/search /scripts/admin/php/search.php

@@ -335,16 +335,16 @@ class ProductAdminController extends Debugger {
 			}
 	   }  	   
 	   
-	   $filter['categories'] = $categories;
+	  // $filter['categories'] = $categories;
 	   
 	   // COMPANIES AND BRANDS
 	   $companyResults = $this->productAdminDao->getCompanies();
-	   $companies = array();
-	   
+	   $companies = array(); 
+
 	   if(is_object($companyResults)){
-			while($row = $companyResults->fetchRow(MDB2_FETCHMODE_ASSOC)){	
-				$companies[] = array(stripslashes($row[PRODUCT_STORE]) , stripslashes($row[PRODUCT_CUSTOMER]));				
-			}
+		while($row = $companyResults->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+			$companies[] = array(stripslashes($row[PRODUCT_STORE]) , stripslashes($row[PRODUCT_CUSTOMER]));
+		}
 	   }
 	   
 	   $filter['companies'] = $companies;
@@ -503,6 +503,20 @@ class ProductAdminController extends Debugger {
 	   }	   
 	
 	   return json_encode($status);
+	}
+	
+	public function getStoreProductCount(){    			      	   	   
+	    $stores = array();	    
+	    $results = $this->productAdminDao->getStoreProductCount(); 	
+	   	   
+    	if(is_object($results)){
+    	 
+    		while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+                $stores[$row[PRODUCT_STORE]] = $row['count'];
+    		}    		
+    	}
+	   		   	   		     
+	    return json_encode($stores);
 	}
 	
 	public function getNextProductDetailUrls($stores, $limit = 1){	  
@@ -674,6 +688,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
 
 }else if ($_GET['method'] == 'getproductdetailstatus'){
     echo $productAdminController->getProductDetailCount();    
+
+}else if ($_GET['method'] == 'storeproductcount'){
+    echo $productAdminController->getStoreProductCount();    
 
 }
 
