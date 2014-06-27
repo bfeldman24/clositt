@@ -71,7 +71,7 @@ class ElasticDao{
             foreach($retDoc['facets'] as $key=>$value){
                 $terms = array();
                 foreach($value['terms'] as $term=>$termValue){
-                    $terms[$term]=$termValue;
+                    $terms[$termValue['term']]=$termValue['count'];
                 }
                 $facets[$key] = $terms;
             }
