@@ -445,7 +445,8 @@ var Companies = {
     	"id": "gs",
     	"date": "Sun Jun 15 20:47:57 2014",
     	"image": ".prodImg>a>img",
-    	"imageAttr": "originalurl",
+    	"imageAttr": "src",
+    	"imageLazyAttr": "originalurl",
     	"link": ".image>.prodImg>a",
     	"linkAttr": "href",
     	"name": ".name>a",
@@ -454,7 +455,7 @@ var Companies = {
     	"priceAttr": "text",
     	"sku": ".prodImg>a>img",
     	"skuAttr": "alt",
-    	"nextPage": ".inline>li>a:first",
+    	"nextPage": ".pagination:first>.inline>li>a:last",
     	"nextPageAttr": "href",
     	"listing": ".thumbnails>.span3>div.productThumb"
     },
