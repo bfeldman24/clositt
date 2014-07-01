@@ -207,17 +207,23 @@ class ProductController {
         }
 
         $results = $this->elasticDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage);
-        $searchResults = array();
 
-		if(is_array($results)){
-			foreach ($results as $hit) {
+        $items = $results['products'];
+        $products = array();
+
+		if(is_array($items)){
+			foreach ($items as $hit) {
 				
 			    $productEntity = new ProductEntity();
 				ProductEntity::setProductFromElastic($productEntity, $hit);
-				$searchResults[] = $productEntity->toArray();
+				$products[] = $productEntity->toArray();
 			}
 		}
-		return json_encode($searchResults);
+
+        $facets = $results['facets'];
+
+        $results = array('products'=>$products, 'facets' => $facets);
+		return json_encode($results);
 	}
 }
 

@@ -228,8 +228,8 @@ var searchController = {
         
         if (searchController.hasMoreProducts){
             var pageIndex = searchController.pageIndex;
-            $.post( window.HOME_ROOT + searchController.url +pageIndex, searchController.criteria, function( data ) {            
-                            
+            $.post( window.HOME_ROOT + searchController.url +pageIndex, searchController.criteria, function( data ) {
+                data = data.products;
         		gridPresenter.endTask();
         		
         		if( Object.keys(data).length > 0){  
@@ -502,8 +502,8 @@ var searchController = {
 		}, this);				
 	},		
 	
-	showResults: function(products){	  
-	    products = searchController.orderResults(products);	    
+	showResults: function(products){
+	    products = searchController.orderResults(products);
 		productPresenter.filterStore = products;
 		gridPresenter.endTask();
 		

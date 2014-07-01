@@ -51,7 +51,8 @@ class ElasticDao{
 	public function getProductsWithCriteria($criteria, $pageNumber, $numResultsPage){
 
 		$searchParams = $this->buildQuery($criteria, $pageNumber, $numResultsPage);
-        $results = array();
+        $products = array();
+        $facets = array();
 
         try {
             $retDoc = $this->client->search($searchParams);
@@ -64,11 +65,21 @@ class ElasticDao{
 			foreach ($retDoc['hits']['hits'] as $hit) {
 				$doc = $hit['_source'];
                 $doc['score'] = $hit['_score'];
-				array_push($results, $doc);
+				array_push($products, $doc);
 			}
+
+            foreach($retDoc['facets'] as $key=>$value){
+                $terms = array();
+                foreach($value['terms'] as $term=>$termValue){
+                    $terms[$termValue['term']]=$termValue['count'];
+                }
+                $facets[$key] = $terms;
+            }
 		}
 
-		return $results;
+
+
+		return array('products'=>$products, 'facets' => $facets);
 	}
 
 
@@ -168,6 +179,11 @@ class ElasticDao{
                 "query" =>$query
             );
         }
+
+        // setup facets
+        $tags =  array('terms'=>array('field'=>'tag','size'=>10));
+        $stores =  array('terms'=>array('field'=>'store','size'=>10));
+        $searchParams['body']['facets'] = array('tags'=>$tags, 'stores'=>$stores);
 
         $searchParams['body']['from']=$start;
         $searchParams['body']['size']=$numResultsPage;
