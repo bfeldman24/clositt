@@ -643,7 +643,27 @@ var Companies = {
     	"skuAttr": "data-item-id",
     	"listing": "ul.products > li",
     	"usePhantomjs": true
-    }  
+    },
+    'Columbia': {
+      	"url": "http://www.columbia.com/mens-jackets/men-jackets,default,sc.html",
+      	"id": "col",
+      	"date": "Thu Jul  3 18:15:26 2014",
+      	"image": ".item-pic>a>img[id]",
+      	"imageAttr": "src",
+      	"link": ".model-info>.prod-model>a",
+      	"linkAttr": "href",
+      	"name": ".model-info>.prod-model>a",
+      	"nameAttr": "text",
+      	"price": ".price-rating-info>.reg-price",
+      	"priceAttr": "text",
+      	"sku": ".item-pic",
+      	"skuAttr": "rel",
+      	"nextPage": ".pagination:first > .pages > a:last",
+      	"nextPageAttr": "text",
+      	"listing": ".results-col>.result-row>div.result-item",
+      	"sampleSku": "WM2049",
+    	"usePhantomjs": true
+    }
 };
 
 

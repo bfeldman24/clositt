@@ -49,7 +49,7 @@ ul>li{
     <hr>
     <br/>
     <ul>
-        <li><a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://www.feld24.info/closetta/selectors.js';})();">Product Scraping - CSS Selector Helper</a></li>
+        <li><a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://www.feld24.info/closetta/selectors.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/admin/js/storeApi.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/admin/js/productSpider.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/admin/js/productDetailApi.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/js/messenger.js';})();">Product Scraping - CSS Selector Helper</a></li>
         <li><a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://www.feld24.info/closetta/genericProductPageScraper.js';})();">Product Scraping - Generic Scraping Script</a></li>
     </ul>
     

@@ -1426,6 +1426,28 @@ var productDetailApi = {
     	"colorsImages": "src",
     	"sizes": ".module.size > div label > span",
     	"sizesAttr": "text"
+    },
+    'Columbia': {
+    	"url": "http://www.columbia.com/Men%27s-Heater-Change%E2%84%A2-Jacket/WM2049,default,pd.html",
+    	"id": "col",
+    	"date": "Thu Jul  3 18:45:56 2014",
+    	"container": ".contentasset>div>div.topHalfWrapper",
+    	"containerAttr": "text",
+    	"name": "div>div>h1.product_title",
+    	"nameAttr": "text",
+    	"details": ".product-info-block>.product-info-left-col>div",
+    	"detailsAttr": "text",
+    	"originalPrice": "div>div>div.price-index",
+    	"originalPriceAttr": "text",
+    	"promotion": "div>div>p",
+    	"promotionAttr": "text",
+    	"colorsImages": ".innerswatch>a>img",
+    	"colorsImagesAttr": "alt",
+    	"colorsNames": ".innerswatch>a>img",
+    	"colorsNamesAttr": "src",
+    	"sizes": ".size_container>.size>div.innersize",
+    	"sizesAttr": "text",
+    	"usePhantomjs": true
     }
 };
 
@@ -1449,7 +1471,7 @@ var productDetail = {
         });
     },
   
-    populateDetails: function(company, sku, url, data, callback){
+    populateDetails: function(company, sku, url, data, callback, selectors){
         if (productDetail.debug) { ;debugger; }
         
         try{
@@ -1460,13 +1482,22 @@ var productDetail = {
             var s = productDetailApi[company]; // s for selectors
             var home = url.substring(0, url.indexOf("/", url.indexOf(".")));
             
+            if(selectors != null){ 
+                s = selectors;   
+            }
+            
             if(s == null){ 
                 Messenger.error("Store ["+ company +"] is not in the API"); 
                 return null;
             }
             
-            product.sku = sku;  
-            product.url = url;                        
+            if (sku != null){            
+                product.sku = sku;
+            }  
+            
+            if (url != null){
+                product.url = url;                        
+            }
             
             if (s.container != null){
                 data = $(data).find(s.container).first(); 
@@ -1601,6 +1632,8 @@ var productDetail = {
         
            if (callback != null && typeof callback == "function"){
                callback(product);
+           }else{
+               return product;
            }
            
         }catch(err){
@@ -1610,7 +1643,7 @@ var productDetail = {
         }                      
     },
     
-    cleanProduct: function (product){                  
+    cleanProduct: function (product){                          
         product.summary = productDetail.setEmptyToNull($.trim(product.summary));
         product.details = productDetail.setEmptyToNull($.trim(product.details));        
         product.promotion = productDetail.setEmptyToNull($.trim(product.promotion));
