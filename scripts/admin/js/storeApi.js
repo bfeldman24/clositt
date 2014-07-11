@@ -1334,9 +1334,19 @@ storeApi = {
 	},
 
 
-	getGenericStore: function(company, data, siteHome, url){	   
+	getGenericStore: function(company, data, siteHome, url, selectors){	   
 	   var products = new Object();
-	   var store = Companies[company];
+	   var store = null;
+	   
+	   if (typeof Companies == "object"){
+	       store = Companies[company];
+	   }else if (selectors != null){
+	       store = selectors;   
+	   }
+	   
+	   if (store == null){
+	       return products;   
+	   }
 	   
 	   storeApiHelper.checkForProductListing(store.id, $(data).find(store.listing));
 	
