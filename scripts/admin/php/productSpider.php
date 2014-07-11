@@ -231,6 +231,7 @@ input{
       			  <option value="Canada Goose">Canada Goose</option>
       			  <option value="Charles Tyrwhitt">Charles Tyrwhitt</option>
       			  <option value="Chicos">Chicos</option>
+      			  <option value="Columbia">Columbia</option>
       			  <option value="Cusp">Cusp</option>
       			  <option value="Diesel">Diesel</option>
       			  <option value="Dillards">Dillards</option>

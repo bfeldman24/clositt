@@ -669,7 +669,7 @@ var categoryMaintenance = {
                           'sweater','vest','sleepwear','swim','loungewear','outerwear',
                           'shorts','blouse','jacket','skirt','petities','trouser','cardigan',
                           'turtleneck','jean','denim','activewear','hoodie','tees','romper',
-                          'clothes','apparel','jersey','khaki','capris'];
+                          'clothes','apparel','jersey','khaki','capris','fleece'];
                           
         var category = new RegExp(dictionary.join("|"));                         
                

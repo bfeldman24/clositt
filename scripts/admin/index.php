@@ -21,7 +21,7 @@ ul>li>a{
 }
 
 ul>li{
-    list-style: katakana outside none;   
+    list-style: hebrew outside none;   
 }
 </style>
 
@@ -30,7 +30,7 @@ ul>li{
 <?php include(dirname(__FILE__) . '/../../static/header.php');   ?>
 <div id="mainContent">
     <a href="#" name="top"></a>
-    <br><h2>Links</h2>   
+    <br><h2>Admin Pages</h2>   
     
     <hr>
     <br/>
@@ -42,6 +42,15 @@ ul>li{
         <li><a href="php/colorProcessor.php">Color Processor</a></li>
         <li><a href="php/storeProductCount.php">Store Product Count</a></li>
         <li><a href="php/onlineUsers.php">Online Users</a></li>
+    </ul>
+    
+    <br><h2>Bookmarklets <small>(drag link to bookmark toolbar)</small></h2>   
+    
+    <hr>
+    <br/>
+    <ul>
+        <li><a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://www.feld24.info/closetta/selectors.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/admin/js/storeApi.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/admin/js/productSpider.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/admin/js/productDetailApi.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/js/messenger.js';})();">Product Scraping - CSS Selector Helper</a></li>
+        <li><a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://www.feld24.info/closetta/genericProductPageScraper.js';})();">Product Scraping - Generic Scraping Script</a></li>
     </ul>
     
     <br><br><br>        
