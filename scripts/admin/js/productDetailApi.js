@@ -1428,27 +1428,26 @@ var productDetailApi = {
     	"sizesAttr": "text"
     },
     'Columbia': {
-    	"url": "http://www.columbia.com/Men%27s-Heater-Change%E2%84%A2-Jacket/WM2049,default,pd.html",
+        "url": "http://www.columbia.com/Men%27s-Heater-Change%E2%84%A2-Jacket/WM2049,default,pd.html",
     	"id": "col",
     	"date": "Thu Jul  3 18:45:56 2014",
-    	"container": ".contentasset>div>div.topHalfWrapper",
-    	"containerAttr": "text",
-    	"name": "div>div>h1.product_title",
-    	"nameAttr": "text",
-    	"details": ".product-info-block>.product-info-left-col>div",
-    	"detailsAttr": "text",
-    	"originalPrice": "div>div>div.price-index",
-    	"originalPriceAttr": "text",
-    	"promotion": "div>div>p",
-    	"promotionAttr": "text",
-    	"colorsImages": ".innerswatch>a>img",
-    	"colorsImagesAttr": "alt",
-    	"colorsNames": ".innerswatch>a>img",
-    	"colorsNamesAttr": "src",
-    	"sizes": ".size_container>.size>div.innersize",
-    	"sizesAttr": "text",
-    	"usePhantomjs": true
-    }
+      	"name": "div>div>h1.product_title",
+      	"nameAttr": "text",
+      	"summary": "form>div>div.description",
+      	"summaryAttr": "text",
+      	"details": ".product-info-block>.product-info-left-col>div.pdpDetailsContent", 
+      	"detailsAttr": "text",
+      	"price": "div>div>div.price-index",
+      	"priceAttr": "text",
+      	"colors": ".innerswatch>a",
+      	"colorsAttr": "rel",
+      	"colorsImages": ".innerswatch>a>img",
+      	"colorsImagesAttr": "src",
+      	"colorsNames": ".innerswatch>a>img",
+      	"colorsNamesAttr": "alt",
+      	"sizes": ".innersize",
+      	"sizesAttr": "text"
+      }
 };
 
 var productDetail = {
