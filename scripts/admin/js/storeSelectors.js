@@ -661,7 +661,66 @@ var Companies = {
     	"listing": ".results-col>.result-row>div.result-item",
     	"sampleSku": "AM6579",
     	"usePhantomjs": true
-    }
+    },
+    'Nautica': {
+      	"url": "http://www.nautica.com/mens-shirts/",
+      	"id": "nau",
+      	"date": "Tue Jul 15 23:13:04 2014",
+      	"image": ".product-image>.thumb-link>img",
+      	"imageAttr": "src",
+      	"name": ".product-name>h2>a.name-link",
+      	"nameAttr": "text",
+      	"link": ".product-name>h2>a.name-link",
+      	"linkAttr": "href",
+      	"price": "div.product-pricing",
+      	"priceAttr": "text",
+      	"sku": ".product-tile",
+      	"skuAttr": "data-itemid",
+      	"listing": ".search-result-items>.grid-tile>div.product-tile",
+      	"sampleSku": "W42179"
+      },
+      'Elie Tahari': {
+      	"url": "http://www.elietahari.com/en_US/men/shop/knits-sweaters",
+      	"id": "eli",
+      	"date": "Fri Jul 18 14:15:33 2014",
+      	"image": ".productimage>a>img.primary",
+      	"imageAttr": "src",
+      	"name": ".gridimagehover>ul>li.gridimagename",
+      	"nameAttr": "text",
+      	"link": ".productimage>a>img.primary",
+      	"linkAttr": "src",
+      	"price": ".gridimagehover>ul>li.gridimageprice",
+      	"priceAttr": "text",
+      	"sku": ".productimage>a>img.primary",
+      	"skuAttr": "src",
+      	"nextPage": "ul>.view-all>a",
+      	"nextPageAttr": "href",
+      	"listing": ".productlisting>.product>div.image",
+      	"sampleSku": "http://cdn.fluidretail.net/customers/c1444/J35AK504/generated/J35AK504_N8R_RB1_324x477.jpg",
+      	"getSku": function(sku){    	   
+            return sku.substring(sku.lastIndexOf("/")+1, sku.indexOf("_", sku.lastIndexOf("/")+1));    	   
+    	}
+      },
+      'Bonobos': {
+      	"url": "http://bonobos.com/b/new-clothing-for-men",
+      	"id": "htt",
+      	"date": "Tue Jul 29 22:11:59 2014",
+      	"image": "a>img",
+      	"imageAttr": "src",
+      	"name": "a>.product-summary-container>h3.product-name",
+      	"nameAttr": "text",
+      	"link": "a",
+      	"linkAttr": "href",
+      	"price": "a>.product-summary-container>p.price-box",
+      	"priceAttr": "text",
+      	"sku": ".item[itemtype]",
+      	"skuAttr": "id",
+      	"nextPage": "div>map>area",
+      	"nextPageAttr": "href",
+      	"listing": ".products-list>.category-products>li.item[itemtype]",
+      	"sampleSku": "product-235671",
+      	"getSku": skuHelper.stripNonNumericChars
+      }
 };
 
 

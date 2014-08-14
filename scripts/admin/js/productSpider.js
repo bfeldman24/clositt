@@ -464,11 +464,11 @@ var spider = {
         var cats = $(".company").sort(function(a, b){
             
             var $aWorks = $(a).find(".isvalid").filter(function(){
-                return $(this).text().indexOf("Works") >= 0;
+                return $(this).text().indexOf("BROKEN") < 0;
             });
             
             var $bWorks = $(b).find(".isvalid").filter(function(){
-                return $(this).text().indexOf("Works") >= 0;
+                return $(this).text().indexOf("BROKEN") < 0;
             });
             
             var textDateA = $aWorks.next(".lastUpdated").first().text();
@@ -966,7 +966,7 @@ var actionButtons = {
         
         var nonBrokenLinksNotUpdatedToday = $("#links").find(':checkbox').filter(function(){
              return ($(this).attr("lastUpdated") == "" || $(this).attr("lastUpdated") != window.todaysDate) && 
-                    $(this).attr("status").indexOf("Works") >= 0;
+                    $(this).attr("status").indexOf("BROKEN") < 0;
         });       
                     
         if(nonBrokenLinksNotUpdatedToday.length > 0 && $("#links").find(':checkbox:checked').length > 0){            
