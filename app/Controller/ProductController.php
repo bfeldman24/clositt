@@ -178,13 +178,14 @@ class ProductController {
 						
 		$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage, $tagAdmin);
 		$searchResults = array();
+		$searchResults['products'] = array();
 		
 		if(is_object($results)){
 			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){
 			    $productEntity = new ProductEntity();
 				ProductEntity::setProductFromDB($productEntity, $row);
 				//ProductTemplate::getProductGridTemplate($productEntity);
-				$searchResults[] = $productEntity->toArray();
+				$searchResults['products'][] = $productEntity->toArray();
 			}
 		}
 		
@@ -250,7 +251,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
             $productCrit->setCustomers($customer);
         }
         
-        $product = $productController->getProducts($productCrit, $_GET['page'], QUERY_LIMIT, true);   
+        $product = array();
+        $product['products'] = $productController->getProducts($productCrit, $_GET['page'], QUERY_LIMIT, true);   
         
     }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page'])){      
     	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
