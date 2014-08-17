@@ -67,6 +67,7 @@ class ProductController {
 	
 	public function getProducts($productCrit, $page, $limit, $random = false){
 	    $searchResults = array();
+	    $searchResults['products'] = array();
 	    		
 		if(isset($page) && isset($limit)){	
 		      
@@ -76,7 +77,7 @@ class ProductController {
 				while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
 				    $productEntity = new ProductEntity();						
 					ProductEntity::setProductFromDB($productEntity, $row);
-					$searchResults[] = $productEntity->toArray();
+					$searchResults['products'][] = $productEntity->toArray();
 				}
 			}
 		}
@@ -251,8 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
             $productCrit->setCustomers($customer);
         }
         
-        $product = array();
-        $product['products'] = $productController->getProducts($productCrit, $_GET['page'], QUERY_LIMIT, true);   
+        $product = $productController->getProducts($productCrit, $_GET['page'], QUERY_LIMIT, true);   
         
     }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page'])){      
     	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);

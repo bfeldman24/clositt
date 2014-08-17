@@ -95,6 +95,13 @@ var gridPresenter = {
 	},
 	
 	lazyLoad: function(products){
+	    if (products == null){
+	        return null;
+	    }
+	    
+	    if (products.products != null){
+	       products = products.products;  
+	    }	               
 	               
         products.forEach(function(product){	                       
 			var $html = productPresenter.getProductTemplate(product);
