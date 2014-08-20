@@ -53,11 +53,11 @@ storeApi = {
 		return newUrl;
 	},
 	
-	getProducts: function(company, url, callback){
-	   storeApi.fetchProducts(company, url, 0, {}, callback);
+	getProducts: function(company, url, callback){	   
+	   storeApi.fetchProducts(company, url, 0, {}, [], callback);
 	},
 	
-	fetchProducts: function(company, url, pageNumber, products, callback){
+	fetchProducts: function(company, url, pageNumber, products, nextPageUrlHistory, callback){
 	   var webProxyData = {u:url};
 	   
 	   if (Companies[company] != null && Companies[company].usePhantomjs){
@@ -103,10 +103,12 @@ storeApi = {
     				        nextPage != null && 
     				        nextPage.length > 10 &&				        
     				        nextPage != url &&
+    				        nextPageUrlHistory.indexOf(nextPage) < 0 &&
     				        (nextPage.indexOf(".com") > 0 || nextPage.indexOf(".net") > 0 || nextPage.indexOf(".org") > 0)){
     				            
     				            pageNumber++;
-    				            storeApi.fetchProducts(company, nextPage, pageNumber, products, callback); 
+    				            nextPageUrlHistory.push(nextPage);
+    				            storeApi.fetchProducts(company, nextPage, pageNumber, products, nextPageUrlHistory, callback); 
     				            
     			        } else {
     			            if (typeof(callback) == "function"){

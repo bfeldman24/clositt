@@ -225,6 +225,7 @@ input{
       			  <option value="Betsey Johnson">Betsey Johnson</option>
       			  <option value="BCBG">BCBG</option>    				  
       			  <option value="Bloomingdales">Bloomingdales</option>
+      			  <option value="Bonobos">Bonobos</option>      			  
       			  <option value="Brooks Brothers">Brooks Brothers (json link)</option>
       			  <option value="Burberry">Burberry</option>
       			  <option value="Calvin Klein">Calvin Klein</option>
@@ -237,6 +238,7 @@ input{
       			  <option value="Dillards">Dillards</option>
       			  <option value="DKNY">DKNY</option>
       			  <option value="Dockers">Dockers</option>
+      			  <option value="Elie Tahari">Elie Tahari</option>      			  
       			  <option value="Express">Express</option>
       			  <option value="Forever21">Forever21</option>				  
       			  <option value="Free People">Free People</option>
@@ -262,6 +264,7 @@ input{
       			  <option value="Madewell">Madewell</option>
       			  <option value="Marc Jacobs">Marc Jacobs</option>
       			  <option value="Michael Kors">Michael Kors</option>
+      			  <option value="Nautica">Nautica</option>
       			  <option value="Neiman Marcus">Neiman Marcus</option>
       			  <option value="New Balance">New Balance</option>
       			  <option value="Nike">Nike</option>

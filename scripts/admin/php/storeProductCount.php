@@ -68,6 +68,7 @@ $(document).ready(function(){
        });
        
        var stores = Object.keys(data).sort();
+       var startingPos = 100;
        var max = -1;
         	
        for(var i=0; i < stores.length; i++){   	   
@@ -85,14 +86,14 @@ $(document).ready(function(){
                    $("<div>").addClass("productCount").html(count)
                 )
             );   
-       }
+       }     
        
        $( "#slider-range" ).slider({
             range: true,
             min: 0,
             max: max,
             step: 25,
-            values: [0, max],
+            values: [0, startingPos],
             slide: function( event, ui ) {
                 $( "#amount" ).val( ui.values[0] + " - " + ui.values[1] );
                 
@@ -106,7 +107,15 @@ $(document).ready(function(){
             }
         });
         
-        $( "#amount" ).val( $("#slider-range").slider("values",0) + " - " + $("#slider-range").slider("values",1) );
+        $( "#amount" ).val( $("#slider-range").slider("values",0) + " - " + $("#slider-range").slider("values",1) );        
+                
+        $filterStores = $(".company").filter(function(){
+            var count = parseInt($(this).attr("count"));
+            return count <= startingPos && count >= 0;
+        });
+        
+        $(".company").hide();
+        $filterStores.show(); 
          
        $("#loadingMask").hide();      	  
     });	    

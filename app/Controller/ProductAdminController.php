@@ -207,14 +207,15 @@ class ProductAdminController extends Debugger {
 	public function getFilteredProducts($criteria, $pageNumber, $numResultsPage){
 			
 		$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage);
-		$searchResults = array();
+		$searchResults = array(); 
+		$searchResults['products'] = array();
 		
 		if(is_object($results)){
 			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){
 			    $productEntity = new ProductEntity();
 				ProductEntity::setProductFromDB($productEntity, $row);
 				//ProductTemplate::getProductGridTemplate($productEntity);
-				$searchResults[] = $productEntity->toArray();
+				$searchResults['products'][] = $productEntity->toArray();
 			}
 		}
 		
@@ -630,7 +631,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
           	$getOnlyUnapprovedTags = true;          	
           	
           	if (!$productCrit->isEmpty()){
-                  $products = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT, $getOnlyUnapprovedTags);
+                  $products = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT, $getOnlyUnapprovedTags);                                                      
                   print_r($products);
           	}
         }

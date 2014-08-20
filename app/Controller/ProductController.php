@@ -67,6 +67,7 @@ class ProductController {
 	
 	public function getProducts($productCrit, $page, $limit, $random = false){
 	    $searchResults = array();
+	    $searchResults['products'] = array();
 	    		
 		if(isset($page) && isset($limit)){	
 		      
@@ -76,7 +77,7 @@ class ProductController {
 				while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
 				    $productEntity = new ProductEntity();						
 					ProductEntity::setProductFromDB($productEntity, $row);
-					$searchResults[] = $productEntity->toArray();
+					$searchResults['products'][] = $productEntity->toArray();
 				}
 			}
 		}
@@ -178,13 +179,14 @@ class ProductController {
 						
 		$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage, $tagAdmin);
 		$searchResults = array();
+		$searchResults['products'] = array();
 		
 		if(is_object($results)){
 			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){
 			    $productEntity = new ProductEntity();
 				ProductEntity::setProductFromDB($productEntity, $row);
 				//ProductTemplate::getProductGridTemplate($productEntity);
-				$searchResults[] = $productEntity->toArray();
+				$searchResults['products'][] = $productEntity->toArray();
 			}
 		}
 		
