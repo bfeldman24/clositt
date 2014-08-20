@@ -8,7 +8,7 @@ class ElasticDao{
 	private $client = null;
     private $index = "products"; //this will be an alias that always has current index
     //private $fields = array('name.partial','name','store','tag','tag.partial','color', 'color2');
-    private $fields = array('name.partial','name','store','details',/*'tag','tag.partial',*/'color', 'color2');
+    private $fields = array('name.partial','name','store','details','customer', 'color', 'color2');
 	public function __construct(){
 		$this->client = new Elasticsearch\Client();
 	}
