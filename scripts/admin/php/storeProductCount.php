@@ -42,6 +42,16 @@ li{
     <br><h2>Store Product Count</h2>
     
     <p>
+        <div class="btn-group product-statuses" data-toggle="buttons">
+            <label class="btn btn-primary active">
+                <input type="radio" name="options" id="live" checked="checked"> Live Products
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="options" id="nonlive"> Non Live/ Old Products
+            </label>
+        </div>
+    </p>
+    <p>
     <label for="amount">Filter By Product Count:</label>
     <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;">
     </p>
@@ -56,19 +66,46 @@ li{
 <?php echo CLOSITT_JS; ?>
 <script src="../js/storeSelectors.js"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-   
+var StoreProductCount = {
+    liveProducts: true,
+    
+    init: function(){
+        $(document).on("click",".product-statuses label",StoreProductCount.changeProductStatus);
+        StoreProductCount.getLiveProductCount();
+    },
+    
+    getLiveProductCount: function(){
+        StoreProductCount.liveProducts = true;
+        $.getJSON( window.HOME_ROOT + "spider/storeproductcount", StoreProductCount.handleProductCount);  
+    },
+    
+    getNonLiveProductCount: function(){
+        StoreProductCount.liveProducts = false;
+        $.getJSON( window.HOME_ROOT + "spider/storenonliveproductcount", StoreProductCount.handleProductCount);  
+    },
+    
+    changeProductStatus: function(e){
+        var active = $(e.currentTarget).parents(".product-statuses").find(".active input");        
+        var clicked = $(e.currentTarget).find("input"); 
+        
+        if (clicked != null && clicked.attr("id") == "live"){
+            StoreProductCount.getLiveProductCount();
+        }else{
+            StoreProductCount.getNonLiveProductCount();      
+        } 
 
-    $.getJSON( window.HOME_ROOT + "spider/storeproductcount", function( data ) {
-       
-       $.each( Companies, function( companyName, storeObject ) {    	   
+    },
+    
+    handleProductCount: function(data){
+        $("#links").html('');
+        
+        $.each( Companies, function( companyName, storeObject ) {    	   
             if (data[companyName] == null){
                 data[companyName] = 0;
             }
        });
        
-       var stores = Object.keys(data).sort();
-       var startingPos = 100;
+       var stores = Object.keys(data).sort();      
        var max = -1;
         	
        for(var i=0; i < stores.length; i++){   	   
@@ -88,12 +125,16 @@ $(document).ready(function(){
             );   
        }     
        
+       var startingMinPos = StoreProductCount.liveProducts ? 0 : 5;
+       var startingMaxPos = StoreProductCount.liveProducts ? 75 : max;
+       var step = StoreProductCount.liveProducts ? 25 : 5;
+       
        $( "#slider-range" ).slider({
             range: true,
             min: 0,
             max: max,
-            step: 25,
-            values: [0, startingPos],
+            step: step,
+            values: [startingMinPos, startingMaxPos],
             slide: function( event, ui ) {
                 $( "#amount" ).val( ui.values[0] + " - " + ui.values[1] );
                 
@@ -111,17 +152,21 @@ $(document).ready(function(){
                 
         $filterStores = $(".company").filter(function(){
             var count = parseInt($(this).attr("count"));
-            return count <= startingPos && count >= 0;
+            return count <= startingMaxPos && count >= startingMinPos;
         });
         
         $(".company").hide();
         $filterStores.show(); 
          
-       $("#loadingMask").hide();      	  
-    });	    
+       $("#loadingMask").hide(); 
+    }    
+};
+
+    	    
     
 
-
+$(document).ready(function(){
+   StoreProductCount.init();
 });
 </script>
 </body>

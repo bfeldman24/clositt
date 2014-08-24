@@ -506,9 +506,9 @@ class ProductAdminController extends Debugger {
 	   return json_encode($status);
 	}
 	
-	public function getStoreProductCount(){    			      	   	   
+	public function getStoreProductCount($getOnlyLiveProducts){    			      	   	   
 	    $stores = array();	    
-	    $results = $this->productAdminDao->getStoreProductCount(); 	
+	    $results = $this->productAdminDao->getStoreProductCount($getOnlyLiveProducts); 	
 	   	   
     	if(is_object($results)){
     	 
@@ -691,7 +691,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     echo $productAdminController->getProductDetailCount();    
 
 }else if ($_GET['method'] == 'storeproductcount'){
-    echo $productAdminController->getStoreProductCount();    
+    echo $productAdminController->getStoreProductCount(true);    
+
+}else if ($_GET['method'] == 'storenonliveproductcount'){
+    echo $productAdminController->getStoreProductCount(false);    
 
 }
 

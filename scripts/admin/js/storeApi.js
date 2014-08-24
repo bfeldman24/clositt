@@ -520,36 +520,7 @@ storeApi = {
         });
 
         return products;
-	},
-	
-	getIntermix: function(data, siteHome){	   
-	   var products = new Object();
-	   
-	   storeApiHelper.checkForProductListing("i", $(data).find(".thumbtext"));
-	
-       $(data).find(".thumbtext").each(function(){
-            if (storeApiHelper.isProductAvailable(this)){
-                var item = new Object();
-
-                item.image = $(this).find(".thumbcontainer img").first().attr("src");
-                item.link = siteHome + $(this).find(".thumbcontainer a").first().attr("href");                
-                item.price = $(this).find(".thumbInfo > .thumbPricing > #productPricing").first().text().trim();
-                item.price = storeApiHelper.findPrice(item.price);
-                item.name = $(this).find(".thumbcontainer img").first().attr("alt");
-
-                if(storeApiHelper.checkForProductImage(item.image)){
-                    
-                   var sku = $(this).find(".qveThumbnail").attr("catpk");
-                   item.sku = 'i' + sku.replace(/\D/g, ''); // strip all non numeric chars
-                   
-			        var itemid = item.sku.replace(/-\W/g, '');
-                    products[itemid] = item;
-                }
-            }
-        });
-
-        return products;
-	},
+	},		
 	
 	getMadewell: function(data, siteHome){	   
 	   var products = new Object();
@@ -1348,6 +1319,10 @@ storeApi = {
 	   
 	   if (store == null){
 	       return products;   
+	   }
+	   
+	   if (storeApiHelper.debug){
+	       console.log($(data).find(store.listing));
 	   }
 	   
 	   storeApiHelper.checkForProductListing(store.id, $(data).find(store.listing));

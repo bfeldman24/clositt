@@ -164,6 +164,13 @@ input{
     cursor: pointer;
 }
 
+.testCategoryLink{
+    margin: 0 0 0 5px;
+    position: relative;
+    top: 5px;   
+    cursor: pointer;
+}
+
 .lastUpdated{
     font-size: 10px;
     margin: 0 2px 0 5px;   
@@ -248,7 +255,7 @@ input{
       			  <option value="H&M">H&M (json link)</option>
       			  <option value="Hollister">Hollister</option>
       			  <option value="Hugo Boss">Hugo Boss</option>
-      			  <option value="Intermix">Intermix (json link)</option>
+      			  <option value="Intermix">Intermix</option>
       			  <option value="JCPenney">JCPenney</option>
       			  <option value="J_Crew">J.Crew</option>
       			  <option value="J_Jill">J.Jill</option>

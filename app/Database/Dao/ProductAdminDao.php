@@ -853,9 +853,17 @@ class ProductAdminDao extends AbstractDao {
         return $affectedRows;
 	}
 	
-	public function getStoreProductCount(){                    
+	public function getStoreProductCount($getOnlyLiveProducts){   
+	    $statuses = '';
+	    
+	    if ($getOnlyLiveProducts){
+	       $statuses = "1,2,4";   
+	    }else{
+	       $statuses = "3,5";
+	    }   
+	                    
         $sql = "SELECT " . PRODUCT_STORE . ", COUNT(1) as count FROM " . PRODUCTS .
-                " WHERE " . PRODUCT_STATUS . " IN (1,2,4) " .
+                " WHERE " . PRODUCT_STATUS . " IN (" . $statuses . ") " .
                 " GROUP BY " . PRODUCT_STORE . 
                 " ORDER BY " . PRODUCT_STORE;
 							        
