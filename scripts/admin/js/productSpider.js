@@ -497,6 +497,55 @@ var spider = {
         
         console.log("Auto Run...");        
         actionButtons.saveAll();
+    },
+    
+    getSpiderStats: function(){
+         $.getJSON( window.HOME_ROOT + "spider/getspiderstats", function( data ) {
+	          if (data){        	      	              	      
+        	      $table = $("<table>").addClass("table table-bordered table-condensed table-responsive") ;
+        	      
+        	      $table.append(
+            	      $("<tr>").append(
+    	                   $("<th>").text("Store")
+    	               ).append(
+    	                   $("<th>").text("Broken Links")
+    	               ).append(
+    	                   $("<th>").text("Total Links")
+    	               ).append(
+    	                   $("<th>").text("% Broken")
+    	               )
+    	          );
+    	      
+        	      $.each( data, function( store, stats ) {    	   
+        	           var percent = Math.round((stats.broken / stats.total) * 100);
+        	       
+        	           $table.append(
+        	               $("<tr>").append(
+        	                   $("<td>").text(store)
+        	               ).append(
+        	                   $("<td>").text(stats.broken)
+        	               ).append(
+        	                   $("<td>").text(stats.total)
+        	               ).append(
+        	                   $("<td>").text(percent + "%")
+        	               )
+        	           );
+        	      });
+        	              	      
+        	      bootbox.dialog({
+                      message: $table,
+                      title: "Spider Stats",
+                      buttons: {                
+                          main: {
+                              label: "Cancel"
+                          }                          
+                      }
+                  });
+        	      
+        	  }else{
+        	       console.log(JSON.stringify(data));
+        	  }
+	    });  
     }
 };
 

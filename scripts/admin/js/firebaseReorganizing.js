@@ -425,5 +425,90 @@ var firebaseReorganizing = {
             
             console.log(JSON.stringify(users));
         });
-    }     
+    },
+    
+    getUsers: function(){
+        firebase.$.child("userdata").once('value', function(users){
+            var sql = '';
+            
+            users.forEach(function(user){                                                                
+                var lastOnline = null; 
+                var signedUpDate = null;
+                
+                if (user.hasChild("lastOnline")){
+                    var lastOnlineDate = new Date(user.child("lastOnline").val());                    
+                    lastOnline = "'" + lastOnlineDate.getFullYear();
+                    lastOnline += "-" + (lastOnlineDate.getMonth() + 1);
+                    lastOnline += "-" + (lastOnlineDate.getDate());                    
+                    lastOnline += " " + lastOnlineDate.toLocaleTimeString() + "'";
+                }
+
+                if (user.hasChild("signedUpDate")){                
+                    var signedUpDateDate = new Date(user.child("signedUpDate").val());                    
+                    
+                    signedUpDate = "'" + signedUpDateDate.getFullYear();
+                    signedUpDate += "-" + (signedUpDateDate.getMonth() + 1);
+                    signedUpDate += "-" + (signedUpDateDate.getDate());
+                                        
+                    signedUpDate += " " + signedUpDateDate.toLocaleTimeString() + "'";
+                }
+                
+                sql += "('" + user.child("email").val();
+                sql += "','" + user.child("name").val();
+                sql += "'," + lastOnline;
+                sql += "," + user.child("loginCount").val();
+                sql += "," + signedUpDate;
+                sql += "," + user.name();
+                sql += "),";
+            });
+            
+            console.log(sql);
+        });
+    },
+    
+    getUserClosetItems: function(){
+        firebase.$.child("userdata").once('value', function(users){
+            var sql = '';
+            
+            users.forEach(function(user){ 
+                var userId = user.name();
+                                               
+                user.child("closets").forEach(function(closet){  
+                    var closetName = closet.child("name").val();
+                
+                    closet.child("items").forEach(function(item){      
+                        sql += "(" + userId;
+                        sql += ",'" + closetName;
+                        sql += "','" + item.name();
+                        sql += "','" + item.val();
+                        sql += "',NOW()";
+                        sql += "),";                        
+                    });
+                });
+            });
+            
+            console.log(sql);
+        });
+    },
+    
+    getUserClosets: function(){
+        firebase.$.child("userdata").once('value', function(users){
+            var sql = '';
+            
+            users.forEach(function(user){ 
+                var userId = user.name();
+                                               
+                user.child("closets").forEach(function(closet){  
+                    var closetName = closet.child("name").val();
+                    
+                    sql += "(" + userId;
+                    sql += ",'" + closetName;                        
+                    sql += "',1,NOW()";
+                    sql += "),";
+                });
+            });
+            
+            console.log(sql);
+        });
+    }        
 }

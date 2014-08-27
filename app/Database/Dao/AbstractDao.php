@@ -52,6 +52,48 @@ class AbstractDao{
 		return $results;
 	}
 	
+	
+	/**
+	 * Insert or update query
+     *
+     * @param $sql - (string) sql query 
+     * @param $params - (array) an array of parameters to replace the '?' in the query string
+     * @param $paramTypes - (array) the types of the respective parameters
+     * @param $errorCode - (string) the error code with which to identify the query in the log file
+     */
+	public function update($sql, $params, $paramTypes, $errorCode){
+	    						
+		if($this->debug){
+		    $parameters = print_r($params, true);
+		    $parameterTypes = print_r($paramTypes, true);
+			$this->logDebug($errorCode ,$sql . " (" . $parameters . "), (".$parameterTypes.")" );
+		}		
+		
+		$stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+            
+        try {              
+             $affectedRows = $stmt->execute($params);
+             
+        } catch (Exception $e) {
+            $this->logError($errorCode ,$e->getMessage(), $sql);
+            return false;
+        }         		
+		
+		if (PEAR::isError($affectedRows)) {
+			$this->logError($errorCode ,$affectedRows->getMessage(),$sql);
+		    return false;
+		}
+		
+		if (!isset($affectedRows)){
+			$this->logWarning($errorCode ,"Query did not work correctly!");
+		    return false;
+		}
+		
+		$stmt->free();
+		
+		return $affectedRows;
+	}
+	
 	public function logError($errorNum, $sql = "", $msg = ""){
 		$this->log("ERROR",$errorNum, $sql, $msg);	
 	}

@@ -75,4 +75,29 @@ define("SWATCHES_IMAGE","image");
 // Sizes
 define("SIZES","Sizes");
 define("SIZES_SIZE","size");
+
+// Filters
+define("FILTERS","Filters");
+define("FILTER_TYPE","type");
+define("FILTER_VALUE","value");
+define("FILTER_SUBVALUE","subvalue");
+define("FILTER_CUSTOMER","customer");
+define("FILTER_STATUS","status");
+define("FILTER_DATE","createdon");
+
+// Closet
+define("CLOSETS","Closets");
+define("CLOSET_ID","closetid");
+define("CLOSET_USER_ID","userid");
+define("CLOSET_NAME","closetname");
+define("CLOSET_PERMISSION","permission");
+define("CLOSET_LAST_UPDATED","lastupdated");
+define("CLOSET_CREATED_ON","createdon");
+
+// Closet Items
+define("CLOSET_ITEMS","ClosetItems");
+define("CLOSET_ITEM_SKU","sku");
+define("CLOSET_ITEM_IMAGE","image");
+define("CLOSET_ITEM_STATUS","status");
+define("CLOSET_ITEM_DATE_ADDED","dateadded");
 ?>

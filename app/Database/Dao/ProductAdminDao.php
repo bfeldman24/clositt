@@ -414,7 +414,7 @@ class ProductAdminDao extends AbstractDao {
             echo 'Caught exception: ',  $e->getMessage(), "\n\n";
         }        		                
         
-       return $affected;
+       return $affectedRows;
 	}
 	
 	public function getTotalProductsCount(){
@@ -567,7 +567,7 @@ class ProductAdminDao extends AbstractDao {
 		$paramsTypes = array();		
 		$params = array();		
 		return $this->getResults($sql, $params, $paramTypes, "98237923");
-	}	
+	}		
 	
 	public function getUniqueTags(){
 	   $sql = "SELECT DISTINCT " . TAG_STRING . 
@@ -871,6 +871,17 @@ class ProductAdminDao extends AbstractDao {
 		$params = array();		
 		
 		return $this->getResults($sql, $params, $paramTypes, "23920342023");	   
+	}
+	
+	public function getSpiderStats(){
+                
+        $sql = "SELECT " . PRODUCT_STORE . ", COUNT(1) AS  total, " . 
+                "(SELECT COUNT(1) FROM " . SPIDER . " s2 WHERE s2." . SPIDER_STORE . " = s." . SPIDER_STORE . " AND s2." . SPIDER_STATUS . " = 2) as broken " .
+                " FROM " . SPIDER . " s " . 
+                " GROUP BY s." . SPIDER_STORE . 
+                " ORDER BY broken DESC, total DESC";
+		
+		return $this->getResults($sql, array(), array(), "203942052718");	   
 	}
 }
 ?>

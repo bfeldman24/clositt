@@ -502,10 +502,10 @@ input{
     <a href="#top" style="float: right; margin-right: 10px;"><button class="btn btn-danger btn-small">Top</button></a>
     <button id="selectall" class="btn btn-default btn-sm">Select All</button>
 <!--    <button id="selectallvalid" class="btn btn-default btn-sm">Select Valid</button>    -->
-    <button id="deselectall" class="btn btn-default btn-sm">Deselect All</button>
-    <button onclick="spider.testProductsFromLinks()" class="btn btn-primary btn-sm">Test Category</button>
+    <button id="deselectall" class="btn btn-default btn-sm">Deselect All</button>    
     <!--<button onclick="spider.testProductsFromLinks(true, false, false)" class="btn btn-primary btn-sm">View Category Data</button>-->
     <button onclick="spider.testProductsFromLinks(false, true, false)" class="btn btn-primary btn-sm" tooltip="(1 store at a time)">View Sample Products</button>    
+    <button onclick="spider.getSpiderStats()" class="btn btn-info btn-sm">Get Spider Stats</button>
     <button onclick="actionButtons.getTotalProductCount()" class="btn btn-info btn-sm">Get Total Product Count</button>
     <button onclick="spider.testProductsFromLinks(false, false, true)" class="btn btn-success btn-sm">Save Selected</button>
     <button onclick="actionButtons.saveAll()" class="btn btn-success btn-sm">Save All</button>                

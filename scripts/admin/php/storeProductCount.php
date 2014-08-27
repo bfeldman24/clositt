@@ -32,6 +32,11 @@ li{
     margin-left: 10px;  
     font-weight: bold; 
 }
+
+#totalProductCount{
+    color: #44a; 
+    font-weight: bold;    
+}
 </style>
 
 </head>
@@ -39,7 +44,7 @@ li{
 <?php include(dirname(__FILE__) . '/../../../static/header.php');   ?>
 <div id="mainContent">
     <a href="#" name="top"></a>
-    <br><h2>Store Product Count</h2>
+    <br><h2>Store Product Count<span id="totalProductCount"></span></h2>
     
     <p>
         <div class="btn-group product-statuses" data-toggle="buttons">
@@ -97,6 +102,7 @@ var StoreProductCount = {
     },
     
     handleProductCount: function(data){
+        $("#loadingMask").show();
         $("#links").html('');
         
         $.each( Companies, function( companyName, storeObject ) {    	   
@@ -107,10 +113,12 @@ var StoreProductCount = {
        
        var stores = Object.keys(data).sort();      
        var max = -1;
+       var totalCount = 0;
         	
        for(var i=0; i < stores.length; i++){   	   
            var companyName = stores[i];
            var count = parseInt(data[companyName]);
+           totalCount += count;
            
            if (count > max){
                 max = count;
@@ -157,9 +165,14 @@ var StoreProductCount = {
         
         $(".company").hide();
         $filterStores.show(); 
+        $("#totalProductCount").text(" - " + StoreProductCount.numberWithCommas(totalCount));
          
        $("#loadingMask").hide(); 
-    }    
+    },  
+    
+    numberWithCommas: function(x) {
+       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+   }  
 };
 
     	    

@@ -41,6 +41,9 @@ ul>li{
         <li><a href="php/tags.php">Tag Adminstration</a></li>
         <li><a href="php/colorProcessor.php">Color Processor</a></li>
         <li><a href="php/storeProductCount.php">Store Product Count</a></li>
+        <li><a href="php/feedback.php">Feedback</a></li>
+        <li><a href="php/reviews.php">Product Reviews</a></li>
+        <li><a href="php/searchTerms.php">Search Terms</a></li>
         <li><a href="php/onlineUsers.php">Online Users</a></li>
     </ul>
     
@@ -50,7 +53,7 @@ ul>li{
     <br/>
     <ul>
         <li><a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://www.feld24.info/closetta/selectors.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/admin/js/storeApi.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/admin/js/productSpider.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/admin/js/productDetailApi.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/js/messenger.js';})();">Product Scraping - CSS Selector Helper</a></li>
-        <li><a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://www.feld24.info/closetta/genericProductPageScraper.js';})();">Product Scraping - Generic Scraping Script</a></li>
+        <li><a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://www.feld24.info/closetta/genericProductPageScraper.js';})();">Product Scraping - Generic Scraping Script To Guess Where the Attributes are Automatically</a></li>
     </ul>
     
     <br><br><br>        

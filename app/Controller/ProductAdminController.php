@@ -318,41 +318,7 @@ class ProductAdminController extends Debugger {
            $results = $this->productController->getProducts($criteria, $page, $limit, true);     	   	   
 	       $data = json_decode($results, true);           
 	   }  
-	}
-	
-	public function getFilters(){
-	   $filter = array();
-	   
-	   // CUSTOMERS
-	   $filter['customers'] = $this->convertResultsToArray($this->productAdminDao->getCustomers());
-	   
-	   // CATEGORIES
-	   $categoryResults = $this->productAdminDao->getCategories();
-	   $categories = array();
-	   
-	   if(is_object($categoryResults)){
-			while($row = $categoryResults->fetchRow(MDB2_FETCHMODE_ASSOC)){	
-				$categories[] = array(stripslashes($row[PRODUCT_CATEGORY]), stripslashes($row[PRODUCT_CUSTOMER]));
-			}
-	   }  	   
-	   
-	  // $filter['categories'] = $categories;
-	   
-	   // COMPANIES AND BRANDS
-	   $companyResults = $this->productAdminDao->getCompanies();
-	   $companies = array(); 
-
-	   if(is_object($companyResults)){
-		while($row = $companyResults->fetchRow(MDB2_FETCHMODE_ASSOC)){	
-			$companies[] = array(stripslashes($row[PRODUCT_STORE]) , stripslashes($row[PRODUCT_CUSTOMER]));
-		}
-	   }
-	   
-	   $filter['companies'] = $companies;
-       $filter['prices'] = array(0,50,100,150,200,250,2000);  
-
-       return $filter;
-	}
+	}				
 	
 	public function getNonLiveProducts($page, $limit){	    
 	           
@@ -520,6 +486,20 @@ class ProductAdminController extends Debugger {
 	    return json_encode($stores);
 	}
 	
+	public function getSpiderStats(){
+	    $stores = array();	    
+	    $results = $this->productAdminDao->getSpiderStats(); 	
+	   	   
+    	if(is_object($results)){
+    	 
+    		while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+                $stores[$row[SPIDER_STORE]] = array('total' => $row['total'], 'broken' => $row['broken']);
+    		}    		
+    	}
+	   		   	   		     
+	    return json_encode($stores);
+	}
+	
 	public function getNextProductDetailUrls($stores, $limit = 1){	  
 	    if ($stores == null || !isset($stores) || !is_array($stores)){
 	       return "No Stores";  
@@ -574,129 +554,161 @@ class ProductAdminController extends Debugger {
 }
 
 $productAdminController = new ProductAdminController($mdb2);
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){    
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){                          
+    $output = null;
     
-    //echo " 1) ProductAdmin. ";
-    //echo "Method: " . $_GET['method'];                    
-    //echo "<br>Criteria: " . print_r($_POST, true);                
-    
-    if ($_GET['method'] == 'update' && isset($_POST['products'])){                                          
-        //echo " 2) update. ";
-        $results = $productAdminController->addAdminProducts($_POST['products'], $_POST['isLastBatch']);   
-        echo json_encode($results);        
-   
-    }else if ($_GET['method'] == 'count'){                                          
-        //echo " 2) count. ";
-        $results = $productAdminController->getTotalProductsCount();   
-        print_r($results);        
-    
-    }else if ($_GET['method'] == 'updatestatus'){                                               
-        echo $productAdminController->updateSpiderStatus($_POST);    
-    
-    }else if ($_GET['method'] == 'addlink'){
-        echo $productAdminController->addSpiderLink($_POST);    
-    
-    }else if ($_GET['method'] == 'addlinks'){
-        echo $productAdminController->addSpiderLinks($_POST['links']);    
-    
-    }else if ($_GET['method'] == 'updatelink'){
-        echo $productAdminController->updateSpiderLink($_POST);    
-        
-    }else if ($_GET['method'] == 'removelink'){
-        echo $productAdminController->removeSpiderLink($_POST);    
-    
-    }else if ($_GET['method'] == 'removetag'){
-        echo $productAdminController->removeTag($_POST);    
-        
-    }else if ($_GET['method'] == 'removetags'){
-        echo $productAdminController->removeTags($_POST);    
-    
-    }else if ($_GET['method'] == 'approvetags'){
-        echo $productAdminController->approveTags($_POST);        
-    
-    }else if ($_GET['method'] == 'searchdb' && isset($_GET['page'])){      
-        
-        if(isset($_POST) && $_POST != null){            
-          	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
-          	
-          	if (!$productCrit->isEmpty()){
-                  $products = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT);
-                  print_r($products);
-          	}
-        }
-    }else if ($_GET['method'] == 'searchunapprovedtags' && isset($_GET['page'])){      
-        if(isset($_POST) && $_POST != null && (isset($_POST['category']) || isset($_POST['tags']))){
+    switch ($_GET['method']){    
             
-          	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
-          	$getOnlyUnapprovedTags = true;          	
-          	
-          	if (!$productCrit->isEmpty()){
-                  $products = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT, $getOnlyUnapprovedTags);                                                      
-                  print_r($products);
-          	}
-        }
-    
-    }else if ($_GET['method'] == 'getnextproductdetailurls'){
-        print_r($productAdminController->getNextProductDetailUrls($_POST['stores'], $_GET['page']));    
-    
-    }else if ($_GET['method'] == 'saveproductdetails'){
-        echo $productAdminController->saveProductDetails($_POST);    
-    }         
-           
-}else if ($_GET['method'] == 'updateshortlinks'){                                          
-    echo "Updating Short Links…";
-    $results = $productAdminController->updateAllShortLinks();   
-    print_r($results);    
+        case 'update':                                          
+            $results = $productAdminController->addAdminProducts($_POST['products'], $_POST['isLastBatch']);   
+            $output = json_encode($results);   
+            break;     
+       
+        case  'count':                                          
+            $results = $productAdminController->getTotalProductsCount();   
+            $output = print_r($results, true);        
+            break;
         
-}else if ($_GET['method'] == 'deleteunwanted'){
-    echo "Removing Unwanted Products... \n";
-    $results = $productAdminController->deleteUnwantedProducts();       
-    echo "Removed $results Products!";
+        case 'updatestatus':                                               
+            $output = $productAdminController->updateSpiderStatus($_POST);    
+            break;
+        
+        case 'addlink':
+            $output = $productAdminController->addSpiderLink($_POST);    
+            break;
+        
+        case 'addlinks':
+            $output = $productAdminController->addSpiderLinks($_POST['links']);    
+            break;
+        
+        case 'updatelink':
+            $output = $productAdminController->updateSpiderLink($_POST);    
+            break;
+            
+        case 'removelink':
+            $output = $productAdminController->removeSpiderLink($_POST);  
+            break;  
+        
+        case 'removetag':
+            $output = $productAdminController->removeTag($_POST);   
+            break; 
+            
+        case 'removetags':
+            $output = $productAdminController->removeTags($_POST);   
+            break; 
+        
+        case 'approvetags':
+            $output = $productAdminController->approveTags($_POST);   
+            break;     
+        
+        case 'getnextproductdetailurls':
+            $output = print_r($productAdminController->getNextProductDetailUrls($_POST['stores'], $_GET['page']), true);    
+            break;
+        
+        case 'saveproductdetails':
+            $output = $productAdminController->saveProductDetails($_POST);     
+            break;   
+    }
     
-}else if ($_GET['method'] == 'getnonliveproducts' && isset($_GET['page'])){
+    if ($output == null){        
+        if ($_GET['method'] == 'searchdb' && isset($_GET['page'])){      
+            
+            if(isset($_POST) && $_POST != null){            
+              	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
+              	
+              	if (!$productCrit->isEmpty()){
+                      $products = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT);
+                      $output = print_r($products, true);
+              	}
+            }
+        }else if ($_GET['method'] == 'searchunapprovedtags' && isset($_GET['page'])){      
+            if(isset($_POST) && $_POST != null && (isset($_POST['category']) || isset($_POST['tags']))){
+                
+              	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
+              	$getOnlyUnapprovedTags = true;          	
+              	
+              	if (!$productCrit->isEmpty()){
+                      $products = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT, $getOnlyUnapprovedTags);                                                      
+                      $output = print_r($products, true);
+              	}
+            }        
+        }
+    }   
     
-        $results = $productAdminController->getNonLiveProducts($_GET['page'], 50);   
-        print_r( json_encode($results) );
-   
-}else if ($_GET['method'] == 'getfilters'){       
-                                   
-    $results = $productAdminController->getFilters();   
-    
-//    $file = fopen(dirname(__FILE__) . "/../Data/generated-filters.json","w");
-//    fwrite($file, json_encode($results));                       
-//    fclose($file);    
+    return $output;  
+     
+           
+}else{
+// GET METHOD    
 
-    print_r(json_encode($results));
-}else if ($_GET['method'] == 'getfiltersselect'){       
-                                   
-    $results = $productAdminController->getFilters();   
-    
-    foreach ($results['categories'] as $filter){
-           echo '<option value="'.$filter.'">'.$filter.'</option>';
-    }        
-    
-}else if ($_GET['method'] == 'getbrowsepages'){                                          
-    $productAdminController->getBrowsePages();   
-
-}else if ($_GET['method'] == 'getlinks'){                                          
-    echo $productAdminController->getSpiderLinks();    
-
-}else if ($_GET['method'] == 'removeuncategorized'){
-    echo $productAdminController->removeUncategorizedProducts();    
-
-}else if ($_GET['method'] == 'getuniquetags'){
-    echo $productAdminController->getUniqueTags();    
-
-}else if ($_GET['method'] == 'getproductdetailstatus'){
-    echo $productAdminController->getProductDetailCount();    
-
-}else if ($_GET['method'] == 'storeproductcount'){
-    echo $productAdminController->getStoreProductCount(true);    
-
-}else if ($_GET['method'] == 'storenonliveproductcount'){
-    echo $productAdminController->getStoreProductCount(false);    
-
+    switch($_GET['method']){
+        case 'updateshortlinks':                                          
+            echo "Updating Short Links…";
+            $results = $productAdminController->updateAllShortLinks();   
+            print_r($results);    
+            break;
+                
+        case 'deleteunwanted':
+            echo "Removing Unwanted Products... \n";
+            $results = $productAdminController->deleteUnwantedProducts();       
+            echo "Removed $results Products!";
+            break;
+            
+        case 'getnonliveproducts' && isset($_GET['page']):             
+            $results = $productAdminController->getNonLiveProducts($_GET['page'], 50);   
+            print_r( json_encode($results) );
+            break;
+        
+        case 'getbrowsepages':                                          
+            $productAdminController->getBrowsePages();   
+            break;
+        
+        case 'getlinks':                                          
+            echo $productAdminController->getSpiderLinks();    
+            break;
+        
+        case 'removeuncategorized':
+            echo $productAdminController->removeUncategorizedProducts();  
+            break;  
+        
+        case 'getuniquetags':
+            echo $productAdminController->getUniqueTags();    
+            break;
+        
+        case 'getproductdetailstatus':
+            echo $productAdminController->getProductDetailCount();  
+            break;  
+        
+        case 'storeproductcount':
+            echo $productAdminController->getStoreProductCount(true); 
+            break;   
+        
+        case 'storenonliveproductcount':
+            echo $productAdminController->getStoreProductCount(false); 
+            break;   
+        
+        case 'getspiderstats':
+            echo $productAdminController->getSpiderStats();    
+            break;        
+        
+        case 'getfilters':                                                   
+            $results = $productAdminController->getFilters();        
+            print_r(json_encode($results));
+            break;
+            
+        case 'getfiltersselect':                                                   
+            $results = $productAdminController->getFilters();   
+            
+            foreach ($results['categories'] as $filter){
+                echo '<option value="'.$filter.'">'.$filter.'</option>';
+            }        
+            
+            break;         
+    }
 }
+
+
 
 
 ?>
