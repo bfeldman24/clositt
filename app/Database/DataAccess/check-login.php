@@ -1,6 +1,7 @@
 <?php
 //require_once(dirname(__FILE__) . '/../Dao/ValidateSessionDao.php');
 require_once(dirname(__FILE__) . '/opendb.php');
+require_once(dirname(__FILE__) . '/../../session.php');
 //$date = gmdate("'Y-m-d'");
 $mdb2 = mdb2_connect();
 
