@@ -218,6 +218,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     firebase.init();
+    session.init();
     Messenger.init();       
     footer.init();
 });

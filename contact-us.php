@@ -69,7 +69,7 @@ $("form").on("submit",function(event){
 	var message = $("#inputMessage").val();
 	
 	if(email.length > 0 && subject.length > 0 && name.length > 0 && message.length > 0){
-		$.post("app/email.php", { e: email, n: name, i: firebase.userid, s: subject, m: message }, function(data) {
+		$.post("app/email.php", { e: email, n: name, i: session.userid, s: subject, m: message }, function(data) {
 			if(data == "success"){
 				Messenger.alert("Your message was sent successfully! Thank you!");
 				$("#inputEmail").val("");
@@ -90,8 +90,8 @@ $("form").on("submit",function(event){
 });
 
 function loggedIn(){
-	$("#inputName").val(firebase.username);
-	$("#inputEmail").val(firebase.email)
+	$("#inputName").val(session.username);
+	$("#inputEmail").val(session.email)
 	$("#inputSubject").val("Hey Clositt Team")
 }
 

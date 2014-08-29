@@ -1167,55 +1167,11 @@ var actionButtons = {
 * not called anywhere in the code. must be called manually
 ****************************************/
 var adminFunctions = {
-    enabled: false,
-    
-    reorganizeLinks: function(){
-        if (!enabled){ return; }
-	
-    	firebase.$.child("spider").once('value', function(spider){
-    	   spider.forEach(function(company){	       	       
-    	       company.forEach(function(customer){	          	           
-    	           customer.forEach(function(category){
-    	               var catObj = {url: category.val(), status: "works"};
-    	               
-    	               firebase.$.child("spider")
-    	                         .child(company.name())
-    	                         .child(customer.name())
-    	                         .child(category.name()).remove();
-    	                         
-    	               firebase.$.child("spider")
-    	                         .child(company.name())
-    	                         .child(customer.name())
-    	                         .child(category.name()).set(catObj);
-    	                         
-    	               console.log(company.name() + " -> " + customer.name() + " -> " + category.name());	               
-    	           });
-    	       });
-    	   });	  
-    	});		
-    },		
+    enabled: false,		
 
     guessTags: function(){
-        if (!enabled){ return; }
-        
-        $(".category").each(function(){        
-           var company = $(this).find('input[type=checkbox]').attr("company");
-           var customer = $(this).find('input[type=checkbox]').attr("customer");
-           var category = $(this).find('input[type=checkbox]').attr("category");
-           
-           $(".tagCheckbox").each(function(){
-               var tag = $(this).val();
-               
-               if (category.toLowerCase() == tag.toLowerCase()){                    
-            	
-                   var tags = [];
-                   tags.push(tag);        	
-            	   firebase.$.child("spider").child(company).child(customer).child(category).child("tags").set(tags);
-            	   console.log("Added: " + company + " " + customer + " " + category + ": " + tag);        	       
-            	   return false;
-        	   }
-    	   });	          
-        });   
+        // TODO: implement guess tags for products, not categories
+        return false;        
     },
     
     getNextBroken: function(){

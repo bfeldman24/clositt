@@ -12,7 +12,7 @@ $(".feedback .feedback-submit-btn").on("click",function(e){
 	var message = feedbackTextArea.val().trim();
 	
 	if(message.length > 0){
-	    var feedback = { e: firebase.email, n: firebase.username, i: firebase.userid, s: "CLOSITT FEEDBACK", m: message };
+	    var feedback = { e: session.email, n: session.username, i: session.userid, s: "CLOSITT FEEDBACK", m: message };
 	   
 		$.post(window.HOME_ROOT + "app/email.php", feedback, function(data) {
 			if(data == "success"){
@@ -47,7 +47,7 @@ $(".feedback-minimized-btn").on("click", function(e){
 });
 
 $("#subheader-myclositt").on('click', function(e){
-    if (firebase.isLoggedIn){
+    if (session.isLoggedIn){
         $("#subheader-myclositt").off('click');
     }else{
         e.preventDefault();
@@ -100,7 +100,7 @@ function submitSigninModal(){
          		var remember = false;		
          					  	
          		sessionStorage.goToClositt = true;			  	
-         	  	firebase.login(email,password,remember);		    
+         	  	session.login(email,password,remember);		    
          	  	$("#signupModalLoginButton").addClass("disabled").text("Logging in...");
          	}else{
          		Messenger.info("Login information is incorrect");	
@@ -128,7 +128,7 @@ function submitSigninModal(){
           		var username = $("#signupModalTab-inputUsername").val();		
           	
           	    sessionStorage.goToClositt = true;
-          		firebase.signup(email, password,remember,name, username);
+          		session.signup(email, password,remember,name, username);
           		$("#signupModalLoginButton").addClass("disabled").text("Signing up...");
           	}else{
           		console.log("invalid");	

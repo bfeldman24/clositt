@@ -33,10 +33,15 @@ var searchController = {
 		}, 800);
 		
 		if (searchTerm.charAt(0) == '#'){
-		  filterPresenter.clearFilters();
+		  filterPresenter.clearFilters();		  		  
 		  
-		  var tag = searchTerm.substring(1);
-		  searchController.getProductsWithTag(tag, searchController.showResults);
+		  // TODO: implement
+		  // var tag = searchTerm.substring(1);
+		  //searchController.getProductsWithTag(tag, searchController.showResults);
+		  
+		  // Remove after the above is implemented
+		  searchController.search();  
+		  
 		}else if (searchTerm == ''){
 		  filterPresenter.onFilterSelect();
 		}else{
@@ -55,7 +60,7 @@ var searchController = {
 		// log search term
 		var logSearchTerm = searchTerm.replace(/[^A-Za-z0-9\w\s]/gi,'');
 		var timestamp = new Date().getTime();
-		firebase.$.child("search").child(logSearchTerm).child(timestamp).set({user: firebase.userid});
+		firebase.$.child("search").child(logSearchTerm).child(timestamp).set({user: session.userid});
 		
 		// get price if there is one
 		if(searchTerm.indexOf("$") > 0 || searchTerm.indexOf("dollar") > 0){  
@@ -266,131 +271,7 @@ var searchController = {
                 }
             }
         }
-    },     
-    
-    getProductsOld: function(criteria, tags, callback){                              
-        gridPresenter.beginTask();                        
-           
-        // criteria has -> "company","customer","category","price","underprice"        
-        if (criteria != null){                        
-            // search store for all matching products
-                        
-            var companies = criteria.company != null && criteria.company.length > 0 ? criteria.company : filterPresenter.companies;
-            var customers = criteria.customer != null && criteria.customer.length > 0 ? criteria.customer : filterPresenter.customers;
-            var categories = criteria.category != null && criteria.category.length > 0 ? criteria.category: filterPresenter.categories;
-                        
-            var returnCount = 0;
-            var expectedCount = companies.length * customers.length * categories.length;         
-            var mergedObject = {};            
-            
-            companies.forEach(function(company){
-                customers.forEach(function(customer){
-                    categories.forEach(function(category){
-
-                        firebase.$.child(firebase.storePath).child("products")
-                            .child(company.toLowerCase())
-                            .child(customer.toLowerCase())
-                            .child(category.toLowerCase())
-                            .once('value', 
-                                
-                                // success
-                                function (snap) {
-                                    // add it to the merged data
-                                    $.extend(mergedObject, snap.val());
-                                    
-                                    // when all paths have resolved, we invoke
-                                    // the callback (jQuery.when would be handy here)
-                                    if (++returnCount === expectedCount) {
-                                        searchController.searchForColors(null, mergedObject, criteria, tags, callback);
-                                    }
-                                },
-                                
-                                // error
-                                function (error) {
-                                    returnCount = expectedCount + 1; // abort counters
-                                    searchController.searchForColors(error, null, criteria, tags, callback);
-                                });  
-                                    
-                    });    
-                });    
-            }); 
-        }
-    },
-    
-    searchForColors: function(error, products, criteria, tags, callback){
-//        console.log("Error: " + error);
-//        console.log("Products: " + Object.keys(products).length);
-        
-        if (error){
-            return null;      
-        }                                                             
-                              
-        var hasColors = criteria.colors != null && criteria.colors.length > 0;                        
-                 
-        // matches color
-        var matchesColor = false;
-        if(hasColors){ 
-            var returnCount = 0;
-            var expectedCount = criteria.colors.length; 
-            var allColors = {};
-            
-            for(var i=0; i < criteria.colors.length; i++){
-                var color = criteria.colors[i].toLowerCase();                                
-                		    
-		        firebase.$.child(firebase.storePath).child("colors").child(color).once('value', 
-                                
-                // success
-                    function (snap) {
-                    // add it to the merged data
-                    $.extend(allColors, snap.val());
-                    
-                    // when all paths have resolved, we invoke
-                    // the callback (jQuery.when would be handy here)
-                    if (++returnCount === expectedCount) {
-                        searchController.searchForTags(allColors, tags, products, criteria);    
-                    }
-                },
-                
-                // error
-                function (error) {
-                    returnCount = expectedCount + 1; // abort counters
-                    searchController.searchForTags(allColors, tags, products, criteria);    
-                });    	        	
-	        }
-        }else{
-            searchController.searchForTags({}, tags, products, criteria);    
-        } 
-    },  
-    
-    searchForTags: function(allColors, tags, products, criteria){
-        // Get product with tags and add ranking
-        
-        var hasTags = tags != null && tags != "" && !(tags.length == 1 && tags[0] == "") && tags.length > 0;               
-        var tagsRegex = null;
-        
-        if (hasTags){
-            var tagsRegexString = tags.join("|").toLowerCase().trim();        
-            tagsRegex = new RegExp(searchController.regexEscape(tagsRegexString), 'gi');     
-        
-            firebase.$.child(firebase.storePath).child("tags").once('value', function(snapshot){
-                var allTags = {};
-                
-                // remove all non alphanumeric characters with a few exceptions                                
-                for(var i=0; i < tags.length; i++){                
-                    var tag = tags[i].replace(/[^A-Za-z0-9\w\s '\-\$\.]/gi,'').toLowerCase();
-                    var items = searchController.getMatchingChild(snapshot, tag);    
-    		    
-    		        if (items != null){
-                        $.extend(allTags, items.val());					
-    		        }
-                }
-                
-                searchController.getColorAndTagProducts(allColors, allTags, products, criteria, tagsRegex, hasTags); 
-            });
-        }else{                                        
-            searchController.getColorAndTagProducts(allColors, {}, products, criteria, tagsRegex, hasTags); 
-        }
-    },
+    },                               
     
     getColorAndTagProducts: function(allColors, allTags, products, criteria, tagsRegex, hasTags){        
         var searchResults = {};                        
@@ -467,40 +348,7 @@ var searchController = {
         
         $("#search-bar-sort-block").css("visibility","visible");
         searchController.showResults(filteredResults);
-    },    
-            
-    getProductsWithTag: function(tagName, callback){	                        
-		gridPresenter.beginTask();
-		    
-		firebase.$.child(firebase.storePath).child("tags").once('value',function(snapshot){
-		    var results = {};
-		    
-		    // remove all non alphanumeric characters with a few exceptions
-            var tag = tagName.replace(/[^A-Za-z0-9\w\s '\-\$\.]/gi,'').toLowerCase();                                                
-            var items = searchController.getMatchingChild(snapshot, tag);                
-	    
-	        if (items != null){		        
-        			items.forEach(function(item){
-        				var sku = item.val();
-        				var product = productPresenter.clothingStore[sku];            				
-        				
-        				if (product != null){
-            				if(product.s in results){
-            				   product = results[product.s];
-            				   product.rank += 10;
-            				
-            				}else{        				    
-                				product.rank = 0;                				
-                				results[product.s] = product;                				
-            				}
-        				}
-        			});		
-	        }					            
-			
-			callback(results);                 			
-            
-		}, this);				
-	},		
+    },                    	
 	
 	showResults: function(products){
 	    products = searchController.orderResults(products);

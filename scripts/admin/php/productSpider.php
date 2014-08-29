@@ -487,7 +487,6 @@ input{
         </li>    
     </ol>
     
-        <!--<p>*** <a href="preload.php">UPDATE WEBSITE WITH NEW PRODUCTS</a> ***</p>-->
     <br><br><br>
     
     <div id="main-workspace" style="display:none;"></div>

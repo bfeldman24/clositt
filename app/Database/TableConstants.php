@@ -100,4 +100,15 @@ define("CLOSET_ITEM_SKU","sku");
 define("CLOSET_ITEM_IMAGE","image");
 define("CLOSET_ITEM_STATUS","status");
 define("CLOSET_ITEM_DATE_ADDED","dateadded");
+
+// Users 
+define("USERS","Users");
+define("USER_ID","userid");
+define("USER_EMAIL","email");
+define("USER_NAME","name");
+define("USER_PASS","password");
+define("USER_SALT","salt");
+define("USER_LOGIN_COUNT","logincount");
+define("USER_LAST_SIGNED_IN","lastonline");
+define("USER_DATE_SIGNED_UP","signedupdate");
 ?>

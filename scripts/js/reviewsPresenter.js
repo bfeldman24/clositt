@@ -68,7 +68,7 @@ var reviewsPresenter = {
 	 },	 	 
 
 	 saveReview: function(e){
-	    if(!firebase.isLoggedIn){
+	    if(!session.isLoggedIn){
 			Messenger.info("Please login or sign up to add comments to this product!");	
 		}else{
       	    var targetOutfit = $(e.target).parents(".item");
@@ -84,7 +84,7 @@ var reviewsPresenter = {
       		 	var minute = reviewsPresenter.addZero(now.getMinutes());
       		 	
       		 	var nowString = (now.getMonth() + 1) +"/"+ now.getDate() +"/"+ now.getFullYear() + " " + hour +":"+ minute + " " + ampm;
-      		 	var user = firebase.username == null ? "Guest" : firebase.username;
+      		 	var user = session.username == null ? "Guest" : session.username;
       		 	var rating = targetOutfit.find(".review-rating").attr("userRating");
       		 	rating = rating == undefined ? 0 : rating;
       		 	

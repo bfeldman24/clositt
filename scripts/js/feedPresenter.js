@@ -75,7 +75,7 @@ var feedPresenter = {
     
     getFeeds: function(callback){
                 
-        firebase.$.child(firebase.userPath).child(firebase.userid).child("feeds/main").on('value', function(feeds){
+        firebase.$.child(firebase.userPath).child(session.userid).child("feeds/main").on('value', function(feeds){
             var allFeeds = [];
             
             feeds.forEach(function(feed){
@@ -132,7 +132,7 @@ var feedPresenter = {
             var owner = $(el.currentTarget).siblings(".feedListingOwner").attr("owner");
             var ownername = $(el.currentTarget).siblings(".feedListingOwner").text();
             
-            firebase.$.child(firebase.userPath).child(firebase.userid).child("feeds/main")
+            firebase.$.child(firebase.userPath).child(session.userid).child("feeds/main")
                 .child(owner).child("closets").child(closetid).remove(function(error){
                     if(error){
                         Messenger.error("There was a problem removing that clositt from your feed!");   
@@ -373,7 +373,7 @@ var closetSearchController = {
             
                       
             firebase.$.child(firebase.userPath)
-                .child(firebase.userid)
+                .child(session.userid)
                 .child("feeds/main")
                 .child(closetSearchController.currentClosetsUser)
                 .child("username")
@@ -382,7 +382,7 @@ var closetSearchController = {
                     if (error){
                         Messenger.error("There was a problem saving that closet to your feed");   
                     }else{
-                        firebase.$.child(firebase.userPath).child(firebase.userid).child("feeds/main")
+                        firebase.$.child(firebase.userPath).child(session.userid).child("feeds/main")
                             .child(closetSearchController.currentClosetsUser).child("closets")
                             .child(closetRef).set(closetName,function(error){
                         

@@ -60,18 +60,8 @@ td {
 
 <script type="text/javascript">
 Messenger.init();
-
-<?php if ($_GET['manual'] == "y"){ ?>
-    $("body").append($("<input>").attr("type","text").addClass("fileEnding").css("height","30px"));
-    $("body").append($("<button>").addClass("btn btn-large btn-primary getColors").text("Save Processed Images").attr("type","button"));
-    
-    colorProcessorSaveToFirebase.firebase = new Firebase('https://clothies.firebaseio.com'); 	 
-	$(document).on("click",".getColors", colorProcessorSaveToFirebase.getColorsFromSavedFile);    
-<?php }else{ ?>
-    colorProcessor.init();
-    colorMappingProcessor.init();
-<?php } ?>
-
+colorProcessor.init();
+colorMappingProcessor.init();
 </script>
 
 </body>

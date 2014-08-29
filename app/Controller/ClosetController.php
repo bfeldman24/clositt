@@ -22,7 +22,8 @@ class ClosetController extends Debugger {
                 $user = $closet->getUserId();
                 
                 if ($user == $_SESSION['userid']){ 
-                    return $this->closetDao->createNewCloset($_SESSION['userid'], $closet);
+                    $insertedId = $this->closetDao->createNewCloset($_SESSION['userid'], $closet);
+                    return $insertedId > 0 ? $insertedId : "failed";
                 }
             }
         }
@@ -39,7 +40,8 @@ class ClosetController extends Debugger {
                 $user = $closet->getUserId();
                 
                 if ($user == $_SESSION['userid']){                
-                    return $this->closetDao->updateCloset($_SESSION['userid'], $closet);
+                    $affectedRows = $this->closetDao->updateCloset($_SESSION['userid'], $closet);
+                    return $affectedRows === 1 ? "success" : "failed";
                 }
             }
         }
@@ -57,7 +59,8 @@ class ClosetController extends Debugger {
                 $user = $closet->getUserId();
                 
                 if ($user == $_SESSION['userid'] && isset($closetId)){                                
-                    return $this->closetDao->deleteCloset($_SESSION['userid'], $closetId);
+                    $affectedRows = $this->closetDao->deleteCloset($_SESSION['userid'], $closetId);
+                    return $affectedRows === 1 ? "success" : "failed";
                 }
             }
         }
@@ -68,13 +71,14 @@ class ClosetController extends Debugger {
 	
 	public function addItemToCloset($data){
 	   if (isset($data)){
-            $closetItem = ClosetItemEntity::setClosetItemFromPost($data);
+            $closetItem = ClosetItemEntity::setFromPost($data);
             
             if (isset($closetItem)){                  
                 $user = $closetItem->getUserId();
                 
                 if ($user == $_SESSION['userid']){                              
-                    return $this->closetDao->addItemToCloset($_SESSION['userid'], $closetItem);
+                    $affectedRows = $this->closetDao->addItemToCloset($_SESSION['userid'], $closetItem);
+                    return $affectedRows === 1 ? "success" : "failed";
                 }
             }
         }
@@ -85,13 +89,14 @@ class ClosetController extends Debugger {
 	
 	public function removeItemFromCloset($data){
 	   if (isset($data)){
-            $closetItem = ClosetItemEntity::setClosetItemFromPost($data);
+            $closetItem = ClosetItemEntity::setFromPost($data);
             
             if (isset($closetItem)){
                 $user = $closetItem->getUserId();
                 
                 if ($user == $_SESSION['userid']){                
-                    return $this->closetDao->removeItemFromCloset($_SESSION['userid'], $closetItem);
+                    $affectedRows = $this->closetDao->removeItemFromCloset($_SESSION['userid'], $closetItem);
+                    return $affectedRows === 1 ? "success" : "failed";
                 }
             }
         }
@@ -125,14 +130,19 @@ class ClosetController extends Debugger {
 	   $closetItemResults = $this->closetDao->getAllClosetItems($owner, $owner == $_SESSION['userid']);    	   
 	   
 	   if(is_object($closetItemResults)){
-			while($row = $closetItemResults->fetchRow(MDB2_FETCHMODE_ASSOC)){	
-			    $closetItemEntity = new ClosetItemEntity();				
-				ClosetItemEntity::setClosetItemFromDB($closetItemEntity, $row);				
-				$closetItems[] = $closetItemEntity->toArray();				
+			while($row = $closetItemResults->fetchRow(MDB2_FETCHMODE_ASSOC)){				    	
+				$closetItemEntity = ClosetItemEntity::setFromDB($row);				
+				$closetName = $closetItemEntity->getClosetName();
+				
+				if (!isset($closetItems[$closetName])){
+				    $closetItems[$closetName] = array();        
+				}
+				
+				$closetItems[$closetName][] = $closetItemEntity->toArray();				
 			}			
 	   }	 
 	   	   
-		return stripslashes(json_encode($closetItems));
+		return stripslashes(json_encode($closetItems, true));
 	}				
 }
 
@@ -159,8 +169,9 @@ if (isset($_GET['method'])){
         case 'get':            
             echo $closetController->getAllClosets();
             break;            
-        case 'getall':                
-            echo $closetController->getAllClosetItems($_POST['owner']);
+        case 'getall':
+            $owner = isset($_POST['owner']) ? $_POST['owner'] : null;                
+            echo $closetController->getAllClosetItems($owner);
             break;
     }            
 }

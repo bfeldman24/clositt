@@ -62,17 +62,19 @@ class ClosetItemEntity {
 		
 	/**** ************************** ****/
 		
-	public static function setClosetItemFromDB($closetItemEntity, $row){         
-		if (is_object($closetItemEntity) && get_class($closetItemEntity) == "ClosetItemEntity"){
-			$closetItemEntity->setClosetId(stripslashes($row[CLOSET_ID]));
-			$closetItemEntity->setClosetName(stripslashes($row[CLOSET_NAME]));			
-			$closetItemEntity->setUserId(stripslashes($row[CLOSET_USER_ID]));
-			$closetItemEntity->setSku(stripslashes($row[CLOSET_ITEM_SKU]));
-			$closetItemEntity->setImage(stripslashes($row[CLOSET_ITEM_IMAGE]));
-		}
+	public static function setFromDB($row){         
+		$closetItemEntity = new ClosetItemEntity();
+	
+		$closetItemEntity->setClosetId(stripslashes($row[CLOSET_ID]));
+		$closetItemEntity->setClosetName(stripslashes($row[CLOSET_NAME]));			
+		$closetItemEntity->setUserId(stripslashes($row[CLOSET_USER_ID]));
+		$closetItemEntity->setSku(stripslashes($row[CLOSET_ITEM_SKU]));
+		$closetItemEntity->setImage(stripslashes($row[CLOSET_ITEM_IMAGE]));	
+		
+		return $closetItemEntity;
 	}		
 	
-	public static function setClosetFromPost($row){
+	public static function setFromPost($row){
 		$closetItemEntity = new ClosetItemEntity();
 		
 		$closetItemEntity->setClosetId(trim($row[JS_CLOSET_ID]));

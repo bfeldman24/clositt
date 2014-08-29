@@ -11,13 +11,27 @@ class ClosetDao extends AbstractDao {
 		$paramTypes = array('integer', 'text');
         $params = array($user, $name);
         
-        return $this->update($sql, $params, $paramTypes, "21983619264");
+        $affectedRows = $this->update($sql, $params, $paramTypes, "21983619264");
+        
+        if ($affectedRows === 1){
+            $id = $this->db->lastInsertID(CLOSETS, CLOSET_ID);
+            
+            if (PEAR::isError($id)) {
+                $this->logError($errorCode ,$id->getMessage(),$sql);
+                return -1;
+            }
+            
+            return $id;
+        }
+        
+        return -1;
 	}
+	
 	
 	public function updateCloset($user, $closet){
 	    $sql = "UPDATE ".CLOSETS.
 	           " SET ".CLOSET_NAME." = ?, ".CLOSET_PERMISSION." = ?, ".CLOSET_LAST_UPDATED." = NOW() " .  
-                " WHERE " . CLOSET_ID . " = ? AND " . CLOSET_USER_ID . " = ?";	   
+                " WHERE ".CLOSET_ID." = ? AND ".CLOSET_USER_ID." = ? AND ".CLOSET_PERMISSION." < 3";	   
 		
 		$closetId = $closet->getClosetId();
 		$name = $closet->getName();
@@ -29,12 +43,11 @@ class ClosetDao extends AbstractDao {
         return $this->update($sql, $params, $paramTypes, "29864921");
 	}
 	
+	
 	public function deleteCloset($user, $closetId){
 	   $sql = "UPDATE ".CLOSETS.
 	           " SET ".CLOSET_PERMISSION." = 3 , ".CLOSET_LAST_UPDATED." = NOW() " . 
-                " WHERE " . CLOSET_ID . " = ? AND " . CLOSET_USER_ID . " = ?";	   
-		
-		$closetId = $closet->getClosetId();
+                " WHERE " . CLOSET_ID . " = ? AND " . CLOSET_USER_ID . " = ?";	   		
 		
 		$paramTypes = array('integer', 'integer');
         $params = array($closetId, $user);
@@ -42,19 +55,21 @@ class ClosetDao extends AbstractDao {
         return $this->update($sql, $params, $paramTypes, "29864921");
 	}
 	
+	
 	public function addItemToCloset($user, $closetItem){
 	   $sql = "INSERT INTO ".CLOSET_ITEMS." (".CLOSET_ID.", ".CLOSET_USER_ID.", ".CLOSET_ITEM_SKU.", ".CLOSET_ITEM_IMAGE.", ".CLOSET_ITEM_STATUS.", ".CLOSET_LAST_UPDATED.", ".CLOSET_ITEM_DATE_ADDED.") " .
                 " VALUES (?,?,?,?,1,NOW(),NOW())";	   
 		
-		$closetId = $closetItem->getClosetId();
+		$closetId = $closetItem->getClosetId();		
 		$sku = $closetItem->getSku();
-		$image = $closetItem->getImage();
+		$image = $closetItem->getImage();				
 		
 		$paramTypes = array('integer', 'integer', 'text', 'text');
         $params = array($closetId, $user, $sku, $image);
         
         return $this->update($sql, $params, $paramTypes, "39847293234");
 	}
+	
 	
 	public function removeItemFromCloset($user, $closetItem){
 	    $sql = "UPDATE ".CLOSET_ITEMS.
@@ -70,11 +85,12 @@ class ClosetDao extends AbstractDao {
         return $this->update($sql, $params, $paramTypes, "293847923");
 	}
 	
+	
 	public function getAllClosets($userId){
 	   $sql = "SELECT " . CLOSET_ID.", ".CLOSET_USER_ID.", ".CLOSET_NAME.", ".CLOSET_PERMISSION. 
                 " FROM " . CLOSETS .
-                " WHERE " . CLOSET_USER_ID . " = ? " .
-                " ORDER BY " . CLOSET_ID.", ".CLOSET_NAME;							       
+                " WHERE " . CLOSET_USER_ID . " = ? AND ".CLOSET_PERMISSION." < 3".
+                " ORDER BY " . CLOSET_NAME;							       
 		
 		$paramsTypes = array('integer');		
 		$params = array($userId);
@@ -82,16 +98,17 @@ class ClosetDao extends AbstractDao {
 		return $this->getResults($sql, $params, $paramTypes, "29387201642");
 	}
 	
+	
 	public function getAllClosetItems($owner, $isPrivate){
 	   $sql = "SELECT i." . CLOSET_ID.", c.".CLOSET_NAME.", i.".CLOSET_USER_ID.", i.".CLOSET_ITEM_SKU.", i.".CLOSET_ITEM_IMAGE. 
                 " FROM " . CLOSET_ITEMS . " i " .
                 " INNER JOIN " . CLOSETS . " c ON c.".CLOSET_ID." = i.".CLOSET_ID .
-                " WHERE i." . CLOSET_USER_ID . " = ? AND c." . CLOSET_PERMISSION . " <= ? " .
-                " ORDER BY " . CLOSET_ID;							       
+                " WHERE i." . CLOSET_USER_ID . " = ? AND c." . CLOSET_PERMISSION . " <= ? AND i." . CLOSET_ITEM_STATUS . " = 1 ".
+                " ORDER BY " . CLOSET_NAME;							       
 		
 		$permission = $isPrivate ? 2 : 1;
 		
-		$paramsTypes = array('integer','integer');		
+		$paramTypes = array('integer','integer');		
 		$params = array($owner, $permission);
 		
 		return $this->getResults($sql, $params, $paramTypes, "98763565478");

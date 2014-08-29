@@ -102,7 +102,7 @@ input[type='checkbox']{
 
 <script type="text/javascript">
 function loggedIn(){
-	$("#inputName").val(firebase.username);				
+	$("#inputName").val(session.username);				
 }
 
 
@@ -119,7 +119,7 @@ $("form").on("submit",function(event){
                         var oldPassword = $("#inputOldPassword").val();
                   		var newPassword = $("#inputPassword").val();            		
                   	
-                  		firebase.authClient.changePassword(firebase.email, oldPassword, newPassword, function(error, success) {
+                  		firebase.authClient.changePassword(session.email, oldPassword, newPassword, function(error, success) {
                             if (error) {
                                   Messenger.error("Your old password is incorrect! Please try again.");
                             }else{
