@@ -1,6 +1,9 @@
 <?php
-require_once(dirname(__FILE__) . '/../globals.php');
-require_once(dirname(__FILE__) . '/../Database/DataAccess/check-login.php');
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
+
+require_once(dirname(__FILE__) . '/../session.php');
+require_once(dirname(__FILE__) . '/../email.php');
 require_once(dirname(__FILE__) . '/../Model/UserEntity.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/UserDao.php');
 require_once(dirname(__FILE__) . '/Debugger.php');
@@ -14,6 +17,8 @@ class UserController extends Debugger {
 	}	
 	
 	public function signUp($data){
+	   global $session;
+	   
 	   if (isset($data)){
             $user = UserEntity::setFromPost($data);
             
@@ -21,44 +26,100 @@ class UserController extends Debugger {
                 $password = $user->getPassword();
                 $confirmPassword = $user->getConfirmPassword();
                 
-                if ($password != $confirmPassword){
+                if (isset($confirmPassword) && $password != $confirmPassword){
                     return "Passwords do not match!";   
                 }
                 
-                $insertedRows = $this->userDao->signUp($user);                
+                $lastInsertId = $this->userDao->signUp($user);                
                 
-                if (isset($insertedRows) && $insertedRows === 1){
-                    // TODO: LOGIN   
+                if (isset($lastInsertId) && is_numeric($lastInsertId) && $lastInsertId > 0){                
+
+                    $session->setSession($user, true);
+                    $session->setCookie($data['remember']);
+                    
+                    EmailController::sendWelcomeMessage($user->getEmail());    
+                                        
+                    $user->setUserId($lastInsertId);
+                    return json_encode($user->toArray());                      
+                }else{
+                    // does user already exist
+                    $doesUserExists = $this->userDao->doesUserExist($user);
+            
+                    if ($doesUserExists) {                        
+                        // attempt to login                               
+                        return $this->login($data);
+                    }             
                 }
             }
         }
                 
         $this->debug("UserController", "signUp", "There was no user supplied to create!");
-        return false;
+        return "failed";
 	}
 	
 	public function login($data){
+	   global $session;
+	   
+	   if( isset($_SESSION['failedcount']) && $_SESSION['failedcount'] > 5){
+			$this->warning("checkLogin", " failed 5 times from ip: " . $_SERVER['REMOTE_ADDR']);
+			return "failed too many times";
+		}
+	   
 	   if (isset($data)){
-            $user = UserEntity::setFromPost($data);
+            $requestUser = UserEntity::setFromPost($data);            
             
-            if (isset($user)){
-                  $this->userDao->updateUserPassword($user);              
-                
-                  // TODO: uncomment once we login via php
-//                $savedPassword = $this->userDao->getUserPassword($user);
-//                                    
-//                if (isset($savedPassword) && $savedPassword !== false){
-//                    $inputPassword = $user->getPassword();                           
-//                    return $inputPassword == $savedPassword;
-//                }
+            if (isset($requestUser)){                                                          
+                $results = $this->userDao->getUserPassword($requestUser->getEmail());
+                         
+                if(is_object($results)){
+        			if($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){        			    				    
+        				$userFromDB = UserEntity::setFromDB($row);								
+        				$savedPassword = $userFromDB->getPassword();	
+        				
+        				if (isset($savedPassword)){
+        				     $user = new UserEntity();
+        				     $user->setSalt($userFromDB->getSalt());
+        				     UserEntity::setFromPost($data, $user);
+        				     
+                             $inputPassword = $user->getPassword();                                                        
+                             
+                             if ($inputPassword === $savedPassword){
+                                 $affectedRows = $this->userDao->updateLoginCount($user);                                 
+                                 $session->setSession($userFromDB);
+                                 $session->setCookie($data['remember']);
+                                 return json_encode($userFromDB->toArray());
+                                 
+                             }else{
+                                 return "Incorrect credentials";                                     
+                             }
+                         }else{
+            			     $affectedRows = $this->userDao->updateUserPassword($requestUser, null);
+            			     
+            			     if ($affectedRows === 1){
+                                    $session->setSession($userFromDB);
+                                    $session->setCookie($data['remember']);
+                                    return json_encode($userFromDB->toArray());
+                             }
+            			}							
+        			}			
+        	   }                                                                                                        
             }
         }
                 
         $this->debug("UserController", "login", "Something went wrong when trying to login!");
-        return false;
-	}			
+        return "failed";
+	}		
+	
+	public function logout(){
+	   global $session;
+	   $session->logout();
+
+	   return "logged out";
+	}	
 	
 	public function updateUserInfo($data){
+	   global $session;
+	   
 	   if (isset($data)){
             $user = UserEntity::setFromPost($data);
             
@@ -66,13 +127,55 @@ class UserController extends Debugger {
                 $userId = $user->getUserId();
                 
                 if ($userId == $_SESSION['userid']){ 
-                    return $this->userDao->updateUserInfo($user);
+                    $affectedRows = $this->userDao->updateUserInfo($user);
+                    
+                    if ($affectedRows === 1){
+                        $session->setSession($user);
+                        return "success";
+                    }else{
+                        return "failed";   
+                    }
                 }
             }
         }
                 
         $this->debug("UserController", "updateUserInfo", "There was no user supplied to update!");
-        return false;
+        return "failed";
+	}
+	
+	public function updateUserPassword($data){
+	   if (isset($data)){                                                                                  
+            $results = $this->userDao->getUserPassword($_SESSION['email']);
+                        
+            if(is_object($results)){
+    			if($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){        			    				    
+    				$userFromDB = UserEntity::setFromDB($row);								
+    				$savedPassword = $userFromDB->getPassword();	
+    				
+    				if (isset($savedPassword)){
+    				    $user = new UserEntity();
+    				    $user->setSalt($userFromDB->getSalt());
+    				    $user->setUserId($_SESSION['userid']);
+    				    $user->setEmail($_SESSION['email']);
+    				    $user->setSecurePassword($data['p']);
+    				     
+    				    $oldUser = new UserEntity();
+    				    $oldUser->setSalt($userFromDB->getSalt());
+    				    $oldUser->setSecurePassword($data['op']);
+                        $oldPassword = $oldUser->getPassword();
+                            
+                        if ($oldPassword === $savedPassword){
+                            $affectedRows = $this->userDao->updateUserPassword($user, $oldPassword);
+                            
+                            return $affectedRows === 1 ? "success" : "failed";
+                        }
+    				}
+    			}                
+            }
+        }
+                 
+        $this->debug("UserController", "updateUserInfo", "There was no user supplied to update!");
+        return "failed";
 	}	
 	
 	public function getUserInfo(){ 
@@ -110,7 +213,7 @@ class UserController extends Debugger {
         }
                 
         $this->debug("UserController", "getUserName", "There was no user supplied to update!");
-        return false;
+        return "failed";
 	}		
 }
 
@@ -125,9 +228,15 @@ if (isset($_GET['method'])){
         case 'login':            
             echo $userController->login($_POST);
             break;
+        case 'logout':            
+            echo $userController->logout();
+            break;    
         case 'update':            
             echo $userController->updateUserInfo($_POST);
             break;
+        case 'updatepass':            
+            echo $userController->updateUserPassword($_POST);
+            break;                
         case 'get':            
             echo $userController->getUserInfo();
             break;

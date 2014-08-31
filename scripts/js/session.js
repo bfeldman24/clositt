@@ -1,71 +1,79 @@
 var session = {
     userid: null,
-	username: null,
+	name: null,
+	nickname: null,
 	email: null,
 	isLoggedIn: false,
 	loginCount: -1,
 	
-	init: function(){
-	   // TODO implement  
+	init: function(){	   
+	   if (sessionInit.active){
+	       session.userid = sessionInit.userid;
+	       session.email = sessionInit.email;
+	       session.name = sessionInit.name;   
+	       session.nickname = session.name.split(" ")[0];
+	       session.isLoggedIn = true;	       	       
+	       session.userDataAvailableCallback();
+    	   session.updateLoggedInDropdownMenu();
+	       session.loggedInCallback();
+	   }else{
+	       session.updateLoggedOutDropdownMenu();
+	       session.loggedOutCallback();
+	   }	   	   
 	},
 	
 	login: function(email, password, remember){
 		
-		firebase.authClient.login('password', {
-          email: email,
-          password: password,
-          rememberMe: remember
-        });     	
+		$.post( window.HOME_ROOT + "u/login", {e: email, p: password, remember: remember }, function(result){
+	          try{
+	               var user = JSON.parse(result);
+	               
+	               if (typeof user == "object" && user.id && user.n && user.e){    			    
+     			     session.userid = user.id;
+     			     session.name = user.n;
+     			     session.email = user.e;
+     			     session.isLoggedIn = true; 			     
+     			     session.loggedInCallback(); 
+	               }         
+	          }catch(e){
+	               Messenger.error("The username/password were incorrect! Please try again."); 	
+ 			  }	
+		});				                           	
 	},
 	
 	signup: function(email, password, remember, name, username){
-		firebase.authClient.createUser(email, password, function(error,user){
-			session.register(error, user, password, remember, name, username);
-		});
-	},
+		$.post( window.HOME_ROOT + "u/signup", {e: email, n: name, p: password, cp: password, remember: remember }, function(result){
+		      try{
+	               var user = JSON.parse(result);
+	               
+	               if (typeof user == "object" && user.id && user.n && user.e){    			    
+                         session.userid = user.id;
+          			     session.name = user.n;
+          			     session.email = user.e;
+          			     session.isLoggedIn = true;
+          			     session.loggedInCallback();
+	               }         
+	          }catch(e){
+	               Messenger.error("Whoops! We encountered an issue while signing you up!");
+	               Messenger.error("Please try again or use the contact link at the bottom of the page to let us investigate the issue.");	               
+    		     
+    		       var userData = { e: email, n: name, s: "Failed Signup Attempt", t: "issue" };
+    		       $.post(window.HOME_ROOT + "app/email.php", userData);
+ 			  }			  
+        });
+				
+	},	
 	
-	register: function(error, user, password, remember, name, username){
-		 if (!error) {		  			  			  
-		 	var firstname = stringFunctions.toTitleCase(name);
-		 	var dateTime = new Date();		 	
-		 	
-		 	var userData = {"email":user.email, "name":firstname, "signedUpDate": dateTime.toJSON(), "loginCount": 1 };
-		 	
-		 	if (username != null){
-    		 	username = username.toLowerCase();
-    		 	userData['username'] = username;
-		 	}
-		 			 	
-		 	userData['closets'] = new Object();
-		 	userData['closets'][closetPresenter.wishListClosetId] = new Object();
-		 	userData['closets'][closetPresenter.wishListClosetId]['name'] = "Wish List";		 	
-		 	
-		 	firebase.$.child(firebase.userPath).child(user.id).set(userData);		 			 	
-		 	session.welcomeEmail(user.email, firstname);
-		  	session.login(user.email, password, remember);
-
-		  }else{		  	
-		  		Messenger.error(error);	
-		  }
-	},
-	
-	logginCallback: function(){	
+	loggedInCallback: function(){	
 	    if (sessionStorage.isActiveUser == null || sessionStorage.isActiveUser == "null"){
 	       sessionStorage.isActiveUser = true;
-	       
-	       firebase.$.child("Auth/Token").on('value',function(snapshot){	
-        		var token = snapshot.val();			
-        		
-        		$.post(window.HOME_ROOT + "app/auth.php", { auth: token, user: session.userid }, function(){        		      
-        		      
-        		      if (sessionStorage.goToClositt){
-                            location.href = window.HOME_ROOT + "clositt.php"; 
-        		      }else if(typeof loggedIn == 'function'){
-                            loggedIn();
-            		  }  
-        		});
-        	});
-	    }else if(typeof loggedIn == 'function'){
+	       	       	      
+	       if (sessionStorage.goToClositt){
+                location.href = window.HOME_ROOT + "clositt.php"; 
+           }else if(typeof loggedIn == 'function'){
+                loggedIn();
+		   }          	
+        }else if(typeof loggedIn == 'function'){
 			loggedIn();
 		}  
 	},
@@ -88,22 +96,20 @@ var session = {
 		}  		
 	},
 	
-	userDataAvailableCallback: function(username){
+	userDataAvailableCallback: function(){
 		if(typeof userDataReady == 'function')
 		{
-			userDataReady(username);
+			userDataReady(session.name);
 		}   
 	},
 	
-	updateLoggedInDropdownMenu: function(username){
-	   var userFirstName = session.username.split(" ")[0];
-	   
+	updateLoggedInDropdownMenu: function(){	   
 		$("#loginBtns").html("")	    	
 	    	.append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + "settings.php")
     	    	.append(
     	    	      $("<span>").addClass("glyphicon glyphicon-user")
     	    	).append( 
-    	    	      $("<span>").text(" " + userFirstName)
+    	    	      $("<span>").text(" " + session.nickname)
     	    	))
     	    )
 	    	.append( $('<li>').append( $('<a>').attr('onclick', 'session.logout()').text('Logout')));
@@ -116,28 +122,10 @@ var session = {
 		    .append( $('<li>').addClass("loggedoutBtns").append( $('<a>').addClass("btn btn-default inverse").attr('href',window.HOME_ROOT + 'signup.php').text('SIGNUP')));		
 	},	
 
- 	logout: function(){				
-		firebase.$.child(firebase.userPath).child(session.userid).child(firebase.connections).remove(function(){
-		    firebase.authClient.logout();
-		  
-      		$.post("/app/auth.php", function(){      		    	
-      			location.href= window.HOME_ROOT+"signup.php";
-      		}).fail(function() {			 
-                  location.href= window.HOME_ROOT;
-      	    });
-		});				
-	},
-	
-	welcomeEmail: function(email, name){
-	    var userData = { e: email, n: name, t: "welcomeMessage" };
-	   
-		$.post(window.HOME_ROOT + "app/email.php", userData, function(data) {
-			if(data == "success"){
-				console.log("Message Sent!")
-			}else{
-				console.log("Message failed to send.")
-			}
-		});  
+ 	logout: function(){	 	   	  								
+		$.post( window.HOME_ROOT + "u/logout", function(user){
+	          location.href= window.HOME_ROOT;
+		});				                           	
 	}
 };
 

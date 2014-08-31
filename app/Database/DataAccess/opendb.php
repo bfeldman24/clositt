@@ -17,7 +17,7 @@ function mdb2_connect() {
 	    die($mdb2->getMessage() . ', ' . $mdb2->getDebugInfo());
 	}
 	
-	$mdb2->setFetchMode(DB_FETCHMODE_OBJECT);
+	//$mdb2->setFetchMode(DB_FETCHMODE_OBJECT);
 	
 	return $mdb2;
 

@@ -38,7 +38,7 @@ var closetPresenter = {
 		      		      
 		}else if(session.isLoggedIn){
 			$.post( window.HOME_ROOT + "cl/getall", closetPresenter.showClosets, "json");
-			$("#user-closet-title").text(session.username + "'s Clositt");
+			$("#user-closet-title").text(session.nickname + "'s Clositt");
 		    			 
 		}else{
 			Messenger.info("We'd love to add that to your Clositt. Just sign in and we'll take care if it for you.");	

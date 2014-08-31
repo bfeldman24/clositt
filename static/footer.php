@@ -216,6 +216,18 @@
 
 <?php echo CLOSITT_JS; ?>
 <script type="text/javascript">
+    var sessionInit = {            
+        <?php if (isset($_SESSION['active']) && $_SESSION['active'] === true){ ?>            
+            active: true,
+            userid: <?php echo $_SESSION["userid"]; ?>, 
+            email: '<?php echo $_SESSION["email"]; ?>',
+            name: '<?php echo $_SESSION["name"]; ?>',
+        <?php }else{ ?>
+            active: false
+        <?php } ?>                                    
+    };
+</script>
+<script type="text/javascript">
 $(document).ready(function() {
     firebase.init();
     session.init();

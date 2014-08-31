@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../Database/DataAccess/check-login.php');
+require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/AbstractDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 

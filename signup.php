@@ -109,14 +109,14 @@ $("#signup-form").on("submit",function(event){
 	 event.preventDefault();
 	 var valid = false;
 	 
-     if($('#signup-inputPassword').val().length > 5 && $('#signup-inputPassword2').val().length > 5){
+     if($('#signup-inputPassword').val().length >= 7 && $('#signup-inputPassword2').val().length >= 7){
              if($('#signup-inputPassword2').val() == $('#signup-inputPassword').val()){                   
                      valid = true;                    
              }else{					              	
                      Messenger.error("Passwords do NOT match!");                     
              }
      }else{
-             Messenger.error("Passwords do NOT match!");        
+             Messenger.error("Passwords must be at least 7 characters long!");        
      }
 
 	if(valid){

@@ -1,6 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../globals.php');
-require_once(dirname(__FILE__) . '/../Database/DataAccess/check-login.php');
+require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Model/ClosetEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ClosetItemEntity.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ClosetDao.php');

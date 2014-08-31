@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../globals.php');
+require_once(dirname(__FILE__) . '/../session.php');
 
 // LOGGING
 define('DEBUG_LOG', dirname(__FILE__) . "/../Logs/Debugger");
@@ -9,21 +9,39 @@ class Debugger{
     
     public function __construct() {
         $this->debugLog = DEBUG_LOG . date("-Y-m-d") . ".txt";
-    }	
+    }				
 	
 	/**
 	* Appends the sql error to the end of the file ($this->file)
     */		
-	public function debug($class, $method, $msg){
+	public function debug($class, $method = "", $msg = ""){
 	    
-		$message = "($class->$method) $msg";		
-		$this->debugger($message);
+		$message = "DEBUG: ($class->$method) $msg";		
+		$this->log($message);
 	}
 	
 	/**
 	* Appends the sql error to the end of the file ($this->file)
     */		
-	public function debugger($msg){
+	public function error($class, $method = "", $msg = ""){
+	    
+		$message = "ERROR: ($class->$method) $msg";		
+		$this->log($message);
+	}	
+	
+	/**
+	* Appends the sql error to the end of the file ($this->file)
+    */		
+	public function warning($class, $method = "", $msg = ""){
+	    
+		$message = "WARNING: ($class->$method) $msg";		
+		$this->log($message);
+	}	
+	
+	/**
+	* Appends the sql error to the end of the file ($this->file)
+    */		
+	public function log($msg){
 		if (DEBUG){
 			$fileName = null;
 			$message = "\n" . date("m/d/y h:i:s") . " - " . $msg;

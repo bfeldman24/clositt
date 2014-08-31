@@ -1,19 +1,17 @@
 <?php
-// LOGGING
-define('INFO',true);
-define('SQL_ERROR_LOG', dirname(__FILE__) . "/../../Logs/sqlErrorLog");
-
+require_once(dirname(__FILE__) . '/../../globals.php');
 require_once(dirname(__FILE__) . '/../TableConstants.php');
 
 class AbstractDao{
 	public $db = null; // PEAR::MDB2 pointer
 	public $debug = DEBUG; // prints sql statements
 	public $info = false; // prints sql statements
-	private $sqlErrorLog = SQL_ERROR_LOG;	
+	private $sqlErrorLog = null;	
 	
 	
 	public function __construct(&$db) {
-		$this->sqlErrorLog = $this->sqlErrorLog . date("-Y-m-d") . ".txt";
+	    $sqlErrorLog = dirname(__FILE__) . "/../../Logs/sqlErrorLog";
+		$this->sqlErrorLog = $sqlErrorLog . date("-Y-m-d") . ".txt";
 		$this->file = fopen($this->sqlErrorLog,"a");
 		$this->db = $db;	
 		$this->db->setErrorHandling(PEAR_ERROR_RETURN);
@@ -80,6 +78,7 @@ class AbstractDao{
         }         		
 		
 		if (PEAR::isError($affectedRows)) {
+		    $_SESSION['errors'] = $errorCode . " - error";
 			$this->logError($errorCode ,$affectedRows->getMessage(),$sql);
 		    return false;
 		}

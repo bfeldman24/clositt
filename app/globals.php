@@ -2,6 +2,7 @@
 define('DOMAIN','closetta.com');
 define('HOME_ROOT','/');
 define('HOME_PAGE','http://' . DOMAIN . HOME_ROOT);
+define('COOKIE_NAME','CookieClosittYum');
 $GLOBALS['ADMIN_LIST'] = array(2, 35, 94);
 
 // DEV

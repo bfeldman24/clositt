@@ -2,7 +2,7 @@
 //error_reporting(E_ALL);
 //ini_set("display_errors", 1);
 
-require_once(dirname(__FILE__) . '/../Database/DataAccess/check-login.php');
+require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/AbstractDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../View/ProductTemplate.php');
@@ -212,7 +212,7 @@ class ColorController extends AbstractDao{
 				" AND ISNULL(c." . PRODUCT_SKU . ") " . 				
 				" LIMIT 100";														
         
-		$paramsTypes = array();		
+		$paramTypes = array();		
 		$params = array();
 		
 		return $this->getResults($sql, $params, $paramTypes, "12381232");
@@ -252,7 +252,7 @@ class ColorController extends AbstractDao{
 				" ORDER BY " . COLOR_MAPPING_COLOR .
 				" LIMIT 25";														
         
-		$paramsTypes = array();		
+		$paramTypes = array();		
 		$params = array();
 		
 		return $this->getResults($sql, $params, $paramTypes, "5645432");
@@ -324,7 +324,7 @@ class ColorController extends AbstractDao{
 				" FROM " . COLOR_MAPPING . " p " .				
 				" WHERE " . COLOR_STATUS . " = 2 ";
         
-		$paramsTypes = array();		
+		$paramTypes = array();		
 		$params = array();
 		
 		return $this->getResults($sql, $params, $paramTypes, "342934962");
@@ -349,7 +349,7 @@ class ColorController extends AbstractDao{
 				" WHERE NOT ISNULL(p." . PRODUCT_COLOR_ONE . ") " .
 				" AND NOT ISNULL(p." . PRODUCT_COLOR_TWO . ") ";
         
-		$paramsTypes = array();		
+		$paramTypes = array();		
 		$params = array();
 		
 		return $this->getResults($sql, $params, $paramTypes, "322832");
