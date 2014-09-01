@@ -1,4 +1,7 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
+
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/AbstractDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
@@ -148,6 +151,73 @@ class TagController extends AbstractDao{
         echo "DONE: " . $i . ") " . $result;
         return $result;
 	}
+	
+	public function getPotentialTags(){
+	   $sql = "SELECT ". PRODUCT_NAME. " FROM " . PRODUCTS . " LIMIT 10000";
+	   $results = $this->getResults($sql, array(), array(), "128723424");
+	   $ignore = array("a","is","to","with","and","the","about");
+	   
+	   $potentialTags = array();
+	   
+	   if(is_object($results)){
+		 
+			while($name = $results->fetchOne()){	
+                $words = explode(" ", strtolower($name));
+                
+                for($i=0; $i < count($words); $i++){
+                    if (!in_array(ucfirst($words[$i]),$potentialTags) && 
+                        !in_array($words[$i],$ignore) && 
+                        ctype_alpha($words[$i])){
+                        $potentialTags[] = ucfirst($words[$i]);
+                    }   
+                }                
+			}
+		}
+		
+		sort($potentialTags);
+		
+		for($i=0; $i < count($potentialTags); $i++){
+		  echo $potentialTags[$i] . ",";
+		}	
+		
+		return '';	 
+	}
+	
+	public function populateTagsBasedOnExistingTags(){
+	   $sql = "SELECT DISTINCT ". TAG_STRING. " FROM " . TAGS;
+	   $results = $this->getResults($sql, array(), array(), "2383294");	   	   
+	   
+	   $insertSQL = "INSERT INTO " . TAGS . 
+	           " (" . TAG_STRING . "," .
+                      PRODUCT_SKU . "," .
+                      TAG_COUNT . ", " .
+                      TAG_DATE_ADDED . ", " .
+                      TAG_GROUP_ID . ")" .
+	           "SELECT ?, sku, 1, NOW(), " .
+	           "(SELECT COALESCE((SELECT ".TAG_GROUP_ID." FROM ".TAGS." WHERE ".TAG_STRING." = ? LIMIT 1), 1)), " .
+               " FROM " . PRODUCTS .
+               " WHERE LOWER(".PRODUCT_NAME.") LIKE '%?%' OR LOWER(".PRODUCT_DETAILS.") LIKE '%?%'";
+	   
+	   $insertSTMT = $this->db->prepare($insertSQL, array('text','text','text'), MDB2_PREPARE_MANIP);
+	   
+	   if(is_object($results)){		 
+			while($tag = $results->fetchOne()){	                                    
+                try {                                                
+                    if(DEBUG){
+                        $tagParams = print_r($tag, true);
+            			$this->debug("239847293" ,$insertSTMT . " (" . $tagParams . ")" );
+            		}
+                    
+                    $results = $insertSTMT->execute($tag, $tag, $tag, $tag);
+                } catch (Exception $e) {
+                    echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+                    print_r($results);
+                }                    
+			}
+	   }
+        
+       $insertSQL->free();        		
+	}
 }
 
 
@@ -163,7 +233,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
         
         $tagResults = $tagController->addTag($_POST);
         
+    }else if ($_GET['method'] == 'getpotentialtags'){                                        
+        $tagResults = $tagController->getPotentialTags($_POST);
+        
     }
+
     
     print_r($tagResults);
 }

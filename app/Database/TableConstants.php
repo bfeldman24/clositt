@@ -38,13 +38,14 @@ define("HISTORICAL_DATE","date");
 define('COLORS', 'Colors');
 define('COLORS_COLOR', 'color');
 define('COLORS_PERCENT', 'percent');
-define('HAS_COLOR', 'hascolor');
 
 define('TAGS', 'Tags');
 define('TAG_STRING', 'tag');
+define('TAG_GROUP_ID', 'groupid');
 define('TAG_COUNT', 'count');
 define('TAG_STATUS', 'status');
 define('TAG_APPROVED', 'approved');
+define('TAG_DATE_ADDED', 'dateadded');
 
 define('COLOR_MAPPING', 'ColorMapping');
 define('COLOR_MAPPING_COLOR', 'color');

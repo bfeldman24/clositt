@@ -81,6 +81,23 @@ body{
 .price{
     font-size: 80%;   
 }
+
+#loadingMask{
+    background: none repeat scroll 0 0 rgba(70, 70, 70, 0.8);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;   
+} 
+
+#loadingMask img{
+    height: 50px;
+    left: 48%;
+    position: fixed;
+    top: 48%;
+    width: 50px;   
+}
 </style>
 
 </head>
@@ -120,6 +137,10 @@ body{
     <div id="sample-grid-container"><div id="product-grid"></div></div>
     <a href="#top" id="clear">Clear Results</a>
     <a href="#top" id="gototop">Go To Top</a>    
+</div>
+
+<div id="loadingMask" style="display:none;" >
+    <img src="../../../css/images/loading.gif"/>
 </div>
 
 
@@ -279,6 +300,7 @@ var tagAdmin = {
                    tagTable.append( row );    		                              
                }
                
+               $("#loadingMask").hide();
                $("#tagTable").html(tagTable);
        });   
     },

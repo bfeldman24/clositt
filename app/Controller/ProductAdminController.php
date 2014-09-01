@@ -623,12 +623,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
               	}
             }
         }else if ($_GET['method'] == 'searchunapprovedtags' && isset($_GET['page'])){      
-            if(isset($_POST) && $_POST != null && (isset($_POST['category']) || isset($_POST['tags']))){
+            if(isset($_POST) && (isset($_POST['category']) || isset($_POST['tags']))){
                 
               	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
               	$getOnlyUnapprovedTags = true;          	
               	
-              	if (!$productCrit->isEmpty()){
+              	if (!$productCrit->isEmpty()){              	 
                       $products = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT, $getOnlyUnapprovedTags);                                                      
                       $output = print_r($products, true);
               	}
@@ -636,7 +636,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
         }
     }   
     
-    return $output;  
+    echo $output;  
      
            
 }else{

@@ -369,8 +369,13 @@ class ProductAdminDao extends AbstractDao {
 	    $sql = "INSERT INTO " . TAGS . 
 	           " (" . TAG_STRING . "," .
                       PRODUCT_SKU . "," .
-                      TAG_COUNT . ")" .
-	           " VALUES ( ?, ?, 1 )";	                    	          
+                      TAG_COUNT . ", " .
+                      TAG_DATE_ADDED . ", " .
+                      TAG_GROUP_ID . ")" .
+	           " SELECT  ?, ?, 1, NOW()," .
+	           " (SELECT COALESCE((SELECT ".TAG_GROUP_ID." FROM ".TAGS." WHERE ".TAG_STRING." = ? LIMIT 1), 1))";	 
+	           
+	                              	          
         
         if($this->debug){		    
 			$this->logDebug("2135232" ,$sql );
@@ -382,7 +387,7 @@ class ProductAdminDao extends AbstractDao {
             foreach ($product['tags'] as $tag) {    
                 try {   
                     //print_r($value);                                           
-                    $affectedRows += $stmt->execute(array($tag, $sku));
+                    $affectedRows += $stmt->execute(array($tag, $sku, $tag));
                 } catch (Exception $e) {
                     echo 'Caught exception: ',  $e->getMessage(), "\n\n";
                 }

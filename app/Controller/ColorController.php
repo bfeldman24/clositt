@@ -15,13 +15,11 @@ class ColorController extends AbstractDao{
 		if(isset($colors) && is_array($colors) && count($colors) > 0){	
 			
 			$results = $this->addColorsDao($colors);
-			//$results2 = $this->addHasColorsDao($colors);			
 			
 			if(is_numeric($results) && $results > 0){
 				return "success";
 			}else{
 			     print_r($results);
-			     //print_r($results2);
 			}
 		}
 	
@@ -131,35 +129,6 @@ class ColorController extends AbstractDao{
         
         return $affected;
 	}
-	
-	public function addHasColorsDao($colors){
-	    if(!isset($colors) || !is_array($colors)){
-			$this->logWarning("32522343","Nothing to add!");
-			return false; 
-		}
-	 
-	    $sql = "INSERT INTO " . HAS_COLOR . 
-	           " VALUES (?, NOW())";
-        
-        $stmt = $this->db->prepare($sql);
-        
-        $affected = 0;
-        
-        if ($colors['colors'] != null){
-            foreach ($colors['colors'] as $color => $products) {            
-                foreach ($products as $sku => $percent) {   
-                    try {                
-                        echo " [COLOR: $color] ";
-                        $affected += $stmt->execute(array($sku));
-                    } catch (Exception $e) {
-                        echo 'Caught exception: ',  $e->getMessage(), "\n\n";                        
-                    }
-                }
-            }
-        }
-        
-        return $affected;
-	}
 
 	public function addColorsFromFile($colorFile){
 	    // Get Products from file    
@@ -201,22 +170,7 @@ class ColorController extends AbstractDao{
 		}
 	
 		return $searchResults;
-	}
-	
-	public function getColorsDaoOLD(){			
-		
-		$sql = "SELECT p." . PRODUCT_SKU . ", p." . PRODUCT_IMAGE .				
-				" FROM " . PRODUCTS . " p " .
-				" LEFT JOIN ". HAS_COLOR . " c ON c." . PRODUCT_SKU . " = p." . PRODUCT_SKU .				
-				" WHERE p." . PRODUCT_STATUS . " IN (1,4) " .
-				" AND ISNULL(c." . PRODUCT_SKU . ") " . 				
-				" LIMIT 100";														
-        
-		$paramTypes = array();		
-		$params = array();
-		
-		return $this->getResults($sql, $params, $paramTypes, "12381232");
-	}
+	}	
 	
 	public function getColorsDao(){			
 		
