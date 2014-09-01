@@ -82,6 +82,34 @@ body{
     font-size: 80%;   
 }
 
+#product-grid .outfit{
+    margin: 0;    
+}
+
+#product-grid .picture{
+    height: auto;
+    width: auto;
+}
+
+#product-grid .outfit, .bottom-block, .overlay > .bottom{
+    width: 100px;   
+}
+
+.overlay > .bottom{
+    z-index: 999;   
+}
+
+.overlay > .bottom > .name {
+    font-size: 8pt;
+}
+
+.productActions .btn {
+    border-radius: 3px !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    padding: 1px 5px !important;
+}
+
 #loadingMask{
     background: none repeat scroll 0 0 rgba(70, 70, 70, 0.8);
     height: 100%;
@@ -139,7 +167,7 @@ body{
     <a href="#top" id="gototop">Go To Top</a>    
 </div>
 
-<div id="loadingMask" style="display:none;" >
+<div id="loadingMask">
     <img src="../../../css/images/loading.gif"/>
 </div>
 
@@ -167,17 +195,13 @@ var tagAdmin = {
         var company = $product.attr("company");
         var name = $product.attr("name");        
         
-        var result = confirm("Are you sure that you want to REMOVE the tag ["+tagAdmin.tag+"] from: " + company + " : " + name + "?");
-        
-        if (result) {
-            $.post(window.HOME_ROOT + "spider/removetag", {sku: sku, tag: tagAdmin.tag}, function(data){
-                 Messenger.info(data);                 
-                 
-                 if (data == "success"){
-                      $product.remove();
-                 }
-            });
-        }
+        $.post(window.HOME_ROOT + "spider/removetag", {sku: sku, tag: tagAdmin.tag}, function(data){
+                Messenger.info(data);                 
+                
+                if (data == "success"){
+                    $product.remove();
+                }
+        });        
     },
     
     removePreviousTags: function(e){
@@ -240,9 +264,9 @@ var tagAdmin = {
             searchController.criteria = {};
             searchController.criteria.category = [];
             searchController.criteria.category.push(tagAdmin.tag);
-            searchController.getProducts(searchController.showResults);
+            searchController.getProducts(searchController.showResults);                        
         }
-    },        
+    },            
   
     clear: function(el){
         searchController.clearSearch(el);
@@ -354,7 +378,7 @@ productPresenter.getProductTemplate = function(product){
 	var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
 	   var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'" company="'+company+'" name="'+name+'">';			        html += '<div class="picture"><img data-src="' + image + '" src="../../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
 			html += '<div class="bottom-block">';
-			    html +='<div class="companyName">' + company + '</div>';
+			    //html +='<div class="companyName">' + company + '</div>';
 				html +='<div class="price">' +  tagAdmin.tag + '</div>';
 			html += '</div>';
 			
