@@ -3,21 +3,27 @@
 //ini_set("display_errors", 1);
 
 require_once(dirname(__FILE__) . '/../session.php');
-require_once(dirname(__FILE__) . '/../Database/Dao/AbstractDao.php');
+require_once(dirname(__FILE__) . '/../Database/Dao/TagDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 
-class TagController extends AbstractDao{		
+class TagController{	
+    private $tagDao = null;
+	
+	public function __construct(&$mdb2){
+		$this->tagDao = new TagDao($mdb2);
+	}
+	
 	
 	public function addTag($tag){
 		
 		if(isset($tag) && is_array($tag) && count($tag) == 2){	
 			
-			$updatedTags = $this->tryUpdateTagDao($tag);									
+			$updatedTags = $this->tagDao->tryUpdateTagDao($tag);									
 			
 			if(is_numeric($updatedTags) && $updatedTags > 0){
 				return "success";
 			}else{
-			    $insertedTags = $this->addNewTagDao($tag);	
+			    $insertedTags = $this->tagDao->addNewTagDao($tag);	
 			    
 			    if(is_numeric($insertedTags) && $insertedTags > 0){
 				    return "success";
@@ -32,7 +38,7 @@ class TagController extends AbstractDao{
 	   
 		if(isset($tags) && is_array($tags) && count($tags) > 0){	
 		
-			$results = $this->addTagsDao($tags);			
+			$results = $this->tagDao->addTagsDao($tags);			
 		
 			if(is_numeric($results) && $results > 0){
 				return "success";
@@ -40,87 +46,7 @@ class TagController extends AbstractDao{
 		}
 	
 		return false;
-	}
-	
-	public function tryUpdateTagDao($tag){
-	   if(!isset($tag) || !is_array($tag)){
-			$this->logWarning("128763192","Nothing to add!");
-			return false; 
-		}
-	 
-	    $sql = "UPDATE " . TAGS . 
-	           " SET " . TAG_COUNT  . " = " . TAG_COUNT . " + 1 " . 
-	           " WHERE " . TAG_STRING . " = :tag AND " . PRODUCT_SKU . " = :sku";
-        
-        $stmt = $this->db->prepare($sql, array('text','text'), MDB2_PREPARE_MANIP);
-                
-        try {
-            if($this->debug){
-                $tagParams = print_r($tag, true);
-    			$this->logDebug("127129321" ,$sql . " (" . $tagParams . ")" );
-    		}
-            
-            $affected = $stmt->execute($tag);
-            $stmt->free();
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            print_r($tag);
-        }       
-        
-        if($this->debug){            
-            $a = print_r($affected, true);
-			$this->logDebug("affected update" ,$a);
-		} 
-        
-        return $affected;
-
-	}
-	
-	public function addNewTagDao($tag){
-	    $insertArray = array();
-        $insertArray[] = $_POST['tag'];
-        $insertArray[] = $_POST['sku'];
-        $insertArray[] = 1;
-        
-        $tagArray = array();
-        $tagArray[] = $insertArray;
-        
-        return $this->addTagsDao($tagArray);	     
-	}
-	
-	public function addTagsDao($tags){
-	    if(!isset($tags) || !is_array($tags)){
-			$this->logWarning("12876319","Nothing to add!");
-			return false; 
-		}
-	 
-	    $sql = "INSERT INTO " . TAGS . 
-	           " VALUES (?, ?, ?)";	           	           
-        
-        $stmt = $this->db->prepare($sql, array('text','text','integer'), MDB2_PREPARE_MANIP);
-        
-        foreach ($tags as $tag) {            
-            try {                                                
-                if($this->debug){
-                    $tagParams = print_r($tag, true);
-        			$this->logDebug("12712931" ,$sql . " (" . $tagParams . ")" );
-        		}
-                
-                $results = $stmt->execute($tag);
-                $stmt->free();
-            } catch (Exception $e) {
-                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-                print_r($row);
-            }
-        }
-        
-        if($this->debug){        
-            $r = print_r($results, true);    
-			$this->logDebug("affected results" ,$r);
-		} 
-        
-        return $results;
-	}
+	}						
 	
 	public function addTagsFromFile($tagFile){
 	    // Get Tags from file    
@@ -152,9 +78,8 @@ class TagController extends AbstractDao{
         return $result;
 	}
 	
-	public function getPotentialTags(){
-	   $sql = "SELECT ". PRODUCT_NAME. " FROM " . PRODUCTS . " LIMIT 10000";
-	   $results = $this->getResults($sql, array(), array(), "128723424");
+	public function getPotentialTags(){	   
+	   $results = $this->tagDao->getPotentialTags();
 	   $ignore = array("a","is","to","with","and","the","about");
 	   
 	   $potentialTags = array();
@@ -218,26 +143,79 @@ class TagController extends AbstractDao{
         
        $insertSQL->free();        		
 	}
+	
+	public function getUniqueTags(){	   
+	    $tags = array();	    			      
+		$results = $this->tagDao->getUniqueTags(); 
+		
+		if(is_object($results)){
+		 
+			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){				    
+				$tags[] = stripslashes($row[TAG_STRING]);
+			}
+		}
+	
+		return json_encode($tags);
+	}
+	
+	public function removeTag($criteria){
+	   if (!isset($criteria) || !isset($criteria['sku']) || strlen($criteria['sku']) < 3 || !isset($criteria['tag']) || strlen($criteria['tag']) < 3){
+	       return "Missing info. Can't proceed";   
+	   }  
+	   
+	   $criteria['skus'] = array($criteria['sku']);
+	   return $this->removeTags($criteria);
+	}
+	
+	public function removeTags($criteria){
+	   if (!isset($criteria) || !isset($criteria['skus']) || !is_array($criteria['skus']) || !isset($criteria['tag']) || strlen($criteria['tag']) < 3){
+	       return "Missing info. Can't proceed";   
+	   }  
+	   
+	   $affectedRows = $this->tagDao->removeTags($criteria['skus'], $criteria['tag']); 
+	   return $affectedRows > 0 ? "success" : "failed";
+	}
+	
+	public function approveTags($criteria){
+	   if (!isset($criteria) || !isset($criteria['skus']) || !is_array($criteria['skus']) || !isset($criteria['tag']) || strlen($criteria['tag']) < 3){
+	       return "Missing info. Can't proceed";   
+	   }  
+	   
+	   $affectedRows = $this->tagDao->approveTags($criteria['skus'], $criteria['tag']); 
+	   return $affectedRows > 0 ? "success" : "failed";
+	}	
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $tagController = new TagController($mdb2);                  
     
-    if ($_GET['method'] == 'addFromFile'){
-         $tagResults = $tagController->addTagsFromFile("../Data/clothies-tags-export.json");
-    
-    }else if ($_GET['method'] == 'add' && isset($_POST['tag']) && isset($_POST['sku'])){                        
-        $_POST['tag'] = ucwords(strtolower($_POST['tag']));
-        $_POST['tag'] = preg_replace('/\s+/', '', $_POST['tag']);
-        
-        $tagResults = $tagController->addTag($_POST);
-        
-    }else if ($_GET['method'] == 'getpotentialtags'){                                        
-        $tagResults = $tagController->getPotentialTags($_POST);
-        
-    }
-
+    switch($_GET['method']){
+        case 'addFromFile':   
+            $tagResults = $tagController->addTagsFromFile("../Data/clothies-tags-export.json");
+            break;
+        case 'add':   
+            $_POST['tag'] = ucwords(strtolower($_POST['tag']));
+            $_POST['tag'] = preg_replace('/\s+/', '', $_POST['tag']);
+            
+            $tagResults = $tagController->addTag($_POST);
+            break;
+        case 'getpotentialtags':   
+            $tagResults = $tagController->getPotentialTags($_POST);
+            break;
+        case 'getuniquetags':
+            $tagResults = $tagController->getUniqueTags();    
+            break;
+        case 'removetag':
+            $tagResults = $tagController->removeTag($_POST);   
+            break;             
+        case 'removetags':
+            $tagResults = $tagController->removeTags($_POST);   
+            break;         
+        case 'approvetags':
+            $tagResults = $tagController->approveTags($_POST);   
+            break;  
+    }        
     
     print_r($tagResults);
 }

@@ -373,9 +373,7 @@ class ProductAdminDao extends AbstractDao {
                       TAG_DATE_ADDED . ", " .
                       TAG_GROUP_ID . ")" .
 	           " SELECT  ?, ?, 1, NOW()," .
-	           " (SELECT COALESCE((SELECT ".TAG_GROUP_ID." FROM ".TAGS." WHERE ".TAG_STRING." = ? LIMIT 1), 1))";	 
-	           
-	                              	          
+	           " (SELECT COALESCE((SELECT ".TAG_GROUP_ID." FROM ".TAGS." WHERE ".TAG_STRING." = ? LIMIT 1), 1))";
         
         if($this->debug){		    
 			$this->logDebug("2135232" ,$sql );
@@ -761,102 +759,7 @@ class ProductAdminDao extends AbstractDao {
         }                        
         
         return $totalAffectedRows;
-	}
-	
-	public function removeTags($skus, $tag){
-	   if (!isset($skus) || $skus == null || !is_array($skus) || count($skus) <= 0 || $tag == null){
-	       return -1;   
-	   }
-	   
-	   $sql = "UPDATE " . TAGS .       	  
-              " SET " . TAG_STATUS . " = 2 ," .
-                        TAG_APPROVED . " = 1 " . 
-              " WHERE " . TAG_STRING . " = ? ";
-                            
-       if($this->debug){		    
-			$this->logDebug("92864192401" ,$sql . " { $sku , $tag } ");
-		}
-        
-        $params = array($tag);
-        $paramTypes = array('text'); 
-        $skuPlaceholders = '';               
-        
-        foreach ($skus as $sku) {    
-            try {   
-                $params[] = $sku;
-                $paramTypes[] = 'text';  
-                
-                if ($skuPlaceholders != ''){
-                    $skuPlaceholders .= ",";   
-                }
-                
-                $skuPlaceholders .= "?";
-                      
-            } catch (Exception $e) {
-                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            }
-        }
-        
-        $sql .= " AND " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")"; 
-
-        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-        $affectedRows = 0;
-                 
-        try {                              
-            $affectedRows = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-        }     
-        
-        return $affectedRows;
-	}
-	
-	public function approveTags($skus, $tag){
-	   if (!isset($skus) || $skus == null || !is_array($skus) || count($skus) <= 0 || $tag == null){
-	       return -1;   
-	   }
-	   
-	   $sql = "UPDATE " . TAGS .       	  
-              " SET " . TAG_APPROVED . " = 1 " . 
-              " WHERE " . TAG_STRING . " = ? ";
-                            
-       if($this->debug){
-			$this->logDebug("238479232" ,$sql . " { $sku , $tag } ");
-		}
-        
-        $params = array($tag);
-        $paramTypes = array('text'); 
-        $skuPlaceholders = '';               
-        
-        foreach ($skus as $sku) {    
-            try {   
-                $params[] = $sku;
-                $paramTypes[] = 'text';  
-                
-                if ($skuPlaceholders != ''){
-                    $skuPlaceholders .= ",";   
-                }
-                
-                $skuPlaceholders .= "?";
-                      
-            } catch (Exception $e) {
-                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            }
-        }
-        
-        $sql .= " AND " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")";       
-        
-        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-        $affectedRows = 0;
-                 
-        try {                              
-            $affectedRows = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-        }     
-        
-        return $affectedRows;
-	}
+	}		
 	
 	public function getStoreProductCount($getOnlyLiveProducts){   
 	    $statuses = '';

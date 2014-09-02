@@ -174,7 +174,6 @@ body{
 
 <?php echo CLOSITT_JS; ?>
 <script type="text/javascript">
-	
 
 var tagAdmin = {
     tag: null,
@@ -195,7 +194,7 @@ var tagAdmin = {
         var company = $product.attr("company");
         var name = $product.attr("name");        
         
-        $.post(window.HOME_ROOT + "spider/removetag", {sku: sku, tag: tagAdmin.tag}, function(data){
+        $.post(window.HOME_ROOT + "t/removetag", {sku: sku, tag: tagAdmin.tag}, function(data){
                 Messenger.info(data);                 
                 
                 if (data == "success"){
@@ -213,16 +212,20 @@ var tagAdmin = {
             skus.push($(this).attr("pid"));    
         });           
         
-        var result = confirm("Are you sure that you want to REMOVE the tag ["+tagAdmin.tag+"] for this product and all of the previous ones?");
+        var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
+        var result = false; 
         
-        if (result) {
-            $.post(window.HOME_ROOT + "spider/removetags", {skus: skus, tag: tagAdmin.tag}, function(data){
+        if (!skipConfirmation){
+            result = confirm("Are you sure that you want to REMOVE the tag ["+tagAdmin.tag+"] for this product and all of the previous ones? \n(If you do not want to see this message again shift click next time)");
+        }
+        
+        if (skipConfirmation || result) {
+            $.post(window.HOME_ROOT + "t/removetags", {skus: skus, tag: tagAdmin.tag}, function(data){
                  Messenger.info(data);                 
                  
                  if (data == "success"){                    
                     $product.prevAll().remove();
-                    $product.remove();  
-                    location.hash = "sample-grid-container";                  
+                    $product.remove();               
                  }
             });
         } 
@@ -237,16 +240,20 @@ var tagAdmin = {
             skus.push($(this).attr("pid"));    
         });           
         
-        var result = confirm("Are you sure that you want to APPROVE the tag ["+tagAdmin.tag+"] for this product and all of the previous ones?");
+        var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
+        var result = false; 
         
-        if (result) {
-            $.post(window.HOME_ROOT + "spider/approvetags", {skus: skus, tag: tagAdmin.tag}, function(data){
+        if (!skipConfirmation){
+            result = confirm("Are you sure that you want to APPROVE the tag ["+tagAdmin.tag+"] for this product and all of the previous ones? \n(If you do not want to see this message again shift click next time)");
+        }
+        
+        if (skipConfirmation || result) {
+            $.post(window.HOME_ROOT + "t/approvetags", {skus: skus, tag: tagAdmin.tag}, function(data){
                  Messenger.info(data);                 
                  
                  if (data == "success"){                    
                     $product.prevAll().remove();
-                    $product.remove();  
-                    location.hash = "sample-grid-container";                  
+                    $product.remove();                
                  }
             });
         }
@@ -277,7 +284,7 @@ var tagAdmin = {
     },
     
     getTags: function(){
-        $.get(window.HOME_ROOT + "spider/getuniquetags", function(data){
+        $.post(window.HOME_ROOT + "t/getuniquetags", function(data){
    	          searchController.clearSearch();
               searchController.isSearchActive = true;    
               
@@ -407,16 +414,12 @@ productPresenter.getProductTemplate = function(product){
 
 $(document).ready(function() {  
     Messenger.init();  
-    firebase.init();
     pagePresenter.init();
-	productPagePresenter.init();
 	gridPresenter.init();
 	productPresenter.init();	
-	filterPresenter.init();	
 	tagPresenter.init();
 	searchController.init();	
 	reviewsPresenter.init();		
-	colorPresenter.init();		
 	tagAdmin.init();
 	
 	// Overrides:

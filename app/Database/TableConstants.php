@@ -45,7 +45,9 @@ define('TAG_GROUP_ID', 'groupid');
 define('TAG_COUNT', 'count');
 define('TAG_STATUS', 'status');
 define('TAG_APPROVED', 'approved');
+define('TAG_DATE_APPROVED', 'dateapproved');
 define('TAG_DATE_ADDED', 'dateadded');
+
 
 define('COLOR_MAPPING', 'ColorMapping');
 define('COLOR_MAPPING_COLOR', 'color');

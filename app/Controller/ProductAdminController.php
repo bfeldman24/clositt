@@ -339,48 +339,7 @@ class ProductAdminController extends Debugger {
 		}		
 	
 		return json_encode($searchResults);
-	}
-	
-	public function getUniqueTags(){	   
-	    $tags = array();	    			      
-		$results = $this->productAdminDao->getUniqueTags(); 
-		
-		if(is_object($results)){
-		 
-			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){				    
-				$tags[] = stripslashes($row[TAG_STRING]);
-			}
-		}
-	
-		return json_encode($tags);
-	}
-	
-	public function removeTag($criteria){
-	   if (!isset($criteria) || !isset($criteria['sku']) || strlen($criteria['sku']) < 3 || !isset($criteria['tag']) || strlen($criteria['tag']) < 3){
-	       return "Missing info. Can't proceed";   
-	   }  
-	   
-	   $criteria['skus'] = array($criteria['sku']);
-	   return $this->removeTags($criteria);
-	}
-	
-	public function removeTags($criteria){
-	   if (!isset($criteria) || !isset($criteria['skus']) || !is_array($criteria['skus']) || !isset($criteria['tag']) || strlen($criteria['tag']) < 3){
-	       return "Missing info. Can't proceed";   
-	   }  
-	   
-	   $affectedRows = $this->productAdminDao->removeTags($criteria['skus'], $criteria['tag']); 
-	   return $affectedRows > 0 ? "success" : "failed";
-	}
-	
-	public function approveTags($criteria){
-	   if (!isset($criteria) || !isset($criteria['skus']) || !is_array($criteria['skus']) || !isset($criteria['tag']) || strlen($criteria['tag']) < 3){
-	       return "Missing info. Can't proceed";   
-	   }  
-	   
-	   $affectedRows = $this->productAdminDao->approveTags($criteria['skus'], $criteria['tag']); 
-	   return $affectedRows > 0 ? "success" : "failed";
-	}
+	}			
 	
 	public function deleteUnwantedProducts(){
 	   return $this->productAdminDao->deleteUnwantedProducts();
@@ -588,19 +547,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
             
         case 'removelink':
             $output = $productAdminController->removeSpiderLink($_POST);  
-            break;  
-        
-        case 'removetag':
-            $output = $productAdminController->removeTag($_POST);   
-            break; 
-            
-        case 'removetags':
-            $output = $productAdminController->removeTags($_POST);   
-            break; 
-        
-        case 'approvetags':
-            $output = $productAdminController->approveTags($_POST);   
-            break;     
+            break;                     
         
         case 'getnextproductdetailurls':
             $output = print_r($productAdminController->getNextProductDetailUrls($_POST['stores'], $_GET['page']), true);    
@@ -670,11 +617,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
         
         case 'removeuncategorized':
             echo $productAdminController->removeUncategorizedProducts();  
-            break;  
-        
-        case 'getuniquetags':
-            echo $productAdminController->getUniqueTags();    
-            break;
+            break;                  
         
         case 'getproductdetailstatus':
             echo $productAdminController->getProductDetailCount();  
