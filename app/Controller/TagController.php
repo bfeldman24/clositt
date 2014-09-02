@@ -190,32 +190,37 @@ class TagController{
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $tagController = new TagController($mdb2);                  
     
-    switch($_GET['method']){
-        case 'addFromFile':   
-            $tagResults = $tagController->addTagsFromFile("../Data/clothies-tags-export.json");
-            break;
-        case 'add':   
-            $_POST['tag'] = ucwords(strtolower($_POST['tag']));
-            $_POST['tag'] = preg_replace('/\s+/', '', $_POST['tag']);
-            
-            $tagResults = $tagController->addTag($_POST);
-            break;
-        case 'getpotentialtags':   
-            $tagResults = $tagController->getPotentialTags($_POST);
-            break;
-        case 'getuniquetags':
-            $tagResults = $tagController->getUniqueTags();    
-            break;
-        case 'removetag':
-            $tagResults = $tagController->removeTag($_POST);   
-            break;             
-        case 'removetags':
-            $tagResults = $tagController->removeTags($_POST);   
-            break;         
-        case 'approvetags':
-            $tagResults = $tagController->approveTags($_POST);   
-            break;  
-    }        
+    if(DEBUG){
+        switch($_GET['method']){
+            case 'addFromFile':   
+                $tagResults = $tagController->addTagsFromFile("../Data/clothies-tags-export.json");
+                break;        
+            case 'getpotentialtags':   
+                $tagResults = $tagController->getPotentialTags($_POST);
+                break;
+            case 'getuniquetags':
+                $tagResults = $tagController->getUniqueTags();    
+                break;
+            case 'removetag':
+                $tagResults = $tagController->removeTag($_POST);   
+                break;             
+            case 'removetags':
+                $tagResults = $tagController->removeTags($_POST);   
+                break;         
+            case 'approvetags':
+                $tagResults = $tagController->approveTags($_POST);   
+                break;  
+        }       
+    }else{
+        switch($_GET['method']){
+           case 'add':   
+               $_POST['tag'] = ucwords(strtolower($_POST['tag']));
+               $_POST['tag'] = preg_replace('/\s+/', '', $_POST['tag']);
+               
+               $tagResults = $tagController->addTag($_POST);
+               break;        
+       }   
+    } 
     
     print_r($tagResults);
 }
