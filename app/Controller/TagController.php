@@ -151,7 +151,7 @@ class TagController{
 		if(is_object($results)){
 		 
 			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){				    
-				$tags[] = stripslashes($row[TAG_STRING]);
+				$tags[stripslashes($row[TAG_STRING])] = array("unapproved" => $row["unapproved"], "approved" => $row[TAG_APPROVED]);
 			}
 		}
 	

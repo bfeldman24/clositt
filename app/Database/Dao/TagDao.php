@@ -6,13 +6,15 @@ require_once(dirname(__FILE__) . '/AbstractDao.php');
 
 class TagDao extends AbstractDao {             	
 	
-	public function getUniqueTags(){
-	   $sql = "SELECT DISTINCT " . TAG_STRING . 
-				" FROM " . TAGS . " t " .
-				" LEFT JOIN " . PRODUCTS . " p ON p." . PRODUCT_SKU . " = t." . PRODUCT_SKU .
-				" WHERE " . TAG_APPROVED . " = 0 " .
-				" AND p." . PRODUCT_STATUS . " = 1 " . 			
-				" ORDER BY " . TAG_STRING;
+	public function getUniqueTags(){								
+		$sql = "SELECT " . TAG_STRING . ", " .
+                " COUNT(CASE WHEN t." . TAG_APPROVED . " <> 1 THEN 1 END) unapproved, " .
+                " COUNT(CASE WHEN t." .TAG_APPROVED . " = 1 THEN 1 END) " . TAG_APPROVED .
+                " FROM ". TAGS . " t " .
+                " LEFT JOIN " . PRODUCTS . " p ON p." . PRODUCT_SKU . " = t." . PRODUCT_SKU .
+                " WHERE p.".PRODUCT_STATUS." = 1 " .
+                " GROUP BY ". TAG_STRING .
+                " ORDER BY ". TAG_STRING;
         
 		$paramTypes = array();		
 		$params = array();		

@@ -65,7 +65,7 @@ body{
     height: auto;
 }
 
-.approvePrevious, .remove, .removePrevious{
+.approvePrevious, .remove, .removePrevious, .approveTag{
     margin-bottom: 5px;   
 }
 
@@ -126,6 +126,11 @@ body{
     top: 48%;
     width: 50px;   
 }
+
+.approved{
+    color: #AAA;
+    margin: 0 10px 0 20px;
+}
 </style>
 
 </head>
@@ -162,7 +167,10 @@ body{
     <hr>
     
     <div id="main-workspace" style="display:none;"></div>    
-    <div id="sample-grid-container"><div id="product-grid"></div></div>
+    <div id="sample-grid-container">
+        <div id="product-grid"></div>
+        <div id="productSpinner" style="display:none;"><img src="../../../css/images/loading.gif"/></div>
+    </div>
     <a href="#top" id="clear">Clear Results</a>
     <a href="#top" id="gototop">Go To Top</a>    
 </div>
@@ -183,7 +191,8 @@ var tagAdmin = {
         $(document).on("change","#tagTable input:radio", tagAdmin.tagClicked);
         $(document).on("click", ".remove", tagAdmin.removeTag);
         $(document).on("click", ".removePrevious", tagAdmin.removePreviousTags);        
-        $(document).on("click", ".approvePrevious", tagAdmin.approvePrevious);
+        $(document).on("click", ".approveTag", tagAdmin.approveTag);
+        $(document).on("click", ".approvePrevious", tagAdmin.approvePrevious);                
         $(document).on("click",".tag-options label",tagAdmin.changeTagOptions);
         tagAdmin.getTags();
     },
@@ -259,8 +268,25 @@ var tagAdmin = {
         }
     },
     
+    approveTag: function(e){
+        var $product = $(e.currentTarget).parents(".outfit");        
+        var skus = [];        
+        skus.push($product.attr("pid"));                         
+        
+        var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
+        
+        $.post(window.HOME_ROOT + "t/approvetags", {skus: skus, tag: tagAdmin.tag}, function(data){
+            Messenger.info(data);                 
+            
+            if (data == "success"){                    
+                $product.remove();                
+            }
+        });        
+    },
+    
     tagClicked: function(e){
-        searchController.clearSearch();
+        $("#productSpinner").show();
+        tagAdmin.clearResults();
         searchController.isSearchActive = true;    
         gridPresenter.maxNumberOfPagesLoadingAtOnce = 1;
      
@@ -271,13 +297,23 @@ var tagAdmin = {
             searchController.criteria = {};
             searchController.criteria.category = [];
             searchController.criteria.category.push(tagAdmin.tag);
-            searchController.getProducts(searchController.showResults);                        
+            searchController.getProducts(searchController.showResults);
+            $("#productSpinner").hide();     
         }
-    },            
+    },  
+    
+    clearResults: function(){
+        gridPresenter.endTask();     	      	
+	 	productPresenter.filterStore = null;	
+	 	searchController.criteria = null;
+	 	productPresenter.productIndex = 0;
+        searchController.pageIndex = 0;
+        gridPresenter.productIndex = 0; 	 		 	
+        searchController.isSearchActive = false; 
+        $("#product-grid").html("");   
+    },          
   
-    clear: function(el){
-        searchController.clearSearch(el);
-        searchController.isSearchActive = true;    
+    clear: function(el){        
         gridPresenter.maxNumberOfPagesLoadingAtOnce = -1; 
         tagAdmin.tag = null;
         $("#tagTable input").prop("checked",false);           
@@ -285,24 +321,30 @@ var tagAdmin = {
     
     getTags: function(){
         $.post(window.HOME_ROOT + "t/getuniquetags", function(data){
-   	          searchController.clearSearch();
-              searchController.isSearchActive = true;    
+   	          tagAdmin.clearResults();
+   	          tagAdmin.clear();   
               
               var tags = JSON.parse(data);
+              var tagsLength = Object.keys(tags).length;
               var table = [];  
               var colNum = 5;        
-              var numRows = Math.ceil(tags.length / colNum);            
+              var numRows = Math.ceil(tagsLength / colNum);            
    	          var i = 0;        
    
               for(var c=0; c < colNum; c++){
                      for(var r = 0; r < numRows; r++){
-     			          if (i >= tags.length){ break; }
+     			          if (i >= tagsLength){ break; }
      
      			          if (table[r] == null){
                                table[r] = [];
                      	  }	
+                     	                       	  
+                          table[r][c] = [];                     	  
      
-     			          table[r][c] = tags[i++]; 
+                          var tag = Object.keys(tags)[i++];                          
+     			          table[r][c]['tag'] = tag;
+     			          table[r][c]['approved'] = parseInt(tags[tag]["approved"]);
+     			          table[r][c]['total'] = parseInt(tags[tag]["approved"]) + parseInt(tags[tag]["unapproved"]);
      		        }
      		
      		        if (i >= tags.length){ break; }
@@ -321,10 +363,13 @@ var tagAdmin = {
                                    .attr("type","radio")
                                    .attr("class","tagCheckbox")
                                    .attr("name","tags")
-                                   .attr("value",table[r][c])                                                                
+                                   .attr("value",table[r][c].tag)                                                                
                            ).append(
-                               $("<span>").text(table[r][c])
+                               $("<span>").addClass("tagname").text(table[r][c].tag)
+                           ).append(
+                               $("<span>").addClass("approved").attr("title","Approved / Total").text("(" + table[r][c].approved + "/" + table[r][c].total + ")")
                            )
+                           
                        )
                    }
                    
@@ -394,10 +439,11 @@ productPresenter.getProductTemplate = function(product){
 			    html +='<div class="bottom">';
 
                     if(category !=undefined){
-                        html += '<div class="productActions" >';
-                        html += '<div class="approvePrevious btn btn-info">Approve All Previous</div>';
-                        html += '<div class="remove btn btn-warning">Remove Tag</div>';
-                        html += '<div class="removePrevious btn btn-danger">Remove All Previous</div>';
+                        html += '<div class="productActions" >';                        
+                            html += '<div class="approveTag btn btn-info">Approve Tag</div>';
+                            html += '<div class="approvePrevious btn btn-info">Approve All Previous</div>';
+                            html += '<div class="remove btn btn-warning">Remove Tag</div>';
+                            html += '<div class="removePrevious btn btn-danger">Remove All Previous</div>';
                         html += '</div>';
                     }
 
