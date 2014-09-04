@@ -178,6 +178,23 @@ class UserController extends Debugger {
         return "failed";
 	}	
 	
+	public function resetPassword($email){
+       $newPass = uniqid();
+       $newPass = substr($newPass,0, 5) . "b" . substr($newPass,5);
+
+       $user = new UserEntity();
+       $user->setEmail($email);              
+       $user->setSecurePassword($newPass);
+       
+       $success = $this->userDao->forceUpdateUserPassword($user);
+       
+       if ($success > 0){
+           return EmailController::sendPasswordResetEmail($email, $newPass);	           
+       }
+       
+       return "failed";
+	}
+	
 	public function getUserInfo(){ 
         $userResult = $this->userDao->getUserInfo($_SESSION['userid']);
         $userEntity = array();
@@ -236,7 +253,10 @@ if (isset($_GET['method']) && $_GET['class'] == "user"){
             break;
         case 'updatepass':            
             echo $userController->updateUserPassword($_POST);
-            break;                
+            break;
+        case 'resetpass':            
+            echo $userController->resetPassword($_POST['email']);
+            break;                   
         case 'get':            
             echo $userController->getUserInfo();
             break;

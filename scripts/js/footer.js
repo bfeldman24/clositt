@@ -12,14 +12,11 @@ $(".feedback .feedback-submit-btn").on("click",function(e){
 	var message = feedbackTextArea.val().trim();
 	
 	if(message.length > 0){
-	    var feedback = { e: session.email, n: session.username, i: session.userid, s: "CLOSITT FEEDBACK", m: message };
+	    var feedback = {t: "feedback", e: session.email, n: session.username, i: session.userid, s: "CLOSITT FEEDBACK", m: message };
 	   
 		$.post(window.HOME_ROOT + "app/email.php", feedback, function(data) {
 			if(data == "success"){
 				Messenger.success("Thanks for your feedback!");
-
-				delete feedback.s;
-				firebase.$.child("feedback").push(feedback);
 				feedbackTextArea.val("");				
 			}else{
 				Messenger.error("There was a problem sending your feedback. Please try again.");	
@@ -159,18 +156,16 @@ $("#resetPassButton").on("click", function(e){
     
     if (email != null && email.indexOf("@") > 0){
         $("#forgotPassModal").modal('hide');
-        
-        firebase.authClient.sendPasswordResetEmail(email, function(error, success) {
-            
-            
-          if (error) {
-                Messenger.error("Sorry. There was an error sending you a reset password email!");                
-                Messenger.error("Please contact us to reset your password.");
-          }else{
-                Messenger.success('We just sent you an email to reset your password.');
+        	  
+		$.post(window.HOME_ROOT + "u/resetpass", {email: email}, function(data) {
+			if(data == "success"){
+				Messenger.success('We just sent you an email to reset your password.');
                 Messenger.success('Please check that email and follow its instructions. Thanks!');
-          }
-        });
+			}else{
+				Messenger.error("Sorry. There was an error sending you a reset password email!");                
+                Messenger.error("Please contact us to reset your password.");
+			}			
+		});
     }else{
         Messenger.error("Please enter a valid email address!");
     }

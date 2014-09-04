@@ -5,6 +5,7 @@ require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
 require_once(dirname(__FILE__) . '/../View/ProductTemplate.php');
 require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
+require_once(dirname(__FILE__) . '/ListController.php');
 
 class ProductController {	
 	private $productDao = null;
@@ -219,6 +220,10 @@ class ProductController {
 				ProductEntity::setProductFromElastic($productEntity, $hit);
 				$products[] = $productEntity->toArray();
 			}
+		}
+		
+		if ($pageNumber == 0){
+		  ListController::writeToFile("searchTerms",$criteria->getSearchString());
 		}
 
         $facets = $results['facets'];

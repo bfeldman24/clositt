@@ -54,7 +54,9 @@ var Feedback = {
 			     
     		      $("#feedback").append(
     		          $("<li>").html(user + comment.child("m").val())    		          
-    		      );				
+    		      );	
+    		      
+    		      console.log(comment.child("m").val()+","+comment.child("e").val());			
     		});	
     		
     		$("#loadingMask").remove();

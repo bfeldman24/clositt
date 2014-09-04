@@ -34,10 +34,14 @@ var session = {
      			     session.email = user.e;
      			     session.isLoggedIn = true; 			     
      			     session.loggedInCallback(); 
-	               }         
+	               }      
 	          }catch(e){
-	               Messenger.error("The username/password were incorrect! Please try again."); 	
+	               Messenger.error("The username/password were incorrect! Please try again."); 		               
  			  }	
+ 			  
+ 			  if (!session.isLoggedIn){
+ 			        $("#signupModalLoginButton").removeClass("disabled").text("Login"); 
+ 			  }
 		});				                           	
 	},
 	
