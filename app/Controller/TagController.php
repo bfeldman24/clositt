@@ -187,7 +187,7 @@ class TagController{
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['class'] == "tags"){
     $tagController = new TagController($mdb2);                  
     
     if(DEBUG){

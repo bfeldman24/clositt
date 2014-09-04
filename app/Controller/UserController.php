@@ -218,7 +218,7 @@ class UserController extends Debugger {
 }
 
 
-if (isset($_GET['method'])){
+if (isset($_GET['method']) && $_GET['class'] == "user"){
     $userController = new UserController($mdb2);             
     
     switch($_GET['method']){

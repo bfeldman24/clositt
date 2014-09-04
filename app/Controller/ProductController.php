@@ -229,7 +229,7 @@ class ProductController {
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['class'] == "products"){
     $productController = new ProductController($mdb2);              
     
     if ($_GET['method'] == 'lookup' && isset($_POST['sku'])){

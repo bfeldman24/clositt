@@ -10,34 +10,34 @@ RewriteRule ^@/(.*)$ clositt.php?user=$1
 RewriteRule ^!/([a-z0-9\-]*)$ product-page.php?s=$1
 
 # API
-RewriteRule ^p/([a-z0-9]*)$ app/Controller/ProductController.php?method=$1
-RewriteRule ^p/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?method=$1&page=$2
+RewriteRule ^p/([a-z0-9]*)$ app/Controller/ProductController.php?class=products&method=$1
+RewriteRule ^p/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?class=products&method=$1&page=$2
 
     #Filter Data
-RewriteRule ^s/filters$ app/Controller/FilterController.php?method=getfilters
+RewriteRule ^s/filters$ app/Controller/FilterController.php?class=filters&method=getfilters
 
     #Browse
-RewriteRule ^b/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?method=browse&customer=$1&page=$2
+RewriteRule ^b/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?class=products&method=browse&customer=$1&page=$2
 
     #Tags
-RewriteRule ^t/([a-z0-9]*)$ app/Controller/TagController.php?method=$1
+RewriteRule ^t/([a-z0-9]*)$ app/Controller/TagController.php?class=tags&method=$1
 
     #Colors
-RewriteRule ^c/([a-z0-9]*)$ app/Controller/ColorController.php?method=$1
+RewriteRule ^c/([a-z0-9]*)$ app/Controller/ColorController.php?class=color&method=$1
 
     #Closet
-RewriteRule ^cl/([a-z]*)$ app/Controller/ClosetController.php?method=$1 
+RewriteRule ^cl/([a-z]*)$ app/Controller/ClosetController.php?class=closet&method=$1 
 
     #User
-RewriteRule ^u/([a-z]*)$ app/Controller/UserController.php?method=$1 
+RewriteRule ^u/([a-z]*)$ app/Controller/UserController.php?class=user&method=$1 
 
     #Reviews
-RewriteRule ^r/([a-z]*)$ app/Controller/ReviewController.php?method=$1 
+RewriteRule ^r/([a-z]*)$ app/Controller/ReviewController.php?class=review&method=$1 
 
 
 # ADMIN API
-RewriteRule ^spider/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1
-RewriteRule ^spider/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1&page=$2
+RewriteRule ^spider/([a-z0-9]*)$ app/Controller/ProductAdminController.php?class=admin&method=$1
+RewriteRule ^spider/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductAdminController.php?class=admin&method=$1&page=$2
 RewriteRule ^notify$ scripts/admin/php/notify.php
 Redirect /admin /scripts/admin/
 Redirect /admin/spider /scripts/admin/php/productSpider.php

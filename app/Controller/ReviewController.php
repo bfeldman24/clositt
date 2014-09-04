@@ -6,6 +6,7 @@ require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ReviewDao.php');
 require_once(dirname(__FILE__) . '/../Model/ReviewEntity.php');
 require_once(dirname(__FILE__) . '/ProductController.php');
+require_once(dirname(__FILE__) . '/ListController.php');
 
 class ReviewController{	
     private $reviewDao = null;
@@ -97,7 +98,7 @@ class ReviewController{
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['class'] == "review"){
     $reviewController = new ReviewController($mdb2);                  
     
     

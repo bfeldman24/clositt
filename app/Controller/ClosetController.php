@@ -153,7 +153,7 @@ class ClosetController extends Debugger {
 }
 
 
-if (isset($_GET['method'])){
+if (isset($_GET['method']) && $_GET['class'] == "closet"){
     $closetController = new ClosetController($mdb2);             
     
     switch($_GET['method']){
