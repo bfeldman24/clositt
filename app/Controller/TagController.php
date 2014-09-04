@@ -211,16 +211,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $tagResults = $tagController->approveTags($_POST);   
                 break;  
         }       
-    }else{
-        switch($_GET['method']){
-           case 'add':   
-               $_POST['tag'] = ucwords(strtolower($_POST['tag']));
-               $_POST['tag'] = preg_replace('/\s+/', '', $_POST['tag']);
-               
-               $tagResults = $tagController->addTag($_POST);
-               break;        
-       }   
-    } 
+    }
+    
+    switch($_GET['method']){
+        case 'add':   
+            $_POST['tag'] = ucwords(strtolower($_POST['tag']));
+            $_POST['tag'] = preg_replace('/\s+/', '', $_POST['tag']);
+            
+            $tagResults = $tagController->addTag($_POST);
+            break;        
+    }        
     
     print_r($tagResults);
 }

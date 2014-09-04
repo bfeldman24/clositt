@@ -31,6 +31,9 @@ RewriteRule ^cl/([a-z]*)$ app/Controller/ClosetController.php?method=$1
     #User
 RewriteRule ^u/([a-z]*)$ app/Controller/UserController.php?method=$1 
 
+    #Reviews
+RewriteRule ^r/([a-z]*)$ app/Controller/ReviewController.php?method=$1 
+
 
 # ADMIN API
 RewriteRule ^spider/([a-z0-9]*)$ app/Controller/ProductAdminController.php?method=$1

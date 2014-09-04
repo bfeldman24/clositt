@@ -4,13 +4,15 @@ require_once(dirname(__FILE__) . '/../Model/ClosetEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ClosetItemEntity.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ClosetDao.php');
 require_once(dirname(__FILE__) . '/Debugger.php');
-
+require_once(dirname(__FILE__) . '/ProductController.php');
 
 class ClosetController extends Debugger {	
 	private $closetDao = null;
+	private $productController = null;
 
 	public function __construct(&$mdb2){
 		$this->closetDao = new ClosetDao($mdb2);
+		$this->productController = new ProductController($mdb2);
 	}
 	
 	public function createNewCloset($data){
@@ -77,6 +79,11 @@ class ClosetController extends Debugger {
                 
                 if ($user == $_SESSION['userid']){                              
                     $affectedRows = $this->closetDao->addItemToCloset($_SESSION['userid'], $closetItem);
+                    
+                    if ($affectedRows === 1){
+                        $this->productController->updateClosittCounter($closetItem->getSku());   
+                    }
+                    
                     return $affectedRows === 1 ? "success" : "failed";
                 }
             }

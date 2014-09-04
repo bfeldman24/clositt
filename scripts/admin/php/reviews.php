@@ -47,7 +47,8 @@ li{
 <script type="text/javascript">
 var Feedback = {
     init: function(){
-        firebase.$.child("reviews").once('value', function(reviews){
+        
+        $.post(window.HOME_ROOT + "r/getall", function(reviews){        
             
              $("#reviews").append(
     	          $("<tr>").append(
@@ -63,27 +64,27 @@ var Feedback = {
     	          )
     	      );
     
-			 reviews.forEach(function(product){
-			     product.forEach(function(review){
+			 for (var sku in reviews){
+			     for(var i=0; i < reviews[sku].length; i++){
       			     
           		      $("#reviews").append(
           		          $("<tr>").append(
-          		              $("<td>").html(review.child("name").val())
+          		              $("<td>").html(reviews[sku][i]["n"])
           		          ).append(
-          		              $("<td>").html(review.child("date").val())
+          		              $("<td>").html(reviews[sku][i]["d"])
           		          ).append(
-          		              $("<td>").html(review.child("sku").val())
+          		              $("<td>").html(reviews[sku][i]["s"])
           		          ).append(
-          		              $("<td>").html(review.child("rating").val())
+          		              $("<td>").html(reviews[sku][i]["r"])
           		          ).append(
-          		              $("<td>").html(review.child("comment").val())
+          		              $("<td>").html(reviews[sku][i]["c"])
           		          )
           		      );
-			     });				
-    		});	
+			     }				
+    		}
     		
     		$("#loadingMask").remove();
-		});
+		}, "json");
     }
 };
 
