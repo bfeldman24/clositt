@@ -228,8 +228,7 @@
     };
 </script>
 <script type="text/javascript">
-$(document).ready(function() {
-    firebase.init();
+$(document).ready(function() {    
     session.init();
     Messenger.init();       
     footer.init();

@@ -44,7 +44,6 @@ ul>li{
         <li><a href="php/feedback.php">Feedback</a></li>
         <li><a href="php/reviews.php">Product Reviews</a></li>
         <li><a href="php/searchTerms.php">Search Terms</a></li>
-        <li><a href="php/onlineUsers.php">Online Users</a></li>
     </ul>
     
     <br><h2>Bookmarklets <small>(drag link to bookmark toolbar)</small></h2>   

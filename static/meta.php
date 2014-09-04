@@ -17,9 +17,6 @@
 
 <script src="<?php echo HOME_ROOT; ?>lib/js/perfect-scrollbar-0.4.9.with-mousewheel.min.js"></script>
 
-<script src='https://cdn.firebase.com/js/client/1.0.6/firebase.js' type='text/javascript' ></script>
-<script src='https://cdn.firebase.com/js/simple-login/1.3.0/firebase-simple-login.js' type='text/javascript'></script>
-
 <script type="text/javascript">
     window.HOME_ROOT = "<?php echo HOME_ROOT; ?>";
     window.HOME_URL = "<?php echo  DOMAIN . HOME_ROOT; ?>";

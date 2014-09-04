@@ -10,7 +10,6 @@ define('DEBUG', true);
 define('CLOSITT_CSS',HOME_ROOT .'css/style.css');
 
 $js = '<script src="' . HOME_ROOT .'scripts/js/session.js"></script>' .
-'<script src="' . HOME_ROOT .'scripts/js/firebaseExtension.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/messenger.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/pagePresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/productPagePresenter.js"></script>' .
