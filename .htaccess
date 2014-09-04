@@ -14,7 +14,7 @@ RewriteRule ^p/([a-z0-9]*)$ app/Controller/ProductController.php?method=$1
 RewriteRule ^p/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?method=$1&page=$2
 
     #Filter Data
-RewriteRule ^s/filters$ app/Data/filters.json
+RewriteRule ^s/filters$ app/Controller/FilterController.php?method=getfilters
 
     #Browse
 RewriteRule ^b/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?method=browse&customer=$1&page=$2
@@ -24,6 +24,12 @@ RewriteRule ^t/([a-z0-9]*)$ app/Controller/TagController.php?method=$1
 
     #Colors
 RewriteRule ^c/([a-z0-9]*)$ app/Controller/ColorController.php?method=$1
+
+    #Closet
+RewriteRule ^cl/([a-z]*)$ app/Controller/ClosetController.php?method=$1 
+
+    #User
+RewriteRule ^u/([a-z]*)$ app/Controller/UserController.php?method=$1 
 
 
 # ADMIN API

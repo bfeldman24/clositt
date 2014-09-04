@@ -97,7 +97,7 @@ $("#signin").on("submit",function(event){
 		var password = $("#inputPassword").val();
 		var remember = $("#remember").is(':checked');		
 					  	
-	  	firebase.login(email,password,remember);		    
+	  	session.login(email,password,remember);		    
 	}else{
 		Messenger.info("Login information is incorrect");	
 		return false;
@@ -109,14 +109,14 @@ $("#signup-form").on("submit",function(event){
 	 event.preventDefault();
 	 var valid = false;
 	 
-     if($('#signup-inputPassword').val().length > 5 && $('#signup-inputPassword2').val().length > 5){
+     if($('#signup-inputPassword').val().length >= 7 && $('#signup-inputPassword2').val().length >= 7){
              if($('#signup-inputPassword2').val() == $('#signup-inputPassword').val()){                   
                      valid = true;                    
              }else{					              	
                      Messenger.error("Passwords do NOT match!");                     
              }
      }else{
-             Messenger.error("Passwords do NOT match!");        
+             Messenger.error("Passwords must be at least 7 characters long!");        
      }
 
 	if(valid){
@@ -126,7 +126,7 @@ $("#signup-form").on("submit",function(event){
 		var name = $("#signup-inputName").val();
 		var username = $("#signup-inputUsername").val();		
 	
-		firebase.signup(email, password,remember,name, username);
+		session.signup(email, password,remember,name, username);
 	}else{
 		console.log("invalid");	
 	}

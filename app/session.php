@@ -1,5 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '/globals.php');
+require_once(dirname(__FILE__) . '/Database/DataAccess/opendb.php');
+require_once(dirname(__FILE__) . '/Controller/SessionController.php');
 
 if (!isset($_SESSION)) {
 	//any subdomains, including "www.mydomain.com" will be included in the session. 
@@ -7,29 +9,8 @@ if (!isset($_SESSION)) {
 	session_start();
 }
 
-class ValidateSession {
-	
-	private $WELCOME_PAGE = 'welcome.php';
-	
-	
-	function session_defaults() {
-		$_SESSION['userid'] = 0;
-		$_SESSION['isAdmin'] = false;
-	}
-	
-	function checkSession(){
-		if (!isset($_SESSION['userid']) || !is_numeric($_SESSION['userid']) || $_SESSION['userid'] <= 0){
-			$this->unauthorized();	
-		}
-	}
-	
-	function unauthorized(){
-		$this->session_defaults();
-		//header( 'Location: ' . HOME_ROOT .  $this->WELCOME_PAGE ) ;	
-	}	
-}
-
-$session = new ValidateSession();
-$session->checkSession();
+$mdb2 = mdb2_connect();
+$session = new SessionController($mdb2);
+$session->checkSession(); 
 
 ?>

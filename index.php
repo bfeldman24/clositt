@@ -232,7 +232,7 @@ $(".joyride-start").click(function(e){
 });
 
 function showWelcomeModal(){
-     if(firebase.loginCount <= 3){
+     if(session.loginCount <= 3){
 	    if (localStorage.welcomeClositt == undefined || localStorage.welcomeClositt == null){
 	       localStorage.welcomeClositt = 1;  
 	    }

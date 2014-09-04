@@ -79,7 +79,7 @@ function loggedIn(){
 	firebase.$.child("Auth/Token").on('value',function(snapshot){	
 			var token = snapshot.val();			
 			
-			$.post("app/auth.php", { auth: token, user: firebase.userid }, function(data) {
+			$.post("app/auth.php", { auth: token, user: session.userid }, function(data) {
 				if(data == "success"){
 					Messenger.success("You are now authorized to enter the site.");
 					setTimeout(function(){
@@ -101,7 +101,7 @@ $("#signin").on("submit",function(event){
 		var password = $("#inputPassword").val();
 		var remember = $("#remember").is(':checked');		
 					  	
-	  	firebase.login(email,password,remember);		    
+	  	session.login(email,password,remember);		    
 	}else{
 		Messenger.info("Login information is incorrect");	
 		return false;

@@ -67,7 +67,7 @@ $("form").on("submit",function(event){
 		var password = $("#inputPassword").val();
 		var remember = $("#remember").is(':checked');		
 					  	
-	  	firebase.login(email,password,remember);		    
+	  	session.login(email,password,remember);		    
 	}else{
 		console.log("invalid");	
 		return false;

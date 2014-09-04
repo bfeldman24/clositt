@@ -138,7 +138,7 @@ function loggedOut(){
 }
 
 function startClosittTour(manual){
-    if(manual || firebase.loginCount <= 3){
+    if(manual || session.loginCount <= 3){
         
         if (localStorage.myClositt == undefined || localStorage.myClositt == null){
             localStorage.myClositt = 1;   

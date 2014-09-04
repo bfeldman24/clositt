@@ -5,9 +5,9 @@ var socialPresenter = {
 		if($("#social-btns").is(":visible")){			    					
 			$("#social-btns").html("").hide('blind');
 		}else{
-		    var closittLink = window.HOME_URL + "@/" + (parseInt(closetPresenter.share) + parseInt(firebase.userid));		    		    
+		    var closittLink = window.HOME_URL + "@/" + (parseInt(closetPresenter.share) + parseInt(session.userid));		    		    
 		    var imgLink = encodeURIComponent($(document).find(".picture img").first().attr("src"));
-		    var desc = encodeURIComponent(firebase.username + "'s Clositt on Clositt.com");		    
+		    var desc = encodeURIComponent(session.username + "'s Clositt on Clositt.com");		    
 		    var socialElement = $("#social-btns");
 		    
 			socialPresenter.createShareButtons(socialElement, closittLink, imgLink, desc);						

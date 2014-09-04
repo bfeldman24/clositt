@@ -38,13 +38,16 @@ define("HISTORICAL_DATE","date");
 define('COLORS', 'Colors');
 define('COLORS_COLOR', 'color');
 define('COLORS_PERCENT', 'percent');
-define('HAS_COLOR', 'hascolor');
 
 define('TAGS', 'Tags');
 define('TAG_STRING', 'tag');
+define('TAG_GROUP_ID', 'groupid');
 define('TAG_COUNT', 'count');
 define('TAG_STATUS', 'status');
 define('TAG_APPROVED', 'approved');
+define('TAG_DATE_APPROVED', 'dateapproved');
+define('TAG_DATE_ADDED', 'dateadded');
+
 
 define('COLOR_MAPPING', 'ColorMapping');
 define('COLOR_MAPPING_COLOR', 'color');
@@ -75,4 +78,43 @@ define("SWATCHES_IMAGE","image");
 // Sizes
 define("SIZES","Sizes");
 define("SIZES_SIZE","size");
+
+// Filters
+define("FILTERS","Filters");
+define("FILTER_TYPE","type");
+define("FILTER_VALUE","value");
+define("FILTER_SUBVALUE","subvalue");
+define("FILTER_CUSTOMER","customer");
+define("FILTER_STATUS","status");
+define("FILTER_DATE","createdon");
+
+// Closet
+define("CLOSETS","Closets");
+define("CLOSET_ID","closetid");
+define("CLOSET_USER_ID","userid");
+define("CLOSET_NAME","closetname");
+define("CLOSET_PERMISSION","permission");
+define("CLOSET_LAST_UPDATED","lastupdated");
+define("CLOSET_CREATED_ON","createdon");
+
+// Closet Items
+define("CLOSET_ITEMS","ClosetItems");
+define("CLOSET_ITEM_SKU","sku");
+define("CLOSET_ITEM_IMAGE","image");
+define("CLOSET_ITEM_STATUS","status");
+define("CLOSET_ITEM_DATE_ADDED","dateadded");
+
+// Users 
+define("USERS","Users");
+define("USER_ID","userid");
+define("USER_EMAIL","email");
+define("USER_NAME","name");
+define("USER_PASS","password");
+define("USER_SALT","salt");
+define("USER_IP","ip");
+define("USER_COOKIE","cookie");
+define("USER_STATUS","status");
+define("USER_LOGIN_COUNT","logincount");
+define("USER_LAST_SIGNED_IN","lastonline");
+define("USER_DATE_SIGNED_UP","signedupdate");
 ?>

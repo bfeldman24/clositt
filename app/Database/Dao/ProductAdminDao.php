@@ -369,8 +369,11 @@ class ProductAdminDao extends AbstractDao {
 	    $sql = "INSERT INTO " . TAGS . 
 	           " (" . TAG_STRING . "," .
                       PRODUCT_SKU . "," .
-                      TAG_COUNT . ")" .
-	           " VALUES ( ?, ?, 1 )";	                    	          
+                      TAG_COUNT . ", " .
+                      TAG_DATE_ADDED . ", " .
+                      TAG_GROUP_ID . ")" .
+	           " SELECT  ?, ?, 1, NOW()," .
+	           " (SELECT COALESCE((SELECT ".TAG_GROUP_ID." FROM ".TAGS." WHERE ".TAG_STRING." = ? LIMIT 1), 1))";
         
         if($this->debug){		    
 			$this->logDebug("2135232" ,$sql );
@@ -382,7 +385,7 @@ class ProductAdminDao extends AbstractDao {
             foreach ($product['tags'] as $tag) {    
                 try {   
                     //print_r($value);                                           
-                    $affectedRows += $stmt->execute(array($tag, $sku));
+                    $affectedRows += $stmt->execute(array($tag, $sku, $tag));
                 } catch (Exception $e) {
                     echo 'Caught exception: ',  $e->getMessage(), "\n\n";
                 }
@@ -414,7 +417,7 @@ class ProductAdminDao extends AbstractDao {
             echo 'Caught exception: ',  $e->getMessage(), "\n\n";
         }        		                
         
-       return $affected;
+       return $affectedRows;
 	}
 	
 	public function getTotalProductsCount(){
@@ -567,7 +570,7 @@ class ProductAdminDao extends AbstractDao {
 		$paramsTypes = array();		
 		$params = array();		
 		return $this->getResults($sql, $params, $paramTypes, "98237923");
-	}	
+	}		
 	
 	public function getUniqueTags(){
 	   $sql = "SELECT DISTINCT " . TAG_STRING . 
@@ -756,106 +759,19 @@ class ProductAdminDao extends AbstractDao {
         }                        
         
         return $totalAffectedRows;
-	}
+	}		
 	
-	public function removeTags($skus, $tag){
-	   if (!isset($skus) || $skus == null || !is_array($skus) || count($skus) <= 0 || $tag == null){
-	       return -1;   
-	   }
-	   
-	   $sql = "UPDATE " . TAGS .       	  
-              " SET " . TAG_STATUS . " = 2 ," .
-                        TAG_APPROVED . " = 1 " . 
-              " WHERE " . TAG_STRING . " = ? ";
-                            
-       if($this->debug){		    
-			$this->logDebug("92864192401" ,$sql . " { $sku , $tag } ");
-		}
-        
-        $params = array($tag);
-        $paramTypes = array('text'); 
-        $skuPlaceholders = '';               
-        
-        foreach ($skus as $sku) {    
-            try {   
-                $params[] = $sku;
-                $paramTypes[] = 'text';  
-                
-                if ($skuPlaceholders != ''){
-                    $skuPlaceholders .= ",";   
-                }
-                
-                $skuPlaceholders .= "?";
-                      
-            } catch (Exception $e) {
-                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            }
-        }
-        
-        $sql .= " AND " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")"; 
-
-        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-        $affectedRows = 0;
-                 
-        try {                              
-            $affectedRows = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-        }     
-        
-        return $affectedRows;
-	}
-	
-	public function approveTags($skus, $tag){
-	   if (!isset($skus) || $skus == null || !is_array($skus) || count($skus) <= 0 || $tag == null){
-	       return -1;   
-	   }
-	   
-	   $sql = "UPDATE " . TAGS .       	  
-              " SET " . TAG_APPROVED . " = 1 " . 
-              " WHERE " . TAG_STRING . " = ? ";
-                            
-       if($this->debug){
-			$this->logDebug("238479232" ,$sql . " { $sku , $tag } ");
-		}
-        
-        $params = array($tag);
-        $paramTypes = array('text'); 
-        $skuPlaceholders = '';               
-        
-        foreach ($skus as $sku) {    
-            try {   
-                $params[] = $sku;
-                $paramTypes[] = 'text';  
-                
-                if ($skuPlaceholders != ''){
-                    $skuPlaceholders .= ",";   
-                }
-                
-                $skuPlaceholders .= "?";
-                      
-            } catch (Exception $e) {
-                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            }
-        }
-        
-        $sql .= " AND " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")";       
-        
-        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-        $affectedRows = 0;
-                 
-        try {                              
-            $affectedRows = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-        }     
-        
-        return $affectedRows;
-	}
-	
-	public function getStoreProductCount(){                    
+	public function getStoreProductCount($getOnlyLiveProducts){   
+	    $statuses = '';
+	    
+	    if ($getOnlyLiveProducts){
+	       $statuses = "1,2,4";   
+	    }else{
+	       $statuses = "3,5";
+	    }   
+	                    
         $sql = "SELECT " . PRODUCT_STORE . ", COUNT(1) as count FROM " . PRODUCTS .
-                " WHERE " . PRODUCT_STATUS . " IN (1,2,4) " .
+                " WHERE " . PRODUCT_STATUS . " IN (" . $statuses . ") " .
                 " GROUP BY " . PRODUCT_STORE . 
                 " ORDER BY " . PRODUCT_STORE;
 							        
@@ -863,6 +779,17 @@ class ProductAdminDao extends AbstractDao {
 		$params = array();		
 		
 		return $this->getResults($sql, $params, $paramTypes, "23920342023");	   
+	}
+	
+	public function getSpiderStats(){
+                
+        $sql = "SELECT " . PRODUCT_STORE . ", COUNT(1) AS  total, " . 
+                "(SELECT COUNT(1) FROM " . SPIDER . " s2 WHERE s2." . SPIDER_STORE . " = s." . SPIDER_STORE . " AND s2." . SPIDER_STATUS . " = 2) as broken " .
+                " FROM " . SPIDER . " s " . 
+                " GROUP BY s." . SPIDER_STORE . 
+                " ORDER BY broken DESC, total DESC";
+		
+		return $this->getResults($sql, array(), array(), "203942052718");	   
 	}
 }
 ?>

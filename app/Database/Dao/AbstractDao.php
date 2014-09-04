@@ -1,19 +1,17 @@
 <?php
-// LOGGING
-define('INFO',true);
-define('SQL_ERROR_LOG', dirname(__FILE__) . "/../../Logs/sqlErrorLog");
-
+require_once(dirname(__FILE__) . '/../../globals.php');
 require_once(dirname(__FILE__) . '/../TableConstants.php');
 
 class AbstractDao{
 	public $db = null; // PEAR::MDB2 pointer
 	public $debug = DEBUG; // prints sql statements
 	public $info = false; // prints sql statements
-	private $sqlErrorLog = SQL_ERROR_LOG;	
+	private $sqlErrorLog = null;	
 	
 	
 	public function __construct(&$db) {
-		$this->sqlErrorLog = $this->sqlErrorLog . date("-Y-m-d") . ".txt";
+	    $sqlErrorLog = dirname(__FILE__) . "/../../Logs/sqlErrorLog";
+		$this->sqlErrorLog = $sqlErrorLog . date("-Y-m-d") . ".txt";
 		$this->file = fopen($this->sqlErrorLog,"a");
 		$this->db = $db;	
 		$this->db->setErrorHandling(PEAR_ERROR_RETURN);
@@ -50,6 +48,49 @@ class AbstractDao{
 		}
 		
 		return $results;
+	}
+	
+	
+	/**
+	 * Insert or update query
+     *
+     * @param $sql - (string) sql query 
+     * @param $params - (array) an array of parameters to replace the '?' in the query string
+     * @param $paramTypes - (array) the types of the respective parameters
+     * @param $errorCode - (string) the error code with which to identify the query in the log file
+     */
+	public function update($sql, $params, $paramTypes, $errorCode){
+	    						
+		if($this->debug){
+		    $parameters = print_r($params, true);
+		    $parameterTypes = print_r($paramTypes, true);
+			$this->logDebug($errorCode ,$sql . " (" . $parameters . "), (".$parameterTypes.")" );
+		}		
+		
+		$stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+            
+        try {              
+             $affectedRows = $stmt->execute($params);
+             
+        } catch (Exception $e) {
+            $this->logError($errorCode ,$e->getMessage(), $sql);
+            return false;
+        }         		
+		
+		if (PEAR::isError($affectedRows)) {
+		    $_SESSION['errors'] = $errorCode . " - error";
+			$this->logError($errorCode ,$affectedRows->getMessage(),$sql);
+		    return false;
+		}
+		
+		if (!isset($affectedRows)){
+			$this->logWarning($errorCode ,"Query did not work correctly!");
+		    return false;
+		}
+		
+		$stmt->free();
+		
+		return $affectedRows;
 	}
 	
 	public function logError($errorNum, $sql = "", $msg = ""){

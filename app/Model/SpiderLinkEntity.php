@@ -120,7 +120,7 @@ class SpiderLinkEntity {
 		$spiderEntity->setStatus(trim($row[JS_SPIDER_STATUS]));	
 		$spiderEntity->setLastSaved(trim($row[JS_SPIDER_LAST_SAVED]));
 				    
-		return $ProductEntity;
+		return $spiderEntity;
 	}
 	
 	public function toArray(){

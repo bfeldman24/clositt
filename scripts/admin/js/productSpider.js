@@ -138,13 +138,15 @@ var spider = {
         							.attr("url", link.url)
         							.attr("status", statusText)
         						).append(
-        						      $("<a>").attr("href", link.url).html(categoryName)
+        						      $("<a>").attr("href", link.url).attr("target","_blank").html(categoryName)
         						).append(
         						      $("<span>").addClass("isvalid").css("color",statusColor).html(statusText)
         						).append(
         						      $("<span>").addClass("lastUpdated").text(link.lastUpdated)
         						).append(
         						      $("<span>").addClass("tagList").html($tags)
+        						).append(
+        						      $("<span>").addClass("testCategoryLink").html($("<i>").addClass("icon-wrench"))
         						).append(
         						      $("<span>").addClass("editCategory").html($("<i>").addClass("icon-pencil"))
         						).append(
@@ -495,6 +497,55 @@ var spider = {
         
         console.log("Auto Run...");        
         actionButtons.saveAll();
+    },
+    
+    getSpiderStats: function(){
+         $.getJSON( window.HOME_ROOT + "spider/getspiderstats", function( data ) {
+	          if (data){        	      	              	      
+        	      $table = $("<table>").addClass("table table-bordered table-condensed table-responsive") ;
+        	      
+        	      $table.append(
+            	      $("<tr>").append(
+    	                   $("<th>").text("Store")
+    	               ).append(
+    	                   $("<th>").text("Broken Links")
+    	               ).append(
+    	                   $("<th>").text("Total Links")
+    	               ).append(
+    	                   $("<th>").text("% Broken")
+    	               )
+    	          );
+    	      
+        	      $.each( data, function( store, stats ) {    	   
+        	           var percent = Math.round((stats.broken / stats.total) * 100);
+        	       
+        	           $table.append(
+        	               $("<tr>").append(
+        	                   $("<td>").text(store)
+        	               ).append(
+        	                   $("<td>").text(stats.broken)
+        	               ).append(
+        	                   $("<td>").text(stats.total)
+        	               ).append(
+        	                   $("<td>").text(percent + "%")
+        	               )
+        	           );
+        	      });
+        	              	      
+        	      bootbox.dialog({
+                      message: $table,
+                      title: "Spider Stats",
+                      buttons: {                
+                          main: {
+                              label: "Cancel"
+                          }                          
+                      }
+                  });
+        	      
+        	  }else{
+        	       console.log(JSON.stringify(data));
+        	  }
+	    });  
     }
 };
 
@@ -510,6 +561,7 @@ var categoryMaintenance = {
         $('form#saveCategories').submit(categoryMaintenance.getCategories);    
         $(document).on("click",".editCategory", categoryMaintenance.editCategory);
         $(document).on("click",".removeCategory", categoryMaintenance.removeCategory);
+        $(document).on("click",".testCategoryLink", categoryMaintenance.testCategoryLink);
     },
     
     saveCategory: function(e) {
@@ -659,6 +711,20 @@ var categoryMaintenance = {
         
     },
     
+    testCategoryLink: function(el){
+       var category = $(el.currentTarget).siblings(':checkbox');  
+       var store = Companies[category.attr("company")];  
+       var phantom = '';
+       
+       if (store != null && store.usePhantomjs){
+            phantom = '&phantom=true';
+       }
+         
+       var url = "webProxy.php?u=" + category.attr("url") + phantom;
+       
+       window.open(url,'_blank'); 
+    },
+    
     getCategories: function(e){
         e.preventDefault();
         $("#loadingMask").show();
@@ -686,7 +752,13 @@ var categoryMaintenance = {
              return false;
         }
         
-        $.post("webProxy.php", {u:home}, function(data){	
+        var data = {u: home};
+        
+        if (store.usePhantomjs){
+            data.phantom = true;   
+        }
+        
+        $.post("webProxy.php", data, function(data){	
          
             if (data == null || data.trim() == ""){
     			 console.log("webProxy returned nothing. Make sure the URL is correct and does not redirect.");    		
@@ -1095,55 +1167,11 @@ var actionButtons = {
 * not called anywhere in the code. must be called manually
 ****************************************/
 var adminFunctions = {
-    enabled: false,
-    
-    reorganizeLinks: function(){
-        if (!enabled){ return; }
-	
-    	firebase.$.child("spider").once('value', function(spider){
-    	   spider.forEach(function(company){	       	       
-    	       company.forEach(function(customer){	          	           
-    	           customer.forEach(function(category){
-    	               var catObj = {url: category.val(), status: "works"};
-    	               
-    	               firebase.$.child("spider")
-    	                         .child(company.name())
-    	                         .child(customer.name())
-    	                         .child(category.name()).remove();
-    	                         
-    	               firebase.$.child("spider")
-    	                         .child(company.name())
-    	                         .child(customer.name())
-    	                         .child(category.name()).set(catObj);
-    	                         
-    	               console.log(company.name() + " -> " + customer.name() + " -> " + category.name());	               
-    	           });
-    	       });
-    	   });	  
-    	});		
-    },		
+    enabled: false,		
 
     guessTags: function(){
-        if (!enabled){ return; }
-        
-        $(".category").each(function(){        
-           var company = $(this).find('input[type=checkbox]').attr("company");
-           var customer = $(this).find('input[type=checkbox]').attr("customer");
-           var category = $(this).find('input[type=checkbox]').attr("category");
-           
-           $(".tagCheckbox").each(function(){
-               var tag = $(this).val();
-               
-               if (category.toLowerCase() == tag.toLowerCase()){                    
-            	
-                   var tags = [];
-                   tags.push(tag);        	
-            	   firebase.$.child("spider").child(company).child(customer).child(category).child("tags").set(tags);
-            	   console.log("Added: " + company + " " + customer + " " + category + ": " + tag);        	       
-            	   return false;
-        	   }
-    	   });	          
-        });   
+        // TODO: implement guess tags for products, not categories
+        return false;        
     },
     
     getNextBroken: function(){

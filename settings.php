@@ -102,7 +102,7 @@ input[type='checkbox']{
 
 <script type="text/javascript">
 function loggedIn(){
-	$("#inputName").val(firebase.username);				
+	$("#inputName").val(session.name);				
 }
 
 
@@ -114,44 +114,48 @@ $("form").on("submit",function(event){
 	 }else{
 	 
       	 if($("#inputOldPassword").attr("disabled") != "disabled"){
-              if($('#inputPassword').val().length > 5 && $('#inputPassword2').val().length > 5){
+              if($('#inputPassword').val().length >= 7 && $('#inputPassword2').val().length >= 7){
                       if($('#inputPassword2').val() == $('#inputPassword').val()){                          	
                         var oldPassword = $("#inputOldPassword").val();
                   		var newPassword = $("#inputPassword").val();            		
                   	
-                  		firebase.authClient.changePassword(firebase.email, oldPassword, newPassword, function(error, success) {
-                            if (error) {
-                                  Messenger.error("Your old password is incorrect! Please try again.");
-                            }else{
-                                  Messenger.success("Password changed successfully!");
+                  	
+                  	    $.post( window.HOME_ROOT + "u/updatepass", {p: newPassword, op: oldPassword }, function(result){
+                  	          if (result != "success"){
+                  	             Messenger.error("Your old password is incorrect! Please try again.");	
+                  	          }else{
+                                   Messenger.success("Password changed successfully!");
                                   $("#changePassword").prop("checked", false);
                                   $("#inputOldPassword").attr("disabled","disabled");
                                   $("#inputOldPassword").val("");
                                   $("#inputPassword").val("");
                                   $("#inputPassword2").val("");
-                                  $(".newPasswordGroup").hide();
-                            }
-                          });
+                                  $(".newPasswordGroup").hide();                           	               
+                   			  }	
+                  		});	
+                  	                  		
                       }else{
                               Messenger.error("New passwords do NOT match!");                                             
                       }
               }else{
-                      Messenger.error("New passwords do NOT match!");        
+                      Messenger.error("Passwords must be at least 7 characters long!");        
               }
       	 }
       	 
       	 if($("#inputName").attr("disabled") != "disabled"){
       	    var name = $("#inputName").val();	
-      	   
-      	    firebase.$.child(firebase.userPath).child(firebase.userid).child('name').set(name, function(error, success) {
-                if (error) {
-                      Messenger.error("There was a problem saving your new name!");
-                }else{
-                      Messenger.success("Name changed successfully!");
+      	    
+      	    $.post( window.HOME_ROOT + "u/update", {id: session.userid, n: name, e: session.email }, function(result){
+    	          if (result != "success"){
+    	             Messenger.error("There was a problem saving your new name!");
+    	          }else{
+                    Messenger.success("Name changed successfully!");
+                    session.name = name;
+                    session.nickname = session.name.split(" ")[0];
                       $("#changeName").prop("checked",false);
-                      $("#inputName").attr("disabled","disabled");
-                }
-              });
+                      $("#inputName").attr("disabled","disabled");                           	               
+    			  }	
+    		});	         	    
       	 }	 
 	 }
 	

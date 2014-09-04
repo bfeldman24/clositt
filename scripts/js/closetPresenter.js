@@ -18,9 +18,7 @@ var closetPresenter = {
 		
 		$(document).on("click", "#closet-share", socialPresenter.showClosittShareButtons);
 		$(document).on("click",".delete-outfit", closetPresenter.removeOutfit);				
-		$(document).keypress(closetPresenter.saveClosetsOnEnter);
-		
-		closetFormPresenter.getClosetInfo();				
+		$(document).keypress(closetPresenter.saveClosetsOnEnter);		      		
 	},
 	
 	setUser: function(user){
@@ -28,25 +26,29 @@ var closetPresenter = {
 	},
 	
 	getClosets: function(){
+	   
 		if(closetPresenter.user != undefined){
-			firebase.$.child(firebase.userPath).child(closetPresenter.user).child("closets").once('value', closetPresenter.showClosets);
-			firebase.$.child(firebase.userPath).child(closetPresenter.user).child("name").once('value', function(data){
-    			 if (data.val() != null){
-    				$("#user-closet-title").text(data.val() + "'s Clositt");
-    			 }
-			});
-		}else if(firebase.isLoggedIn){
-			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").once('value', closetPresenter.showClosets);		
-			 $("#user-closet-title").text(firebase.username + "'s Clositt");
+		      $.post( window.HOME_ROOT + "cl/getall", closetPresenter.showClosets, "json");
+		      
+		      $.post( window.HOME_ROOT + "u/name", {"n": closetPresenter.user}, function(user){
+		          if (user != null && user.name != null){
+		            $("#user-closet-title").text(user.name + "'s Clositt");  
+		          }   
+		      }, "json");
+		      		      
+		}else if(session.isLoggedIn){
+			$.post( window.HOME_ROOT + "cl/getall", closetPresenter.showClosets, "json");
+			$("#user-closet-title").text(session.nickname + "'s Clositt");
+		    			 
 		}else{
 			Messenger.info("We'd love to add that to your Clositt. Just sign in and we'll take care if it for you.");	
 		}
 	},
 	
 	showClosets: function(closets){							
-		closets.forEach(function(closet){
-		      closetPresenter.getClosetTemplate("closet-list", closet, true);				
-		});	
+		for (var c in closets){
+		      closetPresenter.getClosetTemplate("closet-list", closets[c], true);				
+		}	
 		
 		$(".closetName").last().attr("last",true);
 		
@@ -54,6 +56,8 @@ var closetPresenter = {
 	   {
 		 startClosittTour();
 	   }
+	   
+	   closetFormPresenter.setClosetInfo(closets);
 	},		
 	
 	getClosetTemplate: function(parentId, closet, includeClosetName){
@@ -64,7 +68,7 @@ var closetPresenter = {
 		var closetHeader = null;
 		
 		if (includeClosetName){
-		  closetHeader = $("<h1>").addClass("closetName").append($("<span>").addClass(textColor + " closetNameHeader").attr("closetid",closet.name()).text(closet.val().name));
+		  closetHeader = $("<h1>").addClass("closetName").append($("<span>").addClass(textColor + " closetNameHeader").attr("closetid",closet[0].id).text(closet[0].title));
 		}
 		
 		$("#"+parentId).append($("<hr>")).append(		
@@ -81,9 +85,9 @@ var closetPresenter = {
 			)
 		);
 		
-		closet.child("items").forEach(function(item){
+		closet.forEach(function(item){
 			$itemlist.append(
-				productPresenter.getClosetItemTemplate(item.name(),item.val()).prepend(
+				productPresenter.getClosetItemTemplate(item.item,item.cache).prepend(
 					$("<div>").addClass("hanger").append(
 						$("<img>").attr("src",window.HOME_ROOT + "css/images/hanger.png")
 					)
@@ -176,38 +180,33 @@ var closetPresenter = {
 		if( $(".menu-settings").hasClass("active") ){			    
 		  		
 			$(".closetName input").each(function(){
-				var closetid = $(this).attr("closetid");
-				var original = $(this).attr("original");
-				var newName = $(this).val().trim();
+			    var closittData = {
+			         id: $(this).attr("closetid"),
+			         title: $(this).val().trim(),
+			         owner: session.userid,
+			         status: 1
+			    };
+			 		
+			 	var original = $(this).attr("original");			
 				var $closetNameInput = $(this);
-				var success = true;
-								
-				firebase.$.child(firebase.userPath)
-		          .child(firebase.userid)
-		          .child("closets")
-		          .child(closetid)
-		          .child("name")
-		          .set(newName, function(error){
-    					  
-    					  if (error) {
-    					    	Messenger.error('Item could not be removed.' + error);
-    					    	success = false;
+				
+				if (original != closittData.title){	
+    				$.post( window.HOME_ROOT + "cl/update", closittData, function(result){
+    			          if (result != "success") {
+    					    	Messenger.error('Clositts could not be saved.');
     		 			  } else {						
-    							$closetNameInput.attr("original",newName);
-    							$closetNameInput.attr("value",newName);
+    							$closetNameInput.attr("original", closittData.title);
+    							$closetNameInput.attr("value", closittData.title);
     																															
     							if ($closetNameInput.parent().parent().attr("last")){
-    								if(success){
-    									Messenger.success("Clositt Names were saved!");
-    									closetPresenter.hideSettings();	
-    								}else{
-    									Messenger.error("Error! Clositt Names were not saved!");	
-    								}
+    								Messenger.success("Clositt " + closittData.title + " was saved!");
+    								closetPresenter.hideSettings();	
     							}	
-    					  }									
-				});																
-			});	
-		}			
+    					  }	
+    				});	
+				}
+			});		
+		}					
 	},
 
 	saveClosetsOnEnter: function(e){
@@ -220,40 +219,26 @@ var closetPresenter = {
 	},
 	
 	removeOutfit: function(el){
-		var sku = $(el.currentTarget).parents(".item").attr("pid");
-		var closetName = $(el.currentTarget).parent().parent().parent().parent().prev(".closetName").find("input").attr("original");
-		var closetId = $(el.currentTarget).parent().parent().parent().parent().prev(".closetName").find("input").attr("closetid");
+        var $item = $(el.currentTarget).parents(".item");
+		var sku = $item.attr("pid");
+		var $closetInput = $(el.currentTarget).parents(".carousel").prev(".closetName").find("input");				
 		
-		firebase.$.child(firebase.userPath)
-		  .child(firebase.userid)
-		  .child("closets")
-		  .child(closetId)
-		  .child("items")
-		  .once('value', function(items){
-		      
-		      items.forEach(function(item){
-		          if(item.name() == sku){
-		              firebase.$.child(firebase.userPath)
-		                  .child(firebase.userid)
-		                  .child("closets")
-		                  .child(closetId)
-		                  .child("items")
-		                  .child(item.name())
-		                  .remove(function(error){
-                    
-                    		  if (error) {
-                    		    	Messenger.error('Item could not be removed.' + error);
-                    		  } else {
-                    		  		$(el.currentTarget).parent().parent().css("display","none");
-                    		    	Messenger.success('This item was removed from "' + closetName +'"');		    	
-                    		  }
-                	  });
-                	  
-                	  return true;                 
-		          } 
-		      });
-		});
-			
+		var closittData = {
+	         id: $closetInput.attr("closetid"),
+	         title: $closetInput.attr("original"),
+	         owner: session.userid,
+	         status: 2,
+	         item: sku
+	    };	 			 	
+				
+		$.post( window.HOME_ROOT + "cl/remove", closittData, function(result){
+	          if (result != "success") {
+	    	  	   Messenger.error('Item could not be removed.');
+    		  } else {
+    		  		$item.remove();
+    		    	Messenger.success('This item was removed from "' + closittData.title +'"');		    	
+    		  }
+	   });		
 	}	
 }
 
@@ -266,41 +251,50 @@ var closetFormPresenter = {
 	closetIds: null,
 	closetNames: null, 
 	closetItems: null,
-	closetItemsMapping: null,
+	closetItemsMapping: null,	
 	inClosittHangerImg: "/css/images/hanger-icon-green.png",	
+    wishList: "Wish List",
+	wishListId: null,	
 	
 	getClosetInfo: function(){
-		if(closetFormPresenter.closetNames == null && firebase.isLoggedIn){
-			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").on('value', function(snapshot){
-				var closetIds = new Array();
-				var closetNames = new Array();
-				var closetItems = new Array();
-				var closetItemsMapping = new Array();
-				var i=0;
-				
-				snapshot.forEach(function(closet){				    				    
-					closetIds[i] = closet.name();
-					closetNames[i] = closet.val().name;				    
-					
-					closet.child("items").forEach(function(item){					   					    
-						closetItems.push(item.name());					    
-						closetItemsMapping.push(closetNames[i]);							
-					});
-					
-					i++;
-				});	
-				
-				closetFormPresenter.closetIds = closetIds;
-				closetFormPresenter.closetNames = closetNames;
-				closetFormPresenter.closetItems = closetItems;
-				closetFormPresenter.closetItemsMapping = closetItemsMapping;
-				closetFormPresenter.markUsersClositItems();
-			});		
+		if(closetFormPresenter.closetNames == null && session.isLoggedIn){
+		    $.post( window.HOME_ROOT + "cl/getall", closetFormPresenter.setClosetInfo, "json");		  		  		  		  				
 		}
 	},
 	
+	setClosetInfo: function(closets){
+	    var closetIds = new Array();
+		var closetNames = new Array();
+		var closetItems = new Array();
+		var closetItemsMapping = new Array();
+		var i=0;
+            
+        for (var c in closets){
+                var closet = closets[c];
+                closetIds[i] = closet[0].id;
+			  closetNames[i] = closet[0].title;
+			  
+			  if (closet[0].title == closetFormPresenter.wishList){
+			       closetFormPresenter.wishListId = closet[0].id;
+			  }
+		      
+		       closet.forEach(function(item){
+        			closetItems.push(item.item);					    
+				    closetItemsMapping.push(closetNames[i]);							 				
+        	   });	
+        	   
+        	   i++;				
+	    }
+	    
+	    closetFormPresenter.closetIds = closetIds;
+		closetFormPresenter.closetNames = closetNames;
+		closetFormPresenter.closetItems = closetItems;
+		closetFormPresenter.closetItemsMapping = closetItemsMapping;
+		closetFormPresenter.markUsersClositItems();
+	},
+	
 	showClosetForm: function(el){
-		if(!firebase.isLoggedIn){
+		if(!session.isLoggedIn){
 			Messenger.info("We'd love to add that to your Clositt, but first you need to sign in.");	
 		}else{
 			if(closetFormPresenter.closetNames == null){
@@ -372,73 +366,92 @@ var closetFormPresenter = {
 		
 		var closetName = $(el.currentTarget).find('input[name="newCloset"]').val();
 		var closetId = $(el.currentTarget).find('input[name="closet"]:checked').val();				
-		
+				
 		if(closetName.trim().length > 0){
-			closetName = closetName.trim();
-			closetId = new Date().getTime();			
-			firebase.$.child(firebase.userPath).child(firebase.userid).child("closets").child(closetId).child("name").set(closetName);		
+		    // Create new closet	
+			var closittData = {
+		         title: closetName.trim(),
+		         owner: session.userid,
+		         status: 1
+		    };		 				 				
+
+			$.post( window.HOME_ROOT + "cl/create", closittData, function(result){
+		          if (result == "failed" || isNaN(result)) {
+				    	Messenger.error('Clositt could not be saved.');	 			       	 			       
+	 			  }else{
+	 			       closetFormPresenter.addItemToCloset(el, sku, closetName, result);
+	 			  } 
+			});	
 		}else if(closetId != null){		  
 		    closetName = $(el.currentTarget).find('input[name="closet"]:checked').attr("closetName").trim();
-		}
+		    closetFormPresenter.addItemToCloset(el, sku, closetName, closetId);
+		}								
 		
-		if (closetName.length > 0){				
+		return false;		
+	},
+	
+	addItemToCloset: function(el, sku, closetName, closetId){
+	   if (closetName.length > 0){				
 			var index = closetFormPresenter.closetItems.indexOf(sku);
 			
 			if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){			
 			    var img = $(el.currentTarget).parents(".item").find(".picture img").attr("src"); 
-			     
-				firebase.$.child(firebase.userPath)
-				    .child(firebase.userid)
-				    .child("closets")
-				    .child(closetId)
-				    .child("items")
-				    .child(sku)
-				    .set(img, function(error) {
-      
-        				  if (error) {
-        						Messenger.error('Clositt could not be saved. ' + error);
-        				  } else {
-        						Messenger.success('This item was added to "' + closetName + '"');
-        						closetFormPresenter.showClosetForm(el);
-        						closetFormPresenter.updateClosetCount(sku);	
-        				  }
-				});
+			    
+			    var closetItem = {
+			         id: closetId,
+			         title: closetName.trim(),
+			         item: sku,
+			         cache: img,
+    		         owner: session.userid,
+    		         status: 1
+			    };
+			    
+			    $.post( window.HOME_ROOT + "cl/add", closetItem, function(result){    	 			  
+    	 			  if (result != "success") {
+    						Messenger.error('Item could not be saved into ' + closetName);	 			       	 			       
+    				  } else {
+    						Messenger.success('This item was added to "' + closetName + '"');
+    						closetFormPresenter.showClosetForm(el);
+    						closetFormPresenter.updateClosetCount(sku);	
+    				  }
+    			});	
+			     				
 			}else{
 				Messenger.success('This item is already in your clositt "' + closetName + '"');
 			}
-		}				
-		
-		return false;
+		}
 	},
 	
 	addToWishList: function(el){	
-	    if(!firebase.isLoggedIn){
+	    if(!session.isLoggedIn){
 			Messenger.info("We'd love to add that item to your wishlist, but first you need to sign in.");	
 		}else{    
     	    el.preventDefault();								
     		var sku = $(el.currentTarget).parents(".item").attr("pid");
-    		var closetName = "Wish List";
-    		
+    		var closetName = closetFormPresenter.wishList;    		
     		var index = closetFormPresenter.closetItems.indexOf(sku);
     			
     		if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){					 
     		    var img = $(el.currentTarget).parents(".item").find(".picture img").attr("src"); 
     		    
-    			firebase.$.child(firebase.userPath)
-    			     .child(firebase.userid)
-    			     .child("closets")
-    			      .child(closetPresenter.wishListClosetId)
-    			      .child("items")
-    			      .child(sku)
-    			      .set(img, function(error) {
-             			  
-             			  if (error) {
-             					Messenger.error('Clositt could not be saved. ' + error);
-             			  } else {
-             					Messenger.success('This item was added to your ' + closetName + '!');					
-             					closetFormPresenter.updateClosetCount(sku);		
-             			  }
+    		    var closetItem = {
+    		         id: closetFormPresenter.wishListId,
+			         title: closetName,
+			         item: sku,
+			         cache: img,
+    		         owner: session.userid,
+    		         status: 1
+			    };
+			    
+			    $.post( window.HOME_ROOT + "cl/add", closetItem, function(result){    	 			  
+    	 			  if (result != "success") {
+    						Messenger.error('Item could not be saved into ' + closetName);	 			       	 			       
+    				  } else {
+    						Messenger.success('This item was added to "' + closetName + '"');    						
+    						closetFormPresenter.updateClosetCount(sku);	
+    				  }
     			});
+    		        		        		   
     		}else{
     			Messenger.success('This item is already in your "' + closetName + '"');
     		}
@@ -446,7 +459,7 @@ var closetFormPresenter = {
 	},
 	
 	markUsersClositItems: function(){
-		if(closetFormPresenter.closetItems != null && firebase.isLoggedIn){
+		if(closetFormPresenter.closetItems != null && session.isLoggedIn){
 			var $closetItems = $("#hanger-" +  closetFormPresenter.closetItems.join(", #hanger-") );
 			$closetItems.attr("src",closetFormPresenter.inClosittHangerImg);
 			$closetItems.parent().tooltip('destroy');
@@ -471,21 +484,6 @@ var closetFormPresenter = {
     	 	   productTile.tooltip();
     	    }
 	    });
-	    
-//	 	firebase.$.child("clositt").child(firebase.productsPath).child(sku).child("cc").transaction(function(value) {
-//	 	   var newValue = 1;
-//	 	   
-//	 	   if(value != null){		 	       
-//	 	        newValue = value +1;		 	        
-//	 	   } 		 	            
-//	 	   
-//	 	   targetOutfit.find(".numClosets > .counter").text(newValue);
-//	 	   var closetCountPlural = newValue == 1 ? "" : "s"; 
-//	 	   targetOutfit.find(".numClosets").attr("title","Added to "+newValue+" Clositt"+closetCountPlural);
-//	 	   targetOutfit.find(".numClosets").tooltip('destroy');
-//	 	   targetOutfit.find(".numClosets").tooltip();
-//	 	   return newValue;       
-//        });
 	}
 }
 

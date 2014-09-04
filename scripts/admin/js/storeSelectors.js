@@ -336,7 +336,7 @@ var Companies = {
     	"linkAttr": "href",
     	"name": ".product-details>dt>a.prodtitle",
     	"nameAttr": "text",
-    	"price": ".ourprice>nobr>a.prodtitle",
+    	"price": ".ourprice .prodtitle",
     	"priceAttr": "text",
     	"sku": ".product",
     	"skuAttr": "id",
@@ -346,22 +346,22 @@ var Companies = {
     	"getSku": skuHelper.stripNonNumericChars
     },
     'Puma': {
-    	"url": "http://www.shop.puma.com/men/clothing/tees/22500,en_US,sc.html",
+    	"url": "http://us.puma.com/en_US/men/clothing/jackets",
     	"id": "pum",
     	"date": "Sun Jun 15 17:15:54 2014",
-    	"image": ".productimage>a>img",
+    	"image": ".product-image-inner>.thumb-link>img",
     	"imageAttr": "src",
-    	"link": ".nameandpricing>.name>a",
+    	"link": ".product-name>.h10>a.name-link",
     	"linkAttr": "href",
-    	"name": ".nameandpricing>.name>a",
+    	"name": ".product-name>.h10>a.name-link",
     	"nameAttr": "text",
-    	"price": ".pricing>.price",
+    	"price": "div.product-pricing",
     	"priceAttr": "text",
-    	"sku": ".product ",
-    	"skuAttr": "data-color",
+    	"sku": ".product-tile",
+    	"skuAttr": "data-itemid",
     	"nextPage": ".paginationlist>li>a.pagenext",
     	"nextPageAttr": "href",
-    	"listing": ".productlisting>.listItem>div.product"
+    	"listing": ".grid-tile"
     },
     'Perry Ellis': {
     	"url": "http://www.perryellis.com/tops/casual-shirts/",
@@ -369,32 +369,37 @@ var Companies = {
     	"date": "Sun Jun 15 17:22:47 2014",
     	"image": ".productimage>a>img",
     	"imageAttr": "src",
-    	"link": ".thumbnail>.productimage>a",
+    	"link": ".name>a",
     	"linkAttr": "href",
-    	"name": ".thumbnail>.productimage>a",
-    	"nameAttr": "title",
-    	"price": ".pricing>.price",
+    	"name": ".name>a",
+    	"nameAttr": "text",
+    	"price": ".pricing>div.price",
     	"priceAttr": "text",
-    	"sku": ".product input[name=pitem]",
+    	"sku": "input[name=pitem]",
     	"skuAttr": "value",
-    	"listing": ".producthits>.productlisting>div.product"
+    	"listing": ".productlisting>.product",
+    	"usePhantomjs": true
     },
     'Oakley': {
     	"url": "http://www.oakley.com/store/products/men/apparel/sweaters-and-hoodies",
     	"id": "oak",
     	"date": "Sun Jun 15 17:30:30 2014",
-    	"image": ".prod>.prod>img",
-    	"imageAttr": "src",
-    	"link": ".prod>a.prod",
+    	"image": ".container>.image-container .image-pic",
+    	"imageAttr": "data-img",
+    	"link": ".product-name>a",
     	"linkAttr": "href",
-    	"name": "p>.OneLinkNoTx>strong",
+    	"name": ".product-name>a>h5",
     	"nameAttr": "text",
-    	"price": ".product-information>a>p.starting-at",
+    	"price": ".product-content>.product-price",
     	"priceAttr": "text",
-    	"sku": ".prod>.prod",
+    	"sku": ".product-name>a",
     	"skuAttr": "href",
-    	"listing": "div>.listing>li.eyewear",
+    	"listing": ".product",
     	"getSku": function(sku){
+    	   if (sku.lastIndexOf("/") == sku.length -1){
+    	       sku = sku.substring(0, sku.length-1);   
+    	   }
+    	   
     	   if (sku.indexOf("?") > 0){
     	       return sku.substring(sku.lastIndexOf("/")+1, sku.indexOf("?", sku.lastIndexOf("/")));
     	   }else{
@@ -475,22 +480,22 @@ var Companies = {
     	"listing": ".ggpanel"
     },
     'Express': {
-    	"url": "http://www.express.com/clothing/Women/Dresses/cat/cat2002",
+    	"url": "http://www.express.com/clothing/Jackets+-+Coats/Jackets/cat/cat430018",
     	"id": "ex",
-    	"date": "Sun Jun 15 21:04:14 2014",
-    	"image": ".cat-thu-p-cont>a>img.cat-thu-p-ima",
-    	"imageAttr": "src",
-    	"link": ".cat-thu-p-cont>a",
+    	"date": "Thurs Aug 21 21:04:14 2014",
+    	"image": ".image-container>a>img.product-image",
+    	"imageAttr": "data-original",
+    	"link": ".product-info>li>a",
     	"linkAttr": "href",
-    	"name": ".cat-cat-prod-info>.cat-cat-prod-name>a",
+    	"name": ".product-info>li>a",
     	"nameAttr": "text",
-    	"price": "li>div>span",
+    	"price": ".product-info>li>span:nth-child(1)",
     	"priceAttr": "text",
-    	"sku": ".cat-thu-p-cont>a",
-    	"skuAttr": "rel",
-    	"nextPage": "tr>.cat-glo-page-action>a",
-    	"nextPageAttr": "href",
-    	"listing": ".cat-cat-item"
+    	"sku": ".ev-icon",
+    	"skuAttr": "data-product-id",
+    	"nextPage": null,
+    	"nextPageAttr": null,
+    	"listing": "#browse-gallery>ul>li"
     },
     'Dockers': {
     	"url": "http://us.dockers.com/family/index.jsp?categoryId=41317386&cp=2271557&ab=men_MegaNav_summersale_Shorts_08082013",
@@ -648,17 +653,17 @@ var Companies = {
     	"url": "http://www.columbia.com/mens-t-shirts/men-shirts-tshirts,default,sc.html",
     	"id": "col",
     	"date": "Mon Jul  7 22:46:58 2014",
-    	"image": ".item-pic>a>img",
+    	"image": ".product-image>.thumb-link>img.product-image",
     	"imageAttr": "src",
-    	"name": ".model-info>.prod-model>a",
+    	"name": ".product-name>h2>a.name-link",
     	"nameAttr": "text",
-    	"link": ".model-info>.prod-model>a",
+    	"link": ".product-name>h2>a.name-link",
     	"linkAttr": "href",
-    	"price": ".price-rating-info>div.reg-price",
+    	"price": ".product-pricing .product-sales-price",
     	"priceAttr": "text",
-    	"sku": ".item-pic",
-    	"skuAttr": "rel",
-    	"listing": ".results-col>.result-row>div.result-item",
+    	"sku": "div.product-tile ",
+    	"skuAttr": "data-itemid",
+    	"listing": ".grid-tile.product-tile",
     	"sampleSku": "AM6579",
     	"usePhantomjs": true
     },
@@ -703,7 +708,7 @@ var Companies = {
       },
       'Bonobos': {
       	"url": "http://bonobos.com/b/new-clothing-for-men",
-      	"id": "htt",
+      	"id": "bon",
       	"date": "Tue Jul 29 22:11:59 2014",
       	"image": "a>img",
       	"imageAttr": "src",
@@ -711,7 +716,7 @@ var Companies = {
       	"nameAttr": "text",
       	"link": "a",
       	"linkAttr": "href",
-      	"price": "a>.product-summary-container>p.price-box",
+      	"price": "a>.product-summary-container>p>.price",
       	"priceAttr": "text",
       	"sku": ".item[itemtype]",
       	"skuAttr": "id",
@@ -719,7 +724,37 @@ var Companies = {
       	"nextPageAttr": "href",
       	"listing": ".products-list>.category-products>li.item[itemtype]",
       	"sampleSku": "product-235671",
+      	"usePhantomjs": true,
       	"getSku": skuHelper.stripNonNumericChars
+      },
+      'Intermix': {
+      	"url": "http://www.intermixonline.com/category/clothing/just+in.do?nType=1",
+      	"id": "im",
+      	"date": "Thur Aug 21 22:11:59 2014",
+      	"image": ".thumbcontainer img",
+      	"imageAttr": "src",
+      	"name": ".thumbcontainer img",
+      	"nameAttr": "alt",
+      	"link": ".thumbcontainer a",
+      	"linkAttr": "href",
+      	"price": ".thumbInfo > .thumbPricing > #productPricing",
+      	"priceAttr": "text",
+      	"sku": ".thumbcontainer img",
+      	"skuAttr": "src",
+      	"nextPage": ".viewButtons:first>a",
+      	"nextPageAttr": "onclick",
+      	"listing": ".dirThumbsCatProductGrid>.thumbtext",
+      	"sampleSku": "//intermix.scene7.com/is/image/Intermix/PROD_F141C747SJGREY_140?&$273x341$",
+    	"usePhantomjs": true,
+      	"getSku": function(sku){      	 
+    	   sku = sku.substring(sku.lastIndexOf("/")+1);
+    	   
+    	   if (sku.indexOf("?") > 0){
+    	       sku = sku.substring(0, sku.indexOf("?"));   
+    	   }
+    	   
+    	   return sku.replace(/_/g, '');
+    	}
       }
 };
 

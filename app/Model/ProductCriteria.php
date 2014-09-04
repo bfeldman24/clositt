@@ -129,15 +129,37 @@ class ProductCriteria{
     public static function setCriteriaFromPost($row){
 		$productCriteria = new ProductCriteria();
 		
-		$productCriteria->setCompanies($row['company']);
-		$productCriteria->setCustomers($row['customer']);		
-		$productCriteria->setColors($row['colors']);		
-		$productCriteria->setSearchString(trim($row['searchTerm']));
-		$productCriteria->setMinPrice($row['abovePrice']);
-		$productCriteria->setMaxPrice($row['belowPrice']);
+		if (isset($row['company'])){
+		  $productCriteria->setCompanies($row['company']);
+		}
+
+		if (isset($row['customer'])){
+		  $productCriteria->setCustomers($row['customer']);		
+		}
+
+		if (isset($row['colors'])){
+    		$productCriteria->setColors($row['colors']);		
+		}
+
+		if (isset($row['searchTerm'])){
+		  $productCriteria->setSearchString(trim($row['searchTerm']));
+		}
+
+		if (isset($row['abovePrice'])){
+		  $productCriteria->setMinPrice($row['abovePrice']);
+		}
+
+		if (isset($row['belowPrice'])){
+		  $productCriteria->setMaxPrice($row['belowPrice']);
+		}
 		
-		$productCriteria->setCategories(ProductCriteria::convertArrayToCamelCase($row['category']));
-		$productCriteria->setTags(ProductCriteria::convertArrayToCamelCase($row['tags']));		
+		if (isset($row['category'])){
+		  $productCriteria->setCategories(ProductCriteria::convertArrayToCamelCase($row['category']));
+		}
+		
+		if (isset($row['tags'])){
+		  $productCriteria->setTags(ProductCriteria::convertArrayToCamelCase($row['tags']));		
+		}
 
         $weightings = array();
         if(!empty($row['tagWeight'])){

@@ -2,9 +2,8 @@ var tagPresenter = {
 
 	allTags: null,
 	
-	init: function(){		
-		tagPresenter.getAllTagNames();		
-		$(document).on("submit",".addTagForm > form", tagPresenter.addTag);
+	init: function(){		    	   			
+		$(document).on("submit",".addTagForm > form", tagPresenter.addTag);	
 	},
 	
 	showTagForm: function(el){
@@ -57,32 +56,7 @@ var tagPresenter = {
 						$(element).parents(".item").find(".addTagForm").html("").hide();	
 			 	   }
 			 	});
-			 	
-//				firebase.$.child(firebase.storePath)
-//				          .child("tags")
-//				          .child(tagInput.toLowerCase())
-//				          .child("items")
-//				          .child(itemid)
-//				          .transaction(function(currentData) {
-//                              if (currentData === null) {
-//                                    return 1;
-//                              } else {
-//                                    return currentData + 1;
-//                              }
-//                                                                
-//                            }, function(error, committed, snapshot) {
-//                              if (error)
-//                                    Messenger.error('Tag could not be saved. ' + error);
-//                              else if (!committed)
-//                                    Messenger.error('Tag could not be saved. ' + error);
-//                              else
-//                                    Messenger.timeout = 1750;
-//            						Messenger.success('Tag \"'+tagInput+'\" was saved!');					
-//            						Messenger.timeout = Messenger.defaultTimeout;
-//            						$(element).parents(".item").find(".topright").show();
-//            						$(element).parents(".item").find(".addTagForm").html("").hide();
-//            						$(element).parents(".item").find(".addTagForm").tooltip('destroy');
-//                            });    				    				 	
+			 	  				    				 	
 			}catch(err){
 				Messenger.error('Tag could not be saved. ' + err);
 				return false;
@@ -90,19 +64,5 @@ var tagPresenter = {
 		}
 		
 		return false;
-	},
-	
-	getAllTagNames: function(){
-		firebase.$.child(firebase.storePath).child("tags").once('value',function(snapshot){
-			tagPresenter.allTags = new Array();
-			
-			snapshot.forEach(function(tag){
-				tagPresenter.allTags.push(tag.name());
-			});
-			
-			$( "#tags" ).autocomplete({
-				source: tagPresenter.allTags
-			});
-		});
-	}
+	}		
 };

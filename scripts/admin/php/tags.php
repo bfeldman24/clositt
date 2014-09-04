@@ -65,7 +65,7 @@ body{
     height: auto;
 }
 
-.approvePrevious, .remove, .removePrevious{
+.approvePrevious, .remove, .removePrevious, .approveTag{
     margin-bottom: 5px;   
 }
 
@@ -80,6 +80,56 @@ body{
 
 .price{
     font-size: 80%;   
+}
+
+#product-grid .outfit{
+    margin: 0;    
+}
+
+#product-grid .picture{
+    height: auto;
+    width: auto;
+}
+
+#product-grid .outfit, .bottom-block, .overlay > .bottom{
+    width: 100px;   
+}
+
+.overlay > .bottom{
+    z-index: 999;   
+}
+
+.overlay > .bottom > .name {
+    font-size: 8pt;
+}
+
+.productActions .btn {
+    border-radius: 3px !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    padding: 1px 5px !important;
+}
+
+#loadingMask{
+    background: none repeat scroll 0 0 rgba(70, 70, 70, 0.8);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;   
+} 
+
+#loadingMask img{
+    height: 50px;
+    left: 48%;
+    position: fixed;
+    top: 48%;
+    width: 50px;   
+}
+
+.approved{
+    color: #AAA;
+    margin: 0 10px 0 20px;
 }
 </style>
 
@@ -117,15 +167,21 @@ body{
     <hr>
     
     <div id="main-workspace" style="display:none;"></div>    
-    <div id="sample-grid-container"><div id="product-grid"></div></div>
+    <div id="sample-grid-container">
+        <div id="product-grid"></div>
+        <div id="productSpinner" style="display:none;"><img src="../../../css/images/loading.gif"/></div>
+    </div>
     <a href="#top" id="clear">Clear Results</a>
     <a href="#top" id="gototop">Go To Top</a>    
+</div>
+
+<div id="loadingMask">
+    <img src="../../../css/images/loading.gif"/>
 </div>
 
 
 <?php echo CLOSITT_JS; ?>
 <script type="text/javascript">
-	
 
 var tagAdmin = {
     tag: null,
@@ -135,7 +191,8 @@ var tagAdmin = {
         $(document).on("change","#tagTable input:radio", tagAdmin.tagClicked);
         $(document).on("click", ".remove", tagAdmin.removeTag);
         $(document).on("click", ".removePrevious", tagAdmin.removePreviousTags);        
-        $(document).on("click", ".approvePrevious", tagAdmin.approvePrevious);
+        $(document).on("click", ".approveTag", tagAdmin.approveTag);
+        $(document).on("click", ".approvePrevious", tagAdmin.approvePrevious);                
         $(document).on("click",".tag-options label",tagAdmin.changeTagOptions);
         tagAdmin.getTags();
     },
@@ -146,17 +203,13 @@ var tagAdmin = {
         var company = $product.attr("company");
         var name = $product.attr("name");        
         
-        var result = confirm("Are you sure that you want to REMOVE the tag ["+tagAdmin.tag+"] from: " + company + " : " + name + "?");
-        
-        if (result) {
-            $.post(window.HOME_ROOT + "spider/removetag", {sku: sku, tag: tagAdmin.tag}, function(data){
-                 Messenger.info(data);                 
-                 
-                 if (data == "success"){
-                      $product.remove();
-                 }
-            });
-        }
+        $.post(window.HOME_ROOT + "t/removetag", {sku: sku, tag: tagAdmin.tag}, function(data){
+                Messenger.info(data);                 
+                
+                if (data == "success"){
+                    $product.remove();
+                }
+        });        
     },
     
     removePreviousTags: function(e){
@@ -168,16 +221,20 @@ var tagAdmin = {
             skus.push($(this).attr("pid"));    
         });           
         
-        var result = confirm("Are you sure that you want to REMOVE the tag ["+tagAdmin.tag+"] for this product and all of the previous ones?");
+        var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
+        var result = false; 
         
-        if (result) {
-            $.post(window.HOME_ROOT + "spider/removetags", {skus: skus, tag: tagAdmin.tag}, function(data){
+        if (!skipConfirmation){
+            result = confirm("Are you sure that you want to REMOVE the tag ["+tagAdmin.tag+"] for this product and all of the previous ones? \n(If you do not want to see this message again shift click next time)");
+        }
+        
+        if (skipConfirmation || result) {
+            $.post(window.HOME_ROOT + "t/removetags", {skus: skus, tag: tagAdmin.tag}, function(data){
                  Messenger.info(data);                 
                  
                  if (data == "success"){                    
                     $product.prevAll().remove();
-                    $product.remove();  
-                    location.hash = "sample-grid-container";                  
+                    $product.remove();               
                  }
             });
         } 
@@ -192,23 +249,44 @@ var tagAdmin = {
             skus.push($(this).attr("pid"));    
         });           
         
-        var result = confirm("Are you sure that you want to APPROVE the tag ["+tagAdmin.tag+"] for this product and all of the previous ones?");
+        var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
+        var result = false; 
         
-        if (result) {
-            $.post(window.HOME_ROOT + "spider/approvetags", {skus: skus, tag: tagAdmin.tag}, function(data){
+        if (!skipConfirmation){
+            result = confirm("Are you sure that you want to APPROVE the tag ["+tagAdmin.tag+"] for this product and all of the previous ones? \n(If you do not want to see this message again shift click next time)");
+        }
+        
+        if (skipConfirmation || result) {
+            $.post(window.HOME_ROOT + "t/approvetags", {skus: skus, tag: tagAdmin.tag}, function(data){
                  Messenger.info(data);                 
                  
                  if (data == "success"){                    
                     $product.prevAll().remove();
-                    $product.remove();  
-                    location.hash = "sample-grid-container";                  
+                    $product.remove();                
                  }
             });
         }
     },
     
+    approveTag: function(e){
+        var $product = $(e.currentTarget).parents(".outfit");        
+        var skus = [];        
+        skus.push($product.attr("pid"));                         
+        
+        var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
+        
+        $.post(window.HOME_ROOT + "t/approvetags", {skus: skus, tag: tagAdmin.tag}, function(data){
+            Messenger.info(data);                 
+            
+            if (data == "success"){                    
+                $product.remove();                
+            }
+        });        
+    },
+    
     tagClicked: function(e){
-        searchController.clearSearch();
+        $("#productSpinner").show();
+        tagAdmin.clearResults();
         searchController.isSearchActive = true;    
         gridPresenter.maxNumberOfPagesLoadingAtOnce = 1;
      
@@ -220,37 +298,53 @@ var tagAdmin = {
             searchController.criteria.category = [];
             searchController.criteria.category.push(tagAdmin.tag);
             searchController.getProducts(searchController.showResults);
+            $("#productSpinner").hide();     
         }
-    },        
+    },  
+    
+    clearResults: function(){
+        gridPresenter.endTask();     	      	
+	 	productPresenter.filterStore = null;	
+	 	searchController.criteria = null;
+	 	productPresenter.productIndex = 0;
+        searchController.pageIndex = 0;
+        gridPresenter.productIndex = 0; 	 		 	
+        searchController.isSearchActive = false; 
+        $("#product-grid").html("");   
+    },          
   
-    clear: function(el){
-        searchController.clearSearch(el);
-        searchController.isSearchActive = true;    
+    clear: function(el){        
         gridPresenter.maxNumberOfPagesLoadingAtOnce = -1; 
         tagAdmin.tag = null;
         $("#tagTable input").prop("checked",false);           
     },
     
     getTags: function(){
-        $.get(window.HOME_ROOT + "spider/getuniquetags", function(data){
-   	          searchController.clearSearch();
-              searchController.isSearchActive = true;    
+        $.post(window.HOME_ROOT + "t/getuniquetags", function(data){
+   	          tagAdmin.clearResults();
+   	          tagAdmin.clear();   
               
               var tags = JSON.parse(data);
+              var tagsLength = Object.keys(tags).length;
               var table = [];  
               var colNum = 5;        
-              var numRows = Math.ceil(tags.length / colNum);            
+              var numRows = Math.ceil(tagsLength / colNum);            
    	          var i = 0;        
    
               for(var c=0; c < colNum; c++){
                      for(var r = 0; r < numRows; r++){
-     			          if (i >= tags.length){ break; }
+     			          if (i >= tagsLength){ break; }
      
      			          if (table[r] == null){
                                table[r] = [];
                      	  }	
+                     	                       	  
+                          table[r][c] = [];                     	  
      
-     			          table[r][c] = tags[i++]; 
+                          var tag = Object.keys(tags)[i++];                          
+     			          table[r][c]['tag'] = tag;
+     			          table[r][c]['approved'] = parseInt(tags[tag]["approved"]);
+     			          table[r][c]['total'] = parseInt(tags[tag]["approved"]) + parseInt(tags[tag]["unapproved"]);
      		        }
      		
      		        if (i >= tags.length){ break; }
@@ -269,16 +363,20 @@ var tagAdmin = {
                                    .attr("type","radio")
                                    .attr("class","tagCheckbox")
                                    .attr("name","tags")
-                                   .attr("value",table[r][c])                                                                
+                                   .attr("value",table[r][c].tag)                                                                
                            ).append(
-                               $("<span>").text(table[r][c])
+                               $("<span>").addClass("tagname").text(table[r][c].tag)
+                           ).append(
+                               $("<span>").addClass("approved").attr("title","Approved / Total").text("(" + table[r][c].approved + "/" + table[r][c].total + ")")
                            )
+                           
                        )
                    }
                    
                    tagTable.append( row );    		                              
                }
                
+               $("#loadingMask").hide();
                $("#tagTable").html(tagTable);
        });   
     },
@@ -332,7 +430,7 @@ productPresenter.getProductTemplate = function(product){
 	var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
 	   var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'" company="'+company+'" name="'+name+'">';			        html += '<div class="picture"><img data-src="' + image + '" src="../../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
 			html += '<div class="bottom-block">';
-			    html +='<div class="companyName">' + company + '</div>';
+			    //html +='<div class="companyName">' + company + '</div>';
 				html +='<div class="price">' +  tagAdmin.tag + '</div>';
 			html += '</div>';
 			
@@ -341,10 +439,11 @@ productPresenter.getProductTemplate = function(product){
 			    html +='<div class="bottom">';
 
                     if(category !=undefined){
-                        html += '<div class="productActions" >';
-                        html += '<div class="approvePrevious btn btn-info">Approve All Previous</div>';
-                        html += '<div class="remove btn btn-warning">Remove Tag</div>';
-                        html += '<div class="removePrevious btn btn-danger">Remove All Previous</div>';
+                        html += '<div class="productActions" >';                        
+                            html += '<div class="approveTag btn btn-info">Approve Tag</div>';
+                            html += '<div class="approvePrevious btn btn-info">Approve All Previous</div>';
+                            html += '<div class="remove btn btn-warning">Remove Tag</div>';
+                            html += '<div class="removePrevious btn btn-danger">Remove All Previous</div>';
                         html += '</div>';
                     }
 
@@ -361,16 +460,12 @@ productPresenter.getProductTemplate = function(product){
 
 $(document).ready(function() {  
     Messenger.init();  
-    firebase.init();
     pagePresenter.init();
-	productPagePresenter.init();
 	gridPresenter.init();
 	productPresenter.init();	
-	filterPresenter.init();	
 	tagPresenter.init();
 	searchController.init();	
 	reviewsPresenter.init();		
-	colorPresenter.init();		
 	tagAdmin.init();
 	
 	// Overrides:
