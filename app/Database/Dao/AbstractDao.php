@@ -34,7 +34,7 @@ class AbstractDao{
 			$this->logDebug($errorCode ,$sql . " (" . $parameters . "), (".$parameterTypes.")" );
 		}
 		
-		$results =& $stmt->execute($params);
+		$results = $stmt->execute($params);
 		$stmt->free();
 		
 		if (PEAR::isError($results)) {
