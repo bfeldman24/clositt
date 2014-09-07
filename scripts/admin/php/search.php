@@ -127,7 +127,6 @@ body{
 
 $(document).ready(function() {
     searchController.isSearchActive = true;
-    firebase.init();
     pagePresenter.init();
 	productPagePresenter.init();
 	gridPresenter.init();

@@ -51,37 +51,37 @@ function loggedIn(){
 var onlineUsers = {
     
     init: function(){
-        firebase.$.child("userdata").once('value', onlineUsers.trackUsers); 
-        firebase.$.child("onlineGuests").on('child_added', onlineUsers.trackNewGuests); 
-        firebase.$.child("onlineGuests").on('child_removed', onlineUsers.trackSignedOffGuests);
+        //firebase.$.child("userdata").once('value', onlineUsers.trackUsers); 
+        //firebase.$.child("onlineGuests").on('child_added', onlineUsers.trackNewGuests); 
+        //firebase.$.child("onlineGuests").on('child_removed', onlineUsers.trackSignedOffGuests);
     },
         
     trackUsers: function(users){
                 
         users.forEach(function(user){
                                                                             
-            firebase.$.child("userdata").child(user.name()).child(firebase.connections).on('value', function(data){
-                
-                if (data.val()){
-                    console.log(user.name() + " is ONLINE");
-                    
-                    if ($("#user-" + user.name()).length <= 0){
-                        
-                        firebase.$.child("userdata").child(user.name()).once('value', function(userdata){
-                            var name = userdata.child("name").val();
-                            var email = userdata.child("email").val();                            
-                            
-                            $("#userList").append( 
-                                $("<li>").addClass("user").attr("id","user-" + user.name())
-                                .text(name + " (" + email + ")")
-                            );
-                        });
-                    }
-                }else{
-                    console.log(user.name() + " is OFFLINE");
-                    $("#user-" + user.name()).remove();
-                } 
-            });          
+//            firebase.$.child("userdata").child(user.name()).child(firebase.connections).on('value', function(data){
+//                
+//                if (data.val()){
+//                    console.log(user.name() + " is ONLINE");
+//                    
+//                    if ($("#user-" + user.name()).length <= 0){
+//                        
+//                        firebase.$.child("userdata").child(user.name()).once('value', function(userdata){
+//                            var name = userdata.child("name").val();
+//                            var email = userdata.child("email").val();                            
+//                            
+//                            $("#userList").append( 
+//                                $("<li>").addClass("user").attr("id","user-" + user.name())
+//                                .text(name + " (" + email + ")")
+//                            );
+//                        });
+//                    }
+//                }else{
+//                    console.log(user.name() + " is OFFLINE");
+//                    $("#user-" + user.name()).remove();
+//                } 
+//            });          
         });              
     },
     

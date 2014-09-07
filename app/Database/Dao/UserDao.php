@@ -58,10 +58,25 @@ class UserDao extends AbstractDao {
 		$salt = $user->getSalt();
 		$email = $user->getEmail();
 		
-		$paramTypes = array('text', 'text', 'text');
+		$paramTypes = array('text', 'text', 'text', 'text');
         $params = array($password, $salt, $oldPassword, $email);
         
         return $this->update($sql, $params, $paramTypes, "2394829345");
+	}
+	
+	public function forceUpdateUserPassword($user){
+	    $sql = "UPDATE ".USERS.
+	          " SET ".USER_PASS." = ?, ".USER_SALT." = ?, ".USER_STATUS." = 1".
+              " WHERE ".USER_EMAIL." = ? ";	   
+				
+		$password = $user->getPassword();
+		$salt = $user->getSalt();
+		$email = $user->getEmail();
+		
+		$paramTypes = array('text', 'text', 'text');
+        $params = array($password, $salt, $email);
+        
+        return $this->update($sql, $params, $paramTypes, "38924792");
 	}
 	
 	public function updateUserInfo($user){

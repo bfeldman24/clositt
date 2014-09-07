@@ -74,22 +74,8 @@ function loggedOutError(){
 	Messenger.error("You are not Authorized to enter the site");
 }
 
-function loggedIn(){	
-	
-	firebase.$.child("Auth/Token").on('value',function(snapshot){	
-			var token = snapshot.val();			
-			
-			$.post("app/auth.php", { auth: token, user: session.userid }, function(data) {
-				if(data == "success"){
-					Messenger.success("You are now authorized to enter the site.");
-					setTimeout(function(){
-						location.href = "<?php echo HOME_ROOT; ?>";
-					}, 2000);
-				}else{
-					Messenger.info("Not Authorized");
-				}
-			});
-		});
+function loggedIn(){		
+	location.href = window.HOME_ROOT;
 }
 
 $("#signin").on("submit",function(event){
@@ -106,13 +92,6 @@ $("#signin").on("submit",function(event){
 		Messenger.info("Login information is incorrect");	
 		return false;
 	}		
-});
-
-$("#waitinglist").on("submit",function(event){
-	event.preventDefault();
-    firebase.addToWaitingList($("#joinEmail").val(), waitingListCallback);
-    
-    return false;   
 });
 
 function waitingListCallback(success){

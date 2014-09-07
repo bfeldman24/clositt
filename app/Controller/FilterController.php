@@ -151,7 +151,7 @@ class FilterController extends Debugger {
 }
 
 
-if (isset($_GET['method'])){
+if (isset($_GET['method']) && $_GET['class'] == "filter"){
     $filterController = new FilterController($mdb2);              
     
     switch($_GET['method']){

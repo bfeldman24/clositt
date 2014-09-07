@@ -412,7 +412,7 @@ var closetFormPresenter = {
     				  } else {
     						Messenger.success('This item was added to "' + closetName + '"');
     						closetFormPresenter.showClosetForm(el);
-    						closetFormPresenter.updateClosetCount(sku);	
+    						closetFormPresenter.updateClosetCount();	
     				  }
     			});	
 			     				
@@ -448,7 +448,7 @@ var closetFormPresenter = {
     						Messenger.error('Item could not be saved into ' + closetName);	 			       	 			       
     				  } else {
     						Messenger.success('This item was added to "' + closetName + '"');    						
-    						closetFormPresenter.updateClosetCount(sku);	
+    						closetFormPresenter.updateClosetCount();	
     				  }
     			});
     		        		        		   
@@ -467,23 +467,18 @@ var closetFormPresenter = {
 		}
 	},
 	
-	updateClosetCount: function(sku){
-	    
-	    $.post( window.HOME_ROOT + "p/cc", {sku: sku}, function(newValue){
-	       
-	       if (!isNaN(newValue)){	                       
-	           var productTile = $('.item[pid="'+sku+'"] .numClosets');
-	                       
-	           var total = parseInt(productTile.find(".counter").text()) + parseInt(newValue);
-    	       productTile.find(".counter").text(total);
-    	       $('.item[pid="'+sku+'"] .productPageClosittCount .counter').text(total);
-    	       
-    	 	   var closetCountPlural = total == 1 ? "" : "s"; 
-    	 	   productTile.attr("title","Added to "+total+" Clositt"+closetCountPlural);
-    	 	   productTile.tooltip('destroy');
-    	 	   productTile.tooltip();
-    	    }
-	    });
+	updateClosetCount: function(){
+	    	              
+       var productTile = $('.item[pid="'+sku+'"] .numClosets');
+                    
+       var total = parseInt(productTile.find(".counter").text()) + 1;
+       productTile.find(".counter").text(total);
+       $('.item[pid="'+sku+'"] .productPageClosittCount .counter').text(total);
+       
+ 	   var closetCountPlural = total == 1 ? "" : "s"; 
+ 	   productTile.attr("title","Added to "+total+" Clositt"+closetCountPlural);
+ 	   productTile.tooltip('destroy');
+ 	   productTile.tooltip();
 	}
 }
 
