@@ -5,6 +5,7 @@ require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
 require_once(dirname(__FILE__) . '/../View/ProductTemplate.php');
 require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
+require_once(dirname(__FILE__) . '/ListController.php');
 
 class ProductController {	
 	private $productDao = null;
@@ -220,6 +221,10 @@ class ProductController {
 				$products[] = $productEntity->toArray();
 			}
 		}
+		
+		if ($pageNumber == 0){
+		  ListController::writeToFile("searchTerms",$criteria->getSearchString());
+		}
 
         $facets = $results['facets'];
 
@@ -229,7 +234,7 @@ class ProductController {
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['class'] == "products"){
     $productController = new ProductController($mdb2);              
     
     if ($_GET['method'] == 'lookup' && isset($_POST['sku'])){
@@ -256,10 +261,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page'])){      
     	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
         $product = $productController->searchElastic($productCrit, $_GET['page'], QUERY_LIMIT);
-    }else if ($_GET['method'] == 'cc' && isset($_POST['sku'])){     	   	    
-        $product = $productController->updateClosittCounter($_POST['sku']);
-    }else if ($_GET['method'] == 'rc' && isset($_POST['sku'])){                        	     	   	    
-        $product = $productController->updateCommentCounter($_POST['sku']);
     }
     
     if (isset($product) && $product != null){

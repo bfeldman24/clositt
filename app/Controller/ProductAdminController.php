@@ -514,7 +514,7 @@ class ProductAdminController extends Debugger {
 
 $productAdminController = new ProductAdminController($mdb2);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){                          
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['class'] == "admin"){                          
     $output = null;
     
     switch ($_GET['method']){    
@@ -586,7 +586,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method'])){
     echo $output;  
      
            
-}else{
+}else if ($_GET['class'] == "admin"){
 // GET METHOD    
 
     switch($_GET['method']){

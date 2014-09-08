@@ -26,12 +26,14 @@ var reviewsPresenter = {
 	 	       reviewBlock.find(".review-comments").html("");       	 	       
       	 	   reviewBlock.find(".review-rating").attr("userRating",0);      	 	   
       	 	   reviewsPresenter.refreshRating(reviewBlock, 0);
-      	 	   //reviewsPresenter.showAverageRating(reviewBlock);
-      	 	         	 	   	
-      	 	   reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);
-      	 	   reviewsPresenter.currentReviewFB.on('child_added', reviewsPresenter.addReview);	
+      	 	   //reviewsPresenter.showAverageRating(reviewBlock);      	 	         	 	   	
       	 	   
-      	 	   //reviewBlock.show('blind');
+      	 	   $.post( window.HOME_ROOT + "r/get", {s: sku}, function(reviews){
+      	 	       for( var i=0; i< reviews.length; i++){
+          	 	       reviewsPresenter.addReview(reviews[i]);
+      	 	       }
+      	 	   },"json");
+      	 	   
     	       reviewBlock.show(); 
 	 	   }
 	 },
@@ -42,21 +44,18 @@ var reviewsPresenter = {
 	 	   
  	       reviewBlock.find(".review-comments").html("");       	 	       
 	 	   reviewBlock.find(".review-rating").attr("userRating",0);      	 	   
-	 	   reviewsPresenter.refreshRating(reviewBlock, 0);	 	   	 	   
-
-	 	   reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);
-	 	   reviewsPresenter.currentReviewFB.on('child_added', reviewsPresenter.addReviewForProductPage);	 
+	 	   reviewsPresenter.refreshRating(reviewBlock, 0);	 	   	 	    
  	 	   
-	       //reviewBlock.show('blind');
+ 	 	   $.post( window.HOME_ROOT + "r/get", {s: sku}, function(reviews){
+	 	       for( var i=0; i< reviews.length; i++){
+    	 	       reviewsPresenter.addReviewForProductPage(reviews[i]);
+	 	       }
+	 	   },"json");
+ 	 	    	 	   
 	       reviewBlock.show();
 	 },
 
-	 hideReview:function(review){
-	   
-	     if (reviewsPresenter.currentReviewFB != null){
-     	     reviewsPresenter.currentReviewFB.off('child_added', reviewsPresenter.addReview);	
-     	     reviewsPresenter.currentReviewFbUrl = null;
-	     }
+	 hideReview:function(review){	   	     
 
  	     if(review != null && review.is(":visible")){
 	 	 	   review.hide('blind');
@@ -84,53 +83,37 @@ var reviewsPresenter = {
       		 	var minute = reviewsPresenter.addZero(now.getMinutes());
       		 	
       		 	var nowString = (now.getMonth() + 1) +"/"+ now.getDate() +"/"+ now.getFullYear() + " " + hour +":"+ minute + " " + ampm;
-      		 	var user = session.username == null ? "Guest" : session.username;
+      		 	var user = session.userid == null ? "Guest" : session.userid;
       		 	var rating = targetOutfit.find(".review-rating").attr("userRating");
       		 	rating = rating == undefined ? 0 : rating;
       		 	
       		 	var sku = targetOutfit.attr("pid");
-      		 	reviewsPresenter.currentReviewFB = firebase.$.child("reviews/"+sku);	 	 	
-      		 	reviewsPresenter.currentReviewFB.push({name:user, rating:rating, comment: comment, date:nowString, sku:sku});	 	
+      		 	
+      		 	var reviewData = {u:user, r:rating, c: comment, d:nowString, s:sku};
+      		 	$.post( window.HOME_ROOT + "r/add", reviewData, function(result){
+      		 	      if (result != "success"){
+      		 	          Messenger.error("Sorry! There was a problem saving your comment!");
+      		 	      }else{
+      		 	         var total = parseInt($('.item[pid="'+sku+'"]').find(".numReviews > .counter").text()) + 1;
+        	           
+            	         $('.item[pid="'+sku+'"]').find(".numReviews > .counter").text(total);
+          		 	     targetOutfit.find(".productPageCommentCount").text("("+total+")"); 
+      		 	      }
+      		 	});
       		 	
       		 	targetOutfit.find(".review-add-comment").val("");		 	
       		 	var review = targetOutfit.find(".review-float");
       		 	reviewsPresenter.refreshRating(review, 0);
-      		 	
-      		 	// update review count
-      		 	$.post( window.HOME_ROOT + "p/rc", {sku: sku}, function(newValue){
-	       
-        	       if (!isNaN(newValue)){
-        	           var total = parseInt($('.item[pid="'+sku+'"]').find(".numReviews > .counter").text()) + parseInt(newValue);
-        	           
-            	       $('.item[pid="'+sku+'"]').find(".numReviews > .counter").text(total);
-          		 	   targetOutfit.find(".productPageCommentCount").text("("+total+")");
-            	    }
-        	    });
-      		 	
-//      		 	firebase.$.child("clositt/products/"+sku+"/rc").transaction(function(value) {
-//      		 	   var newValue = 1;
-//      		 	   
-//      		 	   if(value == null){		 	       
-//          	 	       firebase.$.child("clositt/products/"+sku+"/rc").set(newValue);
-//      		 	   }else{
-//      		 	        newValue = value +1;		 	        
-//      		 	   } 		 	            
-//      		 	   
-//      		 	   $('.item[pid="'+sku+'"]').find(".numReviews > .counter").text(newValue);
-//      		 	   targetOutfit.find(".productPageCommentCount").text("("+newValue+")");
-//      		 	   return newValue;       
-//                  });
-      		 	
+      		 	      		 	      		 	      		 	
       	 	}else{
       	 		Messenger.info("Please enter a comment");
       	 	}
 		}
 	 },
 	 
-	 addReview: function(snapshot){
-		var review = snapshot.val();
+	 addReview: function(review){
 		if(review != null){		
-		    var reviewBlock = reviewsPresenter.getReviewBlock(review.sku);		  	
+		    var reviewBlock = reviewsPresenter.getReviewBlock(review.s);		  	
 			
 			if(!reviewBlock.find(".review-comments > li").length){
 				reviewBlock.find(".review-comments").html("");	
@@ -141,9 +124,9 @@ var reviewsPresenter = {
 					reviewsPresenter.getReviewHeader(review)
 				).append(				
 					$("<span>").addClass("review-text").append( 
-					   $("<span>").addClass("review-comment-user").text(review.name + ": ")
+					   $("<span>").addClass("review-comment-user").text(review.n + ": ")
 					).append(
-					   $("<pre>").text(review.comment) 
+					   $("<pre>").text(review.c) 
 					)
 				)
 			);
@@ -152,10 +135,9 @@ var reviewsPresenter = {
 		}	
 	 },
 	 
-	 addReviewForProductPage: function(snapshot){
-		var review = snapshot.val();
+	 addReviewForProductPage: function(review){
 		if(review != null){		
-		    var reviewBlock = reviewsPresenter.getReviewBlock(review.sku + "pp");		  	
+		    var reviewBlock = reviewsPresenter.getReviewBlock(review.s + "pp");		  	
 			
 			if(!reviewBlock.find(".review-comments > li").length){
 				reviewBlock.find(".review-comments").html("");	
@@ -166,9 +148,9 @@ var reviewsPresenter = {
 					reviewsPresenter.getReviewHeader(review)
 				).append(				
 					$("<span>").addClass("review-text").append( 
-					   $("<span>").addClass("review-comment-user").text(review.name + ": ")
+					   $("<span>").addClass("review-comment-user").text(review.n + ": ")
 					).append(
-					   $("<pre>").text(review.comment) 
+					   $("<pre>").text(review.c) 
 					)
 				)
 			);
@@ -183,20 +165,20 @@ var reviewsPresenter = {
 	 },
 	 
 	 getReviewHeader: function(review){
-	    var isToday = reviewsPresenter.isDateToday(review.date);	    
-	    var dateTimeSplitIndex = review.date.indexOf(" ");
+	    var isToday = reviewsPresenter.isDateToday(review.d);	    
+	    var dateTimeSplitIndex = review.d.indexOf(" ");
 	    var reviewDate = "";
 	    
 	    if (isToday){
-	       reviewDate = review.date.substring(dateTimeSplitIndex + 1);  
+	       reviewDate = review.d.substring(dateTimeSplitIndex + 1);  
 	    }else{
-	       reviewDate = review.date.substring(0,dateTimeSplitIndex);
+	       reviewDate = review.d.substring(0,dateTimeSplitIndex);
 	    }	    	    
 	   
 	 	return $("<div>").addClass("review-header").append(
 	 		$("<span>").addClass("review-comment-date").text(reviewDate)	 		
 	 	).append(
-		 		reviewsPresenter.getReviewRating(review.rating)
+		 		reviewsPresenter.getReviewRating(review.r)
 	 	);
 	 },	 	 
 	 

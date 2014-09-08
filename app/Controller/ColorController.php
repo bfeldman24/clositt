@@ -389,7 +389,7 @@ class ColorController extends AbstractDao{
 	}
 }
      
-if( isset($_GET['method']) ){
+if( isset($_GET['method']) && $_GET['class'] == "color"){
     $colorController = new ColorController($mdb2);                  
     
     if ($_GET['method'] == 'addFromFile'){

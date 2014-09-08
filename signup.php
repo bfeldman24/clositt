@@ -134,13 +134,6 @@ $("#signup-form").on("submit",function(event){
 	return false;
 });
 
-$("#waitinglist").on("submit",function(event){
-	event.preventDefault();
-    firebase.addToWaitingList($("#joinEmail").val(), waitingListCallback);
-    
-    return false;   
-});
-
 function waitingListCallback(success){
     if(success){
         $("#joinEmail").val("");

@@ -55,12 +55,7 @@ var searchController = {
 		var cleanSearchTerm = searchTerm;
 		var tags = [];
 		var belowPrice = null;
-		var abovePrice = null;
-		
-		// log search term
-		var logSearchTerm = searchTerm.replace(/[^A-Za-z0-9\w\s]/gi,'');
-		var timestamp = new Date().getTime();
-		firebase.$.child("search").child(logSearchTerm).child(timestamp).set({user: session.userid});
+		var abovePrice = null;				
 		
 		// get price if there is one
 		if(searchTerm.indexOf("$") > 0 || searchTerm.indexOf("dollar") > 0){  
