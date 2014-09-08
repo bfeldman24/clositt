@@ -108,41 +108,97 @@ class TagController{
 		return '';	 
 	}
 	
-	public function populateTagsBasedOnExistingTags(){
-	   $sql = "SELECT DISTINCT ". TAG_STRING. " FROM " . TAGS;
-	   $results = $this->getResults($sql, array(), array(), "2383294");	   	   
-	   
-	   $insertSQL = "INSERT INTO " . TAGS . 
-	           " (" . TAG_STRING . "," .
-                      PRODUCT_SKU . "," .
-                      TAG_COUNT . ", " .
-                      TAG_DATE_ADDED . ", " .
-                      TAG_GROUP_ID . ")" .
-	           "SELECT ?, sku, 1, NOW(), " .
-	           "(SELECT COALESCE((SELECT ".TAG_GROUP_ID." FROM ".TAGS." WHERE ".TAG_STRING." = ? LIMIT 1), 1)), " .
-               " FROM " . PRODUCTS .
-               " WHERE LOWER(".PRODUCT_NAME.") LIKE '%?%' OR LOWER(".PRODUCT_DETAILS.") LIKE '%?%'";
-	   
-	   $insertSTMT = $this->db->prepare($insertSQL, array('text','text','text'), MDB2_PREPARE_MANIP);
-	   
-	   if(is_object($results)){		 
-			while($tag = $results->fetchOne()){	                                    
-                try {                                                
-                    if(DEBUG){
-                        $tagParams = print_r($tag, true);
-            			$this->debug("239847293" ,$insertSTMT . " (" . $tagParams . ")" );
-            		}
-                    
-                    $results = $insertSTMT->execute($tag, $tag, $tag, $tag);
-                } catch (Exception $e) {
-                    echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-                    print_r($results);
-                }                    
+	public function getTagListToPopulateTags(){	   
+	    $tagsListFile = dirname(__FILE__) . '/../Data/tags.csv';	    	    			      
+		$TAG = 0;
+		$GROUP = 1;
+		$SYN = 2;
+		$EXCL = 3;
+		
+		$tags = file($tagsListFile);		
+		
+		// add all groups that don't already exist
+		$tagGroups = array();
+		for ($i=1; $i < count($tags); $i++){
+		  $tagParts = explode(",", strtolower($tags[$i]));
+		  $group = ucwords($tagParts[$GROUP]);
+		  
+		  if (!in_array($group, $tagGroups)){
+		         $tagGroups[] = $group;
+		  }   
+		}      
+		$this->tagDao->addTagGroups($tagGroups);
+		      
+		// get mapping from group name to group id
+		$results = $this->tagDao->getAllTagGroups();
+		$tagGroupMapping = array();
+		if(is_object($results)){
+		 
+			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+			     $tagGroupMapping[stripslashes($row[TAG_GROUP_NAME])] = $row[TAG_GROUP_ID];
 			}
-	   }
+		}		
+		
+		$affectedRows = 0;
+		for ($i=1; $i < count($tags); $i++){
+		      
+		      $tagParts = explode(",", strtolower($tags[$i]));
+		      $tag = $tagParts[$TAG];
+		      $group = ucwords($tagParts[$GROUP]);
+		      $synonyms = $tagParts[$SYN];
+		      $this->enrichSynonyms($tag, $synonyms);
+		      $excludes = $tagParts[$EXCL];		      		      
+		      
+		      // Get groupId or default to 1
+		      if (isset($tagGroupMapping[$group])){		          
+		          $groupid = $tagGroupMapping[$group];
+		      }else{
+		          $groupid = 1;
+		      }
+		      
+		      $result = $this->tagDao->populateTagsBasedOnExistingTag($tag, $groupid, $synonyms, $excludes);              
+		      
+		      if (is_numeric($result)){
+		          $affectedRows += $result;
+		      }
+		}
+									
+		return $affectedRows;
+	}	
+	
+	private function enrichSynonyms($tag, &$synonyms){
+	    $tagNoSpaces = str_replace(" ", "-",$tag);                          
         
-       $insertSQL->free();        		
-	}
+        if (isset($synonyms) && trim($synonyms) != ""){
+            $synonyms .= "|";
+        }else{
+            $synonyms = "";   
+        }
+        
+        $synonyms .= $tag;
+    	              
+        // remove trailing es
+        if (substr($tag,strlen($tag)-2) == "es"){
+          	$synonyms .= "|" . substr($tag,0,strlen($tag)-2);
+          
+          	if ($tag != $tagNoSpaces){
+          		$synonyms .= "|" . substr($tagNoSpaces,0,strlen($tagNoSpaces)-2);
+          	}
+        }
+        
+        if (substr($tag,strlen($tag)-1) == "s"){
+            // remove trailing s
+        	$synonyms .= "|" . substr($tag,0,strlen($tag)-1);
+        
+        	if ($tag != $tagNoSpaces){
+        		$synonyms .= "|" . substr($tagNoSpaces,0,strlen($tagNoSpaces)-1);
+        	}
+        }                
+    
+        if ($tag != $tagNoSpaces){                      
+          	$synonyms .= "|" . $tagNoSpaces;
+        }                 
+	}	
 	
 	public function getUniqueTags(){	   
 	    $tags = array();	    			      
@@ -200,7 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['class'] == "tags"){
                 break;
             case 'getuniquetags':
                 $tagResults = $tagController->getUniqueTags();    
-                break;
+                break;            
             case 'removetag':
                 $tagResults = $tagController->removeTag($_POST);   
                 break;             
@@ -210,6 +266,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['class'] == "tags"){
             case 'approvetags':
                 $tagResults = $tagController->approveTags($_POST);   
                 break;  
+            case 'updateproducttags':
+                $tagResults = $tagController->getTagListToPopulateTags();    
+                break;
         }       
     }
     

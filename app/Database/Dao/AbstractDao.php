@@ -37,7 +37,8 @@ class AbstractDao{
 		$results = $stmt->execute($params);
 		$stmt->free();
 		
-		if (PEAR::isError($results)) {
+		$PEAR = new PEAR();
+		if ($PEAR->isError($results)) {
 			$this->logError($errorCode ,$results->getMessage(),$sql);
 		    return false;
 		}
@@ -77,7 +78,8 @@ class AbstractDao{
             return false;
         }         		
 		
-		if (PEAR::isError($affectedRows)) {
+		$PEAR = new PEAR();
+		if ($PEAR->isError($affectedRows)) {
 		    $_SESSION['errors'] = $errorCode . " - error";
 			$this->logError($errorCode ,$affectedRows->getMessage(),$sql);
 		    return false;
