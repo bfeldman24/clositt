@@ -203,9 +203,8 @@ class ElasticDao{
         $params['index'] = $this->index;
         $params['type'] = "product";
         $params['id'] = $sku;
-        $params['body']['doc'] =array($fieldToUpdate=> $newValue);
+        $params['body']['script'] = "ctx._source." . $fieldToUpdate ."+=1";
         $response = $this->client->update($params);
-
         return $response;
     }
 }
