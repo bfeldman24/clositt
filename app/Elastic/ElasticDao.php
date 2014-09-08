@@ -191,15 +191,15 @@ class ElasticDao{
         return $searchParams;
     }
 
-    public function updateClosittCount($sku, $newValue){
-        return $this->updateProduct($sku, 'closittCount', $newValue);
+    public function updateClosittCount($sku){
+        return $this->updateProduct($sku, 'closittCount');
     }
 
-    public function updateCommentCount($sku, $newValue){
-        return $this->updateProduct($sku, 'commentCount', $newValue);
+    public function updateCommentCount($sku){
+        return $this->updateProduct($sku, 'commentCount');
     }
 
-    private function updateProduct($sku, $fieldToUpdate, $newValue){
+    private function updateProduct($sku, $fieldToUpdate){
         $params['index'] = $this->index;
         $params['type'] = "product";
         $params['id'] = $sku;
