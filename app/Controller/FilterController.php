@@ -159,6 +159,14 @@ if (isset($_GET['method']) && $_GET['class'] == "filter"){
             $filters = $filterController->getFilters();
             print_r($filters);
             break;
+        case 'getfiltersselect':                                                   
+            $results = $filterController->getFilters();   
+            
+            foreach ($results['categories'] as $filter){
+                echo '<option value="'.$filter.'">'.$filter.'</option>';
+            }        
+            
+            break; 
     }            
 }
 

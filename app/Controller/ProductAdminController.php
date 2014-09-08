@@ -558,7 +558,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['cla
             break;   
     }
     
-    if ($output == null){        
+    if ($output == null){   
+        $productController = new ProductController($mdb2);
+             
         if ($_GET['method'] == 'searchdb' && isset($_GET['page'])){      
             
             if(isset($_POST) && $_POST != null){            
@@ -633,21 +635,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['cla
         
         case 'getspiderstats':
             echo $productAdminController->getSpiderStats();    
-            break;        
-        
-        case 'getfilters':                                                   
-            $results = $productAdminController->getFilters();        
-            print_r(json_encode($results));
-            break;
-            
-        case 'getfiltersselect':                                                   
-            $results = $productAdminController->getFilters();   
-            
-            foreach ($results['categories'] as $filter){
-                echo '<option value="'.$filter.'">'.$filter.'</option>';
-            }        
-            
-            break;         
+            break;                                
     }
 }
 
