@@ -49,7 +49,7 @@ var pagePresenter = {
 	},
     
     handleImageNotFound:  function(e) {
-        $(e).attr( "src", "css/images/missing.png" );        
+        $(e).attr( "src", window.HOME_ROOT + "css/images/missing.png" );        
         $(e).removeAttr("onerror");
         return true;
     },

@@ -185,6 +185,7 @@ body{
 
 var tagAdmin = {
     tag: null,
+    count: 0,
   
     init: function(){
         $("#clear").click(tagAdmin.clear);           
@@ -203,11 +204,14 @@ var tagAdmin = {
         var company = $product.attr("company");
         var name = $product.attr("name");        
         
-        $.post(window.HOME_ROOT + "t/removetag", {sku: sku, tag: tagAdmin.tag}, function(data){
-                Messenger.info(data);                 
+        $.post(window.HOME_ROOT + "t/removetag", {sku: sku, tag: tagAdmin.tag}, function(data){                
                 
                 if (data == "success"){
+                    tagAdmin.count++;
+                    Messenger.info("Removed the Tag! (" + tagAdmin.count + " total)");                 
                     $product.remove();
+                }else{
+                    Messenger.error("There was a problem removing that tag!");                 
                 }
         });        
     },
@@ -229,12 +233,15 @@ var tagAdmin = {
         }
         
         if (skipConfirmation || result) {
-            $.post(window.HOME_ROOT + "t/removetags", {skus: skus, tag: tagAdmin.tag}, function(data){
-                 Messenger.info(data);                 
+            $.post(window.HOME_ROOT + "t/removetags", {skus: skus, tag: tagAdmin.tag}, function(data){                 
                  
-                 if (data == "success"){                    
+                 if (data == "success"){      
+                    tagAdmin.count += skus.length;           
+                    Messenger.info("Removed all " + skus.length + " Tags! (" + tagAdmin.count + " total)");                 
                     $product.prevAll().remove();
                     $product.remove();               
+                 }else{
+                    Messenger.error("There was a problem removing those tags!");                                     
                  }
             });
         } 
@@ -258,11 +265,14 @@ var tagAdmin = {
         
         if (skipConfirmation || result) {
             $.post(window.HOME_ROOT + "t/approvetags", {skus: skus, tag: tagAdmin.tag}, function(data){
-                 Messenger.info(data);                 
                  
-                 if (data == "success"){                    
+                 if (data == "success"){
+                    tagAdmin.count += skus.length;                    
+                    Messenger.info("Approved all " + skus.length + " Tags! (" + tagAdmin.count + " total)");                 
                     $product.prevAll().remove();
                     $product.remove();                
+                 }else{
+                    Messenger.error("There was a problem approving those tags!");                                     
                  }
             });
         }
@@ -275,11 +285,14 @@ var tagAdmin = {
         
         var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
         
-        $.post(window.HOME_ROOT + "t/approvetags", {skus: skus, tag: tagAdmin.tag}, function(data){
-            Messenger.info(data);                 
+        $.post(window.HOME_ROOT + "t/approvetags", {skus: skus, tag: tagAdmin.tag}, function(data){            
             
-            if (data == "success"){                    
+            if (data == "success"){
+                tagAdmin.count++;                    
+                Messenger.info("Approved the Tag! (" + tagAdmin.count + " total)");                                 
                 $product.remove();                
+            }else{
+                Messenger.error("There was a problem approving that tag!");                                     
             }
         });        
     },
@@ -291,6 +304,7 @@ var tagAdmin = {
         gridPresenter.maxNumberOfPagesLoadingAtOnce = 1;
      
         tagAdmin.tag = $(e.currentTarget).val();
+        tagAdmin.count = 0;
      
         if (tagAdmin.tag != null){
             searchController.hasMoreProducts = true;
@@ -442,7 +456,7 @@ productPresenter.getProductTemplate = function(product){
                         html += '<div class="productActions" >';                        
                             html += '<div class="approveTag btn btn-info">Approve Tag</div>';
                             html += '<div class="approvePrevious btn btn-info">Approve All Previous</div>';
-                            html += '<div class="remove btn btn-warning">Remove Tag</div>';
+                            html += '<div class="remove btn btn-danger">Remove Tag</div>';
                             html += '<div class="removePrevious btn btn-danger">Remove All Previous</div>';
                         html += '</div>';
                     }
