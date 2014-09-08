@@ -50,6 +50,7 @@ var pagePresenter = {
     
     handleImageNotFound:  function(e) {
         $(e).attr( "src", "css/images/missing.png" );        
+        $(e).removeAttr("onerror");
         return true;
     },
     

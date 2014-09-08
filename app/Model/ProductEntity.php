@@ -1,4 +1,6 @@
 <?php
+require_once(dirname(__FILE__) . '/BaseEntity.php');
+
 // JAVASCRIPT Products
 define("JS_PRODUCT_SKU","s");
 define("JS_PRODUCT_STORE","o");
@@ -14,7 +16,7 @@ define("JS_PRODUCT_SHORT_LINK", "sl");
 define("JS_PRODUCT_SCORE", "sc");
 define("JS_PRODUCT_COLORS", "co");
 
-class ProductEntity {
+class ProductEntity{
 
 	private $id; 
 	private $store;
@@ -153,34 +155,34 @@ class ProductEntity {
 		
 	public static function setProductFromDB($ProductEntity, $row){         
 		if (is_object($ProductEntity) && get_class($ProductEntity) == "ProductEntity"){
-			$ProductEntity->setId(stripslashes($row[PRODUCT_SKU]));
-			$ProductEntity->setStore(stripslashes($row[PRODUCT_STORE]));
-			$ProductEntity->setCustomer(stripslashes($row[PRODUCT_CUSTOMER]));
-			$ProductEntity->setCategory(stripslashes($row[PRODUCT_CATEGORY]));
-			$ProductEntity->setName(stripslashes($row[PRODUCT_NAME]));
-			$ProductEntity->setLink(stripslashes($row[PRODUCT_LINK]));
-			$ProductEntity->setImage(stripslashes($row[PRODUCT_IMAGE]));
-			$ProductEntity->setPrice(stripslashes($row[PRODUCT_PRICE]));
-			$ProductEntity->setCommentCount(stripslashes($row[PRODUCT_COMMENT_COUNT]));
-			$ProductEntity->setClosittCount(stripslashes($row[PRODUCT_CLOSITT_COUNT]));	
-			$ProductEntity->setShortLink(stripslashes($row[PRODUCT_SHORT_LINK]));	
+			$ProductEntity->setId(BaseEntity::getField($row,PRODUCT_SKU));
+			$ProductEntity->setStore(BaseEntity::getField($row,PRODUCT_STORE));
+			$ProductEntity->setCustomer(BaseEntity::getField($row,PRODUCT_CUSTOMER));
+			$ProductEntity->setCategory(BaseEntity::getField($row,PRODUCT_CATEGORY));
+			$ProductEntity->setName(BaseEntity::getField($row,PRODUCT_NAME));
+			$ProductEntity->setLink(BaseEntity::getField($row,PRODUCT_LINK));
+			$ProductEntity->setImage(BaseEntity::getField($row,PRODUCT_IMAGE));
+			$ProductEntity->setPrice(BaseEntity::getField($row,PRODUCT_PRICE));
+			$ProductEntity->setCommentCount(BaseEntity::getField($row,PRODUCT_COMMENT_COUNT));
+			$ProductEntity->setClosittCount(BaseEntity::getField($row,PRODUCT_CLOSITT_COUNT));	
+			$ProductEntity->setShortLink(BaseEntity::getField($row,PRODUCT_SHORT_LINK));	
 		}
 	}		
 	
 	public static function setProductFromPost($row){
 		$ProductEntity = new ProductEntity();
 		
-		$ProductEntity->setId(trim($row[JS_PRODUCT_SKU]));
-		$ProductEntity->setStore(trim($row[JS_PRODUCT_STORE]));
-		$ProductEntity->setCustomer(trim($row[JS_PRODUCT_CUSTOMER]));
-		$ProductEntity->setCategory(trim($row[JS_PRODUCT_CATEGORY]));
-		$ProductEntity->setName(trim($row[JS_PRODUCT_NAME]));
-		$ProductEntity->setLink(trim($row[JS_PRODUCT_LINK]));
-		$ProductEntity->setImage(trim($row[JS_PRODUCT_IMAGE]));
-		$ProductEntity->setPrice(trim($row[JS_PRODUCT_PRICE]));
-		$ProductEntity->setCommentCount(trim($row[JS_PRODUCT_COMMENT_COUNT]));
-		$ProductEntity->setClosittCount(trim($row[JS_PRODUCT_CLOSITT_COUNT]));	
-		$ProductEntity->setShortLink(trim($row[JS_PRODUCT_SHORT_LINK]));
+		$ProductEntity->setId(BaseEntity::getField($row,JS_PRODUCT_SKU));
+		$ProductEntity->setStore(BaseEntity::getField($row,JS_PRODUCT_STORE));
+		$ProductEntity->setCustomer(BaseEntity::getField($row,JS_PRODUCT_CUSTOMER));
+		$ProductEntity->setCategory(BaseEntity::getField($row,JS_PRODUCT_CATEGORY));
+		$ProductEntity->setName(BaseEntity::getField($row,JS_PRODUCT_NAME));
+		$ProductEntity->setLink(BaseEntity::getField($row,JS_PRODUCT_LINK));
+		$ProductEntity->setImage(BaseEntity::getField($row,JS_PRODUCT_IMAGE));
+		$ProductEntity->setPrice(BaseEntity::getField($row,JS_PRODUCT_PRICE));
+		$ProductEntity->setCommentCount(BaseEntity::getField($row,JS_PRODUCT_COMMENT_COUNT));
+		$ProductEntity->setClosittCount(BaseEntity::getField($row,JS_PRODUCT_CLOSITT_COUNT));	
+		$ProductEntity->setShortLink(BaseEntity::getField($row,JS_PRODUCT_SHORT_LINK));
 				    
 		return $ProductEntity;
 	}

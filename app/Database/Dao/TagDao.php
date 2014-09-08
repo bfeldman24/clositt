@@ -208,5 +208,96 @@ class TagDao extends AbstractDao {
 	    $sql = "SELECT ". PRODUCT_NAME. " FROM " . PRODUCTS . " LIMIT 10000";
 	    return $this->getResults($sql, array(), array(), "128723424");
 	}
+	
+	public function addTagGroups($groups){
+	   $sql = "INSERT IGNORE INTO ". TAG_GROUPS . 
+	                   " (".TAG_GROUP_NAME.",".TAG_GROUP_STATUS.",".TAG_GROUP_DATE_ADDED.")".
+	          " VALUES (?, 1, NOW())";
+	   
+	   $paramTypes = array('text');
+	   
+	   if($this->debug){		  
+			$this->logDebug("4578774643" ,$sql);
+		}		
+		
+		$stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+        $affectedRows = 0;
+            
+        for($i=0; $i < count($groups); $i++){
+            try {
+                  $result = $stmt->execute(array($groups[$i]));
+                  
+                  if (is_numeric($result)){
+      		          $affectedRows += $result;
+      		      }
+                                  
+            } catch (Exception $e) {
+                $this->logError($errorCode ,$e->getMessage(), $sql);
+                return false;
+            }         		
+        }
+						
+		$stmt->free();		
+		return $affectedRows;  
+	}
+	
+	public function getAllTagGroups(){
+	    $sql = "SELECT ". TAG_GROUP_ID . "," . TAG_GROUP_NAME. " FROM " . TAG_GROUPS;
+	    return $this->getResults($sql, array(), array(), "875843567");
+	}
+	
+	public function populateTagsBasedOnExistingTag($tag, $groupid, $synonyms, $excludes){	   
+	   if (!isset($groupid)){
+	       $groupid = 1;   
+	   }
+	   
+	   $sql = "INSERT IGNORE INTO " . TAGS . 
+	           " (" . TAG_STRING . "," .
+                      PRODUCT_SKU . "," .
+                      TAG_COUNT . ", " .
+                      TAG_DATE_ADDED . ", " .
+                      TAG_GROUP_ID . ")" .
+	           " SELECT ?, sku, 1, NOW(), ? " .
+               " FROM " . PRODUCTS .
+               " WHERE (LOWER(".PRODUCT_NAME.") REGEXP ? OR LOWER(".PRODUCT_DETAILS.") REGEXP ?)";
+               
+       $paramTypes = array('text','integer','text','text');        
+       $params = array($tag, $groupid, $synonyms, $synonyms);
+               
+       if (isset($excludes) && trim($excludes) != ""){
+            $sql .= " AND (LOWER(".PRODUCT_NAME.") NOT REGEXP '?' AND LOWER(".PRODUCT_DETAILS.") NOT REGEXP '?')";
+            $paramTypes[] = "text";
+            $paramTypes[] = "text";
+            $params[] = $excludes;
+            $params[] = $excludes;
+       }
+	   
+	   $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+	   	 
+        try {                                                
+            if(DEBUG){
+                $tagParams = print_r($params, true);
+    			$this->logDebug("238957923" ,$sql . " (" . $tagParams . ")" );
+    		}    		
+    		    		
+            print_r($params);
+            echo "\n";
+            $affectedRows = $stmt->execute($params);
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            print_r($results);
+        }                   
+        
+        $PEAR = new PEAR();
+		if ($PEAR->isError($affectedRows)) {
+		    
+			$this->logError("756476548" ,$affectedRows->getMessage(),$sql);
+		    return false;
+		}
+ 			  
+        
+       $stmt->free();        		
+       return $affectedRows;
+	}
 }
 ?>

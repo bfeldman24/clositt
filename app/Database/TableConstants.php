@@ -41,12 +41,17 @@ define('COLORS_PERCENT', 'percent');
 
 define('TAGS', 'Tags');
 define('TAG_STRING', 'tag');
-define('TAG_GROUP_ID', 'groupid');
 define('TAG_COUNT', 'count');
 define('TAG_STATUS', 'status');
 define('TAG_APPROVED', 'approved');
 define('TAG_DATE_APPROVED', 'dateapproved');
 define('TAG_DATE_ADDED', 'dateadded');
+
+define('TAG_GROUPS', 'TagGroups');
+define('TAG_GROUP_ID', 'groupid');
+define('TAG_GROUP_NAME', 'name');
+define('TAG_GROUP_STATUS', 'status');
+define('TAG_GROUP_DATE_ADDED', 'dateadded');
 
 
 define('COLOR_MAPPING', 'ColorMapping');

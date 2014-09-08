@@ -129,7 +129,7 @@ body{
 
 .approved{
     color: #AAA;
-    margin: 0 10px 0 20px;
+    margin: 0 10px;
 }
 </style>
 
@@ -327,7 +327,7 @@ var tagAdmin = {
               var tags = JSON.parse(data);
               var tagsLength = Object.keys(tags).length;
               var table = [];  
-              var colNum = 5;        
+              var colNum = 8;        
               var numRows = Math.ceil(tagsLength / colNum);            
    	          var i = 0;        
    
