@@ -131,6 +131,26 @@ body{
     color: #AAA;
     margin: 0 10px;
 }
+
+.name{
+    cursor: pointer;   
+}
+
+.name:hover{
+    color: #428bca;   
+}
+
+.modal-title {    
+    text-transform: uppercase;
+}
+
+.modal-store-title{
+    color: #428bca;   
+}
+
+.modal-product-name{
+    color: #444;   
+}
 </style>
 
 </head>
@@ -195,6 +215,7 @@ var tagAdmin = {
         $(document).on("click", ".approveTag", tagAdmin.approveTag);
         $(document).on("click", ".approvePrevious", tagAdmin.approvePrevious);                
         $(document).on("click",".tag-options label",tagAdmin.changeTagOptions);
+        $(document).on("click",".name",tagAdmin.viewLargerImage);
         tagAdmin.getTags();
     },
     
@@ -406,6 +427,43 @@ var tagAdmin = {
         } 
         
         tagAdmin.clear();
+    },
+    
+    viewLargerImage: function(e){
+        var $outfit = $(e.currentTarget).parents(".outfit");
+        var $image = $outfit.find(".picture img").clone();
+        
+        var $message = $("<div>").append(
+                            $("<h2>").addClass("modal-store-title").text($outfit.attr("company"))
+                         ).append(
+                            $("<h2>").addClass("modal-product-name").text($outfit.attr("name"))
+                        ).append($image);
+        
+        bootbox.dialog({
+            message: $message,
+            title: tagAdmin.tag,
+            buttons: {  
+                main: {
+                    label: "Cancel"
+                },              
+                approve: {
+                    label: "Approve Tag",
+                    className: "btn-success",
+                    callback: function() {                        
+                        //tagAdmin.approveTag($outfit);
+                        $outfit.find(".approveTag.btn").trigger("click");
+                    },
+                },
+                reject: {
+                    label: "Remove Tag",
+                    className: "btn-danger",
+                    callback: function() {                        
+                        $outfit.find(".remove.btn").trigger("click");
+                        //tagAdmin.removeTag($outfit);
+                    },
+                },                          
+            }
+        });
     }  
 };
 
