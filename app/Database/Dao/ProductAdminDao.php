@@ -24,7 +24,7 @@ class ProductAdminDao extends AbstractDao {
                     SPIDER_CUSTOMER . "," .
                     SPIDER_CATEGORY;							
         
-		$paramsTypes = array();		
+		$paramTypes = array();		
 		$params = array();
 		
 		return $this->getResults($sql, $params, $paramTypes, "9348023903");
@@ -459,7 +459,7 @@ class ProductAdminDao extends AbstractDao {
 				" ORDER BY " . PRODUCT_STATUS . 
 				" LIMIT ? OFFSET ?";								
         
-		$paramsTypes = array('integer','integer');		
+		$paramTypes = array('integer','integer');		
 		$params = array($limit, $offset);
 		
 		return $this->getResults($sql, $params, $paramTypes, "24928342");
@@ -474,7 +474,7 @@ class ProductAdminDao extends AbstractDao {
 				" ORDER BY " . PRODUCT_STORE . ", " . PRODUCT_NAME .
 				" LIMIT ? OFFSET ?";								
         
-		$paramsTypes = array('integer','integer');		
+		$paramTypes = array('integer','integer');		
 		$params = array($limit, $offset);
 		
 		return $this->getResults($sql, $params, $paramTypes, "2309842");
@@ -546,7 +546,7 @@ class ProductAdminDao extends AbstractDao {
 				" WHERE " . PRODUCT_STATUS . " = 1 " .
 				" ORDER BY " . PRODUCT_CUSTOMER;					
         
-		$paramsTypes = array();		
+		$paramTypes = array();		
 		$params = array();		
 		return $this->getResults($sql, $params, $paramTypes, "2387462");
 	}
@@ -557,7 +557,7 @@ class ProductAdminDao extends AbstractDao {
 				" WHERE " . PRODUCT_STATUS . " = 1 " .
 				" ORDER BY " . PRODUCT_CATEGORY . "," . PRODUCT_CUSTOMER;					
         
-		$paramsTypes = array();		
+		$paramTypes = array();		
 		$params = array();		
 		return $this->getResults($sql, $params, $paramTypes, "232352352");
 	}
@@ -568,7 +568,7 @@ class ProductAdminDao extends AbstractDao {
 				" WHERE " . PRODUCT_STATUS . " = 1 " .
 				" ORDER BY " . PRODUCT_STORE . "," . PRODUCT_CUSTOMER;
         
-		$paramsTypes = array();		
+		$paramTypes = array();		
 		$params = array();		
 		return $this->getResults($sql, $params, $paramTypes, "98237923");
 	}		
@@ -581,7 +581,7 @@ class ProductAdminDao extends AbstractDao {
 				" AND p." . PRODUCT_STATUS . " = 1 " . 			
 				" ORDER BY " . TAG_STRING;
         
-		$paramsTypes = array();		
+		$paramTypes = array();		
 		$params = array();		
 		return $this->getResults($sql, $params, $paramTypes, "2342837429");
 	}	
@@ -609,7 +609,7 @@ class ProductAdminDao extends AbstractDao {
 				          PRODUCT_DETAIL_UPDATED . " < DATE_SUB(NOW(), INTERVAL 3 MONTH)" .
 				    ") ";
 		
-		$paramsTypes = array();		
+		$paramTypes = array();		
 		$params = array();
 		$storePlaceholders = '';
 		
@@ -632,7 +632,7 @@ class ProductAdminDao extends AbstractDao {
         $sql .= " AND ".PRODUCT_STORE." IN (" . $storePlaceholders . ")" .
 				" LIMIT ?";
         
-        $paramsTypes[] = 'integer';		
+        $paramTypes[] = 'integer';		
 		$params[] = $limit;     
 		
 		return $this->getResults($sql, $params, $paramTypes, "235252462");
@@ -784,7 +784,7 @@ class ProductAdminDao extends AbstractDao {
                 " GROUP BY " . PRODUCT_STORE . 
                 " ORDER BY " . PRODUCT_STORE;
 							        
-		$paramsTypes = array();		
+		$paramTypes = array();		
 		$params = array();		
 		
 		return $this->getResults($sql, $params, $paramTypes, "23920342023");	   
