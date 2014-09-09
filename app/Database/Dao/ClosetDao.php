@@ -16,7 +16,7 @@ class ClosetDao extends AbstractDao {
         if ($affectedRows === 1){
             $id = $this->db->lastInsertID(CLOSETS, CLOSET_ID);
             
-            if (PEAR::isError($id)) {
+            if ($this->PEAR->isError($id)) {
                 $this->logError($errorCode ,$id->getMessage(),$sql);
                 return -1;
             }

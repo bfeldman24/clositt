@@ -1,6 +1,6 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductAdminDao.php');
@@ -38,11 +38,11 @@ class ProductAdminController extends Debugger {
 				$cust = $spiderLink->getCustomer();				
 				$cat = $spiderLink->getCategory();				
 				
-				if (!is_array($spiderLinks[$store])){
+				if (!isset($spiderLinks[$store]) || !is_array($spiderLinks[$store])){
 				    $spiderLinks[$store] = array();
 				}
 				
-				if (!is_array($spiderLinks[$store][$cust])){
+				if (!isset($spiderLinks[$store][$cust]) || !is_array($spiderLinks[$store][$cust])){
 				    $spiderLinks[$store][$cust] = array();
 				}				
 				
@@ -56,7 +56,7 @@ class ProductAdminController extends Debugger {
 	public function updateSpiderStatus($criteria){
 	   if (isset($criteria) && is_array($criteria)){
 	       $results = $this->productAdminDao->updateSpiderStatus($criteria);	       
-	       return $results == 1 ? "success" : "failed";	              
+	       return $results === 1 ? "success" : "failed";	              
 	   }else{
 	       return "Nothing to update";   
 	   }
@@ -171,18 +171,9 @@ class ProductAdminController extends Debugger {
          			$results['newTime'] = microtime() - $start;
          			$results['new'] = $addNewProductsResults;
          			$this->debug("ProductAdminController", "addAdminProducts", "newTime = " . $results['newTime']);				
-        			$this->debug("ProductAdminController", "addAdminProducts", "new = " . $results['new']);  
+        			$this->debug("ProductAdminController", "addAdminProducts", "new = " . $results['new']);
          			
          			// Step 5
-         			$start = microtime();
-         			$addTagsForNewProductsResults = $this->productAdminDao->addTagsForNewProducts($products);
-         			// echo " 10) Added Tags for New Products: " . $addTagsForNewProductsResults;  
-         			$results['tagsTime'] = microtime() - $start;
-         			$results['tags'] = $addTagsForNewProductsResults;  
-         			$this->debug("ProductAdminController", "addAdminProducts", "tagsTime = " . $results['tagsTime']);				
-        			$this->debug("ProductAdminController", "addAdminProducts", "tags = " . $results['tags']);
-         			
-         			// Step 6
          			if ($isLastInBatch){
              			$start = microtime();
              			$updatedProductStatus = $this->productAdminDao->setMissingProductsToNotAvailable($products);
@@ -379,7 +370,7 @@ class ProductAdminController extends Debugger {
 	       	       
 	       if ($p instanceof ProductEntity){
 	           $shortlink = str_replace(" ", "-", $p->getStore()) . "-" . str_replace(" ", "-", $p->getCategory()) . "-" . str_replace(" ", "-", $p->getName());	
-	       }else if ($p['s'] != null){	       
+	       }else if (isset($p['s'])){	       
 	           $shortlink = str_replace(" ", "-", $p['o']) . "-" . str_replace(" ", "-", $p['a']) . "-" . str_replace(" ", "-", $p['n']);	
 	       }else{   
 	           $shortlink = str_replace(" ", "-", $p['company']) . "-" . str_replace(" ", "-", $p['category']) . "-" . str_replace(" ", "-", $p['name']);	
@@ -406,7 +397,7 @@ class ProductAdminController extends Debugger {
 	       
 	       if ($p instanceof ProductEntity){
 	           $products[$sku]->setShortLink($shortlink);	       	   
-	       }else if ($p['s'] != null){ 
+	       }else if (isset($p['s'])){ 
 	           $products[$sku]['sl'] = $shortlink;	       	    
 	       }else{
 	           $products[$sku]['shortlink'] = $shortlink;	       	    

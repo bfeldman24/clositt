@@ -160,12 +160,49 @@ class TagDao extends AbstractDao {
 	    $insertArray = array();
         $insertArray[] = $_POST['tag'];
         $insertArray[] = $_POST['sku'];
-        $insertArray[] = 1;
+        $insertArray[] = $_POST['tag'];
         
         $tagArray = array();
         $tagArray[] = $insertArray;
         
         return $this->addTagsDao($tagArray);	     
+	}
+	
+    public function addTagsForNewProducts($products){
+	     if(!isset($products) || !is_array($products)){
+			$this->logWarning("1249871324","Nothing to add!");
+			return false; 
+		}
+	 
+	    $sql = "INSERT IGNORE INTO " . TAGS . 
+	           " (" . TAG_STRING . "," .
+                      PRODUCT_SKU . "," .
+                      TAG_COUNT . ", " .
+                      TAG_STATUS.",".
+                      TAG_APPROVED.",".
+                      TAG_DATE_ADDED . ", " .
+                      TAG_GROUP_ID . ")" .
+	           " SELECT  ?, ?, 1,1,0, NOW()," .
+	           " (SELECT COALESCE((SELECT ".TAG_GROUP_ID." FROM ".TAGS." WHERE ".TAG_STRING." = ? LIMIT 1), 1))";
+        
+        if($this->debug){		    
+			$this->logDebug("2135232" ,$sql );
+		}
+        
+        $stmt = $this->db->prepare($sql);
+        $affectedRows = 0;
+        foreach ($products as $sku => $product) {
+            foreach ($product['tags'] as $tag) {    
+                try {   
+                    //print_r($value);                                           
+                    $affectedRows = $stmt->execute(array($tag, $sku, $tag));
+                } catch (Exception $e) {
+                    echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+                }
+            }
+        }
+        
+        return $affectedRows;
 	}
 	
 	
@@ -175,11 +212,18 @@ class TagDao extends AbstractDao {
 			return false; 
 		}
 	 
-	    $sql = "INSERT INTO " . TAGS . " (".TAG_STRING.",".PRODUCT_SKU.",".TAG_COUNT.",".
-	                                       TAG_STATUS.",".TAG_APPROVED.",".TAG_DATE_ADDED.") " . 
-	           " VALUES (?, ?, ?, 1, 0, NOW())";	           	           
+	    $sql = "INSERT IGNORE INTO " . TAGS . 
+	           " (" . TAG_STRING . "," .
+                      PRODUCT_SKU . "," .
+                      TAG_COUNT . ", " .
+                      TAG_STATUS.",".
+                      TAG_APPROVED.",".
+                      TAG_DATE_ADDED . ", " .
+                      TAG_GROUP_ID . ")" .
+	           " SELECT  ?, ?, 1,1,0, NOW()," .
+	           " (SELECT COALESCE((SELECT ".TAG_GROUP_ID." FROM ".TAGS." WHERE ".TAG_STRING." = ? LIMIT 1), 1))";	           	           
         
-        $stmt = $this->db->prepare($sql, array('text','text','integer'), MDB2_PREPARE_MANIP);
+        $stmt = $this->db->prepare($sql, array('text','text','text'), MDB2_PREPARE_MANIP);
         
         foreach ($tags as $tag) {            
             try {                                                

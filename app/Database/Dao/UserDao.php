@@ -21,7 +21,7 @@ class UserDao extends AbstractDao {
         if ($affectedRows === 1){
             $id = $this->db->lastInsertID(USERS, USER_ID);
             
-            if (PEAR::isError($id)) {
+            if ($this->PEAR->isError($id)) {
                 $this->logError($errorCode ,$id->getMessage(),$sql);
                 return -1;
             }
