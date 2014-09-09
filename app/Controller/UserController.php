@@ -65,7 +65,7 @@ class UserController extends Debugger {
 			return "failed too many times";
 		}
 	   
-	   if (isset($data)){
+	   if (isset($data)){	   
             $requestUser = UserEntity::setFromPost($data);            
             
             if (isset($requestUser)){                                                          
@@ -74,17 +74,13 @@ class UserController extends Debugger {
                 if(is_object($results)){
         			if($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){        			    				    
         				$userFromDB = UserEntity::setFromDB($row);								
-        				$savedPassword = $userFromDB->getPassword();	
+        				$savedHashedPassword = $userFromDB->getPassword();	
+        				$inputedPassword = $data['p'];
         				
-        				if (isset($savedPassword)){
-        				     $user = new UserEntity();
-        				     $user->setSalt($userFromDB->getSalt());
-        				     UserEntity::setFromPost($data, $user);
-        				     
-                             $inputPassword = $user->getPassword();                                                        
-                             
-                             if ($inputPassword === $savedPassword){
-                                 $affectedRows = $this->userDao->updateLoginCount($user);                                 
+        				if (isset($savedHashedPassword)){
+        				    
+                             if (isset($inputedPassword) && password_verify($inputedPassword, $savedHashedPassword)){
+                                 $affectedRows = $this->userDao->updateLoginCount($requestUser);                                 
                                  $session->setSession($userFromDB);
                                  $session->setCookie($data['remember']);
                                  return json_encode($userFromDB->toArray());
@@ -150,22 +146,18 @@ class UserController extends Debugger {
             if(is_object($results)){
     			if($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){        			    				    
     				$userFromDB = UserEntity::setFromDB($row);								
-    				$savedPassword = $userFromDB->getPassword();	
+    				$savedHashedPassword = $userFromDB->getPassword();	
     				
-    				if (isset($savedPassword)){
-    				    $user = new UserEntity();
-    				    $user->setSalt($userFromDB->getSalt());
-    				    $user->setUserId($_SESSION['userid']);
-    				    $user->setEmail($_SESSION['email']);
-    				    $user->setSecurePassword($data['p']);
-    				     
-    				    $oldUser = new UserEntity();
-    				    $oldUser->setSalt($userFromDB->getSalt());
-    				    $oldUser->setSecurePassword($data['op']);
-                        $oldPassword = $oldUser->getPassword();
+    				if (isset($savedHashedPassword)){    				        				     
+                        $oldPassword = $data['op'];                        
+                                                    
+                        if (password_verify($oldPassword, $savedHashedPassword)){
+                            $user = new UserEntity();
+        				    $user->setUserId($_SESSION['userid']);
+        				    $user->setEmail($_SESSION['email']);
+        				    $user->setSecurePassword($data['p']);
                             
-                        if ($oldPassword === $savedPassword){
-                            $affectedRows = $this->userDao->updateUserPassword($user, $oldPassword);
+                            $affectedRows = $this->userDao->updateUserPassword($user, $savedHashedPassword);
                             
                             return $affectedRows === 1 ? "success" : "failed";
                         }
@@ -175,7 +167,7 @@ class UserController extends Debugger {
         }
                  
         $this->debug("UserController", "updateUserInfo", "There was no user supplied to update!");
-        return "failed";
+        return "error";
 	}	
 	
 	public function resetPassword($email){

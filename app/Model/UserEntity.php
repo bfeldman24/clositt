@@ -13,7 +13,6 @@ class UserEntity {
 	private $email;	
 	private $password;
 	private $confirmPassword;
-	private $salt;
 	private $cookie;
 	
 	public function getUserId() {
@@ -61,15 +60,6 @@ class UserEntity {
 		}
 	}	
 	
-	public function getSalt() {
-		return $this->salt;
-	}
-	public function setSalt($salt) {
-		if(isset($salt)){
-			$this->salt = $salt;
-		}
-	}	
-	
 	public function getCookie() {
 		return $this->cookie;
 	}
@@ -83,22 +73,15 @@ class UserEntity {
 	   $this->setPassword($this->secure($password));  
 	}		
 	
-	private function secure($password){
-	     $delimiter = "!^}";	     
+	private function secure($password){	     
+	     $firstPass = $this->getPassword();
 	     
-	     if (!isset($password)){
-	        return null; 
-	     }
+	     if (isset($firstPass)){
+	           $passInfo = password_get_info($firstPass);	           	           
+	           return password_hash($password, $passInfo['algo'], $passInfo['options']);
+	     }     
 	     
-	     $salt = $this->getSalt();
-	     
-	     if (!isset($salt)){
-    	     // Generate random salt
-    	     $salt = uniqid();
-    	     $this->setSalt($salt);	     
-	     }
-	     
-	     return md5($salt . $delimiter . $password);
+	     return password_hash($password, PASSWORD_DEFAULT);	     
 	}				
 			
 		
@@ -115,11 +98,7 @@ class UserEntity {
 		
 		if(isset($row[USER_EMAIL])){
 		  $userEntity->setEmail(stripslashes($row[USER_EMAIL]));
-		}
-		
-		if(isset($row[USER_SALT])){
-		  $userEntity->setSalt(stripslashes($row[USER_SALT]));
-		}
+		}		
 		
 		if(isset($row[USER_PASS])){
 		  $userEntity->setPassword(stripslashes($row[USER_PASS]));
