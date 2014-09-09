@@ -82,7 +82,6 @@ class ElasticDao{
 		return array('products'=>$products, 'facets' => $facets);
 	}
 
-
     private function buildQuery($criteria, $pageNumber, $numResultsPage ){
 
         $start = $pageNumber * $numResultsPage;
@@ -190,6 +189,23 @@ class ElasticDao{
         $searchParams['body']['size']=$numResultsPage;
 
         return $searchParams;
+    }
+
+    public function updateClosittCount($sku){
+        return $this->updateProduct($sku, 'closittCount');
+    }
+
+    public function updateCommentCount($sku){
+        return $this->updateProduct($sku, 'commentCount');
+    }
+
+    private function updateProduct($sku, $fieldToUpdate){
+        $params['index'] = $this->index;
+        $params['type'] = "product";
+        $params['id'] = $sku;
+        $params['body']['script'] = "ctx._source." . $fieldToUpdate ."+=1";
+        $response = $this->client->update($params);
+        return $response;
     }
 }
 
