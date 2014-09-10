@@ -68,7 +68,19 @@ class ClosetController extends Debugger {
                 
         $this->debug("ClosetController", "deleteCloset", "There was no closet supplied to delete!");
         return false;
-	}
+	}	
+   
+   private function file_get_contents_curl($url) {
+       $curl = curl_init($url);
+       curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:26.0) Gecko/20100101 Firefox/26.0');
+       curl_setopt($curl, CURLOPT_AUTOREFERER, true);
+       curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+       curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1 );
+       curl_setopt($curl, CURLOPT_TIMEOUT, 2 );
+       $html = curl_exec( $curl );
+       curl_close( $curl);
+       return $html;
+   }
 	
 	public function addItemToCloset($data){
 	   if (isset($data)){
@@ -81,10 +93,24 @@ class ClosetController extends Debugger {
                     $affectedRows = $this->closetDao->addItemToCloset($_SESSION['userid'], $closetItem);
                     
                     if ($affectedRows === 1){
-                        $this->productController->updateClosittCounter($closetItem->getSku());   
+                        $this->productController->updateClosittCounter($closetItem->getSku());                           
+                        
+                        try{                            
+                            $rawImage = $this->file_get_contents_curl($closetItem->getImage());                          
+                            
+                            if (isset($rawImage) && strlen($rawImage) > 100){
+                                $this->closetDao->saveItemImage($closetItem->getSku(), $rawImage);
+                            }
+                        }catch(Exception $e) {  
+                            $img = $closetItem->getImage();
+                            $sku = $closetItem->getSku();
+                            $this->error("ClosetController", "addItemToCloset", "Could not cache ($sku) image: $img");                          
+                        }
+                        
+                        return "success";
                     }
                     
-                    return $affectedRows === 1 ? "success" : "failed";
+                    return "failed";
                 }
             }
         }

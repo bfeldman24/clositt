@@ -3,7 +3,7 @@ require_once(dirname(__FILE__) . '/../../globals.php');
 require_once(dirname(__FILE__) . '/../TableConstants.php');
 
 class AbstractDao{
-	public $db = null; // PEAR::MDB2 pointer
+	public $db = null; // PEAR->MDB2 pointer
 	public $debug = DEBUG; // prints sql statements
 	public $info = false; // prints sql statements
 	public $PEAR = null;

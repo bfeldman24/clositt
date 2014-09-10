@@ -57,7 +57,7 @@ class ClosetDao extends AbstractDao {
 	
 	
 	public function addItemToCloset($user, $closetItem){
-	   $sql = "INSERT INTO ".CLOSET_ITEMS." (".CLOSET_ID.", ".CLOSET_USER_ID.", ".CLOSET_ITEM_SKU.", ".CLOSET_ITEM_IMAGE.", ".CLOSET_ITEM_STATUS.", ".CLOSET_LAST_UPDATED.", ".CLOSET_ITEM_DATE_ADDED.") " .
+	    $sql = "INSERT INTO ".CLOSET_ITEMS." (".CLOSET_ID.", ".CLOSET_USER_ID.", ".CLOSET_ITEM_SKU.", ".CLOSET_ITEM_IMAGE.", ".CLOSET_ITEM_STATUS.", ".CLOSET_LAST_UPDATED.", ".CLOSET_ITEM_DATE_ADDED.") " .
                 " VALUES (?,?,?,?,1,NOW(),NOW())";	   
 		
 		$closetId = $closetItem->getClosetId();		
@@ -113,5 +113,15 @@ class ClosetDao extends AbstractDao {
 		
 		return $this->getResults($sql, $params, $paramTypes, "98763565478");
 	}	
+	
+	public function saveItemImage($sku, $rawImage){
+	   $sql = "INSERT IGNORE INTO ".CACHED_IMAGES." (".PRODUCT_SKU.", ".PRODUCT_IMAGE.", ".CACHED_IMAGES_DATE_ADDED.") " .
+                " VALUES (?,?,NOW())";	   		
+		
+		$paramTypes = array('text', 'blob');
+        $params = array($sku, $rawImage);
+        
+        return $this->update($sql, $params, $paramTypes, "34629384");
+	}
 }
 ?>

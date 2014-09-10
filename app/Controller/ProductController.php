@@ -1,4 +1,8 @@
 <?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
+
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
@@ -231,14 +235,46 @@ class ProductController {
         $results = array('products'=>$products, 'facets' => $facets);
 		return json_encode($results);
 	}
+	
+	public function getCachedProductImage($sku){
+	    // The default image if none exists
+	    $image = HOME_PAGE . 'css/images/missing.png';   
+	   
+	    if(isset($sku) && trim($sku) != ""){	
+		      
+			$result = $this->productDao->getCachedProductImage($sku);
+			
+			if(is_object($result)){
+				$cachedImage = $result->fetchOne();
+				
+				if (isset($cachedImage) && is_string($cachedImage) && strlen($cachedImage) > 100){
+				    $image = $cachedImage;
+				}
+			}
+		}
+		
+		return $image;
+	}
 }
 
+
+if ($_GET['class'] == "products" && $_GET['method'] == 'image' && isset($_GET['sku'])){
+        $productController = new ProductController($mdb2);              
+        $image = $productController->getCachedProductImage($_GET['sku']);                          
+         
+        // Set the content type header - in this case image/jpeg
+        header('Content-Type: image/jpeg');                
+        print_r($image);
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['class'] == "products"){
     $productController = new ProductController($mdb2);              
     
     if ($_GET['method'] == 'lookup' && isset($_POST['sku'])){
          $product = $productController->getProduct($_POST['sku']);   
+         
+    }else if ($_GET['method'] == 'image' && isset($_POST['sku'])){
+         $product = $productController->getCachedProductImage($_POST['sku']);   
     
     }else if ($_GET['method'] == 'browse' && isset($_GET['page']) && isset($_GET['customer'])){
         $productCrit = ProductCriteria::setCriteriaFromPost($_POST);

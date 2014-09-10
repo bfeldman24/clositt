@@ -187,7 +187,16 @@ class ProductDao extends AbstractDao {
         }
         
         return $affected;
-	}					
+	}		
+	
+	public function getCachedProductImage($sku){
+	   $sql = "SELECT " . PRODUCT_IMAGE . " FROM " . CACHED_IMAGES . " WHERE " . PRODUCT_SKU . " = ?";  
+	   
+	   $paramTypes = array('text');
+	   $params = array($sku);
+	   
+	   return $this->getResults($sql, $params, $paramTypes, "12389124003");
+	}			
 
 	/**
 	*

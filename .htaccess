@@ -5,6 +5,7 @@ Options +SymLinksIfOwnerMatch
 # disallows a directory listing on directories that do not have an index file
 Options -Indexes 
 
+
 RewriteEngine On
 RewriteRule ^@/(.*)$ clositt.php?user=$1
 RewriteRule ^!/([a-z0-9\-]*)$ product-page.php?s=$1
@@ -12,6 +13,7 @@ RewriteRule ^!/([a-z0-9\-]*)$ product-page.php?s=$1
 # API
 RewriteRule ^p/([a-z0-9]*)$ app/Controller/ProductController.php?class=products&method=$1
 RewriteRule ^p/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?class=products&method=$1&page=$2
+RewriteRule ^i/([A-Za-z0-9]*)$ app/Controller/ProductController.php?class=products&method=image&sku=$1
 
     #Filter Data
 RewriteRule ^s/filters$ app/Controller/FilterController.php?class=filters&method=getfilters

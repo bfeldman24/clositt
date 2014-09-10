@@ -129,4 +129,9 @@ define("REVIEW_COMMENT","review");
 define("REVIEW_RATING","rating");
 define("REVIEW_STATUS","status");
 define("REVIEW_DATE","reviewdate");
+
+
+// Cached Images
+define("CACHED_IMAGES","CachedImages");
+define("CACHED_IMAGES_DATE_ADDED","dateadded");
 ?>

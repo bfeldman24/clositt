@@ -412,7 +412,7 @@ var closetFormPresenter = {
     				  } else {
     						Messenger.success('This item was added to "' + closetName + '"');
     						closetFormPresenter.showClosetForm(el);
-    						closetFormPresenter.updateClosetCount();	
+    						closetFormPresenter.updateClosetCount(sku);	
     				  }
     			});	
 			     				
@@ -448,7 +448,7 @@ var closetFormPresenter = {
     						Messenger.error('Item could not be saved into ' + closetName);	 			       	 			       
     				  } else {
     						Messenger.success('This item was added to "' + closetName + '"');    						
-    						closetFormPresenter.updateClosetCount();	
+    						closetFormPresenter.updateClosetCount(sku);	
     				  }
     			});
     		        		        		   
@@ -467,7 +467,7 @@ var closetFormPresenter = {
 		}
 	},
 	
-	updateClosetCount: function(){
+	updateClosetCount: function(sku){
 	    	              
        var productTile = $('.item[pid="'+sku+'"] .numClosets');
                     
