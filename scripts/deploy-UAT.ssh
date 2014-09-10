@@ -38,7 +38,7 @@ echo "Cleared target directory"
 
 echo "Compiling all JS files..."
 mv scripts/java/clositt.js scripts/java/clositt.js.bak
-php -q scripts/admin/php/jsCompiler.php
+php -q admin/php/jsCompiler.php
 
 echo ""
 echo "Minifying JS and CSS files... (Takes a minute)" 

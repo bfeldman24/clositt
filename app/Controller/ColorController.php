@@ -6,7 +6,7 @@ require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/AbstractDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../View/ProductTemplate.php');
-require_once(dirname(__FILE__) . '/../../scripts/admin/php/colorExtract/colorInspector.php');   
+require_once(dirname(__FILE__) . '/../../admin/php/colorExtract/colorInspector.php');   
 
 class ColorController extends AbstractDao{		
 	

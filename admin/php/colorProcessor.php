@@ -1,8 +1,8 @@
 <html>
 <head>
 <?php 
-require_once(dirname(__FILE__) . '/../../../app/globals.php');
-include(dirname(__FILE__) . '/../../../static/meta.php');
+require_once(dirname(__FILE__) . '/../../app/globals.php');
+include(dirname(__FILE__) . '/../../static/meta.php');
 
 ?>
 
@@ -53,8 +53,8 @@ td {
 </head>
 <body>
 
-<script src="../../js/messenger.js" type="text/javascript"></script>
-<script src="../../js/colorPresenter.js" type="text/javascript"></script>
+<script src="../../scripts/js/messenger.js" type="text/javascript"></script>
+<script src="../../scripts/js/colorPresenter.js" type="text/javascript"></script>
 <script src="../js/colorProcessor.js" type="text/javascript"></script>
 
 

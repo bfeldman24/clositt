@@ -24,8 +24,8 @@ $js = '<script src="' . HOME_ROOT .'scripts/js/session.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/reviewsPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/closetPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'scripts/js/colorPresenter.js"></script>' .
-'<script src="' . HOME_ROOT .'scripts/admin/js/firebaseReorganizing.js"></script>' .
-'<script src="' . HOME_ROOT .'scripts/admin/js/lib/bootbox.min.js"></script>' .
+'<script src="' . HOME_ROOT .'admin/js/firebaseReorganizing.js"></script>' .
+'<script src="' . HOME_ROOT .'admin/js/lib/bootbox.min.js"></script>' .
 '<script src="' . HOME_ROOT .'lib/js/jquery.unveil.min.js"></script>'.
 '<script src="' . HOME_ROOT .'lib/js/jquery.sparkline_2.1.2.min.js"></script>';
 

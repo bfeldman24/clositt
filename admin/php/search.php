@@ -4,8 +4,8 @@
 <title>Search Admin</title>
 
 <?php 
-require_once(dirname(__FILE__) . '/../../../app/globals.php');
-include(dirname(__FILE__) . '/../../../static/meta.php');   
+require_once(dirname(__FILE__) . '/../../app/globals.php');
+include(dirname(__FILE__) . '/../../static/meta.php');   
 ?>
 
 <style type="text/css">
@@ -164,7 +164,7 @@ productPresenter.getProductTemplate = function(product){
 	var feedOwner = product.owner;
 	var feedCloset = product.closet;
     var score = product.sc;
-    var explainUrl = window.HOME_ROOT + 'scripts/admin/php/explain.php?sku=' + id + '&query=' + encodeURIComponent($( "#search-bar" ).val()).replace("#","").trim();
+    var explainUrl = window.HOME_ROOT + 'admin/php/explain.php?sku=' + id + '&query=' + encodeURIComponent($( "#search-bar" ).val()).replace("#","").trim();
     var colors = product.co;
 
 	var rand = Math.floor(Math.random() * 3) + 1;
@@ -177,7 +177,7 @@ productPresenter.getProductTemplate = function(product){
 	var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
 	   var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'">';
 			html +='<a target="_blank" href=' + explainUrl +  '>' +
-                '<div class="picture"><img data-src="' + image + '" src="../../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
+                '<div class="picture"><img data-src="' + image + '" src="../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
 			html += '<div class="bottom-block">';
 			    html +='<div class="companyName">' + company + '</div>';
 				html +='<div class="price">' +  price + '</div>';

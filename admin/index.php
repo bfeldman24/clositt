@@ -2,8 +2,8 @@
 <html>
 <head>
 <?php 
-require_once(dirname(__FILE__) . '/../../app/globals.php');
-include(dirname(__FILE__) . '/../../static/meta.php');   
+require_once(dirname(__FILE__) . '/../app/globals.php');
+include(dirname(__FILE__) . '/../static/meta.php');   
 
 ?>
 <style type="text/css">
@@ -27,7 +27,7 @@ ul>li{
 
 </head>
 <body>
-<?php include(dirname(__FILE__) . '/../../static/header.php');   ?>
+<?php include(dirname(__FILE__) . '/../static/header.php');   ?>
 <div id="mainContent">
     <a href="#" name="top"></a>
     <br><h2>Admin Pages</h2>   
@@ -51,13 +51,13 @@ ul>li{
     <hr>
     <br/>
     <ul>
-        <li><a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://www.feld24.info/closetta/selectors.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/admin/js/storeApi.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/admin/js/productSpider.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/admin/js/productDetailApi.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/js/messenger.js';})();">Product Scraping - CSS Selector Helper</a></li>
+        <li><a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://www.feld24.info/closetta/selectors.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/admin/js/storeApi.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/admin/js/productSpider.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/admin/js/productDetailApi.js';document.body.appendChild(document.createElement('script')).src='http://www.closetta.com/scripts/js/messenger.js';})();">Product Scraping - CSS Selector Helper</a></li>
         <li><a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://www.feld24.info/closetta/genericProductPageScraper.js';})();">Product Scraping - Generic Scraping Script To Guess Where the Attributes are Automatically</a></li>
     </ul>
     
     <br><br><br>        
 </div>
 
-<?php include(dirname(__FILE__) . '/../../static/footer.php');   ?>
+<?php include(dirname(__FILE__) . '/../static/footer.php');   ?>
 </body>
 </html>

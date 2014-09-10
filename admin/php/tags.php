@@ -4,8 +4,8 @@
 <title>Tags Admin</title>
 
 <?php 
-require_once(dirname(__FILE__) . '/../../../app/globals.php');
-require_once(dirname(__FILE__) . '/../../../static/meta.php');   
+require_once(dirname(__FILE__) . '/../../app/globals.php');
+require_once(dirname(__FILE__) . '/../../static/meta.php');   
 ?>
 
 <style type="text/css">
@@ -189,14 +189,14 @@ body{
     <div id="main-workspace" style="display:none;"></div>    
     <div id="sample-grid-container">
         <div id="product-grid"></div>
-        <div id="productSpinner" style="display:none;"><img src="../../../css/images/loading.gif"/></div>
+        <div id="productSpinner" style="display:none;"><img src="../../css/images/loading.gif"/></div>
     </div>
     <a href="#top" id="clear">Clear Results</a>
     <a href="#top" id="gototop">Go To Top</a>    
 </div>
 
 <div id="loadingMask">
-    <img src="../../../css/images/loading.gif"/>
+    <img src="../../css/images/loading.gif"/>
 </div>
 
 
@@ -500,7 +500,7 @@ productPresenter.getProductTemplate = function(product){
 		 			
 	//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
 	var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
-	   var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'" company="'+company+'" name="'+name+'">';			        html += '<div class="picture"><img data-src="' + image + '" src="../../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
+	   var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'" company="'+company+'" name="'+name+'">';			        html += '<div class="picture"><img data-src="' + image + '" src="../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
 			html += '<div class="bottom-block">';
 			    //html +='<div class="companyName">' + company + '</div>';
 				html +='<div class="price">' +  tagAdmin.tag + '</div>';
