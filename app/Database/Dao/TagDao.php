@@ -16,9 +16,7 @@ class TagDao extends AbstractDao {
                 " GROUP BY ". TAG_STRING .
                 " ORDER BY ". TAG_STRING;
         
-		$paramTypes = array();		
-		$params = array();		
-		return $this->getResults($sql, $params, $paramTypes, "2342837429");
+		return $this->getResults($sql, array(), array(), "2342837429");
 	}	
 		
 	
@@ -59,16 +57,7 @@ class TagDao extends AbstractDao {
         
         $sql .= " AND " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")"; 
 
-        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-        $affectedRows = 0;
-                 
-        try {                              
-            $affectedRows = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-        }     
-        
-        return $affectedRows;
+        return $this->update($sql, $params, $paramTypes, "21847293");
 	}
 	
 	
@@ -92,33 +81,19 @@ class TagDao extends AbstractDao {
         $skuPlaceholders = '';               
         
         foreach ($skus as $sku) {    
-            try {   
-                $params[] = $sku;
-                $paramTypes[] = 'text';  
-                
-                if ($skuPlaceholders != ''){
-                    $skuPlaceholders .= ",";   
-                }
-                
-                $skuPlaceholders .= "?";
-                      
-            } catch (Exception $e) {
-                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            $params[] = $sku;
+            $paramTypes[] = 'text';  
+            
+            if ($skuPlaceholders != ''){
+                $skuPlaceholders .= ",";   
             }
+            
+            $skuPlaceholders .= "?";                      
         }
         
         $sql .= " AND " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")";       
         
-        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-        $affectedRows = 0;
-                 
-        try {                              
-            $affectedRows = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-        }     
-        
-        return $affectedRows;
+        return $this->update($sql, $params, $paramTypes, "1823749234");
 	}	
 	
 	
@@ -132,27 +107,8 @@ class TagDao extends AbstractDao {
 	           " SET " . TAG_COUNT  . " = " . TAG_COUNT . " + 1 " . 
 	           " WHERE " . TAG_STRING . " = :tag AND " . PRODUCT_SKU . " = :sku";
         
-        $stmt = $this->db->prepare($sql, array('text','text'), MDB2_PREPARE_MANIP);
-                
-        try {
-            if($this->debug){
-                $tagParams = print_r($tag, true);
-    			$this->logDebug("127129321" ,$sql . " (" . $tagParams . ")" );
-    		}
-            
-            $affected = $stmt->execute($tag);
-            $stmt->free();
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            print_r($tag);
-        }       
-        
-        if($this->debug){            
-            $a = print_r($affected, true);
-			$this->logDebug("affected update" ,$a);
-		} 
-        
-        return $affected;
+        $paramTypes = array('text','text');
+        return $this->update($sql, $tag, $paramTypes, "98237492");                
 	}
 	
 	
@@ -316,32 +272,8 @@ class TagDao extends AbstractDao {
             $params[] = $excludes;
        }
 	   
-	   $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-	   	 
-        try {                                                
-            if(DEBUG){
-                $tagParams = print_r($params, true);
-    			$this->logDebug("238957923" ,$sql . " (" . $tagParams . ")" );
-    		}    		
-    		    		
-            print_r($params);
-            echo "\n";
-            $affectedRows = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            print_r($results);
-        }                   
-        
-        $PEAR = new PEAR();
-		if ($PEAR->isError($affectedRows)) {
-		    
-			$this->logError("756476548" ,$affectedRows->getMessage(),$sql);
-		    return false;
-		}
- 			  
-        
-       $stmt->free();        		
-       return $affectedRows;
-	}
+	   print_r($params);
+	   return $this->update($sql, $params, $paramTypes, "853299875");
+    }
 }
 ?>

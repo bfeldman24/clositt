@@ -151,17 +151,7 @@ class ProductDao extends AbstractDao {
         
         $paramTypes = array('text');
         $params = array($productId);
-        
-        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-            
-        try {
-            $affected = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            print_r($params);
-        }
-        
-        return $affected;
+        return $this->update($sql, $params, $paramTypes, "2359827342");
 	}
 	
 	public function updateCommentCounter($productId){
@@ -176,17 +166,7 @@ class ProductDao extends AbstractDao {
         
         $paramTypes = array('text');
         $params = array($productId);
-        
-        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-            
-        try {
-            $affected = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            print_r($params);
-        }
-        
-        return $affected;
+        return $this->update($sql, $params, $paramTypes, "2359827342");
 	}		
 	
 	public function getCachedProductImage($sku){
