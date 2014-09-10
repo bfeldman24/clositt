@@ -92,7 +92,7 @@ class ClosetDao extends AbstractDao {
                 " WHERE " . CLOSET_USER_ID . " = ? AND ".CLOSET_PERMISSION." < 3".
                 " ORDER BY " . CLOSET_NAME;							       
 		
-		$paramsTypes = array('integer');		
+		$paramTypes = array('integer');		
 		$params = array($userId);
 		
 		return $this->getResults($sql, $params, $paramTypes, "29387201642");

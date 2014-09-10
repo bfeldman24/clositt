@@ -32,7 +32,7 @@ class ProductDao extends AbstractDao {
 		     $sql .= " WHERE p." . PRODUCT_SHORT_LINK . " = ? ";
 		}					 								
 		
-		$paramsTypes = array('text');		
+		$paramTypes = array('text');		
 		$params = array($productId);	
 		return $this->getResults($sql, $params, $paramTypes, "3248272");
 	}  
@@ -54,7 +54,7 @@ class ProductDao extends AbstractDao {
     		      $sql .= " AND " . PRODUCT_CUSTOMER . " = ? ";
     		      
     		      $params[] = $customer[0];
-            	  $paramsTypes[] = 'text';
+            	  $paramTypes[] = 'text';
 		      }
 		}		
 		
@@ -65,8 +65,8 @@ class ProductDao extends AbstractDao {
 		$sql .= " LIMIT ? OFFSET ?";
 		$params[] = $limit;
 		$params[] = $offset;
-		$paramsTypes[] = 'integer';
-		$paramsTypes[] = 'integer';		
+		$paramTypes[] = 'integer';
+		$paramTypes[] = 'integer';		
 		
 		return $this->getResults($sql, $params, $paramTypes, "2309842");
 	}  
@@ -106,7 +106,7 @@ class ProductDao extends AbstractDao {
 		               
 		$sql .= " LIMIT ?";								
         
-		$paramsTypes = array('text','text','integer');		
+		$paramTypes = array('text','text','integer');		
 		$params = array($productId, $productId, $limit);
 		
 		return $this->getResults($sql, $params, $paramTypes, "2309842");
@@ -134,7 +134,7 @@ class ProductDao extends AbstractDao {
 		
 		$sql .= " ORDER BY h." . HISTORICAL_DATE;					 								
 		
-		$paramsTypes = array('text');		
+		$paramTypes = array('text');		
 		$params = array($productId);	
 		return $this->getResults($sql, $params, $paramTypes, "876594567");
 	}        	
