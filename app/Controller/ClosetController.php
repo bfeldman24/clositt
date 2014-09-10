@@ -5,6 +5,7 @@ require_once(dirname(__FILE__) . '/../Model/ClosetItemEntity.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ClosetDao.php');
 require_once(dirname(__FILE__) . '/Debugger.php');
 require_once(dirname(__FILE__) . '/ProductController.php');
+require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
 
 class ClosetController extends Debugger {	
 	private $closetDao = null;
@@ -93,7 +94,11 @@ class ClosetController extends Debugger {
                     $affectedRows = $this->closetDao->addItemToCloset($_SESSION['userid'], $closetItem);
                     
                     if ($affectedRows === 1){
-                        $this->productController->updateClosittCounter($closetItem->getSku());                           
+                        $this->productController->updateClosittCounter($closetItem->getSku());
+                        
+                        // Update elastic count
+                        $elastic = new ElasticDao();
+                        $elastic->updateClosittCount($closetItem->getSku());
                         
                         try{                            
                             $rawImage = $this->file_get_contents_curl($closetItem->getImage());                          
