@@ -1,4 +1,6 @@
 <?php
+require_once(dirname(__FILE__) . '/BaseEntity.php');
+
 // JAVASCRIPT Closet
 define("JS_CLOSET_ID","id");
 define("JS_CLOSET_NAME","title");
@@ -65,11 +67,11 @@ class ClosetItemEntity {
 	public static function setFromDB($row){         
 		$closetItemEntity = new ClosetItemEntity();
 	
-		$closetItemEntity->setClosetId(stripslashes($row[CLOSET_ID]));
-		$closetItemEntity->setClosetName(stripslashes($row[CLOSET_NAME]));			
-		$closetItemEntity->setUserId(stripslashes($row[CLOSET_USER_ID]));
-		$closetItemEntity->setSku(stripslashes($row[CLOSET_ITEM_SKU]));
-		$closetItemEntity->setImage(stripslashes($row[CLOSET_ITEM_IMAGE]));	
+		$closetItemEntity->setClosetId(BaseEntity::getDBField($row, CLOSET_ID));
+		$closetItemEntity->setClosetName(BaseEntity::getDBField($row, CLOSET_NAME));			
+		$closetItemEntity->setUserId(BaseEntity::getDBField($row, CLOSET_USER_ID));
+		$closetItemEntity->setSku(BaseEntity::getDBField($row, CLOSET_ITEM_SKU));
+		$closetItemEntity->setImage(BaseEntity::getDBField($row, CLOSET_ITEM_IMAGE));	
 		
 		return $closetItemEntity;
 	}		
@@ -77,10 +79,10 @@ class ClosetItemEntity {
 	public static function setFromPost($row){
 		$closetItemEntity = new ClosetItemEntity();
 		
-		$closetItemEntity->setClosetId(trim($row[JS_CLOSET_ID]));
-		$closetItemEntity->setUserId(trim($row[JS_CLOSET_ITEM_USER_ID]));
-		$closetItemEntity->setSku(trim($row[JS_CLOSET_ITEM_SKU]));
-		$closetItemEntity->setImage(trim($row[JS_CLOSET_ITEM_IMAGE]));	    
+		$closetItemEntity->setClosetId(BaseEntity::getPostField($row, JS_CLOSET_ID));
+		$closetItemEntity->setUserId(BaseEntity::getPostField($row, JS_CLOSET_ITEM_USER_ID));
+		$closetItemEntity->setSku(BaseEntity::getPostField($row, JS_CLOSET_ITEM_SKU));
+		$closetItemEntity->setImage(BaseEntity::getPostField($row, JS_CLOSET_ITEM_IMAGE));	    
 				    
 		return $closetItemEntity;
 	}
