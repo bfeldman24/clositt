@@ -8,13 +8,7 @@
 		
 		<?php if ($_SERVER['PHP_SELF'] == "<?php echo HOME_ROOT; ?>index.php" || $_SERVER['PHP_SELF'] == "<?php echo HOME_ROOT; ?>clositt.php"){ ?>
     		<div class="last footer-item"><a class="joyride-start" href="#">Tour</a></div>						
-		<?php } ?>
-		
-		<?php
-		if((isset($_GET['ben']) && $_GET['ben'] != "") || (isset($_GET['eli']) && $_GET['eli'] != "")){
-		?>
-		<div class="last footer-item"><a href="<?php echo HOME_ROOT; ?>scripts/admin/php/productSpider.php" style="margin: 0 5px;">Upload</a></div>
-		<?php } ?>						
+		<?php } ?>		
 	</div>
 	
 	<div class="feedback hidden-xs">
