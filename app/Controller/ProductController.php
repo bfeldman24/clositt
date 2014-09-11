@@ -147,38 +147,6 @@ class ProductController {
 		return "failed";
 	}
 	
-	public function addProductsFromFile($productFile){
-	    // Get Products from file    
-        $file = fopen($productFile, 'r');
-        $productsJson = fread($file, filesize($productFile));
-        fclose($file);
-        $products = json_decode($productsJson, true);  
-        
-        $productArray = array();
-        $i =0;
-        
-        foreach ($products as $sku => $product){
-             $i++;
-             $insertArray = array();
-             $insertArray[] = $sku;
-             $insertArray[] = $product['o'];
-             $insertArray[] = $product['u'];
-             $insertArray[] = $product['a'];
-             $insertArray[] = $product['n'];
-             $insertArray[] = $product['l'];
-             $insertArray[] = $product['i'];
-             $insertArray[] = $product['p'];
-             $insertArray[] = 0;
-             $insertArray[] = 0;
-                          
-             $productArray[] = $insertArray;  
-        }
-        
-        $result = $this->addProducts($productArray);
-        echo "DONE: " . $i . ") " . $result;
-        return $result;
-	}
-
 	public function getFilteredProducts($criteria, $pageNumber, $numResultsPage, $tagAdmin = false){
 						
 		$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage, $tagAdmin);

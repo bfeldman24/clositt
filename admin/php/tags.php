@@ -148,7 +148,7 @@ body{
     color: #428bca;   
 }
 
-.modal-product-name{
+.modal-product-name a{
     color: #444;   
 }
 </style>
@@ -432,11 +432,14 @@ var tagAdmin = {
     viewLargerImage: function(e){
         var $outfit = $(e.currentTarget).parents(".outfit");
         var $image = $outfit.find(".picture img").clone();
+        var link = $outfit.attr("link");
         
         var $message = $("<div>").append(
                             $("<h2>").addClass("modal-store-title").text($outfit.attr("company"))
                          ).append(
-                            $("<h2>").addClass("modal-product-name").text($outfit.attr("name"))
+                            $("<h2>").addClass("modal-product-name").append(
+                                $("<a>").attr("href",link).text($outfit.attr("name"))
+                             )
                         ).append($image);
         
         bootbox.dialog({
@@ -500,7 +503,7 @@ productPresenter.getProductTemplate = function(product){
 		 			
 	//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
 	var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
-	   var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'" company="'+company+'" name="'+name+'">';			        html += '<div class="picture"><img data-src="' + image + '" src="../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
+	   var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'" company="'+company+'" name="'+name+'" link="'+link+'">';			        html += '<div class="picture"><img data-src="' + image + '" src="../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
 			html += '<div class="bottom-block">';
 			    //html +='<div class="companyName">' + company + '</div>';
 				html +='<div class="price">' +  tagAdmin.tag + '</div>';

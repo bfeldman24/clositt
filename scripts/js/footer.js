@@ -94,7 +94,7 @@ function submitSigninModal(){
      
          		var email = $("#loginModalTab-inputEmail").val();
          		var password = $("#loginModalTab-inputPassword").val();
-         		var remember = false;		
+         		var remember = true;		
          					  	
          		sessionStorage.goToClositt = true;			  	
          	  	session.login(email,password,remember);		    

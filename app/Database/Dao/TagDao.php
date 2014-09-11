@@ -32,6 +32,7 @@ class TagDao extends AbstractDao {
               " WHERE " . TAG_STRING . " = ? ";
                             
        if($this->debug){		    
+            $sku = print_r($skus, true);
 			$this->logDebug("92864192401" ,$sql . " { $sku , $tag } ");
 		}
         
@@ -265,7 +266,7 @@ class TagDao extends AbstractDao {
        $params = array($tag, $groupid, $synonyms, $synonyms);
                
        if (isset($excludes) && trim($excludes) != ""){
-            $sql .= " AND (LOWER(".PRODUCT_NAME.") NOT REGEXP '?' AND LOWER(".PRODUCT_DETAILS.") NOT REGEXP '?')";
+            $sql .= " AND (LOWER(".PRODUCT_NAME.") NOT REGEXP ? AND LOWER(".PRODUCT_DETAILS.") NOT REGEXP ?)";
             $paramTypes[] = "text";
             $paramTypes[] = "text";
             $params[] = $excludes;

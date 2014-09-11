@@ -115,6 +115,7 @@ class SessionController extends Debugger{
      */	
 	function setCookie($remember){		
 	    if (!isset($remember) || $remember !== true || !isset($_SESSION['email'])){
+	       echo "forget me ";
 	       return false;  
 	    }	    	    
 	    

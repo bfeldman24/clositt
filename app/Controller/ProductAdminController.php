@@ -1,10 +1,11 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductAdminDao.php');
-require_once(dirname(__FILE__) . '/../Database/Dao/ProductDao.php');
+require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
+require_once(dirname(__FILE__) . '/../Model/SpiderLinkEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
 require_once(dirname(__FILE__) . '/../Model/SpiderLinkEntity.php');
@@ -194,57 +195,7 @@ class ProductAdminController extends Debugger {
 	
 		return $results;
 	}
-	
-	public function getFilteredProducts($criteria, $pageNumber, $numResultsPage){
-			
-		$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage);
-		$searchResults = array(); 
-		$searchResults['products'] = array();
 		
-		if(is_object($results)){
-			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){
-			    $productEntity = new ProductEntity();
-				ProductEntity::setProductFromDB($productEntity, $row);
-				//ProductTemplate::getProductGridTemplate($productEntity);
-				$searchResults['products'][] = $productEntity->toArray();
-			}
-		}
-		
-		return json_encode($searchResults);
-	}
-	
-	public function addProductsFromFile($productFile){
-	    // Get Products from file    
-        $file = fopen($productFile, 'r');
-        $productsJson = fread($file, filesize($productFile));
-        fclose($file);
-        $products = json_decode($productsJson, true);  
-        
-        $productArray = array();
-        $i =0;
-        
-        foreach ($products as $sku => $product){
-             $i++;
-             $insertArray = array();
-             $insertArray[] = $sku;
-             $insertArray[] = $product['o'];
-             $insertArray[] = $product['u'];
-             $insertArray[] = $product['a'];
-             $insertArray[] = $product['n'];
-             $insertArray[] = $product['l'];
-             $insertArray[] = $product['i'];
-             $insertArray[] = $product['p'];
-             $insertArray[] = 0;
-             $insertArray[] = 0;
-                          
-             $productArray[] = $insertArray;  
-        }
-        
-        $result = $this->addProducts($productArray);
-        //echo "DONE: " . $i . ") " . $result;
-        return $result;
-	}		 
-	
 	public function getTotalProductsCount(){
 	   $result = $this->productAdminDao->getTotalProductsCount();	    
 	   return $result->fetchOne();
@@ -626,7 +577,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['cla
         
         case 'getspiderstats':
             echo $productAdminController->getSpiderStats();    
-            break;                                
+            break; 
+            
+        case 'iselastichealthy':
+            $elasticDao = new ElasticDao();
+            $isElasticHealthy = $elasticDao->isHealthy();
+            echo $isElasticHealthy ? "healthy" : "sick";
+            break;                        
     }
 }
 

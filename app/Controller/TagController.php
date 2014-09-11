@@ -115,7 +115,14 @@ class TagController{
 		$SYN = 2;
 		$EXCL = 3;
 		
+		ini_set("auto_detect_line_endings", true); // fixes issue with not reading line endings from file saved by a Mac
 		$tags = file($tagsListFile);		
+		echo "Found " . count($tags) . " tags! ";
+		
+		if (count($tags) <= 1){
+		      print_r($tags);
+		      return;
+		} 
 		
 		// add all groups that don't already exist
 		$tagGroups = array();
