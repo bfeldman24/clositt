@@ -151,6 +151,18 @@ body{
 .modal-product-name a{
     color: #444;   
 }
+
+.btn-inverse {
+    background-color: #3F3F3F;
+    border-color: #000000;
+    color: #fff;
+}
+
+.btn-inverse:hover, .btn-inverse:focus, .btn-inverse:active, .btn-inverse.active {
+    background-color: #000000;
+    border-color: #000000;
+    color: #eee;
+}
 </style>
 
 </head>
@@ -214,16 +226,15 @@ var tagAdmin = {
         $(document).on("click", ".removePrevious", tagAdmin.removePreviousTags);        
         $(document).on("click", ".approveTag", tagAdmin.approveTag);
         $(document).on("click", ".approvePrevious", tagAdmin.approvePrevious);                
-        $(document).on("click",".tag-options label",tagAdmin.changeTagOptions);
+        $(document).on("click", ".removeProduct", tagAdmin.removeProduct);
+        $(document).on("click",".tag-options label",tagAdmin.changeTagOptions);                
         $(document).on("click",".name",tagAdmin.viewLargerImage);
         tagAdmin.getTags();
     },
     
     removeTag: function(e){
         var $product = $(e.currentTarget).parents(".outfit");
-        var sku = $product.attr("pid");
-        var company = $product.attr("company");
-        var name = $product.attr("name");        
+        var sku = $product.attr("pid");       
         
         $.post(window.HOME_ROOT + "t/removetag", {sku: sku, tag: tagAdmin.tag}, function(data){                
                 
@@ -302,9 +313,7 @@ var tagAdmin = {
     approveTag: function(e){
         var $product = $(e.currentTarget).parents(".outfit");        
         var skus = [];        
-        skus.push($product.attr("pid"));                         
-        
-        var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
+        skus.push($product.attr("pid"));                                          
         
         $.post(window.HOME_ROOT + "t/approvetags", {skus: skus, tag: tagAdmin.tag}, function(data){            
             
@@ -316,6 +325,21 @@ var tagAdmin = {
                 Messenger.error("There was a problem approving that tag!");                                     
             }
         });        
+    },
+    
+    removeProduct: function($product){
+        var sku = $product.attr("pid");
+                
+        $.post(window.HOME_ROOT + "t/replacetag", {sku: sku, tag: tagAdmin.tag, replacement: 'notclothes'}, function(data){            
+            
+            if (data == "success"){
+                tagAdmin.count++;                    
+                Messenger.info("Removed the Product! (" + tagAdmin.count + " total)");                                 
+                $product.remove();                
+            }else{
+                Messenger.error("There was a problem approving that tag!");                                     
+            }
+        });
     },
     
     tagClicked: function(e){
@@ -440,7 +464,7 @@ var tagAdmin = {
                             $("<h2>").addClass("modal-product-name").append(
                                 $("<a>").attr("href",link).text($outfit.attr("name"))
                              )
-                        ).append($image);
+                        ).append($image);        
         
         bootbox.dialog({
             message: $message,
@@ -453,7 +477,6 @@ var tagAdmin = {
                     label: "Approve Tag",
                     className: "btn-success",
                     callback: function() {                        
-                        //tagAdmin.approveTag($outfit);
                         $outfit.find(".approveTag.btn").trigger("click");
                     },
                 },
@@ -462,7 +485,13 @@ var tagAdmin = {
                     className: "btn-danger",
                     callback: function() {                        
                         $outfit.find(".remove.btn").trigger("click");
-                        //tagAdmin.removeTag($outfit);
+                    },
+                },
+                remove: {
+                    label: "Remove Product",
+                    className: "btn-inverse",
+                    callback: function() {     
+                        tagAdmin.removeProduct($outfit);
                     },
                 },                          
             }
@@ -518,7 +547,7 @@ productPresenter.getProductTemplate = function(product){
                             html += '<div class="approveTag btn btn-info">Approve Tag</div>';
                             html += '<div class="approvePrevious btn btn-info">Approve All Previous</div>';
                             html += '<div class="remove btn btn-danger">Remove Tag</div>';
-                            html += '<div class="removePrevious btn btn-danger">Remove All Previous</div>';
+                            html += '<div class="removePrevious btn btn-danger">Remove All Previous</div>';                            
                         html += '</div>';
                     }
 
@@ -546,7 +575,7 @@ $(document).ready(function() {
 	// Overrides:
 	gridPresenter.maxNumberOfPagesLoadingAtOnce = -1;
     searchController.isSearchActive = true;
-    searchController.url = "spider/searchunapprovedtags/";    
+    searchController.url = "t/searchunapprovedtags/";    
 });	
 </script>
 

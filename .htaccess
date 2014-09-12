@@ -23,6 +23,7 @@ RewriteRule ^b/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?cla
 
     #Tags
 RewriteRule ^t/([a-z0-9]*)$ app/Controller/TagController.php?class=tags&method=$1
+RewriteRule ^t/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/TagController.php?class=tags&method=$1&page=$2
 
     #Colors
 RewriteRule ^c/([a-z0-9]*)$ app/Controller/ColorController.php?class=color&method=$1
@@ -41,12 +42,6 @@ RewriteRule ^r/([a-z]*)$ app/Controller/ReviewController.php?class=review&method
 RewriteRule ^spider/([a-z0-9]*)$ app/Controller/ProductAdminController.php?class=admin&method=$1
 RewriteRule ^spider/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductAdminController.php?class=admin&method=$1&page=$2
 RewriteRule ^notify$ admin/php/notify.php
-Redirect /scripts/admin/ /admin/
-Redirect /admin/spider /admin/php/productSpider.php
-Redirect /admin/color /admin/php/colorProcessor.php
-Redirect /admin/search /admin/php/search.php
-Redirect /admin/tags /admin/php/tags.php
-Redirect /admin/details /admin/php/productDetailSpider.php
 
 
 # UNCOMMENT FOR PROD

@@ -11,8 +11,8 @@ class TagDao extends AbstractDao {
                 " COUNT(CASE WHEN t." . TAG_APPROVED . " <> 1 THEN 1 END) unapproved, " .
                 " COUNT(CASE WHEN t." .TAG_APPROVED . " = 1 THEN 1 END) " . TAG_APPROVED .
                 " FROM ". TAGS . " t " .
-                " LEFT JOIN " . PRODUCTS . " p ON p." . PRODUCT_SKU . " = t." . PRODUCT_SKU .
-                " WHERE p.".PRODUCT_STATUS." = 1 " .
+                " INNER JOIN " . PRODUCTS . " p ON p." . PRODUCT_SKU . " = t." . PRODUCT_SKU .
+                " WHERE p." .PRODUCT_STATUS . " = 1 " .
                 " GROUP BY ". TAG_STRING .
                 " ORDER BY ". TAG_STRING;
         
@@ -96,6 +96,28 @@ class TagDao extends AbstractDao {
         
         return $this->update($sql, $params, $paramTypes, "1823749234");
 	}	
+	
+	public function replaceTag($sku, $tag, $replacement){
+	   if (!isset($sku) || !isset($tag) || !isset($replacement)){
+	       return -1;   
+	   }
+	   
+	   $sql = "UPDATE " . TAGS .       	  
+              " SET " . TAG_STATUS . " = 3 ," .
+                        TAG_APPROVED . " = 1, " .
+                        TAG_STRING . " = ?, " .
+                        TAG_DATE_APPROVED . " = NOW() " .
+                        //TAG_GROUP_ID . " = (SELECT COALESCE((SELECT ".TAG_GROUP_ID." FROM ".TAGS." WHERE ".TAG_STRING." = ? LIMIT 1), 1))" .
+              " WHERE " . TAG_STRING . " = ? AND ".PRODUCT_SKU." = ?" ;
+                            
+       if($this->debug){		    
+			$this->logDebug("786848656" ,$sql . " { $sku , $tag, $replacement } ");
+		}
+        
+        $params = array($replacement, $tag, $sku);
+        $paramTypes = array('text', 'text','text');      
+        return $this->update($sql, $params, $paramTypes, "7868486562");
+	}
 	
 	
 	public function tryUpdateTagDao($tag){
@@ -250,7 +272,7 @@ class TagDao extends AbstractDao {
 	public function populateTagsBasedOnExistingTag($tag, $groupid, $synonyms, $excludes){	   
 	   if (!isset($groupid)){
 	       $groupid = 1;   
-	   }
+	   }	   	   
 	   
 	   $sql = "INSERT IGNORE INTO " . TAGS . 
 	           " (" . TAG_STRING . "," .
@@ -262,13 +284,15 @@ class TagDao extends AbstractDao {
                " FROM " . PRODUCTS .
                " WHERE (LOWER(".PRODUCT_NAME.") REGEXP ? OR LOWER(".PRODUCT_DETAILS.") REGEXP ?)";
                
-       $paramTypes = array('text','integer','text','text');        
+       $paramTypes = array('text','integer','text','text');  
+       $synonyms = '[[:<:]]('.$synonyms.')[[:>:]]'; // searches for whole words only            
        $params = array($tag, $groupid, $synonyms, $synonyms);
                
        if (isset($excludes) && trim($excludes) != ""){
             $sql .= " AND (LOWER(".PRODUCT_NAME.") NOT REGEXP ? AND LOWER(".PRODUCT_DETAILS.") NOT REGEXP ?)";
             $paramTypes[] = "text";
             $paramTypes[] = "text";
+            $excludes = '[[:<:]]('.$excludes.')[[:>:]]'; // searches for whole words only            
             $params[] = $excludes;
             $params[] = $excludes;
        }
@@ -276,5 +300,39 @@ class TagDao extends AbstractDao {
 	   print_r($params);
 	   return $this->update($sql, $params, $paramTypes, "853299875");
     }
+    
+    public function getProductsForTag($tag, $page, $getOnlyUnapprovedTags){								
+        $limit = QUERY_LIMIT;
+        $offset = $limit * $page;
+        
+        $sql = "SELECT " .
+    				" p." . PRODUCT_SKU . ", " .
+    				" p." . PRODUCT_STORE . ", " .				
+    				" p." . PRODUCT_CUSTOMER . ", " .
+    				" p." . PRODUCT_CATEGORY . ", " .
+    				" p." . PRODUCT_NAME . ", " .
+    				" p." . PRODUCT_LINK . ", " .
+    				" p." . PRODUCT_IMAGE . ", " .
+    				" p." . PRODUCT_PRICE . ", " .
+    				" p." . PRODUCT_COMMENT_COUNT . ", " .
+    				" p." . PRODUCT_CLOSITT_COUNT . ", " .
+    				" p." . PRODUCT_SHORT_LINK . 
+				" FROM " . PRODUCTS . " p " . 
+				" INNER JOIN " . TAGS . " t ON t." .PRODUCT_SKU . " = p." . PRODUCT_SKU .
+                " WHERE t.".TAG_STRING." = ? AND p." .PRODUCT_STATUS . " = 1 ";
+        
+        if ($getOnlyUnapprovedTags){
+            $sql .= " AND t." . TAG_APPROVED . " = 0";   
+        }
+        
+        $sql .= " ORDER BY (CASE WHEN p.".PRODUCT_NAME." like CONCAT('%',t.".TAG_STRING.",'%') THEN 1 ELSE 2 END), ".
+                    PRODUCT_STORE.",".PRODUCT_CATEGORY.",".PRODUCT_CATEGORY.",".PRODUCT_NAME;
+        $sql .= " LIMIT ? OFFSET ?";
+        
+        
+        $paramTypes = array('text','integer','integer');
+        $params = array($tag, $limit, $offset);
+		return $this->getResults($sql, $params, $paramTypes, "2342837429");
+	}
 }
 ?>
