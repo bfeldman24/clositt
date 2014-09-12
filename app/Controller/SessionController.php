@@ -34,7 +34,7 @@ class SessionController extends Debugger{
      *
      * @return false if there are any sql errors, 
      */		
-	function checkSession() {				
+	function checkSession() {					   
 		if (!isset($_SESSION['active']) || $_SESSION['active'] === false) {        	  
         	if (isset($_COOKIE[COOKIE_NAME]) ) {
     			$this->checkCookie($_COOKIE[COOKIE_NAME]);
@@ -51,18 +51,19 @@ class SessionController extends Debugger{
      * @return false if there are any sql errors
      */		
 	function checkCookie($cookie) {
-		list($email, $cookieDB) = @unserialize(stripslashes($cookie));
+		list($emailEncoded, $cookieDB) = @unserialize(stripslashes($cookie));
 		
-		if (!$email || !$cookieDB){ 
-			$err = "email = " . $email . "; cookieDB = " . $cookieDB . "; cookie = " . $cookie;
+		if (!$emailEncoded || !$cookieDB){ 
+			$err = "email = " . $emailEncoded . "; cookieDB = " . $cookieDB . "; cookie = " . $cookie;
 			$this->debugError("(checkRemember-1)",$err);
 			return false; 
 		}		
 		
+		$email = base64_decode($emailEncoded);		
 		$result = $this->sessionDao->checkCookie($email, $cookieDB);				
 		
-		if(is_object($results)){
-			if($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){  
+		if(is_object($result)){
+			if($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)){  
 			     $user = UserEntity::setFromDB($row); 
 			     $this->setSession($user);
 			}
@@ -114,16 +115,16 @@ class SessionController extends Debugger{
      * @return false if there are any sql errors
      */	
 	function setCookie($remember){		
-	    if (!isset($remember) || $remember !== true || !isset($_SESSION['email'])){
-	       echo "forget me ";
+	    if (!isset($remember) || !$remember || !isset($_SESSION['email'])){	       
 	       return false;  
 	    }	    	    
 	    
 		$cookieDB = md5(rand(100,10000) . COOKIE_NAME . time());
-		$cookie = serialize(array($_SESSION['email'],$cookieDB)); //md5(random)		
+		$email = base64_encode($_SESSION['email']);
+		$cookie = serialize(array($email, $cookieDB)); //md5(random)		
 		setcookie(COOKIE_NAME, $cookie, time() + 31104000, "/"); //expires in about 360 days
 		
-		$affectedRows = $this->sessionDao->setCookie($cookie, $_SESSION['email']);		
+		$affectedRows = $this->sessionDao->setCookie($cookieDB, $_SESSION['email']);		
 		
 		return $affectedRows === 1;
 	}	
