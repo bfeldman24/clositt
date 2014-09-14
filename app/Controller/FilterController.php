@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/FilterDao.php');
+require_once(dirname(__FILE__) . '/../View/FilterView.php');
 require_once(dirname(__FILE__) . '/Debugger.php');
 
 
@@ -70,6 +71,7 @@ class FilterController extends Debugger {
 			             if (!isset($tempFilters[$type][$value])){			                 
         			         $tempFilters[$type][$value] = $customer;
         			         $filters[$type][] = array($value, $customer);
+        			         
         			     }else if ($tempFilters[$type][$value] != $customer && $tempFilters[$type][$value] != "Both"){
         			         $tempFilters[$type][$value] = $customer;
         			         
@@ -83,24 +85,24 @@ class FilterController extends Debugger {
         			     }        			             			     
 			         }
 			    }else{
-			        if (!isset($filters[$type][$subvalue])){
-    			         $filters[$type][$subvalue] = array();
-    			         $tempFilters[$type][$subvalue] = array();
+			        if (!isset($filters[$type][$value])){
+    			         $filters[$type][$value] = array();
+    			         $tempFilters[$type][$value] = array();
     			    }     			    
     			    
     			    if ($customer == null){
-			             $filters[$type][$subvalue][] = $value;
+			             $filters[$type][$value][] = $subvalue;
 			         }else{
-			             if (!isset($tempFilters[$type][$subvalue][$value])){			                 
-        			         $tempFilters[$type][$subvalue][$value] = $customer;
-        			         $filters[$type][$subvalue][] = array($value, $customer);
-        			     }else if ($tempFilters[$type][$subvalue][$value] != $customer && $tempFilters[$type][$subvalue][$value] != "Both"){        			         
-        			         $tempFilters[$type][$subvalue][$value] = $customer;
+			             if (!in_array($subvalue, $tempFilters[$type][$value])){
+        			         $tempFilters[$type][$value][$subvalue] = $customer;
+        			         $filters[$type][$value][] = array($subvalue, $customer);
+        			     }else if ($tempFilters[$type][$value][$subvalue] != $customer && $tempFilters[$type][$value][$subvalue] != "Both"){		         
+        			         $tempFilters[$type][$value][$subvalue] = $customer;
         			         
         			         // update existing record's customer to Both
-        			         for ($i = count($filters[$type][$subvalue]) - 1; $i >= 0; $i--){
-        			             if ($filters[$type][$subvalue][$i][0] == $value){
-        			                 $filters[$type][$subvalue][$i][1] = "Both";
+        			         for ($i = count($filters[$type][$value]) - 1; $i >= 0; $i--){
+        			             if ($filters[$type][$value][$i][0] == $subvalue){
+        			                 $filters[$type][$value][$i][1] = "Both";
         			                 break;    
         			             }    
         			         }
@@ -112,6 +114,24 @@ class FilterController extends Debugger {
 	   
 	   $filters['price'] = array(0,50,100,150,200,250,500,1000);              
 
+       $filters['color'] = array(       
+          "Red" => "#F33",           
+          "Orange" => "#F93",
+          "Yellow" => "#FF0",
+          "Green" => "#3C3",
+          "Cyan" => "#0FF", 
+          //"Teal" => "#088",
+          "Blue" => "#00F",
+          "Magenta" => "#F0F",
+          "Violet" => "#7848C0",
+          "Purple" => "#939",
+          "Pink" => "#FF98bF",
+          "White" => "#F0F0F0",
+          "Gray" => "#999",
+          "Black" => "#000",
+          "Brown" => "#963"
+       );
+
        $filterJson = stripslashes(json_encode($filters));
         
        // Write filter to file
@@ -120,7 +140,7 @@ class FilterController extends Debugger {
            if ($file){
                fwrite($file, $filterJson);
                fclose($file);
-               touch($file);
+               touch($this->filterFile);
            }
        }catch (Exception $e) {
             echo "Whoops";
@@ -150,23 +170,17 @@ class FilterController extends Debugger {
     }
 }
 
-
 if (isset($_GET['method']) && $_GET['class'] == "filter"){
     $filterController = new FilterController($mdb2);              
     
     switch($_GET['method']){
         case 'getfilters':
-            $filters = $filterController->getFilters();
-            print_r($filters);
-            break;
-        case 'getfiltersselect':                                                   
-            $results = $filterController->getFilters();   
+            $filtersJSON = $filterController->getFilters();                        
+            print_r($filtersJSON);
             
-            foreach ($results['categories'] as $filter){
-                echo '<option value="'.$filter.'">'.$filter.'</option>';
-            }        
-            
-            break; 
+            //$filters = json_decode($filtersJSON, true);
+            //FilterView::getNavigationSection($filters);
+            break;    
     }            
 }
 

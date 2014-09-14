@@ -13,6 +13,11 @@ class FilterDao extends AbstractDao {
 	}	
 		
     public function updateCompanyFilters(){
+       $sql = "DELETE FROM ".FILTERS.                
+              " WHERE ".FILTER_TYPE." = 'company'";
+	   
+	   $this->update($sql, array(), array(), "3949233341"); 
+        
 	   $sql = "INSERT INTO ".FILTERS." (".FILTER_TYPE.", ".FILTER_VALUE.", ".FILTER_CUSTOMER.", ".FILTER_STATUS.", ".FILTER_DATE.") " .
                 "SELECT DISTINCT 'company', p.".PRODUCT_STORE.", p.".PRODUCT_CUSTOMER.", 1, NOW() " .
                 "FROM ".PRODUCTS." p " .

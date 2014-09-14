@@ -23,48 +23,7 @@ class ColorController extends AbstractDao{
 		}
 	
 		return "failed";
-	}
-	
-	public function addColorsDaoOLD($colors){
-	    if(!isset($colors) || !is_array($colors)){
-			$this->logWarning("12876319","Nothing to add!");
-			return false; 
-		}
-	 
-	    $sql = "INSERT INTO " . COLORS . 
-	           " VALUES (?, ?, ?, NOW())";
-        
-        $stmt = $this->db->prepare($sql);
-        
-        $affected = 0;
-        
-        if ($colors[0] != null){
-            foreach ($colors as $color) {            
-                try {                
-                    echo "COLOR:";
-                    print_r($colors);
-                    $affected += $stmt->execute($color);
-                } catch (Exception $e) {
-                    echo 'Caught exception: ',  $e->getMessage(), "\n\n";                    
-                }
-            }
-        }else if ($colors['colors'] != null){
-            foreach ($colors['colors'] as $color => $products) {            
-                foreach ($products as $sku => $percent) {   
-                    try {                
-                        echo " [COLOR: $color, SKU: $sku, PERCENT: $percent] ";
-                        $affected += $stmt->execute(array($color, $sku, $percent));
-                    } catch (Exception $e) {
-                        echo 'Caught exception: ',  $e->getMessage(), "\n\n";                        
-                    }
-                }
-            }
-        }else{
-            print_r($colors);   
-        }
-        
-        return $affected;
-	}
+	}		
 	
 	public function addColorsDao($colors){
 	    if(!isset($colors) || !is_array($colors)){
