@@ -7,7 +7,6 @@ require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
-require_once(dirname(__FILE__) . '/../View/ProductTemplate.php');
 require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
 require_once(dirname(__FILE__) . '/ListController.php');
 
@@ -64,8 +63,7 @@ class ProductController {
 				}
 			}
 		}
-	
-	    //ProductTemplate::getProductGridTemplate($productEntity);	    
+		    
         return json_encode($productResults);
 	}
 	
@@ -157,7 +155,6 @@ class ProductController {
 			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){
 			    $productEntity = new ProductEntity();
 				ProductEntity::setProductFromDB($productEntity, $row);
-				//ProductTemplate::getProductGridTemplate($productEntity);
 				$searchResults['products'][] = $productEntity->toArray();
 			}
 		}
