@@ -430,6 +430,16 @@ class ProductAdminController extends Debugger {
 	   }
 	}
 	
+	public function hideProductFromBrowsing($skus){
+	   if (!isset($skus) || !is_array($skus))
+	   {
+	       return "Missing info. Can't proceed";   
+	   }
+	   
+	   $affectedRows = $this->productAdminDao->hideProductFromBrowsing($skus);  
+	   return $affectedRows > 0 ? "success" : "failed";
+	}
+	
 	private function convertResultsToArray($results){
 	   $arr = array();
 	   
@@ -497,6 +507,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['cla
         
         case 'saveproductdetails':
             $output = $productAdminController->saveProductDetails($_POST);     
+            break;   
+        
+        case 'hideproductfrombrowsing':
+            $output = $productAdminController->hideProductFromBrowsing($_POST['skus']);     
             break;   
     }
     
