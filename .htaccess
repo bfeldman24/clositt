@@ -16,7 +16,7 @@ RewriteRule ^p/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?cla
 RewriteRule ^i/([A-Za-z0-9]*)$ app/Controller/ProductController.php?class=products&method=image&sku=$1
 
     #Filter Data
-RewriteRule ^s/filters$ app/Controller/FilterController.php?class=filters&method=getfilters
+RewriteRule ^s/filters$ app/Controller/FilterController.php?class=filter&method=getfilters
 
     #Browse
 RewriteRule ^b/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?class=products&method=browse&customer=$1&page=$2
