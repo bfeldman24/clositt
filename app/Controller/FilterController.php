@@ -7,35 +7,45 @@ require_once(dirname(__FILE__) . '/Debugger.php');
 
 class FilterController extends Debugger {	
 	private $filterDao = null;
-	private $filterFile = null;
+	private $filterJsonFile = null;
+	private $filterHtmlFile = null;
 	private $numDaysToRefreshFilterFile = 3;
 
 	public function __construct(&$mdb2){
 		$this->filterDao = new FilterDao($mdb2);
-		$this->filterFile = dirname(__FILE__) . '/../Data/filters.json';
+		$this->filterJsonFile = dirname(__FILE__) . '/../Data/filters.json';
+		$this->filterHtmlFile = dirname(__FILE__) . '/../Data/filters.html';
 	}
 	
-	public function getFilters(){	    	   
+	public function getJsonFilters(){
+	   return $this->getFilters($this->filterJsonFile);  
+	}
+	
+	public function getHtmlFilters(){
+	   return $this->getFilters($this->filterHtmlFile);  
+	}
+	
+	private function getFilters($filePath){	    	   
 	    $useCurrentFile = false;
 	    $filters = null;
 	    
 	    // Check for latest modification time
-	    if (file_exists($this->filterFile)) {  	        
+	    if (file_exists($filePath)) {  	        
 	       
 	        // php 4 & 5 = filemtime, php 2 & 3 = fileAtime
-            $lastModificationDate = filemtime($this->filterFile);
+            $lastModificationDate = filemtime($filePath);
             
             $useCurrentFile = $this->isDateWithinXNumberOfDays($lastModificationDate, $this->numDaysToRefreshFilterFile);
         }                
 	    
 	    // if file is up to date then return it
 	    if ($useCurrentFile){	       	       
-	       $filters = file_get_contents($this->filterFile);
+	       $filters = file_get_contents($filePath);
 	       
 	    }else{	       	      
 	       // create new file and return that
 	       $this->updateCompanyFilters();	       
-	       $filters = $this->createFilterFile();	         	       
+	       $filters = $this->createFilterFile($filePath);
 	    }
 	    
 	    return $filters;
@@ -45,7 +55,7 @@ class FilterController extends Debugger {
 	   return $this->filterDao->updateCompanyFilters();
 	}
 	
-	private function createFilterFile(){
+	private function createFilterFile($filePath){
 	   $filterResults = $this->filterDao->getFilters();
 	   $filters = array();	   	 
 	   
@@ -133,21 +143,35 @@ class FilterController extends Debugger {
        );
 
        $filterJson = stripslashes(json_encode($filters));
+       $filterHtml = null;
         
        // Write filter to file
        try{        
-           $file = fopen($this->filterFile, 'w');           
+           $file = fopen($this->filterJsonFile, 'w');           
            if ($file){
                fwrite($file, $filterJson);
                fclose($file);
-               touch($this->filterFile);
+               touch($this->filterJsonFile);
            }
+           
+           $htmlFile = fopen($this->filterHtmlFile, 'w');           
+           if ($htmlFile){
+               ob_start();
+               FilterView::getNavigationSection($filters);
+               $filterHtml = ob_get_contents();
+               ob_end_clean();
+               
+               fwrite($htmlFile, $filterHtml);
+               fclose($htmlFile);
+               touch($this->filterHtmlFile);
+           }          
+           
        }catch (Exception $e) {
             echo "Whoops";
             $this->debug("FilterController", "createFilterFile", $e);				
        }
 
-       return $filterJson;
+       return $this->filterHtmlFile == $filePath ? $filterHtml : $filterJson;
 	}
 	
     private function convertResultsToArray($results){
@@ -175,11 +199,9 @@ if (isset($_GET['method']) && $_GET['class'] == "filter"){
     
     switch($_GET['method']){
         case 'getfilters':
-            $filtersJSON = $filterController->getFilters();                        
-            print_r($filtersJSON);
-            
-            //$filters = json_decode($filtersJSON, true);
-            //FilterView::getNavigationSection($filters);
+            $filters = $filterController->getJsonFilters();
+            //$filters = $filterController->getHtmlFilters();
+            print_r($filters);
             break;    
     }            
 }
