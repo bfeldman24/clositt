@@ -151,11 +151,7 @@ class ProductAdminDao extends AbstractDao {
 	           " VALUES (?, ?, ?, " .
 	                    "?, ?, ?, " .
 	                    "?, ?, 0, " .
-	                    "0, ?, NOW())";	                    	          
-        
-        if($this->debug){		    
-			$this->logDebug("873242" ,$sql );
-		}
+	                    "0, ?, NOW())";	                    	                 
         
         $paramTypes = array('text','text','text','text','text','text','text','decimal','text');
         $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
@@ -321,11 +317,7 @@ class ProductAdminDao extends AbstractDao {
               
        if($skipNulls){        
             $sql .= " AND ISNULL(" . PRODUCT_SHORT_LINK . ")"; 
-       }
-              
-       if($this->debug){		    
-			$this->logDebug("235235" ,$sql );
-		}
+       }              
         
         $paramTypes = array('text', 'text');
         $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
@@ -456,11 +448,7 @@ class ProductAdminDao extends AbstractDao {
                     PRODUCT_PROMOTION." = :promotion ," .
                     PRODUCT_PROMOTION_TWO . " = :promotionTwo ," .
                     PRODUCT_DETAIL_UPDATED . " = NOW() " .
-                " WHERE ".PRODUCT_SKU." = :sku";
-                                
-        if($this->debug){		    
-			$this->logDebug("239875203" , $sql);
-		}
+                " WHERE ".PRODUCT_SKU." = :sku";                               
         
         $paramTypes = array('text','text','text','text','text');
         $product = array();
@@ -490,13 +478,7 @@ class ProductAdminDao extends AbstractDao {
 	   
 	   $sql = "INSERT INTO " . SWATCHES . 
 	          " (" . PRODUCT_SKU . "," . SWATCHES_IMAGE . ")" .       	  
-              " VALUES (?,?) ";
-                            
-       if($this->debug){	
-            $swatches = print_r($criteria['swatches'], true);	    
-			$this->logDebug("98327492" ,$sql . " { " .$criteria['sku']. " , $swatches } ");
-		}
-        
+              " VALUES (?,?) ";                                    
         
         $paramTypes = array('text', 'text');         
         $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
@@ -536,13 +518,7 @@ class ProductAdminDao extends AbstractDao {
 	   
 	   $sql = "INSERT INTO " . SIZES . 
 	          " (" . PRODUCT_SKU . "," . SIZES_SIZE . ")" .       	  
-              " VALUES (?,?) ";
-                            
-       if($this->debug){	
-            $sizes = print_r($criteria['sizes'], true);	    
-			$this->logDebug("939482942" ,$sql . " { " .$criteria['sku']. " , $sizes } ");
-		}
-        
+              " VALUES (?,?) ";                                    
         
         $paramTypes = array('text', 'text');         
         $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
@@ -596,6 +572,34 @@ class ProductAdminDao extends AbstractDao {
                 " ORDER BY broken DESC, total DESC";
 		
 		return $this->getResults($sql, array(), array(), "203942052718");	   
+	}
+	
+	public function hideProductFromBrowsing($skus){	   
+	   if (!isset($skus) || !is_array($skus) || count($skus) <= 0){
+	       return;   
+	   }
+	   	   
+	   $sql = "UPDATE " . PRODUCTS .        	 
+              " SET " . PRODUCT_RANDOM_INDEX." = -1 ";                              
+        
+        $paramTypes = array();
+        $params = array();        
+        $skuPlaceholders = '';               
+        
+        foreach ($skus as $sku) {    
+            $params[] = $sku;
+            $paramTypes[] = 'text';  
+            
+            if ($skuPlaceholders != ''){
+                $skuPlaceholders .= ",";   
+            }
+            
+            $skuPlaceholders .= "?";                      
+        }
+        
+        $sql .= " WHERE " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")"; 
+        
+        return $this->update($sql, $params, $paramTypes, "09874073492");						    
 	}
 }
 ?>

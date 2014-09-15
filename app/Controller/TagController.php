@@ -12,8 +12,7 @@ class TagController{
 	public function __construct(&$mdb2){
 		$this->tagDao = new TagDao($mdb2);
 	}
-	
-	
+		
 	public function addTag($tag){
 		
 		if(isset($tag) && is_array($tag) && count($tag) == 2){	
@@ -292,7 +291,7 @@ class TagController{
 	   }
 	   
 	   return null;
-	}
+	}		
 }
 
 
@@ -328,7 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['class'] == "tags"){
             case 'searchunapprovedtags':
                 $getOnlyUnapprovedTags = true; 
                 $tagResults = $tagController->getProductsForTag($_POST['category'], $_GET['page'], $getOnlyUnapprovedTags);    
-                break;
+                break;            
         }       
     }
     

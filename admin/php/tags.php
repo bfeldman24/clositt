@@ -163,6 +163,11 @@ body{
     border-color: #000000;
     color: #eee;
 }
+
+.outfit.selected .bottom-block{
+    background: #428bca; 
+    color: #EFEFEF;
+}
 </style>
 
 </head>
@@ -229,6 +234,8 @@ var tagAdmin = {
         $(document).on("click", ".removeProduct", tagAdmin.removeProduct);
         $(document).on("click",".tag-options label",tagAdmin.changeTagOptions);                
         $(document).on("click",".name",tagAdmin.viewLargerImage);
+        $(document).on("click",".price",tagAdmin.removeProductFromBrowsing);
+        $(document).on("click",".bottom-block", tagAdmin.selectProduct);
         tagAdmin.getTags();
     },
     
@@ -250,12 +257,7 @@ var tagAdmin = {
     
     removePreviousTags: function(e){
         var $product = $(e.currentTarget).parents(".outfit");        
-        var skus = [];        
-        skus.push($product.attr("pid"));
-        
-        $product.prevAll().each(function(){
-            skus.push($(this).attr("pid"));    
-        });           
+        var skus = tagAdmin.getPreviousSkus($product);     
         
         var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
         var result = false; 
@@ -269,9 +271,8 @@ var tagAdmin = {
                  
                  if (data == "success"){      
                     tagAdmin.count += skus.length;           
-                    Messenger.info("Removed all " + skus.length + " Tags! (" + tagAdmin.count + " total)");                 
-                    $product.prevAll().remove();
-                    $product.remove();               
+                    Messenger.info("Removed " + skus.length + " Tags! (" + tagAdmin.count + " total)");                 
+                    tagAdmin.removePreviousProducts($product);               
                  }else{
                     Messenger.error("There was a problem removing those tags!");                                     
                  }
@@ -281,12 +282,7 @@ var tagAdmin = {
     
     approvePrevious: function(e){
         var $product = $(e.currentTarget).parents(".outfit");        
-        var skus = [];        
-        skus.push($product.attr("pid"));
-        
-        $product.prevAll().each(function(){
-            skus.push($(this).attr("pid"));    
-        });           
+        var skus = tagAdmin.getPreviousSkus($product);        
         
         var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
         var result = false; 
@@ -300,9 +296,8 @@ var tagAdmin = {
                  
                  if (data == "success"){
                     tagAdmin.count += skus.length;                    
-                    Messenger.info("Approved all " + skus.length + " Tags! (" + tagAdmin.count + " total)");                 
-                    $product.prevAll().remove();
-                    $product.remove();                
+                    Messenger.info("Approved " + skus.length + " Tags! (" + tagAdmin.count + " total)");                 
+                    tagAdmin.removePreviousProducts($product);                
                  }else{
                     Messenger.error("There was a problem approving those tags!");                                     
                  }
@@ -340,6 +335,76 @@ var tagAdmin = {
                 Messenger.error("There was a problem approving that tag!");                                     
             }
         });
+    },
+    
+    removeProductFromBrowsing: function(e){   
+      e.preventDefault();
+             
+      if (e.altKey){  
+        var $product = $(e.currentTarget).parents(".outfit");        
+        var skus = tagAdmin.getPreviousSkus($product);
+        
+        $.post(window.HOME_ROOT + "spider/hideproductfrombrowsing", {skus: skus}, function(data){                
+                
+                if (data == "success"){
+                    Messenger.info("Removed the Product from Browsing!");                 
+                }else{
+                    Messenger.error("There was a problem removing that tag from browsing!");                 
+                }
+        });  
+      }
+      
+      return false;
+    },
+    
+    selectProduct: function(e){
+         e.preventDefault();
+         
+        $outfit = $(e.currentTarget).parents(".outfit");
+        
+        if ($outfit.hasClass("selected")){
+            $outfit.removeClass("selected");
+        }else{
+            $(".outfit").removeClass("selected");
+            $outfit.addClass("selected");   
+        }
+        
+        return false;
+    },
+    
+    getPreviousSkus: function($product){    
+        if ($product == null){
+            return [];   
+        }
+           
+        var skus = [];        
+        skus.push($product.attr("pid"));
+        
+        $product.prevUntil(".outfit.selected").each(function(){
+            skus.push($(this).attr("pid"));    
+        });        
+        
+        var selectedProduct = $(".outfit.selected");
+        
+        if (selectedProduct.length > 0){
+            var selectedSku = selectedProduct.first().attr("pid");
+            skus.push(selectedSku);
+        }
+        
+        return skus;
+    },
+    
+    removePreviousProducts: function($product){    
+        if ($product != null){        
+            $product.prevUntil(".outfit.selected").remove();        
+            $product.remove();
+            
+            var selectedSku = $(".outfit.selected");
+            
+            if (selectedSku.length > 0){
+                selectedSku.first().remove();
+            }        
+        }
     },
     
     tagClicked: function(e){
@@ -440,6 +505,19 @@ var tagAdmin = {
        });   
     },
     
+    getBrowsingProducts: function(){
+        var active = $(".tag-options").find(".active").removeClass("active");        
+        tagAdmin.clear();
+        
+        tagAdmin.clearResults();
+        searchController.isSearchActive = false;    
+        gridPresenter.maxNumberOfPagesLoadingAtOnce = 2;     
+        tagAdmin.count = 0;
+        tagAdmin.tag = 'browsing';
+            
+        gridPresenter.showContent(50);   
+    },
+    
     changeTagOptions: function(e){
         var active = $(e.currentTarget).parents(".tag-options").find(".active input");        
         var clicked = $(e.currentTarget).find("input"); 
@@ -534,7 +612,7 @@ productPresenter.getProductTemplate = function(product){
 	var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
 	   var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'" company="'+company+'" name="'+name+'" link="'+link+'">';			        html += '<div class="picture"><img data-src="' + image + '" src="../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
 			html += '<div class="bottom-block">';
-			    //html +='<div class="companyName">' + company + '</div>';
+			    html +='<div class="selectProduct"></div>';
 				html +='<div class="price">' +  tagAdmin.tag + '</div>';
 			html += '</div>';
 			

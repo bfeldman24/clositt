@@ -42,7 +42,7 @@ class ProductDao extends AbstractDao {
 		
 		$sql = "SELECT * " .				
 				" FROM " . PRODUCTS .
-				" WHERE " . PRODUCT_STATUS . " = 1 ";			
+				" WHERE " . PRODUCT_STATUS . " = 1 AND " . PRODUCT_RANDOM_INDEX . " > 0 ";			
 		
 		$params = array();
 		$paramTypes = array();
