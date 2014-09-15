@@ -18,6 +18,7 @@ body{
 ul>li>a{
     color: #666;
     text-decoration: none;   
+    cursor: pointer;
 }
 
 ul>li{
