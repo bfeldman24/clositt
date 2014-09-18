@@ -45,7 +45,7 @@ class Router {
                     Router::User();
                     break;
                 case 'admin':
-                    if(DEBUG){
+                    if(ENV == "DEV" || ENV == "QA"){
                         Router::Admin();
                     }
                     break;        
@@ -184,7 +184,7 @@ class Router {
               
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){                                          
             
-            if(DEBUG){
+            if(ENV == "DEV" || ENV == "QA"){
                 switch($_GET['method']){
                     case 'addFromFile':   
                         $tagResults = $tagController->addTagsFromFile("../Data/clothies-tags-export.json");
@@ -236,7 +236,7 @@ class Router {
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             $reviewController = new ReviewController();                            
             
-            if (DEBUG){
+            if(ENV == "DEV" || ENV == "QA"){
                 switch($_GET['method']){
                    case 'getall':               
                        $results = $reviewController->getAllReviews();
@@ -326,7 +326,7 @@ class Router {
     *** ADMIN CONTROLLER ***
     *************************/
     public static function Admin(){
-        if (!DEBUG){
+        if(ENV != "DEV" && ENV != "QA"){
             return "500";   
         }
         
