@@ -1,0 +1,175 @@
+{
+  "settings": {
+    "index": {
+      "analysis": {
+         "filter":{
+            "name_ngrams":{
+               "side":"front",
+               "max_gram":50,
+               "min_gram":2,
+               "type":"edgeNGram"
+            },
+            "name_ngrams_back":{
+               "side":"back",
+               "max_gram":50,
+               "min_gram":2,
+               "type":"edgeNGram"
+            },
+            "name_middle_ngrams":{
+               "type":"nGram",
+               "max_gram":50,
+               "min_gram":2
+            },
+            "snowball": {
+                    "type" : "snowball",
+                    "language" : "English"
+            },
+            "customer_synonms": {
+                "type":"synonym",
+                "synonyms" : ["womens => women", "mens => men"]
+            }
+
+         },
+        "analyzer": {
+          "standard" : {
+            "tokenizer" : "standard",
+            "filter":["customer_synonms","standard","asciifolding","lowercase"]
+          },
+          "customer_synonym_analyzer" :{
+              "tokenizer" : "standard",
+              "filter" : ["standard", "asciifolding", "lowercase", "customer_synonms"]
+            },
+          "snowballer": {
+              "tokenizer": "standard",
+              "filter": ["lowercase", "snowball"]
+          },
+          "htmlContent": {
+              "tokenizer": "standard",
+              "char_filter":"html_strip",
+              "filter": "lowercase,customer_synonms"
+          },
+          "lowercase_single_phrase": {
+            "tokenizer": "keyword",
+            "filter": "lowercase"
+          },
+          "full_name": {
+            "filter": [
+              "standard",
+              "lowercase",
+              "asciifolding",
+              "customer_synonms"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          },
+          "partial_name": {
+            "filter": [
+              "standard",
+              "lowercase",
+              "asciifolding",
+              "name_ngrams"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          },
+          "partial_name_back": {
+            "filter": [
+              "standard",
+              "lowercase",
+              "asciifolding",
+              "name_ngrams_back"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          },
+          "partial_middle_name": {
+            "filter": [
+              "standard",
+              "lowercase",
+              "asciifolding",
+              "name_middle_ngrams"
+            ],
+            "type": "custom",
+            "tokenizer": "standard"
+          }
+        }
+      }
+    }
+  },
+  "mappings": {
+    "product": {
+      "properties": {
+        "store": {
+          "type": "multi_field",
+          "fields": {
+            "store": {
+              "type": "string",
+              "analyzer": "lowercase_single_phrase"
+            }
+          }
+        },
+        "customer": {
+          "type": "string",
+          "index_analyzer": "standard",
+          "search_analyzer": "customer_synonym_analyzer"
+        },
+        "details" : {
+                "type" : "string",
+                "index" : "analyzed",
+                "analyzer" : "htmlContent"
+                }
+        },
+        "name": {
+          "fields":{
+                  "partial":{
+                     "search_analyzer":"full_name",
+                     "index_analyzer":"partial_name",
+                     "type":"string"
+                  },
+                  "partial_back":{
+                     "search_analyzer":"full_name",
+                     "index_analyzer":"partial_name_back",
+                     "type":"string"
+                  },
+                  "partial_middle":{
+                     "search_analyzer":"full_name",
+                     "index_analyzer":"partial_middle_name",
+                     "type":"string"
+                  },
+                  "name":{
+                     "type":"string",
+                     "analyzer":"full_name"
+                  }
+               },
+               "type":"multi_field"
+        },
+        "tag": {
+          "type": "multi_field",
+          "fields": {
+            "partial":{
+                     "search_analyzer":"full_name",
+                     "index_analyzer":"partial_name",
+                     "type":"string"
+                  },
+                  "partial_back":{
+                     "search_analyzer":"full_name",
+                     "index_analyzer":"partial_name_back",
+                     "type":"string"
+                  },
+                  "partial_middle":{
+                     "search_analyzer":"full_name",
+                     "index_analyzer":"partial_middle_name",
+                     "type":"string"
+                  },
+                  "tag":{
+                     "type":"string",
+                     "analyzer":"full_name"
+                  }
+               },
+               "type":"multi_field"
+          }
+        }
+      }
+    }
+  }
+}

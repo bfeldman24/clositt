@@ -1,0 +1,10 @@
+{
+    "actions": [
+       {
+          "add": {
+             "index": "products_v1",
+             "alias": "products"
+          }
+       }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "type" : "jdbc",
+    "jdbc" : {
+        "index" : "products_v1",
+        "type" : "product",     
+        "url" : "jdbc:mysql://host133.hostmonster.com:3306/thewinn2_clositt",
+        "user" : "",
+        "password" : "",
+        "sql" : [
+            {
+                "statement":"select p.sku as _id, p.sku, p.store, p.name, p.closittCount, p.price, p.shortlink, p.image, p.customer,p.category, p.link, p.commentCount, cm.parent as color, cm2.parent as color2, t.tag from Products p left join ColorMapping cm on p.colorOne = cm.color left join ColorMapping cm2 on p.colorTwo = cm2.color left join Tags t on t.sku=p.sku where p.status = 1"
+            }
+            ]
+    }
+}

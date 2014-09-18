@@ -1,0 +1,5 @@
+# run command to open crontab
+sudo crontab -e
+ 
+# Add line to run command at 6am server time (2am EST) every day
+0 6 * * * /home/ben/clositt-private/phantomjs/phantomSpiderScript.sh
