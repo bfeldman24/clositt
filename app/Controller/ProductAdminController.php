@@ -19,10 +19,10 @@ class ProductAdminController extends Debugger {
 	private $debug = false;
 	private $productController = null;
 	
-	public function __construct(&$mdb2){
-		$this->productAdminDao = new ProductAdminDao($mdb2);
-		$this->productDao = new ProductDao($mdb2);
-		$this->productController = new ProductController($mdb2);
+	public function __construct(){
+		$this->productAdminDao = new ProductAdminDao();
+		$this->productDao = new ProductDao();
+		$this->productController = new ProductController();
 	}
 	
 	public function getSpiderLinks(){	    	           
@@ -284,10 +284,13 @@ class ProductAdminController extends Debugger {
 	}			
 	
 	public function deleteUnwantedProducts(){
-	   return $this->productAdminDao->deleteUnwantedProducts();
+	   echo "Removing Unwanted Products... \n";
+	   $results = $this->productAdminDao->deleteUnwantedProducts();
+	   echo "Removed $results Products!";
 	}
 	
 	public function updateAllShortLinks(){
+	   echo "Updating Short Links";
 	   echo "<br>Getting Products.";
 	   $products = array(); 
 	   $results = $this->productAdminDao->getProductsForUpdatingShortLinks(0, 5000);
@@ -463,145 +466,5 @@ class ProductAdminController extends Debugger {
    }
    
 }
-
-$productAdminController = new ProductAdminController($mdb2);
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['class'] == "admin"){                          
-    $output = null;
-    
-    switch ($_GET['method']){    
-            
-        case 'update':                                          
-            $results = $productAdminController->addAdminProducts($_POST['products'], $_POST['isLastBatch']);   
-            $output = json_encode($results);   
-            break;     
-       
-        case  'count':                                          
-            $results = $productAdminController->getTotalProductsCount();   
-            $output = print_r($results, true);        
-            break;
-        
-        case 'updatestatus':                                               
-            $output = $productAdminController->updateSpiderStatus($_POST);    
-            break;
-        
-        case 'addlink':
-            $output = $productAdminController->addSpiderLink($_POST);    
-            break;
-        
-        case 'addlinks':
-            $output = $productAdminController->addSpiderLinks($_POST['links']);    
-            break;
-        
-        case 'updatelink':
-            $output = $productAdminController->updateSpiderLink($_POST);    
-            break;
-            
-        case 'removelink':
-            $output = $productAdminController->removeSpiderLink($_POST);  
-            break;                     
-        
-        case 'getnextproductdetailurls':
-            $output = print_r($productAdminController->getNextProductDetailUrls($_POST['stores'], $_GET['page']), true);    
-            break;
-        
-        case 'saveproductdetails':
-            $output = $productAdminController->saveProductDetails($_POST);     
-            break;   
-        
-        case 'hideproductfrombrowsing':
-            $output = $productAdminController->hideProductFromBrowsing($_POST['skus']);     
-            break;   
-    }
-    
-    if ($output == null){   
-        $productController = new ProductController($mdb2);
-             
-        if ($_GET['method'] == 'searchdb' && isset($_GET['page'])){      
-            
-            if(isset($_POST) && $_POST != null){            
-              	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
-              	
-              	if (!$productCrit->isEmpty()){
-                      $products = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT);
-                      $output = print_r($products, true);
-              	}
-            }
-        }else if ($_GET['method'] == 'searchunapprovedtags' && isset($_GET['page'])){      
-            if(isset($_POST) && (isset($_POST['category']) || isset($_POST['tags']))){
-                
-              	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
-              	$getOnlyUnapprovedTags = true;          	
-              	
-              	if (!$productCrit->isEmpty()){              	 
-                      $products = $productController->getFilteredProducts($productCrit, $_GET['page'], QUERY_LIMIT, $getOnlyUnapprovedTags);                                                      
-                      $output = print_r($products, true);
-              	}
-            }        
-        }
-    }   
-    
-    echo $output;  
-     
-           
-}else if ($_GET['class'] == "admin"){
-// GET METHOD    
-
-    switch($_GET['method']){
-        case 'updateshortlinks':                                          
-            echo "Updating Short Links…";
-            $results = $productAdminController->updateAllShortLinks();   
-            print_r($results);    
-            break;
-                
-        case 'deleteunwanted':
-            echo "Removing Unwanted Products... \n";
-            $results = $productAdminController->deleteUnwantedProducts();       
-            echo "Removed $results Products!";
-            break;
-            
-        case 'getnonliveproducts' && isset($_GET['page']):             
-            $results = $productAdminController->getNonLiveProducts($_GET['page'], 50);   
-            print_r( json_encode($results) );
-            break;
-        
-        case 'getbrowsepages':                                          
-            $productAdminController->getBrowsePages();   
-            break;
-        
-        case 'getlinks':                                          
-            echo $productAdminController->getSpiderLinks();    
-            break;
-        
-        case 'removeuncategorized':
-            echo $productAdminController->removeUncategorizedProducts();  
-            break;                  
-        
-        case 'getproductdetailstatus':
-            echo $productAdminController->getProductDetailCount();  
-            break;  
-        
-        case 'storeproductcount':
-            echo $productAdminController->getStoreProductCount(true); 
-            break;   
-        
-        case 'storenonliveproductcount':
-            echo $productAdminController->getStoreProductCount(false); 
-            break;   
-        
-        case 'getspiderstats':
-            echo $productAdminController->getSpiderStats();    
-            break; 
-            
-        case 'iselastichealthy':
-            $elasticDao = new ElasticDao();
-            $isElasticHealthy = $elasticDao->isHealthy();
-            echo $isElasticHealthy ? "healthy" : "sick";
-            break;                        
-    }
-}
-
-
-
 
 ?>

@@ -10,7 +10,6 @@ if (!isset($_SESSION)) {
 }
 
 $mdb2 = mdb2_connect();
-$session = new SessionController($mdb2);
-$session->checkSession(); 
-
+$session = new SessionController();
+$session->checkSession();
 ?>

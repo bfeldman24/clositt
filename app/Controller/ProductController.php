@@ -13,8 +13,8 @@ require_once(dirname(__FILE__) . '/ListController.php');
 class ProductController {	
 	private $productDao = null;
 	private $elasticDao = null;
-	public function __construct(&$mdb2){
-		$this->productDao = new ProductDao($mdb2);
+	public function __construct(){
+		$this->productDao = new ProductDao();
 		$this->elasticDao = new ElasticDao();
 	}
 	
@@ -67,7 +67,32 @@ class ProductController {
         return json_encode($productResults);
 	}
 	
-	public function getProducts($productCrit, $page, $limit, $random = false){
+	public function getProducts($postData, $getData, $limit, $random = false){
+	    if (!isset($postData)){
+	       return json_encode(array());  
+	    }
+	    
+	    $page = 0;
+	    
+	    if (isset($getData['page'])){
+	       $page = $getData['page'];     
+	    }
+	    
+	    $productCrit = ProductCriteria::setCriteriaFromPost($postData);
+                    
+        if (!isset($postData['customer'])){        
+            if ($getData['customer'] == 'w'){
+                $customer = array();
+                $customer[] = 'women';          
+                            
+            }else if ($getData['customer'] == 'm'){
+                $customer = array();
+                $customer[] = 'men';                   
+            }
+            
+            $productCrit->setCustomers($customer);
+        }
+
 	    $searchResults = array();
 	    $searchResults['products'] = array();
 	    		
@@ -145,7 +170,25 @@ class ProductController {
 		return "failed";
 	}
 	
+	public function getFilteredProductsFromPost($postData, $page, $getOnlyUnapprovedTags = false){
+	    if (!isset($postData)){
+	       return null;  
+	    }
+	   
+	    $productCrit = ProductCriteria::setCriteriaFromPost($postData);
+                      	
+        if (!$productCrit->isEmpty()){
+            $products = $productController->getFilteredProducts($productCrit, $page, QUERY_LIMIT, $getOnlyUnapprovedTags);
+            return print_r($products, true);
+    	}
+    	
+    	return null;
+    }
+	
 	public function getFilteredProducts($criteria, $pageNumber, $numResultsPage, $tagAdmin = false){
+		if (!isset($criteria)){
+	       return null;  
+	    }
 						
 		$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage, $tagAdmin);
 		$searchResults = array();
@@ -162,7 +205,16 @@ class ProductController {
 		return json_encode($searchResults);
 	}
 
-	public function searchElastic($criteria, $pageNumber, $numResultsPage){
+	public function searchElastic($data, $pageNumber, $numResultsPage){
+	    if (!isset($data)){
+	       return "no data";  
+	    }
+	    
+	    if (!isset($pageNumber)){
+	       $pageNumber = 0;  
+	    }
+	   
+        $criteria = ProductCriteria::setCriteriaFromPost($data);
 
         //check if elastic is healthy. If not, do old style search on DB
         $elasticHealthy = false;
@@ -221,53 +273,5 @@ class ProductController {
 		return $image;
 	}
 }
-
-
-if ($_GET['class'] == "products" && $_GET['method'] == 'image' && isset($_GET['sku'])){
-        $productController = new ProductController($mdb2);              
-        $image = $productController->getCachedProductImage($_GET['sku']);                          
-         
-        // Set the content type header - in this case image/jpeg
-        header('Content-Type: image/jpeg');                
-        print_r($image);
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['class'] == "products"){
-    $productController = new ProductController($mdb2);              
-    
-    if ($_GET['method'] == 'lookup' && isset($_POST['sku'])){
-         $product = $productController->getProduct($_POST['sku']);   
-         
-    }else if ($_GET['method'] == 'image' && isset($_POST['sku'])){
-         $product = $productController->getCachedProductImage($_POST['sku']);   
-    
-    }else if ($_GET['method'] == 'browse' && isset($_GET['page']) && isset($_GET['customer'])){
-        $productCrit = ProductCriteria::setCriteriaFromPost($_POST);
-        
-        if (!isset($_POST['customer'])){        
-            if ($_GET['customer'] == 'w'){
-                $customer = array();
-                $customer[] = 'women';          
-                         
-            }else if ($_GET['customer'] == 'm'){
-                $customer = array();
-                $customer[] = 'men';                   
-            }
-            
-            $productCrit->setCustomers($customer);
-        }
-        
-        $product = $productController->getProducts($productCrit, $_GET['page'], QUERY_LIMIT, true);   
-        
-    }else if ($_GET['method'] == 'search' && isset($_POST) && isset($_GET['page'])){      
-    	$productCrit = ProductCriteria::setCriteriaFromPost($_POST);
-        $product = $productController->searchElastic($productCrit, $_GET['page'], QUERY_LIMIT);
-    }
-    
-    if (isset($product) && $product != null){
-        print_r($product);     
-    }
-}
-
 
 ?>

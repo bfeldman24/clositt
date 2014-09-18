@@ -25,7 +25,38 @@ class ProductView {
 		}		
 		
 		?>
-			 			 		
+		
+		<div class="col-xs-12 col-sm-4 col-md-3 col-lg-box box">
+            <div class="outfit item" pid="<?= $product->getId() ?>">
+                <div class="mainwrap">
+                    <div class="imagewrap">
+                        <img src="<?php echo $product->getImage() ?>" onerror="return pagePresenter.handleImageNotFound(this)" />
+                    </div>
+                    <div class="detail">
+                        <h4><?php echo $product->getName() ?></h4>
+                        <span class="price"><?php echo $price ?> </span><!--<del>$50</del>-->
+                        <p><?php echo $product->getStore() ?></p>
+                    </div>
+                    <div class="cart_option">
+                        <a href="ClosittProductDetail.html">
+                            <i class="icon-svg20"></i>
+                        </a>
+                        <a href="#">
+                            <i class="icomoon-bubble-dots-4 message-icon">
+                                <span class="badge">&nbsp;</span>
+                            </i>
+                        </a> 
+                        <a class="more-opt" href="#">
+                            <i class="icon-svg3 dots-icon"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="hover_more"><a href="#"><i class="icon-svg15"></i></a><a href="#"><i class="icon-svg14"></i></a><a href="#"><i class="icon-svg16"></i></a><a href="#"><i class="icon-svg17"></i></a><a href="#"><i class="icon-svg18"></i></a></div>
+            </div>
+        </div>
+
+
+		 <!--			 		
 		<div class="outfit item" pid="<?= $product->getId() ?>">
 			<div class="picture">
 			     <a class="productPage" target="_blank" orig-href="<?= $product->getLink() ?>">
@@ -69,6 +100,7 @@ class ProductView {
 			</div>
 			<div class="clear"></div>				
 		</div>	
+		-->
 			
 		<?php		         
     }

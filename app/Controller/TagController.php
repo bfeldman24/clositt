@@ -9,13 +9,15 @@ require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 class TagController{	
     private $tagDao = null;
 	
-	public function __construct(&$mdb2){
-		$this->tagDao = new TagDao($mdb2);
+	public function __construct(){
+		$this->tagDao = new TagDao();
 	}
 		
 	public function addTag($tag){
 		
 		if(isset($tag) && is_array($tag) && count($tag) == 2){	
+		    $tag['tag'] = ucwords(strtolower($tag['tag']));
+            $tag['tag'] = preg_replace('/\s+/', '', $tag['tag']);		  
 			
 			$updatedTags = $this->tagDao->tryUpdateTagDao($tag);									
 			
@@ -48,6 +50,10 @@ class TagController{
 	}						
 	
 	public function addTagsFromFile($tagFile){
+	    if (!isset($tagFile)){
+	       return;  
+	    }
+	   
 	    // Get Tags from file    
         $file = fopen($tagFile, 'r');
         $tagsJson = fread($file, filesize($tagFile));
@@ -173,6 +179,10 @@ class TagController{
 	}	
 	
 	private function enrichSynonyms($tag, &$synonyms){
+	    if (!isset($tag)){
+	       return;   
+	    }
+	   
 	    $tagNoSpaces = str_replace(" ", "-",$tag);                          
         
         if (isset($synonyms) && trim($synonyms) != ""){
@@ -292,55 +302,6 @@ class TagController{
 	   
 	   return null;
 	}		
-}
-
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['class'] == "tags"){
-    $tagController = new TagController($mdb2);                  
-    
-    if(DEBUG){
-        switch($_GET['method']){
-            case 'addFromFile':   
-                $tagResults = $tagController->addTagsFromFile("../Data/clothies-tags-export.json");
-                break;        
-            case 'getpotentialtags':   
-                $tagResults = $tagController->getPotentialTags($_POST);
-                break;
-            case 'getuniquetags':
-                $tagResults = $tagController->getUniqueTags();    
-                break;            
-            case 'removetag':
-                $tagResults = $tagController->removeTag($_POST);   
-                break;             
-            case 'removetags':
-                $tagResults = $tagController->removeTags($_POST);   
-                break;                                 
-            case 'approvetags':
-                $tagResults = $tagController->approveTags($_POST);   
-                break;  
-            case 'replacetag':
-                $tagResults = $tagController->replaceTag($_POST);   
-                break;  
-            case 'updateproducttags':
-                $tagResults = $tagController->getTagListToPopulateTags();    
-                break;
-            case 'searchunapprovedtags':
-                $getOnlyUnapprovedTags = true; 
-                $tagResults = $tagController->getProductsForTag($_POST['category'], $_GET['page'], $getOnlyUnapprovedTags);    
-                break;            
-        }       
-    }
-    
-    switch($_GET['method']){
-        case 'add':   
-            $_POST['tag'] = ucwords(strtolower($_POST['tag']));
-            $_POST['tag'] = preg_replace('/\s+/', '', $_POST['tag']);
-            
-            $tagResults = $tagController->addTag($_POST);
-            break;        
-    }        
-    
-    print_r($tagResults);
 }
 
 ?>

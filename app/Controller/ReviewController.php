@@ -13,9 +13,9 @@ class ReviewController{
     private $reviewDao = null;
     private $productController = null;
 	
-	public function __construct(&$mdb2){
-		$this->reviewDao = new ReviewDao($mdb2);
-		$this->productController = new ProductController($mdb2);
+	public function __construct(){
+		$this->reviewDao = new ReviewDao();
+		$this->productController = new ProductController();
 	}
 	
 	public function addReview($review){
@@ -100,34 +100,6 @@ class ReviewController{
 	   
 	   return json_encode($reviewList);
 	}		
-}
-
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['class'] == "review"){
-    $reviewController = new ReviewController($mdb2);                  
-    
-    
-    if (DEBUG){
-        switch($_GET['method']){
-           case 'getall':               
-               $results = $reviewController->getAllReviews();
-               break;     
-       }   
-    }
-    
-    switch($_GET['method']){
-        case 'add':               
-            $results = $reviewController->addReview($_POST);
-            break;
-        case 'remove':               
-            $results = $reviewController->removeReview($_POST);
-            break;
-        case 'get':               
-            $results = $reviewController->getReviews($_POST);
-            break;        
-    }   
-        
-    print_r($results);
 }
 
 ?>

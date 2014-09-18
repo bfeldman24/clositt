@@ -23,6 +23,17 @@ class ColorController extends AbstractDao{
 		}
 	
 		return "failed";
+	}
+	
+	public function addColorsFromPost($postData){	
+        $insertArray = array();
+        $insertArray[] = $postData['color'];
+        $insertArray[] = $postData['sku'];
+        $insertArray[] = 1;
+        $colorArray = array();
+        $colorArray[] = $insertArray;
+
+        return $this->addColors($colorArray);                 
 	}		
 	
 	public function addColorsDao($colors){
@@ -89,6 +100,10 @@ class ColorController extends AbstractDao{
 	}
 
 	public function addColorsFromFile($colorFile){
+	    if (!isset($colorFile)){
+	       return null;  
+	    }
+	   
 	    // Get Products from file    
         $file = fopen($colorFile, 'r');
         $colorsJson = fread($file, filesize($colorFile));
@@ -116,6 +131,14 @@ class ColorController extends AbstractDao{
         return $result;
 	}
 	
+	public function processColors(){
+	    $unprocessedColors = $colorController->getColors();                           
+        $colors = ColorInspector::processImageColors($unprocessedColors, 2);                    
+        print_r(json_encode($colors));
+                        
+        return $colorController->addColors($colors);            
+    }
+	
 	public function getColors(){
 	    $searchResults = array();
 	    		      
@@ -140,6 +163,11 @@ class ColorController extends AbstractDao{
 				" LIMIT 100";														        
 		
 		return $this->getResults($sql, array(), array(), "1238123");
+	}
+	
+	public function createColorMapping(){
+	   $colors = $colorController->getColorMapping();
+       return ColorInspector::getClosestColors($colors);
 	}
 	
 	public function getColorMapping(){
@@ -345,66 +373,13 @@ class ColorController extends AbstractDao{
         
         return $affectedRows; 
 	}
+	
+	public function testImage($image){
+	    $images = array();
+        $images['TestProduct'] = $image;
+        $colors = ColorInspector::processImageColors($images, 2);                  
+        return json_encode($colors);
+	}
 }
      
-if( isset($_GET['method']) && $_GET['class'] == "color"){
-    $colorController = new ColorController($mdb2);                  
-    
-    if ($_GET['method'] == 'addFromFile'){
-         $results = $colorController->addColorsFromFile("../Data/clothies-colors-export.json"); 
-    }else if ($_GET['method'] == 'add' && isset($_POST['color']) && isset($_POST['sku'])){
-                
-        $insertArray = array();
-        $insertArray[] = $_POST['color'];
-        $insertArray[] = $_POST['sku'];
-        $insertArray[] = 1;
-        $colorArray = array();
-        $colorArray[] = $insertArray; 
-        
-        $results = $colorController->addColors($colorArray);
-    }else if ($_GET['method'] == 'get'){
-            $unprocessedColors = $colorController->getColors();                           
-            $colors = ColorInspector::processImageColors($unprocessedColors, 2);                    
-            print_r(json_encode($colors));
-            
-            $results = $colorController->addColors($colors);            
-            print_r($results);
-            
-    }else if ($_GET['method'] == 'getmappings'){
-            $colors = $colorController->getColorMapping();                                                   
-            print_r(json_encode($colors));            
-    
-    }else if ($_GET['method'] == 'createmappings'){
-            $colors = $colorController->getColorMapping();
-            $mappings = ColorInspector::getClosestColors($colors);
-            print_r(json_encode($mappings));                              
-    
-    }else if ($_GET['method'] == 'savemappings' && isset($_POST['colors'])){
-            $results = $colorController->saveColorMapping($_POST['colors']);                             
-    
-    }else if ($_GET['method'] == 'getmappingcount'){
-            $results = $colorController->getColorMappingCount();                             
-    
-    }else if ($_GET['method'] == 'testImage'){                          
-            $images = array();
-            $images['TestProduct'] = $_GET['i'];
-            $colors = ColorInspector::processImageColors($images, 2);                  
-            print_r(json_encode($colors));
-            
-    }else if ($_GET['method'] == 'count'){
-            $colorCount = $colorController->getColorsCount();                                      
-            print_r($colorCount);
-    
-    }else if ($_GET['method'] == 'correct' && isset($_POST['sku']) && isset($_POST['oldColor'])){
-        
-        if ($_SESSION['isAdmin']){
-            $results = $colorController->correctColor($_POST['sku'], $_POST['oldColor'], $_POST['newColor']);
-        }else{
-            $results = 'Not Authorized! ';
-        }
-    }
-    
-    print_r($results);
-}
-
 ?>

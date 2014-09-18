@@ -10,8 +10,8 @@ class SessionController extends Debugger{
 	private $id = 0; // the current user's id
 	private $sessionDao = null;
 	
-	public function __construct(&$mdb2){
-		$this->sessionDao = new SessionDao($mdb2);		
+	public function __construct(){
+		$this->sessionDao = new SessionDao();		
 		$_SESSION['errors'] = '';				
 	}
 	

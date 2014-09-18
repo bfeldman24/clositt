@@ -12,8 +12,8 @@ require_once(dirname(__FILE__) . '/Debugger.php');
 class UserController extends Debugger {	
 	private $userDao = null;
 
-	public function __construct(&$mdb2){
-		$this->userDao = new UserDao($mdb2);
+	public function __construct(){
+		$this->userDao = new UserDao();
 	}	
 	
 	public function signUp($data){
@@ -225,38 +225,4 @@ class UserController extends Debugger {
         return "failed";
 	}		
 }
-
-
-if (isset($_GET['method']) && $_GET['class'] == "user"){
-    $userController = new UserController($mdb2);             
-    
-    switch($_GET['method']){
-        case 'signup':            
-            echo $userController->signUp($_POST);
-            break;
-        case 'login':            
-            echo $userController->login($_POST);
-            break;
-        case 'logout':            
-            echo $userController->logout();
-            break;    
-        case 'update':            
-            echo $userController->updateUserInfo($_POST);
-            break;
-        case 'updatepass':            
-            echo $userController->updateUserPassword($_POST);
-            break;
-        case 'resetpass':            
-            echo $userController->resetPassword($_POST['email']);
-            break;                   
-        case 'get':            
-            echo $userController->getUserInfo();
-            break;
-        case 'name':            
-            echo $userController->getUserName($_POST);
-            break;
-    }            
-}
-
-
 ?>

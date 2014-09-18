@@ -11,8 +11,8 @@ class FilterController extends Debugger {
 	private $filterHtmlFile = null;
 	private $numDaysToRefreshFilterFile = 3;
 
-	public function __construct(&$mdb2){
-		$this->filterDao = new FilterDao($mdb2);
+	public function __construct(){
+		$this->filterDao = new FilterDao();
 		$this->filterJsonFile = dirname(__FILE__) . '/../Data/filters.json';
 		$this->filterHtmlFile = dirname(__FILE__) . '/../Data/filters.html';
 	}
@@ -25,7 +25,11 @@ class FilterController extends Debugger {
 	   return $this->getFilters($this->filterHtmlFile);  
 	}
 	
-	private function getFilters($filePath){	    	   
+	private function getFilters($filePath){
+	    if (!isset($filePath)){
+	       return "no path";  
+	    }
+	   	    	   
 	    $useCurrentFile = false;
 	    $filters = null;
 	    
@@ -56,6 +60,10 @@ class FilterController extends Debugger {
 	}
 	
 	private function createFilterFile($filePath){
+	   if (!isset($filePath)){
+	       return "no path";  
+	    }
+	   
 	   $filterResults = $this->filterDao->getFilters();
 	   $filters = array();	   	 
 	   
@@ -193,18 +201,5 @@ class FilterController extends Debugger {
         return $daysDiff <= $numberOfDays;
     }
 }
-
-if (isset($_GET['method']) && $_GET['class'] == "filter"){
-    $filterController = new FilterController($mdb2);              
-    
-    switch($_GET['method']){
-        case 'getfilters':
-            $filters = $filterController->getJsonFilters();
-            //$filters = $filterController->getHtmlFilters();
-            print_r($filters);
-            break;    
-    }            
-}
-
 
 ?>

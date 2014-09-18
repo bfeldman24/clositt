@@ -10,12 +10,13 @@ class AbstractDao{
 	private $sqlErrorLog = null;	
 	
 	
-	public function __construct(&$db) {
+	public function __construct() {
+	    global $mdb2;
 	    $this->PEAR = new PEAR();
 	    $sqlErrorLog = dirname(__FILE__) . "/../../Logs/sqlErrorLog";
 		$this->sqlErrorLog = $sqlErrorLog . date("-Y-m-d") . ".txt";
 		$this->file = fopen($this->sqlErrorLog,"a");
-		$this->db = $db;	
+		$this->db = $mdb2;	
 		$this->db->setErrorHandling(PEAR_ERROR_RETURN);		
 	}
 	

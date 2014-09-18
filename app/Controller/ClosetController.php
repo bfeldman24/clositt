@@ -11,9 +11,9 @@ class ClosetController extends Debugger {
 	private $closetDao = null;
 	private $productController = null;
 
-	public function __construct(&$mdb2){
-		$this->closetDao = new ClosetDao($mdb2);
-		$this->productController = new ProductController($mdb2);
+	public function __construct(){
+		$this->closetDao = new ClosetDao();
+		$this->productController = new ProductController();
 	}
 	
 	public function createNewCloset($data){
@@ -157,7 +157,13 @@ class ClosetController extends Debugger {
 		return stripslashes(json_encode($closets));
 	}
 	
-	public function getAllClosetItems($owner){
+	public function getAllClosetItems($data){
+	   if (!isset($data)){
+	       return "No data";    
+	   }
+	   
+	   $owner = isset($data['owner']) ? $data['owner'] : null;
+	   
 	   $closetItems = array();
 	   
 	   if (!isset($owner)){
@@ -182,36 +188,4 @@ class ClosetController extends Debugger {
 		return stripslashes(json_encode($closetItems, true));
 	}				
 }
-
-
-if (isset($_GET['method']) && $_GET['class'] == "closet"){
-    $closetController = new ClosetController($mdb2);             
-    
-    switch($_GET['method']){
-        case 'create':            
-            echo $closetController->createNewCloset($_POST);
-            break;
-        case 'update':            
-            echo $closetController->updateCloset($_POST);
-            break;
-        case 'delete':            
-            echo $closetController->deleteCloset($_POST);
-            break;
-        case 'add':            
-            echo $closetController->addItemToCloset($_POST);
-            break;
-        case 'remove':            
-            echo $closetController->removeItemFromCloset($_POST);
-            break;
-        case 'get':            
-            echo $closetController->getAllClosets();
-            break;            
-        case 'getall':
-            $owner = isset($_POST['owner']) ? $_POST['owner'] : null;                
-            echo $closetController->getAllClosetItems($owner);
-            break;
-    }            
-}
-
-
 ?>

@@ -39,16 +39,4 @@ class ListController{
 	   return null;
 	}					
 }
-
-if (isset($_GET['method']) && $_GET['class'] == "list"){          
-    
-    switch($_GET['method']){
-        case 'add':            
-            echo ListController::writeToFile($_POST['listName'],$_POST['item']);
-            break;  
-        case 'get':            
-            echo ListController::readFile($_POST['listName']);
-            break;        
-    }            
-}
 ?>
