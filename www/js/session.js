@@ -73,7 +73,7 @@ var session = {
 	       sessionStorage.isActiveUser = true;
 	       	       	      
 	       if (sessionStorage.goToClositt){
-                location.href = window.HOME_ROOT + "clositt.php"; 
+                location.href = window.CLOSITT_PAGE; 
            }else if(typeof loggedIn == 'function'){
                 loggedIn();
 		   }          	
@@ -109,7 +109,7 @@ var session = {
 	
 	updateLoggedInDropdownMenu: function(){	   
 		$("#loginBtns").html("")	    	
-	    	.append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + "settings.php")
+	    	.append( $('<li>').append( $('<a>').attr('href', window.SETTINGS_PAGE)
     	    	.append(
     	    	      $("<span>").addClass("glyphicon glyphicon-user")
     	    	).append( 

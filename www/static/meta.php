@@ -30,5 +30,8 @@
 
 <script type="text/javascript">
     window.HOME_ROOT = "<?php echo HOME_ROOT; ?>";
-    window.HOME_URL = "<?php echo  DOMAIN . HOME_ROOT; ?>";
+    window.HOME_URL = "<?php echo HOME_PAGE; ?>";
+        
+    window.CLOSITT_PAGE = "<?php echo CLOSITT_PAGE; ?>";    
+    window.SETTINGS_PAGE = "<?php echo SETTINGS_PAGE; ?>";        
 </script>

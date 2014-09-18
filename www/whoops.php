@@ -36,7 +36,7 @@ if (!strpos($page, "whoops.php")){
 
     			<p><span><a onclick="window.history.back()" >Go back</a></span></p>
     			<p><span><a href="<?php echo HOME_ROOT; ?>" >Go home</a></span></p>
-    			<p><span><a href="<?php echo HOME_ROOT; ?>contact-us.php" >Contact us to let us know of the problem</a></span></p>
+    			<p><span><a href="<?php echo CONTACT_PAGE; ?>" >Contact us to let us know of the problem</a></span></p>
     		</div> 
     	</div>
     	
