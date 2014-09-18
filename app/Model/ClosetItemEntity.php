@@ -2,8 +2,8 @@
 require_once(dirname(__FILE__) . '/BaseEntity.php');
 
 // JAVASCRIPT Closet
-define("JS_CLOSET_ID","id");
-define("JS_CLOSET_NAME","title");
+define("JS_CLOSET_ITEM_ID","id");
+define("JS_CLOSET_ITEM_NAME","title");
 define("JS_CLOSET_ITEM_USER_ID","owner");
 define("JS_CLOSET_ITEM_SKU","item");
 define("JS_CLOSET_ITEM_IMAGE","cache");
@@ -79,7 +79,7 @@ class ClosetItemEntity {
 	public static function setFromPost($row){
 		$closetItemEntity = new ClosetItemEntity();
 		
-		$closetItemEntity->setClosetId(BaseEntity::getPostField($row, JS_CLOSET_ID));
+		$closetItemEntity->setClosetId(BaseEntity::getPostField($row, JS_CLOSET_ITEM_ID));
 		$closetItemEntity->setUserId(BaseEntity::getPostField($row, JS_CLOSET_ITEM_USER_ID));
 		$closetItemEntity->setSku(BaseEntity::getPostField($row, JS_CLOSET_ITEM_SKU));
 		$closetItemEntity->setImage(BaseEntity::getPostField($row, JS_CLOSET_ITEM_IMAGE));	    
@@ -90,8 +90,8 @@ class ClosetItemEntity {
 	public function toArray(){
 		$closetItemArray = array();	
 		
-		$closetItemArray[JS_CLOSET_ID] = $this->getClosetId();
-		$closetItemArray[JS_CLOSET_NAME] = $this->getClosetName();
+		$closetItemArray[JS_CLOSET_ITEM_ID] = $this->getClosetId();
+		$closetItemArray[JS_CLOSET_ITEM_NAME] = $this->getClosetName();
 		$closetItemArray[JS_CLOSET_ITEM_USER_ID] = $this->getUserId();
 		$closetItemArray[JS_CLOSET_ITEM_SKU] = $this->getSku();
 		$closetItemArray[JS_CLOSET_ITEM_IMAGE] = $this->getImage();

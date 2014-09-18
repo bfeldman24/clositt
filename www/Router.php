@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 require_once(dirname(__FILE__) . '/../app/session.php');
 
 /*
@@ -28,7 +31,7 @@ class Router {
                     Router::Filter();
                     break;    
                 case 'l':
-                    Router::List();
+                    Router::ListController();
                     break;                        
                 case 'p':
                 case 'b': 
@@ -309,7 +312,7 @@ class Router {
     /************************
     *** LIST CONTROLLER ***
     *************************/
-    public static function List(){        
+    public static function ListController(){        
         require_once(dirname(__FILE__) . '/../app/Controller/ListController.php');  
     
         switch($_GET['method']){

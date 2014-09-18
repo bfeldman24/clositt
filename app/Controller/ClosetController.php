@@ -83,7 +83,7 @@ class ClosetController extends Debugger {
        return $html;
    }
 	
-	public function addItemToCloset($data){
+	public function addItemToCloset($data){	   	   	   
 	   if (isset($data)){
             $closetItem = ClosetItemEntity::setFromPost($data);
             
@@ -96,9 +96,14 @@ class ClosetController extends Debugger {
                     if ($affectedRows === 1){
                         $this->productController->updateClosittCounter($closetItem->getSku());
                         
-                        // Update elastic count
-                        $elastic = new ElasticDao();
-                        $elastic->updateClosittCount($closetItem->getSku());
+                        try{
+                            // Update elastic count
+                            $sku = $closetItem->getSku();
+                            $elastic = new ElasticDao();
+                            $elastic->updateClosittCount($sku);
+                        }catch(Exception $e) {                              
+                            $this->error("ClosetController", "addItemToCloset", "Could not update elastic clositt count: $sku");                          
+                        }
                         
                         try{                            
                             $rawImage = $this->file_get_contents_curl($closetItem->getImage());                          

@@ -1,7 +1,4 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
-
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ReviewDao.php');
 require_once(dirname(__FILE__) . '/../Model/ReviewEntity.php');
@@ -31,9 +28,13 @@ class ReviewController{
 	           if ($affectedRows > 0){
 	               $this->productController->updateCommentCounter($sku);   
 	               
-	               // Update elastic count
-                   $elastic = new ElasticDao();
-                   $elastic->updateCommentCount($sku);
+	               try{
+                        // Update elastic count
+                       $elastic = new ElasticDao();
+                       $elastic->updateCommentCount($sku);
+                    }catch(Exception $e) {                              
+                        $this->error("ClosetController", "addItemToCloset", "Could not update elastic clositt count: $sku");                          
+                    }                   	               
 	           }
 	       }
 	   }
