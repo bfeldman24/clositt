@@ -1,40 +1,51 @@
 <?php
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/FilterDao.php');
+require_once(dirname(__FILE__) . '/../View/FilterView.php');
 require_once(dirname(__FILE__) . '/Debugger.php');
 
 
 class FilterController extends Debugger {	
 	private $filterDao = null;
-	private $filterFile = null;
+	private $filterJsonFile = null;
+	private $filterHtmlFile = null;
 	private $numDaysToRefreshFilterFile = 3;
 
 	public function __construct(&$mdb2){
 		$this->filterDao = new FilterDao($mdb2);
-		$this->filterFile = dirname(__FILE__) . '/../Data/filters.json';
+		$this->filterJsonFile = dirname(__FILE__) . '/../Data/filters.json';
+		$this->filterHtmlFile = dirname(__FILE__) . '/../Data/filters.html';
 	}
 	
-	public function getFilters(){	    	   
+	public function getJsonFilters(){
+	   return $this->getFilters($this->filterJsonFile);  
+	}
+	
+	public function getHtmlFilters(){
+	   return $this->getFilters($this->filterHtmlFile);  
+	}
+	
+	private function getFilters($filePath){	    	   
 	    $useCurrentFile = false;
 	    $filters = null;
 	    
 	    // Check for latest modification time
-	    if (file_exists($this->filterFile)) {  	        
+	    if (file_exists($filePath)) {  	        
 	       
 	        // php 4 & 5 = filemtime, php 2 & 3 = fileAtime
-            $lastModificationDate = filemtime($this->filterFile);
+            $lastModificationDate = filemtime($filePath);
             
             $useCurrentFile = $this->isDateWithinXNumberOfDays($lastModificationDate, $this->numDaysToRefreshFilterFile);
         }                
 	    
 	    // if file is up to date then return it
 	    if ($useCurrentFile){	       	       
-	       $filters = file_get_contents($this->filterFile);
+	       $filters = file_get_contents($filePath);
 	       
 	    }else{	       	      
 	       // create new file and return that
 	       $this->updateCompanyFilters();	       
-	       $filters = $this->createFilterFile();	         	       
+	       $filters = $this->createFilterFile($filePath);
 	    }
 	    
 	    return $filters;
@@ -44,7 +55,7 @@ class FilterController extends Debugger {
 	   return $this->filterDao->updateCompanyFilters();
 	}
 	
-	private function createFilterFile(){
+	private function createFilterFile($filePath){
 	   $filterResults = $this->filterDao->getFilters();
 	   $filters = array();	   	 
 	   
@@ -70,6 +81,7 @@ class FilterController extends Debugger {
 			             if (!isset($tempFilters[$type][$value])){			                 
         			         $tempFilters[$type][$value] = $customer;
         			         $filters[$type][] = array($value, $customer);
+        			         
         			     }else if ($tempFilters[$type][$value] != $customer && $tempFilters[$type][$value] != "Both"){
         			         $tempFilters[$type][$value] = $customer;
         			         
@@ -83,24 +95,24 @@ class FilterController extends Debugger {
         			     }        			             			     
 			         }
 			    }else{
-			        if (!isset($filters[$type][$subvalue])){
-    			         $filters[$type][$subvalue] = array();
-    			         $tempFilters[$type][$subvalue] = array();
+			        if (!isset($filters[$type][$value])){
+    			         $filters[$type][$value] = array();
+    			         $tempFilters[$type][$value] = array();
     			    }     			    
     			    
     			    if ($customer == null){
-			             $filters[$type][$subvalue][] = $value;
+			             $filters[$type][$value][] = $subvalue;
 			         }else{
-			             if (!isset($tempFilters[$type][$subvalue][$value])){			                 
-        			         $tempFilters[$type][$subvalue][$value] = $customer;
-        			         $filters[$type][$subvalue][] = array($value, $customer);
-        			     }else if ($tempFilters[$type][$subvalue][$value] != $customer && $tempFilters[$type][$subvalue][$value] != "Both"){        			         
-        			         $tempFilters[$type][$subvalue][$value] = $customer;
+			             if (!in_array($subvalue, $tempFilters[$type][$value])){
+        			         $tempFilters[$type][$value][$subvalue] = $customer;
+        			         $filters[$type][$value][] = array($subvalue, $customer);
+        			     }else if ($tempFilters[$type][$value][$subvalue] != $customer && $tempFilters[$type][$value][$subvalue] != "Both"){		         
+        			         $tempFilters[$type][$value][$subvalue] = $customer;
         			         
         			         // update existing record's customer to Both
-        			         for ($i = count($filters[$type][$subvalue]) - 1; $i >= 0; $i--){
-        			             if ($filters[$type][$subvalue][$i][0] == $value){
-        			                 $filters[$type][$subvalue][$i][1] = "Both";
+        			         for ($i = count($filters[$type][$value]) - 1; $i >= 0; $i--){
+        			             if ($filters[$type][$value][$i][0] == $subvalue){
+        			                 $filters[$type][$value][$i][1] = "Both";
         			                 break;    
         			             }    
         			         }
@@ -112,22 +124,54 @@ class FilterController extends Debugger {
 	   
 	   $filters['price'] = array(0,50,100,150,200,250,500,1000);              
 
+       $filters['color'] = array(       
+          "Red" => "#F33",           
+          "Orange" => "#F93",
+          "Yellow" => "#FF0",
+          "Green" => "#3C3",
+          "Cyan" => "#0FF", 
+          //"Teal" => "#088",
+          "Blue" => "#00F",
+          "Magenta" => "#F0F",
+          "Violet" => "#7848C0",
+          "Purple" => "#939",
+          "Pink" => "#FF98bF",
+          "White" => "#F0F0F0",
+          "Gray" => "#999",
+          "Black" => "#000",
+          "Brown" => "#963"
+       );
+
        $filterJson = stripslashes(json_encode($filters));
+       $filterHtml = null;
         
        // Write filter to file
        try{        
-           $file = fopen($this->filterFile, 'w');           
+           $file = fopen($this->filterJsonFile, 'w');           
            if ($file){
                fwrite($file, $filterJson);
                fclose($file);
-               touch($file);
+               touch($this->filterJsonFile);
            }
+           
+           $htmlFile = fopen($this->filterHtmlFile, 'w');           
+           if ($htmlFile){
+               ob_start();
+               FilterView::getNavigationSection($filters);
+               $filterHtml = ob_get_contents();
+               ob_end_clean();
+               
+               fwrite($htmlFile, $filterHtml);
+               fclose($htmlFile);
+               touch($this->filterHtmlFile);
+           }          
+           
        }catch (Exception $e) {
             echo "Whoops";
             $this->debug("FilterController", "createFilterFile", $e);				
        }
 
-       return $filterJson;
+       return $this->filterHtmlFile == $filePath ? $filterHtml : $filterJson;
 	}
 	
     private function convertResultsToArray($results){
@@ -150,23 +194,15 @@ class FilterController extends Debugger {
     }
 }
 
-
 if (isset($_GET['method']) && $_GET['class'] == "filter"){
     $filterController = new FilterController($mdb2);              
     
     switch($_GET['method']){
         case 'getfilters':
-            $filters = $filterController->getFilters();
+            $filters = $filterController->getJsonFilters();
+            //$filters = $filterController->getHtmlFilters();
             print_r($filters);
-            break;
-        case 'getfiltersselect':                                                   
-            $results = $filterController->getFilters();   
-            
-            foreach ($results['categories'] as $filter){
-                echo '<option value="'.$filter.'">'.$filter.'</option>';
-            }        
-            
-            break; 
+            break;    
     }            
 }
 

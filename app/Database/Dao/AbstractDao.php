@@ -3,18 +3,20 @@ require_once(dirname(__FILE__) . '/../../globals.php');
 require_once(dirname(__FILE__) . '/../TableConstants.php');
 
 class AbstractDao{
-	public $db = null; // PEAR::MDB2 pointer
+	public $db = null; // PEAR->MDB2 pointer
 	public $debug = DEBUG; // prints sql statements
 	public $info = false; // prints sql statements
+	public $PEAR = null;
 	private $sqlErrorLog = null;	
 	
 	
 	public function __construct(&$db) {
+	    $this->PEAR = new PEAR();
 	    $sqlErrorLog = dirname(__FILE__) . "/../../Logs/sqlErrorLog";
 		$this->sqlErrorLog = $sqlErrorLog . date("-Y-m-d") . ".txt";
 		$this->file = fopen($this->sqlErrorLog,"a");
 		$this->db = $db;	
-		$this->db->setErrorHandling(PEAR_ERROR_RETURN);
+		$this->db->setErrorHandling(PEAR_ERROR_RETURN);		
 	}
 	
 	/**

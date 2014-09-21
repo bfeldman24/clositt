@@ -16,7 +16,7 @@ class ClosetDao extends AbstractDao {
         if ($affectedRows === 1){
             $id = $this->db->lastInsertID(CLOSETS, CLOSET_ID);
             
-            if (PEAR::isError($id)) {
+            if ($this->PEAR->isError($id)) {
                 $this->logError($errorCode ,$id->getMessage(),$sql);
                 return -1;
             }
@@ -57,7 +57,7 @@ class ClosetDao extends AbstractDao {
 	
 	
 	public function addItemToCloset($user, $closetItem){
-	   $sql = "INSERT INTO ".CLOSET_ITEMS." (".CLOSET_ID.", ".CLOSET_USER_ID.", ".CLOSET_ITEM_SKU.", ".CLOSET_ITEM_IMAGE.", ".CLOSET_ITEM_STATUS.", ".CLOSET_LAST_UPDATED.", ".CLOSET_ITEM_DATE_ADDED.") " .
+	    $sql = "INSERT INTO ".CLOSET_ITEMS." (".CLOSET_ID.", ".CLOSET_USER_ID.", ".CLOSET_ITEM_SKU.", ".CLOSET_ITEM_IMAGE.", ".CLOSET_ITEM_STATUS.", ".CLOSET_LAST_UPDATED.", ".CLOSET_ITEM_DATE_ADDED.") " .
                 " VALUES (?,?,?,?,1,NOW(),NOW())";	   
 		
 		$closetId = $closetItem->getClosetId();		
@@ -92,7 +92,7 @@ class ClosetDao extends AbstractDao {
                 " WHERE " . CLOSET_USER_ID . " = ? AND ".CLOSET_PERMISSION." < 3".
                 " ORDER BY " . CLOSET_NAME;							       
 		
-		$paramsTypes = array('integer');		
+		$paramTypes = array('integer');		
 		$params = array($userId);
 		
 		return $this->getResults($sql, $params, $paramTypes, "29387201642");
@@ -113,5 +113,15 @@ class ClosetDao extends AbstractDao {
 		
 		return $this->getResults($sql, $params, $paramTypes, "98763565478");
 	}	
+	
+	public function saveItemImage($sku, $rawImage){
+	   $sql = "INSERT IGNORE INTO ".CACHED_IMAGES." (".PRODUCT_SKU.", ".PRODUCT_IMAGE.", ".CACHED_IMAGES_DATE_ADDED.") " .
+                " VALUES (?,?,NOW())";	   		
+		
+		$paramTypes = array('text', 'blob');
+        $params = array($sku, $rawImage);
+        
+        return $this->update($sql, $params, $paramTypes, "34629384");
+	}
 }
 ?>

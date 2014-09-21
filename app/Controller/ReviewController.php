@@ -7,6 +7,7 @@ require_once(dirname(__FILE__) . '/../Database/Dao/ReviewDao.php');
 require_once(dirname(__FILE__) . '/../Model/ReviewEntity.php');
 require_once(dirname(__FILE__) . '/ProductController.php');
 require_once(dirname(__FILE__) . '/ListController.php');
+require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
 
 class ReviewController{	
     private $reviewDao = null;
@@ -29,6 +30,10 @@ class ReviewController{
 	           
 	           if ($affectedRows > 0){
 	               $this->productController->updateCommentCounter($sku);   
+	               
+	               // Update elastic count
+                   $elastic = new ElasticDao();
+                   $elastic->updateCommentCount($sku);
 	           }
 	       }
 	   }

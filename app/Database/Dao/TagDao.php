@@ -11,14 +11,12 @@ class TagDao extends AbstractDao {
                 " COUNT(CASE WHEN t." . TAG_APPROVED . " <> 1 THEN 1 END) unapproved, " .
                 " COUNT(CASE WHEN t." .TAG_APPROVED . " = 1 THEN 1 END) " . TAG_APPROVED .
                 " FROM ". TAGS . " t " .
-                " LEFT JOIN " . PRODUCTS . " p ON p." . PRODUCT_SKU . " = t." . PRODUCT_SKU .
-                " WHERE p.".PRODUCT_STATUS." = 1 " .
+                " INNER JOIN " . PRODUCTS . " p ON p." . PRODUCT_SKU . " = t." . PRODUCT_SKU .
+                " WHERE p." .PRODUCT_STATUS . " = 1 " .
                 " GROUP BY ". TAG_STRING .
                 " ORDER BY ". TAG_STRING;
         
-		$paramTypes = array();		
-		$params = array();		
-		return $this->getResults($sql, $params, $paramTypes, "2342837429");
+		return $this->getResults($sql, array(), array(), "2342837429");
 	}	
 		
 	
@@ -34,6 +32,7 @@ class TagDao extends AbstractDao {
               " WHERE " . TAG_STRING . " = ? ";
                             
        if($this->debug){		    
+            $sku = print_r($skus, true);
 			$this->logDebug("92864192401" ,$sql . " { $sku , $tag } ");
 		}
         
@@ -59,16 +58,7 @@ class TagDao extends AbstractDao {
         
         $sql .= " AND " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")"; 
 
-        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-        $affectedRows = 0;
-                 
-        try {                              
-            $affectedRows = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-        }     
-        
-        return $affectedRows;
+        return $this->update($sql, $params, $paramTypes, "21847293");
 	}
 	
 	
@@ -92,34 +82,42 @@ class TagDao extends AbstractDao {
         $skuPlaceholders = '';               
         
         foreach ($skus as $sku) {    
-            try {   
-                $params[] = $sku;
-                $paramTypes[] = 'text';  
-                
-                if ($skuPlaceholders != ''){
-                    $skuPlaceholders .= ",";   
-                }
-                
-                $skuPlaceholders .= "?";
-                      
-            } catch (Exception $e) {
-                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+            $params[] = $sku;
+            $paramTypes[] = 'text';  
+            
+            if ($skuPlaceholders != ''){
+                $skuPlaceholders .= ",";   
             }
+            
+            $skuPlaceholders .= "?";                      
         }
         
         $sql .= " AND " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")";       
         
-        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-        $affectedRows = 0;
-                 
-        try {                              
-            $affectedRows = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-        }     
-        
-        return $affectedRows;
+        return $this->update($sql, $params, $paramTypes, "1823749234");
 	}	
+	
+	public function replaceTag($sku, $tag, $replacement){
+	   if (!isset($sku) || !isset($tag) || !isset($replacement)){
+	       return -1;   
+	   }
+	   
+	   $sql = "UPDATE " . TAGS .       	  
+              " SET " . TAG_STATUS . " = 3 ," .
+                        TAG_APPROVED . " = 1, " .
+                        TAG_STRING . " = ?, " .
+                        TAG_DATE_APPROVED . " = NOW() " .
+                        //TAG_GROUP_ID . " = (SELECT COALESCE((SELECT ".TAG_GROUP_ID." FROM ".TAGS." WHERE ".TAG_STRING." = ? LIMIT 1), 1))" .
+              " WHERE " . TAG_STRING . " = ? AND ".PRODUCT_SKU." = ?" ;
+                            
+       if($this->debug){		    
+			$this->logDebug("786848656" ,$sql . " { $sku , $tag, $replacement } ");
+		}
+        
+        $params = array($replacement, $tag, $sku);
+        $paramTypes = array('text', 'text','text');      
+        return $this->update($sql, $params, $paramTypes, "7868486562");
+	}
 	
 	
 	public function tryUpdateTagDao($tag){
@@ -132,27 +130,8 @@ class TagDao extends AbstractDao {
 	           " SET " . TAG_COUNT  . " = " . TAG_COUNT . " + 1 " . 
 	           " WHERE " . TAG_STRING . " = :tag AND " . PRODUCT_SKU . " = :sku";
         
-        $stmt = $this->db->prepare($sql, array('text','text'), MDB2_PREPARE_MANIP);
-                
-        try {
-            if($this->debug){
-                $tagParams = print_r($tag, true);
-    			$this->logDebug("127129321" ,$sql . " (" . $tagParams . ")" );
-    		}
-            
-            $affected = $stmt->execute($tag);
-            $stmt->free();
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            print_r($tag);
-        }       
-        
-        if($this->debug){            
-            $a = print_r($affected, true);
-			$this->logDebug("affected update" ,$a);
-		} 
-        
-        return $affected;
+        $paramTypes = array('text','text');
+        return $this->update($sql, $tag, $paramTypes, "98237492");                
 	}
 	
 	
@@ -160,12 +139,49 @@ class TagDao extends AbstractDao {
 	    $insertArray = array();
         $insertArray[] = $_POST['tag'];
         $insertArray[] = $_POST['sku'];
-        $insertArray[] = 1;
+        $insertArray[] = $_POST['tag'];
         
         $tagArray = array();
         $tagArray[] = $insertArray;
         
         return $this->addTagsDao($tagArray);	     
+	}
+	
+    public function addTagsForNewProducts($products){
+	     if(!isset($products) || !is_array($products)){
+			$this->logWarning("1249871324","Nothing to add!");
+			return false; 
+		}
+	 
+	    $sql = "INSERT IGNORE INTO " . TAGS . 
+	           " (" . TAG_STRING . "," .
+                      PRODUCT_SKU . "," .
+                      TAG_COUNT . ", " .
+                      TAG_STATUS.",".
+                      TAG_APPROVED.",".
+                      TAG_DATE_ADDED . ", " .
+                      TAG_GROUP_ID . ")" .
+	           " SELECT  ?, ?, 1,1,0, NOW()," .
+	           " (SELECT COALESCE((SELECT ".TAG_GROUP_ID." FROM ".TAGS." WHERE ".TAG_STRING." = ? LIMIT 1), 1))";
+        
+        if($this->debug){		    
+			$this->logDebug("2135232" ,$sql );
+		}
+        
+        $stmt = $this->db->prepare($sql);
+        $affectedRows = 0;
+        foreach ($products as $sku => $product) {
+            foreach ($product['tags'] as $tag) {    
+                try {   
+                    //print_r($value);                                           
+                    $affectedRows = $stmt->execute(array($tag, $sku, $tag));
+                } catch (Exception $e) {
+                    echo 'Caught exception: ',  $e->getMessage(), "\n\n";
+                }
+            }
+        }
+        
+        return $affectedRows;
 	}
 	
 	
@@ -175,11 +191,18 @@ class TagDao extends AbstractDao {
 			return false; 
 		}
 	 
-	    $sql = "INSERT INTO " . TAGS . " (".TAG_STRING.",".PRODUCT_SKU.",".TAG_COUNT.",".
-	                                       TAG_STATUS.",".TAG_APPROVED.",".TAG_DATE_ADDED.") " . 
-	           " VALUES (?, ?, ?, 1, 0, NOW())";	           	           
+	    $sql = "INSERT IGNORE INTO " . TAGS . 
+	           " (" . TAG_STRING . "," .
+                      PRODUCT_SKU . "," .
+                      TAG_COUNT . ", " .
+                      TAG_STATUS.",".
+                      TAG_APPROVED.",".
+                      TAG_DATE_ADDED . ", " .
+                      TAG_GROUP_ID . ")" .
+	           " SELECT  ?, ?, 1,1,0, NOW()," .
+	           " (SELECT COALESCE((SELECT ".TAG_GROUP_ID." FROM ".TAGS." WHERE ".TAG_STRING." = ? LIMIT 1), 1))";	           	           
         
-        $stmt = $this->db->prepare($sql, array('text','text','integer'), MDB2_PREPARE_MANIP);
+        $stmt = $this->db->prepare($sql, array('text','text','text'), MDB2_PREPARE_MANIP);
         
         foreach ($tags as $tag) {            
             try {                                                
@@ -249,7 +272,7 @@ class TagDao extends AbstractDao {
 	public function populateTagsBasedOnExistingTag($tag, $groupid, $synonyms, $excludes){	   
 	   if (!isset($groupid)){
 	       $groupid = 1;   
-	   }
+	   }	   	   
 	   
 	   $sql = "INSERT IGNORE INTO " . TAGS . 
 	           " (" . TAG_STRING . "," .
@@ -261,43 +284,55 @@ class TagDao extends AbstractDao {
                " FROM " . PRODUCTS .
                " WHERE (LOWER(".PRODUCT_NAME.") REGEXP ? OR LOWER(".PRODUCT_DETAILS.") REGEXP ?)";
                
-       $paramTypes = array('text','integer','text','text');        
+       $paramTypes = array('text','integer','text','text');  
+       $synonyms = '[[:<:]]('.$synonyms.')[[:>:]]'; // searches for whole words only            
        $params = array($tag, $groupid, $synonyms, $synonyms);
                
        if (isset($excludes) && trim($excludes) != ""){
-            $sql .= " AND (LOWER(".PRODUCT_NAME.") NOT REGEXP '?' AND LOWER(".PRODUCT_DETAILS.") NOT REGEXP '?')";
+            $sql .= " AND (LOWER(".PRODUCT_NAME.") NOT REGEXP ? AND LOWER(".PRODUCT_DETAILS.") NOT REGEXP ?)";
             $paramTypes[] = "text";
             $paramTypes[] = "text";
+            $excludes = '[[:<:]]('.$excludes.')[[:>:]]'; // searches for whole words only            
             $params[] = $excludes;
             $params[] = $excludes;
        }
 	   
-	   $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-	   	 
-        try {                                                
-            if(DEBUG){
-                $tagParams = print_r($params, true);
-    			$this->logDebug("238957923" ,$sql . " (" . $tagParams . ")" );
-    		}    		
-    		    		
-            print_r($params);
-            echo "\n";
-            $affectedRows = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            print_r($results);
-        }                   
+	   print_r($params);
+	   return $this->update($sql, $params, $paramTypes, "853299875");
+    }
+    
+    public function getProductsForTag($tag, $page, $getOnlyUnapprovedTags){								
+        $limit = QUERY_LIMIT;
+        $offset = $limit * $page;
         
-        $PEAR = new PEAR();
-		if ($PEAR->isError($affectedRows)) {
-		    
-			$this->logError("756476548" ,$affectedRows->getMessage(),$sql);
-		    return false;
-		}
- 			  
+        $sql = "SELECT " .
+    				" p." . PRODUCT_SKU . ", " .
+    				" p." . PRODUCT_STORE . ", " .				
+    				" p." . PRODUCT_CUSTOMER . ", " .
+    				" p." . PRODUCT_CATEGORY . ", " .
+    				" p." . PRODUCT_NAME . ", " .
+    				" p." . PRODUCT_LINK . ", " .
+    				" p." . PRODUCT_IMAGE . ", " .
+    				" p." . PRODUCT_PRICE . ", " .
+    				" p." . PRODUCT_COMMENT_COUNT . ", " .
+    				" p." . PRODUCT_CLOSITT_COUNT . ", " .
+    				" p." . PRODUCT_SHORT_LINK . 
+				" FROM " . PRODUCTS . " p " . 
+				" INNER JOIN " . TAGS . " t ON t." .PRODUCT_SKU . " = p." . PRODUCT_SKU .
+                " WHERE t.".TAG_STRING." = ? AND p." .PRODUCT_STATUS . " = 1 ";
         
-       $stmt->free();        		
-       return $affectedRows;
+        if ($getOnlyUnapprovedTags){
+            $sql .= " AND t." . TAG_APPROVED . " = 0";   
+        }
+        
+        $sql .= " ORDER BY (CASE WHEN p.".PRODUCT_NAME." like CONCAT('%',t.".TAG_STRING.",'%') THEN 1 ELSE 2 END), ".
+                    PRODUCT_STORE.",".PRODUCT_CATEGORY.",".PRODUCT_CATEGORY.",".PRODUCT_NAME;
+        $sql .= " LIMIT ? OFFSET ?";
+        
+        
+        $paramTypes = array('text','integer','integer');
+        $params = array($tag, $limit, $offset);
+		return $this->getResults($sql, $params, $paramTypes, "2342837429");
 	}
 }
 ?>

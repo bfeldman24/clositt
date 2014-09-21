@@ -1,4 +1,6 @@
 <?php
+require_once(dirname(__FILE__) . '/BaseEntity.php');
+
 // JAVASCRIPT Closet
 define("JS_REVIEW_SKU","s");
 define("JS_REVIEW_USER_ID","u");
@@ -76,12 +78,12 @@ class ReviewEntity {
 	public static function setFromDB($row){         
 		$reviewEntity = new ReviewEntity();
 				
-		$reviewEntity->setSku(stripslashes($row[PRODUCT_SKU]));
-		$reviewEntity->setUserId(stripslashes($row[USER_ID]));
-		$reviewEntity->setUserName(stripslashes($row[USER_NAME]));
-		$reviewEntity->setReview(stripslashes($row[REVIEW_COMMENT]));
-		$reviewEntity->setRating(stripslashes($row[REVIEW_RATING]));
-		$reviewEntity->setDate(stripslashes($row[REVIEW_DATE]));
+		$reviewEntity->setSku(BaseEntity::getDBField($row[PRODUCT_SKU]));
+		$reviewEntity->setUserId(BaseEntity::getDBField($row[USER_ID]));
+		$reviewEntity->setUserName(BaseEntity::getDBField($row[USER_NAME]));
+		$reviewEntity->setReview(BaseEntity::getDBField($row[REVIEW_COMMENT]));
+		$reviewEntity->setRating(BaseEntity::getDBField($row[REVIEW_RATING]));
+		$reviewEntity->setDate(BaseEntity::getDBField($row[REVIEW_DATE]));
 		
 		return $reviewEntity;
 	}		
@@ -89,12 +91,12 @@ class ReviewEntity {
 	public static function setFromPost($row){
 		$reviewEntity = new ReviewEntity();
 		
-		$reviewEntity->setSku(trim($row[JS_REVIEW_SKU]));
-		$reviewEntity->setUserId(trim($row[JS_REVIEW_USER_ID]));
-		$reviewEntity->setUserName(trim($row[JS_REVIEW_USER_NAME]));
-		$reviewEntity->setReview(trim($row[JS_REVIEW_COMMENT]));
-		$reviewEntity->setRating(trim($row[JS_REVIEW_RATING]));
-		$reviewEntity->setDate(trim($reviewEntity->formatDateAsString($row[JS_REVIEW_DATE])));
+		$reviewEntity->setSku(BaseEntity::getPostField($row, JS_REVIEW_SKU));
+		$reviewEntity->setUserId(BaseEntity::getPostField($row, JS_REVIEW_USER_ID));
+		$reviewEntity->setUserName(BaseEntity::getPostField($row, JS_REVIEW_USER_NAME));
+		$reviewEntity->setReview(BaseEntity::getPostField($row, JS_REVIEW_COMMENT));
+		$reviewEntity->setRating(BaseEntity::getPostField($row, JS_REVIEW_RATING));
+		$reviewEntity->setDate($reviewEntity->formatDateAsString(BaseEntity::getPostField($row, JS_REVIEW_DATE)));
 
 		return $reviewEntity;
 	}

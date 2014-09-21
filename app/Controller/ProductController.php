@@ -1,9 +1,12 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
+
+
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
-require_once(dirname(__FILE__) . '/../View/ProductTemplate.php');
 require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
 require_once(dirname(__FILE__) . '/ListController.php');
 
@@ -60,8 +63,7 @@ class ProductController {
 				}
 			}
 		}
-	
-	    //ProductTemplate::getProductGridTemplate($productEntity);	    
+		    
         return json_encode($productResults);
 	}
 	
@@ -143,38 +145,6 @@ class ProductController {
 		return "failed";
 	}
 	
-	public function addProductsFromFile($productFile){
-	    // Get Products from file    
-        $file = fopen($productFile, 'r');
-        $productsJson = fread($file, filesize($productFile));
-        fclose($file);
-        $products = json_decode($productsJson, true);  
-        
-        $productArray = array();
-        $i =0;
-        
-        foreach ($products as $sku => $product){
-             $i++;
-             $insertArray = array();
-             $insertArray[] = $sku;
-             $insertArray[] = $product['o'];
-             $insertArray[] = $product['u'];
-             $insertArray[] = $product['a'];
-             $insertArray[] = $product['n'];
-             $insertArray[] = $product['l'];
-             $insertArray[] = $product['i'];
-             $insertArray[] = $product['p'];
-             $insertArray[] = 0;
-             $insertArray[] = 0;
-                          
-             $productArray[] = $insertArray;  
-        }
-        
-        $result = $this->addProducts($productArray);
-        echo "DONE: " . $i . ") " . $result;
-        return $result;
-	}
-
 	public function getFilteredProducts($criteria, $pageNumber, $numResultsPage, $tagAdmin = false){
 						
 		$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage, $tagAdmin);
@@ -185,7 +155,6 @@ class ProductController {
 			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){
 			    $productEntity = new ProductEntity();
 				ProductEntity::setProductFromDB($productEntity, $row);
-				//ProductTemplate::getProductGridTemplate($productEntity);
 				$searchResults['products'][] = $productEntity->toArray();
 			}
 		}
@@ -231,14 +200,46 @@ class ProductController {
         $results = array('products'=>$products, 'facets' => $facets);
 		return json_encode($results);
 	}
+	
+	public function getCachedProductImage($sku){
+	    // The default image if none exists
+	    $image = HOME_PAGE . 'css/images/missing.png';   
+	   
+	    if(isset($sku) && trim($sku) != ""){	
+		      
+			$result = $this->productDao->getCachedProductImage($sku);
+			
+			if(is_object($result)){
+				$cachedImage = $result->fetchOne();
+				
+				if (isset($cachedImage) && is_string($cachedImage) && strlen($cachedImage) > 100){
+				    $image = $cachedImage;
+				}
+			}
+		}
+		
+		return $image;
+	}
 }
 
+
+if ($_GET['class'] == "products" && $_GET['method'] == 'image' && isset($_GET['sku'])){
+        $productController = new ProductController($mdb2);              
+        $image = $productController->getCachedProductImage($_GET['sku']);                          
+         
+        // Set the content type header - in this case image/jpeg
+        header('Content-Type: image/jpeg');                
+        print_r($image);
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['class'] == "products"){
     $productController = new ProductController($mdb2);              
     
     if ($_GET['method'] == 'lookup' && isset($_POST['sku'])){
          $product = $productController->getProduct($_POST['sku']);   
+         
+    }else if ($_GET['method'] == 'image' && isset($_POST['sku'])){
+         $product = $productController->getCachedProductImage($_POST['sku']);   
     
     }else if ($_GET['method'] == 'browse' && isset($_GET['page']) && isset($_GET['customer'])){
         $productCrit = ProductCriteria::setCriteriaFromPost($_POST);

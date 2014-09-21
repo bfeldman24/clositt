@@ -48,9 +48,10 @@ var pagePresenter = {
 	   } 
 	},
     
-    handleImageNotFound:  function(e) {
-        $(e).attr( "src", window.HOME_ROOT + "css/images/missing.png" );        
-        $(e).removeAttr("onerror");
+    handleImageNotFound:  function(img) {
+        var sku = $(img).parents(".outfit").attr("pid");
+        $(img).attr( "src", window.HOME_ROOT + "i/" + sku);        
+        $(img).removeAttr("onerror");
         return true;
     },
     

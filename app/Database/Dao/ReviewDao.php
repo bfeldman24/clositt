@@ -53,9 +53,7 @@ class ReviewDao extends AbstractDao {
 	           " INNER JOIN " . USERS . " u ON u.".USER_ID." = r.".USER_ID.               
                " ORDER BY r.".PRODUCT_SKU.", r." . REVIEW_DATE . " DESC";        
         
-		$paramTypes = array();		
-		$params = array();		
-		return $this->getResults($sql, $params, $paramTypes, "983740233");
+		return $this->getResults($sql, array(), array(), "983740233");
 	}		
 }
 ?>

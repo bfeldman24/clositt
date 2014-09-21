@@ -1,6 +1,6 @@
 <?php
 
-class ProductTemplate {	
+class ProductView {	
     
     public static function getProductGridTemplate($product){        
 	    if (!is_object($product)){      	

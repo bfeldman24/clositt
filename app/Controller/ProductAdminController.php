@@ -1,10 +1,11 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductAdminDao.php');
-require_once(dirname(__FILE__) . '/../Database/Dao/ProductDao.php');
+require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
+require_once(dirname(__FILE__) . '/../Model/SpiderLinkEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
 require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
 require_once(dirname(__FILE__) . '/../Model/SpiderLinkEntity.php');
@@ -38,11 +39,11 @@ class ProductAdminController extends Debugger {
 				$cust = $spiderLink->getCustomer();				
 				$cat = $spiderLink->getCategory();				
 				
-				if (!is_array($spiderLinks[$store])){
+				if (!isset($spiderLinks[$store]) || !is_array($spiderLinks[$store])){
 				    $spiderLinks[$store] = array();
 				}
 				
-				if (!is_array($spiderLinks[$store][$cust])){
+				if (!isset($spiderLinks[$store][$cust]) || !is_array($spiderLinks[$store][$cust])){
 				    $spiderLinks[$store][$cust] = array();
 				}				
 				
@@ -56,7 +57,7 @@ class ProductAdminController extends Debugger {
 	public function updateSpiderStatus($criteria){
 	   if (isset($criteria) && is_array($criteria)){
 	       $results = $this->productAdminDao->updateSpiderStatus($criteria);	       
-	       return $results == 1 ? "success" : "failed";	              
+	       return $results === 1 ? "success" : "failed";	              
 	   }else{
 	       return "Nothing to update";   
 	   }
@@ -171,18 +172,9 @@ class ProductAdminController extends Debugger {
          			$results['newTime'] = microtime() - $start;
          			$results['new'] = $addNewProductsResults;
          			$this->debug("ProductAdminController", "addAdminProducts", "newTime = " . $results['newTime']);				
-        			$this->debug("ProductAdminController", "addAdminProducts", "new = " . $results['new']);  
+        			$this->debug("ProductAdminController", "addAdminProducts", "new = " . $results['new']);
          			
          			// Step 5
-         			$start = microtime();
-         			$addTagsForNewProductsResults = $this->productAdminDao->addTagsForNewProducts($products);
-         			// echo " 10) Added Tags for New Products: " . $addTagsForNewProductsResults;  
-         			$results['tagsTime'] = microtime() - $start;
-         			$results['tags'] = $addTagsForNewProductsResults;  
-         			$this->debug("ProductAdminController", "addAdminProducts", "tagsTime = " . $results['tagsTime']);				
-        			$this->debug("ProductAdminController", "addAdminProducts", "tags = " . $results['tags']);
-         			
-         			// Step 6
          			if ($isLastInBatch){
              			$start = microtime();
              			$updatedProductStatus = $this->productAdminDao->setMissingProductsToNotAvailable($products);
@@ -203,57 +195,7 @@ class ProductAdminController extends Debugger {
 	
 		return $results;
 	}
-	
-	public function getFilteredProducts($criteria, $pageNumber, $numResultsPage){
-			
-		$results = $this->productDao->getProductsWithCriteria($criteria, $pageNumber, $numResultsPage);
-		$searchResults = array(); 
-		$searchResults['products'] = array();
 		
-		if(is_object($results)){
-			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){
-			    $productEntity = new ProductEntity();
-				ProductEntity::setProductFromDB($productEntity, $row);
-				//ProductTemplate::getProductGridTemplate($productEntity);
-				$searchResults['products'][] = $productEntity->toArray();
-			}
-		}
-		
-		return json_encode($searchResults);
-	}
-	
-	public function addProductsFromFile($productFile){
-	    // Get Products from file    
-        $file = fopen($productFile, 'r');
-        $productsJson = fread($file, filesize($productFile));
-        fclose($file);
-        $products = json_decode($productsJson, true);  
-        
-        $productArray = array();
-        $i =0;
-        
-        foreach ($products as $sku => $product){
-             $i++;
-             $insertArray = array();
-             $insertArray[] = $sku;
-             $insertArray[] = $product['o'];
-             $insertArray[] = $product['u'];
-             $insertArray[] = $product['a'];
-             $insertArray[] = $product['n'];
-             $insertArray[] = $product['l'];
-             $insertArray[] = $product['i'];
-             $insertArray[] = $product['p'];
-             $insertArray[] = 0;
-             $insertArray[] = 0;
-                          
-             $productArray[] = $insertArray;  
-        }
-        
-        $result = $this->addProducts($productArray);
-        //echo "DONE: " . $i . ") " . $result;
-        return $result;
-	}		 
-	
 	public function getTotalProductsCount(){
 	   $result = $this->productAdminDao->getTotalProductsCount();	    
 	   return $result->fetchOne();
@@ -379,7 +321,7 @@ class ProductAdminController extends Debugger {
 	       	       
 	       if ($p instanceof ProductEntity){
 	           $shortlink = str_replace(" ", "-", $p->getStore()) . "-" . str_replace(" ", "-", $p->getCategory()) . "-" . str_replace(" ", "-", $p->getName());	
-	       }else if ($p['s'] != null){	       
+	       }else if (isset($p['s'])){	       
 	           $shortlink = str_replace(" ", "-", $p['o']) . "-" . str_replace(" ", "-", $p['a']) . "-" . str_replace(" ", "-", $p['n']);	
 	       }else{   
 	           $shortlink = str_replace(" ", "-", $p['company']) . "-" . str_replace(" ", "-", $p['category']) . "-" . str_replace(" ", "-", $p['name']);	
@@ -406,7 +348,7 @@ class ProductAdminController extends Debugger {
 	       
 	       if ($p instanceof ProductEntity){
 	           $products[$sku]->setShortLink($shortlink);	       	   
-	       }else if ($p['s'] != null){ 
+	       }else if (isset($p['s'])){ 
 	           $products[$sku]['sl'] = $shortlink;	       	    
 	       }else{
 	           $products[$sku]['shortlink'] = $shortlink;	       	    
@@ -488,6 +430,16 @@ class ProductAdminController extends Debugger {
 	   }
 	}
 	
+	public function hideProductFromBrowsing($skus){
+	   if (!isset($skus) || !is_array($skus))
+	   {
+	       return "Missing info. Can't proceed";   
+	   }
+	   
+	   $affectedRows = $this->productAdminDao->hideProductFromBrowsing($skus);  
+	   return $affectedRows > 0 ? "success" : "failed";
+	}
+	
 	private function convertResultsToArray($results){
 	   $arr = array();
 	   
@@ -555,6 +507,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['cla
         
         case 'saveproductdetails':
             $output = $productAdminController->saveProductDetails($_POST);     
+            break;   
+        
+        case 'hideproductfrombrowsing':
+            $output = $productAdminController->hideProductFromBrowsing($_POST['skus']);     
             break;   
     }
     
@@ -635,7 +591,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['method']) && $_GET['cla
         
         case 'getspiderstats':
             echo $productAdminController->getSpiderStats();    
-            break;                                
+            break; 
+            
+        case 'iselastichealthy':
+            $elasticDao = new ElasticDao();
+            $isElasticHealthy = $elasticDao->isHealthy();
+            echo $isElasticHealthy ? "healthy" : "sick";
+            break;                        
     }
 }
 

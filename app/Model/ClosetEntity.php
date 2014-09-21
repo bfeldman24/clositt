@@ -1,4 +1,6 @@
 <?php
+require_once(dirname(__FILE__) . '/BaseEntity.php');
+
 // JAVASCRIPT Closet
 define("JS_CLOSET_ID","id");
 define("JS_CLOSET_USER_ID","owner");
@@ -53,20 +55,20 @@ class ClosetEntity {
 		
 	public static function setClosetFromDB($closetEntity, $row){         
 		if (is_object($closetEntity) && get_class($closetEntity) == "ClosetEntity"){
-			$closetEntity->setClosetId(stripslashes($row[CLOSET_ID]));
-			$closetEntity->setUserId(stripslashes($row[CLOSET_USER_ID]));
-			$closetEntity->setName(stripslashes($row[CLOSET_NAME]));
-			$closetEntity->setPermission(stripslashes($row[CLOSET_PERMISSION]));
+			$closetEntity->setClosetId(BaseEntity::getDBField($row, CLOSET_ID));
+			$closetEntity->setUserId(BaseEntity::getDBField($row, CLOSET_USER_ID));
+			$closetEntity->setName(BaseEntity::getDBField($row, CLOSET_NAME));
+			$closetEntity->setPermission(BaseEntity::getDBField($row, CLOSET_PERMISSION));
 		}
 	}		
 	
 	public static function setClosetFromPost($row){
 		$closetEntity = new ClosetEntity();
 		
-		$closetEntity->setClosetId(trim($row[JS_CLOSET_ID]));
-		$closetEntity->setUserId(trim($row[JS_CLOSET_USER_ID]));
-		$closetEntity->setName(trim($row[JS_CLOSET_NAME]));
-		$closetEntity->setPermission(trim($row[JS_CLOSET_PERMISSION]));			    
+		$closetEntity->setClosetId(BaseEntity::getPostField($row, JS_CLOSET_ID));
+		$closetEntity->setUserId(BaseEntity::getPostField($row, JS_CLOSET_USER_ID));
+		$closetEntity->setName(BaseEntity::getPostField($row, JS_CLOSET_NAME));
+		$closetEntity->setPermission(BaseEntity::getPostField($row, JS_CLOSET_PERMISSION));			    
 				    
 		return $closetEntity;
 	}

@@ -11,19 +11,15 @@ class SessionDao extends AbstractDao{
      */		
 	function checkCookie($email, $cookieDB) {			
 		
-		$sql = "SELECT * FROM " . USERS . 
-				" WHERE LOWER(" . USER_EMAIL . ") = LOWER(?) AND " . 
+		$sql = "SELECT ".USER_ID.",".USER_EMAIL.",".USER_NAME." FROM " . USERS . 
+				" WHERE LOWER(". USER_EMAIL .") = LOWER(?) AND " . 
     				USER_COOKIE . " = ? AND " . 
-    				USER_STATUS . " BETWEEN 0 AND 1";
+    				USER_STATUS . " = 1";
 		
 		$paramTypes = array('text', 'text');		
 		$params = array($email, $cookieDB);	
 		
-		$this->getResults($sql, $params, $paramTypes, "81276394");															
-		
-		if (is_object($result) ) {
-			$this->_setSession($result, true);
-		}
+		return $this->getResults($sql, $params, $paramTypes, "81276394");																	
 	} 
 	
 	
@@ -38,7 +34,7 @@ class SessionDao extends AbstractDao{
 				" WHERE " . USER_EMAIL . " = ?";			
 		
 		$paramTypes = array('text', 'text');		
-		$params = array($cookieDB, $email);								
+		$params = array($cookie, $email);								
 		return $this->update($sql, $params, $paramTypes, "0923459234");				
 	}
 	

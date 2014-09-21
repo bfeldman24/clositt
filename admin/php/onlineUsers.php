@@ -2,8 +2,8 @@
 <html>
 <head>
 <?php 
-require_once(dirname(__FILE__) . '/../../../app/globals.php');
-include(dirname(__FILE__) . '/../../../static/meta.php');   
+require_once(dirname(__FILE__) . '/../../app/globals.php');
+include(dirname(__FILE__) . '/../../static/meta.php');   
 ?>
 
 <style type="text/css">
@@ -22,7 +22,7 @@ include(dirname(__FILE__) . '/../../../static/meta.php');
 </style>
 </head>
 <body>
-<?php include(dirname(__FILE__) . '/../../../static/header.php');   ?>
+<?php include(dirname(__FILE__) . '/../../static/header.php');   ?>
 
 <div class="main-content">
     <h2>ONLINE USERS:</h2>
@@ -35,7 +35,7 @@ include(dirname(__FILE__) . '/../../../static/meta.php');
 </div>
 
 
-<?php include(dirname(__FILE__) . '/../../../static/footer.php');   ?>
+<?php include(dirname(__FILE__) . '/../../static/footer.php');   ?>
 
 <?php echo CLOSITT_JS; ?>
 <script type="text/javascript">

@@ -4,25 +4,24 @@ require_once(dirname(__FILE__) . '/AbstractDao.php');
 class UserDao extends AbstractDao {
     
     public function signUp($user){
-        $sql = "INSERT INTO ".USERS." (".USER_NAME.", ".USER_EMAIL.", ".USER_PASS.", ".USER_SALT.", ".
+        $sql = "INSERT INTO ".USERS." (".USER_NAME.", ".USER_EMAIL.", ".USER_PASS.", ".
                                         USER_STATUS.", ".USER_LOGIN_COUNT.", ".USER_IP.", ".USER_LAST_SIGNED_IN.", ".USER_DATE_SIGNED_UP.") " .
-                " VALUES (?,?,?,?,1,1,?,NOW(),NOW())";	   
+                " VALUES (?,?,?,1,1,?,NOW(),NOW())";	   
 		
 		$name = $user->getName();
 		$email = $user->getEmail();
 		$password = $user->getPassword();
-		$salt = $user->getSalt();
 		$ip = $_SERVER['REMOTE_ADDR'];
 		
-		$paramTypes = array('text', 'text', 'text', 'text', 'text');
-        $params = array($name, $email, $password, $salt, $ip);
+		$paramTypes = array('text', 'text', 'text', 'text');
+        $params = array($name, $email, $password, $ip);
         
         $affectedRows = $this->update($sql, $params, $paramTypes, "4872394827");	  
         
         if ($affectedRows === 1){
             $id = $this->db->lastInsertID(USERS, USER_ID);
             
-            if (PEAR::isError($id)) {
+            if ($this->PEAR->isError($id)) {
                 $this->logError($errorCode ,$id->getMessage(),$sql);
                 return -1;
             }
@@ -51,30 +50,34 @@ class UserDao extends AbstractDao {
 	
 	public function updateUserPassword($user, $oldPassword){
 	    $sql = "UPDATE ".USERS.
-	          " SET ".USER_PASS." = ?, ".USER_SALT." = ? ".
-              " WHERE ".USER_PASS." = ? AND ".USER_EMAIL." = ? AND ".USER_STATUS." = 1";	   
+	          " SET ".USER_PASS." = ? " .
+              " WHERE ".USER_EMAIL." = ? AND ".USER_STATUS." = 1";              
 				
 		$password = $user->getPassword();
-		$salt = $user->getSalt();
 		$email = $user->getEmail();
 		
-		$paramTypes = array('text', 'text', 'text', 'text');
-        $params = array($password, $salt, $oldPassword, $email);
-        
+		$paramTypes = array('text', 'text');
+        $params = array($password, $email);
+		
+		if (isset($oldPassword)){
+		  $sql .= " AND ".USER_PASS." = ?";
+		  $paramTypes[] = 'text';
+          $params[] = $oldPassword;
+		}
+
         return $this->update($sql, $params, $paramTypes, "2394829345");
 	}
 	
 	public function forceUpdateUserPassword($user){
 	    $sql = "UPDATE ".USERS.
-	          " SET ".USER_PASS." = ?, ".USER_SALT." = ?, ".USER_STATUS." = 1".
+	          " SET ".USER_PASS." = ?, ".USER_STATUS." = 1".
               " WHERE ".USER_EMAIL." = ? ";	   
 				
 		$password = $user->getPassword();
-		$salt = $user->getSalt();
 		$email = $user->getEmail();
 		
-		$paramTypes = array('text', 'text', 'text');
-        $params = array($password, $salt, $email);
+		$paramTypes = array('text', 'text');
+        $params = array($password, $email);
         
         return $this->update($sql, $params, $paramTypes, "38924792");
 	}
@@ -106,7 +109,7 @@ class UserDao extends AbstractDao {
 	}
 	
 	public function getUserPassword($email){ 
-        $sql = "SELECT " . USER_ID.", ".USER_EMAIL.", ".USER_NAME.", ".USER_PASS.", ".USER_SALT.
+        $sql = "SELECT " . USER_ID.", ".USER_EMAIL.", ".USER_NAME.", ".USER_PASS.
                 " FROM " . USERS .
                 " WHERE " . USER_EMAIL . " = ? AND ".USER_STATUS." = 1";		
 		

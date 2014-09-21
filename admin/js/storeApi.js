@@ -1094,7 +1094,7 @@ storeApi = {
 
                 item.image = $(this).find("a img").first().attr("src");
                 item.link = $(this).find("a").first().attr("href");
-                item.name = $(this).parents("table").first().find(".DisplayName").first().text().trim();                
+                item.name = $(this).parents("table").first().find("tr").last().find(".DisplayName").first().text().trim();                
     			item.price = storeApiHelper.findPricesAndGetLowest($(this).parents("table").first().find(".price").text().trim());
 
                 if(storeApiHelper.checkForProductImage(item.image)){

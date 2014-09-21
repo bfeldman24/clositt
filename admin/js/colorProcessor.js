@@ -86,7 +86,7 @@ var colorProcessor = {
 	   	     	   	   
 	     $("body").append(
 	           $("<div>").html(colorProcessor.count + ") Processing Colors (Takes a few minutes)...").append(
-     	           $("<img>").addClass("spinner").attr("src","/css/images/loading.gif")
+     	           $("<img>").addClass("spinner").attr("src",window.HOME_ROOT + "/css/images/loading.gif")
      	     )
 	     );	     	     
 	     
@@ -135,7 +135,7 @@ var colorMappingProcessor = {
         $(document).on("click", ".verifymapping", colorMappingProcessor.getColorMapping);
         $(document).on("click", ".approveColors", colorMappingProcessor.saveColorMapping);
         $(document).on("click", ".toggleSelectAll", colorMappingProcessor.toggleSelectAll);        
-        $.getJSON( window.HOME_ROOT + "scripts/admin/php/colorExtract/colors.json", colorMappingProcessor.getParentOptions);
+        $.getJSON( window.HOME_ROOT + "admin/php/colorExtract/colors.json", colorMappingProcessor.getParentOptions);
         $.post( window.HOME_ROOT + "c/getmappingcount", colorMappingProcessor.areAnyColorsLeft);
     },
     
@@ -233,7 +233,7 @@ var colorMappingProcessor = {
     getColorName: function(hex){
         var colorHexaUrl = "http://www.colorhexa.com/" + hex;
         
-        $.post( window.HOME_ROOT + "scripts/admin/php/webProxy.php", {u: colorHexaUrl}, function(data){
+        $.post( window.HOME_ROOT + "admin/php/webProxy.php", {u: colorHexaUrl}, function(data){
                var colorName = $(data).find(".color-description strong").text().trim();            
                var id = "#colorMapping-name-" + hex;
                $(id).append( $("<input>").addClass("hexaInput input-sm").val(colorName) );                              

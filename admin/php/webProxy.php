@@ -43,12 +43,12 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
     $url = stripslashes($_REQUEST['u']);   
     $file = "";
     
-    if ($_REQUEST['d']){
+    if (isset($_REQUEST['d'])){
         echo "url: " . $url;
     }
 
-    if ($_REQUEST['phantom']){
-	$phantom = "phantomjs";
+    if (isset($_REQUEST['phantom'])){
+    	$phantom = "phantomjs";
         $phantomScript = "/home/ben/clositt-private/phantomjs/phantomWebProxy.js";
         $command = $phantom . " " . $phantomScript . " " . $url;
         
@@ -154,7 +154,7 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
 	       $file = file_get_contents_curl($url);
 	   }  
 	   	
-	   if ($_REQUEST['d']){
+	   if (isset($_REQUEST['d'])){
 	       $html = htmlspecialchars($file, ENT_QUOTES);
            echo " contents: " . $html;
        }	   

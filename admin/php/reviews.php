@@ -2,8 +2,8 @@
 <html>
 <head>
 <?php 
-require_once(dirname(__FILE__) . '/../../../app/globals.php');
-include(dirname(__FILE__) . '/../../../static/meta.php');   
+require_once(dirname(__FILE__) . '/../../app/globals.php');
+include(dirname(__FILE__) . '/../../static/meta.php');   
 ?>
 <style type="text/css">
 body{
@@ -29,19 +29,19 @@ li{
 
 </head>
 <body>
-<?php include(dirname(__FILE__) . '/../../../static/header.php');   ?>
+<?php include(dirname(__FILE__) . '/../../static/header.php');   ?>
 <div id="mainContent">
     <a href="#" name="top"></a>
     <br><h2>Reviews</h2>        
     
     <br>
     
-    <div id="loadingMask"><img src="../../../css/images/loading.gif" style="height:50px;"/></div>
+    <div id="loadingMask"><img src="../../css/images/loading.gif" style="height:50px;"/></div>
     
     <table id="reviews" class="table table-striped table-hover table-bordered table-condensed table-responsive"></table>                                        
 </div>
 
-<?php include(dirname(__FILE__) . '/../../../static/footer.php');   ?>
+<?php include(dirname(__FILE__) . '/../../static/footer.php');   ?>
 
 <?php echo CLOSITT_JS; ?>
 <script type="text/javascript">

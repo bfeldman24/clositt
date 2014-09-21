@@ -1,6 +1,6 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/TagDao.php');
@@ -12,8 +12,7 @@ class TagController{
 	public function __construct(&$mdb2){
 		$this->tagDao = new TagDao($mdb2);
 	}
-	
-	
+		
 	public function addTag($tag){
 		
 		if(isset($tag) && is_array($tag) && count($tag) == 2){	
@@ -115,7 +114,14 @@ class TagController{
 		$SYN = 2;
 		$EXCL = 3;
 		
+		ini_set("auto_detect_line_endings", true); // fixes issue with not reading line endings from file saved by a Mac
 		$tags = file($tagsListFile);		
+		echo "Found " . count($tags) . " tags! ";
+		
+		if (count($tags) <= 1){
+		      print_r($tags);
+		      return;
+		} 
 		
 		// add all groups that don't already exist
 		$tagGroups = array();
@@ -240,6 +246,52 @@ class TagController{
 	   $affectedRows = $this->tagDao->approveTags($criteria['skus'], $criteria['tag']); 
 	   return $affectedRows > 0 ? "success" : "failed";
 	}	
+	
+	public function replaceTag($criteria){
+	   if (!isset($criteria) || 
+	       !isset($criteria['sku']) || strlen($criteria['sku']) < 3 || 
+	       !isset($criteria['tag']) || strlen($criteria['tag']) < 3 ||
+	       !isset($criteria['replacement']) || strlen($criteria['replacement']) < 3){
+	       return "Missing info. Can't proceed";
+	   }  
+	   
+	   $affectedRows = $this->tagDao->replaceTag($criteria['sku'], $criteria['tag'], $criteria['replacement']); 
+	   return $affectedRows > 0 ? "success" : "failed";
+	}
+	
+	public function getProductsForTag($tags, $page, $getOnlyUnapprovedTags){
+	   if (isset($tags)){
+	       if (!isset($getOnlyUnapprovedTags)){
+	           $getOnlyUnapprovedTags = true;   
+	       }
+	       
+	       if (!isset($page)){
+	           $page = 0;   
+	       }
+	       	       
+	       if(is_array($tags)){ 
+          	    list($tag) = $tags;
+      	    }else{
+      	         $tag = $tags;
+      	    }
+	       
+	       $results = $this->tagDao->getProductsForTag($tag, $page, $getOnlyUnapprovedTags);	       
+	       	       
+	       if(is_object($results)){
+	           $products = array();
+	           
+    			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){
+    			    $productEntity = new ProductEntity();
+    				ProductEntity::setProductFromDB($productEntity, $row);
+    				$products[] = $productEntity->toArray();
+    			}
+    			
+    			return json_encode(array("products" => $products));
+    		}
+	   }
+	   
+	   return null;
+	}		
 }
 
 
@@ -262,13 +314,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['class'] == "tags"){
                 break;             
             case 'removetags':
                 $tagResults = $tagController->removeTags($_POST);   
-                break;         
+                break;                                 
             case 'approvetags':
                 $tagResults = $tagController->approveTags($_POST);   
+                break;  
+            case 'replacetag':
+                $tagResults = $tagController->replaceTag($_POST);   
                 break;  
             case 'updateproducttags':
                 $tagResults = $tagController->getTagListToPopulateTags();    
                 break;
+            case 'searchunapprovedtags':
+                $getOnlyUnapprovedTags = true; 
+                $tagResults = $tagController->getProductsForTag($_POST['category'], $_GET['page'], $getOnlyUnapprovedTags);    
+                break;            
         }       
     }
     

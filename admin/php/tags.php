@@ -4,8 +4,8 @@
 <title>Tags Admin</title>
 
 <?php 
-require_once(dirname(__FILE__) . '/../../../app/globals.php');
-require_once(dirname(__FILE__) . '/../../../static/meta.php');   
+require_once(dirname(__FILE__) . '/../../app/globals.php');
+require_once(dirname(__FILE__) . '/../../static/meta.php');   
 ?>
 
 <style type="text/css">
@@ -131,6 +131,43 @@ body{
     color: #AAA;
     margin: 0 10px;
 }
+
+.name{
+    cursor: pointer;   
+}
+
+.name:hover{
+    color: #428bca;   
+}
+
+.modal-title {    
+    text-transform: uppercase;
+}
+
+.modal-store-title{
+    color: #428bca;   
+}
+
+.modal-product-name a{
+    color: #444;   
+}
+
+.btn-inverse {
+    background-color: #3F3F3F;
+    border-color: #000000;
+    color: #fff;
+}
+
+.btn-inverse:hover, .btn-inverse:focus, .btn-inverse:active, .btn-inverse.active {
+    background-color: #000000;
+    border-color: #000000;
+    color: #eee;
+}
+
+.outfit.selected .bottom-block{
+    background: #428bca; 
+    color: #EFEFEF;
+}
 </style>
 
 </head>
@@ -169,14 +206,14 @@ body{
     <div id="main-workspace" style="display:none;"></div>    
     <div id="sample-grid-container">
         <div id="product-grid"></div>
-        <div id="productSpinner" style="display:none;"><img src="../../../css/images/loading.gif"/></div>
+        <div id="productSpinner" style="display:none;"><img src="../../css/images/loading.gif"/></div>
     </div>
     <a href="#top" id="clear">Clear Results</a>
     <a href="#top" id="gototop">Go To Top</a>    
 </div>
 
 <div id="loadingMask">
-    <img src="../../../css/images/loading.gif"/>
+    <img src="../../css/images/loading.gif"/>
 </div>
 
 
@@ -194,15 +231,17 @@ var tagAdmin = {
         $(document).on("click", ".removePrevious", tagAdmin.removePreviousTags);        
         $(document).on("click", ".approveTag", tagAdmin.approveTag);
         $(document).on("click", ".approvePrevious", tagAdmin.approvePrevious);                
-        $(document).on("click",".tag-options label",tagAdmin.changeTagOptions);
+        $(document).on("click", ".removeProduct", tagAdmin.removeProduct);
+        $(document).on("click",".tag-options label",tagAdmin.changeTagOptions);                
+        $(document).on("click",".name",tagAdmin.viewLargerImage);
+        $(document).on("click",".price",tagAdmin.removeProductFromBrowsing);
+        $(document).on("click",".bottom-block", tagAdmin.selectProduct);
         tagAdmin.getTags();
     },
     
     removeTag: function(e){
         var $product = $(e.currentTarget).parents(".outfit");
-        var sku = $product.attr("pid");
-        var company = $product.attr("company");
-        var name = $product.attr("name");        
+        var sku = $product.attr("pid");       
         
         $.post(window.HOME_ROOT + "t/removetag", {sku: sku, tag: tagAdmin.tag}, function(data){                
                 
@@ -218,12 +257,7 @@ var tagAdmin = {
     
     removePreviousTags: function(e){
         var $product = $(e.currentTarget).parents(".outfit");        
-        var skus = [];        
-        skus.push($product.attr("pid"));
-        
-        $product.prevAll().each(function(){
-            skus.push($(this).attr("pid"));    
-        });           
+        var skus = tagAdmin.getPreviousSkus($product);     
         
         var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
         var result = false; 
@@ -237,9 +271,8 @@ var tagAdmin = {
                  
                  if (data == "success"){      
                     tagAdmin.count += skus.length;           
-                    Messenger.info("Removed all " + skus.length + " Tags! (" + tagAdmin.count + " total)");                 
-                    $product.prevAll().remove();
-                    $product.remove();               
+                    Messenger.info("Removed " + skus.length + " Tags! (" + tagAdmin.count + " total)");                 
+                    tagAdmin.removePreviousProducts($product);               
                  }else{
                     Messenger.error("There was a problem removing those tags!");                                     
                  }
@@ -249,12 +282,7 @@ var tagAdmin = {
     
     approvePrevious: function(e){
         var $product = $(e.currentTarget).parents(".outfit");        
-        var skus = [];        
-        skus.push($product.attr("pid"));
-        
-        $product.prevAll().each(function(){
-            skus.push($(this).attr("pid"));    
-        });           
+        var skus = tagAdmin.getPreviousSkus($product);        
         
         var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
         var result = false; 
@@ -268,9 +296,8 @@ var tagAdmin = {
                  
                  if (data == "success"){
                     tagAdmin.count += skus.length;                    
-                    Messenger.info("Approved all " + skus.length + " Tags! (" + tagAdmin.count + " total)");                 
-                    $product.prevAll().remove();
-                    $product.remove();                
+                    Messenger.info("Approved " + skus.length + " Tags! (" + tagAdmin.count + " total)");                 
+                    tagAdmin.removePreviousProducts($product);                
                  }else{
                     Messenger.error("There was a problem approving those tags!");                                     
                  }
@@ -281,9 +308,7 @@ var tagAdmin = {
     approveTag: function(e){
         var $product = $(e.currentTarget).parents(".outfit");        
         var skus = [];        
-        skus.push($product.attr("pid"));                         
-        
-        var skipConfirmation = e.altKey || e.shiftKey || e.ctrlKey;                
+        skus.push($product.attr("pid"));                                          
         
         $.post(window.HOME_ROOT + "t/approvetags", {skus: skus, tag: tagAdmin.tag}, function(data){            
             
@@ -295,6 +320,91 @@ var tagAdmin = {
                 Messenger.error("There was a problem approving that tag!");                                     
             }
         });        
+    },
+    
+    removeProduct: function($product){
+        var sku = $product.attr("pid");
+                
+        $.post(window.HOME_ROOT + "t/replacetag", {sku: sku, tag: tagAdmin.tag, replacement: 'notclothes'}, function(data){            
+            
+            if (data == "success"){
+                tagAdmin.count++;                    
+                Messenger.info("Removed the Product! (" + tagAdmin.count + " total)");                                 
+                $product.remove();                
+            }else{
+                Messenger.error("There was a problem approving that tag!");                                     
+            }
+        });
+    },
+    
+    removeProductFromBrowsing: function(e){   
+      e.preventDefault();
+             
+      if (e.altKey){  
+        var $product = $(e.currentTarget).parents(".outfit");        
+        var skus = tagAdmin.getPreviousSkus($product);
+        
+        $.post(window.HOME_ROOT + "spider/hideproductfrombrowsing", {skus: skus}, function(data){                
+                
+                if (data == "success"){
+                    Messenger.info("Removed the Product from Browsing!");                 
+                }else{
+                    Messenger.error("There was a problem removing that tag from browsing!");                 
+                }
+        });  
+      }
+      
+      return false;
+    },
+    
+    selectProduct: function(e){
+         e.preventDefault();
+         
+        $outfit = $(e.currentTarget).parents(".outfit");
+        
+        if ($outfit.hasClass("selected")){
+            $outfit.removeClass("selected");
+        }else{
+            $(".outfit").removeClass("selected");
+            $outfit.addClass("selected");   
+        }
+        
+        return false;
+    },
+    
+    getPreviousSkus: function($product){    
+        if ($product == null){
+            return [];   
+        }
+           
+        var skus = [];        
+        skus.push($product.attr("pid"));
+        
+        $product.prevUntil(".outfit.selected").each(function(){
+            skus.push($(this).attr("pid"));    
+        });        
+        
+        var selectedProduct = $(".outfit.selected");
+        
+        if (selectedProduct.length > 0){
+            var selectedSku = selectedProduct.first().attr("pid");
+            skus.push(selectedSku);
+        }
+        
+        return skus;
+    },
+    
+    removePreviousProducts: function($product){    
+        if ($product != null){        
+            $product.prevUntil(".outfit.selected").remove();        
+            $product.remove();
+            
+            var selectedSku = $(".outfit.selected");
+            
+            if (selectedSku.length > 0){
+                selectedSku.first().remove();
+            }        
+        }
     },
     
     tagClicked: function(e){
@@ -395,6 +505,19 @@ var tagAdmin = {
        });   
     },
     
+    getBrowsingProducts: function(){
+        var active = $(".tag-options").find(".active").removeClass("active");        
+        tagAdmin.clear();
+        
+        tagAdmin.clearResults();
+        searchController.isSearchActive = false;    
+        gridPresenter.maxNumberOfPagesLoadingAtOnce = 2;     
+        tagAdmin.count = 0;
+        tagAdmin.tag = 'browsing';
+            
+        gridPresenter.showContent(50);   
+    },
+    
     changeTagOptions: function(e){
         var active = $(e.currentTarget).parents(".tag-options").find(".active input");        
         var clicked = $(e.currentTarget).find("input"); 
@@ -406,6 +529,51 @@ var tagAdmin = {
         } 
         
         tagAdmin.clear();
+    },
+    
+    viewLargerImage: function(e){
+        var $outfit = $(e.currentTarget).parents(".outfit");
+        var $image = $outfit.find(".picture img").clone();
+        var link = $outfit.attr("link");
+        
+        var $message = $("<div>").append(
+                            $("<h2>").addClass("modal-store-title").text($outfit.attr("company"))
+                         ).append(
+                            $("<h2>").addClass("modal-product-name").append(
+                                $("<a>").attr("href",link).text($outfit.attr("name"))
+                             )
+                        ).append($image);        
+        
+        bootbox.dialog({
+            message: $message,
+            title: tagAdmin.tag,
+            buttons: {  
+                main: {
+                    label: "Cancel"
+                },              
+                approve: {
+                    label: "Approve Tag",
+                    className: "btn-success",
+                    callback: function() {                        
+                        $outfit.find(".approveTag.btn").trigger("click");
+                    },
+                },
+                reject: {
+                    label: "Remove Tag",
+                    className: "btn-danger",
+                    callback: function() {                        
+                        $outfit.find(".remove.btn").trigger("click");
+                    },
+                },
+                remove: {
+                    label: "Remove Product",
+                    className: "btn-inverse",
+                    callback: function() {     
+                        tagAdmin.removeProduct($outfit);
+                    },
+                },                          
+            }
+        });
     }  
 };
 
@@ -431,7 +599,7 @@ productPresenter.getProductTemplate = function(product){
 	var feedOwner = product.owner;
 	var feedCloset = product.closet;
     var score = product.sc;
-    var explainUrl = window.HOME_ROOT + '/scripts/admin/php/explain.php?sku=' + id + '&query=' + encodeURIComponent($( "#search-bar" ).val()).replace("#","").trim();
+    var explainUrl = window.HOME_ROOT + '/admin/php/explain.php?sku=' + id + '&query=' + encodeURIComponent($( "#search-bar" ).val()).replace("#","").trim();
     var colors = product.co;
 
 	var rand = Math.floor(Math.random() * 3) + 1;
@@ -442,9 +610,9 @@ productPresenter.getProductTemplate = function(product){
 		 			
 	//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
 	var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
-	   var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'" company="'+company+'" name="'+name+'">';			        html += '<div class="picture"><img data-src="' + image + '" src="../../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
+	   var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'" company="'+company+'" name="'+name+'" link="'+link+'">';			        html += '<div class="picture"><img data-src="' + image + '" src="../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
 			html += '<div class="bottom-block">';
-			    //html +='<div class="companyName">' + company + '</div>';
+			    html +='<div class="selectProduct"></div>';
 				html +='<div class="price">' +  tagAdmin.tag + '</div>';
 			html += '</div>';
 			
@@ -457,7 +625,7 @@ productPresenter.getProductTemplate = function(product){
                             html += '<div class="approveTag btn btn-info">Approve Tag</div>';
                             html += '<div class="approvePrevious btn btn-info">Approve All Previous</div>';
                             html += '<div class="remove btn btn-danger">Remove Tag</div>';
-                            html += '<div class="removePrevious btn btn-danger">Remove All Previous</div>';
+                            html += '<div class="removePrevious btn btn-danger">Remove All Previous</div>';                            
                         html += '</div>';
                     }
 
@@ -485,7 +653,7 @@ $(document).ready(function() {
 	// Overrides:
 	gridPresenter.maxNumberOfPagesLoadingAtOnce = -1;
     searchController.isSearchActive = true;
-    searchController.url = "spider/searchunapprovedtags/";    
+    searchController.url = "t/searchunapprovedtags/";    
 });	
 </script>
 

@@ -125,7 +125,7 @@ class GetMostCommonColors
     			{
     				// if you want to *eliminate* gradient variations use:
     				// ksort( &$hexarray );
-    				arsort( &$hexarray, SORT_NUMERIC );
+    				arsort( $hexarray, SORT_NUMERIC );
     
     				$gradients = array();
     				foreach ($hexarray as $hex => $num)
@@ -153,7 +153,7 @@ class GetMostCommonColors
     			{
     				// if you want to *eliminate* brightness variations use:
     				// ksort( &$hexarray );
-    				arsort( &$hexarray, SORT_NUMERIC );
+    				arsort( $hexarray, SORT_NUMERIC );
     
     				$brightness = array();
     				foreach ($hexarray as $hex => $num)
@@ -176,7 +176,7 @@ class GetMostCommonColors
     				}
     			}
     
-    			arsort( &$hexarray, SORT_NUMERIC );
+    			arsort( $hexarray, SORT_NUMERIC );
     
     			// convert counts to percentages
     			foreach ($hexarray as $key => $value)

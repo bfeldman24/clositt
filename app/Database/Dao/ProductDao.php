@@ -32,7 +32,7 @@ class ProductDao extends AbstractDao {
 		     $sql .= " WHERE p." . PRODUCT_SHORT_LINK . " = ? ";
 		}					 								
 		
-		$paramsTypes = array('text');		
+		$paramTypes = array('text');		
 		$params = array($productId);	
 		return $this->getResults($sql, $params, $paramTypes, "3248272");
 	}  
@@ -42,7 +42,7 @@ class ProductDao extends AbstractDao {
 		
 		$sql = "SELECT * " .				
 				" FROM " . PRODUCTS .
-				" WHERE " . PRODUCT_STATUS . " = 1 ";			
+				" WHERE " . PRODUCT_STATUS . " = 1 AND " . PRODUCT_RANDOM_INDEX . " > 0 ";			
 		
 		$params = array();
 		$paramTypes = array();
@@ -54,7 +54,7 @@ class ProductDao extends AbstractDao {
     		      $sql .= " AND " . PRODUCT_CUSTOMER . " = ? ";
     		      
     		      $params[] = $customer[0];
-            	  $paramsTypes[] = 'text';
+            	  $paramTypes[] = 'text';
 		      }
 		}		
 		
@@ -65,8 +65,8 @@ class ProductDao extends AbstractDao {
 		$sql .= " LIMIT ? OFFSET ?";
 		$params[] = $limit;
 		$params[] = $offset;
-		$paramsTypes[] = 'integer';
-		$paramsTypes[] = 'integer';		
+		$paramTypes[] = 'integer';
+		$paramTypes[] = 'integer';		
 		
 		return $this->getResults($sql, $params, $paramTypes, "2309842");
 	}  
@@ -106,7 +106,7 @@ class ProductDao extends AbstractDao {
 		               
 		$sql .= " LIMIT ?";								
         
-		$paramsTypes = array('text','text','integer');		
+		$paramTypes = array('text','text','integer');		
 		$params = array($productId, $productId, $limit);
 		
 		return $this->getResults($sql, $params, $paramTypes, "2309842");
@@ -134,7 +134,7 @@ class ProductDao extends AbstractDao {
 		
 		$sql .= " ORDER BY h." . HISTORICAL_DATE;					 								
 		
-		$paramsTypes = array('text');		
+		$paramTypes = array('text');		
 		$params = array($productId);	
 		return $this->getResults($sql, $params, $paramTypes, "876594567");
 	}        	
@@ -151,17 +151,7 @@ class ProductDao extends AbstractDao {
         
         $paramTypes = array('text');
         $params = array($productId);
-        
-        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-            
-        try {
-            $affected = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            print_r($params);
-        }
-        
-        return $affected;
+        return $this->update($sql, $params, $paramTypes, "2359827342");
 	}
 	
 	public function updateCommentCounter($productId){
@@ -176,18 +166,17 @@ class ProductDao extends AbstractDao {
         
         $paramTypes = array('text');
         $params = array($productId);
-        
-        $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
-            
-        try {
-            $affected = $stmt->execute($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-            print_r($params);
-        }
-        
-        return $affected;
-	}					
+        return $this->update($sql, $params, $paramTypes, "2359827342");
+	}		
+	
+	public function getCachedProductImage($sku){
+	   $sql = "SELECT " . PRODUCT_IMAGE . " FROM " . CACHED_IMAGES . " WHERE " . PRODUCT_SKU . " = ?";  
+	   
+	   $paramTypes = array('text');
+	   $params = array($sku);
+	   
+	   return $this->getResults($sql, $params, $paramTypes, "12389124003");
+	}			
 
 	/**
 	*

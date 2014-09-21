@@ -5,6 +5,7 @@ Options +SymLinksIfOwnerMatch
 # disallows a directory listing on directories that do not have an index file
 Options -Indexes 
 
+
 RewriteEngine On
 RewriteRule ^@/(.*)$ clositt.php?user=$1
 RewriteRule ^!/([a-z0-9\-]*)$ product-page.php?s=$1
@@ -12,15 +13,17 @@ RewriteRule ^!/([a-z0-9\-]*)$ product-page.php?s=$1
 # API
 RewriteRule ^p/([a-z0-9]*)$ app/Controller/ProductController.php?class=products&method=$1
 RewriteRule ^p/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?class=products&method=$1&page=$2
+RewriteRule ^i/([A-Za-z0-9]*)$ app/Controller/ProductController.php?class=products&method=image&sku=$1
 
     #Filter Data
-RewriteRule ^s/filters$ app/Controller/FilterController.php?class=filters&method=getfilters
+RewriteRule ^s/filters$ app/Controller/FilterController.php?class=filter&method=getfilters
 
     #Browse
 RewriteRule ^b/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductController.php?class=products&method=browse&customer=$1&page=$2
 
     #Tags
 RewriteRule ^t/([a-z0-9]*)$ app/Controller/TagController.php?class=tags&method=$1
+RewriteRule ^t/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/TagController.php?class=tags&method=$1&page=$2
 
     #Colors
 RewriteRule ^c/([a-z0-9]*)$ app/Controller/ColorController.php?class=color&method=$1
@@ -38,13 +41,7 @@ RewriteRule ^r/([a-z]*)$ app/Controller/ReviewController.php?class=review&method
 # ADMIN API
 RewriteRule ^spider/([a-z0-9]*)$ app/Controller/ProductAdminController.php?class=admin&method=$1
 RewriteRule ^spider/([a-z0-9]*)/([a-z0-9]*)$ app/Controller/ProductAdminController.php?class=admin&method=$1&page=$2
-RewriteRule ^notify$ scripts/admin/php/notify.php
-Redirect /admin /scripts/admin/
-Redirect /admin/spider /scripts/admin/php/productSpider.php
-Redirect /admin/color /scripts/admin/php/colorProcessor.php
-Redirect /admin/search /scripts/admin/php/search.php
-Redirect /admin/tags /scripts/admin/php/tags.php
-Redirect /admin/details /scripts/admin/php/productDetailSpider.php
+RewriteRule ^notify$ admin/php/notify.php
 
 
 # UNCOMMENT FOR PROD

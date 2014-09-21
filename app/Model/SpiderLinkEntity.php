@@ -1,4 +1,6 @@
 <?php
+require_once(dirname(__FILE__) . '/BaseEntity.php');
+
 // JAVASCRIPT Products
 define("JS_SPIDER_STORE","company");
 define("JS_SPIDER_CUSTOMER","customer");
@@ -97,28 +99,28 @@ class SpiderLinkEntity {
 		
 	public static function setSpiderLinkFromDB($spiderEntity, $row){         
 		if (is_object($spiderEntity) && get_class($spiderEntity) == "SpiderLinkEntity"){
-			$spiderEntity->setStore(stripslashes($row[SPIDER_STORE]));
-			$spiderEntity->setCustomer(stripslashes($row[SPIDER_CUSTOMER]));
-			$spiderEntity->setCategory(stripslashes($row[SPIDER_CATEGORY]));
-			$spiderEntity->setLink(stripslashes($row[SPIDER_LINK]));
-			$spiderEntity->setTags(stripslashes($row[SPIDER_TAGS]));
-			$spiderEntity->setCount(stripslashes($row[SPIDER_COUNT]));
-			$spiderEntity->setStatus(stripslashes($row[SPIDER_STATUS]));	
-			$spiderEntity->setLastSaved(stripslashes($row[SPIDER_LAST_SAVED]));	
+			$spiderEntity->setStore(BaseEntity::getDBField($row, SPIDER_STORE));
+			$spiderEntity->setCustomer(BaseEntity::getDBField($row, SPIDER_CUSTOMER));
+			$spiderEntity->setCategory(BaseEntity::getDBField($row, SPIDER_CATEGORY));
+			$spiderEntity->setLink(BaseEntity::getDBField($row, SPIDER_LINK));
+			$spiderEntity->setTags(BaseEntity::getDBField($row, SPIDER_TAGS));
+			$spiderEntity->setCount(BaseEntity::getDBField($row, SPIDER_COUNT));
+			$spiderEntity->setStatus(BaseEntity::getDBField($row, SPIDER_STATUS));	
+			$spiderEntity->setLastSaved(BaseEntity::getDBField($row, SPIDER_LAST_SAVED));	
 		}
 	}		
 	
 	public static function setSpiderLinkFromPost($row){
 		$spiderEntity = new SpiderLinkEntity();
 		
-		$spiderEntity->setStore(trim($row[JS_SPIDER_STORE]));
-		$spiderEntity->setCustomer(trim($row[JS_SPIDER_CUSTOMER]));
-		$spiderEntity->setCategory(trim($row[JS_SPIDER_CATEGORY]));
-		$spiderEntity->setLink(trim($row[JS_SPIDER_LINK]));
-		$spiderEntity->setTags(trim($row[JS_SPIDER_TAGS]));
-		$spiderEntity->setCount(trim($row[JS_SPIDER_COUNT]));
-		$spiderEntity->setStatus(trim($row[JS_SPIDER_STATUS]));	
-		$spiderEntity->setLastSaved(trim($row[JS_SPIDER_LAST_SAVED]));
+		$spiderEntity->setStore(BaseEntity::getPostField($row, JS_SPIDER_STORE));
+		$spiderEntity->setCustomer(BaseEntity::getPostField($row, JS_SPIDER_CUSTOMER));
+		$spiderEntity->setCategory(BaseEntity::getPostField($row, JS_SPIDER_CATEGORY));
+		$spiderEntity->setLink(BaseEntity::getPostField($row, JS_SPIDER_LINK));
+		$spiderEntity->setTags(BaseEntity::getPostField($row, JS_SPIDER_TAGS));
+		$spiderEntity->setCount(BaseEntity::getPostField($row, JS_SPIDER_COUNT));
+		$spiderEntity->setStatus(BaseEntity::getPostField($row, JS_SPIDER_STATUS));	
+		$spiderEntity->setLastSaved(BaseEntity::getPostField($row, JS_SPIDER_LAST_SAVED));
 				    
 		return $spiderEntity;
 	}

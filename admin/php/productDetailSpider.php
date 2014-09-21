@@ -2,8 +2,8 @@
 <html>
 <head>
 <?php 
-require_once(dirname(__FILE__) . '/../../../app/globals.php');
-include(dirname(__FILE__) . '/../../../static/meta.php');   
+require_once(dirname(__FILE__) . '/../../app/globals.php');
+include(dirname(__FILE__) . '/../../static/meta.php');   
 ?>
 <style type="text/css">
 body{
@@ -83,7 +83,7 @@ input{
 
 </head>
 <body>
-<?php include(dirname(__FILE__) . '/../../../static/header.php');   ?>
+<?php include(dirname(__FILE__) . '/../../static/header.php');   ?>
 <div id="mainContent">
     <a href="#" name="top"></a>
     <br><h2>Product <i>Detail</i> Genie <span id="detailCount"></span></h2>    
@@ -98,13 +98,13 @@ input{
 </div>
 
 <div id="loadingMask" style="display:none;" >
-    <img src="../../../css/images/loading.gif"/>
+    <img src="../../css/images/loading.gif"/>
 </div>
 <div id="transparentLoadingMask" style="display:none;" >
-    <img src="../../../css/images/loading.gif"/>
+    <img src="../../css/images/loading.gif"/>
 </div>
 
-<?php include(dirname(__FILE__) . '/../../../static/footer.php');   ?>
+<?php include(dirname(__FILE__) . '/../../static/footer.php');   ?>
 
 <?php echo CLOSITT_JS; ?>
 <script src="../js/storeApi.js"></script>

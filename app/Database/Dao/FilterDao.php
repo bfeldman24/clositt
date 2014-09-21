@@ -13,26 +13,18 @@ class FilterDao extends AbstractDao {
 	}	
 		
     public function updateCompanyFilters(){
+       $sql = "DELETE FROM ".FILTERS.                
+              " WHERE ".FILTER_TYPE." = 'company'";
+	   
+	   $this->update($sql, array(), array(), "3949233341"); 
+        
 	   $sql = "INSERT INTO ".FILTERS." (".FILTER_TYPE.", ".FILTER_VALUE.", ".FILTER_CUSTOMER.", ".FILTER_STATUS.", ".FILTER_DATE.") " .
                 "SELECT DISTINCT 'company', p.".PRODUCT_STORE.", p.".PRODUCT_CUSTOMER.", 1, NOW() " .
                 "FROM ".PRODUCTS." p " .
                 "LEFT JOIN ".FILTERS." f on f.".FILTER_TYPE." = 'company' AND f.".FILTER_VALUE." = p.store AND f.".FILTER_CUSTOMER." = p.customer " .
                 "WHERE p.".PRODUCT_STATUS." = 1 AND ISNULL(f.".FILTER_VALUE.") ";
 	   
-	   if($this->debug){		    
-			$this->logDebug("120947107" ,$sql );
-	   }
-		
-	   $stmt = $this->db->prepare($sql);
-            
-       try {                                          
-            $affectedRows = $stmt->execute();
-            
-       } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n\n";
-       }        		                
-        
-       return $affectedRows;
+	   return $this->update($sql, array(), array(), "394923334");
 	}	
 }
 ?>

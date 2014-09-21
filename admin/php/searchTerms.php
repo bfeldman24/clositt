@@ -2,9 +2,9 @@
 <html>
 <head>
 <?php 
-require_once(dirname(__FILE__) . '/../../../app/globals.php');
-include(dirname(__FILE__) . '/../../../static/meta.php');   
-require_once(dirname(__FILE__) . '/../../../app/Controller/ListController.php');
+require_once(dirname(__FILE__) . '/../../app/globals.php');
+include(dirname(__FILE__) . '/../../static/meta.php');   
+require_once(dirname(__FILE__) . '/../../app/Controller/ListController.php');
 
 $lineArray = ListController::readFile("searchTerms");
 $searchTerms = '';
@@ -60,7 +60,7 @@ li{
 
 </head>
 <body>
-<?php include(dirname(__FILE__) . '/../../../static/header.php');   ?>
+<?php include(dirname(__FILE__) . '/../../static/header.php');   ?>
 <div id="mainContent">
     <a href="#" name="top"></a>
     <br><h2>Search Terms</h2>        
@@ -77,7 +77,7 @@ li{
     </table>                                
 </div>
 
-<?php include(dirname(__FILE__) . '/../../../static/footer.php');   ?>
+<?php include(dirname(__FILE__) . '/../../static/footer.php');   ?>
 
 <?php echo CLOSITT_JS; ?>
 </body>

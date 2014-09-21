@@ -1,4 +1,6 @@
 <?php
+require_once(dirname(__FILE__) . '/BaseEntity.php');
+
 // JAVASCRIPT Closet
 define("JS_USER_ID","id");
 define("JS_USER_NAME","n");
@@ -13,7 +15,6 @@ class UserEntity {
 	private $email;	
 	private $password;
 	private $confirmPassword;
-	private $salt;
 	private $cookie;
 	
 	public function getUserId() {
@@ -61,15 +62,6 @@ class UserEntity {
 		}
 	}	
 	
-	public function getSalt() {
-		return $this->salt;
-	}
-	public function setSalt($salt) {
-		if(isset($salt)){
-			$this->salt = $salt;
-		}
-	}	
-	
 	public function getCookie() {
 		return $this->cookie;
 	}
@@ -83,51 +75,26 @@ class UserEntity {
 	   $this->setPassword($this->secure($password));  
 	}		
 	
-	private function secure($password){
-	     $delimiter = "!^}";	     
+	private function secure($password){	     
+	     $firstPass = $this->getPassword();
 	     
-	     if (!isset($password)){
-	        return null; 
-	     }
+	     if (isset($firstPass)){
+	           $passInfo = password_get_info($firstPass);	           	           
+	           return password_hash($password, $passInfo['algo'], $passInfo['options']);
+	     }     
 	     
-	     $salt = $this->getSalt();
-	     
-	     if (!isset($salt)){
-    	     // Generate random salt
-    	     $salt = uniqid();
-    	     $this->setSalt($salt);	     
-	     }
-	     
-	     return md5($salt . $delimiter . $password);
+	     return password_hash($password, PASSWORD_DEFAULT);	     
 	}				
 			
 		
 	public static function setFromDB($row){         
 		$userEntity = new UserEntity();	
 		
-		if(isset($row[USER_ID])){	
-		  $userEntity->setUserId(stripslashes($row[USER_ID]));
-		}
-		
-		if(isset($row[USER_NAME])){
-		  $userEntity->setName(stripslashes($row[USER_NAME]));
-		}
-		
-		if(isset($row[USER_EMAIL])){
-		  $userEntity->setEmail(stripslashes($row[USER_EMAIL]));
-		}
-		
-		if(isset($row[USER_SALT])){
-		  $userEntity->setSalt(stripslashes($row[USER_SALT]));
-		}
-		
-		if(isset($row[USER_PASS])){
-		  $userEntity->setPassword(stripslashes($row[USER_PASS]));
-		}
-		
-		if(isset($row[USER_COOKIE])){
-		  $userEntity->setCookie(stripslashes($row[USER_COOKIE]));
-		}		
+		$userEntity->setUserId(BaseEntity::getDBField($row, USER_ID));				
+		$userEntity->setName(BaseEntity::getDBField($row, USER_NAME));
+		$userEntity->setEmail(BaseEntity::getDBField($row, USER_EMAIL));
+		$userEntity->setPassword(BaseEntity::getDBField($row, USER_PASS));
+		$userEntity->setCookie(BaseEntity::getDBField($row, USER_COOKIE));
 		
 		return $userEntity;
 	}		
@@ -139,25 +106,11 @@ class UserEntity {
 	   
         if (is_object($userEntity) && get_class($userEntity) == "UserEntity"){		            
             
-            if (isset($row[JS_USER_ID])){
-    		  $userEntity->setUserId(trim($row[JS_USER_ID]));
-            }
-            
-            if (isset($row[JS_USER_NAME])){
-    		  $userEntity->setName(trim($row[JS_USER_NAME]));
-            }
-            
-            if (isset($row[JS_USER_EMAIL])){
-    		  $userEntity->setEmail(trim($row[JS_USER_EMAIL]));
-            }
-            
-            if (isset($row[JS_USER_PASSWORD])){
-    		  $userEntity->setPassword($userEntity->secure(trim($row[JS_USER_PASSWORD])));
-            }
-            
-            if (isset($row[JS_USER_CONFIRM_PASSWORD])){
-    		  $userEntity->setConfirmPassword($userEntity->secure(trim($row[JS_USER_CONFIRM_PASSWORD])));			
-            }
+    		$userEntity->setUserId(BaseEntity::getPostField($row, JS_USER_ID));            
+    		$userEntity->setName(BaseEntity::getPostField($row, JS_USER_NAME));
+    		$userEntity->setEmail(BaseEntity::getPostField($row, JS_USER_EMAIL));
+    		$userEntity->setPassword($userEntity->secure(BaseEntity::getPostField($row, JS_USER_PASSWORD)));
+    		$userEntity->setConfirmPassword($userEntity->secure(BaseEntity::getPostField($row, JS_USER_CONFIRM_PASSWORD)));			
     		
     		return $userEntity;
         }    

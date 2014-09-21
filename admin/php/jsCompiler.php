@@ -73,7 +73,7 @@ $files = array("closetPresenter.js",
      $jsFiles .= file_get_contents(dirname(__FILE__) . $dir . "/" . $files[$i]);
   }
   
-  $file = fopen(dirname(__FILE__) . "/../../java/clositt.js","w");
+  $file = fopen(dirname(__FILE__) . "/../../scripts/java/clositt.js","w");
   fwrite($file,$jsFiles);                       
   fclose($file);
   

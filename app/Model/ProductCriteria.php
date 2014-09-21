@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(__FILE__) . '/BaseEntity.php');
 
 class ProductCriteria{
 
@@ -17,7 +18,6 @@ class ProductCriteria{
 	public function getCompanies() {
 		return $this->companies;
 	}
-
 	public function setCompanies($companies) {
 		if(isset($companies)){
 			$this->companies = $companies;
@@ -27,7 +27,6 @@ class ProductCriteria{
 	public function getCustomers() {
 		return $this->customers;
 	}
-
 	public function setCustomers($customers) {
 		if(isset($customers)){
 			$this->customers = $customers;
@@ -37,7 +36,6 @@ class ProductCriteria{
 	public function getCategories() {
 		return $this->categories;
 	}
-
 	public function setCategories($categories) {
 		if(isset($categories)){
 			$this->categories = $categories;
@@ -47,7 +45,6 @@ class ProductCriteria{
 	public function getColors() {
 		return $this->colors;
 	}
-
 	public function setColors($colors) {
 		if(isset($colors)){
 			$this->colors = $colors;
@@ -58,7 +55,6 @@ class ProductCriteria{
 	public function getTags() {
 		return $this->tags;
 	}
-
 	public function setTags($tags) {
 		if(isset($tags)){
 			$this->tags = $tags;
@@ -68,7 +64,6 @@ class ProductCriteria{
 	public function getSearchString() {
 		return $this->searchString;
 	}
-
 	public function setSearchString($searchString) {
 		if(isset($searchString)){
 			$this->searchString = $searchString;
@@ -78,7 +73,6 @@ class ProductCriteria{
 	public function getMinPrice() {
 		return $this->minPrice;
 	}
-
 	public function setMinPrice($minPrice) {
 		if(isset($minPrice)){
 			$this->minPrice = $minPrice;
@@ -88,7 +82,6 @@ class ProductCriteria{
 	public function getMaxPrice() {
 		return $this->maxPrice;
 	}
-
 	public function setMaxPrice($maxPrice) {
 		if(isset($maxPrice)){
 			$this->maxPrice = $maxPrice;
@@ -98,7 +91,6 @@ class ProductCriteria{
     public function getFieldWeightings() {
         return $this->fieldWeightings;
     }
-
     public function setFieldWeightings($fieldWeightings) {
         if(isset($fieldWeightings)){
             $this->fieldWeightings = $fieldWeightings;
@@ -108,7 +100,6 @@ class ProductCriteria{
     public function getQueryType() {
         return $this->queryType;
     }
-
     public function setQueryType($queryType) {
         if(isset($queryType)){
             $this->queryType = $queryType;
@@ -129,67 +120,32 @@ class ProductCriteria{
     public static function setCriteriaFromPost($row){
 		$productCriteria = new ProductCriteria();
 		
-		if (isset($row['company'])){
-		  $productCriteria->setCompanies($row['company']);
-		}
+		$productCriteria->setCompanies(BaseEntity::getPostField($row, 'company'));				
+		$productCriteria->setCustomers(BaseEntity::getPostField($row, 'customer'));		
+        $productCriteria->setColors(BaseEntity::getPostField($row, 'colors'));		
+		$productCriteria->setSearchString(BaseEntity::getPostField($row, 'searchTerm'));		
+    	$productCriteria->setMinPrice(BaseEntity::getPostField($row, 'abovePrice'));
+    	$productCriteria->setMaxPrice(BaseEntity::getPostField($row, 'belowPrice'));
+    	$productCriteria->setCategories(ProductCriteria::convertArrayToCamelCase(BaseEntity::getPostField($row, 'category')));
+    	$productCriteria->setTags(ProductCriteria::convertArrayToCamelCase(BaseEntity::getPostField($row, 'tags')));		
 
-		if (isset($row['customer'])){
-		  $productCriteria->setCustomers($row['customer']);		
-		}
+        $weightings = array();        
+        $weightings['tags'] = BaseEntity::getPostField($row, 'tagWeight');
+        $weightings['store'] = BaseEntity::getPostField($row, 'storeWeight');
+        $weightings['color'] = BaseEntity::getPostField($row, 'colorWeight');
+        $weightings['title'] = BaseEntity::getPostField($row, 'titleWeight');
 
-		if (isset($row['colors'])){
-    		$productCriteria->setColors($row['colors']);		
-		}
-
-		if (isset($row['searchTerm'])){
-		  $productCriteria->setSearchString(trim($row['searchTerm']));
-		}
-
-		if (isset($row['abovePrice'])){
-		  $productCriteria->setMinPrice($row['abovePrice']);
-		}
-
-		if (isset($row['belowPrice'])){
-		  $productCriteria->setMaxPrice($row['belowPrice']);
-		}
-		
-		if (isset($row['category'])){
-		  $productCriteria->setCategories(ProductCriteria::convertArrayToCamelCase($row['category']));
-		}
-		
-		if (isset($row['tags'])){
-		  $productCriteria->setTags(ProductCriteria::convertArrayToCamelCase($row['tags']));		
-		}
-
-        $weightings = array();
-        if(!empty($row['tagWeight'])){
-            $weightings['tags'] = $row['tagWeight'];
-        }
-
-        if(!empty($row['storeWeight'])){
-            $weightings['store'] = $row['storeWeight'];
-        }
-
-        if(!empty($row['colorWeight'])){
-            $weightings['color'] = $row['colorWeight'];
-        }
-
-        if(!empty($row['titleWeight'])){
-            $weightings['title'] = $row['titleWeight'];
-        }
-
-        if(!empty($weightings)){
-            $productCriteria->setFieldWeightings($weightings);
-        }
-
-        if(!empty($row['queryType'])){
-            $productCriteria->setQueryType($row['queryType']);
-        }
+        $productCriteria->setFieldWeightings($weightings);        
+        $productCriteria->setQueryType(BaseEntity::getPostField($row, 'queryType'));
 
 		return $productCriteria;
 	}	
 	
 	private static function convertArrayToCamelCase($arr){
+	    if (!isset($arr)){
+	       return null;  
+	    }
+	   
 	    for ($i=0; $i < count($arr); $i++){
         	$arr[$i] = ProductCriteria::toCamelCase($arr[$i]);
         }  
@@ -198,6 +154,10 @@ class ProductCriteria{
 	}
 	
 	private static function toCamelCase($str){
+	       if (!isset($str)){
+    	       return null;  
+    	   }
+	   
 	       $str = ucwords(strtolower($str));
            //$str = preg_replace('/\s+/', '', $str); 
            return trim($str);
