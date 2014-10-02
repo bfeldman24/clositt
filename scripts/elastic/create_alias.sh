@@ -38,3 +38,6 @@ curl -XPOST http://localhost:9200/_aliases -d '
 }'
 printf "\n Saving latest alias to file\n"
 echo $NEW_INDEX > "latest_alias.txt"
+
+printf "\n Deleting old $OLD_INDEX"
+curl -XDELETE http://localhost:9200/$OLD_INDEX

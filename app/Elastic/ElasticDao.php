@@ -8,7 +8,7 @@ class ElasticDao{
 	private $client = null;
     private $index = "products"; //this will be an alias that always has current index
     //private $fields = array('name.partial','name','store','tag','tag.partial','color', 'color2');
-    private $fields = array('name.partial','name','store','details','customer', 'color', 'color2');
+    private $fields = array('name.partial','name','store','category', 'details','customer', 'color', 'color2');
 	public function __construct(){
 		$this->client = new Elasticsearch\Client();
 	}
@@ -145,8 +145,7 @@ class ElasticDao{
                 $colorBoost = !empty($userWeights['color']) ? "^" . $userWeights['color'] : "";
                 $titleBoost = !empty($userWeights['title']) ? "^" . $userWeights['title'] : "";
 
-                //array_push($fields, "tag" . $tagBoost);
-                //array_push($fields, "tag.partial" . $tagBoost);
+                array_push($fields, "category" . $tagBoost);
                 array_push($fields, "details");
                 array_push($fields, "store" . $storeBoost);
 
@@ -168,16 +167,10 @@ class ElasticDao{
         if (empty($queryType) || $queryType=="querystring"){
             $searchParams['body']['query']['query_string'] = array( "query" => $criteria->getSearchString() ,"fields" => $fields);
         }
-        else{//($queryType=="multimatch"){
-            $query['multi_match']['fields'] = $fields;
-            $query['multi_match']['query'] = $criteria->getSearchString();
-            $query['multi_match']['type'] = "cross_fields";
-
-            $searchParams['body']['query']['filtered'] = array(
-                "filter" => $baseFilter,
-                "query" =>$query
-            );
-        }
+        else if ($queryType=="custom"){
+            //if doing custom search, the fields should be specified in the query string itself.
+            $searchParams['body']['query']['query_string'] = array( "query" => $criteria->getSearchString());
+         }
 
         // setup facets
         $tags =  array('terms'=>array('field'=>'tag','size'=>10));

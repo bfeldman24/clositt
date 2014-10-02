@@ -64,8 +64,8 @@ body{
         <div class="col-xs-12 col-sm-2 form-group">
             <label for="search-type">Search Type</label>
             <select class="form-control" id="search-type">
-                <option value="multimatch">Multi Match</option>
                 <option value="querystring">Query String</option>
+                <option value="custom">Custom</option>
             </select>
         </div>
         <div class="col-xs-12 col-sm-2 form-group">
