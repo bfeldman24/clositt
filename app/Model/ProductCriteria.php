@@ -13,6 +13,14 @@ class ProductCriteria{
 	private $maxPrice;
     private $fieldWeightings;
     private $queryType;
+    
+    public function __construct(){
+        $this->companies = array();
+        $this->customers = array();
+        $this->categories = array();
+        $this->colors = array();
+        $this->tags = array();
+    }
 
 	//Getters and Setters
 	public function getCompanies() {
@@ -122,7 +130,7 @@ class ProductCriteria{
 		
 		$productCriteria->setCompanies(BaseEntity::getPostField($row, 'company'));				
 		$productCriteria->setCustomers(BaseEntity::getPostField($row, 'customer'));		
-        $productCriteria->setColors(BaseEntity::getPostField($row, 'colors'));		
+        $productCriteria->setColors(BaseEntity::getPostField($row, 'color'));		
 		$productCriteria->setSearchString(BaseEntity::getPostField($row, 'searchTerm'));		
     	$productCriteria->setMinPrice(BaseEntity::getPostField($row, 'abovePrice'));
     	$productCriteria->setMaxPrice(BaseEntity::getPostField($row, 'belowPrice'));

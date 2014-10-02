@@ -489,7 +489,7 @@ class ProductAdminDao extends AbstractDao {
                 $params = array($criteria['sku'], $swatch);                               
                 $affectedRows = $stmt->execute($params); 
                 
-                if ($this->PEAR->isError($affected)) {
+                if ($this->PEAR->isError($affectedRows)) {
         			$this->logError("928372923" ,$affectedRows->getMessage(),$sql);
         		    return false;
         		} 
@@ -529,7 +529,7 @@ class ProductAdminDao extends AbstractDao {
                 $params = array($criteria['sku'], $size);                               
                 $affectedRows = $stmt->execute($params); 
                 
-                if ($this->PEAR->isError($affected)) {
+                if ($this->PEAR->isError($affectedRows)) {
         			$this->logError("65223423" ,$affectedRows->getMessage(),$sql);
         		    return false;
         		} 
@@ -600,6 +600,6 @@ class ProductAdminDao extends AbstractDao {
         $sql .= " WHERE " . PRODUCT_SKU . " IN (" . $skuPlaceholders . ")"; 
         
         return $this->update($sql, $params, $paramTypes, "09874073492");						    
-	}
+	}				
 }
 ?>

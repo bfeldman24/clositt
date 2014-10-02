@@ -20,9 +20,21 @@ var session = {
 	       session.updateLoggedOutDropdownMenu();
 	       session.loggedOutCallback();
 	   }	   	   
+
+        $(document).on("click", ".loggedoutBtns .register", function(e){
+            e.preventDefault();
+            $("#signupModalTabBtn").tab('show');
+        });       
+        
+        $(document).on("click", ".loggedoutBtns .login", function(e){
+            e.preventDefault();
+            $("#loginModalTabBtn").tab('show');
+        });   
 	},
 	
 	login: function(email, password, remember){
+		
+		$("#loginModalSubmit").addClass("disabled").val("Logging in...");
 		
 		$.post( window.HOME_ROOT + "u/login", {e: email, p: password, remember: remember }, function(result){
 	          try{
@@ -36,17 +48,20 @@ var session = {
      			     session.loggedInCallback(); 
 	               }      
 	          }catch(e){
-	               Messenger.error("The username/password were incorrect! Please try again."); 		               
+	               Messenger.error("The username/password were incorrect! Please try again."); 		               	               
  			  }	
  			  
  			  if (!session.isLoggedIn){
- 			        $("#signupModalLoginButton").removeClass("disabled").text("Login"); 
+ 			        $("#loginModalSubmit").removeClass("disabled").val("Login Now"); 
  			  }
 		});				                           	
 	},
 	
 	signup: function(email, password, remember, name, username){
-		$.post( window.HOME_ROOT + "u/signup", {e: email, n: name, p: password, cp: password, remember: remember }, function(result){
+	   
+	    $("#signupModalSubmit").addClass("disabled").val("Signing Up...");
+	    
+		$.post( window.HOME_ROOT + "u/signup", {e: email, n: name, p: password, remember: remember }, function(result){
 		      try{
 	               var user = JSON.parse(result);
 	               
@@ -59,11 +74,15 @@ var session = {
 	               }         
 	          }catch(e){
 	               Messenger.error("Whoops! We encountered an issue while signing you up!");
-	               Messenger.error("Please try again or use the contact link at the bottom of the page to let us investigate the issue.");	               
+	               Messenger.error("Please try again or use the contact link at the bottom of the page to let us know of the issue.");	               
     		     
     		       var userData = { e: email, n: name, s: "Failed Signup Attempt", t: "issue" };
-    		       $.post(window.HOME_ROOT + "app/email.php", userData);
- 			  }			  
+    		       $.post(window.HOME_ROOT + "e/contact", userData);
+ 			  }	
+ 			  
+ 			  if (!session.isLoggedIn){
+ 			        $("#signupModalSubmit").removeClass("disabled").val("Sign Up"); 
+ 			  }		  
         });
 				
 	},	
@@ -107,30 +126,77 @@ var session = {
 		}   
 	},
 	
-	updateLoggedInDropdownMenu: function(){	   
+	updateLoggedInDropdownMenu: function(){	 
+	    var pageUrl;
+	    var linkTitle;
+	    var linkClass;
+	    var icon;
+	    var iconTag;
+	    
+	    if (location.href.indexOf("clositt") > 0){
+	       pageUrl = "#";
+	       linkTitle = session.nickname + "'s Account";  
+	       icon = "glyphicon glyphicon-user";
+	       iconTag = "<span>";
+	       linkClass = "user-settings";
+	    }else{
+	       pageUrl = window.CLOSITT_PAGE;
+	       linkTitle = session.nickname + "'s Clositt";
+	       icon = "icon-svg20"; // hanger
+	       iconTag = "<i>";
+	       linkClass = "";
+	    }
+	     
 		$("#loginBtns").html("")	    	
-	    	.append( $('<li>').append( $('<a>').attr('href', window.SETTINGS_PAGE)
-    	    	.append(
-    	    	      $("<span>").addClass("glyphicon glyphicon-user")
-    	    	).append( 
-    	    	      $("<span>").text(" " + session.nickname)
-    	    	))
+	    	.append( 
+        	      $('<li>').append( $('<a>').attr('href', pageUrl).addClass(linkClass)	    	      
+        	    	 .append(
+        	    	      $("<span>").append( 
+        	    	            $(iconTag).addClass(icon)
+        	    	      ).append(
+                                $("<span>").text(" " + linkTitle)
+                	      )
+    	    	     )
+    	       )
     	    )
 	    	.append( $('<li>').append( $('<a>').attr('onclick', 'session.logout()').text('Logout')));
+	    	
+	    $(document).on("click", ".user-settings", session.showUserAccountModal);
 	},
 	
 	updateLoggedOutDropdownMenu: function(){
 	   
 		$("#loginBtns").html("")
-		    .append( $('<li>').addClass("loggedoutBtns").append( $('<a>').addClass("btn btn-default").attr('onclick','showSigninModal()').text('LOGIN')))
-		    .append( $('<li>').addClass("loggedoutBtns").append( $('<a>').addClass("btn btn-default inverse").attr('href',window.HOME_ROOT + 'signup.php').text('SIGNUP')));		
+		    .append( $('<li>').addClass("loggedoutBtns").append( 
+		          $('<a>').addClass("login").attr('data-toggle','modal').attr("data-target","#loginSignupModal").append(
+		              $("<span>").append( 
+        	    	            $("<i>").addClass("icon-svg20")
+        	    	      ).append(
+                                $("<span>").text(" My Clositt")
+                	      )
+		          )
+		     ))
+		    .append( $('<li>').addClass("loggedoutBtns active").append( 
+		          $('<a>').addClass("register").attr('data-toggle','modal').attr("data-target","#loginSignupModal").text('Register')
+		     ));			    		    	
 	},	
 
  	logout: function(){	 	   	  								
 		$.post( window.HOME_ROOT + "u/logout", function(user){
 	          location.href= window.HOME_ROOT;
 		});				                           	
-	}
+	},
+	
+	showUserAccountModal: function (e) {		   
+	    	    
+	    $("#userModal").modal({
+	       show: true,
+	       remote: window.HOME_ROOT + "/settings"
+	    });
+	    	    	    	           
+        e.preventDefault();
+        return false;  		    
+    },
 };
 
 

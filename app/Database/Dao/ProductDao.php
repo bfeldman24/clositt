@@ -19,10 +19,13 @@ class ProductDao extends AbstractDao {
 				" p." . PRODUCT_NAME . ", " .
 				" p." . PRODUCT_LINK . ", " .
 				" p." . PRODUCT_IMAGE . ", " .
-				" p." . PRODUCT_PRICE . ", " .
+				" p." . PRODUCT_PRICE . ", " .				
+				" p." . PRODUCT_COLOR_ONE . ", " .
+				" p." . PRODUCT_COLOR_TWO . ", " .
 				" p." . PRODUCT_COMMENT_COUNT . ", " .
 				" p." . PRODUCT_CLOSITT_COUNT . ", " .
 				" p." . PRODUCT_SHORT_LINK . ", " .
+				" p." . PRODUCT_DETAIL_UPDATED . ", " .
 				" p." . PRODUCT_STATUS . 
 				" FROM " . PRODUCTS . " p ";
 		
@@ -122,13 +125,14 @@ class ProductDao extends AbstractDao {
 				"h." . PRODUCT_SKU . ", " .
 				"h." . HISTORICAL_OLD_PRICE . ", " .				
 				"h." . HISTORICAL_NEW_PRICE . ", " .
-				"h." . HISTORICAL_DATE . 				
-				" FROM " . HISTORICAL_PRICES . " h ";
+				"h." . HISTORICAL_DATE . ", " .
+				"p." . PRODUCT_CREATED_ON .  				
+				" FROM " . HISTORICAL_PRICES . " h " . 
+				" INNER JOIN " . PRODUCTS . " p ON p.". PRODUCT_SKU . " = h. " . PRODUCT_SKU;
 		
 		if (substr_count($productId, "-") <= 1){
 		     $sql .= " WHERE h." . PRODUCT_SKU . " = ? ";
 		}else{
-		     $sql .= " INNER JOIN " . PRODUCTS . " p ON p.". PRODUCT_SKU . " = h. " . PRODUCT_SKU;
 		     $sql .= " WHERE p." . PRODUCT_SHORT_LINK . " = ? ";
 		}
 		
@@ -352,7 +356,7 @@ class ProductDao extends AbstractDao {
 		$params[] = $start;
 		$paramTypes[] = 'integer';
 
-		return $this->getResults($sql, $params, $paramTypes, "3248272");
+		return $this->getResults($sql, $params, $paramTypes, "32482723");
 
 	}
 
@@ -386,5 +390,29 @@ class ProductDao extends AbstractDao {
         
         return $sql;
 	}
+	
+	public function getProductSwatches($sku){
+	    if (!isset($sku) || trim($sku) == ""){
+	       return "Missing Data";   
+	    }
+	   
+	    $sql = "SELECT ".SWATCHES_IMAGE." FROM ".SWATCHES." WHERE ".PRODUCT_SKU." = ?";
+		
+		$paramTypes = array('text');
+		$params = array($sku);
+		return $this->getResults($sql, $params, $paramTypes, "75853789");	
+	}
+	
+	public function getProductSizes($sku){
+	    if (!isset($sku) || trim($sku) == ""){
+	       return "Missing Data";   
+	    }
+	   
+	    $sql = "SELECT ".SIZES_SIZE." FROM ".SIZES." WHERE ".PRODUCT_SKU." = ?";
+		
+		$paramTypes = array('text');
+		$params = array($sku);
+		return $this->getResults($sql, $params, $paramTypes, "23985792");	
+	}		
 }
 ?>

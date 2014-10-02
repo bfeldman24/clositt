@@ -49,22 +49,14 @@ $("#subheader-myclositt").on('click', function(e){
     }else{
         e.preventDefault();
         Messenger.error("We'd love to show you your Clositt, but first you need to sign in.");
-        $("#signinModal").modal('show');        
+        $("#loginSignupModal").modal('show');        
         return false;
     } 
 });
 
-$('#signinModal').on('shown', function () {
+$('#loginSignupModal').on('shown.bs.modal', function(e){
     $("#loginModalTab-inputEmail").focus();
-})
-
-$('#signinModal a[data-toggle="tab"]').on('shown', function (e) {     
-    if($(e.target).attr("href") == "#loginModalTab"){
-        $("#signupModalLoginButton").text("Login");
-    }else{
-        $("#signupModalLoginButton").text("Sign Up");   
-    }        
-})
+});
 
 $('#loginModalTab-inputPassword, #signupModalTab-inputPassword2, #signupModalTab-inputPassword').keyup(function(e) {
     e.preventDefault();	 
@@ -78,18 +70,22 @@ $('#loginModalTab-inputPassword, #signupModalTab-inputPassword2, #signupModalTab
 });
 
 
-$("#signupModalLoginButton").on("click",function(event){
+$("#signupModalSubmit, #loginModalSubmit").on("click",function(event){
 	event.preventDefault();
 	submitSigninModal();	 	 	 	
 	return false;
 });
 
-function showSigninModal(){
-    $("#signinModal").modal('show');   
-}
+$(".showLoginTab").on("click", function(event){
+    $('#loginModalTabBtn').tab('show');
+});
+
+$(".showSignupTab").on("click", function(event){
+    $('#signupModalTabBtn').tab('show');
+});
 
 function submitSigninModal(){
-    if ($('#signinModal li.active a[data-toggle="tab"]').attr("href") == "#loginModalTab"){
+    if ($('#loginSignupModal li.active a[data-toggle="tab"]').attr("href") == "#loginModalTab"){
             if($('#loginModalTab-inputPassword').val().length > 5){
      
          		var email = $("#loginModalTab-inputEmail").val();
@@ -97,8 +93,7 @@ function submitSigninModal(){
          		var remember = true;		
          					  	
          		sessionStorage.goToClositt = true;			  	
-         	  	session.login(email,password,remember);		    
-         	  	$("#signupModalLoginButton").addClass("disabled").text("Logging in...");
+         	  	session.login(email,password,remember);		             	  	
          	}else{
          		Messenger.info("Login information is incorrect");	
          	} 
@@ -107,14 +102,10 @@ function submitSigninModal(){
 	        var valid = false;
 	      
 	        
-            if($('#signupModalTab-inputPassword').val().length > 5 && $('#signupModalTab-inputPassword2').val().length > 5){
-                    if($('#signupModalTab-inputPassword2').val() == $('#signupModalTab-inputPassword').val()){                   
-                            valid = true;                    
-                    }else{					              	
-                            Messenger.error("Passwords do NOT match!");                     
-                    }
+            if($('#signupModalTab-inputPassword').val().length > 5){                    
+                valid = true;                    
             }else{
-                    Messenger.error("Passwords do NOT match!");        
+                Messenger.error("Passwords do NOT match!");        
             }
           
           	if(valid){
@@ -126,7 +117,6 @@ function submitSigninModal(){
           	
           	    sessionStorage.goToClositt = true;
           		session.signup(email, password,remember,name, username);
-          		$("#signupModalLoginButton").addClass("disabled").text("Signing up...");
           	}else{
           		console.log("invalid");	
           	}

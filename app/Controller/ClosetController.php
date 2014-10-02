@@ -147,7 +147,7 @@ class ClosetController extends Debugger {
         return false;
 	}
 	
-	public function getAllClosets(){
+	public function getAllClosets($json = true){
 	   $closets = array();
 	   $closetResults = $this->closetDao->getAllClosets($_SESSION['userid']);	   
 	   
@@ -158,18 +158,18 @@ class ClosetController extends Debugger {
 				$closets[] = $closetEntity->toArray();				
 			}			
 	   }
-	   	   
-		return stripslashes(json_encode($closets));
+	   
+	   if ($json){	   
+	       return stripslashes(json_encode($closets));	       
+	   }else{
+	       return $closets;
+	   }
 	}
 	
-	public function getAllClosetItems($data){
-	   if (!isset($data)){
-	       return "No data";    
-	   }
-	   
-	   $owner = isset($data['owner']) ? $data['owner'] : null;
-	   
+	public function getAllClosetItems($data = null, $json = false){
 	   $closetItems = array();
+	   	   	   
+	   $owner = isset($data['owner']) ? $data['owner'] : null;	   	   
 	   
 	   if (!isset($owner)){
 	       $owner = $_SESSION['userid'];
@@ -189,8 +189,12 @@ class ClosetController extends Debugger {
 				$closetItems[$closetName][] = $closetItemEntity->toArray();				
 			}			
 	   }	 
-	   	   
-		return stripslashes(json_encode($closetItems, true));
-	}				
+	   
+	   if ($json){	   
+	       return stripslashes(json_encode($closetItems, true));
+	   }else{
+	       return $closetItems;   
+	   }
+	}					
 }
 ?>

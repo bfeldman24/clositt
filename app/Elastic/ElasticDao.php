@@ -48,8 +48,7 @@ class ElasticDao{
         return $results;
     }
 
-	public function getProductsWithCriteria($criteria, $pageNumber, $numResultsPage){
-
+	public function getProductsWithCriteria($criteria, $pageNumber, $numResultsPage){        
 		$searchParams = $this->buildQuery($criteria, $pageNumber, $numResultsPage);
         $products = array();
         $facets = array();
@@ -61,7 +60,7 @@ class ElasticDao{
             //TODO log error here
         }
 
-		if (is_array($retDoc)){
+		if (isset($retDoc) && is_array($retDoc)){
 			foreach ($retDoc['hits']['hits'] as $hit) {
 				$doc = $hit['_source'];
                 $doc['score'] = $hit['_score'];

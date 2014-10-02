@@ -9,17 +9,19 @@ class FilterView {
 	       return null;
 	    }	
         
+        ob_start();
         ?>                            
+        
         <section id="nav">
-            <div class="container">
+            <div class="container" id="filters">
                 <h4 class="text-center">Narrow by:</h4>
-                <div class="col-sm-offset-1 col-md-offset-2">
+                <div class="col-sm-offset-1 col-md-offset-3">
                     <div class="nav">
                         <ul>
                             <li>
-                                <div class="btn-group">
+                                <div class="btn-group ">
                                     <button type="button" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Item Type <span class="icon-svg19"></span></button>
-                                    <ul class="dropdown-menu brand-box search-results filter-drop" role="menu">
+                                    <ul class="dropdown-menu brand-box search-results filter-drop filter-options" role="menu" filterType="category">
                                         <?php FilterView::getCategoryFilters($filters['category']); ?>
                                     </ul>
                                 </div>
@@ -28,11 +30,11 @@ class FilterView {
                             <li>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Size <span class="icon-svg19"></span></button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="javascript:void();">&nbsp;</a></li>
-                                        <li><a href="javascript:void();">&nbsp;</a></li>
-                                        <li><a href="javascript:void();">&nbsp;</a></li>
-                                        <li><a href="javascript:void();">&nbsp;</a></li>
+                                    <ul class="dropdown-menu filter-options" role="menu" filterType="size">
+                                        <li><a >&nbsp;</a></li>
+                                        <li><a >&nbsp;</a></li>
+                                        <li><a >&nbsp;</a></li>
+                                        <li><a >&nbsp;</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -40,7 +42,7 @@ class FilterView {
                             <li>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Color <span class="icon-svg19"></span></button>
-                                    <ul class="dropdown-menu color-box" role="menu">
+                                    <ul class="dropdown-menu color-box filter-options" role="menu" filterType="color">
                                         <?php FilterView::getColorFilter($filters['color']); ?>
                                     </ul>
                                 </div>
@@ -48,7 +50,7 @@ class FilterView {
                             <li>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Price <span class="icon-svg19"></span></button>
-                                    <ul class="dropdown-menu" role="menu">
+                                    <ul class="dropdown-menu brand-box filter-drop filter-options" role="menu" filterType="price">
                                         <?php FilterView::getPriceFilter($filters['price']); ?>
                                     </ul>
                                 </div>
@@ -57,41 +59,41 @@ class FilterView {
                                 <div class="btn-group ">
                                     <button type="button" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Brand/Store <span class="icon-svg19"></span></button>
                                     <ul class="dropdown-menu scrollTo brand-box" role="menu">
-                                        <li class="alphabets">                                        
-                                            <a rel="#0" href="javascript:void();">#</a>
-                                            <a rel="#a" href="javascript:void();">A</a> 
-                                            <a rel="#b" href="javascript:void();">B</a> 
-                                            <a rel="#c" href="javascript:void();">C</a> 
-                                            <a rel="#d" href="javascript:void();">D</a> 
-                                            <a rel="#e" href="javascript:void();">E</a> 
-                                            <a rel="#f" href="javascript:void();">F</a> 
-                                            <a rel="#g" href="javascript:void();">G</a> 
-                                            <a rel="#h" href="javascript:void();">H</a> 
-                                            <a rel="#i" href="javascript:void();">I</a> 
-                                            <a rel="#j" href="javascript:void();">J</a> 
-                                            <a rel="#k" href="javascript:void();">K</a> 
-                                            <a rel="#l" href="javascript:void();">L</a> 
-                                            <a rel="#m" href="javascript:void();">M</a> 
-                                            <a rel="#n" href="javascript:void();">N</a> 
-                                            <a rel="#o" href="javascript:void();">O</a> 
-                                            <a rel="#p" href="javascript:void();">P</a> 
-                                            <a rel="#q" href="javascript:void();">Q</a> 
-                                            <a rel="#r" href="javascript:void();">R</a> 
-                                            <a rel="#s" href="javascript:void();">S</a> 
-                                            <a rel="#t" href="javascript:void();">T</a> 
-                                            <a rel="#u" href="javascript:void();">U</a> 
-                                            <a rel="#v" href="javascript:void();">V</a> 
-                                            <a rel="#w" href="javascript:void();">W</a> 
-                                            <a rel="#x" href="javascript:void();">X</a> 
-                                            <a rel="#y" href="javascript:void();">Y</a> 
-                                            <a rel="#z" href="javascript:void();">Z</a> 
+                                        <li class="alphabets">
+                                            <a rel="#0">#</a> 
+                                            <a rel="#a">A</a> 
+                                            <a rel="#b">B</a> 
+                                            <a rel="#c">C</a> 
+                                            <a rel="#d">D</a> 
+                                            <a rel="#e">E</a> 
+                                            <a rel="#f">F</a> 
+                                            <a rel="#g">G</a> 
+                                            <a rel="#h">H</a> 
+                                            <a rel="#i">I</a> 
+                                            <a rel="#j">J</a> 
+                                            <a rel="#k">K</a> 
+                                            <a rel="#l">L</a> 
+                                            <a rel="#m">M</a> 
+                                            <a rel="#n">N</a> 
+                                            <a rel="#o">O</a> 
+                                            <a rel="#p">P</a> 
+                                            <a rel="#q">Q</a> 
+                                            <a rel="#r">R</a> 
+                                            <a rel="#s">S</a> 
+                                            <a rel="#t">T</a> 
+                                            <a rel="#u">U</a> 
+                                            <a rel="#v">V</a> 
+                                            <a rel="#w">W</a> 
+                                            <a rel="#x">X</a> 
+                                            <a rel="#y">Y</a> 
+                                            <a rel="#z">Z</a> 
                                         </li>
                                         <li>
                                             <input type="text" class="form-control drop-search input-search" placeholder="Search">
                                         </li>
                                         <li>
-                                            <ul class="search-results">
-                                                <?php FilterView::getStoreFilter($filters['company']); ?>                                            	
+                                            <ul class="search-results filter-options" filterType="company">
+                                            	<?php FilterView::getStoreFilter($filters['company']); ?>
                                             </ul>
                                         </li>
                                     </ul>
@@ -99,21 +101,25 @@ class FilterView {
                             </li>
                         </ul>
                     </div>
-                    <div class="tag"><span>T-Shirt <a href="javascript:void();" class="icon-svg4"></a></span></div>
+                    <div class="tag selectedFilters"></div>
                 </div>
             </div>
         </section>
-        <?php   
+            
+    <?php   
+        
+        $html = ob_get_clean();
+        return preg_replace('/^\s+|\n|\r|\s+$/m', '', $html);
     }
     
     public static function getCategoryFilters($categories){
         
         foreach ($categories as $category => $subcategories){
-            echo '<li><a class="select_filter" href="javascript:void();">'.$category.'</a>';
+            echo '<li><a>'.$category.'</a>';
             
             echo '<ul>';
             foreach ($subcategories as $subcategory){
-                echo '<li><a class="select_filter" href="javascript:void();">'.$subcategory[0].'</a></li>';    
+                echo '<li><a class="select_filter" value="'.$subcategory[0].'">'.$subcategory[0].'</a></li>';    
             }           
             echo '</ul>';
             
@@ -123,14 +129,14 @@ class FilterView {
     
     public static function getColorFilter($colors){
         foreach ($colors as $name => $hex){
-            echo '<li><a style="background-color:'.$hex.'" title="'.$name.'" href="javascript:void();">&nbsp;</a></li>';
+            echo '<li><a class="select_filter" style="background-color:'.$hex.'" title="'.$name.'" value="'.$name.'">&nbsp;</a></li>';
         }        
     }
     
     public static function getPriceFilter($prices){
         
         for ($i=0; $i < count($prices) - 1; $i++){                                  
-            echo '<li><a href="javascript:void();">'.$prices[$i].' - '.$prices[$i + 1].'</a></li>';               
+            echo '<li><a class="select_filter" value="'.$prices[$i].' - '.$prices[$i + 1].'" min="'.$prices[$i].'" max="'.$prices[$i + 1].'">'.$prices[$i].' - '.$prices[$i + 1].'</a></li>';               
         }         
     }
     
@@ -140,17 +146,20 @@ class FilterView {
         foreach ($stores as $store){
             $firstLetter = strtolower(substr($store[0], 0, 1));
             
-            if (!in_array($firstLetter, $firstLetters)){
-                $firstLetters[] = $firstLetter;
-                
-                if (is_numeric($firstLetter)){
-                    $firstLetter = "#"; 
+            if (isset($firstLetter) && $firstLetter != ""){
+                                
+                if (!in_array($firstLetter, $firstLetters)){
+                    $firstLetters[] = $firstLetter;
+                    
+                    if (is_numeric($firstLetter)){
+                        $firstLetter = "0"; 
+                    }
+                    
+                    echo '<li id="'.$firstLetter.'"></li>';
                 }
                 
-                echo '<li id="'.$firstLetter.'"></li>';
+                echo '<li><a class="select_filter" value="'.$store[0].'" >'.$store[0].'</a></li>';               
             }
-            
-            echo '<li><a href="javascript:void();">'.$store[0].'</a></li>';               
         }                
     }
 

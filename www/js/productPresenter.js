@@ -5,140 +5,10 @@ var productPresenter = {
 	filterStore: null, 
 	populateStoreCallback: null,		
 	
-	init: function(){				
+	init: function(){	
+	    $(document).on('click','.imagewrap', productPresenter.showProductModal);
 	},		
- 
-	getProductTemplate: function(product){
-	    if (product == null || typeof(product) != "object"){      	
-	       return $("");
-	    }
-	    
-		var company = product.o;
-		var audience = product.u;
-		var category = product.a;
-		var link = product.l;
-		var image = product.i;
-		var name = product.n;		
-		var reviewCount = product.rc == null ? 0 : product.rc;
-		var closetCount = product.cc == null ? 0 : product.cc;
-		var closetCountPlural = closetCount == 1 ? "" : "s"; 
-		var id = product.s;
-		var shortlink = product.sl;
-		var price = product.p == null || isNaN(product.p) ? "" : "$" + Math.round(product.p);		 	
- 		var filterPrice = product.fp; 		 		
- 		var feedOwner = product.owner;
-		var feedCloset = product.closet;
-
-		var rand = Math.floor(Math.random() * 3) + 1;
-		var shadow = "";
-		if(rand == 1){
-			shadow = 'shadow';	
-		}		
-			 			
- 		//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
- 		var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
-		var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'">';
-				html +='<a class="productPage" target="_blank"><div class="picture"><img data-src="' + image + '" src="css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';			
-				html += '<div class="bottom-block">';
-				    html +='<div class="companyName">' + company + '</div>';
-					html +='<div class="price">' +  price + '</div>';
-				html += '</div>';
-				
-				html +='<div class="overlay">';
-					html +='<div class="topleft">';										
-						html +='<div class="shareOutfitBtn" data-toggle="tooltip" data-placement="left" title="Share it!"><img class="social-people-icon" src="css/images/social/social-people.png" /></div>';						 
-					html += '</div>';
-					html += '<div class="social-btns" style="display:none;"></div>';
-					html +='<div class="topright">';										
-						html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Clositt"><img class="hanger-icon" src="css/images/hanger-icon.png" /><i class="icon-plus-sign hanger-plus"></i></div>';
-					html += '</div>';
-					html +='<div class="bottom">';						    					    
-					    html += '<div class="productActions" >';					    
-					       html += '<span data-toggle="tooltip" data-placement="top" data-animation="false" title="Add to Wish List" class="addToWishList"><i class="icon-gift"></i></span>';
-					       html += '<span data-toggle="tooltip" data-placement="top" data-animation="false" title="Show Comments" class="showComments numReviews"><span class="counter" >'+reviewCount+'</span><i class="icon-comment"></i></span>';
-					       html += '<span data-toggle="tooltip" data-placement="top" data-animation="false" title="Added to '+closetCount+' Clositt'+closetCountPlural+'" class="numClosets"><span class="counter">'+closetCount+'</span><i class="icon-hanger"></i></span>';
-					    html += '</div>';									
-					    
-					    if(feedOwner != null && feedCloset != null){
-					       html += '<div class="productSubHeader" >';
-	   				            html += '<div class="outfitFeedOwner"><span class="outfitOwner">'+feedOwner+'\'s</span><span>&nbsp;\"'+feedCloset+'\" clositt</span></div>';
-    					    html += '</div>';  
-					    }
-					    					    					
-						//html +='<div class="companyName">' + company + '</div>';
-						//html +='<div class="price">' +  price + '</div>';
-						html +='<div class="name">' + name + '</div>';
-					html += '</div>';
-					html += '<div class="product-comments"></div>';
-					html += '<div class="addToClosetForm" style="display:none;"></div>';
-				html += '</div>';
-				html += '<div class="clear"></div>';				
-			html +='</div>';
-			
-		return $(html);
-	},
-	
-//	getStoreProductTemplate: function(product){	    
-//	    
-//	    var company = product.o;
-//		var audience = product.u;
-//		var category = product.a;
-//		var link = product.link;
-//		var image = product.image;
-//		var name = product.name;		
-//		var reviewCount = product.rc == null ? 0 : product.rc;
-//		var closetCount = product.cc == null ? 0 : product.cc;
-//		var closetCountPlural = closetCount == 1 ? "" : "s"; 
-//		var id = product.sku;
-//		var price = product.price == null || isNaN(product.price) ? "" : "$" + Math.round(product.price);		 	
-// 		var filterPrice = product.fp; 		 		
-// 		var feedOwner = product.owner;
-//		var feedCloset = product.closet;
-//
-//		var rand = Math.floor(Math.random() * 3) + 1;
-//		var shadow = "";
-//		if(rand == 1){
-//			shadow = 'shadow';	
-//		}		
-//			 			
-// 		//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
-// 		var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
-//		var html ='<div class="outfit item" '+attr+' pid="'+id+'">';
-//				html +='<div class="picture"><a class="productPage" target="_blank"><img src="' + image + '" class="'+shadow+'" onerror="return pagePresenter.handleImageNotFound(this)"/></a></div>';			
-//				html +='<div class="overlay">';
-//					html +='<div class="topleft">';										
-//						html +='<div class="tagOutfitBtn" data-toggle="tooltip" data-placement="left" title="Tagitt"><i class="icon-tags icon-white"></i></div>';						 
-//					html += '</div>';
-//					html += '<div class="addTagForm" style="display:none;"></div>';
-//					html +='<div class="topright">';										
-//						html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Clositt"><img class="hanger-icon" src="css/images/hanger-icon-white.png" /><i class="icon-plus-sign icon-white hanger-plus"></i></div>';
-//					html += '</div>';
-//					html +='<div class="bottom">';						    					    
-//					    html += '<div class="productActions" >';					    
-//					       html += '<span data-toggle="tooltip" data-placement="top" title="Add to Wish List" class="addToWishList"><i class="icon-gift icon-white"></i></span>';
-//					       html += '<span data-toggle="tooltip" data-placement="top" title="Show Comments" class="showComments numReviews"><span class="counter" >'+reviewCount+'</span><i class="icon-comment icon-white"></i></span>';
-//					       html += '<span data-toggle="tooltip" data-placement="top" title="Added to '+closetCount+' Clositt'+closetCountPlural+'" class="numClosets"><span class="counter">'+closetCount+'</span><i class="icon-hanger-white"></i></span>';
-//					    html += '</div>';									
-//					    
-//					    if(feedOwner != null && feedCloset != null){
-//					       html += '<div class="productSubHeader" >';
-//	   				            html += '<div class="outfitFeedOwner"><span class="outfitOwner">'+feedOwner+'\'s</span><span>&nbsp;\"'+feedCloset+'\" clositt</span></div>';
-//    					    html += '</div>';  
-//					    }
-//					    					
-//						html +='<div class="companyName">' + company + '</div>';
-//						html +='<div class="price">' +  price + '</div>';
-//						html +='<div class="name">' + name + '</div>';
-//					html += '</div>';
-//					html += '<div class="product-comments"></div>';
-//					html += '<div class="addToClosetForm" style="display:none;"></div>';
-//				html += '</div>';
-//				html += '<div class="clear"></div>';				
-//			html +='</div>';
-//			
-//		return $(html);
-//	},
-	
+ 		
 	getClosetItemTemplate: function(sku, image){	    
 	    var html = '';
 	    
@@ -195,5 +65,44 @@ var productPresenter = {
 	
 	formatSku: function(sku){
 	   return sku.substring(sku.indexOf("_") + 1);  
-	}
+	},
+	
+	showProductModal: function (e) {		   
+	    if ($(e.currentTarget).parents("#product").length > 0){
+	         // Do not open the modal if you are clicking from within the modal already
+	         return;
+	    }
+	   
+	    var sku = $(e.currentTarget).parents(".outfit").attr("pid");
+	    
+	    if ( $("#productModal #product").length <= 0){
+	       $('#productModal').modal("show");
+	    }
+	    
+	    $("#productModal .modal-content").load( window.HOME_ROOT + "d/" + sku, function(response, status, xhr) {
+	        if (status == "success"){
+                $('#productModal').modal("show");
+	        }else{
+	           $('#productModal').modal("hide");
+	        }
+        });	   		    
+    },
+    
+    showImageCallback: function(){
+        
+        $(this).on("load", function(){
+            $(this).prev().remove();
+            $(this).show(); 
+        });
+        
+        return true;
+    },
+    
+    handleImageNotFound:  function(img) {
+        var sku = $(img).parents(".outfit").attr("pid");
+        $(img).removeAttr("data-src");
+        $(img).removeAttr("onerror");
+        $(img).attr( "src", window.HOME_ROOT + "i/" + sku);                       
+        return true;
+    }	   			
 };

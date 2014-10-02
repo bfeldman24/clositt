@@ -163,11 +163,8 @@ class FilterController extends Debugger {
            }
            
            $htmlFile = fopen($this->filterHtmlFile, 'w');           
-           if ($htmlFile){
-               ob_start();
-               FilterView::getNavigationSection($filters);
-               $filterHtml = ob_get_contents();
-               ob_end_clean();
+           if ($htmlFile){               
+               $filterHtml = FilterView::getNavigationSection($filters);
                
                fwrite($htmlFile, $filterHtml);
                fclose($htmlFile);

@@ -8,7 +8,7 @@ if (!strpos($page, "whoops.php")){
 }
 
 ?>
-<!DOCTYPE>
+<!DOCTYPE HTML>
 <html>
 <head>
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		

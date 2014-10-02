@@ -1,13 +1,15 @@
+<?php include(dirname(__FILE__) . '/modals.php');   ?>
+
 <?php echo CLOSITT_JS; ?>
-<script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/greensock.js"></script>
-<script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/layerslider.js"></script>
-<script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/layerslider.kreaturamedia.jquery.js"></script>
-<script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/layerslider.transitions.js"></script>
+<script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/jquery.flexslider.js"></script>
+<script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/jquery.flexslider-min.js"></script>
 <script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/highcharts.js"></script>
 <script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/exporting.js"></script>
 <script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/owl.carousel.js"></script>
 <script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/jquery.mCustomScrollbar.js"></script>
 <script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/custom.js"></script>
+
+
 
 <script type="text/javascript">
     var sessionInit = {            

@@ -12,10 +12,16 @@ class ListController{
 	}
 	
 	public static function writeToFile($fileName, $item){
-	   self::init();
+	   self::init();	   
 	   
 	   if (isset($fileName) && isset($item)){
-	       $userInfo =  ", " . $_SESSION['userid'] . ", " . $_SERVER['REMOTE_ADDR'] . ", " . date("m/d/Y H:i:s");
+	       $user = '-1';
+	    
+      	   if (isset($_SESSION['userid'])){
+      	       $user = $_SESSION['userid'];  
+      	   }
+	       
+	       $userInfo =  ", " . $user . ", " . $_SERVER['REMOTE_ADDR'] . ", " . date("m/d/Y H:i:s");
 	       
     	   $file = fopen(self::$listDirectory . $fileName . self::$extension,"a");
            $numBytes = fwrite($file,"\n" . $item . $userInfo);

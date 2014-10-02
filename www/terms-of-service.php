@@ -1,5 +1,5 @@
 <?php require_once(dirname(__FILE__) . '/../app/session.php'); ?>		
-<!DOCTYPE>
+<!DOCTYPE HTML>
 <html>
 <head>
 

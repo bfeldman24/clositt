@@ -137,7 +137,13 @@ class AbstractDao{
      * @param $msg - (string) the automoted error message by the DB or the sql paramters
      */		
 	private function log($errorLevel, $errorNum, $sql = "", $msg = ""){
-		$error = "\n" . date("m/d/y h:i:s") . " - " . $errorLevel . " - (". $errorNum . "[".$_SESSION['userid']."]) - " . $sql . ": " . $msg;
+	    $user = '';
+	    
+	    if (isset($_SESSION['userid'])){
+	       $user = "[" .$_SESSION['userid'] . "]";  
+	    }
+	   
+		$error = "\n" . date("m/d/y h:i:s") . " - " . $errorLevel . " - (". $errorNum . $user . ") - " . $sql . ": " . $msg;
 		fwrite($this->file,$error);
 	}			
 	

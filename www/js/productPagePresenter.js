@@ -23,6 +23,7 @@ var productPagePresenter = {
                             } 
                     });
             }
+            
         });
                                    
 	},

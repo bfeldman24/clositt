@@ -14,19 +14,19 @@ define("PRODUCT_PRICE","price");
 define("PRODUCT_SUMMARY","summary");
 define("PRODUCT_DETAILS","details");
 define("PRODUCT_PROMOTION","promotion");
-define("PRODUCT_PROMOTION_TWO","promotionTwo");
-define("PRODUCT_COLOR_ONE","colorOne");
-define("PRODUCT_COLOR_ONE_PERCENT","colorOnePercent");
-define("PRODUCT_COLOR_TWO","colorTwo");
-define("PRODUCT_COLOR_TWO_PERCENT","colorTwoPercent");
-define("PRODUCT_COMMENT_COUNT","commentCount");
-define("PRODUCT_CLOSITT_COUNT","closittCount");
+define("PRODUCT_PROMOTION_TWO","promotiontwo");
+define("PRODUCT_COLOR_ONE","colorone");
+define("PRODUCT_COLOR_ONE_PERCENT","coloronepercent");
+define("PRODUCT_COLOR_TWO","colortwo");
+define("PRODUCT_COLOR_TWO_PERCENT","colortwopercent");
+define("PRODUCT_COMMENT_COUNT","commentcount");
+define("PRODUCT_CLOSITT_COUNT","closittcount");
 define("PRODUCT_SHORT_LINK","shortlink");
 define("PRODUCT_STATUS","status");
 define("PRODUCT_RANDOM_INDEX","rand");
-define("PRODUCT_DATE_UPDATED","updatedOn");
-define("PRODUCT_DETAIL_UPDATED","detailsUpdatedOn");
-define("PRODUCT_CREATED_ON","createdOn");
+define("PRODUCT_DATE_UPDATED","updatedon");
+define("PRODUCT_DETAIL_UPDATED","detailsupdatedon");
+define("PRODUCT_CREATED_ON","createdon");
 
 
 // Historical Prices Table

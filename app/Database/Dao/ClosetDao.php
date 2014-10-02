@@ -100,10 +100,13 @@ class ClosetDao extends AbstractDao {
 	
 	
 	public function getAllClosetItems($owner, $isPrivate){
-	   $sql = "SELECT i." . CLOSET_ID.", c.".CLOSET_NAME.", i.".CLOSET_USER_ID.", i.".CLOSET_ITEM_SKU.", i.".CLOSET_ITEM_IMAGE. 
-                " FROM " . CLOSET_ITEMS . " i " .
-                " INNER JOIN " . CLOSETS . " c ON c.".CLOSET_ID." = i.".CLOSET_ID .
-                " WHERE i." . CLOSET_USER_ID . " = ? AND c." . CLOSET_PERMISSION . " <= ? AND i." . CLOSET_ITEM_STATUS . " = 1 ".
+	   $sql = "SELECT c." . CLOSET_ID.", c.".CLOSET_NAME.", i.".CLOSET_USER_ID.", i.".CLOSET_ITEM_SKU.", i.".CLOSET_ITEM_IMAGE.
+	                   ", p.".PRODUCT_NAME.", p.".PRODUCT_STORE.", p.".PRODUCT_PRICE.", p.".PRODUCT_SHORT_LINK. 
+                " FROM " . CLOSETS . " c " .               
+                " LEFT JOIN " . CLOSET_ITEMS . " i ON c.".CLOSET_ID." = i.".CLOSET_ID .                
+                " LEFT JOIN " . PRODUCTS . " p ON p.".PRODUCT_SKU." = i.".CLOSET_ITEM_SKU .
+                " WHERE c." . CLOSET_USER_ID . " = ? AND c." . CLOSET_PERMISSION . " <= ? AND " .
+                       "(isnull(i." . CLOSET_ITEM_STATUS . ") OR i." . CLOSET_ITEM_STATUS . " = 1) ".
                 " ORDER BY " . CLOSET_NAME;							       
 		
 		$permission = $isPrivate ? 2 : 1;

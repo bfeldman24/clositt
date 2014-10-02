@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/BaseEntity.php');
+require_once(dirname(__FILE__) . '/ProductEntity.php');
 
 // JAVASCRIPT Closet
 define("JS_CLOSET_ITEM_ID","id");
@@ -7,6 +8,7 @@ define("JS_CLOSET_ITEM_NAME","title");
 define("JS_CLOSET_ITEM_USER_ID","owner");
 define("JS_CLOSET_ITEM_SKU","item");
 define("JS_CLOSET_ITEM_IMAGE","cache");
+define("JS_CLOSET_ITEM_PRODUCT","reference");
 
 class ClosetItemEntity {
 
@@ -15,6 +17,7 @@ class ClosetItemEntity {
 	private $userId;
 	private $sku;
 	private $image;
+	private $product;
 	
 	public function getClosetId() {
 		return $this->closetId;
@@ -59,6 +62,15 @@ class ClosetItemEntity {
 		if(isset($image)){
 			$this->image = $image;
 		}
+	}
+	
+	public function getProduct() {
+		return $this->product;
+	}
+	public function setProduct($product) {
+		if(isset($product)){
+			$this->product = $product;
+		}
 	}					
 	
 		
@@ -72,6 +84,10 @@ class ClosetItemEntity {
 		$closetItemEntity->setUserId(BaseEntity::getDBField($row, CLOSET_USER_ID));
 		$closetItemEntity->setSku(BaseEntity::getDBField($row, CLOSET_ITEM_SKU));
 		$closetItemEntity->setImage(BaseEntity::getDBField($row, CLOSET_ITEM_IMAGE));	
+		
+		$product = new ProductEntity();
+		ProductEntity::setProductFromDB($product, $row);		
+		$closetItemEntity->setProduct($product);
 		
 		return $closetItemEntity;
 	}		
@@ -95,6 +111,11 @@ class ClosetItemEntity {
 		$closetItemArray[JS_CLOSET_ITEM_USER_ID] = $this->getUserId();
 		$closetItemArray[JS_CLOSET_ITEM_SKU] = $this->getSku();
 		$closetItemArray[JS_CLOSET_ITEM_IMAGE] = $this->getImage();
+		
+		$product = $this->getProduct();		
+		if (isset($product)){
+		  $closetItemArray[JS_CLOSET_ITEM_PRODUCT] = $product->toArray();
+		}
 		
 		foreach ($closetItemArray as $key => $value){
 			if(!isset($value) || $value == ""){

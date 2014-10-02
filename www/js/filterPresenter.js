@@ -9,25 +9,22 @@ var filterPresenter = {
 	
 	init: function(){		
 	    filterPresenter.allFilters = [];	  
+	    $(".search-results").mCustomScrollbar();
+	    
+        $(document).on("click", '#filters .selectedFilters>span>a', filterPresenter.removeFilter);
+        $('#filters .select_filter').click(filterPresenter.onFilterSelect);        
+        $(document).on('keyup', '#filters input.drop-search', filterPresenter.filterTypeAhead);        
+        $(document).on("click","#filters .alphabets>a", filterPresenter.scrollToStore);
 						
-		$("#filter-float").on("click",".filterHeader", filterPresenter.toggleFilterOptionsVisibility);
-		$("#filter-float").on("click",".filterSubheader", filterPresenter.toggleFilterSubOptionsVisibility);
-		$("#filter-float").on("click",".filterHeader-Customer .customerOption", filterPresenter.selectCustomerFilter);		
-		$("#filter-float").on("click",".selectedFilter-x", filterPresenter.removeFilter);
-		
-		$("#filter-float").on("click","input", filterPresenter.onFilterInputChecked);	
-		
-		//firebase.$.child('clositt/filterdata').once('value', filterPresenter.populateFilterData);	 					
-		$.getJSON(window.HOME_ROOT + "s/filters", filterPresenter.populateFilterData);
-	},
-	
-	populateFilterDataOld: function(store){		
-		var companies = store.child("companies").val();
-	 	var customers = store.child("customers").val();
-	 	var categories = store.child("categories").val();
-	 	var prices = store.child("prices").val();										 		 	
-	 	filterPresenter.createFilters(companies, customers, categories, prices);		
-	},
+//		$("#filter-float").on("click",".filterHeader", filterPresenter.toggleFilterOptionsVisibility);
+//		$("#filter-float").on("click",".filterSubheader", filterPresenter.toggleFilterSubOptionsVisibility);
+//		$("#filter-float").on("click",".filterHeader-Customer .customerOption", filterPresenter.selectCustomerFilter);		
+//		$("#filter-float").on("click",".selectedFilter-x", filterPresenter.removeFilter);
+//		
+//		$("#filter-float").on("click","input", filterPresenter.onFilterInputChecked);	
+//				
+//		$.getJSON(window.HOME_ROOT + "s/filters", filterPresenter.populateFilterData);
+	},		
 	
 	populateFilterData: function(store){		
 		var companies = store["companies"];
@@ -149,63 +146,45 @@ var filterPresenter = {
  	      if (filterPresenter.needsRefresh && !filterPresenter.pauseRefresh){
  	          filterPresenter.onFilterSelect();
  	      }
- 	},
+ 	}, 	 	
  	
- 	onFilterInputChecked: function(){
- 	      filterPresenter.needsRefresh = true; 	   	      
- 	      setTimeout(filterPresenter.onFilterSelect, 50); 	      
- 	},
- 	
- 	onFilterSelect: function(){ 	    
- 	   	    	 
- 	    $("#selectedFilters").html("");      	    
+ 	onFilterSelect: function(e){ 	     	 
  	    
+ 	    if (e != null){  	    	  	    	     	    
+    	   filterPresenter.createSelectedFilter(e);    	
+ 	    }
+ 	    
+ 	    // Search for new filters
 	 	var criteria = new Object();
 	 	var isSearch = $( "#search-bar" ).val().trim().length > 0;
-	 	var areAnyFiltersChecked = false;
-	 	var filters = new Array("filterprice","category","company");
+	 	var areAnyFiltersChecked = false;	 	
 	 	
-	 	$.each(filters, function(index, filterName) {
-	 		criteria[filterName] = new Array();
-	 		
-		 	$("#filter-float").find('input[name="'+filterName+'"]:checked').each(function(){
-		 	    areAnyFiltersChecked = true;
-		 		var name = $(this).attr("name");
-		 		var value = $(this).val().toLowerCase();
-		 		var value = value.replace(/'/g, "\\'");
-		 		filterPresenter.createSelectedFilter($(this).val(), $(this).next(".filterValueName").text());
-		 		
-		 		if(name == "filterprice"){
-		 			var abovePrice = parseInt(value);
-		 			var belowPrice = parseInt($(this).attr("max"));
-		 					 			   
-	 			   if(criteria['belowPrice'] == null || belowPrice > criteria['belowPrice']){
-	 			      criteria['belowPrice'] = belowPrice;
-	 			   }
-	 			   
-	 			   if(criteria['abovePrice'] == null || abovePrice < criteria['abovePrice']){
-	 			      criteria['abovePrice'] = abovePrice;
-	 			   }
-		 		}else{
-			 		criteria[filterName].push(value);
-		 		}
-		 	});
-	 	});
-	 		 	
-	 	var customer = filterPresenter.getSelectedCustomer();
-	 	
-	 	if (customer != null){
-	 	     criteria['customer'] = [customer];	 	
-	 	}
-	 	criteria['colors'] = colorPresenter.getSelectedColors();
-	 	
-	 	if (criteria['colors'] != null && criteria['colors'].length > 0){     
-	 	     areAnyFiltersChecked = true;
-	 	}
-	 		 	
+	 	$("#filters .selectedFilters span").each(function(){
+            areAnyFiltersChecked = true;
+            
+            var filterType = $(this).attr("filterType");
+            var filterValue = $(this).attr("value").toLowerCase().replace(/'/g, "\\'");
+            
+	 		criteria[filterType] = new Array();	 				 	
+	 	    	 		
+	 		if(filterType == "price"){
+	 			var abovePrice = parseInt($(this).attr("min"));
+	 			var belowPrice = parseInt($(this).attr("max"));
+	 					 			   
+ 			   if(criteria['belowPrice'] == null || belowPrice > criteria['belowPrice']){
+ 			      criteria['belowPrice'] = belowPrice;
+ 			   }
+ 			   
+ 			   if(criteria['abovePrice'] == null || abovePrice < criteria['abovePrice']){
+ 			      criteria['abovePrice'] = abovePrice;
+ 			   }
+	 		}else{
+		 		criteria[filterType].push(filterValue);
+	 		}
+	 	});	 		 		 
+			 		 	
 	 	if (!filterPresenter.pauseRefresh){
-	 	    productPresenter.filterStore = [];
- 	        window.scrollTo(0, pagePresenter.defaultHeaderHeight);
+	 	    productPresenter.filterStore = []; 	        
  	        gridPresenter.beginTask(); 
 	 	 
     	 	if (isSearch){
@@ -274,19 +253,7 @@ var filterPresenter = {
  	          filterPresenter.onFilterSelect();
  	      }
  	}, 	
- 	
- 	getSelectedCustomer: function(){
- 	      var selected = $("#filter-float").find(".customerOption.selected").first();
- 	       	      
- 	      if (selected.length > 0){
- 	          return selected.attr("filterid");   
- 	      }else if ($("#filter-float").find(".customerOption").length > 0){
- 	          return null; 	          
- 	      }else{
- 	          return filterPresenter.defaultCustomer;    
- 	      } 	       	      
- 	},
- 	
+ 	 	
  	refreshFilters: function(){
  	      var customer = filterPresenter.getSelectedCustomer();
  	      
@@ -338,34 +305,17 @@ var filterPresenter = {
          });
  	},
  	
- 	createSelectedFilter: function(filterid, filterValue){ 	       	  
- 	      $("#selectedFilters").append(
- 	          $("<div>").addClass("selectedFilter-wrapper").attr("filterid", filterid).append(
- 	              $("<div>").addClass("selectedFilter-x").text("X")
- 	          ).append(
-     	          $("<div>").addClass("selectedFilter-value").text(filterValue)
- 	          )
- 	      );
- 	},
- 	
- 	removeFilter: function(e){
- 	    var filterValue = $(e.currentTarget).parent().attr("filterid");
- 	    
- 	    var input = $("#filter-float").find('input[value="'+filterValue+'"]');
- 	    
- 	    if (input == null || input.length <= 0){
- 	          colorPresenter.removeSelectedColor(filterValue);
- 	    }else{
- 	          input.prop('checked', false);  
- 	    }
- 	    
- 	    filterPresenter.needsRefresh = true;
- 	    filterPresenter.onFilterSelect();
- 	},
- 	
- 	filterPanelToggle: function(){ 		
-	 	 $("#filter-float").toggle('slide',1000);				 	 	 	
-	 },
+ 	createSelectedFilter: function(e){ 	       	  
+ 	    var tagValue = $(e.currentTarget).attr("value");	  
+	    var tagType = $(e.currentTarget).parents("ul.filter-options").attr("filterType");	  
+    	$(".selectedFilters").append(
+    	   $('<span>').attr("value",tagValue).attr("filterType",tagType).text(tagValue).append(
+                $('<a class="icon-svg4"></a>')
+    	   )
+    	);
+    	
+    	$(e.currentTarget).parents(".open").first().removeClass("open");
+ 	}, 	 	 	
 	 
 	 clearFilters: function(){
 	   $("#filter-float").find("input").prop("checked", false);
@@ -375,43 +325,55 @@ var filterPresenter = {
 	   $("#filter-float").find(".customerOption").removeClass("selected");
 	 },
 	 
-	 hideFilterPanel: function(){
-           $("#filter-float").hide('slide',500);
-	 },
+	 removeFilter: function(e){      	      		 	     	    
+ 	    $(e.currentTarget).parent().remove();
+ 	    filterPresenter.needsRefresh = true;
+ 	    filterPresenter.onFilterSelect();
+ 	    return false;
+ 	 },
 	 
-	 showFilter: function(){	   
-	       $("#filter-float").show('slide',500);	 	 	
-	 },
-	 
-	 toggleFilterOptionsVisibility: function(){
-           var filterOptions = $(this).next(".filterOptions").first(); 
-	       
-	       if (filterOptions != null){
-	           if (filterOptions.is(":visible")){	               
-	               $(this).removeClass("open");
-	               
-	               if ($('#filter-float .open').length <= 0){
-	                   $('#filter-float').scrollTop(0);
-	               }
-	           }else{
-	               $(this).addClass("open");   
+	 filterTypeAhead: function(){
+	     $(".alphabets>a").removeClass("selected");
+	     var storeSearch = $("input.drop-search").val().trim().toLowerCase();
+	     
+	     if (!storeSearch || storeSearch == ""){
+	         $("ul.search-results[filterType=company] li").show();
+       	     $(".alphabets>a").show();
+       	     return;
+	     }
+	     
+	     var invalidStores = $("ul.search-results[filterType=store] li").filter(function(){
+	           var store = $(this).find("a").attr("value");
+	           
+	           if (typeof store !== typeof undefined && store !== false) { 
+	               store = store.toLowerCase();
+	               return store.indexOf(storeSearch) != 0;
 	           }
 	           
-	           filterOptions.toggle('blind');   
-	       }
+	           return false;
+	     });
+	     	     
+	     var invalidFirstLetters = $(".alphabets>a").filter(function(){
+	           var letter = $(this).text().toLowerCase();	          
+	           var searchFirstLetter = storeSearch.substr(0,1);
+	           return searchFirstLetter != letter;	           	           
+	     });
+	     
+	     $("ul.search-results[filterType=store] li").show();
+	     invalidStores.hide();
+	     
+	     $(".alphabets>a").show();
+	     invalidFirstLetters.hide();
 	 },
 	 
-	 toggleFilterSubOptionsVisibility: function(){
-           var filterOptions = $(this).next(".subcategory").first(); 
-	       
-	       if (filterOptions != null){
-	           if (filterOptions.is(":visible")){
-	               $(this).removeClass("open");
-	           }else{
-	               $(this).addClass("open");   
-	           }
-	           
-	           filterOptions.toggle('blind');   
-	       }
-	 }
+	 scrollToStore: function(e){
+		e.preventDefault();
+		$(".alphabets>a").removeClass("selected");
+		
+		var letter = $(e.currentTarget).attr("rel");
+        $(e.currentTarget).addClass("selected");        			
+		$(".search-results").mCustomScrollbar("scrollTo", letter);
+
+        return false;
+	 }	 	
 };

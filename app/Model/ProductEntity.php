@@ -15,6 +15,7 @@ define("JS_PRODUCT_CLOSITT_COUNT","cc");
 define("JS_PRODUCT_SHORT_LINK", "sl");
 define("JS_PRODUCT_SCORE", "sc");
 define("JS_PRODUCT_COLORS", "co");
+define("JS_PRODUCT_ARE_DETAILS_POPULATED", "dp");
 
 class ProductEntity{
 
@@ -31,6 +32,7 @@ class ProductEntity{
 	private $shortLink;
 	private $score;
     private $colors;
+    private $areDetailsPopulated = false;
 
 	public function getId() {
 		return $this->id;
@@ -145,9 +147,18 @@ class ProductEntity{
     }
     public function setColors($colors) {
         if(isset($colors)){
-            $this->colors= $colors;
+            $this->colors = $colors;
         }
     }
+    
+    public function getAreDetailsPopulated(){
+        return $this->areDetailsPopulated;
+    }
+    public function setAreDetailsPopulated($areDetailsPopulated) {
+        if(isset($areDetailsPopulated)){
+            $this->areDetailsPopulated = true;
+        }
+    }        
 
 	/**** ************************** ****/
 		
@@ -163,7 +174,21 @@ class ProductEntity{
 			$ProductEntity->setPrice(BaseEntity::getDBField($row,PRODUCT_PRICE));
 			$ProductEntity->setCommentCount(BaseEntity::getDBField($row,PRODUCT_COMMENT_COUNT));
 			$ProductEntity->setClosittCount(BaseEntity::getDBField($row,PRODUCT_CLOSITT_COUNT));	
-			$ProductEntity->setShortLink(BaseEntity::getDBField($row,PRODUCT_SHORT_LINK));	
+			$ProductEntity->setShortLink(BaseEntity::getDBField($row,PRODUCT_SHORT_LINK));
+			$ProductEntity->setAreDetailsPopulated(BaseEntity::getDBField($row,PRODUCT_DETAIL_UPDATED));
+			
+			$colors = array();
+			$colorOne = BaseEntity::getDBField($row,PRODUCT_COLOR_ONE);
+			if (isset($colorOne)){
+			     $colors[] = $colorOne; 
+			}
+			
+			$colorTwo = BaseEntity::getDBField($row,PRODUCT_COLOR_TWO);
+			if (isset($colorTwo)){
+			     $colors[] = $colorTwo; 
+			}
+			
+			$ProductEntity->setColors($colors);	
 		}
 	}		
 	
@@ -201,6 +226,8 @@ class ProductEntity{
 		$ProductArray[JS_PRODUCT_SHORT_LINK] = $this->getShortLink();
         $ProductArray[JS_PRODUCT_SCORE] = $this->getScore();
         $ProductArray[JS_PRODUCT_COLORS] = $this->getColors();
+        $ProductArray[JS_PRODUCT_ARE_DETAILS_POPULATED] = $this->getAreDetailsPopulated();
+        		
 		foreach ($ProductArray as $key => $value){
 			if(!isset($value) || $value == ""){
 				unset($ProductArray[$key]);

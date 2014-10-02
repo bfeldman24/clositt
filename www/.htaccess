@@ -8,7 +8,9 @@ Options -Indexes
 
 RewriteEngine On
 RewriteRule ^@/(.*)$ clositt.php?user=$1
-RewriteRule ^!/([a-z0-9\-]*)$ product-page.php?s=$1
+RewriteRule ^!/(.{3,50})$ product-page.php?s=$1
+RewriteRule ^!\+/([0-9]*)/(.*)$ clositt.php?user=$1&closittname=$2
+RewriteRule ^d/(.{3,50})$ product-modal.php?s=$1
 
 # Image
 RewriteRule ^i/([A-Za-z0-9]*)$ Router.php?classCode=i&method=image&sku=$1
@@ -20,7 +22,7 @@ RewriteRule ^([a-z]{1,2})/([a-z0-9]*)$ Router.php?classCode=$1&method=$2
 RewriteRule ^([a-z]{1,2})/([a-z0-9]*)/([a-z0-9]*)$ Router.php?classCode=$1&method=$2&page=$3
 
 RewriteRule ^([a-z]+)$ $1.php
-RewriteRule ^([a-z]+).(html|HTML|phtml|PHTML|asp|ASP)$ $1.php
+RewriteRule ^([a-z]+).(html|HTML|phtml|PHTML|asp|ASP|jsp|JSP)$ $1.php
 
 
 

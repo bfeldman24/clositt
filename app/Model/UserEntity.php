@@ -75,7 +75,7 @@ class UserEntity {
 	   $this->setPassword($this->secure($password));  
 	}		
 	
-	private function secure($password){	     
+	private function secure($password){	        	   	        
 	     $firstPass = $this->getPassword();
 	     
 	     if (isset($firstPass)){
@@ -110,7 +110,11 @@ class UserEntity {
     		$userEntity->setName(BaseEntity::getPostField($row, JS_USER_NAME));
     		$userEntity->setEmail(BaseEntity::getPostField($row, JS_USER_EMAIL));
     		$userEntity->setPassword($userEntity->secure(BaseEntity::getPostField($row, JS_USER_PASSWORD)));
-    		$userEntity->setConfirmPassword($userEntity->secure(BaseEntity::getPostField($row, JS_USER_CONFIRM_PASSWORD)));			
+
+    		$confirm = BaseEntity::getPostField($row, JS_USER_CONFIRM_PASSWORD);    		
+    		if (isset($confirm)){
+    		  $userEntity->setConfirmPassword($userEntity->secure($confirm));			
+    		}
     		
     		return $userEntity;
         }    

@@ -1,83 +1,179 @@
-<?php require_once(dirname(__FILE__) . '/app/session.php'); ?>
-<!DOCTYPE>
+<?php 
+require_once(dirname(__FILE__) . '/../app/session.php'); 
+require_once(dirname(__FILE__) . '/../app/Controller/ClosetController.php');
+require_once(dirname(__FILE__) . '/../app/View/ClosetView.php');
+
+$closetController = new ClosetController();              
+$closets = $closetController->getAllClosetItems();
+
+if(isset($_GET['user'])){
+    require_once(dirname(__FILE__) . '/../app/Controller/UserController.php'); 
+    $userController = new UserController();
+    $userid = $_GET['user'];
+    $name = $userController->getUserName($userid, false);    
+    
+    if(isset($_GET['closittname'])){
+        $isFound = false;
+        
+        foreach ($closets as $closetName => $items) {
+            $selector = preg_replace('/\s+/', '', $closetName);
+            
+            if ($selector == $_GET['closittname']){
+                $closets = array($closetName => $items);
+                $isFound = true;
+                break;   
+            }
+        }
+        
+        if (!$isFound){
+            $closets = array();       
+        }
+    }
+    
+}else{
+    $name = $_SESSION['name']; 
+    $userid = $_SESSION['userid']; 
+}
+
+$nickname = explode(' ', $name)[0];
+
+if (!isset($nickname) || $nickname == ""){
+    $nickname = "My";
+}else{
+    $nickname .= "'s";   
+}   
+
+?>
+<!DOCTYPE HTML>
 <html>
 <head>
 
 <link href="<?php echo HOME_ROOT; ?>lib/css/joyride-2.1.css" rel="stylesheet">
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
-<style type="text/css">
-    #main-content {  
-        padding: 10px 0px 80px;
-    }
 
-    #brand-fixed-background {
-        display: block;
-    }
-    
-    h1{
-        margin-top: 0;   
-    }
-    
-    .clositt-menu-btns{
-        margin-right: 10px;   
-    }
-    
-    .clositt-menu-btns > div, .clositt-menu-btns > ul{
-        display: inline;   
-    }
-    
-    #social-btns {
-       margin-left: 7px;
-       right: auto;
-       top: 40px;
-       width: 32px;
-   }
-
-</style>
 </head>
 <body>
-
-<?php include(dirname(__FILE__) . '/static/header.php');   ?>
-<div id="main-content" class="container main-container" style="margin-top:80px">
-	<div class="row">
-	    <div class="col-xs-12 col-sm-8">
-          	<h1><span id="user-closet-title"></span></h1>
-      	</div>
-      	
-      	<?php if(!isset($_GET['user'])){ ?>	                 
-            <div class="col-xs-12 col-sm-2 col-sm-offset-2">   
-                <div class="clositt-menu-btns">
-                    <ul id="closet-settings" class="nav pull-right">                              	
-                	 		<li class="dropdown">
-                			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                				<!--<i class="minicon-single settings-minicon"></i> -->
-                				<img src="css/images/menu.png" class="clositt-menu-icon"/>
-                			</a>
-                			<ul class="dropdown-menu dropdown-menu-right">
-                			     <li class="menu-settings"><a  onclick="closetPresenter.showSettings()"><i class="icon-pencil"></i> Edit</a></li>
-                                <li class="menu-cancel" style="display:none;"><a onclick="closetPresenter.showSettings()"><i class="icon-remove"></i> Cancel</a></li>
-                                <li class="menu-save" style="display:none;"><a onclick="closetPresenter.saveClosets()"><i class="icon-ok"></i> Save</a></li>                  
-                			</ul>
-                		</li>	              	
-                    </ul>
-                    <div class="pull-right">
-            		    <div id="closet-share" data-toggle="tooltip" data-placement="left" title="Share it!">
-                		      <img class="social-people-icon" src="css/images/social/social-people.png" />
-                		</div>
-                		<div id="social-btns" class="social-btns" style="display:none;"></div>				
-                	</div>            		                    
-          		</div>
-            </div>      
-      	<?php } ?>
-	</div>
-
-	<div id="closet-list"></div>
-	<br /><br /><br /><br />
+<div class="wrapper">
+    <?php include(dirname(__FILE__) . '/static/header.php');   ?>
+    
+    <section class="my-clositt">
+        <div id="nav">
+            <div class="container">
+            
+                <h4 class="text-center" id="user-closet-title"><?php echo $nickname; ?> Clositt</h4>
+                <!--
+                <div class="col-xs-2 col-xs-offset-5">
+                    <a class="icon-svg6 suffle-btn"></a>
+                    <a class="icon-svg9"></a>
+                    <a class="icon-svg7"></a>
+                    <a class="icon-svg10"></a>
+                    <a class="icon-svg11"></a>
+                </div>
+                -->
+                
+                <div class="col-sm-offset-1 col-md-offset-2">
+                    <div class="nav">
+                        <ul id="closetNameList">                            
+                            <?php if(!isset($_GET['user'])){ ?>	
+                                <?php echo ClosetView::getClosetNames($closets); ?>
+                                <li class="addnew">
+                                    <div class="btn-group disabled">
+                                        <button type="button" class="btn btn-default nav-filter"  data-toggle="modal" data-target="#addclositt" >ADD NEW  + </button>
+                                    </div>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="clositt-inner">
+        <div class="panel-group">             
+            <?php echo ClosetView::getClosets($closets, $userid); ?>       
+        </div>
+    </section>
+    
+    <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 </div>
-<div id="page-mask" style="display:none;"></div>
-<div id="product-module" style="display:none;"></div>
 
-<?php include(dirname(__FILE__) . '/static/footer.php');   ?>
+<?php include(dirname(__FILE__) . '/static/footerMeta.php');   ?>
+    
+    
+    
+    
+<!-- MODALS -->
+<div class="modal fade" id="addclositt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">Add New Clositt</h4>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control" placeholder="New Clositt Name..." id="newClosetName" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="saveNewClosetName" class="btn btn-primary">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editClosittModal" tabindex="-1" role="dialog" aria-labelledby="editClosittModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">Edit Clositt</h4>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control" id="editClosetName" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" id="saveEditNewClosetName" class="btn btn-primary">Save</button>
+        <button type="button" id="confirmRemoveClosetBtn" class="btn btn-danger">Remove Clositt</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmRemoveClosittModal" tabindex="-1" role="dialog" aria-labelledby="confirmRemoveClosittModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">Remove Clositt</h4>
+      </div>
+      <div class="modal-body">
+        <p class="log">Are you sure that you want to remove <span id="removeClosetName">that clositt</span> and all of its outfits?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+        <button type="button" id="removeClosetBtn" class="btn btn-primary">YES</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    
+    
+    
+    
+    
 <script src="<?php echo HOME_ROOT; ?>lib/js/jquery.joyride-2.1.js"></script>
 
 <div id="closetId" style="display:none;"><?php echo $_GET['user'];?></div>
@@ -114,27 +210,29 @@
         pagePresenter.enableLazyLoading = false;     
         closetPresenter.setUser(<?php echo $_GET['user']; ?>);
         pagePresenter.init();    
-        //productPresenter.populateStore(closetPresenter.init);
         closetPresenter.init();        	
         productPagePresenter.init();	
+        productPresenter.init();	
         reviewsPresenter.init();
         tagPresenter.init();
+        socialPresenter.init();
      });
 <?php }else{ ?>
     function userDataReady(user){    
         pagePresenter.enableLazyLoading = false;
         pagePresenter.init();    
-        //productPresenter.populateStore(closetPresenter.init);
         closetPresenter.init();     
         productPagePresenter.init();
+        productPresenter.init();	
         reviewsPresenter.init();       
         tagPresenter.init();
+        socialPresenter.init();
         $("#subheader-myclositt").addClass("active");                
     }        
 <?php } ?>
 
 function loggedOut(){
-	location.href = "<?php echo HOME_ROOT . 'signup.php'; ?>";
+	location.href = window.HOME_URL;
 }
 
 function startClosittTour(manual){

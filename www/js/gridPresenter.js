@@ -10,8 +10,11 @@ var gridPresenter = {
 	init: function(){			
 	    gridPresenter.randomStartingPosition = parseInt(Math.random() * 15000);	
 		gridEvents.init();
-		gridPresenter.mixupBrowsePages();
-		gridPresenter.showContent(15);												
+		gridPresenter.mixupBrowsePages();				
+		
+		if ($( "#search-bar" ).val().length <= 0 && location.hash.indexOf("#outfit") != 0){		
+		      gridPresenter.showContent(15);			
+		}									
 	},					
 
 	alignDefaultGrid: function(){	   		
@@ -72,14 +75,7 @@ var gridPresenter = {
         		    gridPresenter.productIndex = 0; 		  			
         		    
         		}else{	    		    
-                     var c = filterPresenter.getSelectedCustomer();
-    			     
-    			     if (c == null){
-    			         c = "b";			         
-    			     }else{
-        			     c = c.substring(0,1);
-    			     }
-    			     
+                     var defaultCustomer = "w";
     			     var page = gridPresenter.productIndex;
     			     
     			     if (gridPresenter.browsePages[page] != null){
@@ -87,7 +83,7 @@ var gridPresenter = {
     			     }
     			 
     			     gridPresenter.numberOfLoadingPages++;
-    			     $.post( window.HOME_ROOT + "b/" + c + "/" + page, gridPresenter.lazyLoad, "json");
+    			     $.post( window.HOME_ROOT + "b/" + defaultCustomer + "/" + page, gridPresenter.lazyLoad, "json");
     			     gridPresenter.productIndex++;    			            			             		    
     			}		
     		}
@@ -99,25 +95,23 @@ var gridPresenter = {
 	        return null;
 	    }
 	    
+	    var $productHtml;
+	    
 	    if (products.products != null){
-	       products = products.products;  
-	    }	               
-	               
-        products.forEach(function(product){	                       
-			var $html = productPresenter.getProductTemplate(product);
-			$html.addClass("col-xs-5 col-xs-offset-1 col-sm-4 col-md-3 col-lg-2");
-            $("#product-grid").append($html);
-            
-            if ($("#product-grid .outfit").length < 30){                        
-                $html.find("img[data-src]").unveil(10000);
-            }else{
-                $html.find("img[data-src]").unveil(200);
-            }
-	   });
+	       $productHtml = $(products.products);  
+	    }	
+	    
+	    if ($productHtml != null && $productHtml.length > 0){
+	       $("#product-grid").append($productHtml);	       
+	       $("#product-grid .outfit img[data-src]").unveil(200, productPresenter.showImageCallback);
+	    }else{
+	       pagePresenter.enableLazyLoading = false; // no more products  
+	    }       	                      
 			                   			   	   		
 	   gridPresenter.alignDefaultGrid(); 
 	   gridPresenter.endTask(); 
 	   gridPresenter.numberOfLoadingPages--;
+	   pagePresenter.productLoaderPosition = $("#product-loader").position().top;
 	},	
 	
 	beginTask: function(){

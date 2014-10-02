@@ -197,12 +197,20 @@ class UserController extends Debugger {
 		return stripslashes(json_encode($userEntity->toArray()));
 	}	
 	
-	public function getUserName($data){
-	   if (isset($data)){
-            $user = UserEntity::setFromPost($data);
-            
-            if (isset($user)){
-                $userId = $user->getUserId();                
+	public function getUserName($data, $json = true){
+	    if (isset($data)){
+	        if (is_array($data)){
+                $user = UserEntity::setFromPost($data);
+                
+                if (isset($user)){
+                    $userId = $user->getUserId();                
+                }
+
+	        }else if (is_numeric($data)){
+	            $userId = $data;
+	        }
+	                    
+            if (isset($userId)){             
                 
                 $userResult = $this->userDao->getUserInfo($userId);
                 $userName = null;
@@ -213,8 +221,11 @@ class UserController extends Debugger {
         			}			
         	   }
         	   	   
-        		return stripslashes(json_encode(array("name" => $userName)));
-                                
+        	   if ($json){
+        		  return stripslashes(json_encode(array("name" => $userName)));
+        	   }else{
+        	      return $userName;
+        	   }                                
             }
         }
                 

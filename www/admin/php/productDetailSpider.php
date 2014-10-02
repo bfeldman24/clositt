@@ -4,6 +4,12 @@
 <?php 
 require_once(dirname(__FILE__) . '/../../../app/globals.php');
 include(dirname(__FILE__) . '/../../static/meta.php');   
+
+$items = '';
+if (isset($_GET['o']) && isset($_GET['s']) && isset($_GET['l'])){
+    $items = "'" . $_GET['o'] . "','" . $_GET['s'] . "','" . $_GET['l'] . "'";    
+}
+
 ?>
 <style type="text/css">
 body{
@@ -130,7 +136,8 @@ function clearPage(){
         
 
     var productDetailSpider = {
-	autoRunHash: '#autoRun',
+	    autoRunHash: '#autoRun',
+	    singleProductHash: "#singleProduct",
         showData: false,
         loop: true,
         limit: 10,
@@ -159,9 +166,13 @@ function clearPage(){
                console.log(scraped + " scraped product details");
                console.log(productDetailSpider.totalLiveProducts + " total live products");
 
-		if (location.hash == productDetailSpider.autoRunHash){
-           	    productDetailSpider.getProducts();
-           	}
+		       if (location.hash == productDetailSpider.autoRunHash){
+            	    productDetailSpider.getProducts();
+            	}else if (location.hash == productDetailSpider.singleProductHash){
+            	   Messenger.debug = true;
+            	   console.log("Save: <?php echo $items; ?>");
+            	   productDetail.getDetails(<?php echo $items; ?>, productDetailSpider.saveProductDetails);
+            	}
             }); 
         },
         
@@ -242,7 +253,10 @@ function clearPage(){
                     
                     Messenger.success("Saved Product Details: " + product.sku + ".      rate = " + secondPerPage + " seconds per page. (" + minutesLeft + " mins left)"); 
                     
-                    
+                    if (productDetailSpider.products == null){
+                        Messenger.info("Finished saving product details");
+                        return;   
+                    }
                                           
                     productDetailSpider.handleProductDetails(product);                                        
                     

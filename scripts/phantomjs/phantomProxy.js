@@ -43,11 +43,11 @@ page.onResourceError = function(resourceError) {
 
 };
 
-var dev = "http://dev.closetta.com/ben/";
+var dev = "http://dev.closetta.com/design/";
 var uat = "http://closetta.com/";
 var url = system.args[1];
 
-page.open(uat + url, function(status) {
+page.open(dev + url, function(status) {
 
     if(status !== 'success'){
         console.log("Failed to load page");

@@ -30,7 +30,8 @@ class EmailController{
     }
     
     public static function sendContactForm($name, $id, $email, $subject, $message){
-        $to = 'eli@clositt.com';        
+        //$to = 'eli@clositt.com';        
+        $to = 'ben@clositt.com';        
         $emailSubject = 'CLOSITT: ' . $subject;
         
         $emailMessage = "Name: " . $name . "\r\n" . 
@@ -39,7 +40,7 @@ class EmailController{
         				"Subject: " . $subject . "\r\n" . 
         				"Message: " . $message . "\r\n"; 
         				
-        $headers = "From: Ben@clositt.com \r\n" .
+        $headers = "From: Clositt Team <Eli@Clositt.com> \r\n" .
         		    'Reply-To: '. $email . "\r\n" .
         		    'Bcc: bfeldman24@gmail.com' . "\r\n";
         	
@@ -48,9 +49,58 @@ class EmailController{
             ListController::writeToFile("feedback",$message.",".$email.",".$name.",".$id);
        } 		    
         
-        if(mail($to, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){                                    
+        if(mail($to, $emailSubject, $emailMessage, $headers, "-fBen@Clositt.com")){                                    
         	return "success";	
         }else{
+        	return "failed";	
+        }
+    }
+    
+    public static function shareProduct($to, $link){
+        $emailSubject = 'Clositt.com: What do you think of this outfit?';
+        
+        if (isset($_SESSION['name'])){
+            $message = $_SESSION['name'] . " found this on Clositt and wants to know if you like it: ";
+        }else{
+            $message = "Do you like this? ";   
+        }
+        
+        if (isset($_SESSION['email'])){
+            $sender = $_SESSION['email'];
+        }else{
+            $sender = "Clositt Team <Eli@Clositt.com>";   
+        }
+        
+        $emailMessage = $message . $link . "\r\n" .         				
+        				"\r\n" . 
+        				"If so, check out more on Clositt.com"; 
+        				
+        $headers = "From: Clositt Team <Eli@Clositt.com> \r\n" .
+        		    "Reply-To: " . $sender. " \r\n" .
+        		    "Bcc: bfeldman24@gmail.com" . "\r\n";
+        
+        
+        if (isset($_SESSION['shareProductCount'])){
+            $_SESSION['shareProductCount']++;
+        }else{
+            $_SESSION['shareProductCount'] = 1;   
+        }
+        
+        if ($_SESSION['shareProductCount'] > 25){
+            return "failed";   
+        }                      
+        
+        // Log it
+        $user = '';	    
+	    if (isset($_SESSION['userid'])){
+	       $user = $_SESSION['userid'];  
+	    }
+        
+        if(mail($to, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){                                        	    
+            ListController::writeToFile("share", $to.",".$user.",".$link);              
+        	return "success";	
+        }else{
+            ListController::writeToFile("shareFailed", $to.",".$user.",".$link);  
         	return "failed";	
         }
     } 
@@ -62,9 +112,8 @@ class EmailController{
                       "It looks like you've forgotten your password. No sweat.\n\n" .
                       "Here's what to do:\n" .
                       "1) Login to Clositt.com with this temporary password: $tempPassword \n" .
-                      "2) Once you login, click on your name in the top right corner.\n" .
-                      "3) Click 'Account Settings.'\n" .
-                      "4) Change your password ('old password' means the temporary one).\n\n" .
+                      "2) Once you login, click on 'Account' in the top right corner.\n" .
+                      "3) Change your password ('old password' means the temporary one).\n\n" .
                       "Note: your temporary password will expire in 24 hours:\n\n" .
                       "Now just head to www.clositt.com and you should be all set. \n\n" .
                       "Happy Shopping!! \n\n" .

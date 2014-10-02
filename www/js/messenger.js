@@ -1,50 +1,25 @@
-var Messenger = {
-	
+var Messenger = {	
 	id: 'messenger',
-	position: 'top',
-	align: 'center',	
+	top: 65,
 	timeout: 4000,
 	defaultTimeout: 4000,
-	width: 300, 
-	height: 75,
 	debug: false,
 	
-	messageBoxTemplate: $('<ul class="messenger messenger-fixed messenger-theme-future"></ul>'),
+	messageBoxTemplate: $('<ul class="messenger messenger-fixed messenger-theme-block"></ul>'),
 				
 	alertTemplate: $('<li class="messenger-message-slot  ">' +
 						'<div class="messenger-message">' +
-							'<div class="messenger-message-inner"></div>' +
-							'<div class="messenger-spinner">' +
-								'<span class="messenger-spinner-side messenger-spinner-side-left">' +
-						        	'<span class="messenger-spinner-fill"></span>' +
-    							'</span>' +
-							    '<span class="messenger-spinner-side messenger-spinner-side-right">' +
-							        '<span class="messenger-spinner-fill"></span>' +
-							    '</span>' +
-							'</div>' +
+							'<div class="messenger-message-inner"></div>' +							
 						'</div>' +
 					'</li>'),
 				
 	
 	init: function(){
-		if(Messenger.align == 'center'){
-			var left = 50;
-		}else{
-			var left = 0;
-		}
-		
-		if(Messenger.position == 'top'){
-			var top = 50;
-		}else{
-			var top = $(document).height() - Messenger.height;
-		}
 		
 		$('body').append(Messenger.messageBoxTemplate
-			.attr("id",Messenger.id)
+			.attr("id", Messenger.id)
 			.css("display","none")
-			.css("top",top + "px")
-			.css("left",left + "%")
-			.css("min-width",Messenger.width + "px")
+			.css("top", Messenger.top + "px")
 		);
 	},
 	
@@ -62,8 +37,7 @@ var Messenger = {
 		$alertMessage.children("div").first().addClass(status);
 		$alertMessage.find(".messenger-message-inner").first().text(msg);		
 		
-		$("#" + Messenger.id).append($alertMessage);		
-		$("#" + Messenger.id).css("margin-left", "-" + ($("#" + Messenger.id).width() / 2) + "px");		
+		$("#" + Messenger.id).append($alertMessage);
 		$("#" + Messenger.id).css("display","block");
 		
 		if (Messenger.debug){

@@ -12,7 +12,7 @@ class SessionController extends Debugger{
 	
 	public function __construct(){
 		$this->sessionDao = new SessionDao();		
-		$_SESSION['errors'] = '';				
+		$this->setSessionDefaults();				
 	}
 	
 	function setSessionDefaults() {

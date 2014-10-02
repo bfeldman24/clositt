@@ -27,8 +27,7 @@ $js = '<script src="' . HOME_ROOT .'js/session.js"></script>' .
 '<script src="' . HOME_ROOT .'js/colorPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'admin/js/firebaseReorganizing.js"></script>' .
 '<script src="' . HOME_ROOT .'admin/js/lib/bootbox.min.js"></script>' .
-'<script src="' . HOME_ROOT .'lib/js/jquery.unveil.min.js"></script>'.
-'<script src="' . HOME_ROOT .'lib/js/jquery.sparkline_2.1.2.min.js"></script>';
+'<script src="' . HOME_ROOT .'lib/js/jquery.unveil.min.js"></script>';
 
 define('CLOSITT_JS',$js);
 
@@ -45,8 +44,7 @@ define('ENV','PROD');
 define('CLOSITT_CSS',HOME_ROOT .'css/style.min.css');
 
 $js = '<script src="' . HOME_ROOT .'js/clositt.min.js"></script>' .
-'<script src="' . HOME_ROOT .'lib/js/jquery.unveil.min.js"></script>'.
-'<script src="' . HOME_ROOT .'lib/js/jquery.sparkline_2.1.2.min.js"></script>;
+'<script src="' . HOME_ROOT .'lib/js/jquery.unveil.min.js"></script>';
 
 define('CLOSITT_JS',$js);
 */

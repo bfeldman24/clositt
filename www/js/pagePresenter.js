@@ -1,63 +1,55 @@
 var pagePresenter = {
     lastExecTime: 0,    
-    waitTime: 500,
+    waitTime: 1000,
     enableLazyLoading: true,
-    defaultHeaderHeight: 670,
+    defaultHeaderHeight: 525,
+    productLoadOffset: '150%',
+    areProductsInitialized: false,
+    lastScrollHeight: 0,
+    viewportHeight: 0,
+    productLoaderPosition: 0,
     
     init: function(){
         $("#subheader-navbar").show('fast');
    	    //$("#brand").css("position", "fixed");
         //$("#user-dropdown").css("position", "fixed");
         
-        $("#scroll-to-top").on("click", pagePresenter.scrollToTop);
-                        
-        $(document).ready(function(){
-            $(window).scroll(pagePresenter.handleScrollEvents);
-            pagePresenter.handleScrollEvents();    
-        });
+        $(".back_to_top").on("click", pagePresenter.scrollToTop);        
         
-    },
-    
-    handleScrollEvents: function(){
-        pagePresenter.toggleHeader();
-
-        if(pagePresenter.enableLazyLoading && typeof gridPresenter == 'object' && Date.now() - pagePresenter.lastExecTime > pagePresenter.waitTime){
-            pagePresenter.lastExecTime = Date.now();
-            gridPresenter.showContent(15);            
-        }                       
-    },
-    
-    toggleHeader: function(){
+        $(document).ready(function(){                        
+            if ($("#product-loader").length > 0){
+                pagePresenter.viewportHeight = $(window).height();
+                pagePresenter.productLoaderPosition = $("#product-loader").position().top;
                 
-	   var defaultFixedHeight = 45;
-	   var scrollLocation = $(window).scrollTop();	  
-	   
-	   if(scrollLocation > pagePresenter.defaultHeaderHeight + 300 && !$("#scroll-to-top").is(":visible") && $("#scroll-to-top").length > 0){
-            $("#scroll-to-top").show('fade');   
-        }
-	   
-	   if (scrollLocation > (pagePresenter.defaultHeaderHeight + defaultFixedHeight) && !$("#filter-float-container").hasClass("affix")){	       	       
-	       $("#filter-float-container").addClass("affix");
-	       
-	   } else if (scrollLocation <= pagePresenter.defaultHeaderHeight + defaultFixedHeight && $("#filter-float-container").hasClass("affix")){	       
-	       $("#filter-float-container").removeClass("affix");	       
-	       	       
-	       if($("#scroll-to-top").length > 0){
-               $("#scroll-to-top").hide('fade');   
-           }
-	   } 
-	},
-    
-    handleImageNotFound:  function(img) {
-        var sku = $(img).parents(".outfit").attr("pid");
-        $(img).attr( "src", window.HOME_ROOT + "i/" + sku);        
-        $(img).removeAttr("onerror");
-        return true;
+                $(window).scroll(pagePresenter.handleScrollEvents);
+                pagePresenter.handleScrollEvents();  
+            }  
+        });
     },
+    
+    handleScrollEvents: function(){                     
+
+        if(pagePresenter.areProductsInitialized &&
+            pagePresenter.enableLazyLoading && 
+            typeof gridPresenter == 'object' &&
+            pagePresenter.productLoaderPosition < ($(window).scrollTop() + pagePresenter.viewportHeight + 100) &&
+            Date.now() - pagePresenter.lastExecTime > pagePresenter.waitTime){
+                
+            pagePresenter.lastExecTime = Date.now();
+            pagePresenter.lastScrollHeight = $(window).scrollTop();
+            pagePresenter.viewportHeight = $(window).height(); // reset in case user changed screen size            
+            // pagePresenter.productLoaderPosition gets reset in gridPresenter.lazyLoad()
+            
+            gridPresenter.showContent(15);            
+        }else if (!pagePresenter.areProductsInitialized){
+            pagePresenter.areProductsInitialized = $(".outfit").length > 0;
+        }          
+                             
+    },                
     
     scrollToTop: function(e){
        e.preventDefault();                
-       pagePresenter.scrollTo(pagePresenter.defaultHeaderHeight - 75);			
+       pagePresenter.scrollTo(pagePresenter.defaultHeaderHeight);			
 	   return false;
     },
     

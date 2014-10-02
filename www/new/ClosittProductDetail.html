@@ -20,10 +20,31 @@
                     <div class="container-fluid">
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"><span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                            <a class="navbar-brand" href="#">Clositt</a>
+                            <a class="navbar-brand" href="#"><img src="images/logo.png"></a>
                         </div>
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <div class="col-md-1 col-lg-3"></div>
+                            <div class=" col-lg-4 browse clearfix">
+                             
+                              <ul>
+                                <li>
+                                <div class="btn-group">
+                                  <button class="btn btn-default btn-sm" type="button">
+                                   <i class="icon-th-list"></i> Browse 
+                                  </button>
+                                  
+                                </div>
+                                </li>
+                                <li>
+                                <div class="btn-group">
+                                  <button class="btn btn-default btn-sm" type="button">
+                                   <i class="icon-svg20"></i> MyClositt 
+                                  </button>
+                                  
+                                </div>
+                                </li>
+                               </ul> 
+                           
+                            </div>
                             <form class="navbar-form navbar-left" role="search">
                                 <div class="form-group">
                                     <input type="text" class="form-control input-search" placeholder="Search for all favourite brands on one place">
@@ -31,8 +52,8 @@
                                 <button type="submit" class="btn btn-default search-btn icon-svg2"></button>
                             </form>
                             <ul class="nav navbar-nav navbar-right">
-                                <li class="active"><a href="#">Login</a></li>
-                                <li><a href="#">Register</a></li>
+                                 <li class="active"><a data-toggle="modal" data-target="#myModal2" href="#">Login</a></li>
+                                <li><a data-toggle="modal" data-target="#myModal2" href="#">Register</a></li>
                             </ul>
                         </div>
                     </div>
@@ -46,7 +67,7 @@
                     <div class="col-xs-12 col-sm-8 col-md-9">
                         <div class="row">
                             <div class="col-xs-12 col-md-6">
-                                <div class="show_product pull-left">
+                                <div class="show_product">
                                     <div class="imagewrap">
                                         <img src="images/poduct.jpg">
                                         <div class="product-avail"><a class="prod-type" href="#"><i class="icon-svg20"></i></a><a class="quantity" href="#">10</a> </div>
@@ -128,14 +149,18 @@
                                         <div class="imagewrap">
                                             <img src="images/item1.jpg" alt="">
                                         </div>
-                                        <div class="detail">
-                                            <h4>Wood Wood JOKER Tee - Black..</h4>
-                                            <span class="price">$15 </span><del>$50</del>
-                                            <p>Diesel</p>
-                                        </div>
-                                        <div class="cart_option"><a href="#"><i class="icon-svg4 remove-prod"></i></a><a href="#"><i class="icomoon-bubble-dots-4 message-icon"><span class="badge">&nbsp;</span></i></a> <a class="more-opt" href="#"><i class="icon-svg3 dots-icon"></i></a></div>
+                                                    <div class="detail">
+                                                        <h4>Wood Wood JOKER Tee - Black</h4>
+                                                        <div>
+                                                         <span class="price pull-right">$15 </span>
+                                                        <p class="pull-left">Diesel </p>
+                                                        </div>
+                                                       <div class="clear"></div>
+                                                        
+                                                    </div>
+                                        <div class="cart_option"><a href="#"><i class="icon-svg4 remove-prod"></i></a><a href="#"><i class="icomoon-bubble-dots-4 message-icon"><span class="badge">&nbsp;</span></i></a> <a class="more-opt" href="#"><i class="icomoon-share-2 dots-icon"></i></a></div>
                                     </div>
-                                    <div class="hover_more"><a href="#"><i class="icon-svg15"></i></a><a href="#"><i class="icon-svg14"></i></a><a href="#"><i class="icon-svg16"></i></a><a href="#"><i class="icon-svg17"></i></a><a href="#"><i class="icon-svg18"></i></a></div>
+                                    <div class="hover_more"><a href="#"><i class="icon-svg17"></i></a><a href="#"><i class="icon-svg16"></i></a><a href="#"><i class="icon-linkedin"></i></a><a href="#"><i class="icon-svg14"></i></a><a href="#"><i class="icon-svg15"></i></a><a href="#"><i class="icon-svg18"></i></a></div>
                                 </div>
                             </div>
                             <div class="col-xs-12 box">
@@ -144,14 +169,18 @@
                                         <div class="imagewrap">
                                             <img src="images/item2.jpg" alt="">
                                         </div>
-                                        <div class="detail">
-                                            <h4>Wood Wood JOKER Tee - Black..</h4>
-                                            <span class="price">$15 </span><del>$50</del>
-                                            <p>Diesel</p>
-                                        </div>
-                                        <div class="cart_option"><a href="#"><i class="icon-svg4 remove-prod"></i></a><a href="#"><i class="icomoon-bubble-dots-4 message-icon"></i></a><a class="more-opt" href="#"><i class="icon-svg3 dots-icon"></i></a></div>
+                                                    <div class="detail">
+                                                        <h4>Wood Wood JOKER Tee - Black</h4>
+                                                        <div>
+                                                         <span class="price pull-right">$15 </span>
+                                                        <p class="pull-left">Diesel </p>
+                                                        </div>
+                                                       <div class="clear"></div>
+                                                        
+                                                    </div>
+                                        <div class="cart_option"><a href="#"><i class="icon-svg4 remove-prod"></i></a><a href="#"><i class="icomoon-bubble-dots-4 message-icon"></i></a><a class="more-opt" href="#"><i class="icomoon-share-2 dots-icon"></i></a></div>
                                     </div>
-                                    <div class="hover_more"><a href="#"><i class="icon-svg15"></i></a><a href="#"><i class="icon-svg14"></i></a><a href="#"><i class="icon-svg16"></i></a><a href="#"><i class="icon-svg17"></i></a><a href="#"><i class="icon-svg18"></i></a></div>
+                                    <div class="hover_more"><a href="#"><i class="icon-svg17"></i></a><a href="#"><i class="icon-svg16"></i></a><a href="#"><i class="icon-linkedin"></i></a><a href="#"><i class="icon-svg14"></i></a><a href="#"><i class="icon-svg15"></i></a><a href="#"><i class="icon-svg18"></i></a></div>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +188,27 @@
                 </div>
             </div>
         </section>
-        <section id="subscribe">
+        <section id="subscribes">
+            <h1><span>Connect with clositt</span></h1>
+            <p>a fun way to shop online,  all major brands available</p>
+           
+        
+          
+            <div class="social">
+            
+               <ul>
+                  <li><a href="#"><div class="outer_box"><div class="icon_box"><i class="icon-svg9"></i></div></div><div class="clear"></div><span>Like us on Facebook</span></a></li>
+                  <li class="social_line"><img src="images/social_line.png"></li>
+                  <li><a href="#"><div class="outer_box"><div class="icon_box"><i class="icon-svg7"></i></div></div> <div class="clear"></div><span>Follow us on twitter</span></a></li>
+                  <li class="social_line"><img src="images/social_line.png"></li>
+                  <li><a href="#"><div class="outer_box"><div class="icon_box"><i class="icon-svg15"></i></div></div> <div class="clear"></div><span>Read our Blog</span></a></li>
+                  <li class="social_line"><img src="images/social_line.png"></li>
+                  <li><a href="#"><div class="outer_box"><div class="icon_box"><i class="icon-envelope-o"></i></div></div><div class="clear"></div><span>Contact us</span></a></li>                  <div class="clear"></div>
+               </ul>
+               
+           </div> 
+            
+            <div class="clear"></div>
             <h2>Subscribe to our Newsletter for latest news.</h2>
             <form>
                 <input type="email" name="" placeholder="Email address">
@@ -167,6 +216,7 @@
             </form>
            
         </section>
+        
         <footer id="footer">
          <div class="back_to_top"><a href="#" class="icon-angle-up"></a></div>
             <div class="container">
@@ -183,6 +233,96 @@
             </div>
         </footer>
     </div>
+    
+    
+    
+    
+                  
+     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog2">
+            <div class="modal-content2">
+                <button type="button" class="close close2 modal_close" data-dismiss="modal"><span class="icon-times close-modal" aria-hidden="true"></span></button>
+                  
+                  
+                <!-- Nav tabs -->   
+                <section id="login_box">
+                 <div class="login_sign_btn"> 
+                  <ul class="nav nav-tabs">
+                      <li class="active"><a href="#loginn"  data-toggle="tab">Login</a></li>
+                      <li><a href="#signn"  data-toggle="tab">Sign Up</a></li>
+                  </ul>
+                </div>
+                  <!-- Tab panes -->  
+                  <div class="tab-content">  
+                    <div class="tab-pane active" id="loginn">
+                  
+                        <div class="container">
+                        <div class="row">
+                            <div class="col-xs-12">
+                              <div class="login">
+                                <h1>Login</h1>
+                                 <p class="log">You already have an account? Great! Login here.</p>
+                                 <form>
+                                    <input type="text" name="" value="" placeholder="Email Address">
+                                    <input type="password" name="" value="" placeholder="Password">
+                                    <div class="sub">
+                                        <p class="pull-left">Forget password? <a href="#">Here</a> </p>
+                                        <input class="pull-right" type="submit" name="" value="Login Now">
+                                        <div class="clear"></div>
+                                    </div>
+                                    <div class="border"></div>
+                                    
+                                    <div class="register">
+                                      <p>Don't have an account? <a href="#">Register Now »</a></p>
+                                    </div>
+                                 </form>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                     
+                     </div>
+                     
+                      <div class="tab-pane" id="signn">
+                  
+                        <div class="container">
+                        <div class="row">
+                            <div class="col-xs-12">
+                              <div class="login">
+                                <h1>Sign Up</h1>
+                                 <p class="log">Fill the form to become a member in Clositt</p>
+                                 <form>
+                                    <input type="text" name="" value="" placeholder="Name">
+                                    <input type="email" name="" value="" placeholder="Email Address">
+                                    <input type="password" name="" value="" placeholder="Password">
+                                    <div class="sub">
+                                        <p class="pull-left">Already have account?<a href="#">Here</a> </p>
+                                        <input class="pull-right" type="submit" name="" value="Sign Up">
+                                        <div class="clear"></div>
+                                    </div>
+                                   <div class="space"></div>
+                                    
+                                    
+                                 </form>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                     
+                     </div>
+                     
+                 </div>   
+                 
+                  
+                </section>
+            </div>
+        </div>
+    </div>
+    
+    
+     
+    
+    
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>
     <script src="js/highcharts.js"></script>

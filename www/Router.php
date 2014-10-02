@@ -26,13 +26,16 @@ class Router {
                 case 'cl':
                     Router::Closet();
                     break;
+                case 'e':
+                    Router::Email();
+                    break;                 
                 case 'f':
                 case 's':
                     Router::Filter();
                     break;    
                 case 'l':
                     Router::ListController();
-                    break;                        
+                    break;                                           
                 case 'p':
                 case 'b': 
                 case 'i':
@@ -122,7 +125,7 @@ class Router {
                 echo $closetController->getAllClosets();
                 break;            
             case 'getall':                               
-                echo $closetController->getAllClosetItems($_POST);
+                echo $closetController->getAllClosetItems($_POST, true);
                 break;
         }  
     }   
@@ -140,24 +143,24 @@ class Router {
                 case 'lookup':
                      $product = $productController->getProduct($_POST['sku']);   
                      print_r($product);
-                     break;                                      
+                     break;                                                      
                 case 'search':                	
-                    $product = $productController->searchElastic($_POST, $_GET['page'], QUERY_LIMIT);
+                    $product = $productController->searchElasticHtml($_POST, $_GET['page'], QUERY_LIMIT);
                     print_r($product);
                     break;                          
                 case 'browse':                                        
-                    $product = $productController->getProducts($_POST, $_GET, QUERY_LIMIT, true);   
+                    $product = $productController->getProductsHtml($_POST, $_GET, 25, true);   
+                    header('Content-Type: application/json');
                     print_r($product);
                     break;                                
             }
             
         }else{
             if ($_GET['classCode'] == "i" && $_GET['method'] == 'image'){           
-                    $image = $productController->getCachedProductImage($_GET['sku']);                          
-                                 
-                    header('Content-Type: image/jpeg');                
+                    $image = $productController->getCachedProductImage($_GET['sku']);   
+                    header('Content-Type: image/jpeg');                                                                        
                     print_r($image);
-            }   
+            }
         }           
     }
         
@@ -427,6 +430,26 @@ class Router {
                     break;                        
             }
         }   
+    }
+    
+    /************************
+    ***  EMAIL CONTROLLER ***
+    *************************/
+    public static function Email(){  
+        require_once(dirname(__FILE__) . '/../app/email.php');   
+    
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'){   
+            switch($_GET['method']){
+                case 'contact':                               
+                    $success = EmailController::sendContactForm($_POST['n'], $_POST['i'], $_POST['e'], $_POST['s'], $_POST['m']);
+                    print_r($success);
+                    break;  
+                case 'share':
+                    $success = EmailController::shareProduct($_POST['to'], $_POST['link']);
+                    print_r($success);
+                    break;    
+            }      
+        }
     }
 }
 

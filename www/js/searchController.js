@@ -9,10 +9,18 @@ var searchController = {
     init: function(){
         $("#search-bar").on("keyup", searchController.showClearBtn);
         $("#search-bar").on("keypress", searchController.searchOnEnter);
-        $("#search-form").submit(searchController.search);
 		$("#seach-bar-icon").on("click", searchController.searchBarSubmit);
 		$("#search-clear-btn").click(searchController.clearSearch);		
 		$("#search-bar-sort").change(searchController.sortBy);	
+		
+		if ($("#search-bar").val().length > 0 || location.hash.indexOf("#outfit") == 0){		
+		     if (location.hash.indexOf("#outfit") == 0){
+		          var searchStr = location.hash.substring(location.hash.indexOf("#outfit") + 8);
+		          $("#search-bar").val(searchStr);
+		     }
+		  
+		     searchController.searchBarSubmit();			
+		}
     },
     
     searchOnEnter: function(el){        
@@ -23,7 +31,10 @@ var searchController = {
     },
     
     searchBarSubmit: function(el){
-		el.preventDefault();
+        if (el != null){
+		  el.preventDefault();
+        }
+        
 		var searchTerm = $( "#search-bar" ).val().trim();
 		
 		searchController.isSearchActive = true;
@@ -43,11 +54,14 @@ var searchController = {
 		  searchController.search();  
 		  
 		}else if (searchTerm == ''){
+		  location.hash = '';
 		  filterPresenter.onFilterSelect();
 		}else{
 		  filterPresenter.clearFilters();
 		  searchController.search();  
-		}		
+		}	
+		
+		return false;	
     },
     
     search: function(criteria){
@@ -219,34 +233,39 @@ var searchController = {
         
         searchController.criteria = criteria;
         searchController.pageIndex = 0;
-        searchController.hasMoreProducts = true;
+        searchController.hasMoreProducts = true;        
         $("#product-grid").html("");
+        location.hash = "outfit=" + $( "#search-bar" ).val();
         searchController.getProducts(searchController.showResults);
     },            
     
     getProducts: function(){                                
         
         if (searchController.hasMoreProducts){
+            $("#product-loader").show();
+            
             var pageIndex = searchController.pageIndex;
             $.post( window.HOME_ROOT + searchController.url +pageIndex, searchController.criteria, function( data ) {
-                data = data.products;
         		gridPresenter.endTask();
         		
-        		if( Object.keys(data).length > 0){  
-        		    productPresenter.filterStore = data;
+        		if( data.products != null && data.products.length > 100){  
+        		    productPresenter.filterStore = data.products;
         		    gridPresenter.lazyLoad(data);     		        		    
         		}else if (pageIndex <= 0){
         		    productPresenter.filterStore = {};
         		    
         		    var errorMessage = '';
         		    
-        		    if (searchController.criteria['searchTerm'] == null || searchController.criteria['searchTerm'] == ""){
+        		    if (searchController.criteria == null ||
+        		          searchController.criteria['searchTerm'] == null || 
+        		          searchController.criteria['searchTerm'] == ""){        		              
         		        errorMessage = "There are no macthing outfits!";
         		    }else{
         		        errorMessage = "There are no outfits that matched your search! Try using another way to describe what you are looking for.";
         		    }
         		  
         			$("#product-grid").html($("<div>").text(errorMessage));
+        			$("#product-loader").hide();
         		}else{
         		      searchController.hasMoreProducts = false; 
         		}                        
@@ -256,6 +275,8 @@ var searchController = {
               
             searchController.pageIndex++;        
         }else{
+            $("#product-loader").hide();
+                        
             if ($(".endResults").length <= 0){
                 
                 if ($("#product-grid .item").length > 0){

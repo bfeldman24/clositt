@@ -2,43 +2,62 @@
 require_once(dirname(__FILE__) . '/../app/session.php'); 
 require_once(dirname(__FILE__) . '/../app/Controller/FilterController.php');
 
-$filterController = new FilterController($mdb2);              
+$filterController = new FilterController();              
 $filters = $filterController->getHtmlFilters();
 ?>		
-<!DOCTYPE>
+<!DOCTYPE HTML>
 <html>
 <head>
 
 <link href="<?php echo HOME_ROOT; ?>lib/css/joyride-2.1.css" rel="stylesheet">
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
+<link href="<?php echo HOME_ROOT; ?>new/css/jquery.mCustomScrollbar.css" rel="stylesheet">
+<link href="<?php echo HOME_ROOT; ?>new/css/flexslider.css" rel="stylesheet" />
 
 </head>
 <body>
 
 <div class="wrapper">
     <?php include(dirname(__FILE__) . '/static/header.php');   ?>    
-    <section id="slider">
-        <div class="sliderwrap">    
-            <div id="layerslider" style="width: 100%; height: 620px;">
-                <div class="ls-slide" data-ls="transition2d:5;">
-                    <img src="<?php echo HOME_ROOT; ?>new/images/homeslider.jpg" class="ls-bg" alt="Slide background" />
-                </div>    
-                <div class="ls-slide" data-ls="transition2d:5;timeshift:-1000;">
-                    <img src="<?php echo HOME_ROOT; ?>new/images/homeslider1.jpg" class="ls-bg" alt="Slide background" />
-                </div>    
-            </div>
+     <section id="slider">
+        <div class="sliderwrap"> 
+            <h1>find it on clositt</h1>
+            <h2>Search, Browse and Collect your favorite clothes</h2>
+            <a class="started" href="#top"><i class="icon-angle-right"></i> GET STARTED NOW</a>
+                
+		<a class="nextstep" id="top" href="#top"></a>
+        
         </div>
     </section>
-    
+        
     <?php print_r($filters); ?>
     
-    <section id="items">
+    <section class="items">
         <div class="container">
-            <div class="row box-row"></div>
+           
+            <div id="product-grid" class="row box-row">
+                <div class="col-xs-12 col-sm-8 col-md-7">
+                    <div class="flexslider">
+                        <ul class="slides">
+                            <li>
+                                <img src="<?php echo HOME_ROOT; ?>new/images/popupslider.jpg" />
+                            </li>
+                            <li>
+                                <img src="<?php echo HOME_ROOT; ?>new/images/popupslider.jpg" />
+                            </li>
+                            <li>
+                                <img src="<?php echo HOME_ROOT; ?>new/images/popupslider.jpg" />
+                            </li>
+                        </ul>
+                    </div>
+                </div> 
+                    
+            </div>
+            
         </div>
     </section>
     
-    <div class="loader"><i class="icon-svg5"></i></div>
+    <div id="product-loader" class="loader"><i class="icon-svg5"></i></div>
     
     <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
 </div>
@@ -46,22 +65,34 @@ $filters = $filterController->getHtmlFilters();
 <?php include(dirname(__FILE__) . '/static/footerMeta.php');   ?>
 
 <script type="text/javascript">
+	
+  $(window).load(function() {
+    $('.flexslider').flexslider({
+      animation: "slide"
+    });
+  });    
+
+</script>
+
+
+<script type="text/javascript">
 $(document).ready(function() {	
 	
 	pagePresenter.init();
 	productPagePresenter.init();
 	gridPresenter.init();
-	productPresenter.init();	
+	productPresenter.init();
+	socialPresenter.init();	
 	filterPresenter.init();	
 	tagPresenter.init();
 	searchController.init();	
-	reviewsPresenter.init();		
-	colorPresenter.init();             
+	reviewsPresenter.init();
+	closetFormPresenter.initNotLoggedIn();	             
 });
 
 
 function loggedIn(){       
-	closetFormPresenter.getClosetInfo();			
+	closetFormPresenter.init();			
 }
 </script>
 

@@ -2,7 +2,7 @@
 
 class ProductView {	
     
-    public static function getProductGridTemplate($product){        
+    public static function getProductGridTemplate($product, $lazyLoadImages = true, $columnSizeOverride = null){        
 	    if (!is_object($product)){      	
 	       return null;
 	    }	    	    				
@@ -18,91 +18,84 @@ class ProductView {
 		$price = $product->getPrice();
 		$price = !isset($price) || !is_numeric($price) ? "" : "$" . round($price);		 						
 
-		$rand = rand(1,3);
-		$shadow = "";
-		if($rand == 1){
-			$shadow = 'shadow';	
-		}		
+        if (isset($columnSizeOverride)){
+            $columnSizes = $columnSizeOverride;   
+        }else{
+            $columnSizes = "col-xs-12 col-sm-4 col-md-3 col-lg-box";   
+        }
+        
+        // Get the product page links        
+        $home = 'http://www.clositt.com/'; // DELETE THIS AND JUST ADD HOME_PAGE
+        $productPageLink = rawurlencode($home . "!/" . $product->getShortLink());
+        $productPageImgLink = rawurlencode($product->getImage());
+        $productPageDescription = rawurlencode("Found on Clositt.com");
 		
-		?>
+		ob_start();
+		?>		
 		
-		<div class="col-xs-12 col-sm-4 col-md-3 col-lg-box box">
-            <div class="outfit item" pid="<?= $product->getId() ?>">
+		<div class="<?php echo $columnSizes; ?> box outfit" pid="<?php echo $product->getId() ?>">
+            <div class="item" data-url="<?php echo $product->getShortLink() ?>">
                 <div class="mainwrap">
                     <div class="imagewrap">
-                        <img src="<?php echo $product->getImage() ?>" onerror="return pagePresenter.handleImageNotFound(this)" />
+                        <?php if ($lazyLoadImages){ ?>
+                        <img class="loadingImage" src="<?php echo HOME_ROOT; ?>css/images/loading.gif"/>
+                        <img style="display:none;" data-src="<?php echo $product->getImage() ?>" onerror="return productPresenter.handleImageNotFound(this)" />
+                        <?php }else{ ?>
+                            <img src="<?php echo $product->getImage() ?>" onerror="return productPresenter.handleImageNotFound(this)" />
+                        <?php } ?>
                     </div>
                     <div class="detail">
                         <h4><?php echo $product->getName() ?></h4>
-                        <span class="price"><?php echo $price ?> </span><!--<del>$50</del>-->
-                        <p><?php echo $product->getStore() ?></p>
+                        <div>
+                            <span class="price pull-right"><?php echo $price ?></span>
+                            <p class="pull-left"><?php echo $product->getStore() ?></p>
+                        </div>
+                        <div class="clear"></div>                        
                     </div>
-                    <div class="cart_option">
-                        <a href="ClosittProductDetail.html">
-                            <i class="icon-svg20"></i>
-                        </a>
-                        <a href="#">
+                    
+                    <div class="cart_option"> 
+                        <a class="dropdown-toggle addToClosittDropdown" data-toggle="dropdown"><i class="icon-svg20"></i></a>
+                        
+                        <div class="dropdown-menu create_new" role="menu">
+                            <input class="pull-left addNewClosetInput" type="text" placeholder="Create New Clositt" />
+                            <a class="create pull-right submitNewCloset"><i class="icon-plus"></i></a>
+                            <div class="clear"></div>
+                            
+                            <div class="my_opt addToClosetOptions"></div>                            
+                        </div>
+    
+                        <a>
                             <i class="icomoon-bubble-dots-4 message-icon">
                                 <span class="badge">&nbsp;</span>
                             </i>
                         </a> 
-                        <a class="more-opt" href="#">
-                            <i class="icon-svg3 dots-icon"></i>
-                        </a>
-                    </div>
+                        <a class="more-opt"><i class="icomoon-share-2 dots-icon"></i></a>
+                    </div>                    
                 </div>
-                <div class="hover_more"><a href="#"><i class="icon-svg15"></i></a><a href="#"><i class="icon-svg14"></i></a><a href="#"><i class="icon-svg16"></i></a><a href="#"><i class="icon-svg17"></i></a><a href="#"><i class="icon-svg18"></i></a></div>
+                <div class="hover_more">
+                    <a style="margin-left: 12%;" class="socialbtn" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $productPageLink; ?>">
+                        <i class="icon-svg17"></i>
+                    </a>
+                    <a class="socialbtn" target="_blank" href="https://twitter.com/share?url=<?php echo $productPageLink; ?>">
+                        <i class="icon-svg16"></i>
+                    </a>
+                    <a class="socialbtn" target="_blank" href="https://plus.google.com/share?url=<?php echo $productPageLink; ?>">
+                        <i class="icon-svg14"></i>
+                    </a>
+                    <a class="socialbtn" target="_blank" href="http://pinterest.com/pin/create/button/?url=<?php echo $productPageLink; ?>&media=<?php echo $productPageImgLink; ?>&description=<?php echo $productPageDescription; ?>">
+                        <i class="icon-svg18"></i>
+                    </a>
+                    <a class="socialbtn email-product" target="_blank" href="#" data-url="<?php echo $product->sl; ?>">
+                        <i class="icomoon-envelop"></i>
+                    </a>                                                 
+                </div>
             </div>
-        </div>
-
-
-		 <!--			 		
-		<div class="outfit item" pid="<?= $product->getId() ?>">
-			<div class="picture">
-			     <a class="productPage" target="_blank" orig-href="<?= $product->getLink() ?>">
-			         <img src="<?= $product->getImage() ?>" class="<?= $shadow ?>" onerror="return pagePresenter.handleImageNotFound(this)"/>
-			     </a>
-			</div>			
-			<div class="overlay">
-				<div class="topleft">										
-					<div class="tagOutfitBtn" data-toggle="tooltip" data-placement="left" title="Tagitt">
-					   <i class="icon-tags icon-white"></i>
-					</div>						 
-				</div>
-				<div class="addTagForm" style="display:none;"></div>
-				<div class="topright">										
-					<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Clositt">
-					   <img class="hanger-icon" src="css/images/hanger-icon-white.png" />
-					   <i class="icon-plus-sign icon-white hanger-plus"></i>
-					</div>
-				</div>
-				<div class="bottom">						    					    
-				    <div class="productActions" >					    
-				       <span data-toggle="tooltip" data-placement="top" title="Add to Wish List" class="addToWishList">
-				            <i class="icon-gift icon-white"></i>
-				       </span>
-				       <span data-toggle="tooltip" data-placement="top" title="Show Comments" class="showComments numReviews">
-				            <span class="counter" ><?= $reviewCount ?></span>
-				            <i class="icon-comment icon-white"></i>
-				       </span>
-				       <span data-toggle="tooltip" data-placement="top" title="Added to '+closetCount+' Clositt'+closetCountPlural+'" class="numClosets">
-				            <span class="counter"><?= $closetCount ?></span>
-				            <i class="icon-hanger-white"></i>
-				       </span>
-				    </div>														    					    
-				    					
-					<div class="companyName"><?= $product->getStore() ?></div>
-					<div class="price"><?= $price ?></div>
-					<div class="name"><?= $product->getName() ?></div>
-				</div>
-				<div class="product-comments"></div>
-				<div class="addToClosetForm" style="display:none;"></div>
-			</div>
-			<div class="clear"></div>				
-		</div>	
-		-->
-			
-		<?php		         
+        </div>								
+		
+    <?php	
+                
+        $html = ob_get_clean();
+        return preg_replace('/^\s+|\n|\r|\s+$/m', '', $html);
     }
 
 }
