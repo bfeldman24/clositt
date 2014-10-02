@@ -1,0 +1,59 @@
+Clositt - SQL
+List of MySQL queries to find errors in the development Database
+Ben Fishman
+8/24/'14
+
+:::::::::::::::::::::::::::::::::::::::::::::::::
+1 .Lots of duplicate links in HistoricalProducts
+:::::::::::::::::::::::::::::::::::::::::::::::::
+
+select id,sku,count(*)
+from HistoricalProducts
+group by sku
+order by count(*) asc
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+2 . Weird price change to 9999.99 in HistoricalPrices
+these sku dont exist in the products table
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+select *
+from HistoricalPrices
+where newPrice = (select MAX(newPrice) from HistoricalPrices)
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+3. Duplicate data/counting links/ different categories same product
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+select sku, name, store,link,category,count(*)
+from Products
+group by link
+Having count(*) > 1 
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+4. Product table has category data with imporper tab and new_line fomatting
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+select *
+from Products
+where category LIKE '\n%' or category LIKE '%\t%'
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+5. Query to look for anything over 20,000 - arbitrary call by me after looking up the max value in products
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+select *
+from Products   //can be switched with HistoricalProducts
+where price > '20000'     //just change equivalence operator to look for small prices
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+6. Query to for skus whos price has increased by more than 50% since they were to stored in HProd to Prod
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+select p.sku, p.link, p.price, hp.price as hp_price, hp.sku hp_sku
+from Products p, HistoricalProducts hp
+where p.sku = hp.sku and p.price > ((hp.price*.5)+hp.price)
+
+-----------------------
+weird chars: ‰ Ã
+
