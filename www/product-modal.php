@@ -172,8 +172,8 @@ if (isset($_GET['s'])){
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-md-6">
-                        <div class="add-clositt">
-                            <a class="add-btn pull-left dropdown-toggle addToClosittDropdown" data-toggle="dropdown">
+                        <div class="add-clositt addToClosittDropdown">
+                            <a class="add-btn pull-left dropdown-toggle" data-toggle="dropdown">
                                 <i class="icon-svg20"></i>Add to Clositt
                             </a>                             
                         

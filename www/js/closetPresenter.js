@@ -289,7 +289,13 @@ var closetFormPresenter = {
 	},
 	
 	initNotLoggedIn: function(){
-	   $(document).on("show.bs.dropdown",".cart_option, .add-clositt", closetFormPresenter.showClosetForm);
+	   $(document).on("show.bs.dropdown",".addToClosittDropdown", closetFormPresenter.showClosetForm);
+	   $(document).on("shown.bs.dropdown",".addToClosittDropdown", function(e){
+	       var $element = $(e.currentTarget).parent().find(".addToClosetOptions");
+	       if (!$element.hasClass("mCustomScrollbar")){
+	           $element.mCustomScrollbar();
+	       }
+	   });
 	},
 	
 	getClosetInfo: function(){
@@ -340,7 +346,7 @@ var closetFormPresenter = {
 			
 			var element = el.currentTarget;					
 			
-			if($(element).parents(".item").find(".addToClosetOptions > a").length <= 0){				
+			if($(element).parents(".item").find(".addToClosetOptions .closetOption").length <= 0){				
 			 	
 			 	$options = $("<div>");			
 				
@@ -355,7 +361,7 @@ var closetFormPresenter = {
 					);
 				}		
 														
-				$(element).parent().find(".addToClosetOptions").append( $options.children() );						
+				$(element).parent().find(".addToClosetOptions").append( $options.children() );										
 			}
 		}
 	},	

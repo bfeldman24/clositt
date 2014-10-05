@@ -11,7 +11,6 @@ $filters = $filterController->getHtmlFilters();
 
 <link href="<?php echo HOME_ROOT; ?>lib/css/joyride-2.1.css" rel="stylesheet">
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
-<link href="<?php echo HOME_ROOT; ?>new/css/jquery.mCustomScrollbar.css" rel="stylesheet">
 <link href="<?php echo HOME_ROOT; ?>new/css/flexslider.css" rel="stylesheet" />
 
 </head>
