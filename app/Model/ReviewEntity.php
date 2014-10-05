@@ -78,12 +78,12 @@ class ReviewEntity {
 	public static function setFromDB($row){         
 		$reviewEntity = new ReviewEntity();
 				
-		$reviewEntity->setSku(BaseEntity::getDBField($row[PRODUCT_SKU]));
-		$reviewEntity->setUserId(BaseEntity::getDBField($row[USER_ID]));
-		$reviewEntity->setUserName(BaseEntity::getDBField($row[USER_NAME]));
-		$reviewEntity->setReview(BaseEntity::getDBField($row[REVIEW_COMMENT]));
-		$reviewEntity->setRating(BaseEntity::getDBField($row[REVIEW_RATING]));
-		$reviewEntity->setDate(BaseEntity::getDBField($row[REVIEW_DATE]));
+		$reviewEntity->setSku(BaseEntity::getDBField($row, PRODUCT_SKU));
+		$reviewEntity->setUserId(BaseEntity::getDBField($row, USER_ID));
+		$reviewEntity->setUserName(BaseEntity::getDBField($row, USER_NAME));
+		$reviewEntity->setReview(BaseEntity::getDBField($row, REVIEW_COMMENT));
+		$reviewEntity->setRating(BaseEntity::getDBField($row, REVIEW_RATING));
+		$reviewEntity->setDate(BaseEntity::getDBField($row, REVIEW_DATE));
 		
 		return $reviewEntity;
 	}		

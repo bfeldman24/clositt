@@ -40,8 +40,9 @@ img { max-width: 100%; }
 #slider { margin: 0 0 0; }
 .navbar-default { background: none; border: none; margin: 0; min-height: 60px; padding-top: 5px; }
 .navbar-default .navbar-nav > li > a { color: #f44fa4; font-size: 14px; font-weight: 600; }
-.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus { color: #f44fa4; font-weight: 600; }
-.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus { color: #2b2e2f; background: none; background-color: transparent; }
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus { color: #66ccff; font-weight: 600; }
+.navbar-default .navbar-nav > .active > a { color: #2b2e2f; background: none; background-color: transparent; }
+.navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus { color: #66ccff !important; background: none; background-color: transparent; }
 .navbar-default .navbar-brand { color: #f44fa4; font-size: 31px; font-weight: 600; font-family: 'Open Sans', sans-serif; padding: 0px 15px; text-transform: uppercase; }
 .navbar-default .navbar-brand:hover { color: #f44fa4; }
 .navbar-default .search-btn { font-size: 16px; padding: 8px 9px; background: #f44fa4; border: none; color: #fff; }
@@ -78,7 +79,6 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 }
 .btn-clositt-theme{
     background-color: #66ccff;
-    border-color: #55bbee;
     color: #fff;
 }
 .btn-clositt-theme:hover, .btn-clositt-theme:focus, .btn-clositt-theme:active{
@@ -224,7 +224,7 @@ p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; li
 
 .space { height: 10px; clear: both; display: block }
 
-.create_new{
+.create_new, .comments{
     background: #FFFFFF ;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
@@ -237,16 +237,40 @@ p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; li
 	top:50px;
 	z-index:999;
 	max-height: 300px;
-    overflow-y: auto;
-  }
+}
   
-.create_new:before { background:url(../images/drop-arrow.png) no-repeat left top; left:30px; top:-8px; height:8px; width:15px; position:absolute; content:""; display:table;  }
+.create_new .addToClosetOptions{
+    display: block;
+    max-height: 225px;
+    overflow: hidden;
+}  
 
-.create_new input[type="text"]{  width:80%; min-height:38px; border:1px solid #e1e1e1; padding-left:10px; border-radius:6px 0px 0px 6px; margin-bottom:13px;}
-.create_new input[placeholder="Create New Clositt"]{ color:#424242; font-size:14px}
-.create_new a.create{display: block;float: right !important;text-align: center;width: 20% !important; min-height:38px !important; padding:9px; background:#f354a8; border-radius:0px 6px 6px 0px;}
+.comments{
+    padding: 0;
+}
 
-.create_new a.create i {color: #fff !important;font-size: 19px!important;}
+.comments .review-comments{
+    max-height: 165px;   
+    display: block;
+    overflow: hidden;
+}
+  
+.create_new:before, .comments:before { background:url(../images/drop-arrow.png) no-repeat left top; left:30px; top:-8px; height:8px; width:15px; position:absolute; content:""; display:table;  }
+.comments:before{ left: 97px; }    
+.create_new input[type="text"], .comments textarea{  width:80%; min-height:38px; border:1px solid #e1e1e1; padding-left:10px; border-radius:6px 0px 0px 6px; margin-bottom:13px; color:#424242; font-size:14px}
+.comments textarea {border-radius: 6px 6px 0px 0px; font-size: 14px; height: 70px; line-height: 16px; padding: 10px; resize: none; width: 100%; margin-bottom:0px; border: medium none;}
+.create_new a.create, .comments .addCommentBtn{display: block;float: right !important;text-align: center;width: 20% !important; min-height:38px !important; padding:9px; background:#f354a8; border-radius:0px 6px 6px 0px;}
+.create_new a.create i, .comments .addCommentBtn i {color: #fff !important;font-size: 19px!important;}
+
+.comments .addCommentBtn {float: none !important; background: #F5F5F5; height: 30px; width: 100% !important; border-radius: 0px; border-right: none !important;}
+
+.comments .review-comments { margin: 5px 5px 5px 10px; } 
+.comments .review-comments .review { margin: 0; border-bottom: 1px dotted #66ccff; width: 100%; padding: 10px 0;}
+.comments .review-comments .review:first-child {padding-top: 5px}
+.comments .review-comments .review:last-child {border-bottom: none; padding-bottom: 5px}
+.comments .review-comments .review .review-user { font-weight: bold; font-size:12px; float:left; margin-right: 5px; background: none; color: #bdbdbd; }
+.comments .review-comments .review .review-user a { display: inline; float: none; color: #bdbdbd; }
+.comments .review-comments .review .review-text {font-size: 12px; line-height: 14px; color: #666; white-space: pre;}
 
 a.ring_opt{ width:100% !important; border-right:0px !important; min-height:0px !important; border-radius: 10px; padding: 5px; float: left;}
 a.ring_opt p{ color:#434343; font-size:13px; margin-left:8px}
@@ -285,13 +309,13 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 }
 .items .col-lg-box { min-height: 374px; padding-bottom: 10px !important; }
 .items { margin-top: 26px; }
-.items .box { padding-bottom: 50px; max-width: 300px; }
+.items .box { padding-bottom: 40px; max-width: 300px; }
 .items .item { border: 1px solid #d0d0d0; border-radius: 8px; background: #fff; position: relative; max-width: 225px; margin: 0 auto; }
 .items .item-type2 { max-width: 270px; }
 .items .item .mainwrap { background: #fff;  border-radius: 8px; position: relative;}
 .items .item .imagewrap { width: 100%; border-radius: 8px 8px 0 0; height: 175px; text-align: center; overflow: hidden; position: relative; cursor: pointer; }
 .items .item .imagewrap img { max-width: 100%; height: 100%; }
-.items .item .detail { padding: 6px 8px 14px 8px; }
+.items .item .detail { padding: 6px 8px 5px 8px; }
 .items .item .detail h4 { color: #424242; font-size: 13px; font-weight: 400; line-height: normal; font-family: 'Sintony', sans-serif; margin-bottom: 4px; display: block; min-height: 36px; overflow: hidden; }
 .items .item .detail span.price { color: #424242; font-size: 16px; font-family: 'Doppio One'; font-weight: 400; margin-right: 4px; }
 .items .item .detail del { color: #f44fa4; font-size: 16px; font-family: 'Doppio One'; font-weight: 400; }

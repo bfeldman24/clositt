@@ -6,7 +6,7 @@
 <script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/highcharts.js"></script>
 <script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/exporting.js"></script>
 <script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/owl.carousel.js"></script>
-<script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/jquery.mCustomScrollbar.js"></script>
+<script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/custom.js"></script>
 
 

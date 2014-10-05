@@ -4,9 +4,11 @@ require_once(dirname(__FILE__) . '/../Database/Dao/ReviewDao.php');
 require_once(dirname(__FILE__) . '/../Model/ReviewEntity.php');
 require_once(dirname(__FILE__) . '/ProductController.php');
 require_once(dirname(__FILE__) . '/ListController.php');
+require_once(dirname(__FILE__) . '/ListController.php');
+require_once(dirname(__FILE__) . '/Debugger.php');
 require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
 
-class ReviewController{	
+class ReviewController extends Debugger{	
     private $reviewDao = null;
     private $productController = null;
 	
@@ -21,8 +23,9 @@ class ReviewController{
 	   if (isset($review) && isset($_SESSION['userid'])){
 	       $reviewEntity = ReviewEntity::setFromPost($review);
 	       $sku = $reviewEntity->getSku();
+	       $userid = $reviewEntity->getUserId();	       	       
 	       
-	       if (isset($sku)){
+	       if (isset($sku) && $userid == $_SESSION['userid']){
 	           $affectedRows = $this->reviewDao->addReview($reviewEntity, $_SESSION['userid']);
 	           
 	           if ($affectedRows > 0){
@@ -66,10 +69,9 @@ class ReviewController{
 	       $sku = $reviewEntity->getSku();
 	       
 	       if (isset($sku)){
-	           $results = $this->reviewDao->getReviews($reviewEntity);
+	           $results = $this->reviewDao->getReviews($sku);
 	           
-	           if(is_object($results)){
-		 
+	           if(is_object($results)){		 
         			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){				    
         				$fetchedReview = ReviewEntity::setFromDB($row);
         				$reviewList[] = $fetchedReview->toArray();

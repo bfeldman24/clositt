@@ -1,4 +1,8 @@
 <?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
+require_once(dirname(__FILE__) . '/ProductView.php');
 
 class ClosetView {	        
     
@@ -28,7 +32,7 @@ class ClosetView {
                 
         $html = ob_get_clean();
         return preg_replace('/^\s+|\n|\r|\s+$/m', '', $html);
-    }
+    }             
     
     
     public static function getClosets($closets, $userid){
@@ -49,13 +53,7 @@ class ClosetView {
                     $itemsCount = $countItems;
                     break;       
                 }   
-            }            
-            
-            // Get the clositt page links        
-            $home = 'http://www.clositt.com/'; // DELETE THIS AND JUST ADD HOME_PAGE
-            $closittPageLink = rawurlencode($home . "!+/" . $userid . "/" . $closetRef);
-            $closittPageImgLink = rawurlencode($items[0]['cache']);
-            $closittPageDescription = rawurlencode($name . " - Clositt.com");
+            }                        
             
             // Closet header            
             ?>            
@@ -87,65 +85,13 @@ class ClosetView {
                                     <div class="container">
                                          <div class="row box-row">
 
-            <?php               
-            // Closet Items                 
-            foreach ($items as $item) {
-                if (!isset($item) || !isset($item['item']) || !isset($item['cache'])){
-                    continue;   
-                }
-                
-                // Get the product page links        
-                $home = 'http://www.clositt.com/'; // DELETE THIS AND JUST ADD HOME_PAGE
-                $productPageLink = rawurlencode($home . "!/" . $item['reference']['sl']);
-                $productPageImgLink = rawurlencode($item['cache']);
-                $productPageDescription = rawurlencode("Found on Clositt.com");
-                
-                ?>                                           
-                                            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-box box outfit" pid="<?php echo $item['item']; ?>">
-                                                <div class="item">
-                                                    <div class="mainwrap">
-                                                        <div class="imagewrap">
-                                                            <img src="<?php echo $item['cache']; ?>">
-                                                        </div>
-                                                        <div class="detail">
-                                                            <h4><?php echo $item['reference']['n']; ?></h4>
-                                                            <div>
-                                                                <span class="price pull-right"><?php echo $item['reference']['p']; ?></span>
-                                                            <p class="pull-left"><?php echo $item['reference']['o']; ?></p>
-                                                            </div>
-                                                            <div class="clear"></div>
-                                                            
-                                                        </div>
-                                                        <div class="cart_option">
-                                                            <a class="removeProductBtn"><i class="icon-svg4 remove-prod"></i></a>
-                                                            <a><i class="icomoon-bubble-dots-4 message-icon"><span class="badge">&nbsp;</span></i></a> 
-                                                            <a class="more-opt"><i class="icomoon-share-2 dots-icon"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hover_more">
-                                                        <a style="margin-left: 12%;" class="socialbtn" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $productPageLink; ?>">
-                                                            <i class="icon-svg17"></i>
-                                                        </a>
-                                                        <a class="socialbtn" target="_blank" href="https://twitter.com/share?url=<?php echo $productPageLink; ?>">
-                                                            <i class="icon-svg16"></i>
-                                                        </a>
-                                                        <a class="socialbtn" target="_blank" href="https://plus.google.com/share?url=<?php echo $productPageLink; ?>">
-                                                            <i class="icon-svg14"></i>
-                                                        </a>
-                                                        <a class="socialbtn" target="_blank" href="http://pinterest.com/pin/create/button/?url=<?php echo $productPageLink; ?>&media=<?php echo $productPageImgLink; ?>&description=<?php echo $productPageDescription; ?>">
-                                                            <i class="icon-svg18"></i>
-                                                        </a>
-                                                        <a class="socialbtn email-product" target="_blank" href="#" data-url="<?php echo $productPageLink; ?>">
-                                                            <i class="icomoon-envelop"></i>
-                                                        </a>                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                <?php
-            }
-            
-            // Container closing tags
-            ?>                                                                                                                                    
+                                            <?php               
+                                                // Closet Items                 
+                                                foreach ($items as $item) {                                
+                                                    echo ProductView::getProductGridTemplate($item, false);
+                                                }            
+                                            ?>               
+                                                                                                                                                                 
                                         </div>
                                     </div>
                                 </section>

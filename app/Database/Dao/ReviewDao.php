@@ -8,15 +8,14 @@ class ReviewDao extends AbstractDao {
 	
 	public function addReview($review, $userid){
 	    $sql = "INSERT INTO " .REVIEWS. 
-	           " (".PRODUCT_SKU.",".USER_ID.",".REVIEW_COMMENT.",".REVIEW_RATING.",".REVIEW_STATUS.",".REVIEW_DATE.")".
-                " VALUES (?,?,?,?,1,NOW())";
+	           " (".PRODUCT_SKU.",".USER_ID.",".REVIEW_COMMENT.",".REVIEW_STATUS.",".REVIEW_DATE.")".
+                " VALUES (?,?,?,1,NOW())";
         
         $sku = $review->getSku();
         $comment = $review->getReview();
-        $rating = $review->getRating();
         
-		$paramTypes = array('text','integer','text','integer');		
-		$params = array($sku, $userid, $comment, $rating);		
+		$paramTypes = array('text','integer','text');		
+		$params = array($sku, $userid, $comment);		
 		return $this->update($sql, $params, $paramTypes, "3987239423");
 	}
 	
@@ -33,14 +32,12 @@ class ReviewDao extends AbstractDao {
 		return $this->update($sql, $params, $paramTypes, "0072397362");
 	}
 	
-	public function getReviews($review){
+	public function getReviews($sku){
 	    $sql = "SELECT r.".PRODUCT_SKU.",u.".USER_NAME.",r.".REVIEW_COMMENT.",r.".REVIEW_RATING.",r.".REVIEW_DATE. 
 	           " FROM ".REVIEWS . " r " .
 	           " INNER JOIN " . USERS . " u ON u.".USER_ID." = r.".USER_ID.
                 " WHERE r.".PRODUCT_SKU." = ? AND r." . REVIEW_STATUS . " = 1 " . 
-                " ORDER BY r." . REVIEW_DATE . " DESC";
-        
-        $sku = $review->getSku();
+                " ORDER BY r." . REVIEW_DATE . " DESC";        
         
 		$paramTypes = array('text');		
 		$params = array($sku);		

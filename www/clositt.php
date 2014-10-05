@@ -215,19 +215,18 @@ if (!isset($nickname) || $nickname == ""){
         productPresenter.init();	
         reviewsPresenter.init();
         tagPresenter.init();
-        socialPresenter.init();
+        socialPresenter.init();	
      });
 <?php }else{ ?>
     function userDataReady(user){    
         pagePresenter.enableLazyLoading = false;
         pagePresenter.init();    
-        closetPresenter.init();     
-        productPagePresenter.init();
+        closetPresenter.init();             
         productPresenter.init();	
+        productPagePresenter.init();
         reviewsPresenter.init();       
         tagPresenter.init();
         socialPresenter.init();
-        $("#subheader-myclositt").addClass("active");                
     }        
 <?php } ?>
 

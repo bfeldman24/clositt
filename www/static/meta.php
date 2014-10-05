@@ -16,9 +16,10 @@ if (isset($product) && $product != null){
 <meta property="og:image:secure_url" content="<?php echo $metaImage; ?>" /> 
 
 <link href="<?php echo HOME_ROOT; ?>lib/css/bootstrap.min.css" rel="stylesheet">
+<link href="<?php echo HOME_ROOT; ?>lib/css/jquery-ui-1.10.1.custom.min.css" rel="stylesheet">
 <link href="<?php echo HOME_ROOT; ?>lib/css/messenger.css" rel="stylesheet">
 <link href="<?php echo HOME_ROOT; ?>lib/css/messenger-theme-block.css" rel="stylesheet">
-<link href="<?php echo HOME_ROOT; ?>lib/css/jquery-ui-1.10.1.custom.min.css" rel="stylesheet">
+<link href="<?php echo HOME_ROOT; ?>new/css/jquery.mCustomScrollbar.min.css" rel="stylesheet">
 <!-- <link href="<?php echo CLOSITT_CSS; ?>" rel="stylesheet"> -->
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
