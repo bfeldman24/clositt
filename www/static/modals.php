@@ -23,7 +23,7 @@
                                         <h1>Login</h1>
                                         <p class="log">You already have an account? Great! Login here.</p>
                                         
-                                        <form id="signin">
+                                        <div id="signin">
                                             <input id="loginModalTab-inputEmail" type="text" placeholder="Email Address" />
                                             <input id="loginModalTab-inputPassword" type="password" placeholder="Password" />
                                             <div class="sub">
@@ -36,7 +36,7 @@
                                             <div class="register">
                                                 <p>Don't have an account? <a href="#" class="showSignupTab">Register Now &gt;&gt;</a></p>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div> 
                                 </div>
                             </div>
@@ -51,7 +51,7 @@
                                         <h1>Sign Up</h1>
                                         <p class="log">Fill the form to become a member in Clositt</p>
                                 
-                                        <form>
+                                        <div>
                                             <input id="signupModalTab-inputName" type="text" placeholder="Name" />
                                             <input id="signupModalTab-inputEmail" type="email" placeholder="Email Address" />
                                             <input id="signupModalTab-inputPassword" type="password" placeholder="Password" />
@@ -61,7 +61,7 @@
                                                 <div class="clear"></div>
                                             </div>
                                             <div class="space"></div>                                                                                
-                                        </form>
+                                        </div>
                                     </div> 
                                 </div>
                             </div>

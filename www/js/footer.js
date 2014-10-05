@@ -72,7 +72,7 @@ $('#loginModalTab-inputPassword, #signupModalTab-inputPassword2, #signupModalTab
 
 $("#signupModalSubmit, #loginModalSubmit").on("click",function(event){
 	event.preventDefault();
-	submitSigninModal();	 	 	 	
+	submitSigninModal(event);	 	 	 	
 	return false;
 });
 
@@ -84,7 +84,9 @@ $(".showSignupTab").on("click", function(event){
     $('#signupModalTabBtn').tab('show');
 });
 
-function submitSigninModal(){
+function submitSigninModal(e){
+    e.preventDefault();
+    
     if ($('#loginSignupModal li.active a[data-toggle="tab"]').attr("href") == "#loginModalTab"){
             if($('#loginModalTab-inputPassword').val().length > 5){
      
@@ -121,6 +123,8 @@ function submitSigninModal(){
           		console.log("invalid");	
           	}
 	 }
+	 
+	 return false;
 }
 
 $(".forgotpass").on("click", function(e){
