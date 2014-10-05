@@ -4,7 +4,7 @@
 <title>Search Admin</title>
 
 <?php 
-require_once(dirname(__FILE__) . '/../../../app/globals.php');
+require_once(dirname(__FILE__) . '/../../../app/session.php');
 include(dirname(__FILE__) . '/../../static/meta.php');   
 ?>
 
@@ -94,6 +94,7 @@ body{
 </div>
 
 
+<?php include(dirname(__FILE__) . '/../../static/footerMeta.php');   ?>
 <?php echo CLOSITT_JS; ?>
 <script type="text/javascript">
 
