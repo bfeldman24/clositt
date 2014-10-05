@@ -12,12 +12,12 @@ then
     then
         echo "ES is not healthy, restarting!"
         curl -XPOST http://localhost:9200/_shutdown
-        ./../../elasticsearch-1.1.0/bin/elasticsearch -d -Xmx96m -Xms96m
+        ./../../lib/elasticsearch-1.1.0/bin/elasticsearch -d -Xmx96m -Xms96m
     else
         echo "ES is healthy!"
     fi
 
 else
     echo "$SERVICE is not running, starting"
-    ./../../elasticsearch-1.1.0/bin/elasticsearch -d -Xmx96m -Xms96m
+    ./../../lib/elasticsearch-1.1.0/bin/elasticsearch -d -Xmx96m -Xms96m
 fi
