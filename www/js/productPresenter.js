@@ -7,27 +7,7 @@ var productPresenter = {
 	
 	init: function(){	
 	    $(document).on('click','.imagewrap', productPresenter.showProductModal);
-	},		
- 		
-	getClosetItemTemplate: function(sku, image){	    
-	    var html = '';
-	    
-	    if (sku != null && image != null){	       
-	    	 			    			 			
-    		html ='<div class="outfit item" pid="'+sku+'">';
-				html +='<div class="picture"><a class="productPage" target="_blank" ><img src="' + image + '" /></a></div>';							
-//				html +='<div class="overlay">';
-//					html +='<div class="bottom">';										
-//						html +='<div class="companyName">' + company + '</div>';
-//						html +='<div class="name">' + name + '</div>';
-//					html += '</div>';
-//				html += '</div>';
-				html += '<div class="clear"></div>';				
-			html +='</div>';
-	    }
-			
-		return $(html);
-	},		
+	},		 			
 	
 	refreshImages: function(){	   
 	     var date = new Date();
@@ -93,6 +73,7 @@ var productPresenter = {
         $(this).on("load", function(){
             $(this).prev().remove();
             $(this).show(); 
+            $(this).parents(".mainwrap").first().find(".detail h4").tooltip({delay: { "show": 1500, "hide": 0 }});
         });
         
         return true;
@@ -102,7 +83,8 @@ var productPresenter = {
         var sku = $(img).parents(".outfit").attr("pid");
         $(img).removeAttr("data-src");
         $(img).removeAttr("onerror");
-        $(img).attr( "src", window.HOME_ROOT + "i/" + sku);                       
+        $(img).attr( "src", window.HOME_ROOT + "i/" + sku);  
+        $(img).parents(".mainwrap").first().find(".detail h4").tooltip({delay: { "show": 1500, "hide": 0 }});                     
         return true;
     }	   			
 };
