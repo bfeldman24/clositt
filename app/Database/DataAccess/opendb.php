@@ -3,7 +3,7 @@ require_once('MDB2.php');
 
 function mdb2_connect() {
 
-	require_once('clositt-config.php');
+	require_once(dirname(__FILE__) . '/../../../configs/clositt-config.php');
 	
 	$options = array(
 	    'portability' => MDB2_PORTABILITY_ALL,
