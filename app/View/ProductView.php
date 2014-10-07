@@ -16,7 +16,7 @@ class ProductView {
             $name = $product->getName();
             $image = $product->getImage();
             $shortLink = $product->getShortLink(); 
-            $price = $product->getPrice();
+            $price = $product->getPrice();                        
     		
 //    		$reviewCount = $product->getCommentCount();
 //    		$reviewCount = isset($reviewCount) ? $reviewCount : 0;		
@@ -41,6 +41,7 @@ class ProductView {
 		}
 		
 		$price = !isset($price) || !is_numeric($price) ? '' : "$" . round($price);
+		$tooltip = 'data-toggle="tooltip" data-placement="top" title="'.$name.'"';						
 
         if (isset($columnSizeOverride)){
             $columnSizes = $columnSizeOverride;   
@@ -69,7 +70,7 @@ class ProductView {
                         <?php } ?>
                     </div>
                     <div class="detail">
-                        <h4><?php echo $name ?></h4>
+                        <h4 <?php echo $tooltip; ?>><?php echo $name ?></h4>
                         <div>
                             <span class="price pull-right"><?php echo $price ?></span>
                             <p class="pull-left"><?php echo $store ?></p>
