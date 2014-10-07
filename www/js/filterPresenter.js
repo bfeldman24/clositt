@@ -255,7 +255,6 @@ var filterPresenter = {
  	}, 	
  	 	
  	refreshFilters: function(){
- 	      var customer = filterPresenter.getSelectedCustomer();
  	      
  	      if (customer == "men"){
  	          filterPresenter.defaultCustomer = "men";
