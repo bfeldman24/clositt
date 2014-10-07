@@ -32,9 +32,10 @@ $filters = $filterController->getHtmlFilters();
     <?php print_r($filters); ?>
     
     <section class="items">
-        <div class="container">
-           
+        <div class="container">           
             <div id="product-grid" class="row box-row">
+            
+                <?php /*
                 <div class="col-xs-12 col-sm-8 col-md-7">
                     <div class="flexslider">
                         <ul class="slides">
@@ -50,9 +51,9 @@ $filters = $filterController->getHtmlFilters();
                         </ul>
                     </div>
                 </div> 
+                */ ?>
                     
-            </div>
-            
+            </div>            
         </div>
     </section>
     
