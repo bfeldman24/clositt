@@ -244,12 +244,14 @@ class ProductEntity{
 			$ProductEntity->setId(BaseEntity::getDBField($row, 'sku'));
 			$ProductEntity->setStore(BaseEntity::getDBField($row, 'store'));
 			$ProductEntity->setCustomer(BaseEntity::getDBField($row, 'customer'));
-            if(is_array($row['tag'])){
-                $ProductEntity->setCategory(stripslashes(implode(", ",$row['tag'])));
-            }
-            else{
-                $ProductEntity->setCategory(BaseEntity::getDBField($row, 'tag'));
-            }
+            
+            if(isset($row['tag'])){
+                if (is_array($tags)){
+                   $ProductEntity->setCategory(stripslashes(implode(", ", $tags)));
+                }else{
+                   $ProductEntity->setCategory($tags);
+               }
+            }            
 
             $colors = array();
             if(isset($row['color'])){
