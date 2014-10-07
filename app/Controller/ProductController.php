@@ -258,7 +258,7 @@ class ProductController extends Debugger{
 	       $pageNumber = 0;  
 	    }
 	   
-        $criteria = ProductCriteria::setCriteriaFromPost($data);
+        $criteria = ProductCriteria::setCriteriaFromPost($data);        
 
         //check if elastic is healthy. If not, do old style search on DB
         $elasticHealthy = false;
@@ -319,7 +319,7 @@ class ProductController extends Debugger{
 		
 		if (!isset($image)){
 		   // The default image if none exists
-	       $image = file_get_contents(dirname(__FILE__) . '/../../www/css/images/missing.png');    
+	       $image = file_get_contents(dirname(__FILE__) . '/../../www/css/images/missing.jpg');    
 		}
 		
 		return $image;

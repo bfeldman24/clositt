@@ -6,7 +6,7 @@ class FilterView {
         if (!isset($filters) || !is_array($filters) || 
             !isset($filters['customer']) || !isset($filters['category']) || !isset($filters['company']) || 
             !isset($filters['price']) || !isset($filters['color'])){      	
-	       return null;
+	       return "whoops";
 	    }	
         
         ob_start();
@@ -144,21 +144,23 @@ class FilterView {
         $firstLetters = array();
         
         foreach ($stores as $store){
-            $firstLetter = strtolower(substr($store[0], 0, 1));
-            
-            if (isset($firstLetter) && $firstLetter != ""){
-                                
-                if (!in_array($firstLetter, $firstLetters)){
-                    $firstLetters[] = $firstLetter;
-                    
-                    if (is_numeric($firstLetter)){
-                        $firstLetter = "0"; 
+            if (!empty($store)){
+                $firstLetter = strtolower(substr($store[0], 0, 1));
+                
+                if (isset($firstLetter) && $firstLetter != ""){
+                                    
+                    if (!in_array($firstLetter, $firstLetters)){
+                        $firstLetters[] = $firstLetter;
+                        
+                        if (is_numeric($firstLetter)){
+                            $firstLetter = "0"; 
+                        }
+                        
+                        echo '<li id="'.$firstLetter.'"></li>';
                     }
                     
-                    echo '<li id="'.$firstLetter.'"></li>';
+                    echo '<li><a class="select_filter" value="'.$store[0].'" >'.$store[0].'</a></li>';               
                 }
-                
-                echo '<li><a class="select_filter" value="'.$store[0].'" >'.$store[0].'</a></li>';               
             }
         }                
     }
