@@ -166,7 +166,7 @@ class ElasticDao{
             }
 
             if(!empty($filters)){
-                $searchParams['body']['query']['filtered']['filter'] = $filters;
+                $searchParams['body']['query']['filtered']['filter']['and'] = $filters;
             }
 
         }
