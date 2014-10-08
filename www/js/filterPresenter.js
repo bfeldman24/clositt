@@ -165,7 +165,9 @@ var filterPresenter = {
             var filterType = $(this).attr("filterType");
             var filterValue = $(this).attr("value").toLowerCase().replace(/'/g, "\\'");
             
-	 		criteria[filterType] = new Array();	 				 	
+            if (criteria[filterType] == undefined || criteria[filterType] == null){
+	 		    criteria[filterType] = new Array();	 				 	
+            }
 	 	    	 		
 	 		if(filterType == "price"){
 	 			var abovePrice = parseInt($(this).attr("min"));
@@ -190,9 +192,10 @@ var filterPresenter = {
     	 	if (isSearch){
     	 	     searchController.search(criteria);
     	 	     
-    	 	}else if (areAnyFiltersChecked){
+    	 	}else if (areAnyFiltersChecked){    	 	    
     	 	    searchController.criteria = criteria;
                 searchController.pageIndex = 0; 
+                searchController.isSearchActive = true;
                 searchController.hasMoreProducts = true;	 		 		 	
                 searchController.getProducts();
     	 	}else{
@@ -307,11 +310,21 @@ var filterPresenter = {
  	createSelectedFilter: function(e){ 	       	  
  	    var tagValue = $(e.currentTarget).attr("value");	  
 	    var tagType = $(e.currentTarget).parents("ul.filter-options").attr("filterType");	  
-    	$(".selectedFilters").append(
-    	   $('<span>').attr("value",tagValue).attr("filterType",tagType).text(tagValue).append(
-                $('<a class="icon-svg4"></a>')
-    	   )
-    	);
+	    
+	    if ($('.selectedFilters span[value="'+tagValue+'"]').length <= 0){	    
+	        var $filterButton = $('<span>').attr("value",tagValue).attr("filterType",tagType).text(tagValue).append(
+                                     $('<a class="icon-svg4"></a>')
+                         	   );
+	       
+	        if (tagType == "price"){
+	           var min = $(e.currentTarget).attr("min");
+	           var max = $(e.currentTarget).attr("max");
+	           
+	           $filterButton.attr("min",min).attr("max",max);  
+	        }
+	       
+          	$(".selectedFilters").append($filterButton);
+	    }
     	
     	$(e.currentTarget).parents(".open").first().removeClass("open");
  	}, 	 	 	
