@@ -91,7 +91,7 @@ if (!isset($nickname) || $nickname == ""){
     
     <section class="clositt-inner">
         <div class="panel-group">             
-            <?php echo ClosetView::getClosets($closets, $userid); ?>       
+            <?php echo ClosetView::getClosets($closets); ?>       
         </div>
     </section>
     

@@ -35,7 +35,7 @@ class ClosetView {
     }             
     
     
-    public static function getClosets($closets, $userid){
+    public static function getClosets($closets){
         if (!isset($closets) || !is_array($closets)){      	
 	       return null;
 	    }	    	    								
