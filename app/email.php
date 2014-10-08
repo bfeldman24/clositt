@@ -130,6 +130,23 @@ class EmailController{
         }else{
         	return "failed";	
         }
+    }
+    
+    
+    
+    public static function sendHtmlEmail($email, $subject, $message){           
+                                                                        				
+        $headers = "From: info@clositt.com \r\n" .
+        		    "Reply-To: ben@clositt.com \r\n" .
+        		    "Bcc: bfeldman24@gmail.com \r\n" .
+        		    "MIME-Version: 1.0\r\n" .
+        		    "Content-Type: text/html; charset=ISO-8859-1\r\n"; 		    
+        
+        if(mail($email, $subject, $message, $headers)){                                    
+        	return "success";	
+        }else{
+        	return "failed";	
+        }
     }  
 }
 
