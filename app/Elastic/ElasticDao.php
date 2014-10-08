@@ -58,6 +58,7 @@ class ElasticDao{
         }
         catch(Exception $e){
             //TODO log error here
+
         }
 
 		if (isset($retDoc) && is_array($retDoc)){
@@ -92,7 +93,7 @@ class ElasticDao{
         $customer = array('term'=>array('customer'=>$criteria->getCustomers()));
         //TODO fix so the filter and the indexing both use same analyzer. For now
         //just turn to lower case bc on indexing every thing gets lowercase treatment
-        $category = array('terms'=>array('tag'=>array_map('strtolower', $criteria->getCategories())));
+        $category = array('terms'=>array('category'=>array_map('strtolower', $criteria->getCategories())));
         $color = array('term'=>array('color'=>array_map('strtolower', $criteria->getColors())));
         $store = array('terms'=>array('store'=>array_map('strtolower', $criteria->getCompanies())));
 
@@ -128,11 +129,6 @@ class ElasticDao{
             array_push($filters, $color);
         }
 
-        if(empty($filters)==false){
-            $baseFilter = array('and'=>$filters);
-        }
-
-        $query = array();
         $fields = array();
 
         if($criteria->getSearchString()){
@@ -165,7 +161,14 @@ class ElasticDao{
 
         $queryType =$criteria->getQueryType();
         if (empty($queryType) || $queryType=="querystring"){
-            $searchParams['body']['query']['query_string'] = array( "query" => $criteria->getSearchString() ,"fields" => $fields);
+            if($criteria->getSearchString()){
+                $searchParams['body']['query']['filtered']['query']['query_string'] = array( "query" => $criteria->getSearchString() ,"fields" => $fields);
+            }
+
+            if(!empty($filters)){
+                $searchParams['body']['query']['filtered']['filter'] = $filters;
+            }
+
         }
         else if ($queryType=="custom"){
             //if doing custom search, the fields should be specified in the query string itself.
