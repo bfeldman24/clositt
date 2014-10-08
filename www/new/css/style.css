@@ -428,7 +428,7 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 .stBubble { background-image: none !important; }
 
 
-#product .product-slider { margin-top: 44px; width: 100%; min-width: 325px; border-radius: 6px; border: 1px solid #e1e1e1; padding: 70px 16px 15px 16px; position: relative; }
+#product .product-slider { margin-top: 44px; width: 100%; min-width: 325px; border-radius: 6px; border: 1px solid #e1e1e1; padding: 70px 16px 15px 16px; position: relative; height: 223px; overflow: hidden }
 #product .product-slider .slidewrap { width: 114px; height: 136px; border: 1px solid #e1e1e1; margin-left: 1px; }
 #product .product-slider .slidewrap a { display: block; }
 #product .product-slider .slidewrap a i { display: none; width: 44px; height: 44px; border-radius: 100%; background: rgba(0,0,0,0.90); text-align: center; line-height: 40px; vertical-align: middle; color: #fff; font-size: 20px; position: absolute; margin: auto; left: 0; top: 0; right: 0; bottom: 0; }

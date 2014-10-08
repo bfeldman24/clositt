@@ -307,8 +307,7 @@ function loadChart(){
     });
 }
 
-$(document).ready(function(){   
-    pagePresenter.enableLazyLoading = false;    
+$(document).ready(function(){       
     pagePresenter.init();	
     productPagePresenter.init();	
     socialPresenter.init();
@@ -343,19 +342,20 @@ $(document).ready(function(){
     <?php } ?>
     
     if ($("#productModal .product-slider .slidewrap").length > 0){
-        $('#productModal .product-slider').owlCarousel({
-            loop: false,
-            margin: 16,
-            responsiveClass: true,
-            items: $("#productModal .product-slider .slidewrap").length,
-            nav: true				
-    	});    	    	    	
+         setTimeout(function () {
+            $('#productModal .product-slider').owlCarousel({
+                loop: false,
+                margin: 16,
+                responsiveClass: true,
+                items: $("#productModal .product-slider .slidewrap").length,
+                nav: true				
+        	});    	 
+    	}, 1000);   	    	
     }
-    
-    loadChart();        
+        
     setTimeout(function () {
         loadChart();
-    }, 2000); 
+    }, 1000); 
 
 });
 
