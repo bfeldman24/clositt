@@ -415,14 +415,18 @@ var closetFormPresenter = {
 		       
 		      Messenger.success('Clositt '+ closittData.title + ' was saved!');  
 		      closetFormPresenter.closetNames.push(closetName);
+		       		 
+		       var selector = ".addToClosetOptions";		       
+		       if ($(el.currentTarget).parent().find(".addToClosetOptions .mCSB_container").length > 0){      		       										   		selector = ".addToClosetOptions	.mCSB_container";		       		       
+		       }
 		       
-		       $(el.currentTarget).parent().find(".addToClosetOptions").prepend(
+		       $(el.currentTarget).parent().find(selector).prepend(
 			       $("<a>").addClass("ring_opt closetOption").attr("i",closetFormPresenter.closetNames.length - 1).append(
-						$("<div>").addClass("ring2 pull-left")
+						$("<div>").addClass("ring pull-left")
 					).append( 
 					    $("<p>").addClass("pull-left").text(closetName)
 					)
-			   );																       		       
+			   );
 		       
 		       if (el != null && sku != null){
  			       closetFormPresenter.addItemToCloset(el, sku, closetName, result);
