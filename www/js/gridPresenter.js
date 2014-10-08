@@ -104,7 +104,7 @@ var gridPresenter = {
 	    if ($productHtml != null && $productHtml.length > 0){
 	       $("#product-grid").append($productHtml);	       
 	       $("#product-grid .outfit img[data-src]").unveil(200, productPresenter.showImageCallback);
-	    }else{
+	    }else{	       
 	       pagePresenter.enableLazyLoading = false; // no more products  
 	    }       	                      
 			                   			   	   		
