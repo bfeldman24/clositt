@@ -344,17 +344,24 @@ var closetFormPresenter = {
 				closetFormPresenter.getClosetInfo();
 			}			
 			
-			var element = el.currentTarget;					
+			var element = el.currentTarget;			
+			var sku = $(element).parents(".outfit").attr("pid");
+			var index = closetFormPresenter.closetItems.indexOf(sku);								
 			
 			if($(element).parents(".item").find(".addToClosetOptions .closetOption").length <= 0){				
 			 	
 			 	$options = $("<div>");			
 				
-				for(var i=0; i< closetFormPresenter.closetNames.length; i++){										
+				for(var i=0; i< closetFormPresenter.closetNames.length; i++){	
+				    
+				    var radioBtn = "ring2";
+				    if (index >= 0 && closetFormPresenter.closetItemsMapping[index] == closetFormPresenter.closetNames[i]){
+				        radioBtn = "ring";
+				    }									
 				
 					$options.append(
 						$("<a>").addClass("ring_opt closetOption").attr("i",i).append(
-							$("<div>").addClass("ring2 pull-left")
+							$("<div>").addClass(radioBtn + " pull-left")
 						).append( 
 						    $("<p>").addClass("pull-left").text(closetFormPresenter.closetNames[i])
 						)
@@ -462,7 +469,7 @@ var closetFormPresenter = {
     			});	
 			     				
 			}else{
-				Messenger.success('This item is already in your clositt "' + closetName + '"');
+				Messenger.info('This item is already in your clositt "' + closetName + '"');
 			}
 		}
 		

@@ -15,9 +15,15 @@ class FilterView {
         <section id="nav">
             <div class="container" id="filters">
                 <h4 class="text-center">Narrow by:</h4>
-                <div class="col-sm-offset-1 col-md-offset-3">
+                <div class="col-sm-offset-1 col-md-offset-2">
                     <div class="nav">
-                        <ul>
+                        <ul>                        
+                             <li>
+                                <div class="btn-group">
+                                    <div class="btn btn-default nav-filter customer" type="customer" value="men" style="width:60px;">Men</div>
+                                    <div class="btn btn-default nav-filter customer" type="customer" value="women" style="width:80px;">Women</div>
+                                </div>
+                            </li>
                             <li>
                                 <div class="btn-group ">
                                     <button type="button" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Item Type <span class="icon-svg19"></span></button>
@@ -136,7 +142,7 @@ class FilterView {
     public static function getPriceFilter($prices){
         
         for ($i=0; $i < count($prices) - 1; $i++){                                  
-            echo '<li><a class="select_filter" value="'.$prices[$i].' - '.$prices[$i + 1].'" min="'.$prices[$i].'" max="'.$prices[$i + 1].'">'.$prices[$i].' - '.$prices[$i + 1].'</a></li>';               
+            echo '<li><a class="select_filter" value="$'.$prices[$i].' - $'.$prices[$i + 1].'" min="'.$prices[$i].'" max="'.$prices[$i + 1].'">$'.$prices[$i].' - $'.$prices[$i + 1].'</a></li>';               
         }         
     }
     

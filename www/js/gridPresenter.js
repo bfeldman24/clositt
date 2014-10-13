@@ -75,7 +75,7 @@ var gridPresenter = {
         		    gridPresenter.productIndex = 0; 		  			
         		    
         		}else{	    		    
-                     var defaultCustomer = "w";
+                     var defaultCustomer = filterPresenter.defaultCustomer.substring(0,1);
     			     var page = gridPresenter.productIndex;
     			     
     			     if (gridPresenter.browsePages[page] != null){

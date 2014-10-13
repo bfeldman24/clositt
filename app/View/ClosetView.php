@@ -35,7 +35,7 @@ class ClosetView {
     }             
     
     
-    public static function getClosets($closets){
+    public static function getClosets($closets, $userid){
         if (!isset($closets) || !is_array($closets)){      	
 	       return null;
 	    }	    	    								
@@ -53,7 +53,18 @@ class ClosetView {
                     $itemsCount = $countItems;
                     break;       
                 }   
-            }                        
+            }  
+            
+            // Get the clositt page links        
+            $home = 'http://www.clositt.com/'; // DELETE THIS AND JUST ADD HOME_PAGE
+            $closittPageLink = rawurlencode($home . "!+/" . $userid . "/" . $closetRef);            
+            $closittPageDescription = rawurlencode($name . " - Clositt.com");           
+            
+            if (isset($items[0]['cache'])){
+                $closittPageImgLink = rawurlencode($items[0]['cache']);   
+            }else{
+                $closittPageImgLink = LOGO;
+            }           
             
             // Closet header            
             ?>            

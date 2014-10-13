@@ -91,7 +91,7 @@ if (!isset($nickname) || $nickname == ""){
     
     <section class="clositt-inner">
         <div class="panel-group">             
-            <?php echo ClosetView::getClosets($closets); ?>       
+            <?php echo ClosetView::getClosets($closets, $userid); ?>       
         </div>
     </section>
     
@@ -262,6 +262,7 @@ $(".joyride-start").click(function(e){
     startClosittTour(true);
 });    
 
+pagePresenter.defaultHeaderHeight = 0;
 
 </script>
 
