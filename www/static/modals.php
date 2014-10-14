@@ -21,20 +21,19 @@
                                 <div class="col-xs-12">
                                     <div class="login">
                                         <h1>Login</h1>
-                                        <p class="log">You already have an account? Great! Login here.</p>
-                                        
+                                                                                
                                         <div id="signin">
                                             <input id="loginModalTab-inputEmail" type="text" placeholder="Email Address" />
                                             <input id="loginModalTab-inputPassword" type="password" placeholder="Password" />
                                             <div class="sub">
-                                                <p class="pull-left">Forgot password? <a class="forgotpass">Here</a> </p>
+                                                <p class="pull-left"><a class="forgotpass">Forgot password?</a></p>
                                                 <input id="loginModalSubmit" class="pull-right" type="submit" value="Login Now" />
                                                 <div class="clear"></div>
                                             </div>
                                             <div class="border"></div>
                                             
                                             <div class="register">
-                                                <p>Don't have an account? <a href="#" class="showSignupTab">Register Now &gt;&gt;</a></p>
+                                                <p><a href="#" class="showSignupTab">Create a Clositt Account</a></p>
                                             </div>
                                         </div>
                                     </div> 
@@ -49,14 +48,14 @@
                                 <div class="col-xs-12">
                                     <div class="login">
                                         <h1>Sign Up</h1>
-                                        <p class="log">Fill the form to become a member in Clositt</p>
+                                        <p class="log">Create an account to get your own Clositt</p>
                                 
                                         <div>
                                             <input id="signupModalTab-inputName" type="text" placeholder="Name" />
                                             <input id="signupModalTab-inputEmail" type="email" placeholder="Email Address" />
                                             <input id="signupModalTab-inputPassword" type="password" placeholder="Password" />
                                             <div class="sub">
-                                                <p class="pull-left">Already have account? <a href="#" class="showLoginTab">Here</a> </p>
+                                                <p class="pull-left"><a href="#" class="showLoginTab">Already have an Account?</a> </p>
                                                 <input id="signupModalSubmit"  class="pull-right" type="submit" value="Sign Up" />
                                                 <div class="clear"></div>
                                             </div>
