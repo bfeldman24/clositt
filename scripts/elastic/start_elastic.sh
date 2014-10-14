@@ -2,7 +2,8 @@
 
 
 SERVICE='org.elasticsearch.bootstrap.Elasticsearch'
-
+CURRENTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SCRIPT_LOCATION="$CURRENTDIR/../../lib/elasticsearch-1.1.0/bin/elasticsearch"
 #Start service if not runnig yet
 if ps ax | grep -v grep | grep $SERVICE > /dev/null
 then
@@ -12,12 +13,12 @@ then
     then
         echo "ES is not healthy, restarting!"
         curl -XPOST http://localhost:9200/_shutdown
-        ./../../lib/elasticsearch-1.1.0/bin/elasticsearch -d -Xmx96m -Xms96m
+        $SCRIPT_LOCATION -d -Xmx96m -Xms96m
     else
         echo "ES is healthy!"
     fi
 
 else
     echo "$SERVICE is not running, starting"
-    ./../../lib/elasticsearch-1.1.0/bin/elasticsearch -d -Xmx96m -Xms96m
+    $SCRIPT_LOCATION -d -Xmx96m -Xms96m
 fi
