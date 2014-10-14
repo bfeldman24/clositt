@@ -139,7 +139,7 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 #nav .nav ul li .btn-group.open .color-box li a.color-9 { background: #8a5e3b; }
 #nav .nav ul li .btn-group.open .brand-box { min-width: 320px; margin: -5px 0 0 0; padding-bottom: 20px; border-radius: 0 5px 5px 5px; padding-top: 20px; }
 #nav .nav ul li .btn-group.open .brand-box li { padding-left: 60px; margin-bottom: 0px; }
-#nav .nav ul li .btn-group.open .brand-box li a { color: #cccccc; font-size: 14px; letter-spacing: 1px; font-weight: 600; font-family: 'Open Sans', sans-serif; padding: 6px 5px; margin-bottom: 5px; text-transform: uppercase; }
+#nav .nav ul li .btn-group.open .brand-box li a { color: #888888; font-size: 14px; letter-spacing: 1px; font-weight: 600; font-family: 'Open Sans', sans-serif; padding: 6px 5px; margin-bottom: 5px; text-transform: uppercase; }
 #nav .nav ul li .btn-group.open .brand-box li a:hover, #nav .nav ul li .btn-group.open .brand-box li a.active { background: #66ccff; color: #fff; border-radius: 5px; }
 #nav .nav ul li .btn-group.open .brand-box li .input-search { width: 95%; background: url(../images/search2.png) no-repeat 95% 8px; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none; border: 1px solid #cccccc; padding-right: 40px; font-weight: 400; font-size: 13px; }
 #nav .nav ul li .btn-group.open .brand-box li.alphabets { width: 38px; position: absolute; left: 0; top: 20px; border-right: 2px solid #ececec; padding: 0; }
