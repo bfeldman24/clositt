@@ -164,6 +164,7 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 .my-clositt #nav .nav ul li .disabled .nav-filter { color: #e1e1e1; border: 1px solid #e1e1e1; }
 .clositt-inner { width: 100%; max-width: 940px; margin: 0 auto; }
 .clositt-inner .panel-default { border: none; box-shadow: none; -webkit-box-shadow: none; -moz-box-shadow: none; }
+.clositt-inner .panel.closetPanel {overflow: visible }
 .clositt-inner .panel-body { padding: 0; border: none !important; }
 .clositt-inner .panel-default > .panel-heading { color: #adadad; font-size: 26px; font-family: 'Open Sans', sans-serif; font-weight: 400; margin-top: 60px; background-color: transparent; border-color: transparent; }
 .clositt-inner .panel-default > .panel-heading .panel-title { color: #adadad; font-size: 26px; font-family: 'Open Sans', sans-serif; font-weight: 400; }
