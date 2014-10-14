@@ -66,33 +66,33 @@ class FilterView {
                                     <button type="button" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Brand/Store <span class="icon-svg19"></span></button>
                                     <ul class="dropdown-menu scrollTo brand-box" role="menu">
                                         <li class="alphabets">
-                                            <a rel="#0">#</a> 
-                                            <a rel="#a">A</a> 
-                                            <a rel="#b">B</a> 
-                                            <a rel="#c">C</a> 
-                                            <a rel="#d">D</a> 
-                                            <a rel="#e">E</a> 
-                                            <a rel="#f">F</a> 
-                                            <a rel="#g">G</a> 
-                                            <a rel="#h">H</a> 
-                                            <a rel="#i">I</a> 
-                                            <a rel="#j">J</a> 
-                                            <a rel="#k">K</a> 
-                                            <a rel="#l">L</a> 
-                                            <a rel="#m">M</a> 
-                                            <a rel="#n">N</a> 
-                                            <a rel="#o">O</a> 
-                                            <a rel="#p">P</a> 
-                                            <a rel="#q">Q</a> 
-                                            <a rel="#r">R</a> 
-                                            <a rel="#s">S</a> 
-                                            <a rel="#t">T</a> 
-                                            <a rel="#u">U</a> 
-                                            <a rel="#v">V</a> 
-                                            <a rel="#w">W</a> 
-                                            <a rel="#x">X</a> 
-                                            <a rel="#y">Y</a> 
-                                            <a rel="#z">Z</a> 
+                                            <a rel="#123">#</a> 
+                                            <a rel="#A">A</a> 
+                                            <a rel="#B">B</a> 
+                                            <a rel="#C">C</a> 
+                                            <a rel="#D">D</a> 
+                                            <a rel="#E">E</a> 
+                                            <a rel="#F">F</a> 
+                                            <a rel="#G">G</a> 
+                                            <a rel="#H">H</a> 
+                                            <a rel="#I">I</a> 
+                                            <a rel="#J">J</a> 
+                                            <a rel="#K">K</a> 
+                                            <a rel="#L">L</a> 
+                                            <a rel="#M">M</a> 
+                                            <a rel="#N">N</a> 
+                                            <a rel="#O">O</a> 
+                                            <a rel="#P">P</a> 
+                                            <a rel="#Q">Q</a> 
+                                            <a rel="#R">R</a> 
+                                            <a rel="#S">S</a> 
+                                            <a rel="#T">T</a> 
+                                            <a rel="#U">U</a> 
+                                            <a rel="#V">V</a> 
+                                            <a rel="#W">W</a> 
+                                            <a rel="#X">X</a> 
+                                            <a rel="#Y">Y</a> 
+                                            <a rel="#Z">Z</a> 
                                         </li>
                                         <li>
                                             <input type="text" class="form-control drop-search input-search" placeholder="Search">
@@ -151,7 +151,7 @@ class FilterView {
         
         foreach ($stores as $store){
             if (!empty($store)){
-                $firstLetter = strtolower(substr($store[0], 0, 1));
+                $firstLetter = strtoupper(substr($store[0], 0, 1));
                 
                 if (isset($firstLetter) && $firstLetter != ""){
                                     
@@ -159,10 +159,10 @@ class FilterView {
                         $firstLetters[] = $firstLetter;
                         
                         if (is_numeric($firstLetter)){
-                            $firstLetter = "0"; 
+                            $firstLetter = "123"; 
                         }
                         
-                        echo '<li id="'.$firstLetter.'"></li>';
+                        echo '<li id="'.$firstLetter.'" class="brand-letter">'.$firstLetter.'</li>';
                     }
                     
                     echo '<li><a class="select_filter" value="'.$store[0].'" >'.$store[0].'</a></li>';               
