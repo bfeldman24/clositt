@@ -145,7 +145,7 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 #nav .nav ul li .btn-group.open .brand-box li.alphabets { width: 38px; position: absolute; left: 0; top: 20px; border-right: 2px solid #ececec; padding: 0; }
 #nav .nav ul li .btn-group.open .brand-box li.alphabets a { display: block; width: 100%; text-align: center; padding: 0; font-family: 'Source Sans Pro', sans-serif; font-weight: 600; margin-bottom: 0px; font-size: 14px; line-height: 18px; text-transform: uppercase; color: #66ccff; }
 #nav .nav ul li .btn-group.open .brand-box li.alphabets a:hover { background: none; color: #66ccff; }
-#nav .nav ul li .btn-group.open .brand-box li.alphabets .selected, #nav .nav ul li .btn-group.open .brand-box li.alphabets .selected:hover { color: #fff; background: #66ccff; border-radius: 10px; }
+#nav .nav ul li .btn-group.open .brand-box li.alphabets .selected, #nav .nav ul li .btn-group.open .brand-box li.alphabets a:hover { color: #fff; background: #66ccff; border-radius: 10px; }
 #nav .nav ul li .btn-group.open .brand-box li .search-results { width: 95%; max-height: 425px; margin-top: 10px; }
 #nav .nav ul li .btn-group.open .brand-box li .search-results li { padding: 0; }
 #nav .tag { margin-bottom: 4px; }
