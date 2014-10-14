@@ -1,7 +1,7 @@
 <div class="modal fade" id="loginSignupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog2">
         <div class="modal-content2">
-            <button type="button" class="close close2 modal_close" data-dismiss="modal">
+            <button type="button" class="close modal_close" data-dismiss="modal">
                 <span class="icon-times close-modal" aria-hidden="true"></span>
             </button>                
                 
@@ -78,7 +78,7 @@
 <div class="modal fade" id="shareProductModal" tabindex="-1" role="dialog" aria-labelledby="shareProductModalLabel" aria-hidden="true">
     <div class="modal-dialog2">
         <div class="modal-content2">
-            <button type="button" class="close close2 modal_close" data-dismiss="modal">
+            <button type="button" class="close modal_close" data-dismiss="modal">
                 <span class="icon-times close-modal" aria-hidden="true"></span>
             </button>                
                 
@@ -125,7 +125,7 @@
 <div id="forgotPassModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog2">
         <div class="modal-content2">
-            <button type="button" class="close close2 modal_close" data-dismiss="modal">
+            <button type="button" class="close modal_close" data-dismiss="modal">
                 <span class="icon-times close-modal" aria-hidden="true"></span>
             </button>                
                 
