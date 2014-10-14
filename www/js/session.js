@@ -21,7 +21,7 @@ var session = {
 	       session.loggedOutCallback();
 	   }	   	   
 
-        $(document).on("click", ".loggedoutBtns .register", function(e){
+        $(document).on("click", ".loggedoutBtns .register, #getstarted", function(e){
             e.preventDefault();
             $("#signupModalTabBtn").tab('show');
         });       

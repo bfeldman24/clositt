@@ -22,7 +22,7 @@ $filters = $filterController->getHtmlFilters();
         <div class="sliderwrap"> 
             <h1>find it on clositt</h1>
             <h2>Search, Browse and Collect your favorite clothes</h2>
-            <a class="started go_to_top hidden-xs"><i class="icon-angle-right"></i> GET STARTED NOW</a>
+            <a id="getstarted" class="started hidden-xs" data-toggle="modal" data-target="#loginSignupModal"><i class="icon-angle-right"></i> GET STARTED NOW</a>
                 
 		<a class="nextstep go_to_top" id="top" ></a>
         
