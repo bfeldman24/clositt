@@ -94,15 +94,13 @@ function submitSigninModal(e){
          		var password = $("#loginModalTab-inputPassword").val();
          		var remember = true;		
          					  	
-         		sessionStorage.goToClositt = true;			  	
-         	  	session.login(email,password,remember);		             	  	
+         	  	session.login(email,password,remember);
          	}else{
          		Messenger.info("Login information is incorrect");	
          	} 
 	       
 	 }else{	 	 
-	        var valid = false;
-	      
+	        var valid = false;	      
 	        
             if($('#signupModalTab-inputPassword').val().length > 5){                    
                 valid = true;                    
@@ -117,7 +115,7 @@ function submitSigninModal(e){
           		var name = $("#signupModalTab-inputName").val();
           		var username = $("#signupModalTab-inputUsername").val();		
           	
-          	    sessionStorage.goToClositt = true;
+          	    session.goToClosittOnLogin = true;
           		session.signup(email, password,remember,name, username);
           	}else{
           		console.log("invalid");	

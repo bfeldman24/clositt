@@ -5,6 +5,7 @@ var session = {
 	email: null,
 	isLoggedIn: false,
 	loginCount: -1,
+	goToClosittOnLogin: false,
 	
 	init: function(){	   
 	   if (sessionInit.active){
@@ -28,8 +29,9 @@ var session = {
         
         $(document).on("click", ".loggedoutBtns .login", function(e){
             e.preventDefault();
+            session.goToClosittOnLogin = $(e.currentTarget).hasClass("myclositt");                                    
             $("#loginModalTabBtn").tab('show');
-        });   
+        });         
 	},
 	
 	login: function(email, password, remember){
@@ -43,6 +45,7 @@ var session = {
 	               if (typeof user == "object" && user.id && user.n && user.e){    			    
      			     session.userid = user.id;
      			     session.name = user.n;
+     			     session.nickname = session.name.split(" ")[0];
      			     session.email = user.e;
      			     session.isLoggedIn = true; 			     
      			     session.loggedInCallback(); 
@@ -51,9 +54,9 @@ var session = {
 	               Messenger.error("The username/password were incorrect! Please try again."); 		               	               
  			  }	
  			  
- 			  if (!session.isLoggedIn){
- 			        $("#loginModalSubmit").removeClass("disabled").val("Login Now"); 
- 			  }
+ 			  setTimeout(function(){
+ 			    $("#loginModalSubmit").removeClass("disabled").val("Login Now")
+ 			  }, 1000); 			   			    			  
 		});				                           	
 	},
 	
@@ -89,16 +92,23 @@ var session = {
 	
 	loggedInCallback: function(){	
 	    if (sessionStorage.isActiveUser == null || sessionStorage.isActiveUser == "null"){
-	       sessionStorage.isActiveUser = true;
+	       sessionStorage.isActiveUser = true;	       	       
 	       	       	      
-	       if (sessionStorage.goToClositt){
+	       if (session.goToClosittOnLogin){
                 location.href = window.CLOSITT_PAGE; 
+                return;
            }else if(typeof loggedIn == 'function'){
-                loggedIn();
+                session.updateLoggedInDropdownMenu();                
+                loggedIn();                
+                Messenger.success("Thanks " + session.nickname + "! You are now logged in and ready to go!");
 		   }          	
         }else if(typeof loggedIn == 'function'){
+            session.updateLoggedInDropdownMenu();
 			loggedIn();
+			Messenger.success("Thanks " + session.nickname + "! You are now logged in and ready to go!");
 		}  
+		
+		$("#loginSignupModal").modal('hide');
 	},
 	
 	loggedOutCallback: function(){	
@@ -168,7 +178,7 @@ var session = {
 	   
 		$("#loginBtns").html("")
 		    .append( $('<li>').addClass("loggedoutBtns").append( 
-		          $('<a>').addClass("login").attr('data-toggle','modal').attr("data-target","#loginSignupModal").append(
+		          $('<a>').addClass("login myclositt").attr('data-toggle','modal').attr("data-target","#loginSignupModal").append(
 		              $("<span>").append( 
         	    	            $("<i>").addClass("icon-svg20")
         	    	      ).append(
@@ -177,12 +187,13 @@ var session = {
 		          )
 		     ))
 		    .append( $('<li>').addClass("loggedoutBtns active").append( 
-		          $('<a>').addClass("register").attr('data-toggle','modal').attr("data-target","#loginSignupModal").text('Register')
+		          $('<a>').addClass("login").attr('data-toggle','modal').attr("data-target","#loginSignupModal").text('Login')
 		     ));			    		    	
 	},	
 
  	logout: function(){	 	   	  								
 		$.post( window.HOME_ROOT + "u/logout", function(user){
+	          session.goToClosittPageOnLogin = false;
 	          location.href= window.HOME_ROOT;
 		});				                           	
 	},
