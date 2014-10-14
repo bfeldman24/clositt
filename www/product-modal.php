@@ -217,7 +217,8 @@ if (isset($_GET['s'])){
                         <div class="product-slider <?php if (!isset($productData->swatches)){ echo 'hide'; } ?>" >
                         <?php 
                             $swatches = $productData->swatches;                                
-                            if (isset($swatches)){
+                            if (isset($swatches) && count($swatches) > 0){
+                                    echo '<div class="slidewrap"><a><img src="'. $product->i .'"/><i class="icon-search-plus"></i></a></div>';
                                 foreach ($swatches as $image) {
                                     echo '<div class="slidewrap"><a><img src="'.$image.'"/><i class="icon-search-plus"></i></a></div>';                                
                                 }
@@ -307,27 +308,23 @@ function loadChart(){
     });
 }
 
-$(document).ready(function(){   
-    pagePresenter.enableLazyLoading = false;    
+$(document).ready(function(){       
     pagePresenter.init();	
     productPagePresenter.init();	
     socialPresenter.init();
     //reviewsPresenter.init(); 
     //reviewsPresenter.populateProductPageReview($("#product-page-content"), "<?php echo $product->s ?>");      
     
-    $(document).on("click", ".slidewrap>a>i, .slidewrap>a>img", function(e){
-        var $clickedImg = $(e.currentTarget).siblings("img").first();
+    $(document).on("click", ".slidewrap>a", function(e){
         
-        if ($clickedImg.length <= 0 && $(e.currentTarget).attr("src") != null){
-            $clickedImg = $(e.currentTarget);
-        }        
+        var $clickedImg = $(e.currentTarget).find("img").first();                      
         
         if ($clickedImg.length > 0){
             var clickedImgSrc = $clickedImg.attr("src");
             
-            var mainImgSrc = $("#mainProductImage").first().attr("src");
+//            var mainImgSrc = $("#mainProductImage").first().attr("src");
             $("#mainProductImage").first().attr("src", clickedImgSrc);
-            $clickedImg.attr("src", mainImgSrc);
+//            $clickedImg.attr("src", mainImgSrc);
             
             <?php if ($productPage === true){ ?>    
                 pagePresenter.scrollTo($("#mainProductImage").position().top);        
@@ -343,19 +340,20 @@ $(document).ready(function(){
     <?php } ?>
     
     if ($("#productModal .product-slider .slidewrap").length > 0){
-        $('#productModal .product-slider').owlCarousel({
-            loop: false,
-            margin: 16,
-            responsiveClass: true,
-            items: $("#productModal .product-slider .slidewrap").length,
-            nav: true				
-    	});    	    	    	
+         setTimeout(function () {
+            $('#productModal .product-slider').owlCarousel({
+                loop: false,
+                margin: 16,
+                responsiveClass: true,
+                items: $("#productModal .product-slider .slidewrap").length,
+                nav: true				
+        	});    	 
+    	}, 1000);   	    	
     }
-    
-    loadChart();        
+        
     setTimeout(function () {
         loadChart();
-    }, 2000); 
+    }, 1000); 
 
 });
 

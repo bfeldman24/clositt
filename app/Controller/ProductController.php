@@ -111,13 +111,12 @@ class ProductController extends Debugger{
             if ($getData['customer'] == 'w'){
                 $customer = array();
                 $customer[] = 'women';          
-                            
+                $productCrit->setCustomers($customer);               
             }else if ($getData['customer'] == 'm'){
                 $customer = array();
-                $customer[] = 'men';                   
-            }
-            
-            $productCrit->setCustomers($customer);
+                $customer[] = 'men';                  
+                $productCrit->setCustomers($customer); 
+            }                        
         }
 	    		
 		if(isset($page) && isset($limit)){	

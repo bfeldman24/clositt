@@ -53,7 +53,7 @@ class ProductDao extends AbstractDao {
 		if(isset($criteria)){ 
 		      $customer = $criteria->getCustomers();
 		      		      
-		      if(is_array($customer)){
+		      if(is_array($customer) && count($customer) > 0){
     		      $sql .= " AND " . PRODUCT_CUSTOMER . " = ? ";
     		      
     		      $params[] = $customer[0];

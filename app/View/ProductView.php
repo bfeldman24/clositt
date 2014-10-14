@@ -36,7 +36,9 @@ class ProductView {
             $shortLink = isset($product['reference']['sl']) ? $product['reference']['sl'] : ''; 
             $price = isset($product['reference']['p']) ? $product['reference']['p'] : '';
 
-		}else{
+		}
+		
+		if (!isset($sku) || !isset($image) || (!isset($name) && !isset($store))){
 		    return null; 
 		}
 		

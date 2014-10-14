@@ -9,10 +9,12 @@ var filterPresenter = {
 	
 	init: function(){		
 	    filterPresenter.allFilters = [];	  
+	    filterPresenter.refreshCustomerFilter();
 	    $(".search-results").mCustomScrollbar();
 	    
         $(document).on("click", '#filters .selectedFilters>span>a', filterPresenter.removeFilter);
         $('#filters .select_filter').click(filterPresenter.onFilterSelect);        
+        $("#filters .customer").click(filterPresenter.selectCustomerFilter);
         $(document).on('keyup', '#filters input.drop-search', filterPresenter.filterTypeAhead);        
         $(document).on("click","#filters .alphabets>a", filterPresenter.scrollToStore);
 						
@@ -166,7 +168,7 @@ var filterPresenter = {
             var filterValue = $(this).attr("value").toLowerCase().replace(/'/g, "\\'");
             
             if (criteria[filterType] == undefined || criteria[filterType] == null){
-	 		    criteria[filterType] = new Array();	 				 	
+	 		    criteria[filterType] = [];	 				 	
             }
 	 	    	 		
 	 		if(filterType == "price"){
@@ -183,7 +185,13 @@ var filterPresenter = {
 	 		}else{
 		 		criteria[filterType].push(filterValue);
 	 		}
-	 	});	 		 		 
+	 	});	 
+	 	
+	 	// add customer filter			 	
+	 	if (filterPresenter.defaultCustomer != "both"){	 	      	
+	 	     criteria['customer'] = [];
+	 	     criteria['customer'].push(filterPresenter.defaultCustomer);
+	 	}
 			 		 	
 	 	if (!filterPresenter.pauseRefresh){
 	 	    productPresenter.filterStore = []; 	        
@@ -226,65 +234,56 @@ var filterPresenter = {
  	},
  	
  	selectCustomerFilter: function(e){
- 	      var isFilter = false;
+ 	      var previousSelectedCustomer = filterPresenter.defaultCustomer; 	      	      
+ 	      var canRefresh = false;
  	      
- 	      var selectedCustomer = $("#filter-float").find(".customerOption.selected").first();
- 	      
- 	      if (selectedCustomer != null){
- 	          selectedCustomer.removeClass("selected");
- 	      }
- 	      
- 	      // Do not reselect the customer if it was the one that was previously selected 
- 	      // and then clicked
- 	      if (e != null && e.currentTarget != null){   
- 	          isFilter = true;
+ 	      if (e && $(e.currentTarget).attr("type") == "customer"){
+ 	          canRefresh = true;
  	          
- 	          if (selectedCustomer.attr("filterid") != $(e.currentTarget).attr("filterid")){      	      
+ 	          if ($(e.currentTarget).hasClass("selected")){
+ 	              $(e.currentTarget).removeClass("selected");    
+ 	          }else{
+ 	              $(".nav-filter.customer").removeClass("selected"); 	              
  	              $(e.currentTarget).addClass("selected");
- 	          } 	          
- 	           	      
- 	      }else if (e == "men"){ 	      
- 	          $('.customerOption[filterid="men"]').addClass("selected");
- 	          
- 	      }else if (e == "women"){ 	      
- 	          $('.customerOption[filterid="women"]').addClass("selected");
+ 	          }	          
  	      }
  	      
- 	      filterPresenter.refreshFilters();
+ 	      var $selected = $(".nav-filter.customer.selected");
  	      
- 	      if (isFilter){
- 	          filterPresenter.onFilterSelect();
- 	      }
- 	}, 	
- 	 	
- 	refreshFilters: function(){
- 	      
- 	      if (customer == "men"){
- 	          filterPresenter.defaultCustomer = "men";
- 	          
- 	          // Need to use the callback because the animation visibility function does not hide hidden elements 	          
- 	          $('.filterOptions .controls[filter-customer="Men"]').show('blind', 'slow', function(){ $(this).show(); });	          
- 	          $('.filterOptions .controls[filter-customer="Women"]').hide('blind', 'slow', function(){ $(this).hide(); });
- 	          
+ 	      if ($selected.length != 1){
+ 	          filterPresenter.defaultCustomer = "both"; 	 	           	          
+ 	          filterPresenter.hideSubcategories("None");
+ 	      }else if ($selected.attr("value") == "men"){
+ 	          filterPresenter.defaultCustomer = "men"; 	           	          
  	          filterPresenter.hideSubcategories("Women");
  	      }else{
  	          
- 	          if (customer == "women"){
- 	              filterPresenter.defaultCustomer = "women";
- 	              
- 	              $('.filterOptions .controls[filter-customer="Men"]').hide('blind', 'slow', function(){ $(this).hide(); });
-     	          $('.filterOptions .controls[filter-customer="Women"]').show('blind', 'slow', function(){ $(this).show(); });
-     	          
-     	          filterPresenter.hideSubcategories("Men");
- 	          }else{
- 	              filterPresenter.defaultCustomer = "both";
- 	              
- 	              $('.filterOptions .controls[filter-customer="Men"]').show('blind', 'slow', function(){ $(this).show(); });
-     	          $('.filterOptions .controls[filter-customer="Women"]').show('blind', 'slow', function(){ $(this).show(); });
-     	          $('.filterOptions .filterSubheader').show('blind', 'slow', function(){ $(this).show(); });
- 	          } 	           	           	          
- 	      } 	       	       	      
- 	},
+              filterPresenter.defaultCustomer = "women";              	          
+	          filterPresenter.hideSubcategories("Men"); 	          	           	           	          
+ 	      } 
+ 	      
+ 	      // update cookie
+ 	      document.cookie="customer="+filterPresenter.defaultCustomer+"; expires=Sun, 31 Dec 9999 12:00:00 UTC; path=/";
+ 	      
+ 	      if (canRefresh && previousSelectedCustomer != filterPresenter.defaultCustomer){
+ 	          filterPresenter.onFilterSelect();
+ 	      }
+ 	}, 
+ 	
+ 	refreshCustomerFilter: function(){
+ 	      var customer = session.getCookie("customer");
+ 	      
+ 	      $(".nav-filter.customer").removeClass("selected");
+ 	      if (customer == "men"){
+ 	             $(".nav-filter.customer[value=men]").addClass("selected");
+ 	             filterPresenter.defaultCustomer = "men";
+ 	      }else if (customer == "women"){
+ 	             $(".nav-filter.customer[value=women]").addClass("selected");
+ 	             filterPresenter.defaultCustomer = "women";
+ 	      }else{
+ 	          filterPresenter.defaultCustomer = "both";   
+ 	      }
+ 	},	
  	
  	hideSubcategories: function(customer){
     	 // Toggle Subcategories
@@ -330,11 +329,8 @@ var filterPresenter = {
  	}, 	 	 	
 	 
 	 clearFilters: function(){
-	   $("#filter-float").find("input").prop("checked", false);
-	   $("#filter-float").find(".selectedColor").removeClass("selectedColor");
-	   $("#selectedFilters").html("");
-	   
-	   $("#filter-float").find(".customerOption").removeClass("selected");
+	   $(".nav-filter.customer").removeClass("selected");
+	   $("#filters .selectedFilters span").remove();
 	 },
 	 
 	 removeFilter: function(e){      	      		 	     	    

@@ -22,9 +22,9 @@ $filters = $filterController->getHtmlFilters();
         <div class="sliderwrap"> 
             <h1>find it on clositt</h1>
             <h2>Search, Browse and Collect your favorite clothes</h2>
-            <a class="started" href="#top"><i class="icon-angle-right"></i> GET STARTED NOW</a>
+            <a class="started go_to_top hidden-xs"><i class="icon-angle-right"></i> GET STARTED NOW</a>
                 
-		<a class="nextstep" id="top" href="#top"></a>
+		<a class="nextstep go_to_top" id="top" ></a>
         
         </div>
     </section>
@@ -77,13 +77,12 @@ $filters = $filterController->getHtmlFilters();
 
 <script type="text/javascript">
 $(document).ready(function() {	
-	
+	filterPresenter.init();	
 	pagePresenter.init();
 	productPagePresenter.init();
 	gridPresenter.init();
 	productPresenter.init();
-	socialPresenter.init();	
-	filterPresenter.init();	
+	socialPresenter.init();		
 	tagPresenter.init();
 	searchController.init();	
 	reviewsPresenter.init();

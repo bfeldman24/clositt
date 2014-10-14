@@ -75,7 +75,7 @@ var gridPresenter = {
         		    gridPresenter.productIndex = 0; 		  			
         		    
         		}else{	    		    
-                     var defaultCustomer = "w";
+                     var defaultCustomer = filterPresenter.defaultCustomer.substring(0,1);
     			     var page = gridPresenter.productIndex;
     			     
     			     if (gridPresenter.browsePages[page] != null){
@@ -104,7 +104,7 @@ var gridPresenter = {
 	    if ($productHtml != null && $productHtml.length > 0){
 	       $("#product-grid").append($productHtml);	       
 	       $("#product-grid .outfit img[data-src]").unveil(200, productPresenter.showImageCallback);
-	    }else{
+	    }else{	       
 	       pagePresenter.enableLazyLoading = false; // no more products  
 	    }       	                      
 			                   			   	   		

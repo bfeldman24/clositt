@@ -134,18 +134,7 @@ var searchController = {
         }                                
         
         if (criteria == null){
-            criteria = {};
-            
-            // Select the customer if applicable
-            var customerRegex = new RegExp(searchController.regexEscape("women|men"), 'gi');
-            matchingCustomerFilters = cleanSearchTerm.match(customerRegex);
-            
-            if (matchingCustomerFilters != null && matchingCustomerFilters.length > 0){
-                filterPresenter.selectCustomerFilter(matchingCustomerFilters[0]);
-                criteria['customer'] = matchingCustomerFilters;
-                
-                cleanSearchTerm = cleanSearchTerm.replace(customerRegex, '');
-            }                                                                        
+            criteria = {};                                                                                          
                     
             // Clear filters and reselct the matching filters        
             filterPresenter.clearFilters();            
@@ -259,12 +248,12 @@ var searchController = {
         		    if (searchController.criteria == null ||
         		          searchController.criteria['searchTerm'] == null || 
         		          searchController.criteria['searchTerm'] == ""){        		              
-        		        errorMessage = "There are no macthing outfits!";
+        		        errorMessage = "There are no matching outfits!";
         		    }else{
         		        errorMessage = "There are no outfits that matched your search! Try using another way to describe what you are looking for.";
         		    }
         		  
-        			$("#product-grid").html($("<div>").text(errorMessage));
+        			$("#product-grid").html($("<div>").addClass("endResults").text(errorMessage));
         			$("#product-loader").hide();
         		}else{
         		      searchController.hasMoreProducts = false; 

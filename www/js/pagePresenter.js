@@ -14,7 +14,7 @@ var pagePresenter = {
    	    //$("#brand").css("position", "fixed");
         //$("#user-dropdown").css("position", "fixed");
         
-        $(".back_to_top").on("click", pagePresenter.scrollToTop);        
+        $(".back_to_top, .go_to_top").on("click", pagePresenter.scrollToTop);        
         
         $(document).ready(function(){                        
             if ($("#product-loader").length > 0){
