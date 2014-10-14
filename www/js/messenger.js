@@ -23,7 +23,7 @@ var Messenger = {
 		);
 	},
 	
-	alert: function(msg, statusCode){
+	alert: function(msg, statusCode, timeout){
 		var status = "alert-success";
 		
 		if(statusCode == "error"){
@@ -53,20 +53,23 @@ var Messenger = {
 				$("#" + Messenger.id).css("display","none");			
 			}
 			
-		}, Messenger.timeout );
+		}, timeout );
 		
 		return true;
 	},
 	
-	success: function(msg){
-		Messenger.alert(msg, "success");	
+	success: function(msg, timeout){
+	    timeout = timeout || Messenger.timeout; 	   
+		Messenger.alert(msg, "success", timeout);	
 	},
 	
-	error: function(msg){
-		Messenger.alert(msg, "error");	
+	error: function(msg, timeout){
+	    timeout = timeout || Messenger.timeout;
+		Messenger.alert(msg, "error", timeout);	
 	},
 	
-	info: function(msg){
-		Messenger.alert(msg, "info");	
+	info: function(msg, timeout){
+	    timeout = timeout || Messenger.timeout;
+		Messenger.alert(msg, "info", timeout);	
 	}
 }

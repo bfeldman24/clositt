@@ -76,11 +76,17 @@ var session = {
           			     session.loggedInCallback();
 	               }         
 	          }catch(e){
-	               Messenger.error("Whoops! We encountered an issue while signing you up!");
-	               Messenger.error("Please try again or use the contact link at the bottom of the page to let us know of the issue.");	               
-    		     
-    		       var userData = { e: email, n: name, s: "Failed Signup Attempt", t: "issue" };
-    		       $.post(window.HOME_ROOT + "e/contact", userData);
+	               if (result == "Incorrect credentials"){
+	                   Messenger.error("There is already a clositt user with that email address in our system!", 8000);
+	                   Messenger.error("Go to the login tab and try again. If you forgot your password, use the forgot password link.", 8000);
+	                   $("#loginModalTab-inputEmail").val(email);
+	               }else{	           
+    	               Messenger.error("Whoops! We encountered an issue while signing you up!", 8000);
+    	               Messenger.error("Please try again or use the contact link at the bottom of the page to let us know of the issue.", 8000);	               
+        		     
+        		       var userData = { e: email, n: name, s: "Failed Signup Attempt", t: "issue" };
+        		       $.post(window.HOME_ROOT + "e/contact", userData);
+	               }
  			  }	
  			  
  			  if (!session.isLoggedIn){
