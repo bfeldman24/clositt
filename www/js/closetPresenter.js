@@ -9,8 +9,7 @@ var closetPresenter = {
 	    if (closetPresenter.user != null){
 		  closetPresenter.user =  parseInt(closetPresenter.user) - parseInt(closetPresenter.share);
 	    }	    
-		
-		
+				
 		$(document).on("click", "#closet-share", socialPresenter.showClosittShareButtons);
 		$(document).on("click",".removeProductBtn", closetPresenter.removeOutfit);		
 		$(document).on("click", ".closetName", closetPresenter.goToCloset);	
@@ -26,7 +25,8 @@ var closetPresenter = {
 		$("#search-bar").on("keypress", closetPresenter.searchOnEnter);
 		$("#seach-bar-icon").on("click", closetPresenter.searchBarSubmit);     
 		
-		$('.closet-title').tooltip();		      		
+		$('.closet-title').tooltip();	
+		closetFormPresenter.init();	      		
 	},		
 	
 	setUser: function(user){
@@ -225,7 +225,7 @@ var closetPresenter = {
 	   var closetName = $("#newClosetName").val();
 	   
 	   if (closetName == null || closetName.trim() == "" || 
-	       closetName == $("#newClosetName").attr("placeholder") || $('#' + closetName.replace(/ /g,'')).length > 0){
+	       closetName == $("#newClosetName").attr("placeholder") || $('#' + closetName.replace(/\W+/g, '')).length > 0){
 	           
 	       Messenger.info("Please enter a new clositt name!");   
 	   }else{
@@ -422,22 +422,39 @@ var closetFormPresenter = {
 		       
 		      Messenger.success('Clositt '+ closittData.title + ' was saved!');  
 		      closetFormPresenter.closetNames.push(closetName);
-		       		 
-		       var selector = ".addToClosetOptions";		       
-		       if ($(el.currentTarget).parent().find(".addToClosetOptions .mCSB_container").length > 0){      		       										   		selector = ".addToClosetOptions	.mCSB_container";		       		       
+		       
+		       if (el == null){
+		          if ($("#closetNameList").length > 0){
+		              var $newClositt = $("<li>").css("display","none").append(
+            		                      $("<div>").addClass("btn-group").append(
+            		                          $("<button>").addClass("btn btn-default nav-filter closetName")
+            		                              .attr("type","button")
+            		                              .attr("name",closittData.title)
+            		                              .text(closittData.title)		                                      		                              
+            		                      )
+            		                  );
+		              
+		              $newClositt.insertBefore("#closetNameList .addnew");
+		              $newClositt.show('slow');		              		              		              
+		          }   
+		       }else{
+		          		       		 
+      		       var selector = ".addToClosetOptions";		       
+      		       if ($(el.currentTarget).parent().find(".addToClosetOptions .mCSB_container").length > 0){      		       										   		selector = ".addToClosetOptions	.mCSB_container";		       		       
+      		       }
+      		       
+      		       $(el.currentTarget).parent().find(selector).prepend(
+      			       $("<a>").addClass("ring_opt closetOption").attr("i",closetFormPresenter.closetNames.length - 1).append(
+      						$("<div>").addClass("ring pull-left")
+      					).append( 
+      					    $("<p>").addClass("pull-left").text(closetName)
+      					)
+      			   );		       
+		       
+      		       if (el != null && sku != null){
+       			       closetFormPresenter.addItemToCloset(el, sku, closetName, result);
+       		   	   }
 		       }
-		       
-		       $(el.currentTarget).parent().find(selector).prepend(
-			       $("<a>").addClass("ring_opt closetOption").attr("i",closetFormPresenter.closetNames.length - 1).append(
-						$("<div>").addClass("ring pull-left")
-					).append( 
-					    $("<p>").addClass("pull-left").text(closetName)
-					)
-			   );
-		       
-		       if (el != null && sku != null){
- 			       closetFormPresenter.addItemToCloset(el, sku, closetName, result);
- 			  }
 		});
 	},
 	
