@@ -386,7 +386,7 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
  transform: rotate(359deg);
 }
 }
-#footer { padding: 30px; position: relative; border-bottom:8px solid #66ccff }
+#footer { padding: 30px; position: relative; border-bottom:8px solid #66ccff; border-top: 1px dashed #ccc; }
 #footer .foooter_logo { position: absolute; text-transform: uppercase; text-align: left; bottom: 8px; left: 10%; font-size: 14px; color: #1c1c1c; font-family: 'Source Sans Pro', sans-serif; font-weight: 700; min-width: 151px; }
 #footer .foooter_logo span { color: #a0a0a0; text-transform: none; font-style: italic; font-weight: 400; }
 #footer .footer_nav { width: 100%; text-align: center; }

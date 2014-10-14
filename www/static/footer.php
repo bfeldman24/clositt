@@ -1,8 +1,8 @@
+<?php /* ?>
 <section id="subscribes">
     <h1><span>Connect with clositt</span></h1>
     <p class="clositt-theme">a fun way to shop online,  all major brands available</p>
 
-    <?php /* ?>
     <div class="social">            
         <ul>
             <li><a href="#"><div class="outer_box"><div class="icon_box"><i class="icon-svg9"></i></div></div><div class="clear"></div><span>Like us on Facebook</span></a></li>
@@ -20,13 +20,13 @@
     <form>
         <input type="email" name="" placeholder="Email address">
         <input type="submit" name="" value="SUBSCRIBE">
-    </form>
-    <?php */ ?>
+    </form>    
     
 </section>
+<?php */ ?>
 
 <footer id="footer">
-    <div class="back_to_top"><a href="#" class="icon-angle-up"></a></div>
+    <?php /* ?><div class="back_to_top"><a href="#" class="icon-angle-up"></a></div><?php */ ?>
     <div class="container">
         <a href="<?php echo HOME_ROOT; ?>" class="foooter_logo pull-left">clositt <span>shopping is fun</span> </a>
         <div class="footer_nav pull-left">
