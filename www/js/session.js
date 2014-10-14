@@ -191,7 +191,7 @@ var session = {
 	    	    
 	    $("#userModal").modal({
 	       show: true,
-	       remote: window.HOME_ROOT + "/settings"
+	       remote: window.HOME_ROOT + "settings"
 	    });
 	    	    	    	           
         e.preventDefault();
