@@ -112,7 +112,7 @@ class EmailController{
                       "It looks like you've forgotten your password. No sweat.\n\n" .
                       "Here's what to do:\n" .
                       "1) Login to Clositt.com with this temporary password: $tempPassword \n" .
-                      "2) Once you login, click on 'Account' in the top right corner.\n" .
+                      "2) Once you login, go to your clositt page and click on the 'Account' link in the top right corner.\n" .
                       "3) Change your password ('old password' means the temporary one).\n\n" .
                       "Note: your temporary password will expire in 24 hours:\n\n" .
                       "Now just head to www.clositt.com and you should be all set. \n\n" .
