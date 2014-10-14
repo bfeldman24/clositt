@@ -490,7 +490,7 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 .sliderwrap h1 { font-size:76px; font-weight:700; color:#fff; text-transform:uppercase; text-align:center; padding-top:80px; display:block; }
 .sliderwrap h2 { font-size:36px; font-weight:400; font-family: 'Sanchez', serif; color:#fff; text-align:center; padding-top:18px; display:block; }
 
-.sliderwrap a.started { max-width:335px; width:80%; margin:36px auto 0; min-height:60px; padding:14px 20px; background:#67cdfe; border-bottom:5px solid #4cbef5; display:block; color:#fff; font-weight:400; font-size:22px; text-transform:uppercase; text-align:center; }
+.sliderwrap a.started { max-width:335px; width:80%; margin:100px auto 0; min-height:60px; padding:14px 20px; background:#67cdfe; border-bottom:5px solid #4cbef5; display:block; color:#fff; font-weight:400; font-size:22px; text-transform:uppercase; text-align:center; }
 .sliderwrap a.started i { margin-right:6px;}
 .sliderwrap a.nextstep { background:url(../images/benner-arrow.png) no-repeat left top; width:90px; height:47px; position:absolute; left:0; right:0; bottom:0; margin:0 auto;}
 
