@@ -111,7 +111,10 @@ var gridPresenter = {
 	   gridPresenter.alignDefaultGrid(); 
 	   gridPresenter.endTask(); 
 	   gridPresenter.numberOfLoadingPages--;
-	   pagePresenter.productLoaderPosition = $("#product-loader").position().top;
+	   
+	   if ($("#product-loader").length > 0){
+	       pagePresenter.productLoaderPosition = $("#product-loader").position().top;
+	   }
 	},	
 	
 	beginTask: function(){
