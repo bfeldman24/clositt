@@ -70,8 +70,7 @@ class ClosetView {
             ?>            
             <div class="panel panel-default closetPanel" id="<?php echo $closetRef; ?>" number="<?php echo $items[0]['id']; ?>" original="<?php echo $items[0]['title']; ?>">
                         <div class="panel-heading">
-                            <h4 class="panel-title"><span class="closet-title" data-toggle="tooltip" data-placement="bottom" title="Edit or Delete"><?php echo $name; ?></span>&nbsp;<span class="badge"><?php echo $itemsCount; ?></span>
-                                <a class="icon-svg6 suffle-btn"></a>                               
+                            <h4 class="panel-title"><span class="closet-title" data-toggle="tooltip" data-placement="bottom" title="Edit or Delete"><?php echo $name; ?></span>&nbsp;<span class="badge itemCount"><?php echo $itemsCount; ?></span>
                                 <a class="socialbtn" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $closittPageLink; ?>">
                                     <i class="icon-svg9"></i>
                                 </a>

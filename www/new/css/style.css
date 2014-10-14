@@ -174,7 +174,8 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 .clositt-inner .panel-default > .panel-heading a { font-size: 14px; color: rgba(173,173,173,0.5); padding: 0 4px; vertical-align: middle; }
 .clositt-inner .panel-default > .panel-heading a.collapse-btn { font-size: 7px; padding: 0 16px; }
 .clositt-inner .panel-default > .panel-heading a.collapse-btn:hover { color: #f44fa4; }
-.clositt-inner .panel-default > .panel-heading a.suffle-btn { padding: 0 16px; color: #ecaa97; }
+.clositt-inner .panel-default > .panel-heading a.suffle-btn { color: #ecaa97; }
+.clositt-inner .panel-default > .panel-heading .itemCount { margin-right: 16px; }
 .clositt-inner .panel-default > .panel-heading a:hover { color: rgba(173,173,173,01); }
 .wishlist { color: #adadad; padding: 60px 0px 80px; font-size: 40px; font-family: 'Open Sans', sans-serif; font-weight: 400; }
 #nav .nav ul li .btn-group.open .filter-drop { min-width: 140px; padding-bottom: 5px; border-radius: 0 0px 5px 5px; padding-top: 5px; }
