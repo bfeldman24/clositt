@@ -436,6 +436,7 @@ class Router {
     ***  EMAIL CONTROLLER ***
     *************************/
     public static function Email(){  
+        $_POST['router'] = "sent from router";
         require_once(dirname(__FILE__) . '/../app/email.php');   
     
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){   

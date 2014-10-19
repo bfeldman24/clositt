@@ -152,7 +152,7 @@ class EmailController{
 
 
 
-if (isset($_REQUEST['t'])){
+if (isset($_REQUEST['t']) && !isset($_POST['router'])){
     $email = $_REQUEST['e'];
     $messageType = $_REQUEST['t'];
     
