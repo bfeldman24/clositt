@@ -52,7 +52,7 @@ class ProductView {
         }
         
         // Get the product page links        
-        $home = 'http://www.clositt.com/'; // DELETE THIS AND JUST ADD HOME_PAGE
+        $home = HOME_PAGE;
         $productPageLink = rawurlencode($home . "!/" . $shortLink);
         $productPageImgLink = rawurlencode($image);
         $productPageDescription = rawurlencode("Found on Clositt.com");

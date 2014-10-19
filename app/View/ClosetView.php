@@ -54,7 +54,7 @@ class ClosetView {
             }  
             
             // Get the clositt page links        
-            $home = 'http://www.clositt.com/'; // DELETE THIS AND JUST ADD HOME_PAGE
+            $home = HOME_PAGE;
             $closittPageLink = rawurlencode($home . "!+/" . $userid . "/" . $closetRef);            
             $closittPageDescription = rawurlencode($name . " - Clositt.com");           
             
