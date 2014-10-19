@@ -360,10 +360,11 @@ var closetFormPresenter = {
 				
 				for(var i=0; i< closetFormPresenter.closetNames.length; i++){	
 				    
-				    var radioBtn = "ring2";
+				    var radioBtn = "customcheckbox";
 				    if (closetFormPresenter.closetItemsMapping[closetFormPresenter.closetNames[i]] != null &&
 			              closetFormPresenter.closetItemsMapping[closetFormPresenter.closetNames[i]].indexOf(sku) >= 0){
-				        radioBtn = "ring";
+				        
+				        radioBtn = "customcheckbox icon-check";
 				    }									
 				
 				    var closetName = closetFormPresenter.closetNames[i];
@@ -390,8 +391,12 @@ var closetFormPresenter = {
 	
 	addToCloset: function(el){		
 		var sku = $(el.currentTarget).parents(".outfit").attr("pid");	
-		$(el.currentTarget).parent().find(".ring").removeClass("ring").addClass("ring2");
-		$(el.currentTarget).find(".ring2").removeClass("ring2").addClass("ring");	
+
+		if ($(el.currentTarget).find(".customcheckbox.icon-check").length > 0){
+    		$(el.currentTarget).find(".customcheckbox").removeClass("icon-check");	
+		}else{
+    		$(el.currentTarget).find(".customcheckbox").addClass("icon-check");	
+		}
 		
 		var i = $(el.currentTarget).attr("i");			
 		var closetName = closetFormPresenter.closetNames[i];
@@ -460,7 +465,7 @@ var closetFormPresenter = {
       		       
       		       $(el.currentTarget).parent().find(selector).prepend(
       			       $("<a>").addClass("ring_opt closetOption").attr("i",closetFormPresenter.closetNames.length - 1).append(
-      						$("<div>").addClass("ring pull-left")
+      						$("<div>").addClass("customcheckbox pull-left")
       					).append( 
       					    $("<p>").addClass("pull-left").text(closetName)
       					)
@@ -478,17 +483,18 @@ var closetFormPresenter = {
 			var productIsNotInCloset = closetFormPresenter.closetItemsMapping[closetName] == null ||
 			              closetFormPresenter.closetItemsMapping[closetName].indexOf(sku) < 0;								
 			
-			if(productIsNotInCloset){						 			 
-			    var img = $(el.currentTarget).parents(".outfit").find(".imagewrap img").attr("src"); 
+			var img = $(el.currentTarget).parents(".outfit").find(".imagewrap img").attr("src"); 
 			    
-			    var closetItem = {
-			         id: closetId,
-			         title: closetName.trim(),
-			         item: sku,
-			         cache: img,
-    		         owner: session.userid,
-    		         status: 1
-			    };
+		    var closetItem = {
+		         id: closetId,
+		         title: closetName.trim(),
+		         item: sku,
+		         cache: img,
+		         owner: session.userid,
+		         status: 1
+		    };
+			
+			if(productIsNotInCloset){						 			 			    
 			    
 			    $.post( window.HOME_ROOT + "cl/add", closetItem, function(result){    	 			  
     	 			  if (result != "success") {
@@ -496,6 +502,7 @@ var closetFormPresenter = {
     				  } else {
     						Messenger.success('This item was added to "' + closetName + '"');
     						
+    						// add to closet mapping
     						if (closetFormPresenter.closetItemsMapping[closetName] == null){
         				        closetFormPresenter.closetItemsMapping[closetName] = [];
                 			}	
@@ -509,7 +516,22 @@ var closetFormPresenter = {
     			});	
 			     				
 			}else{
-				Messenger.info('This item is already in your clositt "' + closetName + '"');
+				$.post( window.HOME_ROOT + "cl/remove", closetItem, function(result){    	 			  
+    	 			  if (result != "success") {
+    						Messenger.error('Item could not be removed from ' + closetName);	 			       	 			       
+    				  } else {    				        
+    						Messenger.success('This item was removed from "' + closetName + '"');    							
+    						
+    						// remove from closet mapping
+    						if (closetFormPresenter.closetItemsMapping[closetName] != null){
+        				        var productIndex = closetFormPresenter.closetItemsMapping[closetName].indexOf(sku);
+        				        
+        				        if (productIndex > -1) {
+                                     closetFormPresenter.closetItemsMapping[closetName].splice(productIndex, 1);
+                                }
+                			}	                			                			
+    				  }
+    			});
 			}
 		}
 		
@@ -528,17 +550,18 @@ var closetFormPresenter = {
     		var productIsNotInCloset = closetFormPresenter.closetItemsMapping[closetName] == null ||
 			              closetFormPresenter.closetItemsMapping[closetName].indexOf(sku) < 0;								
     			
-    		if(productIsNotInCloset){					 
-    		    var img = $(el.currentTarget).parents(".outfit").find(".picture img").attr("src"); 
-    		    
-    		    var closetItem = {
-    		         id: closetFormPresenter.wishListId,
-			         title: closetName,
-			         item: sku,
-			         cache: img,
-    		         owner: session.userid,
-    		         status: 1
-			    };
+			var img = $(el.currentTarget).parents(".outfit").find(".picture img").attr("src"); 
+		    
+		    var closetItem = {
+		         id: closetFormPresenter.wishListId,
+		         title: closetName,
+		         item: sku,
+		         cache: img,
+		         owner: session.userid,
+		         status: 1
+		    };
+    			
+    		if(productIsNotInCloset){					     		    
 			    
 			    $.post( window.HOME_ROOT + "cl/add", closetItem, function(result){    	 			  
     	 			  if (result != "success") {
@@ -550,7 +573,14 @@ var closetFormPresenter = {
     			});
     		        		        		   
     		}else{
-    			Messenger.success('This item is already in your "' + closetName + '"');
+    			
+    			$.post( window.HOME_ROOT + "cl/remove", closetItem, function(result){    	 			  
+    	 			  if (result != "success") {
+    						Messenger.error('Item could not be removed from ' + closetName);	 			       	 			       
+    				  } else {
+    						Messenger.success('This item was removed from "' + closetName + '"');    							
+    				  }
+    			});      			    						 	        				        		  			
     		}
 		}
 	},
