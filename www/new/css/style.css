@@ -262,6 +262,10 @@ p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; li
 	z-index:999;
 	max-height: 300px;
 }
+
+#productModal .create_new{
+    top:67px;
+}
   
 .create_new .addToClosetOptions{
     display: block;
