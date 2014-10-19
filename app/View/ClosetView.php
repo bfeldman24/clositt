@@ -23,7 +23,7 @@ class ClosetView {
 		  ?>				
     		<li>
                 <div class="btn-group">                    
-                    <button type="button" class="btn btn-default nav-filter closetName" name="<?php echo $selector; ?>" ><?php echo $shortName; ?></button>
+                    <button type="button" class="btn btn-default nav-filter closetName" name="<?php echo $selector; ?>" data-toggle="tooltip" data-placement="top" title="<?php echo $shortName == $name ? '' : $name; ?>"><?php echo $shortName; ?></button>
                 </div>
             </li>							
         <?php }	

@@ -25,6 +25,7 @@ var closetPresenter = {
 		$("#search-bar").on("keypress", closetPresenter.searchOnEnter);
 		$("#seach-bar-icon").on("click", closetPresenter.searchBarSubmit);     
 		
+		$('.closetName').tooltip();
 		$('.closet-title').tooltip();	
 		$('.badge.itemCount').tooltip();	
 		closetFormPresenter.init();	      		
