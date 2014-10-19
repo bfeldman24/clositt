@@ -100,13 +100,13 @@ class ClosetDao extends AbstractDao {
 	
 	
 	public function getAllClosetItems($owner, $isPrivate){
-	   $sql = "SELECT c." . CLOSET_ID.", c.".CLOSET_NAME.", i.".CLOSET_USER_ID.", i.".CLOSET_ITEM_SKU.", i.".CLOSET_ITEM_IMAGE.
-	                   ", p.".PRODUCT_NAME.", p.".PRODUCT_STORE.", p.".PRODUCT_PRICE.", p.".PRODUCT_SHORT_LINK. 
+	   $sql = "SELECT c." . CLOSET_ID.", c.".CLOSET_NAME.", i.".CLOSET_USER_ID.", i.".CLOSET_ITEM_SKU.", COALESCE(i.".CLOSET_ITEM_IMAGE.
+	                   ", p.".PRODUCT_IMAGE.") AS ".CLOSET_ITEM_IMAGE.", p.".PRODUCT_NAME.", p.".PRODUCT_STORE.", p.".PRODUCT_PRICE.", p.".PRODUCT_SHORT_LINK. 
                 " FROM " . CLOSETS . " c " .               
-                " LEFT JOIN " . CLOSET_ITEMS . " i ON c.".CLOSET_ID." = i.".CLOSET_ID .                
+                " LEFT JOIN " . CLOSET_ITEMS . " i ON c.".CLOSET_ID." = i.".CLOSET_ID . " AND " .
+                       "(isnull(i." . CLOSET_ITEM_STATUS . ") OR i." . CLOSET_ITEM_STATUS . " = 1) ".          
                 " LEFT JOIN " . PRODUCTS . " p ON p.".PRODUCT_SKU." = i.".CLOSET_ITEM_SKU .
-                " WHERE c." . CLOSET_USER_ID . " = ? AND c." . CLOSET_PERMISSION . " <= ? AND " .
-                       "(isnull(i." . CLOSET_ITEM_STATUS . ") OR i." . CLOSET_ITEM_STATUS . " = 1) ".
+                " WHERE c." . CLOSET_USER_ID . " = ? AND c." . CLOSET_PERMISSION . " <= ? " .
                 " ORDER BY " . CLOSET_NAME;							       
 		
 		$permission = $isPrivate ? 2 : 1;

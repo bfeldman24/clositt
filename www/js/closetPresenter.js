@@ -127,6 +127,7 @@ var closetPresenter = {
 	    	  	   Messenger.error('Item could not be removed.');
     		  } else {
     		  		$item.remove();
+    		  		$closetInput.find(".itemCount").text($closetInput.find(".outfit").length);
     		    	Messenger.success('This item was removed from "' + closittData.title +'"');		    	
     		  }
 	   });		

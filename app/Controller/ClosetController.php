@@ -138,7 +138,7 @@ class ClosetController extends Debugger {
                 
                 if ($user == $_SESSION['userid']){                
                     $affectedRows = $this->closetDao->removeItemFromCloset($_SESSION['userid'], $closetItem);
-                    return $affectedRows === 1 ? "success" : "failed";
+                    return $affectedRows > 0 ? "success" : "failed";
                 }
             }
         }
