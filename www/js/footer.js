@@ -72,8 +72,7 @@ $('#loginModalTab-inputPassword, #signupModalTab-inputPassword2, #signupModalTab
     e.preventDefault();	 
     
     // on enter
-    if(e.keyCode == 13) {   
-        ;debugger;     
+    if(e.keyCode == 13) {       
         submitSigninModal(e);
     }
     
