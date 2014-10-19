@@ -68,12 +68,12 @@ $('#loginSignupModal').on('show.bs.modal', function (e) {
 });
 
 
-$('#loginModalTab-inputPassword, #signupModalTab-inputPassword2, #signupModalTab-inputPassword').keyup(function(e) {
+$('.modal input[type=text], .modal input[type=password]').keyup(function(e) {
     e.preventDefault();	 
     
     // on enter
-    if(e.keyCode == 13) {       
-        submitSigninModal(e);
+    if(e.keyCode == 13) {                      
+        $(e.currentTarget).parents(".modal").first().find("[type=submit]").first().trigger("click");        
     }
     
     return false;
