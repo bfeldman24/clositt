@@ -7,7 +7,7 @@ var closetPresenter = {
 
 	init: function(){
 	    if (closetPresenter.user != null){
-		  closetPresenter.user =  parseInt(closetPresenter.user) - parseInt(closetPresenter.share);
+		      closetPresenter.user =  parseInt(closetPresenter.user) - parseInt(closetPresenter.share);
 	    }	    
 				
 		$(document).on("click", "#closet-share", socialPresenter.showClosittShareButtons);
@@ -26,6 +26,7 @@ var closetPresenter = {
 		$("#seach-bar-icon").on("click", closetPresenter.searchBarSubmit);     
 		
 		$('.closet-title').tooltip();	
+		$('.badge.itemCount').tooltip();	
 		closetFormPresenter.init();	      		
 	},		
 	
