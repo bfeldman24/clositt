@@ -31,6 +31,8 @@ body { font-size: 14px; color: #2b2e2f; font-family: 'Open Sans', sans-serif; ma
 .wrapper { margin: 0; padding: 60px 0 0; }
 .container { position: relative; width: 100%; max-width: 1174px; }
 img { max-width: 100%; }
+
+a:active, a:focus { outline: none; }
 /*--------------header-------------*/
 
 #header { max-height: 70px; position: fixed; width: 100%; top: 0; z-index: 1001; background: #fff; padding: 0px 0px; -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, .10); -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, .10); box-shadow: 0px 1px 3px rgba(0, 0, 0, .10); border-top:5px solid #66ccff; overflow: hidden; }
@@ -77,6 +79,17 @@ img { max-width: 100%; }
 p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.clositt-theme{
     color: #66ccff;
 }
+
+.panel-clositt-theme {
+    border-color: #66ccff;
+}
+
+.panel-clositt-theme > .panel-heading {
+    background-color: #66ccff;
+    border-color: #66ccff;
+    color: #FFFFFF;
+}
+
 .btn-clositt-theme{
     background-color: #66ccff;
     color: #fff;

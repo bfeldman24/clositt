@@ -4,13 +4,14 @@
 <head>
 
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>	
+
 </head>
 <body>
 
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
 
 
-<div class="row" style="margin-top:80px;">
+<div class="row wrapper" style="margin-top:50px;">
     <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2">
         <div class="panel panel-clositt-theme">
             <div class="panel-heading">

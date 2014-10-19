@@ -3,15 +3,24 @@
 <html>
 <head>
 
-<link href="<?php echo HOME_ROOT; ?>lib/css/joyride-2.1.css" rel="stylesheet">
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
+<style type="text/css">
+p {
+    margin: 0 0 10px !important;
+    line-height: 18px;
+}
+
+strong, b {
+    font-weight: 700 !important;   
+}
+</style>
 
 </head>
 <body>
 
     <?php include(dirname(__FILE__) . '/static/header.php');   ?>
     
-    <div id="main-wrapper" style="margin-top: 25px;">
+    <div class="wrapper" style="margin: 50px;">
     
         <div class="panel panel-clositt-theme">
           <div class="panel-heading">
@@ -49,6 +58,7 @@
     
     
     <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
+    <?php include(dirname(__FILE__) . '/static/footerMeta.php');   ?>
     
 </body>
 </html>
