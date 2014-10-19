@@ -359,11 +359,19 @@ var closetFormPresenter = {
 				        radioBtn = "ring";
 				    }									
 				
+				    var closetName = closetFormPresenter.closetNames[i];
+				    var closetTitle = "";
+				    
+				    if (closetName.length >= 20){
+				        closetName = closetName.substring(0,19) + "...";   
+				        closetTitle = closetFormPresenter.closetNames[i];     
+				    }
+				
 					$options.append(
 						$("<a>").addClass("ring_opt closetOption").attr("i",i).append(
 							$("<div>").addClass(radioBtn + " pull-left")
 						).append( 
-						    $("<p>").addClass("pull-left").text(closetFormPresenter.closetNames[i])
+						    $("<p>").addClass("pull-left").attr("title",closetTitle).text(closetName)
 						)
 					);
 				}		
