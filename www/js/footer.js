@@ -54,16 +54,27 @@ $("#subheader-myclositt").on('click', function(e){
     } 
 });
 
-$('#loginSignupModal').on('shown.bs.modal', function(e){
-    $("#loginModalTab-inputEmail").focus();
+
+$('#loginSignupModal').on('show.bs.modal', function (e) {
+    
+    setTimeout(function(){
+        if ($("#loginModalTab-inputEmail").is(":visible")){
+            $("#loginModalTab-inputEmail").focus();
+        }else{
+            $("#signupModalTab-inputName").focus();   
+        }
+    }, 500);
+    
 });
+
 
 $('#loginModalTab-inputPassword, #signupModalTab-inputPassword2, #signupModalTab-inputPassword').keyup(function(e) {
     e.preventDefault();	 
     
     // on enter
-    if(e.keyCode == 13) {        
-        submitSigninModal();
+    if(e.keyCode == 13) {   
+        ;debugger;     
+        submitSigninModal(e);
     }
     
     return false;
