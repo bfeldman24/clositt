@@ -305,15 +305,15 @@ var closetFormPresenter = {
 	},
 	
 	setClosetInfo: function(closets){
-	    var closetIds = new Array();
-		var closetNames = new Array();
-		var closetItems = new Array();
-		var closetItemsMapping = new Array();
+	    var closetIds = [];
+		var closetNames = [];
+		var closetItems = [];
+		var closetItemsMapping = {};
 		var i=0;
             
         for (var c in closets){
-                var closet = closets[c];
-                closetIds[i] = closet[0].id;
+              var closet = closets[c];
+              closetIds[i] = closet[0].id;
 			  closetNames[i] = closet[0].title;
 			  
 			  if (closet[0].title == closetFormPresenter.wishList){
@@ -321,8 +321,15 @@ var closetFormPresenter = {
 			  }
 		      
 		       closet.forEach(function(item){
+		          if (item.item != null){
         			closetItems.push(item.item);					    
-				    closetItemsMapping.push(closetNames[i]);							 				
+        			
+        			if (closetItemsMapping[closetNames[i]] == null){
+				        closetItemsMapping[closetNames[i]] = [];
+        			}	
+        			        			
+        			closetItemsMapping[closetNames[i]].push(item.item);						 				
+		          }
         	   });	
         	   
         	   i++;				
@@ -332,7 +339,6 @@ var closetFormPresenter = {
 		closetFormPresenter.closetNames = closetNames;
 		closetFormPresenter.closetItems = closetItems;
 		closetFormPresenter.closetItemsMapping = closetItemsMapping;
-		closetFormPresenter.markUsersClositItems();
 	},
 	
 	showClosetForm: function(el){
@@ -346,7 +352,6 @@ var closetFormPresenter = {
 			
 			var element = el.currentTarget;			
 			var sku = $(element).parents(".outfit").attr("pid");
-			var index = closetFormPresenter.closetItems.indexOf(sku);								
 			
 			if($(element).parents(".item").find(".addToClosetOptions .closetOption").length <= 0){				
 			 	
@@ -355,7 +360,8 @@ var closetFormPresenter = {
 				for(var i=0; i< closetFormPresenter.closetNames.length; i++){	
 				    
 				    var radioBtn = "ring2";
-				    if (index >= 0 && closetFormPresenter.closetItemsMapping[index] == closetFormPresenter.closetNames[i]){
+				    if (closetFormPresenter.closetItemsMapping[closetFormPresenter.closetNames[i]] != null &&
+			              closetFormPresenter.closetItemsMapping[closetFormPresenter.closetNames[i]].indexOf(sku) >= 0){
 				        radioBtn = "ring";
 				    }									
 				
@@ -468,9 +474,10 @@ var closetFormPresenter = {
 	
 	addItemToCloset: function(el, sku, closetName, closetId){
 	   if (closetName.length > 0){				
-			var index = closetFormPresenter.closetItems.indexOf(sku);
+			var productIsNotInCloset = closetFormPresenter.closetItemsMapping[closetName] == null ||
+			              closetFormPresenter.closetItemsMapping[closetName].indexOf(sku) < 0;								
 			
-			if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){			
+			if(productIsNotInCloset){						 			 
 			    var img = $(el.currentTarget).parents(".outfit").find(".imagewrap img").attr("src"); 
 			    
 			    var closetItem = {
@@ -487,6 +494,13 @@ var closetFormPresenter = {
     						Messenger.error('Item could not be saved into ' + closetName);	 			       	 			       
     				  } else {
     						Messenger.success('This item was added to "' + closetName + '"');
+    						
+    						if (closetFormPresenter.closetItemsMapping[closetName] == null){
+        				        closetFormPresenter.closetItemsMapping[closetName] = [];
+                			}	
+                			
+                			closetFormPresenter.closetItemsMapping[closetName].push(sku);	
+    						
     						closetFormPresenter.showClosetForm(el);
     						closetFormPresenter.updateClosetCount(sku);	
     						return true;
@@ -509,9 +523,11 @@ var closetFormPresenter = {
     	    el.preventDefault();								
     		var sku = $(el.currentTarget).parents(".outfit").attr("pid");
     		var closetName = closetFormPresenter.wishList;    		
-    		var index = closetFormPresenter.closetItems.indexOf(sku);
+    		
+    		var productIsNotInCloset = closetFormPresenter.closetItemsMapping[closetName] == null ||
+			              closetFormPresenter.closetItemsMapping[closetName].indexOf(sku) < 0;								
     			
-    		if(index < 0 || closetFormPresenter.closetItemsMapping[index] != closetName){					 
+    		if(productIsNotInCloset){					 
     		    var img = $(el.currentTarget).parents(".outfit").find(".picture img").attr("src"); 
     		    
     		    var closetItem = {
@@ -539,12 +555,12 @@ var closetFormPresenter = {
 	},
 	
 	markUsersClositItems: function(){
-		if(closetFormPresenter.closetItems != null && session.isLoggedIn){
-			var $closetItems = $("#hanger-" +  closetFormPresenter.closetItems.join(", #hanger-") );
-			$closetItems.attr("src",closetFormPresenter.inClosittHangerImg);
-			$closetItems.parent().tooltip('destroy');
-			$closetItems.parent().tooltip({title:"In my Clositt"});	
-		}
+//		if(closetFormPresenter.closetItems != null && session.isLoggedIn){
+//			var $closetItems = $("#hanger-" +  closetFormPresenter.closetItems.join(", #hanger-") );
+//			$closetItems.attr("src",closetFormPresenter.inClosittHangerImg);
+//			$closetItems.parent().tooltip('destroy');
+//			$closetItems.parent().tooltip({title:"In my Clositt"});	
+//		}
 	},
 	
 	updateClosetCount: function(sku){
