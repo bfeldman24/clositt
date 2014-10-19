@@ -24,13 +24,15 @@ var Messenger = {
 	},
 	
 	alert: function(msg, statusCode, timeout){
-		var status = "alert-success";
+		var status = "alert-info";
 		
 		if(statusCode == "error"){
 			status = "alert-error";
-		}else if(statusCode == "info"){
-			status = "alert-info";
+		}else if(statusCode == "success"){
+			status = "alert-success";
 		}
+		
+		timeout = timeout || Messenger.timeout; 
 		
 		var $alertMessage = Messenger.alertTemplate.clone();
 		
@@ -58,18 +60,15 @@ var Messenger = {
 		return true;
 	},
 	
-	success: function(msg, timeout){
-	    timeout = timeout || Messenger.timeout; 	   
+	success: function(msg, timeout){	    	   
 		Messenger.alert(msg, "success", timeout);	
 	},
 	
 	error: function(msg, timeout){
-	    timeout = timeout || Messenger.timeout;
 		Messenger.alert(msg, "error", timeout);	
 	},
 	
 	info: function(msg, timeout){
-	    timeout = timeout || Messenger.timeout;
 		Messenger.alert(msg, "info", timeout);	
 	}
 }
