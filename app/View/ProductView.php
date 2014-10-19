@@ -81,7 +81,7 @@ class ProductView {
                     </div>
                     
                     <div class="cart_option">
-                        <?php if ($isClosetPage){ ?>
+                        <?php if ($isClosetPage && !isset($_GET['user'])){ ?>
                             <a class="removeProductBtn"><i class="icon-svg4 remove-prod"></i></a>
                         <?php }else{ ?>
                             <div class="addToClosittDropdown"> 

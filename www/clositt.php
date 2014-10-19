@@ -4,7 +4,14 @@ require_once(dirname(__FILE__) . '/../app/Controller/ClosetController.php');
 require_once(dirname(__FILE__) . '/../app/View/ClosetView.php');
 
 $closetController = new ClosetController();              
-$closets = $closetController->getAllClosetItems();
+
+$owner = null;
+if(isset($_GET['user'])){
+    $owner = array();
+    $owner['owner'] = $_GET['user'];
+}
+
+$closets = $closetController->getAllClosetItems($owner);
 
 if(isset($_GET['user'])){
     require_once(dirname(__FILE__) . '/../app/Controller/UserController.php'); 
@@ -74,13 +81,16 @@ if (!isset($nickname) || $nickname == ""){
                 <div class="col-sm-offset-1 col-md-offset-2">
                     <div class="nav">
                         <ul id="closetNameList">                            
-                            <?php if(!isset($_GET['user'])){ ?>	
+                            <?php if(!isset($_GET['closittname'])){ ?>	
                                 <?php echo ClosetView::getClosetNames($closets); ?>
+                                
+                                <?php if(!isset($_GET['user'])){ ?>	
                                 <li class="addnew">
                                     <div class="btn-group disabled">
                                         <button type="button" class="btn btn-default nav-filter"  data-toggle="modal" data-target="#addclositt" >ADD NEW  + </button>
                                     </div>
                                 </li>
+                                <?php } ?>
                             <?php } ?>
                         </ul>
                     </div>

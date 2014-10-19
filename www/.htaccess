@@ -7,9 +7,9 @@ Options -Indexes
 
 
 RewriteEngine On
-RewriteRule ^@/(.*)$ clositt.php?user=$1
-RewriteRule ^!/(.{3,50})$ product-page.php?s=$1
 RewriteRule ^!\+/([0-9]*)/(.*)$ clositt.php?user=$1&closittname=$2
+RewriteRule ^!\+/(.*)$ clositt.php?user=$1
+RewriteRule ^!/(.{3,50})$ product-page.php?s=$1
 RewriteRule ^d/(.{3,50})$ product-modal.php?s=$1
 
 # Image
