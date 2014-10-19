@@ -75,6 +75,8 @@ var socialPresenter = {
 	},
 	
 	emailProduct: function(e){
+	   e.preventDefault();
+	   
 	   if (e == null || e.currentTarget == null){ return false; }
 	   
 	   socialPresenter.link = $(e.currentTarget).attr("data-url");
@@ -85,11 +87,16 @@ var socialPresenter = {
 	   	   
 	   $('#shareProductModal').modal('show');
 	   
-	   e.preventDefault();
+	   setTimeout(function(){            
+            $("#shareProductModal #shareEmail").focus();            
+        }, 500);
+	   	   
 	   return false;
 	},
 	
 	shareProduct: function(e){
+	   e.preventDefault();
+	   
 	   var to = $("#shareEmail").val();
 	   
 	   if (to.trim() == ""){
@@ -97,6 +104,7 @@ var socialPresenter = {
 	       return;   
 	   }
 	   
+	   $("#shareProductModal #share").attr("disabled","disabled");
 	   $("#shareProductModal #share").text("Sending...");
 	   
 	   var url = socialPresenter.link;
@@ -107,7 +115,7 @@ var socialPresenter = {
 	   
 	   $.post(window.HOME_ROOT + "e/share", { to: to, link: url}, function(data) {
 			if(data == "success"){
-				Messenger.alert("Your message was sent successfully! Thank you!");
+				Messenger.success("Your message was sent successfully! Thank you!");
 				$("#shareEmail").val("");
 				socialPresenter.link = null;
         	    $('#shareProductModal').modal("hide");
@@ -115,10 +123,10 @@ var socialPresenter = {
 				Messenger.error("There was a problem sending an email to that address. Please try again.");	
 			}
 			
+			$("#shareProductModal #share").removeAttr("disabled");
 			$("#shareProductModal #share").text("Share");
 		});	
-		
-		e.preventDefault();
+				
 	   return false;   	   
 	}
 };
