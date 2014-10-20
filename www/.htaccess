@@ -9,8 +9,8 @@ Options -Indexes
 RewriteEngine On
 RewriteRule ^!\+/([0-9]*)/(.*)$ clositt.php?user=$1&closittname=$2
 RewriteRule ^!\+/(.*)$ clositt.php?user=$1
-RewriteRule ^!/(.{3,50})$ product-page.php?s=$1
-RewriteRule ^d/(.{3,50})$ product-modal.php?s=$1
+RewriteRule ^!/(.*)$ product-page.php?s=$1
+RewriteRule ^d/(.*)$ product-modal.php?s=$1
 
 # Image
 RewriteRule ^i/([A-Za-z0-9]*)$ Router.php?classCode=i&method=image&sku=$1
