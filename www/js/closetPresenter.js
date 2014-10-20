@@ -230,7 +230,7 @@ var closetPresenter = {
 	   if (closetName == null || closetName.trim() == "" || 
 	       closetName == $("#newClosetName").attr("placeholder") || $('#' + closetName.replace(/\W+/g, '')).length > 0){
 	           
-	       Messenger.info("Please enter a new clositt name!");   
+	       Messenger.info("That clositt name already exists! Please enter a new clositt name.");   
 	   }else{
 	       closetFormPresenter.createNewCloset(closetName);   
 	       $('#addclositt').modal('hide')
@@ -444,6 +444,7 @@ var closetFormPresenter = {
 		       
 		      Messenger.success('Clositt '+ closittData.title + ' was saved!');  
 		      closetFormPresenter.closetNames.push(closetName);
+		      closetFormPresenter.closetNames = closetFormPresenter.closetNames.sort();
 		       
 		       if (el == null){
 		          if ($("#closetNameList").length > 0){
@@ -467,7 +468,7 @@ var closetFormPresenter = {
       		       
       		       $(el.currentTarget).parent().find(selector).prepend(
       			       $("<a>").addClass("ring_opt closetOption").attr("i",closetFormPresenter.closetNames.length - 1).append(
-      						$("<div>").addClass("customcheckbox pull-left")
+      						$("<div>").addClass("customcheckbox pull-left icon-check")
       					).append( 
       					    $("<p>").addClass("pull-left").text(closetName)
       					)
