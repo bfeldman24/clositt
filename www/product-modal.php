@@ -129,9 +129,9 @@ if (isset($_GET['s'])){
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <div class="price_detail pull-left">
-                            <h4><?php echo $product->n; ?></h4>
+                            <h4 class="productName"><?php echo $product->n; ?></h4>
                             <div class="product-category clearfix">
-                                <p><?php echo $product->o; ?></p>
+                                <p class="productStore"><?php echo $product->o; ?></p>
                             </div>
                             <h1>Price: <span>$<?php echo $product->p; ?></span></h1>
                             <div class="size-color row">
