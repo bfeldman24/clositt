@@ -74,6 +74,7 @@
 </div>
 
 
+
 <div class="modal fade" id="shareProductModal" tabindex="-1" role="dialog" aria-labelledby="shareProductModalLabel" aria-hidden="true">
     <div class="modal-dialog2">
         <div class="modal-content2">
@@ -100,7 +101,14 @@
                                                 <div class="col-xs-12">       
                                                     <input type="text" id="shareEmail" placeholder="Email Address" class="input-xlarge form-control" />                     
                                                 </div>
-                                              </div>                                                                                                                             
+                                                <div class="col-xs-12">       
+                                                    <input type="text" id="shareEmailFromName" placeholder="Your Name" class="input-xlarge form-control" />                     
+                                                </div>
+                                                <div class="col-xs-12">       
+                                                    <textarea rows="3" id="shareEmailMessage" class="form-control" placeholder="Message..."></textarea>
+                                                    <p class="log" style="margin-bottom:15px;" id="shareEmailFixedMessage"><q>Check out this outfit from <span id="emailOutfitStore"></span>: <a id="emailOutfitLink"></a></q></p>
+                                                </div>
+                                              </div>                                                                                                                                                                          
                                               <div class="form-group">
                                                 <div>
                                     		      <button type="submit" class="btn btn-clositt-theme center-block" id="share">Share</button>                      

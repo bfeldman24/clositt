@@ -72,10 +72,10 @@ class ProductView {
                         <?php } ?>
                     </div>
                     <div class="detail">
-                        <h4 <?php echo $tooltip; ?>><?php echo $name ?></h4>
+                        <h4 class="productName" <?php echo $tooltip; ?>><?php echo $name ?></h4>
                         <div>
                             <span class="price pull-right"><?php echo $price ?></span>
-                            <p class="pull-left"><?php echo $store ?></p>
+                            <p class="pull-left productStore"><?php echo $store ?></p>
                         </div>
                         <div class="clear"></div>                        
                     </div>

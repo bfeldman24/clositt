@@ -84,6 +84,21 @@ var socialPresenter = {
 	   if ($(e.currentTarget).parents("#productModal").length > 0){
 	       $(e.currentTarget).parents("#productModal").modal('hide');
 	   }	   
+	   
+	   if (session.name == null){
+	       $("#shareEmailFromName").show();
+	   }else{
+	       $("#shareEmailFromName").hide();
+	   }
+	   
+	   // Clear text
+	   $("#emailOutfitLink").text("");
+	   $("#emailOutfitStore").text("");
+	   
+	   // populate text
+	   var item = $(e.currentTarget).parents(".item").first();
+	   $("#emailOutfitLink").attr("href",socialPresenter.link).text(item.find(".productName").text());
+	   $("#emailOutfitStore").text(item.find(".productStore").text());	   
 	   	   
 	   $('#shareProductModal').modal('show');
 	   
@@ -97,9 +112,9 @@ var socialPresenter = {
 	shareProduct: function(e){
 	   e.preventDefault();
 	   
-	   var to = $("#shareEmail").val();
+	   var email = $("#shareEmail").val();
 	   
-	   if (to.trim() == ""){
+	   if (email.trim() == ""){
 	       Messenger.alert("You must enter an email address!");
 	       return;   
 	   }
@@ -113,10 +128,20 @@ var socialPresenter = {
 	       url = window.HOME_URL + "!/" + url;
 	   }
 	   
-	   $.post(window.HOME_ROOT + "e/share", { to: to, link: url}, function(data) {
+	   var name = $("#shareEmailFromName").val();
+	   var inputMessage = $("#shareEmailMessage").val();
+	   var product = $("#emailOutfitLink").text();
+	   var store = $("#emailOutfitStore").text();
+	   
+	   $.post(window.HOME_ROOT + "e/share", { to: email, username: name, message: inputMessage, link: url, product: product, store: store }, function(data) {
 			if(data == "success"){
 				Messenger.success("Your message was sent successfully! Thank you!");
 				$("#shareEmail").val("");
+				$("#shareEmailFromName").val("");
+        	    $("#shareEmailMessage").val("");
+        	    $("#emailOutfitLink").text("");
+        	    $("#emailOutfitStore").text("");
+	   
 				socialPresenter.link = null;
         	    $('#shareProductModal').modal("hide");
 			}else{

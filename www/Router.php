@@ -446,7 +446,7 @@ class Router {
                     print_r($success);
                     break;  
                 case 'share':
-                    $success = EmailController::shareProduct($_POST['to'], $_POST['link']);
+                    $success = EmailController::shareProduct($_POST['to'], $_POST['username'], $_POST['message'], $_POST['link'], $_POST['product'], $_POST['store']);
                     print_r($success);
                     break;    
             }      
