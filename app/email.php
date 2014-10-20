@@ -56,28 +56,54 @@ class EmailController{
         }
     }
     
-    public static function shareProduct($to, $link){
-        $emailSubject = 'Clositt.com: What do you think of this outfit?';
-        
+    public static function shareProduct($to, $username, $message, $link, $product, $store){
+                
         if (isset($_SESSION['name'])){
-            $message = $_SESSION['name'] . " found this on Clositt and wants to know if you like it: ";
-        }else{
-            $message = "Do you like this? ";   
+            $username = $_SESSION['name'];
         }
         
+        if (isset($username)){
+            $emailSubject = $username . " shared an outfit with you from Clositt.com";
+        }else{
+            $emailSubject = "Someone shared an outfit with you from Clositt.com";       
+        }
+        
+        $message = '<p>' . $message . '</p>';
+        $message .= "<br /><br /><p>Check out this outfit";
+        
+        if (isset($store)){
+            $message .= " from " . $store;       
+        }
+        
+        $message .= ':';
+        
+        if (isset($product)){
+            $message .= ' <a href="'.$link.'">'.$product.'</a><p>';       
+        }else{
+            $message .= ' <a href="'.$link.'">'.$link.'</a></p>';       
+        }
+        
+        if (isset($username)){
+            $message .= "<br /><br /><p>From,<br />" . $username . "</p>";   
+        }
+        
+        $message = '<!DOCTYPE HTML><html><head></head><body style="font-family: \'Open Sans\',​sans-serif"><div><div style="width: 100%; margin: 0 0 10px 0; padding-left: 5px; border-top: 5px solid #66ccff; max-height: 70px;"><img src="http://clositt.com/css/images/logo.png" /></div><br /><br />'.$message.'</div></body></html>';
+        
+        
+        $sender = "Clositt <Eli@Clositt.com>";   
         if (isset($_SESSION['email'])){
             $sender = $_SESSION['email'];
-        }else{
-            $sender = "Clositt Team <Eli@Clositt.com>";   
+            
+            if (isset($username)){
+                $sender = $username . " <" . $sender . ">";    
+            }
         }
-        
-        $emailMessage = $message . $link . "\r\n" .         				
-        				"\r\n" . 
-        				"If so, check out more on Clositt.com"; 
         				
-        $headers = "From: Clositt Team <Eli@Clositt.com> \r\n" .
+        $headers = "From: Clositt <Eli@Clositt.com> \r\n" .
         		    "Reply-To: " . $sender. " \r\n" .
-        		    "Bcc: bfeldman24@gmail.com" . "\r\n";
+        		    "Bcc: bfeldman24@gmail.com" . "\r\n" .
+        		    "MIME-Version: 1.0\r\n" .
+        		    "Content-Type: text/html; charset=ISO-8859-1\r\n";
         
         
         if (isset($_SESSION['shareProductCount'])){
@@ -96,7 +122,7 @@ class EmailController{
 	       $user = $_SESSION['userid'];  
 	    }
         
-        if(mail($to, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){                                        	    
+        if(mail($to, $emailSubject, $message, $headers, "-fEli@Clositt.com")){                                        	    
             ListController::writeToFile("share", $to.",".$user.",".$link);              
         	return "success";	
         }else{
@@ -134,10 +160,10 @@ class EmailController{
     
     
     
-    public static function sendHtmlEmail($email, $subject, $message){           
+    public static function sendHtmlEmail($email, $from, $subject, $message){           
                                                                         				
-        $headers = "From: info@clositt.com \r\n" .
-        		    "Reply-To: ben@clositt.com \r\n" .
+        $headers = "From: ".$from." \r\n" .
+        		    "Reply-To: ".$from." \r\n" .
         		    "Bcc: bfeldman24@gmail.com \r\n" .
         		    "MIME-Version: 1.0\r\n" .
         		    "Content-Type: text/html; charset=ISO-8859-1\r\n"; 		    

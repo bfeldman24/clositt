@@ -30,7 +30,7 @@ class PriceAlertsController extends Debugger {
                     
                    //print_r($alertTemplate);
                     
-                   EmailController::sendHtmlEmail($userData['e'], 'Clositt Price Updates', $alertTemplate);          
+                   EmailController::sendHtmlEmail($userData['e'], 'eli@clositt.com', 'Clositt Price Updates', $alertTemplate);          
 	           }
 	       }  
 	    }	            
