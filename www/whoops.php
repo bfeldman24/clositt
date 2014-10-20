@@ -19,9 +19,9 @@ if (!strpos($page, "whoops.php")){
 
 <?php include(dirname(__FILE__) . '/static/header.php');   ?>
 
-<div id="mainContainer">
+<div class="wrapper">
 
-	<div id= "row">
+	<div class="row">
     	<div class="col-xs-12 col-sm-10 col-sm-offset-1"> 
     	   <div id="topBanner" >
         	   <span id="bannerText">Whoops! Looks like we cannot find the page you are looking for.</span>
@@ -29,14 +29,14 @@ if (!strpos($page, "whoops.php")){
     	</div>
    </div>     	
    
-   <div id= "row">     	 
+   <div class="row">     	 
     	<div class="homeGrid col-xs-12 col-sm-4 col-sm-offset-1">
 			<div id="goback">
     			<h1 class="waitList">What you can do from here:</h1> <br>
 
-    			<p><span><a onclick="window.history.back()" >Go back</a></span></p>
-    			<p><span><a href="<?php echo HOME_ROOT; ?>" >Go home</a></span></p>
-    			<p><span><a href="<?php echo CONTACT_PAGE; ?>" >Contact us to let us know of the problem</a></span></p>
+    			<p><a onclick="window.history.back()" >Go back</a></p>
+    			<p><a href="<?php echo HOME_PAGE; ?>" >Go home</a></p>
+    			<p><a href="<?php echo CONTACT_PAGE; ?>" >Complain to us about this problem</a></p>
     		</div> 
     	</div>
     	
@@ -52,6 +52,7 @@ if (!strpos($page, "whoops.php")){
 
 	
 <?php include(dirname(__FILE__) . '/static/footer.php');   ?>
+<?php include(dirname(__FILE__) . '/static/footerMeta.php');   ?>
 
 </body>
 </html>
