@@ -12,20 +12,12 @@ var filterPresenter = {
 	    filterPresenter.refreshCustomerFilter();
 	    $(".search-results").mCustomScrollbar();
 	    
+	    $(document).on("click", "#filters .categoryItem", filterPresenter.showCategorySubmenuItem);
         $(document).on("click", '#filters .selectedFilters>span>a', filterPresenter.removeFilter);
         $('#filters .select_filter').click(filterPresenter.onFilterSelect);        
         $("#filters .customer").click(filterPresenter.selectCustomerFilter);
         $(document).on('keyup', '#filters input.drop-search', filterPresenter.filterTypeAhead);        
-        $(document).on("click","#filters .alphabets>a", filterPresenter.scrollToStore);
-						
-//		$("#filter-float").on("click",".filterHeader", filterPresenter.toggleFilterOptionsVisibility);
-//		$("#filter-float").on("click",".filterSubheader", filterPresenter.toggleFilterSubOptionsVisibility);
-//		$("#filter-float").on("click",".filterHeader-Customer .customerOption", filterPresenter.selectCustomerFilter);		
-//		$("#filter-float").on("click",".selectedFilter-x", filterPresenter.removeFilter);
-//		
-//		$("#filter-float").on("click","input", filterPresenter.onFilterInputChecked);	
-//				
-//		$.getJSON(window.HOME_ROOT + "s/filters", filterPresenter.populateFilterData);
+        $(document).on("click","#filters .alphabets>a", filterPresenter.scrollToStore);						
 	},		
 	
 	populateFilterData: function(store){		
@@ -372,6 +364,23 @@ var filterPresenter = {
 	     
 	     $(".alphabets>a").show();
 	     invalidFirstLetters.hide();
+	 },
+	 
+	 showCategorySubmenuItem: function(e){
+	       e.preventDefault();
+	       
+	       $(e.currentTarget).siblings(".active").removeClass("active").each(function(){
+               $(this).find("ul.subcategory").first().hide("slow");	  
+           });
+	       
+	       var subcategory = $(e.currentTarget).find("ul.subcategory").first();		              	              
+	       subcategory.toggle("slow", function(){	           	           	           
+               if (!$(e.currentTarget).hasClass("active")){                                        
+                    $(e.currentTarget).addClass("active");
+               }
+	       });
+	           
+	       return false;
 	 },
 	 
 	 scrollToStore: function(e){

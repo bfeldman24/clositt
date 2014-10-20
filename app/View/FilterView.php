@@ -118,19 +118,33 @@ class FilterView {
         return preg_replace('/^\s+|\n|\r|\s+$/m', '', $html);
     }
     
-    public static function getCategoryFilters($categories){
+    public static function getCategoryFilters($categories){                        
         
         foreach ($categories as $category => $subcategories){
-            echo '<li><a>'.$category.'</a>';
-            
-            echo '<ul>';
-            foreach ($subcategories as $subcategory){
-                echo '<li><a class="select_filter" value="'.$subcategory[0].'">'.$subcategory[0].'</a></li>';    
+            if ($category != "Other"){
+                echo '<li class="categoryItem" ><a>'.$category.'</a>';
+                
+                echo '<ul class="subcategory" parent="'.$category.'" style="display:none;">';
+                foreach ($subcategories as $subcategory){
+                    echo '<li class="subcategoryItem"><a class="select_filter" value="'.$subcategory[0].'"><span class="icon-svg19"></span> '.$subcategory[0].'</a></li>';    
+                }           
+                echo '</ul>';
+                
+                echo '</li>';
+            }
+        } 
+        
+        if (isset($categories['Other'])){
+            echo '<li class="categoryItem" ><a>Other</a>';
+                
+            echo '<ul class="subcategory" parent="Other" style="display:none;">';
+            foreach ($categories['Other'] as $subcategory){
+                echo '<li class="subcategoryItem"><a class="select_filter" value="'.$subcategory[0].'"><span class="icon-svg19"></span> '.$subcategory[0].'</a></li>';    
             }           
             echo '</ul>';
             
-            echo '</li>';
-        }                 
+            echo '</li>';      
+        }
     }
     
     public static function getColorFilter($colors){

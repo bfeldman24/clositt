@@ -133,7 +133,7 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 }
 
 #nav .nav ul li .nav-filter span { font-size: 10px; position: absolute; right: 8px; top: 12px; color: #d0d0d0; }
-#nav .nav ul li .btn-group.open .dropdown-toggle { box-shadow: none; -webkit-box-shadow: none; -moz-box-shadow: none; border-bottom: 1px solid #fff; border-radius: 5px 5px 0 0; z-index: 1111; position: relative; background: #fff; }
+#nav .nav ul li .btn-group.open .dropdown-toggle { box-shadow: none; -webkit-box-shadow: none; -moz-box-shadow: none; border-bottom: 1px solid #fff; border-radius: 5px 5px 0 0; z-index: 999; position: relative; background: #fff; }
 #nav .nav ul li .btn-group.open .dropdown-toggle span { color: #66ccff; }
 #nav .nav ul li .btn-group.open .dropdown-toggle span.icon-svg19:before { content: "\e60b"; }
 #nav .nav ul li .btn-group.open .dropdown-menu { background: #fff; border-radius: 5px; margin: -9px 0 0; border: 1px solid #8cd9ff; padding-top: 10px; min-width: 140px; }
@@ -194,7 +194,15 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 .clositt-inner .panel-default > .panel-heading a:hover { color: rgba(173,173,173,01); }
 .wishlist { color: #adadad; padding: 60px 0px 80px; font-size: 40px; font-family: 'Open Sans', sans-serif; font-weight: 400; }
 #nav .nav ul li .btn-group.open .filter-drop { min-width: 140px; padding-bottom: 5px; border-radius: 0 0px 5px 5px; padding-top: 5px; }
+
+#nav .nav ul li .btn-group.open .filter-drop[filterType=category] { min-width: 250px; }
+#nav .nav ul li .btn-group.open .filter-drop[filterType=category] .categoryItem > a { color: #999 }
+#nav .nav ul li .btn-group.open .filter-drop[filterType=category] .categoryItem:last-child { border-bottom: none; }
+#nav .nav ul li .btn-group.open .subcategoryItem .icon-svg19 {color: #aaa;font-size: 8px; position: relative; top: -2px; }
+#nav .nav ul li .btn-group.open .subcategoryItem:hover .icon-svg19, #nav .nav ul li .btn-group.open .filter-drop[filterType=category] .categoryItem > a:hover {color: #fff; }
+
 #nav .nav ul li .btn-group.open .filter-drop li { padding: 0 10px; }
+
 #addclositt .modal-title, #editClosittModal .modal-title, #confirmRemoveClosittModal .modal-title { font-size: 24px; font-family: 'Open Sans', sans-serif; font-weight: 600; color: #adadad; }
 #addclositt .modal-dialog, #editClosittModal .modal-dialog, #confirmRemoveClosittModal .modal-dialog { max-width: 380px; width: 100%; }
 /*--------------box-------------*/
