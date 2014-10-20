@@ -185,7 +185,7 @@ if (isset($_GET['s'])){
                                 <div class="my_opt addToClosetOptions"></div>                            
                             </div>
                             
-                            <a class="shop-btn pull-right" href="<?php echo $product->l; ?>">
+                            <a class="shop-btn pull-right" target="_blank" href="<?php echo $product->l; ?>">
                                 <i class=" icomoon-basket-2"></i>Shop it on
                                 <br />
                                 <span><?php echo $abbreviatedLink ?></span> 
