@@ -1,5 +1,8 @@
 <?php include(dirname(__FILE__) . '/modals.php');   ?>
 
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo HOME_ROOT; ?>lib/js/jquery-ui-1.11.2.custom.min.js"></script>
+<script type="text/javascript" src="<?php echo HOME_ROOT; ?>lib/js/bootstrap.min.js"></script>
 <?php echo CLOSITT_JS; ?>
 <script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/jquery.flexslider.js"></script>
 <script type="text/javascript" src="<?php echo HOME_ROOT; ?>new/js/jquery.flexslider-min.js"></script>
