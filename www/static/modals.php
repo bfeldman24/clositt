@@ -106,7 +106,11 @@
                                                 </div>
                                                 <div class="col-xs-12">       
                                                     <textarea rows="3" id="shareEmailMessage" class="form-control" placeholder="Message..."></textarea>
-                                                    <p class="log" style="margin-bottom:15px;" id="shareEmailFixedMessage"><q>Check out this outfit from <span id="emailOutfitStore"></span>: <a id="emailOutfitLink"></a></q></p>
+                                                    <p class="log" style="margin-bottom:15px;" id="shareEmailFixedMessage">
+                                                        <q><span id="emailOutfitText">Check out this outfit from</span>
+                                                        <span id="emailOutfitStore"></span>: 
+                                                        <a id="emailOutfitLink"></a></q>
+                                                    </p>
                                                 </div>
                                               </div>                                                                                                                                                                          
                                               <div class="form-group">

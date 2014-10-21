@@ -96,9 +96,25 @@ var socialPresenter = {
 	   $("#emailOutfitStore").text("");
 	   
 	   // populate text
-	   var item = $(e.currentTarget).parents(".item").first();
-	   $("#emailOutfitLink").attr("href",socialPresenter.link).text(item.find(".productName").text());
-	   $("#emailOutfitStore").text(item.find(".productStore").text());	   
+	   if ($(e.currentTarget).parents(".item").length <= 0){
+	       var closetTitle = $(e.currentTarget).prevAll(".closet-title").first().text();
+	       $("#emailOutfitText").text("Check out my clositt");
+	       $("#emailOutfitStore").text("");
+    	   $("#emailOutfitLink").attr("href",socialPresenter.link).text(closetTitle);    	   
+	   }else{
+    	   var item = $(e.currentTarget).parents(".item").first();
+    	   var store = item.find(".productStore").text();
+    	   var itemName = item.find(".productName").text();
+    	       	   
+    	   if (itemName == null || itemName.trim() == ""){
+    	       Messenger.error("Sorry. That product no longer exists in our database so it cannot be shared.");
+    	       return false;   
+    	   }
+    	   
+    	   $("#emailOutfitText").text("Check out this outfit" + (store != null && store.trim() != "" ? " from" : ''));
+    	   $("#emailOutfitStore").text(store);	   
+    	   $("#emailOutfitLink").attr("href",socialPresenter.link).text(itemName);    	   
+	   }
 	   	   
 	   $('#shareProductModal').modal('show');
 	   

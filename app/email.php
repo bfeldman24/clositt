@@ -69,10 +69,12 @@ class EmailController{
         }
         
         $message = '<p>' . $message . '</p>';
-        $message .= "<br /><br /><p>Check out this outfit";
+        $message .= "<br /><br /><p>";
         
-        if (isset($store)){
-            $message .= " from " . $store;       
+        if (isset($store) && trim($store) != ""){
+            $message .= "Check out this outfit from " . $store;       
+        }else{
+            $message .= "Check out my clositt";       
         }
         
         $message .= ':';
