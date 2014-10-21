@@ -191,7 +191,7 @@ class ClosetController extends Debugger {
 	   }	 
 	   
 	   if ($json){	   
-	       return stripslashes(json_encode($closetItems, true));
+	       return json_encode($closetItems, true);
 	   }else{
 	       return $closetItems;   
 	   }
