@@ -222,19 +222,22 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 .modal-content2 { position: relative; background-color: #fff; -webkit-background-clip: padding-box; background-clip: padding-box; border: 0px solid #999; border-radius: 6px; outline: 0; -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5); box-shadow: 0 3px 9px rgba(0, 0, 0, .5); }
 .nav-tabs { border-bottom: none; }
 #login_box { padding-top: 30px; border-bottom: 5px solid #66ccff; border-radius: 6px; }
+.modal-content { border-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.2) #66ccff; border-radius: 6px; border-width: 1px 1px 5px; }
+
+
 .modal-dialog2 { max-width: 467px; width:96%; max-height:500px; margin: auto; left:0; right:0; bottom:0; top:0; position: absolute; }
 button.close2 { background: none repeat scroll 0 0 rgba(0, 0, 0, 0); border: 0 none; cursor: pointer; padding: 0; position: absolute; z-index: 999; right: 38px; top: 38px; }
-.modal-dialog2 .modal-content2 { }
 .close-modal2 { width: 50px; height: 50px; border-radius: 100%; background: #66ccff; color: #fff; font-size: 30px; display: block; opacity: 1; text-align: center; vertical-align: middle; line-height: 50px; position: absolute; z-index: 999; top: 0; right: 0 }
 #login_box .login { max-width: 400px; width:100%; margin: 0 auto }
-#login_box .login h1 { color: #2a2a2a; font-size: 30px; text-align: center; margin-bottom: 20px; font-weight: 700; }
+#login_box .login h1 { margin-bottom: 20px; }
+#login_box .login h1, .modal-header > .modal-title { color: #2a2a2a !important; font-size: 30px !important; text-align: center; font-weight: 700 !important; }
+.modal-header {border-bottom: none;}
+.modal-footer {border-top: none;}
 
 p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; line-height: 24px; }
 #login_box .login p.log { margin-bottom: 27px;}
 
-#login_box .login input[type="text"] { width: 100%; min-height: 47px; border-left: 4px solid #66ccff !important; border-radius: 4px; border: none; background: #eaedf2; margin-bottom: 18px; }
-#login_box .login input[type="password"] { width: 100%; min-height: 47px; border-left: 4px solid #66ccff !important; border-radius: 4px; border: none; background: #eaedf2; margin-bottom: 18px; }
-#login_box .login input[type="email"] { width: 100%; min-height: 47px; border-left: 4px solid #66ccff !important; border-radius: 4px; border: none; background: #eaedf2; margin-bottom: 18px; }
+.modal input[type="text"], .modal input[type="password"], .modal input[type="email"] { width: 100%; min-height: 47px; border-left: 4px solid #66ccff !important; border-radius: 4px; border: none; background: #eaedf2; margin-bottom: 18px; }
 #login_box .login input[placeholder="Name"], #shareEmailFromName { color: #565656; font-size: 17px; padding-left: 17px; }
 #login_box .login input[placeholder="Email Address"], #shareEmail { color: #565656; font-size: 17px; padding-left: 17px; }
 #login_box .login input[placeholder="Password"] { color: #565656; font-size: 17px; padding-left: 17px; }
@@ -396,9 +399,11 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 
 .modal-dialog { width: 876px; }
 .modal-dialog .modal-content { padding-bottom: 20px; }
-.close-modal { width: 35px; height: 35px; border-radius: 100%; background: #66ccff; color: #fff; font-size: 20px; display: block; opacity: 1; text-align: center; vertical-align: middle; line-height: 35px; }
+.close-modal, .close>.icon-times  { width: 35px; height: 35px; border-radius: 100%; background: #66ccff; color: #fff; font-size: 20px; display: block; opacity: 1; text-align: center; vertical-align: middle; line-height: 35px; }
+
 .close, .close:hover { filter: alpha(opacity=100); opacity: 1; }
 .modal_close { margin: -18px -18px 0 0; }
+.modal_close2 { position: absolute; top: -18px; right: -18px; }
 .fa-spin { -webkit-animation: fa-spin 2s infinite linear; animation: fa-spin 2s infinite linear; }
 @-webkit-keyframes spin {  0% {
  -webkit-transform: rotate(0deg);
@@ -588,3 +593,8 @@ button.close2 {right: 8px; top: 8px;}
   opacity: 0.65 !important;
   filter: alpha(opacity=65) !important;
 } 
+
+.btn-danger {
+    background-color: #f06a66;
+    border-color: #f5605b;
+}

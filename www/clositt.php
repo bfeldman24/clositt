@@ -118,8 +118,8 @@ if (!isset($nickname) || $nickname == ""){
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-            <span aria-hidden="true">&times;</span>
+        <button type="button" class="close modal_close2" data-dismiss="modal">
+            <span aria-hidden="true" class="icon-times"></span>
             <span class="sr-only">Close</span>
         </button>
         <h4 class="modal-title">Add New Clositt</h4>
@@ -129,7 +129,7 @@ if (!isset($nickname) || $nickname == ""){
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id="saveNewClosetName" class="btn btn-primary">Save Changes</button>
+        <button type="button" id="saveNewClosetName" class="btn btn-clositt-theme">Save Changes</button>
       </div>
     </div>
   </div>
@@ -139,8 +139,8 @@ if (!isset($nickname) || $nickname == ""){
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-            <span aria-hidden="true">&times;</span>
+        <button type="button" class="close modal_close2" data-dismiss="modal">
+            <span aria-hidden="true" class="icon-times"></span>
             <span class="sr-only">Close</span>
         </button>
         <h4 class="modal-title">Edit Clositt</h4>
@@ -150,7 +150,7 @@ if (!isset($nickname) || $nickname == ""){
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" id="saveEditNewClosetName" class="btn btn-primary">Save</button>
+        <button type="button" id="saveEditNewClosetName" class="btn btn-clositt-theme">Save</button>
         <button type="button" id="confirmRemoveClosetBtn" class="btn btn-danger">Remove Clositt</button>
       </div>
     </div>
@@ -161,8 +161,8 @@ if (!isset($nickname) || $nickname == ""){
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-            <span aria-hidden="true">&times;</span>
+        <button type="button" class="close modal_close2" data-dismiss="modal">
+            <span aria-hidden="true" class="icon-times"></span>
             <span class="sr-only">Close</span>
         </button>
         <h4 class="modal-title">Remove Clositt</h4>
@@ -172,7 +172,7 @@ if (!isset($nickname) || $nickname == ""){
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
-        <button type="button" id="removeClosetBtn" class="btn btn-primary">YES</button>
+        <button type="button" id="removeClosetBtn" class="btn btn-clositt-theme">YES</button>
       </div>
     </div>
   </div>
