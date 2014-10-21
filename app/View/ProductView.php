@@ -65,8 +65,8 @@ class ProductView {
                 <div class="mainwrap">
                     <div class="imagewrap">
                         <?php if ($lazyLoadImages){ ?>
-                        <img class="loadingImage" src="<?php echo HOME_ROOT; ?>css/images/loading.gif"/>
-                        <img style="display:none;" data-src="<?php echo $image ?>" onerror="return productPresenter.handleImageNotFound(this)" />
+                            <img class="loadingImage" src="<?php echo HOME_ROOT; ?>css/images/loading.gif"/>
+                            <img style="display:none;" data-src="<?php echo $image ?>" onerror="return productPresenter.handleImageNotFound(this)" />
                         <?php }else{ ?>
                             <img src="<?php echo $image ?>" onerror="return productPresenter.handleImageNotFound(this)" />
                         <?php } ?>

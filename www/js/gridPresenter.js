@@ -95,19 +95,19 @@ var gridPresenter = {
 	        return null;
 	    }
 	    
-	    var $productHtml;
+	    var productHtml;
 	    
 	    if (products.products != null){
-	       $productHtml = $(products.products);  
+	       productHtml = products.products;  
 	    }	
 	    
-	    if ($productHtml != null && $productHtml.length > 0){
-	       $("#product-grid").append($productHtml);	       
+	    if (productHtml != null && productHtml.length > 0){
+	       $("#product-grid").append(productHtml);	       
 	       $("#product-grid .outfit img[data-src]").unveil(200, productPresenter.showImageCallback);
 	    }else{	       
 	       pagePresenter.enableLazyLoading = false; // no more products  
 	    }       	                      
-			                   			   	   		
+	   	                   			   	   		
 	   gridPresenter.alignDefaultGrid(); 
 	   gridPresenter.endTask(); 
 	   gridPresenter.numberOfLoadingPages--;

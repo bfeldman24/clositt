@@ -3,7 +3,8 @@ var pagePresenter = {
     waitTime: 1000,
     enableLazyLoading: true,
     defaultHeaderHeight: 525,
-    productLoadOffset: '150%',
+    productLoadOffsetPercentage: '3', // x viewport height
+    productLoadOffset: 0,
     areProductsInitialized: false,
     lastScrollHeight: 0,
     viewportHeight: 0,
@@ -17,8 +18,9 @@ var pagePresenter = {
         $(".back_to_top, .go_to_top").on("click", pagePresenter.scrollToTop);        
         
         $(document).ready(function(){                        
-            if ($("#product-loader").length > 0){
+            if ($("#product-loader").length > 0 && typeof gridPresenter == 'object'){
                 pagePresenter.viewportHeight = $(window).height();
+                pagePresenter.productLoadOffset = pagePresenter.productLoadOffsetPercentage * pagePresenter.viewportHeight;                
                 pagePresenter.productLoaderPosition = $("#product-loader").position().top;
                 
                 $(window).scroll(pagePresenter.handleScrollEvents);
@@ -30,17 +32,17 @@ var pagePresenter = {
     handleScrollEvents: function(){                     
 
         if(pagePresenter.areProductsInitialized &&
-            pagePresenter.enableLazyLoading && 
-            typeof gridPresenter == 'object' &&
-            pagePresenter.productLoaderPosition < ($(window).scrollTop() + pagePresenter.viewportHeight + 100) &&
-            Date.now() - pagePresenter.lastExecTime > pagePresenter.waitTime){
+            pagePresenter.enableLazyLoading &&             
+            pagePresenter.productLoaderPosition - pagePresenter.productLoadOffset < ($(window).scrollTop() + pagePresenter.viewportHeight + 100) &&
+            Date.now() - pagePresenter.lastExecTime > pagePresenter.waitTime){            
+              
+                pagePresenter.lastExecTime = Date.now();
+                pagePresenter.lastScrollHeight = $(window).scrollTop();
+                pagePresenter.viewportHeight = $(window).height(); // reset in case user changed screen size            
+                pagePresenter.productLoadOffset = pagePresenter.productLoadOffsetPercentage * pagePresenter.viewportHeight;
+                // pagePresenter.productLoaderPosition gets reset in gridPresenter.lazyLoad()
                 
-            pagePresenter.lastExecTime = Date.now();
-            pagePresenter.lastScrollHeight = $(window).scrollTop();
-            pagePresenter.viewportHeight = $(window).height(); // reset in case user changed screen size            
-            // pagePresenter.productLoaderPosition gets reset in gridPresenter.lazyLoad()
-            
-            gridPresenter.showContent(15);            
+                gridPresenter.showContent(15);            
         }else if (!pagePresenter.areProductsInitialized){
             pagePresenter.areProductsInitialized = $(".outfit").length > 0;
         }          
