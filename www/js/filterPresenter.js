@@ -10,7 +10,8 @@ var filterPresenter = {
 	init: function(){		
 	    filterPresenter.allFilters = [];	  
 	    filterPresenter.refreshCustomerFilter();
-	    $(".search-results").mCustomScrollbar();
+	    $(".search-results").mCustomScrollbar();	    
+	    $('#company-search-dropdown').parent().on('hidden.bs.dropdown', filterPresenter.clearCompanyDropdown)
 	    
 	    $(document).on("click", "#filters .categoryItem", filterPresenter.showCategorySubmenuItem);
         $(document).on("click", '#filters .selectedFilters>span>a', filterPresenter.removeFilter);
@@ -205,6 +206,7 @@ var filterPresenter = {
     	 	}
     	 	
     	 	filterPresenter.needsRefresh = false;	 		 	
+    	 	filterPresenter.clearCompanyDropdown();
 	 	}
  	},
  	
@@ -343,7 +345,7 @@ var filterPresenter = {
        	     return;
 	     }
 	     
-	     var invalidStores = $("ul.search-results[filterType=store] li").filter(function(){
+	     var invalidStores = $("ul.search-results[filterType=company] li").filter(function(){
 	           var store = $(this).find("a").attr("value");
 	           
 	           if (typeof store !== typeof undefined && store !== false) { 
@@ -358,10 +360,16 @@ var filterPresenter = {
 	           var letter = $(this).text().toLowerCase();	          
 	           var searchFirstLetter = storeSearch.substr(0,1);
 	           return searchFirstLetter != letter;	           	           
-	     });
+	     });	     	     
 	     
-	     $("ul.search-results[filterType=store] li").show();
+	     $("ul.search-results[filterType=company] li").show();
 	     invalidStores.hide();
+	     
+	     if (storeSearch.length > 0){
+	           $("ul.search-results[filterType=company] li.brand-letter").hide(); 
+	     }else{
+	           $("ul.search-results[filterType=company] li.brand-letter").show(); 
+	     }
 	     
 	     $(".alphabets>a").show();
 	     invalidFirstLetters.hide();
@@ -382,6 +390,13 @@ var filterPresenter = {
 	       });
 	           
 	       return false;
+	 },
+	 
+	 clearCompanyDropdown: function(){
+	       $("input.drop-search").val("");
+	       $("ul.search-results[filterType=company] li").show(); 
+	       $(".alphabets>a").show();
+	       $(".alphabets>a.selected").removeClass("selected");	       
 	 },
 	 
 	 scrollToStore: function(e){

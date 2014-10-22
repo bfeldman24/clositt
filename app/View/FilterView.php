@@ -63,7 +63,7 @@ class FilterView {
                             </li>
                             <li>
                                 <div class="btn-group ">
-                                    <button type="button" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Brand/Store <span class="icon-svg19"></span></button>
+                                    <button type="button" id="company-search-dropdown" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Brand/Store <span class="icon-svg19"></span></button>
                                     <ul class="dropdown-menu scrollTo brand-box" role="menu">
                                         <li class="alphabets">
                                             <a rel="#123">#</a> 
