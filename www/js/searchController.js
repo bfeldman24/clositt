@@ -176,42 +176,7 @@ var searchController = {
                         $(this).prop('checked', true);                                                
                     }
                 });               
-            }
-            
-//            if (matchingFilters != null && matchingFilters.length > 0){
-//                // remove filters in the search string
-//                regex = new RegExp(searchController.regexEscape(matchingFilters.join('|')), 'gi');
-//                cleanSearchTerm = cleanSearchTerm.replace(regex, '');
-//                cleanSearchTerm = cleanSearchTerm.replace(/(\b(\w{1,2})\b(\s|$))/gi,''); // remove words less than 3 chars
-//                cleanSearchTerm = cleanSearchTerm.trim(); 
-//                tags = cleanSearchTerm.split(" ");       
-//            }
-            
-            
-            // Seach for colors
-            var colors = colorPresenter.getColorNames();                        
-            matchingColors = [];   
-            
-            for (var i=0; i< colors.length; i++) {
-                var colorName = colors[i].toLowerCase();                                
-                
-                if (cleanSearchTerm.indexOf(colorName) >= 0){
-                       matchingColors.push(colorName);
-                       
-                       var colorFilter = $("#filter-float").find('.colorFilter.' + colorName);
-                
-                        if (colorFilter.length > 0){
-                            $(".selectedColor").removeClass("selectedColor");
-                            colorFilter.addClass("selectedColor");
-                            
-                            filterPresenter.createSelectedFilter(colorFilter.attr("data-original-title"), colorFilter.attr("data-original-title"));
-                        } 
-                }
-            }                                                                                 
-            
-            if (matchingColors.length > 0){
-                criteria['colors'] = matchingColors;                                       
-            }              
+            }                       
         }
          
         if (tags.length > 0){ 

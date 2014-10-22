@@ -323,6 +323,7 @@ var filterPresenter = {
 	 clearFilters: function(){
 	   $(".nav-filter.customer").removeClass("selected");
 	   $("#filters .selectedFilters span").remove();
+	   filterPresenter.defaultCustomer = "both";
 	 },
 	 
 	 removeFilter: function(e){      	      		 	     	    
