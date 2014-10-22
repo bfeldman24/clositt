@@ -19,123 +19,7 @@ var filterPresenter = {
         $("#filters .customer").click(filterPresenter.selectCustomerFilter);
         $(document).on('keyup', '#filters input.drop-search', filterPresenter.filterTypeAhead);        
         $(document).on("click","#filters .alphabets>a", filterPresenter.scrollToStore);						
-	},		
-	
-	populateFilterData: function(store){		
-		var companies = store["companies"];
-	 	var customers = store["customers"];
-	 	var categories = store["categories"];
-	 	var prices = store["prices"];
-	 	filterPresenter.createFilters(companies, customers, categories, prices);		
-	},
- 
-	createFilters:  function(companies, customers, categories, prices){
- 		filterPresenter.companies = companies;
- 		filterPresenter.customers = customers;
- 		filterPresenter.categories = categories;
- 		
- 		var priceBuckets = new Array();
- 		
- 		var priceCount = prices.length;
-
- 		priceBuckets[0] = 0;
- 		var i=0;
- 		while(priceBuckets[i] < prices[priceCount - 1] && i < 5){
- 			priceBuckets[i+1] = priceBuckets[i] + 50;
- 			i++;
- 		}
- 		
- 		if(priceBuckets[i] < prices[priceCount - 1]){
- 			priceBuckets[i]	= (Math.round(prices[priceCount - 1] / 50) * 50) + 50;
- 		}
- 		
- 		$("#filter-float").html("");
- 		$("#filter-float").append($("<div>").attr("id","selectedFilters"));
- 		
- 		var selectedWomen = filterPresenter.defaultCustomer == "women" ? "selected" : "";
- 		var selectedMen = filterPresenter.defaultCustomer == "men" ? "selected" : "";
- 		$("#filter-float").append($("<h4>").addClass("filterHeader-Customer").css("padding","0").append(
- 		         $("<div>").addClass("customerOption " + selectedWomen).attr("filterid","women").text("Women")
- 		     ).append(
- 		         $("<div>").addClass("customerOption " + selectedMen).attr("filterid","men").text("Men")
- 		     )
- 		);
-// 		var customerOptions = $("<div>").addClass("filterOptions");
-// 		
-// 		$.each(filterPresenter.customers, function(index, value) {
-// 		    filterPresenter.allFilters.push(value);
-// 		    
-// 			customerOptions.append(
-// 				$("<div>").addClass("controls").append(
-// 					$("<label>").addClass("checkbox").append(
-// 						$("<input>").attr("type","checkbox").attr("name","customer").attr("value",value)
-// 					).append($("<span>").addClass("filterValueName").html(value))
-// 				)
-// 			)
-// 		}); 		
-// 		$("#filter-float").append(customerOptions);
- 		
- 		
- 		$("#filter-float").append($("<h4>").html("Category").addClass("filterHeader").attr('id', 'category'));
- 		var categoryOptions = $("<div>").addClass("filterOptions");
- 		$.each(filterPresenter.categories, function(subindex, subcategory) {
- 		    categoryOptions.append($("<h5>").addClass("filterSubheader").text(subindex));
- 		    
- 		    var subCategoryOptions = $("<div>").addClass("subcategory"); 		    
- 		    $.each(subcategory, function(index, value) {  		     
-     		    filterPresenter.allFilters.push(value[0]);
-     		     
-     			subCategoryOptions.append(
-     				$("<div>").addClass("controls").attr("filter-customer",value[1]).append(
-     					$("<label>").addClass("checkbox").append(
-     						$("<input>").attr("type","checkbox").attr("name","category").attr("value",value[0])
-     					).append($("<span>").addClass("filterValueName").html(value[0]))
-     				)
-     			)
- 		    });
- 		    
- 		    categoryOptions.append(subCategoryOptions);
- 		});  
- 		$("#filter-float").append(categoryOptions);	 		
- 		
- 		$("#filter-float").append($("<h4>").html("Brand").addClass("filterHeader").attr('id', 'brands'));
- 		var brandOptions = $("<div>").addClass("filterOptions");
- 		$.each(filterPresenter.companies, function(index, value) {
- 		    filterPresenter.allFilters.push(value[0]);
- 		    
- 			brandOptions.append(
- 				$("<div>").addClass("controls").attr("filter-customer",value[1]).append(
- 					$("<label>").addClass("checkbox").append(
- 						$("<input>").attr("type","checkbox").attr("name","company").attr("value",value[0])
- 					).append($("<span>").addClass("filterValueName").html(value[0]))
- 				)
- 			)
- 		}); 
- 		$("#filter-float").append(brandOptions);
- 		
- 		$("#filter-float").append($("<h4>").html("Price").addClass("filterHeader").attr('id', 'price'));	
- 		var priceOptions = $("<div>").addClass("filterOptions");	 		 		
- 		for(var i=0;i<priceBuckets.length-1;i++){
- 			priceOptions.append(
- 				$("<div>").addClass("controls").append(
- 					$("<label>").addClass("checkbox").append(
- 						$("<input>").attr("type","checkbox").attr("name","filterprice").attr("value",priceBuckets[i]).attr("max",priceBuckets[i+1])
- 					).append($("<span>").addClass("filterValueName").html("$"+priceBuckets[i]+" - $"+priceBuckets[i+1]))
- 				)
- 			)
- 		}
- 		$("#filter-float").append(priceOptions);
- 		
- 		$("#filter-float").append($("<h4>").html("Color").addClass("filterHeader").attr('id', 'color'));
- 		var colorOptions = $("<div>").addClass("filterOptions");	 		 				 		 		 		
-		$("#filter-float").append(colorOptions.append(colorPresenter.getColorFilters())); 		 		 		
- 		
- 		filterPresenter.allFilters.sort(function(a,b){
- 		     return a.split(" ").length < b.split(" ").length;
- 		});
- 		
- 		filterPresenter.showFilter();
- 	},
+	},				 	
  	
  	refreshIfNeeded: function(){ 	        	  
  	      if (filterPresenter.needsRefresh && !filterPresenter.pauseRefresh){
@@ -377,14 +261,12 @@ var filterPresenter = {
 	 
 	 showCategorySubmenuItem: function(e){
 	       e.preventDefault();
-	       
-	       $(e.currentTarget).siblings(".active").removeClass("active").each(function(){
-               $(this).find("ul.subcategory").first().hide("slow");	  
-           });
-	       
+	       	       	       
 	       var subcategory = $(e.currentTarget).find("ul.subcategory").first();		              	              
 	       subcategory.toggle("slow", function(){	           	           	           
-               if (!$(e.currentTarget).hasClass("active")){                                        
+               if ($(e.currentTarget).hasClass("active")){                                        
+                    $(e.currentTarget).removeClass("active");
+               }else{
                     $(e.currentTarget).addClass("active");
                }
 	       });
