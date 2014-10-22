@@ -6,11 +6,11 @@
     <div class="social">            
         <ul>
             <li><a href="#"><div class="outer_box"><div class="icon_box"><i class="icon-svg9"></i></div></div><div class="clear"></div><span>Like us on Facebook</span></a></li>
-            <li class="social_line"><img src="<?php echo HOME_ROOT; ?>new/images/social_line.png"></li>
+            <li class="social_line"><img src="<?php echo HOME_ROOT; ?>css/images/social_line.png"></li>
             <li><a href="#"><div class="outer_box"><div class="icon_box"><i class="icon-svg7"></i></div></div> <div class="clear"></div><span>Follow us on twitter</span></a></li>
-            <li class="social_line"><img src="<?php echo HOME_ROOT; ?>new/images/social_line.png"></li>
+            <li class="social_line"><img src="<?php echo HOME_ROOT; ?>css/images/social_line.png"></li>
             <li><a href="#"><div class="outer_box"><div class="icon_box"><i class="icon-svg15"></i></div></div> <div class="clear"></div><span>Read our Blog</span></a></li>
-            <li class="social_line"><img src="<?php echo HOME_ROOT; ?>new/images/social_line.png"></li>
+            <li class="social_line"><img src="<?php echo HOME_ROOT; ?>css/images/social_line.png"></li>
             <li><a href="#"><div class="outer_box"><div class="icon_box"><i class="icon-envelope-o"></i></div></div><div class="clear"></div><span>Contact us</span></a></li>                  <div class="clear"></div>
         </ul>        
     </div>     

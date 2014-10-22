@@ -18,7 +18,7 @@ if (isset($_GET['outfit'])){
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<?php echo HOME_PAGE; ?>"><img src="<?php echo HOME_ROOT; ?>new/images/logo.png"></a>
+                    <a class="navbar-brand" href="<?php echo HOME_PAGE; ?>"><img src="<?php echo HOME_ROOT; ?>css/images/logo.png"></a>
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <div class="col-sm-1 col-md-2 browse clearfix">                                                                    

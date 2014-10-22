@@ -18,7 +18,12 @@ var filterPresenter = {
         $('#filters .select_filter').click(filterPresenter.onFilterSelect);        
         $("#filters .customer").click(filterPresenter.selectCustomerFilter);
         $(document).on('keyup', '#filters input.drop-search', filterPresenter.filterTypeAhead);        
-        $(document).on("click","#filters .alphabets>a", filterPresenter.scrollToStore);						
+        $(document).on("click","#filters .alphabets>a", filterPresenter.scrollToStore);
+        
+        $(".drop-search").click(function(e){
+          	e.preventDefault();
+          	return false;
+      	});							
 	},				 	
  	
  	refreshIfNeeded: function(){ 	        	  

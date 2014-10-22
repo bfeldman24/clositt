@@ -7,6 +7,31 @@ var productPresenter = {
 	
 	init: function(){	
 	    $(document).on('click','.imagewrap', productPresenter.showProductModal);
+	    
+	    $(document).on("mouseenter",".mainwrap .more-opt", function(e){
+           e.stopPropagation();
+            var $mainitem = $(e.currentTarget).parents(".item").first();
+            $mainitem.find(".hover_more").addClass('open');
+        });
+        
+        $(document).on("mouseleave",".mainwrap .more-opt", function(e){
+           var $mainitem = $(e.currentTarget).parents(".item").first();
+            $mainitem.find(".hover_more").removeClass('open');
+        });
+        
+        
+        $(document).on("mouseenter",".hover_more", function(e){
+           e.stopPropagation();
+            var $mainitem = $(e.currentTarget).parents(".item").first();
+            $mainitem.find(".more-opt i").addClass('hover');
+            $(e.currentTarget).addClass("open");
+        });
+        
+        $(document).on("mouseleave",".hover_more", function(e){
+           var $mainitem = $(e.currentTarget).parents(".item").first();
+            $mainitem.find(".more-opt i").removeClass('hover');
+            $(e.currentTarget).removeClass("open");
+        });
 	},		 			
 	
 	refreshImages: function(){	   

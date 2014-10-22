@@ -20,14 +20,13 @@ if (isset($product) && $product != null){
 <link href="<?php echo HOME_ROOT; ?>lib/css/jquery-ui-1.11.2.custom.min.css" rel="stylesheet">
 <link href="<?php echo HOME_ROOT; ?>lib/css/messenger.css" rel="stylesheet">
 <link href="<?php echo HOME_ROOT; ?>lib/css/messenger-theme-block.css" rel="stylesheet">
-<link href="<?php echo HOME_ROOT; ?>new/css/jquery.mCustomScrollbar.min.css" rel="stylesheet">
-<!-- <link href="<?php echo CLOSITT_CSS; ?>" rel="stylesheet"> -->
+<link href="<?php echo HOME_ROOT; ?>lib/css/jquery.mCustomScrollbar.min.css" rel="stylesheet">
 
 
-<link href="<?php echo HOME_ROOT; ?>new/css/iconic-font.css" rel="stylesheet" />
-<link href="<?php echo HOME_ROOT; ?>new/css/icomoon_all.css" rel="stylesheet" />
-<link href="<?php echo HOME_ROOT; ?>new/css/owl.carousel.css" rel="stylesheet" />
-<link href="<?php echo HOME_ROOT; ?>new/css/style.css" rel="stylesheet" />
+<link href="<?php echo HOME_ROOT; ?>lib/css/iconic-font.css" rel="stylesheet" />
+<link href="<?php echo HOME_ROOT; ?>lib/css/icomoon_all.css" rel="stylesheet" />
+<link href="<?php echo HOME_ROOT; ?>lib/css/owl.carousel.css" rel="stylesheet" />
+<link href="<?php echo CLOSITT_CSS; ?>" rel="stylesheet">
 
 
 <script type="text/javascript">
