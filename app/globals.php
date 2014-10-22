@@ -1,7 +1,8 @@
 <?php 
-define('DOMAIN','dev.closetta.com');
-define('HOME_ROOT','/design/');
+define('DOMAIN','closetta.com');
+define('HOME_ROOT','/');
 define('HOME_PAGE','http://' . DOMAIN . HOME_ROOT);
+define('LOGO', HOME_PAGE . 'css/images/logo.png');
 define('COOKIE_NAME','CookieClosittYum');
 $GLOBALS['ADMIN_LIST'] = array(2, 35, 94);
 
