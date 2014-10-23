@@ -39,4 +39,11 @@
         </div>
         <div class="clear"></div>
     </div>
+    
+    <div class="feedback hidden-xs">        
+        <div class="feedback-minimized">
+            <button class="feedback-minimized-btn btn btn-xs" type="button"><div class="rotate90">Feedback</div></button>
+        </div>
+    </div>        
 </footer>
+

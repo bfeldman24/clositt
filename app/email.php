@@ -19,7 +19,7 @@ class EmailController{
         				
         $headers = "From: Clositt Team <Eli@Clositt.com> \r\n" .
         		    "Reply-To: Eli@Clositt.com \r\n" .
-        		    'Bcc: bfeldman24@gmail.com, eli@clositt.com' . "\r\n";
+        		    'Bcc: ben@clositt.com, eli@clositt.com' . "\r\n";
         		        
         if(mail($email, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){
         	$_SESSION['welcomeEmail'] = $_SERVER['REMOTE_ADDR'];
@@ -30,26 +30,23 @@ class EmailController{
     }
     
     public static function sendContactForm($name, $id, $email, $subject, $message){
-        //$to = 'eli@clositt.com';        
-        $to = 'ben@clositt.com';        
+        $to = 'eli@clositt.com, ben@clositt.com';               
         $emailSubject = 'CLOSITT: ' . $subject;
         
         $emailMessage = "Name: " . $name . "\r\n" . 
                         "Clositt Id: " . $id . "\r\n" . 
-        				"Email: " . $email . "\r\n" .
-        				"Subject: " . $subject . "\r\n" . 
+        				"Email: " . $email . "\r\n" . 
         				"Message: " . $message . "\r\n"; 
         				
         $headers = "From: Clositt Team <Eli@Clositt.com> \r\n" .
-        		    'Reply-To: '. $email . "\r\n" .
-        		    'Bcc: bfeldman24@gmail.com' . "\r\n";
+        		    'Reply-To: '. $email . "\r\n";
         	
        // Log feedback 		    
        if ($subject == "CLOSITT FEEDBACK"){
             ListController::writeToFile("feedback",$message.",".$email.",".$name.",".$id);
        } 		    
         
-        if(mail($to, $emailSubject, $emailMessage, $headers, "-fBen@Clositt.com")){                                    
+        if(mail($to, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){                                    
         	return "success";	
         }else{
         	return "failed";	
@@ -103,7 +100,7 @@ class EmailController{
         				
         $headers = "From: Clositt <Eli@Clositt.com> \r\n" .
         		    "Reply-To: " . $sender. " \r\n" .
-        		    "Bcc: bfeldman24@gmail.com" . "\r\n" .
+        		    "Bcc: ben@clositt.com, eli@clositt.com" . "\r\n" .
         		    "MIME-Version: 1.0\r\n" .
         		    "Content-Type: text/html; charset=ISO-8859-1\r\n";
         
@@ -151,7 +148,7 @@ class EmailController{
                 				
         $headers = "From: info@clositt.com \r\n" .
         		    "Reply-To: eli@clositt.com \r\n" .
-        		    "Bcc: bfeldman24@gmail.com \r\n";        	
+        		    "Bcc: ben@clositt.com \r\n";        	
         
         if(mail($email, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){                                    
         	return "success";	
@@ -166,7 +163,7 @@ class EmailController{
                                                                         				
         $headers = "From: ".$from." \r\n" .
         		    "Reply-To: ".$from." \r\n" .
-        		    "Bcc: bfeldman24@gmail.com \r\n" .
+        		    "Bcc: ben@clositt.com \r\n" .
         		    "MIME-Version: 1.0\r\n" .
         		    "Content-Type: text/html; charset=ISO-8859-1\r\n"; 		    
         
