@@ -243,8 +243,8 @@ var closetPresenter = {
 	   // Only go to clositt if it has outfits
 	   // && $('#' + closetName + " .items .item").length > 0 
 	   
-	   if ($('#' + closetName).length > 0){	       
-	       pagePresenter.scrollTo($('#' + closetName).offset().top);
+	   if ($('#' + closetName).length > 0){	    
+	       pagePresenter.scrollTo($('#' + closetName).offset().top - $("#header").height() - 10);
 	   }else{
 	       Messenger.info("There are no items in that clositt");   
 	   }
