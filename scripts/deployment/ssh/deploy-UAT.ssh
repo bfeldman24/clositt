@@ -88,9 +88,9 @@ sudo cp www/js/clositt.min.js /home/$1/www/js
 sudo cp www/js/clositt.min.e.js /home/$1/www/js
 
 echo "Setting permissions..."
-sudo chmod 777 /home/$1/app/Logs
+sudo chmod -R 777 /home/$1/app/Logs
 sudo chmod 777 /home/$1/app/Data
-sudo chmod 777 /home/$1/app/Data/Lists
+sudo chmod -R 777 /home/$1/app/Data/Lists
 sudo chmod 777 /home/$1/app/Data/filters.html
 
 
