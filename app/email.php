@@ -19,7 +19,7 @@ class EmailController{
         				
         $headers = "From: Clositt Team <Eli@Clositt.com> \r\n" .
         		    "Reply-To: Eli@Clositt.com \r\n" .
-        		    'Bcc: ben@clositt.com, eli@clositt.com' . "\r\n";
+        		    'Bcc: bfeldman24@gmail.com, eli@clositt.com' . "\r\n";
         		        
         if(mail($email, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){
         	$_SESSION['welcomeEmail'] = $_SERVER['REMOTE_ADDR'];
@@ -40,7 +40,7 @@ class EmailController{
         				
         $headers = "From: Clositt Team <Eli@Clositt.com> \r\n" .
         		    'Reply-To: '. $email . "\r\n" .
-        		    'Bcc: ben@clositt.com' . "\r\n";
+        		    'Bcc: bfeldman24@gmail.com' . "\r\n";
         	
        // Log feedback 		    
        if ($subject == "CLOSITT FEEDBACK"){
@@ -101,7 +101,7 @@ class EmailController{
         				
         $headers = "From: Clositt <Eli@Clositt.com> \r\n" .
         		    "Reply-To: " . $sender. " \r\n" .
-        		    "Bcc: ben@clositt.com, eli@clositt.com" . "\r\n" .
+        		    "Bcc: bfeldman24@gmail.com" . "\r\n" .
         		    "MIME-Version: 1.0\r\n" .
         		    "Content-Type: text/html; charset=ISO-8859-1\r\n";
         
@@ -149,7 +149,7 @@ class EmailController{
                 				
         $headers = "From: info@clositt.com \r\n" .
         		    "Reply-To: eli@clositt.com \r\n" .
-        		    "Bcc: ben@clositt.com \r\n";        	
+        		    "Bcc: bfeldman24@gmail.com \r\n";        	
         
         if(mail($email, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){                                    
         	return "success";	
@@ -164,7 +164,7 @@ class EmailController{
                                                                         				
         $headers = "From: ".$from." \r\n" .
         		    "Reply-To: ".$from." \r\n" .
-        		    "Bcc: ben@clositt.com \r\n" .
+        		    "Bcc: bfeldman24@gmail.com \r\n" .
         		    "MIME-Version: 1.0\r\n" .
         		    "Content-Type: text/html; charset=ISO-8859-1\r\n"; 		    
         
