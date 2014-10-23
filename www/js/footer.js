@@ -4,20 +4,24 @@ var footer = {
     }  
 };
 
-$(".feedback .feedback-submit-btn").on("click",function(e){
+$(".feedback .feedback-minimized-btn").on("click", function(e){
+    $('#feedbackModal').modal('show');
+});
+
+$("#feedbackSubmit").on("click",function(e){
 	e.preventDefault();
 	$(e.currentTarget).addClass("disabled").text("Submitting...");
 
-	var feedbackTextArea = $(e.currentTarget).parents(".feedback").find(".feedback-textarea");
-	var message = feedbackTextArea.val().trim();
+	var message = $("#feedbackMessage").val().trim();
 	
 	if(message.length > 0){
-	    var feedback = {t: "feedback", e: session.email, n: session.username, i: session.userid, s: "CLOSITT FEEDBACK", m: message };
+	    var feedback = {t: "feedback", e: session.email, n: session.name, i: session.userid, s: "CLOSITT FEEDBACK", m: message };
 	   
-		$.post(window.HOME_ROOT + "app/email.php", feedback, function(data) {
+		$.post(window.HOME_ROOT + "e/contact", feedback, function(data) {
 			if(data == "success"){
 				Messenger.success("Thanks for your feedback!");
-				feedbackTextArea.val("");				
+				$('#feedbackModal').modal('hide');
+				$("#feedbackMessage").val("");				
 			}else{
 				Messenger.error("There was a problem sending your feedback. Please try again.");	
 			}
@@ -29,18 +33,6 @@ $(".feedback .feedback-submit-btn").on("click",function(e){
 	}
 	
 	return false;
-});
-
-$(".feedbackMinimize").on("click", function(e){
-    var feedbackPopup = $(e.currentTarget).parents(".feedback");
-    feedbackPopup.find(".feedback-maximize").hide('fade');
-    feedbackPopup.find(".feedback-minimized").show('fade');
-});
-
-$(".feedback-minimized-btn").on("click", function(e){
-    var feedbackPopup = $(e.currentTarget).parents(".feedback");
-    feedbackPopup.find(".feedback-maximize").show('fade');
-    feedbackPopup.find(".feedback-minimized").hide('fade');
 });
 
 $("#subheader-myclositt").on('click', function(e){
