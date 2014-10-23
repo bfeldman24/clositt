@@ -186,7 +186,7 @@ if (!isset($nickname) || $nickname == ""){
     
 <script src="<?php echo HOME_ROOT; ?>lib/js/jquery.joyride-2.1.js"></script>
 
-<div id="closetId" style="display:none;"><?php echo $_GET['user'];?></div>
+<div id="closetId" style="display:none;"><?php if (isset($_GET['user'])){ echo $_GET['user']; };?></div>
 
 <!-- Joyride Content -->
 <ol id="joyRideTipContent">

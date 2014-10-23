@@ -82,51 +82,39 @@
                 <span class="icon-times close-modal" aria-hidden="true"></span>
             </button>                
                 
-            <!-- Nav tabs -->   
-            <section id="login_box">    
-                <!-- Tab panes -->  
-                <div class="tab-content">  
-                    <div class="tab-pane active" id="loginModalTab">                
-                        <div class="container">
-                            <div class="row">
+            <!-- Nav tabs -->                              
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h1>Share via Email</h1>
+                                                                                
+                        <div class="form-horizontal" role="form">
+                            <div class="form-group">
                                 <div class="col-xs-12">
-                                    <div class="login">
-                                        <h1>Share via Email</h1>
-                                                                                                
-                                        <div class="form-horizontal" role="form">
-                                             <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <p class="log" style="margin-bottom:15px;">Enter an email address to share your find</p>
-                                                </div>
-                                                <div class="col-xs-12">       
-                                                    <input type="text" id="shareEmail" placeholder="Email Address" class="input-xlarge form-control" />                     
-                                                </div>
-                                                <div class="col-xs-12">       
-                                                    <input type="text" id="shareEmailFromName" placeholder="Your Name" class="input-xlarge form-control" />                     
-                                                </div>
-                                                <div class="col-xs-12">       
-                                                    <textarea rows="3" id="shareEmailMessage" class="form-control" placeholder="Message..."></textarea>
-                                                    <p class="log" style="margin-bottom:15px;" id="shareEmailFixedMessage">
-                                                        <q><span id="emailOutfitText">Check out this outfit from</span>
-                                                        <span id="emailOutfitStore"></span>: 
-                                                        <a id="emailOutfitLink"></a></q>
-                                                    </p>
-                                                </div>
-                                              </div>                                                                                                                                                                          
-                                              <div class="form-group">
-                                                <div>
-                                    		      <button type="submit" class="btn btn-clositt-theme center-block" id="share">Share</button>                      
-                                                </div>
-                                              </div>  
-                                        </div>
-                                    </div> 
+                                    <p class="log">Enter an email address to share your find</p>
                                 </div>
-                            </div>
-                        </div>                    
-                    </div>                                   
-                </div>                   
-                
-            </section>                   
+                                <div class="col-xs-12">       
+                                    <input type="text" id="shareEmail" placeholder="Email Address" class="input-xlarge form-control" />                     
+                                </div>
+                                <div class="col-xs-12">       
+                                    <input type="text" id="shareEmailFromName" placeholder="Your Name" class="input-xlarge form-control" />                     
+                                </div>
+                                <div class="col-xs-12">       
+                                    <textarea rows="3" id="shareEmailMessage" class="form-control" placeholder="Message..."></textarea>
+                                    <p class="log" id="shareEmailFixedMessage">
+                                        <q><span id="emailOutfitText">Check out this outfit from</span>
+                                        <span id="emailOutfitStore"></span>: 
+                                        <a id="emailOutfitLink"></a></q>
+                                    </p>
+                                </div>
+                            </div>                                                                                                                                                                          
+                            <div class="form-group">
+                    		      <button type="submit" class="btn btn-clositt-theme center-block" id="share">Share</button>                      
+                            </div>  
+                        </div> 
+                    </div>
+                </div>
+            </div>                                                         
                             
         </div>
     </div>
@@ -140,39 +128,29 @@
                 <span class="icon-times close-modal" aria-hidden="true"></span>
             </button>                
                 
-            <!-- Nav tabs -->   
-            <section id="login_box">    
-                <!-- Tab panes -->  
-                <div class="tab-content">  
-                    <div class="tab-pane active" id="loginModalTab">                
-                        <div class="container">
-                            <div class="row">
+            <!-- Nav tabs -->                             
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h1>Forgot Password?</h1>
+                                                                                
+                        <div class="form-horizontal" role="form">
+                                <div class="form-group">
                                 <div class="col-xs-12">
-                                    <div class="login">
-                                        <h1>Forgot Password?</h1>
-                                                                                                
-                                        <div class="form-horizontal" role="form">
-                                             <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <p class="log" style="margin-bottom:15px;">Please enter your email address so we can send you an email to reset your password:</p>
-                                                </div>
-                                                <div class="col-xs-12">       
-                                                    <input type="text" id="forgotPasswordEmail" placeholder="Email Address" class="input-xlarge form-control" />                     
-                                                </div>
-                                              </div>                                                                                                                             
-                                              <div class="form-group">
-                                                <div>
-                                    		      <button id="resetPassButton" class="btn btn-clositt-theme center-block">Reset My Password</button>                               </div>
-                                              </div>  
-                                        </div>
-                                    </div> 
+                                    <p class="log">Please enter your email address so we can send you an email to reset your password:</p>
                                 </div>
-                            </div>
-                        </div>                    
-                    </div>                                   
-                </div>                   
-                
-            </section>                   
+                                <div class="col-xs-12">       
+                                    <input type="text" id="forgotPasswordEmail" placeholder="Email Address" class="input-xlarge form-control" />                     
+                                </div>
+                                </div>                                                                                                                             
+                                <div class="form-group">
+                                <div>
+                    		      <button id="resetPassButton" class="btn btn-clositt-theme center-block">Reset My Password</button>                               </div>
+                                </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>                                                          
                             
         </div>
     </div>            
@@ -194,6 +172,39 @@
             <button type="button" class="close modal_close" data-dismiss="modal">
                 <span class="icon-times close-modal" aria-hidden="true"></span>
             </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog2">
+        <div class="modal-content2">
+            <button type="button" class="close modal_close" data-dismiss="modal">
+                <span class="icon-times close-modal" aria-hidden="true"></span>
+            </button>                
+            
+            <div class="container">                
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h1>Feedback</h1>
+                                                                                
+                        <div class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <p class="log">Lay it on us. We can handle it.</p>
+                                </div>
+                                <div class="col-xs-12">       
+                                    <textarea id="feedbackMessage" placeholder="What can we do better?" class="input-xlarge form-control" rows="3"></textarea>                     
+                                </div> 
+                            </div>                                                                                                                                                                                                              
+                            <div class="form-group">
+            		              <button type="submit" class="btn btn-clositt-theme center-block" id="feedbackSubmit">Submit</button>                      
+                            </div>  
+                        </div>
+                    </div>                                     
+                </div>                 
+            </div>   
+                            
         </div>
     </div>
 </div>
