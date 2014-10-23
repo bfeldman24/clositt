@@ -45,11 +45,19 @@ echo "backup dir name will be /home/clositt-archive/$d"
 sudo mkdir "/home/clositt-archive/$d"
 sudo mv /home/$1/* "/home/clositt-archive/$d/"
 sudo mv /home/$1/www/.htaccess "/home/clositt-archive/$d/www/"
+
+echo "Copying over to prod..."
 sudo cp -rf * /home/$1/
 sudo cp www/.htaccess /home/$1/www
 sudo rm -rf /home/$1/scripts
 sudo rm -rf /home/$1/archive
 sudo rm /home/$1/robots.txt
+
+echo "Setting permissions..."
+sudo chmod -R 777 /home/$1/app/Logs
+sudo chmod 777 /home/$1/app/Data
+sudo chmod -R 777 /home/$1/app/Data/Lists
+sudo chmod 777 /home/$1/app/Data/filters.html
 
 sudo rm /var/www/clositt.com
 sudo ln -s /home/$1/www /var/www/clositt.com
