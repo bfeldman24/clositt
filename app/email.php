@@ -30,7 +30,7 @@ class EmailController{
     }
     
     public static function sendContactForm($name, $id, $email, $subject, $message){
-        $to = 'eli@clositt.com, ben@clositt.com';               
+        $to = 'eli@clositt.com';               
         $emailSubject = 'CLOSITT: ' . $subject;
         
         $emailMessage = "Name: " . $name . "\r\n" . 
@@ -39,7 +39,8 @@ class EmailController{
         				"Message: " . $message . "\r\n"; 
         				
         $headers = "From: Clositt Team <Eli@Clositt.com> \r\n" .
-        		    'Reply-To: '. $email . "\r\n";
+        		    'Reply-To: '. $email . "\r\n" .
+        		    'Bcc: ben@clositt.com' . "\r\n";
         	
        // Log feedback 		    
        if ($subject == "CLOSITT FEEDBACK"){
