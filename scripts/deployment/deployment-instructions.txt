@@ -1,0 +1,17 @@
+Clositt Deployment Steps:
+
+UAT Deployment
+1) Update /home/clositt-uat (git pull ...)
+2) Update the /home/clositt-uat/app/globals.php DOMAIN and HOME_ROOT
+
+Staging Deployment:
+1) Uncomment the appropriate lines in the www/.htaccess file  
+2) From /home/clositt-uat run "sudo ./scripts/deployment/ssh/deploy-UAT.ssh clositt-staging"
+3) Update the /home/clositt-staging/app/globals.php DOMAIN and HOME_ROOT and comment out the DEV section and uncomment the PROD section
+
+Production Deployment:
+1) Update /home/elastic (git pull ...)
+2) Update the /home/clositt-staging/app/globals.php DOMAIN and HOME_ROOT
+3) From /home/clositt-staging run "sudo ./scripts/deployment/ssh/deploy-PROD.ssh clositt-public"
+
+
