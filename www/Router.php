@@ -147,13 +147,20 @@ class Router {
                 case 'search':                	
                     $product = $productController->searchElasticHtml($_POST, $_GET['page'], QUERY_LIMIT);
                     print_r($product);
-                    break;                          
+                    break;
                 case 'browse':                                        
                     $product = $productController->getProductsHtml($_POST, $_GET, 25, true);   
                     header('Content-Type: application/json');
                     print_r($product);
                     break;                                
             }
+            
+            if(ENV == "DEV" || ENV == "QA"){
+               if($_GET['method'] == "searchjson"){ 	
+                    $product = $productController->searchElastic($_POST, $_GET['page'], QUERY_LIMIT);
+                    print_r($product);
+                }
+           }
             
         }else{
             if ($_GET['classCode'] == "i" && $_GET['method'] == 'image'){           
@@ -301,8 +308,7 @@ class Router {
                 $results = $colorController->testImage($_GET['i']);
                 break;                            
             case 'count':
-                $colorCount = $colorController->getColorsCount();                                      
-                print_r($colorCount);
+                $results = $colorController->getColorsCount();                                      
                 break;                    
             case 'correct':                            
                 $results = $colorController->correctColor($_POST['sku'], $_POST['oldColor'], $_POST['newColor']);                

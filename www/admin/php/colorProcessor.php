@@ -53,6 +53,7 @@ td {
 </head>
 <body>
 
+<?php include(dirname(__FILE__) . '/../../static/footerMeta.php'); ?>
 <script src="../../js/messenger.js" type="text/javascript"></script>
 <script src="../../js/colorPresenter.js" type="text/javascript"></script>
 <script src="../js/colorProcessor.js" type="text/javascript"></script>

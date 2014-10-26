@@ -190,10 +190,11 @@ var searchController = {
         searchController.hasMoreProducts = true;        
         $("#product-grid").html("");
         location.hash = "outfit=" + $( "#search-bar" ).val();
-        searchController.getProducts(searchController.showResults);
+        searchController.getProducts();
     },            
     
-    getProducts: function(){                                
+    getProducts: function(json){                                        
+        json = json === true ? true : false;
         
         if (searchController.hasMoreProducts){
             $("#product-loader").show();
@@ -202,7 +203,7 @@ var searchController = {
             $.post( window.HOME_ROOT + searchController.url +pageIndex, searchController.criteria, function( data ) {
         		gridPresenter.endTask();
         		
-        		if( data.products != null && data.products.length > 100){  
+        		if( data.products != null && ((!json && data.products.length > 100) || (json && data.products.length > 0))){  
         		    productPresenter.filterStore = data.products;
         		    gridPresenter.lazyLoad(data);     		        		    
         		}else if (pageIndex <= 0){

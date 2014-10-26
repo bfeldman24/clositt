@@ -8,7 +8,8 @@ include(dirname(__FILE__) . '/../static/meta.php');
 ?>
 <style type="text/css">
 body{
-	font-size:16px;	
+	font-size:16px;
+	line-height: 1.42857;
 }
 
 h2 {

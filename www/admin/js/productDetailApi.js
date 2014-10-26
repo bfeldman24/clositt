@@ -1547,6 +1547,10 @@ var productDetail = {
     debug: false,
     
     getDetails: function(company, sku, url, callback){
+        if (company == null || sku == null || url == null){
+            return;   
+        }
+        
         var webProxyData = {u:url};
 	    company = company.substring(0,1).toUpperCase() + company.substring(1);
 	   

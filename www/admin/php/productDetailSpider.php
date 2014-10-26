@@ -5,7 +5,7 @@
 require_once(dirname(__FILE__) . '/../../../app/globals.php');
 include(dirname(__FILE__) . '/../../static/meta.php');   
 
-$items = '';
+$items = 'null';
 if (isset($_GET['o']) && isset($_GET['s']) && isset($_GET['l'])){
     $items = "'" . $_GET['o'] . "','" . $_GET['s'] . "','" . $_GET['l'] . "'";    
 }
@@ -31,11 +31,14 @@ input{
 }
 
 .actionButtons{
-    background: linear-gradient(to bottom, #666666 0%, #111111 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    bottom: 30px;
+    background: none repeat scroll 0 0 #fff;
+    border-top: 5px solid #66ccff;
+    bottom: 0;
     padding: 7px 5px;
     position: fixed;
-    width: 100%;}
+    width: 100%;
+    z-index: 9999;
+}
 
 #loadingMask{
     background: none repeat scroll 0 0 rgba(70, 70, 70, 0.8);
@@ -89,12 +92,14 @@ input{
 
 </head>
 <body>
-<?php include(dirname(__FILE__) . '/../../static/header.php');   ?>
-<div id="mainContent">
-    <a href="#" name="top"></a>
-    <br><h2>Product <i>Detail</i> Genie <span id="detailCount"></span></h2>    
-    <hr>        
-    <div id="productDetailOutput"></div>
+<div class="wrapper">
+    <?php include(dirname(__FILE__) . '/../../static/header.php');   ?>
+    <div id="mainContent">
+        <a href="#" name="top"></a>
+        <br><h2>Product <i>Detail</i> Genie <span id="detailCount"></span></h2>    
+        <hr>        
+        <div id="productDetailOutput"></div>
+    </div>
 </div>
 
 <div class="actionButtons">
@@ -110,7 +115,7 @@ input{
     <img src="../../css/images/loading.gif"/>
 </div>
 
-<?php include(dirname(__FILE__) . '/../../static/footer.php');   ?>
+<?php include(dirname(__FILE__) . '/../../static/footerMeta.php');   ?>
 
 <?php echo CLOSITT_JS; ?>
 <script src="../js/storeApi.js"></script>

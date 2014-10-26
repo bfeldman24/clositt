@@ -2,7 +2,7 @@
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/AbstractDao.php');
 require_once(dirname(__FILE__) . '/../Model/ProductEntity.php');
-require_once(dirname(__FILE__) . '/../../admin/php/colorExtract/colorInspector.php');   
+require_once(dirname(__FILE__) . '/../../www/admin/php/colorExtract/colorInspector.php');   
 
 class ColorController extends AbstractDao{		
 	
@@ -55,7 +55,7 @@ class ColorController extends AbstractDao{
         
         $affected = 0;
         
-        if ($colors[0] != null){
+        if (count($colors) > 0){
             foreach ($colors as $color) {            
                 try {                                    
                     print_r($colors);
@@ -129,11 +129,11 @@ class ColorController extends AbstractDao{
 	}
 	
 	public function processColors(){
-	    $unprocessedColors = $colorController->getColors();                           
+	    $unprocessedColors = $this->getColors();                           
         $colors = ColorInspector::processImageColors($unprocessedColors, 2);                    
         print_r(json_encode($colors));
                         
-        return $colorController->addColors($colors);            
+        return $this->addColors($colors);            
     }
 	
 	public function getColors(){
@@ -163,7 +163,7 @@ class ColorController extends AbstractDao{
 	}
 	
 	public function createColorMapping(){
-	   $colors = $colorController->getColorMapping();
+	   $colors = $this->getColorMapping();
        return ColorInspector::getClosestColors($colors);
 	}
 	

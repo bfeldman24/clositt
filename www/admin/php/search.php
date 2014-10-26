@@ -42,6 +42,28 @@ body{
     left: 10px;
     z-index: 9999;      
 }
+
+.viewlink {
+    background: none repeat scroll 0 0 #f5f5f5;
+    height: 75px;
+    opacity: 0.7;
+    overflow: hidden;
+    position: absolute;
+    top: 15%;
+    width: 100%;
+    text-align: center;
+}
+
+.items .item .detail h4 {
+    height: auto;
+}
+
+.bottom {
+    background: none repeat scroll 0 0 #f0f0f0;
+    font-size: 14px;
+    line-height: 1.3em;
+    padding: 5px;
+}
 </style>
 
 </head>
@@ -88,7 +110,13 @@ body{
     <hr>
     
     <div id="main-workspace" style="display:none;"></div>    
-    <div id="sample-grid-container"><div id="product-grid"></div></div>
+    
+    <section id="sample-grid-container" class="items">
+        <div class="container">           
+            <div id="product-grid" class="row box-row"></div>
+        </div>
+    </section>
+    
     <a href="#top" id="clear">Clear Results</a>
     <a href="#top" id="gototop">Go To Top</a>    
 </div>
@@ -100,7 +128,9 @@ body{
 
 
     searchController.searchBarSubmit = function(el){
-        el.preventDefault();
+        if (el){
+            el.preventDefault();
+        }   
 
         var search ={};
         search.searchTerm = $( "#search-bar" ).val().trim();
@@ -113,17 +143,17 @@ body{
         searchController.hasMoreProducts = true
         searchController.criteria = search;
 
-        $.post(window.HOME_ROOT + "p/search/0", search, function( products ) {
-                products = products.products;
-                if( Object.keys(products).length > 0){
+        $.post(window.HOME_ROOT + "p/searchjson/0", search, function( data ) {
+
+                if( data.products.length > 0){
                     $("#product-grid").children().remove();
-                    gridPresenter.lazyLoad(products);
+                    searchAdmin.lazyLoad(data);
                 } else {
                     alert("No products found!");
                 }
             }
             , "json" // remove this if you don't want to return the data in json format
-        );
+        ); 
     };
 
 $(document).ready(function() {
@@ -144,75 +174,102 @@ $("#clear").click(function(el){
     searchController.isSearchActive = true;    
 });
 
-productPresenter.getProductTemplate = function(product){
-    if (product == null || typeof(product) != "object"){      	
-       return $("");
-    }    
+
+var searchAdmin = {
+    lazyLoad: function(products){
+	    if (products == null){
+	        return null;
+	    }	   
+
+	    if (products.products != null){
+	       products = products.products;  
+	    }	               
+
+        products.forEach(function(product){	                       
+			var $html = searchAdmin.getProductTemplate(product);
+            $("#product-grid").append($html);
+
+            if ($("#product-grid .outfit").length < 30){                        
+                $html.find("img[data-src]").unveil(10000);
+            }else{
+                $html.find("img[data-src]").unveil(200);
+            }
+	   });
+			                   			   	   		
+	   gridPresenter.alignDefaultGrid(); 
+	   gridPresenter.endTask(); 
+	   gridPresenter.numberOfLoadingPages--;
+	},
+	
+	getProductTemplate: function(product){
+        if (product == null || typeof(product) != "object"){      	
+           return $("");
+        }    
+        
+    	var company = product.o;
+    	var audience = product.u;
+    	var category = product.a;
+    	var link = product.l;
+    	var image = product.i;
+    	var name = product.n;		
+    	var reviewCount = product.rc == null ? 0 : product.rc;
+    	var closetCount = product.cc == null ? 0 : product.cc;
+    	var closetCountPlural = closetCount == 1 ? "" : "s"; 
+    	var id = product.s;
+    	var shortlink = product.sl;
+    	var price = product.p == null || isNaN(product.p) ? "" : "$" + Math.round(product.p);		 	
+    	var filterPrice = product.fp; 		 		
+    	var feedOwner = product.owner;
+    	var feedCloset = product.closet;
+        var score = product.sc;
+        var explainUrl = window.HOME_ROOT + 'admin/php/explain.php?sku=' + id + '&query=' + encodeURIComponent($( "#search-bar" ).val()).replace("#","").trim();
+        var colors = product.co;
     
-	var company = product.o;
-	var audience = product.u;
-	var category = product.a;
-	var link = product.l;
-	var image = product.i;
-	var name = product.n;		
-	var reviewCount = product.rc == null ? 0 : product.rc;
-	var closetCount = product.cc == null ? 0 : product.cc;
-	var closetCountPlural = closetCount == 1 ? "" : "s"; 
-	var id = product.s;
-	var shortlink = product.sl;
-	var price = product.p == null || isNaN(product.p) ? "" : "$" + Math.round(product.p);		 	
-	var filterPrice = product.fp; 		 		
-	var feedOwner = product.owner;
-	var feedCloset = product.closet;
-    var score = product.sc;
-    var explainUrl = window.HOME_ROOT + 'admin/php/explain.php?sku=' + id + '&query=' + encodeURIComponent($( "#search-bar" ).val()).replace("#","").trim();
-    var colors = product.co;
-
-	var rand = Math.floor(Math.random() * 3) + 1;
-	var shadow = "";
-	if(rand == 1){
-		shadow = 'shadow';	
-	}		
-		 			
-	//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
-	var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
-	   var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'">';
-			html +='<a target="_blank" href=' + explainUrl +  '>' +
-                '<div class="picture"><img data-src="' + image + '" src="../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
-			html += '<div class="bottom-block">';
-			    html +='<div class="companyName">' + company + '</div>';
-				html +='<div class="price">' +  price + '</div>';
-			html += '</div>';
-			
-			html +='<div class="overlay">';
-
-					html +='<div class="bottom">';
-				    html += '<div class="productActions" >';					    
-				    html += 'Score= ' + score;
-                    html += '</div>';
-
-                    if(category !=undefined){
-                        html += '<div class="productActions" style="height:auto;" >';
-                        html += 'Tags = ' + category ;
-                        html += '</div>';
-                    }
-
-                    html += '<div class="productActions" style="height:auto;">';
-                    html += 'Colors = ' + colors;
-                    html += '</div>';
-
-					//html +='<div class="companyName">' + company + '</div>';
-					//html +='<div class="price">' +  price + '</div>';
-					html +='<div class="name">' + name + '</div>';
-				html += '</div>';
-				html += '<div class="product-comments"></div>';
-				html += '<div class="addToClosetForm" style="display:none;"></div>';
-			html += '</div>';
-			html += '<div class="clear"></div>';				
-		html +='</div>';
-		
-	return $(html);
-};
+    	var rand = Math.floor(Math.random() * 3) + 1;
+    	var shadow = "";
+    	if(rand == 1){
+    		shadow = 'shadow';	
+    	}		
+    	
+    	var html = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-box box outfit" pid="'+id+'">' +
+                '<div class="item" data-url="'+link+'">' +
+                    '<div class="mainwrap">' +
+                        '<div class="imagewrap">' +                                                   
+                                '<img src="'+image+'" />' +
+                        '</div>' +
+                        '<div class="detail">' +
+                            '<h4 class="productName">'+name+'</h4>' +
+                            '<div>' +
+                                '<span class="price pull-right">'+price+'</span>' +
+                                '<p class="pull-left productStore">'+company+'</p>' +                                                            
+                            '</div>' +
+                            '<div class="clear"></div>' +
+                        '</div>' +
+                        
+                        '<div class="cart_option">' +                        
+                            '<div class="bottom">' +
+            				        '<div class="productActions" >' +
+            				            'Score = ' + score +
+                                    '</div>';
+            
+                                    if(category != undefined){
+                                            html += '<div class="productActions" style="height:auto;" >';
+                                            html += 'Tags = ' + category ;
+                                            html += '</div>';
+                                    }
+            
+                                    html += '<div class="productActions" style="height:auto;">' +
+                                    'Colors = ' + colors +
+                                '</div>' +                                         
+                        '</div>' +
+                    '</div>' +
+                    '<div class="hover_more"></div>' +
+                '</div>' +
+            '</div>';		 			
+    		
+    	return $(html);
+    }       
+}
 </script>
 
 </body>

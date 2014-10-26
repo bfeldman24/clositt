@@ -34,7 +34,7 @@ class GetMostCommonColors
 	 */
 	function Get_Color( $img, $count=20, $reduce_brightness=true, $reduce_gradients=true, $delta=16, $focusWidthPercent=.4, $focusHeightPercent = .8 )
 	{
-		if (is_readable( $img) || true )
+		if (isset($img) && trim($img) != "" && (is_readable($img) || true ))
 		{
 			if ( $delta > 2 )
 			{

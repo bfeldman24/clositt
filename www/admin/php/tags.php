@@ -58,6 +58,7 @@ body{
 .productActions {
     min-height: 30px;
     height: auto;
+    padding: 2px 0;
 }
 
 .overlay .productActions {
@@ -86,14 +87,18 @@ body{
     margin: 0;    
 }
 
+/*
 #product-grid .picture{
     height: auto;
     width: auto;
 }
+*/
+
 
 #product-grid .outfit, .bottom-block, .overlay > .bottom{
     width: 100px;   
 }
+
 
 .overlay > .bottom{
     z-index: 999;   
@@ -101,6 +106,14 @@ body{
 
 .overlay > .bottom > .name {
     font-size: 8pt;
+    padding: 2px 0 5px;
+    text-align: center;
+}
+
+.overlay{
+    background: none repeat scroll 0 0 #fff;
+    bottom: 0;
+    position: absolute;   
 }
 
 .productActions .btn {
@@ -108,6 +121,8 @@ body{
     font-size: 12px !important;
     line-height: 1.5 !important;
     padding: 1px 5px !important;
+    margin-left: 2px;
+    width: 94px;
 }
 
 #loadingMask{
@@ -168,6 +183,29 @@ body{
     background: #428bca; 
     color: #EFEFEF;
 }
+
+
+#product-grid .outfit{
+    padding: 1px;
+    height: 160px !important;
+}
+
+.items .item .imagewrap {
+    max-height: 130px;
+    overflow: hidden;
+}
+
+.items .item .imagewrap img {
+    height: auto;
+}
+
+.items .col-lg-box {
+    min-height: 100px;
+}
+
+.items .item .imagewrap {
+    height: auto;
+}
 </style>
 
 </head>
@@ -203,11 +241,14 @@ body{
     </div>
     <hr>
     
-    <div id="main-workspace" style="display:none;"></div>    
-    <div id="sample-grid-container">
-        <div id="product-grid"></div>
-        <div id="productSpinner" style="display:none;"><img src="../../css/images/loading.gif"/></div>
-    </div>
+    <div id="main-workspace" style="display:none;"></div>        
+    <section id="sample-grid-container" class="items">
+        <div class="container">           
+            <div id="product-grid" class="row box-row"></div>
+            <div id="productSpinner" style="display:none;"><img src="../../css/images/loading.gif"/></div>
+        </div>
+    </section>
+    
     <a href="#top" id="clear">Clear Results</a>
     <a href="#top" id="gototop">Go To Top</a>    
 </div>
@@ -217,6 +258,7 @@ body{
 </div>
 
 
+<?php require_once(dirname(__FILE__) . '/../../static/footerMeta.php'); ?>
 <?php echo CLOSITT_JS; ?>
 <script type="text/javascript">
 
@@ -236,6 +278,8 @@ var tagAdmin = {
         $(document).on("click",".name",tagAdmin.viewLargerImage);
         $(document).on("click",".price",tagAdmin.removeProductFromBrowsing);
         $(document).on("click",".bottom-block", tagAdmin.selectProduct);
+        $(document).on("mousemove",".outfit", tagAdmin.showOverlay).on("mouseleave",".outfit", tagAdmin.hideAllOverlays);
+        
         tagAdmin.getTags();
     },
     
@@ -421,7 +465,7 @@ var tagAdmin = {
             searchController.criteria = {};
             searchController.criteria.category = [];
             searchController.criteria.category.push(tagAdmin.tag);
-            searchController.getProducts(searchController.showResults);
+            searchController.getProducts(true);
             $("#productSpinner").hide();     
         }
     },  
@@ -574,69 +618,128 @@ var tagAdmin = {
                 },                          
             }
         });
+    },
+    
+    showOverlay: function() {	
+            var overlay = $(this).find(".overlay").not(".alwaysVisible").first();
+						
+			if (overlay.length > 0 && (!overlay.is(":visible") || overlay.data("fadingOut"))){			
+			     overlay.stop(true, true);			     
+			     overlay.fadeIn('fast');
+			     overlay.data("fadingOut", false);
+			}
+	},
+	
+	hideAllOverlays: function() {	  	   
+	    
+	    if ($(window).width() > 767){
+           	$(".overlay:visible").not(".alwaysVisible").each(function(){		       	    
+           	    
+           	    $(this).data("fadingOut", true); 
+                $(this).fadeOut('slow');    		    			    		
+           	});
+	    }
+	},
+    
+    getProductTemplate: function(product){
+        if (product == null || typeof(product) != "object" || tagAdmin.tag == null){      	
+           return $("");
+        }    
+        
+    	var company = product.o;
+    	var audience = product.u;
+    	var category = product.a;
+    	var link = product.l;
+    	var image = product.i;
+    	var name = product.n;		
+    	var reviewCount = product.rc == null ? 0 : product.rc;
+    	var closetCount = product.cc == null ? 0 : product.cc;
+    	var closetCountPlural = closetCount == 1 ? "" : "s"; 
+    	var id = product.s;
+    	var shortlink = product.sl;
+    	var price = product.p == null || isNaN(product.p) ? "" : "$" + Math.round(product.p);		 	
+    	var filterPrice = product.fp; 		 		
+    	var feedOwner = product.owner;
+    	var feedCloset = product.closet;
+        var score = product.sc;
+        var explainUrl = window.HOME_ROOT + '/admin/php/explain.php?sku=' + id + '&query=' + encodeURIComponent($( "#search-bar" ).val()).replace("#","").trim();
+        var colors = product.co;
+    
+    	var rand = Math.floor(Math.random() * 3) + 1;
+    	var shadow = "";
+    	if(rand == 1){
+    		shadow = 'shadow';	
+    	}		
+    		 			    	    		    		
+    		
+    	var html = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-box box outfit" pid="'+id+'" data-url="'+shortlink+'" company="'+company+'" name="'+name+'" link="'+link+'">' +
+            '<div class="item" data-url="'+link+'">' +
+                '<div class="mainwrap">' +
+                    '<div class="imagewrap picture">' +                                                   
+                            '<img data-src="' + image + '" src="../../css/images/loading.gif"  onerror="return productPresenter.handleImageNotFound(this)"/>' +
+                    '</div>' +                    
+                    '<div class="detail">' +
+                        '<div>' +
+                            '<div class="selectProduct"></div>' +
+    				        '<div class="price pull-right">' +  tagAdmin.tag + '</div>' +
+    				    '</div>' +
+                        '<div class="clear"></div>' +
+                    '</div>' +
+                    
+                    '<div class="overlay" style="display:none;">' +    
+        			    '<div class="bottom">';
+    
+                            if(category !=undefined){
+                                html += '<div class="productActions" >';                        
+                                    html += '<div class="approveTag btn btn-info"><span class="icon-check"></span> Tag</div>';
+                                    html += '<div class="approvePrevious btn btn-info"><span class="icon-check"></span> All Previous</div>';
+                                    html += '<div class="remove btn btn-danger"><span class="icon-times"></span> Tag</div>';
+                                    html += '<div class="removePrevious btn btn-danger"><span class="icon-times"></span> All Previous</div>';                            
+                                html += '</div>';
+                            }
+    
+    					html += '<div class="name">' + name + '</div>' +
+    				    '</div>' +
+    			     '</div>' +
+                '</div>' +                
+            '</div>' +
+        '</div>';
+	
+    		
+    	return $(html);
     }  
 };
 
 
-productPresenter.getProductTemplate = function(product){
-    if (product == null || typeof(product) != "object" || tagAdmin.tag == null){      	
-       return $("");
-    }    
-    
-	var company = product.o;
-	var audience = product.u;
-	var category = product.a;
-	var link = product.l;
-	var image = product.i;
-	var name = product.n;		
-	var reviewCount = product.rc == null ? 0 : product.rc;
-	var closetCount = product.cc == null ? 0 : product.cc;
-	var closetCountPlural = closetCount == 1 ? "" : "s"; 
-	var id = product.s;
-	var shortlink = product.sl;
-	var price = product.p == null || isNaN(product.p) ? "" : "$" + Math.round(product.p);		 	
-	var filterPrice = product.fp; 		 		
-	var feedOwner = product.owner;
-	var feedCloset = product.closet;
-    var score = product.sc;
-    var explainUrl = window.HOME_ROOT + '/admin/php/explain.php?sku=' + id + '&query=' + encodeURIComponent($( "#search-bar" ).val()).replace("#","").trim();
-    var colors = product.co;
+gridPresenter.lazyLoad = function(products){
+    if (products == null){
+        return null;
+    }	   
 
-	var rand = Math.floor(Math.random() * 3) + 1;
-	var shadow = "";
-	if(rand == 1){
-		shadow = 'shadow';	
-	}		
-		 			
-	//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
-	var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
-	   var html ='<div class="outfit item '+shadow+'" '+attr+' pid="'+id+'" data-url="'+shortlink+'" company="'+company+'" name="'+name+'" link="'+link+'">';			        html += '<div class="picture"><img data-src="' + image + '" src="../../css/images/loading.gif"  onerror="return pagePresenter.handleImageNotFound(this)"/></div></a>';
-			html += '<div class="bottom-block">';
-			    html +='<div class="selectProduct"></div>';
-				html +='<div class="price">' +  tagAdmin.tag + '</div>';
-			html += '</div>';
-			
-			html +='<div class="overlay">';
+    if (products.products != null){
+       products = products.products; 
+       
+       if (typeof products != "object"){
+            return;
+       } 
+    }	               
 
-			    html +='<div class="bottom">';
+    products.forEach(function(product){	                       
+		var $html = tagAdmin.getProductTemplate(product);
+        $("#product-grid").append($html);
 
-                    if(category !=undefined){
-                        html += '<div class="productActions" >';                        
-                            html += '<div class="approveTag btn btn-info">Approve Tag</div>';
-                            html += '<div class="approvePrevious btn btn-info">Approve All Previous</div>';
-                            html += '<div class="remove btn btn-danger">Remove Tag</div>';
-                            html += '<div class="removePrevious btn btn-danger">Remove All Previous</div>';                            
-                        html += '</div>';
-                    }
-
-					html +='<div class="name">' + name + '</div>';
-				html += '</div>';
-			html += '</div>';					
-			html += '<div class="clear"></div>';				
-		html +='</div>';
-		
-	return $(html);
+        if ($("#product-grid .outfit").length < 30){                        
+            $html.find("img[data-src]").unveil(10000);
+        }else{
+            $html.find("img[data-src]").unveil(200);
+        }
+   });
+		                   			   	   		
+   gridPresenter.alignDefaultGrid(); 
+   gridPresenter.endTask(); 
+   gridPresenter.numberOfLoadingPages--;
 };
+
 
 
 
