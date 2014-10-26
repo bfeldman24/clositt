@@ -331,8 +331,12 @@ var spider = {
     	var html = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-box box outfit" pid="'+id+'">' +
             '<div class="item" data-url="'+link+'">' +
                 '<div class="mainwrap">' +
-                    '<div class="imagewrap">' +                       
+                    '<div class="imagewrap">' +                                                   
                             '<img src="'+image+'" />' +
+                    '</div>' +
+                    '<div class="viewlink">' +
+                            '<span class="sku">'+id+'</span>' +
+                            '<p class="link">'+link+'</p>' +
                     '</div>' +
                     '<div class="detail">' +
                         '<h4 class="productName">'+name+'</h4>' +

@@ -150,11 +150,14 @@ input{
 }
 
 .actionButtons{
-    background: linear-gradient(to bottom, #666666 0%, #111111 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    bottom: 0px;
+    background: none repeat scroll 0 0 #fff;
+    border-top: 5px solid #66ccff;
+    bottom: 0;
     padding: 7px 5px;
     position: fixed;
-    width: 100%;}
+    width: 100%;
+    z-index: 9999;
+}
     
 .isvalid{
     font-size: 9px;   
@@ -234,9 +237,25 @@ input{
     display:none;   
 }
 
+.viewlink {
+    background: none repeat scroll 0 0 #f5f5f5;
+    height: 75px;
+    opacity: 0.7;
+    overflow: hidden;
+    position: absolute;
+    top: 15%;
+    width: 100%;
+    text-align: center;
+}
+
+.viewlink .link {
+    font-size: 10px;
+}
+
 ul.messenger.messenger-theme-block.messenger-fixed .messenger-message {
     padding: 2px;
 }
+
 </style>
 
 </head>
