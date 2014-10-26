@@ -192,6 +192,7 @@ body{
 
 .items .item .imagewrap {
     max-height: 130px;
+    min-height: 130px;
     overflow: hidden;
 }
 
