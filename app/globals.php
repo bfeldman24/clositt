@@ -16,7 +16,6 @@ $js = '<script src="' . HOME_ROOT .'js/session.js"></script>' .
 '<script src="' . HOME_ROOT .'js/pagePresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'js/productPagePresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'js/gridPresenter.js"></script>' .
-'<script src="' . HOME_ROOT .'js/gridEvents.js"></script>' .
 '<script src="' . HOME_ROOT .'js/productPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'js/filterPresenter.js"></script>' .
 '<script src="' . HOME_ROOT .'js/footer.js"></script>' .
@@ -42,6 +41,7 @@ define('CLOSITT_JS',$js);
 
 /*
 define('ENV','PROD');
+define('DEBUG', false);
 define('CLOSITT_CSS',HOME_ROOT .'css/style.min.css');
 
 $js = '<script src="' . HOME_ROOT .'js/clositt.min.js"></script>' .

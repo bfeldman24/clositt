@@ -210,8 +210,6 @@ var closetSearchController = {
             $("#search-form").submit(closetSearchController.search);
     		$("#seach-bar-icon").on("click", closetSearchController.searchBarSubmit);
     		$("#search-clear-btn").click(closetSearchController.clearSearch); 
-    		$(document).on("mouseenter",".feedCloset", gridEvents.showOverlay)
-    		           .on("mouseleave",".feedCloset", gridEvents.hideOverlay);
     		           
     		$(document).on("click",".feedViewCloset", closetSearchController.showClosetItems);
     		$(document).on("click",".addClosetToFeed", closetSearchController.addClosetToFeed);

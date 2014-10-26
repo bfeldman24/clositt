@@ -307,7 +307,6 @@ var spider = {
         	}
          	 		 			 		 	
          	gridPresenter.endTask();	
-         	$(document).on("mouseenter",".outfit", gridEvents.showOverlay);     	
         }
     },
     

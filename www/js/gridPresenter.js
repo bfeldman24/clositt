@@ -8,8 +8,7 @@ var gridPresenter = {
     browsePages: [],        
 	
 	init: function(){			
-	    gridPresenter.randomStartingPosition = parseInt(Math.random() * 15000);	
-		gridEvents.init();
+	    gridPresenter.randomStartingPosition = parseInt(Math.random() * 15000);			
 		gridPresenter.mixupBrowsePages();				
 		
 		if ($( "#search-bar" ).val().length <= 0 && location.hash.indexOf("#outfit") != 0){		
