@@ -328,43 +328,54 @@ var spider = {
     		shadow = 'shadow';	
     	}		
     		 			
-    	//var attr = 	'company="'+company+'" customer="'+audience+'" category="'+category+'" price="'+filterPrice+'"';
- 		var attr = 	''; //'company="'+company+'" customer="'+audience+'" category="'+category+'"';
-		var html ='<div class="outfit item col-xs-5 col-xs-offset-1 col-sm-4 col-md-3 col-lg-2 '+shadow+'" '+attr+' pid="'+id+'" >';
-				html +='<div class="picture"><a class="productPage" target="_blank"><img src="' + image + '" /></a></div>';			
-				html += '<div class="bottom-block">';
-				    html +='<div class="companyName">' + company + '</div>';
-					html +='<div class="price">' +  price + '</div>';
-				html += '</div>';
-				
-				html +='<div class="overlay">';
-					html +='<div class="topleft">';										
-						html +='<div class="shareOutfitBtn" data-toggle="tooltip" data-placement="left" title="Share it!"><img class="social-people-icon" src="/css/images/social/social-people.png" /></div>';						 
-					html += '</div>';
-					html += '<div class="social-btns" style="display:none;"></div>';
-					html +='<div class="topright">';										
-						html +='<div class="addToClosetBtn" data-toggle="tooltip" data-placement="right" title="Add to Clositt"><img class="hanger-icon" src="/css/images/hanger-icon.png" /><i class="icon-plus-sign hanger-plus"></i></div>';
-					html += '</div>';
-					html +='<div class="middle">';										
-						html +='<div class="sku">Sku: '+id+'</div>';
-						html +='<div class="link">Link: <a href="'+link+'">'+link+'</a></div>';
-					html += '</div>';
-					html +='<div class="bottom">';						    					    
-					    html += '<div class="productActions" >';					    
-					       html += '<span data-toggle="tooltip" data-placement="top" data-animation="false" title="Add to Wish List" class="addToWishList"><i class="icon-gift"></i></span>';
-					       html += '<span data-toggle="tooltip" data-placement="top" data-animation="false" title="Show Comments" class="showComments numReviews"><span class="counter" >0</span><i class="icon-comment"></i></span>';
-					       html += '<span data-toggle="tooltip" data-placement="top" data-animation="false" title="Added to 0 Clositts" class="numClosets"><span class="counter">0</span><i class="icon-hanger"></i></span>';
-					    html += '</div>';														    					    
-					    					    					
-						//html +='<div class="companyName">' + company + '</div>';
-						//html +='<div class="price">' +  price + '</div>';
-						html +='<div class="name">' + name + '</div>';
-					html += '</div>';
-					html += '<div class="product-comments"></div>';
-					html += '<div class="addToClosetForm" style="display:none;"></div>';
-				html += '</div>';
-				html += '<div class="clear"></div>';				
-			html +='</div>';
+    	var html = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-box box outfit" pid="'+id+'">' +
+            '<div class="item" data-url="'+link+'">' +
+                '<div class="mainwrap">' +
+                    '<div class="imagewrap">' +                       
+                            '<img src="'+image+'" />' +
+                    '</div>' +
+                    '<div class="detail">' +
+                        '<h4 class="productName">'+name+'</h4>' +
+                        '<div>' +
+                            '<span class="price pull-right">'+price+'</span>' +
+                            '<p class="pull-left productStore">'+company+'</p>' +
+                        '</div>' +
+                        '<div class="clear"></div>' +
+                    '</div>' +
+                    
+                    '<div class="cart_option">' +                        
+                            '<div class="addToClosittDropdown">' +
+                                '<a class="dropdown-toggle" data-toggle="dropdown"><i class="icon-svg20"></i></a>' +
+                                
+                                '<div class="dropdown-menu create_new" role="menu">' +
+                                    '<input class="pull-left addNewClosetInput" type="text" placeholder="Create New Clositt" />' +
+                                    '<a class="create pull-right submitNewCloset"><i class="icon-plus"></i></a>' +
+                                    '<div class="clear"></div>' +
+                                    
+                                    '<div class="my_opt addToClosetOptions"></div>' +
+                                '</div>' +
+                            '</div>' +
+    
+                        '<div class="commentDropdown">' +
+                            '<a class="dropdown-toggle" data-toggle="dropdown">' +
+                                '<i class="icomoon-bubble-dots-4 message-icon"></i>' +
+                            '</a>' +
+                            
+                            '<div class="dropdown-menu comments" role="menu">' +
+                                '<textarea class="commentTextArea" type="text" placeholder="#LoveIt..." ></textarea>' +                                
+                                '<div class="addCommentBtn"><button class="btn btn-clositt-theme btn-xs">ADD</button></div>' +
+                                '<div class="clear"></div>' +
+                                                                
+                                '<ul class="review-comments"></ul>' +                                
+                            '</div>' +
+                        '</div>' +
+                         
+                        '<a class="more-opt"><i class="icomoon-share-2 dots-icon"></i></a>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="hover_more"></div>' +
+            '</div>' +
+        '</div>';
 			
 		return $(html);
     },
