@@ -63,10 +63,6 @@ echo "Copying configs..."
 sudo mkdir /home/$1/configs
 sudo cp -r configs /home/$1/
 
-echo "Copying lib..."
-sudo mkdir /home/$1/lib
-sudo cp -r lib/elastic* /home/$1/lib/
-
 echo "Copying scripts..."
 sudo mkdir /home/$1/scripts
 sudo mkdir /home/$1/scripts/deployment
