@@ -119,7 +119,7 @@ if (isset($_GET['s'])){
                     <div class="col-xs-12 col-md-6">
                         <div class="show_product">
                             <div class="imagewrap">
-                                <img id="mainProductImage" src="<?php echo $product->i; ?>">
+                                <img id="mainProductImage" src="<?php echo $product->i; ?>" onerror="return productPresenter.handleImageNotFound(this)">
                                 <div class="product-avail">
                                     <a class="prod-type"><i class="icon-svg20"></i></a>
                                     <a class="quantity"><?php echo $product->cc; ?></a> 
@@ -137,6 +137,7 @@ if (isset($_GET['s'])){
                             <div class="size-color row">
                                 <div class="size pull-left col-xs-7">
                                 <?php 
+                                    /*
                                     $sizes = $productData->sizes;
                                     $active = ' class="active"';
                                     if (isset($sizes)){
@@ -145,6 +146,7 @@ if (isset($_GET['s'])){
                                             $active = '';
                                         }
                                     }
+                                    */
                                 ?>
                                 </div>
                                 <div class="color pull-right col-xs-5">

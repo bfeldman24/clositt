@@ -1,5 +1,6 @@
 var socialPresenter = {	
     link: null,
+    currentlySending: false,
         
     init: function(){
         $(document).on("click",".email-product", socialPresenter.emailProduct);         
@@ -81,6 +82,10 @@ var socialPresenter = {
 	   
 	   socialPresenter.link = $(e.currentTarget).attr("data-url");
 	   
+	   if (socialPresenter.link.indexOf("http") < 0){
+	       socialPresenter.link = window.HOME_URL + "!/" + socialPresenter.link;
+	   }
+	   
 	   if ($(e.currentTarget).parents("#productModal").length > 0){
 	       $(e.currentTarget).parents("#productModal").modal('hide');
 	   }	   
@@ -113,7 +118,7 @@ var socialPresenter = {
     	   
     	   $("#emailOutfitText").text("Check out this outfit" + (store != null && store.trim() != "" ? " from" : ''));
     	   $("#emailOutfitStore").text(store);	   
-    	   $("#emailOutfitLink").attr("href",socialPresenter.link).text(itemName);    	   
+    	   $("#emailOutfitLink").attr("href", socialPresenter.link).text(itemName);    	   
 	   }
 	   	   
 	   $('#shareProductModal').modal('show');
@@ -136,37 +141,36 @@ var socialPresenter = {
 	   }
 	   
 	   $("#shareProductModal #share").attr("disabled","disabled");
-	   $("#shareProductModal #share").text("Sending...");
-	   
-	   var url = socialPresenter.link;
-	   
-	   if (url.indexOf("http") < 0){
-	       url = window.HOME_URL + "!/" + url;
-	   }
+	   $("#shareProductModal #share").text("Sending...");	   
 	   
 	   var name = $("#shareEmailFromName").val();
 	   var inputMessage = $("#shareEmailMessage").val();
 	   var product = $("#emailOutfitLink").text();
 	   var store = $("#emailOutfitStore").text();
 	   
-	   $.post(window.HOME_ROOT + "e/share", { to: email, username: name, message: inputMessage, link: url, product: product, store: store }, function(data) {
-			if(data == "success"){
-				Messenger.success("Your message was sent successfully! Thank you!");
-				$("#shareEmail").val("");
-				$("#shareEmailFromName").val("");
-        	    $("#shareEmailMessage").val("");
-        	    $("#emailOutfitLink").text("");
-        	    $("#emailOutfitStore").text("");
-	   
-				socialPresenter.link = null;
-        	    $('#shareProductModal').modal("hide");
-			}else{
-				Messenger.error("There was a problem sending an email to that address. Please try again.");	
-			}
-			
-			$("#shareProductModal #share").removeAttr("disabled");
-			$("#shareProductModal #share").text("Share");
-		});	
+	   if (!socialPresenter.currentlySending){
+	       socialPresenter.currentlySending = true;
+	       
+    	   $.post(window.HOME_ROOT + "e/share", { to: email, username: name, message: inputMessage, link: socialPresenter.link, product: product, store: store }, function(data) {
+    			if(data == "success"){
+    				Messenger.success("Your message was sent successfully! Thank you!");
+    				$("#shareEmail").val("");
+    				$("#shareEmailFromName").val("");
+            	    $("#shareEmailMessage").val("");
+            	    $("#emailOutfitLink").text("");
+            	    $("#emailOutfitStore").text("");
+    	   
+    				socialPresenter.link = null;
+            	    $('#shareProductModal').modal("hide");
+    			}else{
+    				Messenger.error("There was a problem sending an email to that address. Please try again.");	
+    			}
+    			
+    			$("#shareProductModal #share").removeAttr("disabled");
+    			$("#shareProductModal #share").text("Share");
+    			socialPresenter.currentlySending = false;
+    		});	
+	   }
 				
 	   return false;   	   
 	}

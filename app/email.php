@@ -6,10 +6,11 @@
 require_once(dirname(__FILE__) . '/session.php');
 require_once(dirname(__FILE__) . '/Controller/ListController.php');
 
-class EmailController{
+class EmailController{    
+    private static $timeDelayInSeconds = 4;
+    private static $emailLimit = 100;
     
-    public static function sendWelcomeMessage($email){
-                
+    public static function sendWelcomeMessage($email){                
         $emailSubject = 'Welcome To Clositt!';    
         $emailMessage = "Welcome to Clositt! \r\n \r\n" .                                        
                         "We're happy that you're giving Clositt a try. \r\n \r\n" . 
@@ -19,18 +20,13 @@ class EmailController{
         				
         $headers = "From: Clositt Team <Eli@Clositt.com> \r\n" .
         		    "Reply-To: Eli@Clositt.com \r\n" .
-        		    'Bcc: bfeldman24@gmail.com, eli@clositt.com' . "\r\n";
-        		        
-        if(mail($email, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){
-        	$_SESSION['welcomeEmail'] = $_SERVER['REMOTE_ADDR'];
-        	return "success";	    	
-        }else{
-        	return "failed";	
-        }
+        		    'Bcc: eliyahurosen@gmail.com,bfeldman24@gmail.com' . "\r\n";
+        
+        return self::sendEmail($email, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com");		        
     }
     
-    public static function sendContactForm($name, $id, $email, $subject, $message){
-        $to = 'eli@clositt.com';               
+    public static function sendContactForm($name, $id, $email, $subject, $message){        
+        $to = 'eliyahurosen@gmail.com,bfeldman24@gmail.com';
         $emailSubject = 'CLOSITT: ' . $subject;
         
         $emailMessage = "Name: " . $name . "\r\n" . 
@@ -39,23 +35,17 @@ class EmailController{
         				"Message: " . $message . "\r\n"; 
         				
         $headers = "From: Clositt Team <Eli@Clositt.com> \r\n" .
-        		    'Reply-To: '. $email . "\r\n" .
-        		    'Bcc: bfeldman24@gmail.com' . "\r\n";
+        		    'Reply-To: '. $email . "\r\n";
         	
        // Log feedback 		    
        if ($subject == "CLOSITT FEEDBACK"){
-            ListController::writeToFile("feedback",$message.",".$email.",".$name.",".$id);
+            ListController::writeToFile("feedback", $message.",".$email.",".$name.",".$id);
        } 		    
         
-        if(mail($to, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){                                    
-        	return "success";	
-        }else{
-        	return "failed";	
-        }
+       return self::sendEmail($to, $emailSubject, $emailMessage, $headers);
     }
     
-    public static function shareProduct($to, $username, $message, $link, $product, $store){
-                
+    public static function shareProduct($to, $username, $message, $link, $product, $store){                
         if (isset($_SESSION['name'])){
             $username = $_SESSION['name'];
         }
@@ -101,7 +91,7 @@ class EmailController{
         				
         $headers = "From: Clositt <Eli@Clositt.com> \r\n" .
         		    "Reply-To: " . $sender. " \r\n" .
-        		    "Bcc: bfeldman24@gmail.com" . "\r\n" .
+        		    "Bcc: eliyahurosen@gmail.com,bfeldman24@gmail.com" . "\r\n" .
         		    "MIME-Version: 1.0\r\n" .
         		    "Content-Type: text/html; charset=ISO-8859-1\r\n";
         
@@ -122,18 +112,19 @@ class EmailController{
 	       $user = $_SESSION['userid'];  
 	    }
         
-        if(mail($to, $emailSubject, $message, $headers, "-fEli@Clositt.com")){                                        	    
+        $results = self::sendEmail($to, $emailSubject, $message, $headers);
+
+        if($results == "success"){                                        	    
             ListController::writeToFile("share", $to.",".$user.",".$link);              
-        	return "success";	
         }else{
             ListController::writeToFile("shareFailed", $to.",".$user.",".$link);  
-        	return "failed";	
         }
+        
+        return $results;
     } 
     
     
-    public static function sendPasswordResetEmail($email, $tempPassword){           
-        
+    public static function sendPasswordResetEmail($email, $tempPassword){                   
         $emailMessage = "Hello!\n\n" .
                       "It looks like you've forgotten your password. No sweat.\n\n" .
                       "Here's what to do:\n" .
@@ -151,29 +142,50 @@ class EmailController{
         		    "Reply-To: eli@clositt.com \r\n" .
         		    "Bcc: bfeldman24@gmail.com \r\n";        	
         
-        if(mail($email, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com")){                                    
-        	return "success";	
-        }else{
-        	return "failed";	
-        }
+        return self::sendEmail($email, $emailSubject, $emailMessage, $headers, "-fEli@Clositt.com");
     }
     
     
     
-    public static function sendHtmlEmail($email, $from, $subject, $message){           
-                                                                        				
+    public static function sendHtmlEmail($email, $from, $subject, $message){ 			
         $headers = "From: ".$from." \r\n" .
         		    "Reply-To: ".$from." \r\n" .
         		    "Bcc: bfeldman24@gmail.com \r\n" .
         		    "MIME-Version: 1.0\r\n" .
         		    "Content-Type: text/html; charset=ISO-8859-1\r\n"; 		    
         
-        if(mail($email, $subject, $message, $headers)){                                    
+        return self::sendEmail($email, $subject, $message, $headers);
+    }
+    
+    
+    private static function sendEmail($email, $subject, $message, $headers, $options = null){
+        // Restrict duplicate emails
+        if (isset($_SESSION['lastSendEmailTime']) && (time() - $_SESSION['lastSendEmailTime'] < self::$timeDelayInSeconds)){
+            ListController::writeToFile("preventedDuplicateEmails", $email." - ".$subject);
+            return "failed";
+        }
+        $_SESSION['lastSendEmailTime'] = time(); 
+        
+        // Restrict too many emails
+        if (!isset($_SESSION['emailCounter'])){
+            $_SESSION['emailCounter'] = 0;
+        }
+        
+        if ($_SESSION['emailCounter'] > self::$emailLimit){
+            ListController::writeToFile("tooManyEmails", $email." - ".$subject);
+            return "failed";   
+        }
+        
+        $_SESSION['emailCounter']++;
+          
+        // Send  
+        if(mail($email, $subject, $message, $headers, $options)){                                    
         	return "success";	
         }else{
         	return "failed";	
-        }
-    }  
+        } 
+    }    
+      
 }
 
 

@@ -104,7 +104,7 @@
                                     <p class="log" id="shareEmailFixedMessage">
                                         <q><span id="emailOutfitText">Check out this outfit from</span>
                                         <span id="emailOutfitStore"></span>: 
-                                        <a id="emailOutfitLink"></a></q>
+                                        <a id="emailOutfitLink" target="_blank"></a></q>
                                     </p>
                                 </div>
                             </div>                                                                                                                                                                          

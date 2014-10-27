@@ -436,8 +436,8 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 #product .show_product { max-width: 408px; margin: 0 auto; }
 #product .show_product .imagewrap { width: 100%; border-radius: 6px; text-align: center; border: 1px solid #e1e1e1; overflow: hidden; position: relative; min-height: 100px; }
 #product .show_product .product-avail { position: absolute; right: 16px; bottom: 16px; }
-#product .show_product .product-avail a { float: left; width: 40px; height: 40px; color: #fff; font-size: 19px; font-weight: 700; line-height: normal; font-family: 'Sintony', sans-serif; padding: 4px 0; border-radius: 5px; text-align: center; cursor: pointer; margin-left: 6px; line-height: 34px; vertical-align: middle; }
-#product .show_product .product-avail a.quantity { background: #66ccff; }
+#product .show_product .product-avail a { float: left; width: 40px; height: 40px; color: #fff; font-size: 19px; font-weight: 700; line-height: normal; font-family: 'Sintony', sans-serif; padding: 4px 0; border-radius: 5px; text-align: center; cursor: default; margin-left: 6px; line-height: 34px; vertical-align: middle; }
+#product .show_product .product-avail a.quantity { background: #66ccff; cursor: default;}
 #product .show_product .product-avail a.prod-type { background: #fff; border: 1px solid #e1e1e1; }
 #product .show_product .product-avail a.prod-type i { font-size: 30px; color: #434343; }
 #product .price_detail { width: 100%; }
@@ -451,7 +451,7 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 #product .price_detail .size-color .size a { float: left; min-width: 36px; max-width: 80px; height: 36px; color: #424242; font-size: 19px; font-weight: 400; line-height: normal; font-family: 'Sintony', sans-serif; padding: 4px 0; border: 1px solid #e1e1e1; border-radius: 5px; text-align: center; margin-right: 6px; cursor: pointer; overflow: hidden; }
 #product .price_detail .size-color .size a:hover, #product .price_detail .size-color .size a.active { color: #fff; background: #66ccff; border: 1px solid #66ccff; }
 #product .price_detail .size-color .color h2 { color: #424242; font-size: 19px; font-weight: 700; line-height: normal; font-family: 'Sintony', sans-serif; margin: 8px 10px 0px 0px; }
-#product .price_detail .size-color .color a { float: left; width: 36px; height: 36px; border-radius: 5px; margin-right: 6px; }
+#product .price_detail .size-color .color a { float: left; width: 36px; height: 36px; border-radius: 5px; margin-right: 6px; cursor: default; }
 #product .price_detail .size-color .color a.black { background: #000; }
 #product .price_detail .size-color .color a.blue { background: #66ccff; }
 #product .price_detail .size-color .color a.nblue { background: #223361; }

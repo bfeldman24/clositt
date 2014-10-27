@@ -168,12 +168,14 @@ var filterPresenter = {
  	      }
  	},	
  	
- 	hideSubcategories: function(customer){
+ 	hideSubcategories: function(customer){ 	   	      
+ 	     return; // TODO implement method
+ 	  
     	 // Toggle Subcategories
          $(".subcategory").each(function(){
                var isAllOneCustomer = true;
            
-               $(this).find(".controls[filter-customer]").each(function(){
+               $(this).find(".filter-options[filterType=category] .subcategoryItem a").each(function(){
                    isAllOneCustomer = isAllOneCustomer && $(this).attr("filter-customer") == customer;
                });
                
