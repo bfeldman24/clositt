@@ -216,6 +216,7 @@ if (isset($_GET['s'])){
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-md-6">
+                        <?php /* ?>
                         <div class="product-slider <?php if (!isset($productData->swatches)){ echo 'hide'; } ?>" >
                         <?php 
                             $swatches = $productData->swatches;                                
@@ -227,6 +228,7 @@ if (isset($_GET['s'])){
                             }
                         ?>                        
                         </div>
+                        <?php */ ?>
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <div class="price-chat <?php if (!isset($productData->historicalPrices)){ echo 'hide'; } ?>">
