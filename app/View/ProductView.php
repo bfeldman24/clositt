@@ -104,7 +104,7 @@ class ProductView {
                             
                             <div class="dropdown-menu comments" role="menu">
                                 <textarea class="commentTextArea" type="text" placeholder="#LoveIt..." ></textarea>                                
-                                <div class="addCommentBtn"><button class="btn btn-clositt-theme btn-xs">ADD</button></div>
+                                <div class="addCommentBtn"><button class="btn btn-clositt-theme btn-xs">COMMENT</button></div>
                                 <div class="clear"></div>
                                                                 
                                 <ul class="review-comments"></ul>                                

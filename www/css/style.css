@@ -273,9 +273,9 @@ p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; li
 	padding:10px;
 	border-bottom:5px solid #66cbff;
 	position:absolute;
-	top:50px;
+	top:48px;
 	z-index:999;
-	max-height: 300px;
+	max-height: 225px;
 }
 
 #productModal .create_new{
@@ -284,7 +284,7 @@ p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; li
   
 .create_new .addToClosetOptions{
     display: block;
-    max-height: 225px;
+    max-height: 150px;
     overflow: hidden;
 }  
 
@@ -293,7 +293,7 @@ p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; li
 }
 
 .comments .review-comments{
-    max-height: 165px;   
+    max-height: 110px;   
     display: block;
     overflow: hidden;
 }
@@ -301,7 +301,7 @@ p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; li
 .create_new:before, .comments:before { background:url(images/drop-arrow.png) no-repeat left top; left:30px; top:-8px; height:8px; width:15px; position:absolute; content:""; display:table;  }
 .comments:before{ left: 97px; }    
 .create_new input[type="text"], .comments textarea{  width:80%; min-height:38px; border:1px solid #e1e1e1; padding-left:10px; border-radius:6px 0px 0px 6px; margin-bottom:13px; color:#424242; font-size:14px}
-.comments textarea {border-radius: 6px 6px 0px 0px; font-size: 14px; height: 70px; line-height: 16px; padding: 10px; resize: none; width: 100%; margin-bottom:0px; border: medium none;}
+.comments textarea {border-radius: 6px 6px 0px 0px; font-size: 14px; height: 60px; line-height: 16px; padding: 10px; resize: none; width: 100%; margin-bottom:0px; border: medium none;}
 .create_new a.create, .comments .addCommentBtn{display: block;float: right !important;text-align: center;width: 20% !important; min-height:38px !important; padding:9px; background:#f354a8; border-radius:0px 6px 6px 0px;}
 .create_new a.create i, .comments .addCommentBtn i {color: #fff !important;font-size: 19px!important;}
 
@@ -354,7 +354,7 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 .col-bx-2 { width: 20%; }
 .col-bx-10 { width: 80%; }
 }
-.items .col-lg-box { min-height: 374px; padding-bottom: 10px !important; }
+.items .col-lg-box { min-height: 295px; padding-bottom: 10px !important; }
 .items { margin-top: 26px; }
 .items .box { padding-bottom: 40px; max-width: 300px; }
 .items .item { border: 1px solid #d0d0d0; border-radius: 8px; background: #fff; position: relative; max-width: 225px; margin: 0 auto; }
