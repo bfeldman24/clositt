@@ -134,7 +134,7 @@ if (!isset($nickname) || $nickname == ""){
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id="saveNewClosetName" class="btn btn-clositt-theme">Save Changes</button>
+        <button type="button" id="saveNewClosetName" class="btn btn-clositt-theme">Add Clositt</button>
       </div>
     </div>
   </div>
