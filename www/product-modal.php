@@ -211,7 +211,7 @@ if (isset($_GET['s'])){
                             <a class="socialbtn" site="pinterest" target="_blank" href="http://pinterest.com/pin/create/button/?url=<?php echo $productPageLink; ?>&media=<?php echo $productPageImgLink; ?>&description=<?php echo $productPageDescription; ?>">
                                 <i class="icon-svg18"></i>
                             </a>
-                            <a class="socialbtn email-product" site="email" target="_blank" href="#" data-url="<?php echo $product->sl; ?>">
+                            <a class="socialbtn email-product" site="email" href="#" data-url="<?php echo $product->sl; ?>">
                                 <i class="icomoon-envelop"></i>
                             </a>                             		        		            
                         </div>
