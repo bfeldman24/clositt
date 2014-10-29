@@ -56,7 +56,12 @@ if (!isset($nickname) || $nickname == ""){
 <head>
 
 <link href="<?php echo HOME_ROOT; ?>lib/css/joyride-2.1.css" rel="stylesheet">
-<?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
+<?php include(dirname(__FILE__) . '/static/meta.php'); ?>
+<style type="text/css">
+.clositt-inner{
+    min-height: 300px;   
+}
+</style>		
 
 </head>
 <body>
