@@ -161,7 +161,7 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 #nav .nav ul li .btn-group.open .brand-box li.alphabets .selected, #nav .nav ul li .btn-group.open .brand-box li.alphabets a:hover { color: #fff; background: #66ccff; border-radius: 10px; }
 #nav .nav ul li .btn-group.open .brand-box li .search-results { width: 95%; max-height: 425px; margin-top: 10px; }
 #nav .nav ul li .btn-group.open .brand-box li .search-results li { padding: 0; }
-#nav .nav ul li .btn-group.open .brand-box li.brand-letter { border-bottom: 1px solid #ccc; color: #ccc; font-family: cursive, 'Open Sans', sans-serif; font-size: 20px; font-variant: small-caps; height: 26px; line-height: 20px; margin-bottom: 10px !important; }
+#nav .nav ul li .btn-group.open .brand-box li.brand-letter { border-bottom: 1px solid #ccc; color: #ccc; font-family: 'Open Sans', sans-serif; font-size: 16px; font-variant: small-caps; height: 20px; line-height: 16px; margin-bottom: 10px !important; }
 
 #nav .tag { margin-bottom: 4px; }
 #nav .tag span { background: #71c8f1; float: left; font-size: 13px; font-family: 'Source Sans Pro', sans-serif; font-weight: 600; color: #fff; padding: 5px 10px 5px 10px; border-radius: 5px; min-width: 80px; margin-right: 5px; }
@@ -388,7 +388,7 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 .items .item-type2 .uniform img { max-width: none !important; width: auto !important; min-height: 0 !important; vertical-align: middle; margin-right: 8px; }
 .items .item-type2:hover .mainwrap { background: #e1e1e1; cursor: pointer; }
 
-.endResults { font-family: "Sanchez",serif; font-size: 18px; color: #333; margin: 20px 0 100px;}
+.endResults { font-size: 18px; color: #333; margin: 20px 0 100px;}
 
 .loadingImage {height: 35px !important; margin-top: 70px; width: 35px;}
 .loader { margin: 80px 0; text-align: center; display: block; }
