@@ -1,5 +1,6 @@
 var productPagePresenter = {
-
+    loggingStats: false,    
+    
 	init: function(){
         $(document).on("click",".productPage", productPagePresenter.showProductPage);
         $(document).on("click","#page-mask", productPagePresenter.hide);
@@ -7,6 +8,7 @@ var productPagePresenter = {
         $(document).on("click",".productPageClositt", productPagePresenter.showClosetForm); 
         $(document).on("click",".productPageTagitt", productPagePresenter.showTagForm);
         $(document).on("click",".productPageComments", productPagePresenter.showReview);   
+        $(document).on("click", ".shop-btn", productPagePresenter.logStats);
         
         $(document).on("keydown", productPagePresenter.hideOnEsc);  
         
@@ -150,5 +152,24 @@ var productPagePresenter = {
                $(e.currentTarget).parents(".item").find(".review-add-comment").attr("rows","1");
            }
        }               
-    }
+    },
+    
+    logStats: function(e){
+	   if (!productPagePresenter.loggingStats){
+	       productPagePresenter.loggingStats = true;
+	       	          	       	      	   
+	       var item = $(e.currentTarget).parents(".outfit").first();
+	       	       
+	       if (item.length > 0){
+	           
+	           setTimeout(function(){
+        	       $.post(window.HOME_ROOT + "s/shopit", {id: item.attr("pid")});
+        	       
+        	       setTimeout(function(){        	  
+            	       productPagePresenter.loggingStats = false
+            	   }, 3000);
+        	   }, 100);   
+	       }	       	           	       	       	       	   
+	   }
+	}
 };

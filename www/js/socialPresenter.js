@@ -1,10 +1,12 @@
 var socialPresenter = {	
     link: null,
     currentlySending: false,
+    loggingStats: false,    
         
     init: function(){
         $(document).on("click",".email-product", socialPresenter.emailProduct);         
         $(document).on("click", '#shareProductModal #share', socialPresenter.shareProduct); 
+        $(document).on("click", ".socialbtn", socialPresenter.logStats); 
     },
     
 	showClosittShareButtons: function(){			
@@ -45,27 +47,27 @@ var socialPresenter = {
 	   var encodeLink = encodeURIComponent(link);
 	   
 	   $(element).append(
-        		  $("<a>").addClass("socialbtn").attr("target","_blank")
+        		  $("<a>").addClass("socialbtn").attr("site","facebook").attr("target","_blank")
         		      .attr("href","https://www.facebook.com/sharer/sharer.php?u="+encodeLink).append(
         		      $("<img>").attr("src", window.HOME_ROOT + "css/images/social/facebook-icon.png")
         		  )
         		).append(
-        		  $("<a>").addClass("socialbtn").attr("target","_blank")
+        		  $("<a>").addClass("socialbtn").attr("site","twitter").attr("target","_blank")
         		      .attr("href","https://twitter.com/share?url=" + encodeLink).append(
         		      $("<img>").attr("src", window.HOME_ROOT + "css/images/social/twitter-icon.png")
         		  )		
         		).append(
-        		  $("<a>").addClass("socialbtn").attr("target","_blank")
+        		  $("<a>").addClass("socialbtn").attr("site","google").attr("target","_blank")
         		      .attr("href","https://plus.google.com/share?url="+encodeLink).append(
         		      $("<img>").attr("src", window.HOME_ROOT + "css/images/social/googleplus-icon.png")
         		  )
         		).append(
-        		  $("<a>").addClass("socialbtn").attr("target","_blank")
+        		  $("<a>").addClass("socialbtn").attr("site","pinterest").attr("target","_blank")
         		      .attr("href","http://pinterest.com/pin/create/button/?url="+encodeLink+"&media="+imgLink+"&description="+description).append(
         		      $("<img>").attr("src", window.HOME_ROOT + "css/images/social/pinterest-icon.png")
         		  )
         		).append(
-        		  $("<a>").addClass("socialbtn").attr("href","mailto:?subject=Clositt.com: What do you think of this?&body=Do you like this? " + link).append(
+        		  $("<a>").addClass("socialbtn").attr("site","email").attr("href","mailto:?subject=Clositt.com: What do you think of this?&body=Do you like this? " + link).append(
         		      $("<img>").attr("src", window.HOME_ROOT + "css/images/social/email-icon.png")
         		  )
         		).append(
@@ -173,5 +175,30 @@ var socialPresenter = {
 	   }
 				
 	   return false;   	   
+	},
+	
+	logStats: function(e){
+	   if (!socialPresenter.loggingStats){
+	       socialPresenter.loggingStats = true;
+	       
+	       var shareData = {};
+    	   shareData.site = $(e.currentTarget).attr("site"); 
+    	      	   
+	       var item = $(e.currentTarget).parents(".outfit").first();
+	       	       
+	       if (item.length > 0){
+	           shareData.id = item.attr("pid");   
+	       }else{	           
+	           shareData.closet = "closet: " + $(e.currentTarget).parents(".closetPanel").first().attr("number");  
+	       }	       	           	       	   
+    	   
+    	   setTimeout(function(){
+    	       $.post(window.HOME_ROOT + "s/social", shareData);
+    	       
+    	       setTimeout(function(){        	  
+        	       socialPresenter.loggingStats = false
+        	   }, 3000);
+    	   }, 100);
+	   }
 	}
 };

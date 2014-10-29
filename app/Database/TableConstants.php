@@ -134,4 +134,13 @@ define("REVIEW_DATE","reviewdate");
 // Cached Images
 define("CACHED_IMAGES","CachedImages");
 define("CACHED_IMAGES_DATE_ADDED","dateadded");
+
+
+// Stats
+define("STATS","Stats");
+define("STATS_SESSION_ID","sessionid");
+define("STATS_ACTION","action");
+define("STATS_DETAIL","detail");
+define("STATS_INFO","info");
+define("STATS_TIMESTAMP","timestamp");
 ?>

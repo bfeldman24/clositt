@@ -124,6 +124,56 @@ class ProductCriteria{
         !isset($this->customers) &&
         !isset($this->companies);
     }
+    
+    public function toString(){  
+        if ($this->isEmpty()){
+            return null;   
+        }
+        
+        $output = "{";
+        
+        if (isset($this->searchString) && $this->searchString != ""){                                              
+            $output .= "searchstring: " . $this->searchString;
+        }
+        
+        if (isset($this->maxPrice)){
+            $output .= ", maxPrice: " . $this->maxPrice;
+        }
+        
+        if (isset($this->minPrice)){
+            $output .= ", minPrice: " . $this->minPrice;
+        }
+        
+        if (isset($this->tags) && is_array($this->tags) && count($this->tags) > 0){
+            $tags = json_encode($this->tags);
+            $output .= ", tags: " . $tags;
+        }
+        
+        if (isset($this->colors) && is_array($this->colors) && count($this->colors) > 0){
+            $colors = json_encode($this->colors);
+            $output .= ", colors: " . $colors;
+        }
+        
+        if (isset($this->categories) && is_array($this->categories) && count($this->categories) > 0){
+            $categories = json_encode($this->categories);
+            $output .= ", categories: " . $categories;        
+        }
+        
+        if (isset($this->customers) && is_array($this->customers) && count($this->customers) > 0){
+            $customers = json_encode($this->customers);
+            $output .= ", customers: " . $customers;
+        }
+        
+        if (isset($this->companies) && is_array($this->companies) && count($this->companies) > 0){
+            $companies = json_encode($this->companies);
+            $output .= ", companies: " . $companies;
+        }
+                
+        $output .= "}";        
+        $output = strlen($output) <= 2 ? null : $output;
+        
+        return $output;
+    }
 
     public static function setCriteriaFromPost($row){
 		$productCriteria = new ProductCriteria();

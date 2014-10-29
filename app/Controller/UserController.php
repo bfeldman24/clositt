@@ -106,6 +106,10 @@ class UserController extends Debugger {
 	public function logout(){
 	   global $session;
 	   $session->logout();
+	   
+	    // Log stats
+		require_once(dirname(__FILE__) . '/StatsController.php');		
+		StatsController::add('Logged Out');
 
 	   return "logged out";
 	}	

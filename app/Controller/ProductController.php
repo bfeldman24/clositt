@@ -6,6 +6,7 @@ require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
 require_once(dirname(__FILE__) . '/../View/ProductView.php');
 require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
 require_once(dirname(__FILE__) . '/ListController.php');
+require_once(dirname(__FILE__) . '/StatsController.php');
 require_once(dirname(__FILE__) . '/Debugger.php');
 
 class ProductController extends Debugger{	
@@ -33,6 +34,9 @@ class ProductController extends Debugger{
 				
 			if (isset($productResults['product']) && $productResults['product'] != null){
 			    $sku = $productEntity->getId();
+			 
+			    // Log Stats
+			    StatsController::addItemAction('Product Lookup', $sku);
 			 
 			    // GET SWATCHES
 			    $swatchResults = $this->productDao->getProductSwatches($sku);
@@ -133,7 +137,15 @@ class ProductController extends Debugger{
 					}else{
 					   $searchResults['products'][] = $productEntity->toArray();
 					}					
-				}
+				}				
+			}
+			
+			if (isset($_SESSION['skipFirstBrowse'])){
+    			// Log Stats
+    			$pageStats = "p:".$page.", l:".$limit;
+        		StatsController::add('Browse', $pageStats, $productCrit->toString());			
+			}else{
+			     $_SESSION['skipFirstBrowse'] = true;
 			}
 		}
 	
@@ -251,13 +263,17 @@ class ProductController extends Debugger{
 	public function searchElastic($data, $pageNumber, $numResultsPage, $useTemplate = false){
 	    if (!isset($data)){
 	       return "no data";  
-	    }
+	    }	    
 	    
 	    if (!isset($pageNumber)){
 	       $pageNumber = 0;  
 	    }
 	   
         $criteria = ProductCriteria::setCriteriaFromPost($data);        
+        
+        // Log Stats
+        $pageStats = " p:" . $pageNumber . ",l:" . $numResultsPage;
+		StatsController::add('Search', $criteria->getSearchString(), $criteria->toString() . $pageStats);
 
         //check if elastic is healthy. If not, do old style search on DB
         $elasticHealthy = false;
@@ -297,7 +313,7 @@ class ProductController extends Debugger{
 
         $facets = $results['facets'];
 
-        $results = array('products'=> $products, 'facets' => $facets);
+        $results = array('products'=> $products, 'facets' => $facets);                
 		return json_encode($results);
 	}
 	

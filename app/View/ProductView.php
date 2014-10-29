@@ -115,19 +115,19 @@ class ProductView {
                     </div>                    
                 </div>
                 <div class="hover_more">
-                    <a style="margin-left: 12%;" class="socialbtn" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $productPageLink; ?>">
+                    <a style="margin-left: 12%;" class="socialbtn" site="facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $productPageLink; ?>">
                         <i class="icon-svg17"></i>
                     </a>
-                    <a class="socialbtn" target="_blank" href="https://twitter.com/share?url=<?php echo $productPageLink; ?>">
+                    <a class="socialbtn" target="_blank" site="twitter" href="https://twitter.com/share?url=<?php echo $productPageLink; ?>">
                         <i class="icon-svg16"></i>
                     </a>
-                    <a class="socialbtn" target="_blank" href="https://plus.google.com/share?url=<?php echo $productPageLink; ?>">
+                    <a class="socialbtn" target="_blank" site="google" href="https://plus.google.com/share?url=<?php echo $productPageLink; ?>">
                         <i class="icon-svg14"></i>
                     </a>
-                    <a class="socialbtn" target="_blank" href="http://pinterest.com/pin/create/button/?url=<?php echo $productPageLink; ?>&media=<?php echo $productPageImgLink; ?>&description=<?php echo $productPageDescription; ?>">
+                    <a class="socialbtn" target="_blank" site="pinterest" href="http://pinterest.com/pin/create/button/?url=<?php echo $productPageLink; ?>&media=<?php echo $productPageImgLink; ?>&description=<?php echo $productPageDescription; ?>">
                         <i class="icon-svg18"></i>
                     </a>
-                    <a class="socialbtn email-product" target="_blank" href="#" data-url="<?php echo $shortLink; ?>">
+                    <a class="socialbtn email-product" site="email" target="_blank" href="#" data-url="<?php echo $shortLink; ?>">
                         <i class="icomoon-envelop"></i>
                     </a>                                                 
                 </div>
