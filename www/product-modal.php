@@ -150,7 +150,7 @@ if (isset($_GET['s'])){
                                 ?>
                                 </div>
                                 <div class="color pull-right col-xs-5">
-                                    <?php if (isset($colors) && count($colors) > 0){ ?>                                    
+                                    <?php if (isset($product->co) && count($product->co) > 0){ ?>                                    
                                         <h2 class="pull-left">Color</h2>
                                     <?php } ?>
                                     
@@ -239,6 +239,9 @@ if (isset($_GET['s'])){
                             <div id="chart-container" style="min-width: 200px; height: 160px; margin: 0 auto;"></div>
                         </div>
                     </div>
+                </div>
+                <div class="badData" data-toggle="tooltip" data-placement="left" title="Report Incorrect Product Info">
+                    <i class="icomoon-warning"></i>
                 </div>
             </div>
             <?php if (isset($similarProducts)){ ?>
