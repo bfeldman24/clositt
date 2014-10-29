@@ -148,11 +148,13 @@ $numColorsToTag = 2;
                     
                     $colorStore['numProducts'] = $i++;
                     
+                    /*
                     if (filesize("colorInspectorSaved.json") < 500000000){
                         $file = fopen("colorInspectorSaved.json","w");
                         fwrite($file,json_encode($colorStore));                       
                         fclose($file);
                     }
+                    */
                 }else{
                     $colorStore['colors'][$sku]['error'] = -1;      
                 }

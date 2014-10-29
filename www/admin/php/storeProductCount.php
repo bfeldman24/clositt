@@ -8,6 +8,27 @@ include(dirname(__FILE__) . '/../../static/meta.php');
 <style type="text/css">
 body{
 	font-size:16px;	
+	line-height: 1.42857;
+}
+
+h2 {
+    font-size: 30px;
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: inherit;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+}
+
+p {
+    margin: 10px 0;   
 }
 
 #mainContent{
@@ -41,32 +62,35 @@ li{
 
 </head>
 <body>
-<?php include(dirname(__FILE__) . '/../../static/header.php');   ?>
-<div id="mainContent">
-    <a href="#" name="top"></a>
-    <br><h2>Store Product Count<span id="totalProductCount"></span></h2>
-    
-    <p>
-        <div class="btn-group product-statuses" data-toggle="buttons">
-            <label class="btn btn-primary active">
-                <input type="radio" name="options" id="live" checked="checked"> Live Products
-            </label>
-            <label class="btn btn-primary">
-                <input type="radio" name="options" id="nonlive"> Non Live/ Old Products
-            </label>
-        </div>
-    </p>
-    <p>
-    <label for="amount">Filter By Product Count:</label>
-    <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;">
-    </p>
-    <div id="slider-range"></div>
-    
-    <br><br>
-    <ul id="links"><li id="loadingMask"><img src="../../css/images/loading.gif" style="height:50px;"/></li></ul>                                       
+<div class="wrapper">
+    <?php include(dirname(__FILE__) . '/../../static/header.php');   ?>
+    <div id="mainContent">
+        <a href="#" name="top"></a>
+        <h2>Store Product Count<span id="totalProductCount"></span></h2>
+        
+        <p>
+            <div class="btn-group product-statuses" data-toggle="buttons">
+                <label class="btn btn-primary active">
+                    <input type="radio" name="options" id="live" checked="checked"> Live Products
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="options" id="nonlive"> Non Live/ Old Products
+                </label>
+            </div>
+        </p>
+        <p>
+        <label for="amount">Filter By Product Count:</label>
+        <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;">
+        </p>
+        <div id="slider-range"></div>
+        
+        <br><br>
+        <ul id="links"><li id="loadingMask"><img src="../../css/images/loading.gif" style="height:50px;"/></li></ul>                                       
+    </div>
 </div>
 
 <?php include(dirname(__FILE__) . '/../../static/footer.php');   ?>
+<?php include(dirname(__FILE__) . '/../../static/footerMeta.php');   ?>
 
 <?php echo CLOSITT_JS; ?>
 <script src="../js/storeSelectors.js"></script>

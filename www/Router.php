@@ -1,6 +1,6 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 require_once(dirname(__FILE__) . '/../app/session.php');
 
@@ -29,8 +29,7 @@ class Router {
                 case 'e':
                     Router::Email();
                     break;                 
-                case 'f':
-                case 's':
+                case 'f':                
                     Router::Filter();
                     break;    
                 case 'l':
@@ -44,6 +43,9 @@ class Router {
                 case 'r':
                     Router::Review();
                     break;
+                case 's': 
+                    Router::Stats();
+                    break;   
                 case 't':
                     Router::Tag();
                     break;                                
@@ -288,7 +290,7 @@ class Router {
                 $results = $colorController->addColorsFromPost($_POST);
                 break;                                
             case 'get':                                
-                $results = $colorController->processColors();            
+                $colorController->processColors();            
                 break;                
             case 'getmappings':
                 $colors = $colorController->getColorMapping();                                                   
@@ -315,7 +317,9 @@ class Router {
                 break;
         }
         
-        print_r($results);
+        if (isset($results)){
+            print_r($results);
+        }
     }
     
     /************************
@@ -453,6 +457,28 @@ class Router {
                     break;  
                 case 'share':
                     $success = EmailController::shareProduct($_POST['to'], $_POST['username'], $_POST['message'], $_POST['link'], $_POST['product'], $_POST['store']);
+                    print_r($success);
+                    break;    
+            }      
+        }
+    }
+    
+    /************************
+    ***  STATS CONTROLLER ***
+    *************************/
+    public static function Stats(){  
+        require_once(dirname(__FILE__) . '/../app/Controller/StatsController.php');   
+    
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'){   
+            switch($_GET['method']){
+                case 'social':                               
+                    $closet = isset($_POST['closet']) ? $_POST['closet'] : null;
+                    $sku = isset($_POST['id']) ? $_POST['id'] : null;
+                    $success = StatsController::add("Shared", $_POST['site'], $closet, $sku);
+                    print_r($success);
+                    break;
+                case 'shopit':                               
+                    $success = StatsController::addItemAction("Visited Store", $_POST['id']);
                     print_r($success);
                     break;    
             }      

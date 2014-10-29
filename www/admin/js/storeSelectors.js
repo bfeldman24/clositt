@@ -565,7 +565,7 @@ var Companies = {
     	"id": "aer",
     	"date": "Sun Jun 15 21:43:33 2014",
     	"image": ".details-image>a>img",
-    	"imageAttr": "src",
+    	"imageAttr": "data-original",
     	"link": ".details-content>h4>a",
     	"linkAttr": "href",
     	"name": ".details-content>h4>a",
@@ -593,7 +593,7 @@ var Companies = {
     	"skuAttr": "id",
     	"nextPage": ".categorypagination>.nextPage>a",
     	"nextPageAttr": "href",
-    	"listing": ".productListing>ul>li",
+    	"listing": "#product-grid>ul>li",
     	"sampleSku": "scene_7_F82526",
     	"getSku": function(sku){
     	     return sku.substring(sku.lastIndexOf("_")+1);
