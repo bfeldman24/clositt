@@ -127,7 +127,7 @@ class ProductView {
                     <a class="socialbtn" target="_blank" site="pinterest" href="http://pinterest.com/pin/create/button/?url=<?php echo $productPageLink; ?>&media=<?php echo $productPageImgLink; ?>&description=<?php echo $productPageDescription; ?>">
                         <i class="icon-svg18"></i>
                     </a>
-                    <a class="socialbtn email-product" site="email" target="_blank" href="#" data-url="<?php echo $shortLink; ?>">
+                    <a class="socialbtn email-product" site="email" href="#" data-url="<?php echo $shortLink; ?>">
                         <i class="icomoon-envelop"></i>
                     </a>                                                 
                 </div>

@@ -82,7 +82,7 @@ class ClosetView {
                                 <a class="socialbtn" site="pinterest" target="_blank" href="http://pinterest.com/pin/create/button/?url=<?php echo $closittPageLinkEncoded; ?>&media=<?php echo $closittPageImgLink; ?>&description=<?php echo $closittPageDescription; ?>">
                                     <i class="icon-svg11"></i>
                                 </a>
-                                <a class="socialbtn email-product" site="email" target="_blank" href="#" data-url="<?php echo $closittPageLink; ?>">
+                                <a class="socialbtn email-product" site="email" href="#" data-url="<?php echo $closittPageLink; ?>">
                                     <i class="icomoon-envelop"></i>
                                 </a>
                 <a class="icon-svg8 collapse-btn" data-toggle="collapse" href="#collapse<?php echo $closetRef; ?>"></a>
