@@ -1,4 +1,5 @@
 var closetPresenter = {
+    isInitialized: false,
 	share: 121200,	
 	carouselLeft: null,	
 	carouselRight: null,
@@ -6,6 +7,8 @@ var closetPresenter = {
 	wishListClosetId: 2,
 
 	init: function(){
+	    closetPresenter.isInitialized = true;
+	   
 	    if (closetPresenter.user != null){
 		      closetPresenter.user =  parseInt(closetPresenter.user) - parseInt(closetPresenter.share);
 	    }	    
