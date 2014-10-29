@@ -55,6 +55,7 @@ ul>li>a{
             <li><a href="php/feedback.php">Feedback</a></li>
             <li><a href="php/reviews.php">Product Reviews</a></li>
             <li><a href="php/searchTerms.php">Search Terms</a></li>
+            <li><a href="php/users.php">Users</a></li>
             <li><a id="elasticHealthCheck">Elasic Health Check</a></li>
             <li style="display:none;"><a id="populateTags">Populate Tags (Careful, this takes a while)</a></li>
         </ul>
