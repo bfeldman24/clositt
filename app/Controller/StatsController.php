@@ -14,14 +14,18 @@ class StatsController{
     public static function addItemAction($action, $sku = null){	
         return self::add($action, null, null, $sku);        
     }
+    
+    public static function addClosetAction($action, $closetid = null){	
+        return self::add($action, null, null, null, $closetid);        
+    }
     	
-	public static function add($action, $detail = null, $info = null, $sku = null){	
+	public static function add($action, $detail = null, $info = null, $sku = null, $closetid = null){	
 		self::init();
 		
 		if(isset($action) && trim($action) != ""){	
 			
 			$session = session_id();
-			$results = self::$statsDao->add($_SESSION['userid'], $_SERVER['REMOTE_ADDR'], $session, $action, $sku, $detail, $info);
+			$results = self::$statsDao->add($_SESSION['userid'], $_SERVER['REMOTE_ADDR'], $session, $action, $sku, $closetid, $detail, $info);
 			
 			if(is_numeric($results) && $results > 0){
 				return "success";

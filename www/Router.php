@@ -474,7 +474,7 @@ class Router {
                 case 'social':                               
                     $closet = isset($_POST['closet']) ? $_POST['closet'] : null;
                     $sku = isset($_POST['id']) ? $_POST['id'] : null;
-                    $success = StatsController::add("Shared", $_POST['site'], $closet, $sku);
+                    $success = StatsController::add("Shared", $_POST['site'], null, $sku, $closet);
                     print_r($success);
                     break;
                 case 'shopit':                               
