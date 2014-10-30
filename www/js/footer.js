@@ -72,7 +72,7 @@ $('#loginSignupModal').on('show.bs.modal', function (e) {
 });
 
 
-$('.modal input[type=text], .modal input[type=password]').keyup(function(e) {
+$(document).on('keyup', '.modal input[type=text], .modal input[type=password]', function(e) {
     e.preventDefault();	 
     
     // on enter

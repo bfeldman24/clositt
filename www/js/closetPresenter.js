@@ -457,7 +457,7 @@ var closetFormPresenter = {
 		          if ($("#closetNameList").length > 0){
 		              var $newClositt = $("<li>").css("display","none").append(
             		                      $("<div>").addClass("btn-group").append(
-            		                          $("<button>").addClass("btn btn-default nav-filter closetName")
+            		                          $("<button>").addClass("btn btn-default nav-filter closetName newClosetName")
             		                              .attr("type","button")
             		                              .attr("name",closittData.title)
             		                              .text(closittData.title)		                                      		                              
@@ -465,7 +465,8 @@ var closetFormPresenter = {
             		                  );
 		              
 		              $newClositt.insertBefore("#closetNameList .addnew");
-		              $newClositt.show('slow');		              		              		              
+		              $newClositt.show('slow');
+		              $newClositt.find(".newClosetName").removeClass("newClosetName", 3000);		              		              		              
 		          }   
 		       }else{
 		          		       		 
