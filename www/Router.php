@@ -320,23 +320,7 @@ class Router {
         if (isset($results)){
             print_r($results);
         }
-    }
-    
-    /************************
-    *** LIST CONTROLLER ***
-    *************************/
-    public static function ListController(){        
-        require_once(dirname(__FILE__) . '/../app/Controller/ListController.php');  
-    
-        switch($_GET['method']){
-            case 'add':            
-                echo ListController::writeToFile($_POST['listName'], $_POST['item']);
-                break;  
-            case 'get':            
-                echo ListController::readFile($_POST['listName']);
-                break;        
-        }            
-    }
+    }        
     
     /************************
     *** ADMIN CONTROLLER ***
@@ -458,9 +442,33 @@ class Router {
                 case 'share':
                     $success = EmailController::shareProduct($_POST['to'], $_POST['username'], $_POST['message'], $_POST['link'], $_POST['product'], $_POST['store']);
                     print_r($success);
-                    break;    
+                    break;  
+                case 'issue':            
+                    $message = "Product: " .$_POST['item'] . " has some issues. Please check it out";
+                    $success = EmailController::sendContactForm($_SESSION['name'], $_SESSION['userid'], $_SESSION['email'], "Data Issue", $message);
+                    break;  
             }      
         }
+    }
+    
+    /************************
+    *** LIST CONTROLLER ***
+    *************************/
+    public static function ListController(){        
+        require_once(dirname(__FILE__) . '/../app/Controller/ListController.php');  
+    
+        switch($_GET['method']){
+            case 'add':            
+                echo ListController::writeToFile($_POST['listName'], $_POST['item']);
+                break;  
+            case 'get':            
+                echo ListController::readFile($_POST['listName']);
+                break;
+            case 'issue':            
+                echo ListController::writeToFile($_POST['listName'], $_POST['item']);
+                Router::Email();
+                break;        
+        }            
     }
     
     /************************
