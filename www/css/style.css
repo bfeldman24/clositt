@@ -161,7 +161,7 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 #nav .nav ul li .btn-group.open .brand-box li.alphabets .selected, #nav .nav ul li .btn-group.open .brand-box li.alphabets a:hover { color: #fff; background: #66ccff; border-radius: 10px; }
 #nav .nav ul li .btn-group.open .brand-box li .search-results { width: 95%; max-height: 425px; margin-top: 10px; }
 #nav .nav ul li .btn-group.open .brand-box li .search-results li { padding: 0; }
-#nav .nav ul li .btn-group.open .brand-box li.brand-letter { border-bottom: 1px solid #ccc; color: #ccc; font-family: cursive, 'Open Sans', sans-serif; font-size: 20px; font-variant: small-caps; height: 26px; line-height: 20px; margin-bottom: 10px !important; }
+#nav .nav ul li .btn-group.open .brand-box li.brand-letter { border-bottom: 1px solid #ccc; color: #ccc; font-family: 'Open Sans', sans-serif; font-size: 16px; font-variant: small-caps; height: 20px; line-height: 16px; margin-bottom: 10px !important; }
 
 #nav .tag { margin-bottom: 4px; }
 #nav .tag span { background: #71c8f1; float: left; font-size: 13px; font-family: 'Source Sans Pro', sans-serif; font-weight: 600; color: #fff; padding: 5px 10px 5px 10px; border-radius: 5px; min-width: 80px; margin-right: 5px; }
@@ -273,9 +273,9 @@ p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; li
 	padding:10px;
 	border-bottom:5px solid #66cbff;
 	position:absolute;
-	top:50px;
+	top:48px;
 	z-index:999;
-	max-height: 300px;
+	max-height: 225px;
 }
 
 #productModal .create_new{
@@ -284,7 +284,7 @@ p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; li
   
 .create_new .addToClosetOptions{
     display: block;
-    max-height: 225px;
+    max-height: 150px;
     overflow: hidden;
 }  
 
@@ -293,7 +293,7 @@ p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; li
 }
 
 .comments .review-comments{
-    max-height: 165px;   
+    max-height: 110px;   
     display: block;
     overflow: hidden;
 }
@@ -301,7 +301,7 @@ p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; li
 .create_new:before, .comments:before { background:url(images/drop-arrow.png) no-repeat left top; left:30px; top:-8px; height:8px; width:15px; position:absolute; content:""; display:table;  }
 .comments:before{ left: 97px; }    
 .create_new input[type="text"], .comments textarea{  width:80%; min-height:38px; border:1px solid #e1e1e1; padding-left:10px; border-radius:6px 0px 0px 6px; margin-bottom:13px; color:#424242; font-size:14px}
-.comments textarea {border-radius: 6px 6px 0px 0px; font-size: 14px; height: 70px; line-height: 16px; padding: 10px; resize: none; width: 100%; margin-bottom:0px; border: medium none;}
+.comments textarea {border-radius: 6px 6px 0px 0px; font-size: 14px; height: 60px; line-height: 16px; padding: 10px; resize: none; width: 100%; margin-bottom:0px; border: medium none;}
 .create_new a.create, .comments .addCommentBtn{display: block;float: right !important;text-align: center;width: 20% !important; min-height:38px !important; padding:9px; background:#f354a8; border-radius:0px 6px 6px 0px;}
 .create_new a.create i, .comments .addCommentBtn i {color: #fff !important;font-size: 19px!important;}
 
@@ -354,7 +354,7 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 .col-bx-2 { width: 20%; }
 .col-bx-10 { width: 80%; }
 }
-.items .col-lg-box { min-height: 374px; padding-bottom: 10px !important; }
+.items .col-lg-box { min-height: 295px; padding-bottom: 10px !important; }
 .items { margin-top: 26px; }
 .items .box { padding-bottom: 40px; max-width: 300px; }
 .items .item { border: 1px solid #d0d0d0; border-radius: 8px; background: #fff; position: relative; max-width: 225px; margin: 0 auto; }
@@ -388,7 +388,7 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 .items .item-type2 .uniform img { max-width: none !important; width: auto !important; min-height: 0 !important; vertical-align: middle; margin-right: 8px; }
 .items .item-type2:hover .mainwrap { background: #e1e1e1; cursor: pointer; }
 
-.endResults { font-family: "Sanchez",serif; font-size: 18px; color: #333; margin: 20px 0 100px;}
+.endResults { font-size: 18px; color: #333; margin: 20px 0 100px;}
 
 .loadingImage {height: 35px !important; margin-top: 70px; width: 35px;}
 .loader { margin: 80px 0; text-align: center; display: block; }
@@ -400,6 +400,7 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 
 .modal-dialog { width: 876px; }
 .modal-dialog .modal-content { padding-bottom: 20px; }
+#productModal .modal-dialog .modal-content { padding-bottom: 30px; }
 .close-modal, .close>.icon-times  { width: 35px; height: 35px; border-radius: 100%; background: #66ccff; color: #fff; font-size: 20px; display: block; opacity: 1; text-align: center; vertical-align: middle; line-height: 35px; }
 
 .close, .close:hover { filter: alpha(opacity=100); opacity: 1; }
@@ -474,6 +475,8 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 
 #product a.socialbtn > i { font-size: 16px; color: #428bca; z-index:-1; width:29px; height: 29px; line-height:27px; vertical-align:middle; border:1px solid #428bca; border-radius:100%;  margin:0 auto; display:block; }
 #product a.socialbtn > i:hover { background: #428bca; color:#fff; border-color:#428bca;}
+
+#product .badData { bottom: -28px; color: #ffa500; cursor: pointer; margin: 5px; position: absolute; right: -8px; }
 
 .zoomContainer {
     position: fixed !important;

@@ -56,7 +56,12 @@ if (!isset($nickname) || $nickname == ""){
 <head>
 
 <link href="<?php echo HOME_ROOT; ?>lib/css/joyride-2.1.css" rel="stylesheet">
-<?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
+<?php include(dirname(__FILE__) . '/static/meta.php'); ?>
+<style type="text/css">
+.clositt-inner{
+    min-height: 300px;   
+}
+</style>		
 
 </head>
 <body>
@@ -129,7 +134,7 @@ if (!isset($nickname) || $nickname == ""){
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id="saveNewClosetName" class="btn btn-clositt-theme">Save Changes</button>
+        <button type="button" id="saveNewClosetName" class="btn btn-clositt-theme">Add Clositt</button>
       </div>
     </div>
   </div>

@@ -150,7 +150,10 @@ if (isset($_GET['s'])){
                                 ?>
                                 </div>
                                 <div class="color pull-right col-xs-5">
-                                    <h2 class="pull-left">Color</h2>
+                                    <?php if (isset($product->co) && count($product->co) > 0){ ?>                                    
+                                        <h2 class="pull-left">Color</h2>
+                                    <?php } ?>
+                                    
                                     <div class="pull-right">
                                     <?php 
                                         $colors = $product->co;
@@ -196,19 +199,19 @@ if (isset($_GET['s'])){
                     </div>
                     <div class="col-xs-12 col-md-6 clearfix">
                         <div class="likewrap pull-right social-btns">
-                            <a class="socialbtn" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $productPageLink; ?>">
+                            <a class="socialbtn" site="facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $productPageLink; ?>">
                                 <i class="icon-svg17"></i>
                             </a>
-                            <a class="socialbtn" target="_blank" href="https://twitter.com/share?url=<?php echo $productPageLink; ?>">
+                            <a class="socialbtn" site="twitter" target="_blank" href="https://twitter.com/share?url=<?php echo $productPageLink; ?>">
                                 <i class="icon-svg16"></i>
                             </a>
-                            <a class="socialbtn" target="_blank" href="https://plus.google.com/share?url=<?php echo $productPageLink; ?>">
+                            <a class="socialbtn" site="google" target="_blank" href="https://plus.google.com/share?url=<?php echo $productPageLink; ?>">
                                 <i class="icon-svg14"></i>
                             </a>
-                            <a class="socialbtn" target="_blank" href="http://pinterest.com/pin/create/button/?url=<?php echo $productPageLink; ?>&media=<?php echo $productPageImgLink; ?>&description=<?php echo $productPageDescription; ?>">
+                            <a class="socialbtn" site="pinterest" target="_blank" href="http://pinterest.com/pin/create/button/?url=<?php echo $productPageLink; ?>&media=<?php echo $productPageImgLink; ?>&description=<?php echo $productPageDescription; ?>">
                                 <i class="icon-svg18"></i>
                             </a>
-                            <a class="socialbtn email-product" target="_blank" href="#" data-url="<?php echo $product->sl; ?>">
+                            <a class="socialbtn email-product" site="email" href="#" data-url="<?php echo $product->sl; ?>">
                                 <i class="icomoon-envelop"></i>
                             </a>                             		        		            
                         </div>
@@ -236,6 +239,9 @@ if (isset($_GET['s'])){
                             <div id="chart-container" style="min-width: 200px; height: 160px; margin: 0 auto;"></div>
                         </div>
                     </div>
+                </div>
+                <div class="badData" data-toggle="tooltip" data-placement="left" title="Report Incorrect Product Info">
+                    <i class="icomoon-warning"></i>
                 </div>
             </div>
             <?php if (isset($similarProducts)){ ?>

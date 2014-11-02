@@ -1,7 +1,19 @@
 var footer = {
     init: function(){
         
-    }  
+    },
+    
+    focusOnInputInModal: function(id){
+        $(id).on('show.bs.modal', function (e) {
+    
+            setTimeout(function(){
+                if ($(id + " input[type=text]:visible").first().length > 0){
+                    $(id + " input[type=text]:visible").first().focus();
+                }
+            }, 1000);
+            
+        });   
+    }
 };
 
 $(".feedback .feedback-minimized-btn").on("click", function(e){

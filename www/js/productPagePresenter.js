@@ -1,5 +1,6 @@
 var productPagePresenter = {
-
+    busy: false,    
+    
 	init: function(){
         $(document).on("click",".productPage", productPagePresenter.showProductPage);
         $(document).on("click","#page-mask", productPagePresenter.hide);
@@ -7,6 +8,8 @@ var productPagePresenter = {
         $(document).on("click",".productPageClositt", productPagePresenter.showClosetForm); 
         $(document).on("click",".productPageTagitt", productPagePresenter.showTagForm);
         $(document).on("click",".productPageComments", productPagePresenter.showReview);   
+        $(document).on("click", ".shop-btn", productPagePresenter.logStats);
+        $(document).on("click", ".badData", productPagePresenter.logBadData);
         
         $(document).on("keydown", productPagePresenter.hideOnEsc);  
         
@@ -24,6 +27,9 @@ var productPagePresenter = {
                     });
             }
             
+            setTimeout(function(){
+                $(".badData").tooltip();            
+            }, 2000);
         });
                                    
 	},
@@ -150,5 +156,49 @@ var productPagePresenter = {
                $(e.currentTarget).parents(".item").find(".review-add-comment").attr("rows","1");
            }
        }               
-    }
+    },
+    
+    logBadData: function(e){
+        if (!productPagePresenter.busy){
+	       productPagePresenter.busy = true;
+	       	          	       	      	   
+	       var item = $(e.currentTarget).parents(".outfit").first();
+	       	       
+	       if (item.length > 0){
+	           
+	           setTimeout(function(){
+        	       $.post(window.HOME_ROOT + "l/add", {listName: "badData", item: item.attr("pid")}, function(result){
+        	              if (result == "success"){
+        	                   Messenger.success("Thanks! We are always trying to improve our product quality.");
+        	              }else{
+        	                   Messenger.error("Whoops. It looks like we encountered an issue!");
+        	              }
+        	       });
+        	       
+        	       setTimeout(function(){        	  
+            	       productPagePresenter.busy = false
+            	   }, 3000);
+        	   }, 100);   
+	       }	       	           	       	       	       	   
+	   }
+    },
+    
+    logStats: function(e){
+	   if (!productPagePresenter.busy){
+	       productPagePresenter.busy = true;
+	       	          	       	      	   
+	       var item = $(e.currentTarget).parents(".outfit").first();
+	       	       
+	       if (item.length > 0){
+	           
+	           setTimeout(function(){
+        	       $.post(window.HOME_ROOT + "s/shopit", {id: item.attr("pid")});
+        	       
+        	       setTimeout(function(){        	  
+            	       productPagePresenter.busy = false
+            	   }, 3000);
+        	   }, 100);   
+	       }	       	           	       	       	       	   
+	   }
+	}
 };

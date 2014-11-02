@@ -70,19 +70,19 @@ class ClosetView {
             <div class="panel panel-default closetPanel" id="<?php echo $closetRef; ?>" number="<?php echo $items[0]['id']; ?>" original="<?php echo $items[0]['title']; ?>">
                         <div class="panel-heading">
                             <h4 class="panel-title"><span class="closet-title" data-toggle="tooltip" data-placement="bottom" title="Click to Edit or Delete"><?php echo $name; ?></span>&nbsp;<span class="badge itemCount" data-toggle="tooltip" data-placement="bottom" title="# of items in this Clositt"><?php echo $itemsCount; ?></span>
-                                <a class="socialbtn" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $closittPageLinkEncoded; ?>">
+                                <a class="socialbtn" site="facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $closittPageLinkEncoded; ?>">
                                     <i class="icon-svg9"></i>
                                 </a>
-                                <a class="socialbtn" target="_blank" href="https://twitter.com/share?url=<?php echo $closittPageLinkEncoded; ?>">
+                                <a class="socialbtn" site="twitter" target="_blank" href="https://twitter.com/share?url=<?php echo $closittPageLinkEncoded; ?>">
                                     <i class="icon-svg7"></i>
                                 </a>
-                                <a class="socialbtn" target="_blank" href="https://plus.google.com/share?url=<?php echo $closittPageLinkEncoded; ?>">
+                                <a class="socialbtn" site="google" target="_blank" href="https://plus.google.com/share?url=<?php echo $closittPageLinkEncoded; ?>">
                                     <i class="icon-svg10"></i>
                                 </a>
-                                <a class="socialbtn" target="_blank" href="http://pinterest.com/pin/create/button/?url=<?php echo $closittPageLinkEncoded; ?>&media=<?php echo $closittPageImgLink; ?>&description=<?php echo $closittPageDescription; ?>">
+                                <a class="socialbtn" site="pinterest" target="_blank" href="http://pinterest.com/pin/create/button/?url=<?php echo $closittPageLinkEncoded; ?>&media=<?php echo $closittPageImgLink; ?>&description=<?php echo $closittPageDescription; ?>">
                                     <i class="icon-svg11"></i>
                                 </a>
-                                <a class="socialbtn email-product" target="_blank" href="#" data-url="<?php echo $closittPageLink; ?>">
+                                <a class="socialbtn email-product" site="email" href="#" data-url="<?php echo $closittPageLink; ?>">
                                     <i class="icomoon-envelop"></i>
                                 </a>
                 <a class="icon-svg8 collapse-btn" data-toggle="collapse" href="#collapse<?php echo $closetRef; ?>"></a>

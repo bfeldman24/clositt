@@ -1,4 +1,5 @@
 var closetPresenter = {
+    isInitialized: false,
 	share: 121200,	
 	carouselLeft: null,	
 	carouselRight: null,
@@ -6,6 +7,8 @@ var closetPresenter = {
 	wishListClosetId: 2,
 
 	init: function(){
+	    closetPresenter.isInitialized = true;
+	   
 	    if (closetPresenter.user != null){
 		      closetPresenter.user =  parseInt(closetPresenter.user) - parseInt(closetPresenter.share);
 	    }	    
@@ -24,6 +27,9 @@ var closetPresenter = {
 		
 		$("#search-bar").on("keypress", closetPresenter.searchOnEnter);
 		$("#seach-bar-icon").on("click", closetPresenter.searchBarSubmit);     
+		
+		footer.focusOnInputInModal('#addclositt');
+		footer.focusOnInputInModal('#editClosittModal');
 		
 		$('.closetName').tooltip();
 		$('.closet-title').tooltip();	
@@ -233,7 +239,8 @@ var closetPresenter = {
 	       Messenger.info("That clositt name already exists! Please enter a new clositt name.");   
 	   }else{
 	       closetFormPresenter.createNewCloset(closetName);   
-	       $('#addclositt').modal('hide')
+	       $('#addclositt').modal('hide');
+	       $('#newClosetName').val("");
 	   }
 	},
 	

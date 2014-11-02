@@ -108,6 +108,16 @@ class UserDao extends AbstractDao {
 		return $this->getResults($sql, $params, $paramTypes, "092374902734");
 	}
 	
+	public function getAllUserInfo(){ 
+        $sql = "SELECT " . USER_NAME.", ".USER_EMAIL.", ".USER_STATUS.",".USER_DATE_SIGNED_UP.
+                " FROM " . USERS;
+		
+		$paramTypes = array();		
+		$params = array();
+		
+		return $this->getResults($sql, $params, $paramTypes, "823502302");
+	}
+	
 	public function getUserPassword($email){ 
         $sql = "SELECT " . USER_ID.", ".USER_EMAIL.", ".USER_NAME.", ".USER_PASS.
                 " FROM " . USERS .

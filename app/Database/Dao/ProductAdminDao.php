@@ -184,7 +184,7 @@ class ProductAdminDao extends AbstractDao {
 	}
 	
 	public function addNewProducts(){	    			 	 
-	    $sql = "INSERT INTO " . PRODUCTS . 
+	    $sql = "INSERT IGNORE INTO " . PRODUCTS . 
 	           " (" . PRODUCT_SKU . "," .
                       PRODUCT_STORE . "," . 
                       PRODUCT_CUSTOMER . "," . 
@@ -222,8 +222,10 @@ class ProductAdminDao extends AbstractDao {
         return $this->update($sql, array(), array(), "324987239");
 	}	
 	
-	public function updateExistingProducts(){	   	   
-	   $sql = "UPDATE " . PRODUCTS . " p " .
+	public function updateExistingProducts(){	   	 
+	   
+	   $sql = "SET SQL_SAFE_UPDATES='OFF'; ";  
+	   $sql .= "UPDATE IGNORE " . PRODUCTS . " p " .
         	  " INNER JOIN " . TEMP_PRODUCTS . " tp ON tp." . PRODUCT_SKU . " = p." . PRODUCT_SKU .
               " SET " .
               "p." .PRODUCT_NAME . " = tp." . PRODUCT_NAME . "," .
@@ -231,7 +233,8 @@ class ProductAdminDao extends AbstractDao {
               "p." .PRODUCT_IMAGE . " = tp." . PRODUCT_IMAGE . "," .
               "p." .PRODUCT_PRICE . " = tp." . PRODUCT_PRICE . "," . 
               "p." .PRODUCT_DATE_UPDATED. " = tp." . PRODUCT_DATE_UPDATED . "," .
-              "p." .PRODUCT_STATUS. " = CASE WHEN p.".PRODUCT_STATUS." = 3 THEN 1 ELSE p.".PRODUCT_STATUS." END";               
+              "p." .PRODUCT_STATUS. " = CASE WHEN p.".PRODUCT_STATUS." = 3 THEN 1 ELSE p.".PRODUCT_STATUS." END; ";               
+       $sql .= "SET SQL_SAFE_UPDATES='ON'; ";       
               
        return $this->update($sql, array(), array(), "923847293");
 	}		

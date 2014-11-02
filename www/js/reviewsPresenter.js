@@ -64,7 +64,7 @@ var reviewsPresenter = {
       	 	var comment = targetOutfit.find(".commentTextArea").val();
       	 	
       	 	if(comment.trim() != ""){	 		      		 	
-      	 	   $(".addCommentBtn .btn").addClass("disabled").text("ADDING...");
+      	 	   $(".addCommentBtn .btn").addClass("disabled").text("COMMENT...");
       	 	   
       		 	var user = session.userid == null ? -1 : session.userid;      		 	
       		 	var sku = targetOutfit.attr("pid");
@@ -85,7 +85,7 @@ var reviewsPresenter = {
           		 	     reviewsPresenter.addReview(reviewData, targetOutfit.find(".review-comments"), true);             		 	     
       		 	      }
       		 	      
-      		 	      $(".addCommentBtn .btn").removeClass("disabled").text("ADD");
+      		 	      $(".addCommentBtn .btn").removeClass("disabled").text("COMMENT");
       		 	});      		 	      		 			 	      		 	
       		 	      		 	      		 	      		 	
       	 	}else{

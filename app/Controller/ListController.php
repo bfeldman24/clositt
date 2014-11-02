@@ -2,7 +2,8 @@
 require_once(dirname(__FILE__) . '/../session.php');
 
 class ListController{		
-	private static $listDirectory = null;  
+	private static $listDirectory = null;
+	private static $prodListDirectory = "/home/clositt-public/app/Data/Lists/";  
 	private static $extension = ".csv";  	   
 	
 	public static function init(){
@@ -36,6 +37,17 @@ class ListController{
 	   
 	   if (isset($fileName)){	       
     	   $lineArray = file(self::$listDirectory . $fileName . self::$extension);           
+           return $lineArray;
+	   }
+	   
+	   return null;
+	}
+	
+	public static function readProdFile($fileName){
+	   self::init();
+	   
+	   if (isset($fileName)){	       
+    	   $lineArray = file(self::$prodListDirectory . $fileName . self::$extension);           
            return $lineArray;
 	   }
 	   

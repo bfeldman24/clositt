@@ -338,7 +338,7 @@ var searchController = {
 		        errorMessage = "There are no outfits that matched: \'" + searchTerm + "\'! Try using another way to describe what you are looking for.";
 		    }
 		  
-			$("#product-grid").html($("<div>").text(errorMessage));
+			$("#product-grid").html($("<div>").addClass("endResults").text(errorMessage));
 		}
 	},
 	

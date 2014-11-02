@@ -106,6 +106,10 @@ class UserController extends Debugger {
 	public function logout(){
 	   global $session;
 	   $session->logout();
+	   
+	    // Log stats
+		require_once(dirname(__FILE__) . '/StatsController.php');		
+		StatsController::add('Logged Out');
 
 	   return "logged out";
 	}	
@@ -195,6 +199,19 @@ class UserController extends Debugger {
 	   }
 	   	   
 		return stripslashes(json_encode($userEntity->toArray()));
+	}
+	
+	public function getAllUserInfo(){ 
+        $userResult = $this->userDao->getAllUserInfo();
+        $users = array();
+        
+        if(is_object($userResult)){
+			while($row = $userResult->fetchRow(MDB2_FETCHMODE_ASSOC)){				    
+				$users[] = $row;
+			}			
+	   }
+	   	   
+	   return $users;
 	}	
 	
 	public function getUserName($data, $json = true){
