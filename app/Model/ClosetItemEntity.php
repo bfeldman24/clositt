@@ -96,6 +96,7 @@ class ClosetItemEntity {
 		$closetItemEntity = new ClosetItemEntity();
 		
 		$closetItemEntity->setClosetId(BaseEntity::getPostField($row, JS_CLOSET_ITEM_ID));
+		$closetItemEntity->setClosetName(BaseEntity::getPostField($row, JS_CLOSET_NAME));			
 		$closetItemEntity->setUserId(BaseEntity::getPostField($row, JS_CLOSET_ITEM_USER_ID));
 		$closetItemEntity->setSku(BaseEntity::getPostField($row, JS_CLOSET_ITEM_SKU));
 		$closetItemEntity->setImage(BaseEntity::getPostField($row, JS_CLOSET_ITEM_IMAGE));	    

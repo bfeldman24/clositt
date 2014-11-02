@@ -12,6 +12,7 @@ if(isset($_GET['user'])){
 }
 
 $closets = $closetController->getAllClosetItems($owner);
+$isUnsavedSesssion = false;
 
 if(isset($_GET['user'])){
     require_once(dirname(__FILE__) . '/../app/Controller/UserController.php'); 
@@ -23,7 +24,7 @@ if(isset($_GET['user'])){
         $isFound = false;
         
         foreach ($closets as $closetName => $items) {
-            $selector = preg_replace('/\s+/', '', $closetName);
+            $selector = preg_replace('/[\s\W]+/', '', $closetName);
             
             if ($selector == $_GET['closittname']){
                 $closets = array($closetName => $items);
@@ -37,12 +38,18 @@ if(isset($_GET['user'])){
         }
     }
     
-}else{
+}else if ($_SESSION['active']){
     $name = $_SESSION['name']; 
     $userid = $_SESSION['userid']; 
+    $sessionClosets = $closetController->getAllSessionClosetItems();
+}else{
+    $userid = $_SESSION['userid']; 
+    $isUnsavedSesssion = true;   
 }
 
-$nickname = explode(' ', $name)[0];
+if (isset($name)){
+    $nickname = explode(' ', $name)[0];
+}
 
 if (!isset($nickname) || $nickname == ""){
     $nickname = "My";
@@ -81,7 +88,12 @@ if (!isset($nickname) || $nickname == ""){
                     <a class="icon-svg10"></a>
                     <a class="icon-svg11"></a>
                 </div>
-                -->
+                -->                
+                
+                <?php if ($isUnsavedSesssion){ ?>
+                <p class="log bg-warning">These clositts will be lost once you close your browser. Please <a class="showSignupTab" data-toggle="modal" data-target="#loginSignupModal">sign up</a> or <a class="showLoginTab" data-toggle="modal" data-target="#loginSignupModal">login</a> to save them.</p>
+                <br/><br/>
+                <?php } ?>
                 
                 <div class="col-sm-offset-1 col-md-offset-2">
                     <div class="nav">
@@ -103,7 +115,17 @@ if (!isset($nickname) || $nickname == ""){
             </div>
         </div>
     </section>
-    
+                                  
+    <?php if($_SESSION['active'] && isset($sessionClosets) && is_array($sessionClosets) && count($sessionClosets) > 0){ ?>               
+        <section class="clositt-inner unsaved-clositt-inner bg-warning">
+            <h4 id="user-unsaved-closet-title" class="text-center">Unsaved Clositts</h4>
+            <p class="log">These clositts will be lost if not saved once you close your browser</p>
+            <div class="panel-group">
+                <?php echo ClosetView::getClosets($sessionClosets, $userid, true); ?>                       
+            </div>
+        </section>
+    <?php } ?>        
+
     <section class="clositt-inner">
         <div class="panel-group">             
             <?php echo ClosetView::getClosets($closets, $userid); ?>       
@@ -220,34 +242,21 @@ if (!isset($nickname) || $nickname == ""){
 
 <script type="text/javascript">
 
-<?php if(isset($_GET['user'])){ ?>
-    $(document).ready(function(){
-        pagePresenter.enableLazyLoading = false;     
-        closetPresenter.setUser(<?php echo $_GET['user']; ?>);
-        pagePresenter.init();    
-        closetPresenter.init();        	
-        productPagePresenter.init();	
-        productPresenter.init();	
-        reviewsPresenter.init();
-        tagPresenter.init();
-        socialPresenter.init();	
-     });
-<?php }else{ ?>
-    function userDataReady(user){    
-        pagePresenter.enableLazyLoading = false;
-        pagePresenter.init();    
-        closetPresenter.init();             
-        productPresenter.init();	
-        productPagePresenter.init();
-        reviewsPresenter.init();       
-        tagPresenter.init();
-        socialPresenter.init();
-    }        
-<?php } ?>
 
-function loggedOut(){
-	location.href = window.HOME_URL;
-}
+$(document).ready(function(){        
+    <?php if(isset($_GET['user'])){ ?>
+        closetPresenter.setUser(<?php echo $_GET['user']; ?>);        
+    <?php } ?>        
+
+    pagePresenter.enableLazyLoading = false;     
+    pagePresenter.init();    
+    closetPresenter.init();        	
+    productPagePresenter.init();	
+    productPresenter.init();	
+    reviewsPresenter.init();
+    tagPresenter.init();
+    socialPresenter.init();	        
+});   
 
 function startClosittTour(manual){
     if(manual || session.loginCount <= 3){
@@ -278,6 +287,12 @@ $(".joyride-start").click(function(e){
 });    
 
 pagePresenter.defaultHeaderHeight = 0;
+
+<?php if (isset($isUnsavedSesssion) && $isUnsavedSesssion === true){ ?>
+function loggedIn(){
+    location.href = location.href;   
+}
+<?php } ?>
 
 </script>
 

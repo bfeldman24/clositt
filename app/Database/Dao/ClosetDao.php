@@ -27,6 +27,17 @@ class ClosetDao extends AbstractDao {
         return -1;
 	}
 	
+	public function getClosetId($user, $closet){
+        $sql = "SELECT ".CLOSET_ID." FROM ".CLOSETS.
+               " WHERE ".CLOSET_USER_ID." = ? AND ".CLOSET_NAME." = ? ";
+		
+		$name = $closet->getName();
+		$paramTypes = array('integer', 'text');
+        $params = array($user, $name);
+        
+        return $this->getResults($sql, $params, $paramTypes, "8768390978");        
+	}
+	
 	
 	public function updateCloset($user, $closet){
 	    $sql = "UPDATE ".CLOSETS.

@@ -26,7 +26,7 @@ class SessionController extends Debugger{
       	$_SESSION['failed'] = false;
       	$_SESSION['failedcount'] = 0;
       	$_SESSION['isAdmin'] = false;      	      	      	
-      	$_SESSION['errors'] = null;
+      	$_SESSION['errors'] = null;      	
     }
     
     /**

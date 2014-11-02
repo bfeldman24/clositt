@@ -85,13 +85,16 @@ $(document).ready(function() {
 	socialPresenter.init();		
 	tagPresenter.init();
 	searchController.init();	
-	reviewsPresenter.init();
-	closetFormPresenter.initNotLoggedIn();	             
+	reviewsPresenter.init();	
 });
 
 
 function loggedIn(){       
 	closetFormPresenter.init();			
+}
+
+function loggedOut(){
+    closetFormPresenter.init();
 }
 </script>
 

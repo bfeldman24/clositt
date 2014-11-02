@@ -174,7 +174,7 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 .profile-drop .dropdown-menu li a { padding: 8px 15px; color: #fff; border-bottom: 1px solid #e1e1e1; }
 .profile-drop .dropdown-menu li:last-child a { border: none; }
 .profile-drop .dropdown-menu > li > a:hover, .profile-drop .dropdown-menu > li > a:focus { background: none; }
-.my-clositt #nav h4 { color: #adadad; padding: 30px 0px; font-size: 60px; font-family: 'Open Sans', sans-serif; font-weight: 400; }
+.my-clositt #nav h4, #user-unsaved-closet-title { color: #adadad; padding: 30px 0px; font-size: 60px; font-family: 'Open Sans', sans-serif; font-weight: 400; }
 .my-clositt #nav .nav ul li .nav-filter { width: 130px; text-align: center; font-family: 'Open Sans', sans-serif; font-weight: 400; color: #da552f; border: 1px solid #da552f; }
 .my-clositt #nav .nav ul li .disabled .nav-filter { color: #e1e1e1; border: 1px solid #e1e1e1; }
 .newClosetName { color: #fff; background: #da552f; }
@@ -194,6 +194,12 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 .clositt-inner .panel-default > .panel-heading a.suffle-btn { color: #ecaa97; }
 .clositt-inner .panel-default > .panel-heading .itemCount { margin-right: 16px; }
 .clositt-inner .panel-default > .panel-heading a:hover { color: rgba(173,173,173,01); }
+
+.unsaved-clositt-inner { margin: 25px auto; padding: 0 25px 25px; border-radius: 10px;}
+.unsaved-clositt-inner .panel { background: inherit; }
+.unsaved-clositt-inner .saveProductBtn.text-center { color: #aaa; float: none !important; font-size: 18px; line-height: 40px; width: 100% !important; }
+.unsaved-clositt-inner .saveProductBtn.text-center:hover, .unsaved-clositt-inner .saveProductBtn.text-center:active { color: #fff; background: #66ccff;}
+
 .wishlist { color: #adadad; padding: 60px 0px 80px; font-size: 40px; font-family: 'Open Sans', sans-serif; font-weight: 400; }
 #nav .nav ul li .btn-group.open .filter-drop { min-width: 140px; padding-bottom: 5px; border-radius: 0 0px 5px 5px; padding-top: 5px; }
 
@@ -666,3 +672,6 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
     /* Internet Explorer */
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
+
+/* OVERRIDE BOOTSTRAP */
+.log.bg-warning { padding: 10px;}

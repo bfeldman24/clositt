@@ -28,8 +28,7 @@ var session = {
         });       
         
         $(document).on("click", ".loggedoutBtns .login", function(e){
-            e.preventDefault();
-            session.goToClosittOnLogin = $(e.currentTarget).hasClass("myclositt");                                    
+            e.preventDefault();            
             $("#loginModalTabBtn").tab('show');
         });         
 	},
@@ -103,9 +102,13 @@ var session = {
 	       if (session.goToClosittOnLogin){
                 location.href = window.CLOSITT_PAGE; 
                 return;
-           }else if(typeof loggedIn == 'function'){
+           }else{
                 session.updateLoggedInDropdownMenu();                
-                loggedIn();                
+                
+                if(typeof loggedIn == 'function'){
+                    loggedIn();                
+                }
+                
                 Messenger.success("Thanks " + session.nickname + "! You are now logged in and ready to go!");
 		   }          	
         }else if(typeof loggedIn == 'function'){
@@ -184,7 +187,7 @@ var session = {
 	   
 		$("#loginBtns").html("")
 		    .append( $('<li>').addClass("loggedoutBtns").append( 
-		          $('<a>').addClass("login myclositt").attr('data-toggle','modal').attr("data-target","#loginSignupModal").append(
+		          $('<a>').addClass("myclositt").attr("href",window.HOME_ROOT + "clositt").append(
 		              $("<span>").append( 
         	    	            $("<i>").addClass("icon-svg20")
         	    	      ).append(

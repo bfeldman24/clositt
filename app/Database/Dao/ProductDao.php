@@ -40,6 +40,31 @@ class ProductDao extends AbstractDao {
 		return $this->getResults($sql, $params, $paramTypes, "3248272");
 	}  
 	
+	public function getMultipleProducts($skus){					
+		if(!isset($skus) || !is_array($skus) || count($skus) <= 0){
+			$this->logWarning("2384791","IDs are null");
+			return false; 
+		}	
+		
+		$sql = "SELECT * " .				
+				" FROM " . PRODUCTS .
+				" WHERE " . PRODUCT_STATUS . " = 1 AND " . PRODUCT_SKU . " IN (";			
+				
+		$params = array();
+		$paramTypes = array();
+		
+		$placeholders = '';
+		foreach ($skus as $sku){
+		    $placeholders .= $placeholders == '' ? '?' : ',?';
+		    $params[] = $sku;
+       		$paramTypes[] = "text";   
+		}
+										
+        $sql .= $placeholders . ")";
+        		
+		return $this->getResults($sql, $params, $paramTypes, "39847293");
+	}
+	
 	public function getProducts($criteria, $page, $limit, $random){					
 		$offset = $page * $limit;
 		

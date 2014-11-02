@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
 
 require_once(dirname(__FILE__) . '/../app/session.php');
 
@@ -123,6 +123,9 @@ class Router {
             case 'remove':            
                 echo $closetController->removeItemFromCloset($_POST);
                 break;
+            case 'createandadd':            
+                echo $closetController->createNewClosetAndAddItems($_POST);
+                break;    
             case 'get':            
                 echo $closetController->getAllClosets();
                 break;            
