@@ -7,10 +7,14 @@ class ElasticDao{
 
 	private $client = null;
     private $index = "products"; //this will be an alias that always has current index
-    //private $fields = array('name.partial','name','store','tag','tag.partial','color', 'color2');
+
     private $fields = array('name.partial','name','store','category', 'details','customer', 'color', 'color2');
+    private $listColorsToParse = array("Red", "Orange", "Yellow", "Green", "Cyan", "Blue", "Magenta", "Violet", "Purple", "Pink", "White", "Gray", "Black", "Brown");
+    private $debugger = null;
+
 	public function __construct(){
 		$this->client = new Elasticsearch\Client();
+        $this->debugger = new Debugger();
 	}
 
     public function isHealthy(){
@@ -53,6 +57,8 @@ class ElasticDao{
         $products = array();
         $facets = array();
 
+        $time_start = microtime(true);
+
         try {
             $retDoc = $this->client->search($searchParams);
         }
@@ -77,7 +83,9 @@ class ElasticDao{
             }
 		}
 
-
+        $time_end = microtime(true);
+        $time = $time_end - $time_start;
+        $this->debugger->log("Total time to get products was : $time");
 
 		return array('products'=>$products, 'facets' => $facets);
 	}
@@ -86,48 +94,16 @@ class ElasticDao{
 
         $start = $pageNumber * $numResultsPage;
 
-        //TODO CONFIGS!!!
         $searchParams['index'] = $this->index;
-
-
-        $customer = array('term'=>array('customer'=>$criteria->getCustomers()));
-        //TODO fix so the filter and the indexing both use same analyzer. For now
-        //just turn to lower case bc on indexing every thing gets lowercase treatment
-        $category = array('terms'=>array('category'=>array_map('strtolower', $criteria->getCategories())));
-        $color = array('term'=>array('color'=>array_map('strtolower', $criteria->getColors())));
-        $store = array('terms'=>array('store'=>array_map('strtolower', $criteria->getCompanies())));
-
-        $price = array();
-
-        if($criteria->getMinPrice()){
-            $price['price']['gte'] = $criteria->getMinPrice();
-        }
-
-        if($criteria->getMaxPrice()){
-            $price['price']['lte'] = $criteria->getMaxPrice();
-        }
 
         $filters = array();
 
-        if(empty($price)==false){
-            array_push($filters, array('range'=>$price));
-        }
-
-        if( $criteria->getCompanies()){
-            array_push($filters, $store);
-        }
-
-        if( $criteria->getCustomers()){
-            array_push($filters, $customer);
-        }
-
-        if( $criteria->getCategories()){
-            array_push($filters, $category);
-        }
-
-        if( $criteria->getColors()){
-            array_push($filters, $color);
-        }
+        //TODO Refactor these functions out of this DAO into a criteria builder
+        $this->addPriceFilter($criteria, $filters);
+        $this->addCustomerFilter($criteria, $filters);
+        $this->addStoresFilter($criteria, $filters);
+        $this->addColorFilter($criteria, $filters);
+        $this->addTagsFilter($criteria, $filters);
 
         $fields = array();
 
@@ -201,6 +177,142 @@ class ElasticDao{
         $params['body']['script'] = "ctx._source." . $fieldToUpdate ."+=1";
         $response = $this->client->update($params);
         return $response;
+    }
+
+    private function addColorFilter($criteria, &$filters){
+
+        $color = array();
+        if( $criteria->getColors()){
+            $$color =  $criteria->getColors();
+        }
+
+        $terms = explode(" ", $criteria->getSearchString());
+
+        foreach($terms as $term){
+            if($this->arrayContainsInsensitive($term, $this->listColorsToParse) && in_array($term, $color) === false){
+                array_push($color, $term);
+            }
+        }
+
+        if(!empty($color)){
+            $colors = array('term'=>array('color'=>array_map('strtolower', $color)));
+            array_push($filters, $colors);
+        }
+    }
+
+    /*
+     * If user has already manually added a customer type, then use that.
+     * Otherwise check if the "men" or "women" is in the search term and if
+     * it is then add it as a filter
+     */
+    private function addCustomerFilter($criteria, &$filters){
+        if( $criteria->getCustomers()){
+            $customerType = $criteria->getCustomers();
+        }
+        elseif( stristr($criteria->getSearchString(), "men") !== false){
+            $customerType = "men";
+        }
+        elseif( stristr($criteria->getSearchString(), "women") !== false){
+            $customerType = "women";
+        }
+
+        if(!empty($customerType)){
+            $customer = array('term'=>array('customer'=>$customerType));
+            array_push($filters, $customer);
+        }
+    }
+
+    private function addPriceFilter($criteria, &$filters){
+        $price = array();
+
+        if($criteria->getMinPrice()){
+            $price['price']['gte'] = $criteria->getMinPrice();
+        }
+
+        if($criteria->getMaxPrice()){
+            $price['price']['lte'] = $criteria->getMaxPrice();
+        }
+
+        if(empty($price)==false){
+            array_push($filters, array('range'=>$price));
+        }
+    }
+
+    private function addStoresFilter($criteria, &$filters){
+        $storesToSearch = array();
+        if($criteria->getCompanies()){
+            foreach($criteria->getCompanies() as $store){
+                array_push($storesToSearch, $store);
+            }
+        }
+
+        $storesFromElastic = $this->getAllFromElastic('stores', 'store');
+        foreach($storesFromElastic as $store){
+            if(in_array($store, $storesToSearch) === false && stripos($criteria->getSearchString(), $store)){
+                array_push($storesToSearch, $store);
+            }
+        }
+
+        if(!empty($storesToSearch)){
+            $store = array('terms'=>array('store'=>array_map('strtolower', $storesToSearch)));
+            array_push($filters, $store);
+        }
+    }
+
+    private function addTagsFilter($criteria, &$filters){
+
+        $tagsToSearch = array();
+        if($criteria->getCategories()){
+            foreach($criteria->getCategories() as $tag){
+                array_push($tagsToSearch, $tag);
+            }
+        }
+
+        $tagsFromElastic = $this->getAllFromElastic('tags', 'tag');
+        foreach($tagsFromElastic as $tag){
+            if(in_array($tag, $tagsToSearch) === false && stripos($criteria->getSearchString(), $tag)){
+                array_push($tagsToSearch, $tag);
+            }
+        }
+
+        if(!empty($tagsToSearch)){
+            $tags = array('terms'=>array('category'=>array_map('strtolower', $tagsToSearch)));
+            array_push($filters, $tags);
+        }
+
+    }
+
+    private function getAllFromElastic($indexName, $fieldName){
+        $searchParams = array();
+        $searchParams['index'] = $indexName;
+        $searchParams['body']['query']['match_all']=array();
+        $searchParams['body']['from']=0;
+        $searchParams['body']['size']=400;
+
+        try {
+            $retDoc = $this->client->search($searchParams);
+        }
+        catch(Exception $e){
+            //TODO log error here
+
+        }
+
+        $items = array();
+        if (isset($retDoc) && is_array($retDoc)){
+            foreach ($retDoc['hits']['hits'] as $hit) {
+                array_push($items, $hit['_source'][$fieldName]);
+            }
+        }
+
+        return $items;
+    }
+
+    private function arrayContainsInsensitive($str, array $arr)
+    {
+        foreach($arr as $a) {
+            if (stripos($str,$a) !== false) return true;
+        }
+        return false;
     }
 }
 

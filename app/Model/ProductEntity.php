@@ -244,8 +244,10 @@ class ProductEntity{
 			$ProductEntity->setId(BaseEntity::getDBField($row, 'sku'));
 			$ProductEntity->setStore(BaseEntity::getDBField($row, 'store'));
 			$ProductEntity->setCustomer(BaseEntity::getDBField($row, 'customer'));
-            
-            if(isset($row['tag'])){
+
+
+            if(isset($row['category'])){
+                $tags = $row['category'];
                 if (is_array($tags)){
                    $ProductEntity->setCategory(stripslashes(implode(", ", $tags)));
                 }else{
