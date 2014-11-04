@@ -277,7 +277,7 @@ var closetPresenter = {
 	 			  if (result != "success") {
 						Messenger.error(itemName + ' could not be saved into ' + closetName, 6000);	 			       	 			       
 				  } else {    						    						
-						Messenger.success(itemName + ' was saved to "' + closetName + '"!', 6000);
+						Messenger.success(itemName + ' was saved to "' + closetName + '"!', 8000);
 						
 						// add to closet mapping
 						if (closetFormPresenter.closetItemsMapping[closetName] == null){
@@ -288,11 +288,11 @@ var closetPresenter = {
 						closetFormPresenter.updateClosetCount(sku);	
 						
 						if ($item.parents(".closetPanel").first().find(".outfit").length <= 1){
-						      Messenger.success('The entire clositt "' + closetName + '" was saved!', 6000);
+						      Messenger.success('The entire clositt "' + closetName + '" was saved!', 8000);
 						      $item.parents(".closetPanel").first().remove();
 						      
-						      if ($item.parents(".unsaved-clositt-inner").first().find(".closetPanel").length <= 0){
-    						      $item.parents(".unsaved-clositt-inner").first().find(".closetPanel").remove();
+						      if ($(".unsaved-clositt-inner").first().find(".closetPanel").length <= 0){
+    						      $(".unsaved-clositt-inner").first().remove();
     						  } 
     						  
 						}else{
