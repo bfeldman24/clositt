@@ -344,6 +344,7 @@ ul.messenger.messenger-theme-block.messenger-fixed .messenger-message {
           			  <option value="Ralph Lauren">Ralph Lauren</option>
           			  <option value="REI">REI</option>
           			  <option value="Saks Fifth Avenue">Saks Fifth Avenue</option>
+          			  <option value="Shinesty">Shinesty</option>
           			  <option value="Target">Target</option>	
           			  <option value="The North Face">The North Face</option>
           			  <option value="Tommy Hilfiger">Tommy Hilfiger</option>      			    				  

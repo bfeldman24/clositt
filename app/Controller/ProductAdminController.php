@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../session.php');
+require_once(dirname(__FILE__) . '/../globals.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductAdminDao.php');
 require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
 require_once(dirname(__FILE__) . '/../Model/SpiderLinkEntity.php');
@@ -8,7 +8,6 @@ require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
 require_once(dirname(__FILE__) . '/../Model/SpiderLinkEntity.php');
 require_once(dirname(__FILE__) . '/ProductController.php');
 require_once(dirname(__FILE__) . '/Debugger.php');
-
 
 class ProductAdminController extends Debugger {
 	private $productAdminDao = null;
@@ -130,11 +129,12 @@ class ProductAdminController extends Debugger {
 			$this->debug("ProductAdminController", "addAdminProducts", "clearProductsTime = " . $results['clearProductsTime']);				
 			$this->debug("ProductAdminController", "addAdminProducts", "clearProducts = " . $results['clearProducts']);				
 						
-			if ($clearProducts){
+
 			    // echo " 5) truncate table. "; 
 			      			
          		// Step 1         		
          		$start = microtime();
+         		$results['startAddingTempProducts'] = $start;
          		$numberOfTempProducts = $this->productAdminDao->addTempProducts($products);			  
          		
          		if(is_numeric($numberOfTempProducts) && $numberOfTempProducts > 0){
@@ -182,7 +182,7 @@ class ProductAdminController extends Debugger {
             			$this->debug("ProductAdminController", "addAdminProducts", "updatedStatus = " . $results['updatedStatus']);
          			}
          		}
-			}
+			
 		}else{
 		  // echo "not validated";
 		  // echo " 1)" . isset($products) ;

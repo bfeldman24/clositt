@@ -13,8 +13,9 @@ var spider = {
     // Gets the category links
     getLinks: function(){
         $("#loadingMask").show();
-    	$("#links").html("");	
-    	spider.links = [];
+    	$links = $("<div>");
+    	$("#links").html("");
+    	spider.links = [];    	
     	
     	if (location.hash == spider.testNewProductsHash){
     	   for(var i=0; i < Object.keys(Companies).length; i++){
@@ -23,7 +24,7 @@ var spider = {
     	       var categoryName = "test";
     	       var category = Companies[companyName]; 
     	       
-    	       $("#links").append(
+    	       $links.append(
     	           $("<div>").addClass("company").append(
     	               $("<a>").attr("name",companyName)
     	            ).append(
@@ -31,7 +32,7 @@ var spider = {
     	            )
     	        );   
     	           	       
-	            $("#links > .company").last().append($("<div>").addClass("customer").append($("<div>").addClass("customerName").html("&raquo; " + customerName)));
+	            $links.find(".company").last().append($("<div>").addClass("customer").append($("<div>").addClass("customerName").html("&raquo; " + customerName)));
 	       	                          
                var link = {};
                link.company = companyName.replace(/'/g, "\\'");
@@ -40,7 +41,7 @@ var spider = {
                link.url = category["url"].replace(/'/g, "\\'");
                spider.links.push(link);
                	               
-               $("#links > .company > .customer").last().append(
+               $links.find(".company > .customer").last().append(
 					$("<div>").addClass("category").css("display","none").append(
 						$("<input>")
 							.attr("type","checkbox")
@@ -60,6 +61,7 @@ var spider = {
 				); 	   
     	   }
     	 
+    	   $("#links").html($links);
     	   $("#loadingMask").hide();  
     	   return true;
     	}
@@ -419,7 +421,7 @@ var spider = {
                 if (result == null){
                     output += "Data was NOT saved successfully! ";
                 }else{
-                    if (result['clearProducts'] != null && result['clearProducts']){
+                    if (result['clearProducts'] != null){
     
                         if (result['new'] != null && !isNaN(result['new']) &&
                             result['updated'] != null && !isNaN(result['updated']) && 

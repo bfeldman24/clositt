@@ -755,6 +755,26 @@ var Companies = {
     	   
     	   return sku.replace(/_/g, '');
     	}
+      },
+      'Shinesty': {
+      	"url": "http://shinesty.com/collections/80s",
+      	"id": "sh",
+      	"date": "Mon Nov 3 22:11:59 2014",
+      	"image": "a>img",
+      	"imageAttr": "src",
+      	"name": "a>.info>span.title:first-child()",
+      	"nameAttr": "text",
+      	"link": "a:first-child()",
+      	"linkAttr": "href",
+      	"price": "a>.info>span.price",
+      	"priceAttr": "text",
+      	"sku": ".modal",
+      	"skuAttr": "id",
+      	"nextPage": ".paginate>span.next>a",
+      	"nextPageAttr": "href",
+      	"listing": ".column.thumbnail",
+      	"sampleSku": "product-372747380",
+      	"getSku": skuHelper.stripNonNumericChars
       }
 };
 
