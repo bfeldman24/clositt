@@ -128,7 +128,7 @@ class FilterController extends Debugger {
 			         }
 			    }			 			    			   
 			}						
-	   }  	   
+	   }  		      
 	   
 	   $filters['price'] = array(0,50,100,150,200,250,500,1000);              
 
