@@ -1,6 +1,6 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 require_once(dirname(__FILE__) . '/../app/session.php');
 
@@ -55,6 +55,11 @@ class Router {
                 case 'admin':
                     if(ENV == "DEV" || ENV == "QA"){
                         Router::Admin();
+                    }
+                    break;
+                case 'qa':
+                    if(ENV == "DEV" || ENV == "QA"){
+                        Router::DataQualityAdmin();
                     }
                     break;        
             } 
@@ -426,6 +431,30 @@ class Router {
                     echo $isElasticHealthy ? "healthy" : "sick";
                     break;                        
             }
+        }   
+    }
+        
+    /************************************
+    *** DATA QUALITY ADMIN CONTROLLER ***
+    ************************************/
+    public static function DataQualityAdmin(){
+        if(ENV != "DEV" && ENV != "QA"){
+            return "500";   
+        }
+        
+        require_once(dirname(__FILE__) . '/../app/Controller/DataQualityAdminController.php');  
+        $dataQualityAdminController = new DataQualityAdminController();
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'){                          
+            $output = null;
+            
+            switch ($_GET['method']){                        
+                case 'get':
+                    $results = $dataQualityAdminController->get($_POST['queryNumber']);
+                    break;
+            }
+
+            print_r($results);
         }   
     }
     
