@@ -164,7 +164,7 @@ class FilterView {
         $firstLetters = array();
         
         foreach ($stores as $store){
-            if (!empty($store)){
+            if (!empty($store) && strlen($store) > 2){
                 $firstLetter = strtoupper(substr($store[0], 0, 1));
                 
                 if (isset($firstLetter) && $firstLetter != ""){
