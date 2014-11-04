@@ -350,7 +350,17 @@ class ProductAdminDao extends AbstractDao {
               " SET " . PRODUCT_STATUS . " = 5 " . 
               " WHERE " . PRODUCT_SKU . " IN (SELECT " . PRODUCT_SKU . " FROM " . TAGS . " WHERE " . TAG_STRING . " IN ('delete','notclothes','remove') )";                            
         
-        return $this->update($sql, array(), array(), "2309823");
+        $this->update($sql, array(), array(), "2309823");
+        
+        // Closetid 155 and 146 are ben and eli's delete clositts
+        $sql = "SET SQL_SAFE_UPDATES='OFF'; " .
+               " UPDATE " . PRODUCTS . " p " .
+               " RIGHT JOIN " . CLOSET_ITEMS . " c ON c.".PRODUCT_SKU." = p.".PRODUCT_SKU .
+               " SET p.".PRODUCT_STATUS." = 5 " .
+               " WHERE c.". CLOSET_ID." IN (155, 146); ".
+               " SET SQL_SAFE_UPDATES='ON';";
+               
+        return $this->update($sql, array(), array(), "2309824");       
 	}
 	
 	public function getCustomers(){	   
