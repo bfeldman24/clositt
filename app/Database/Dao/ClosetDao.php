@@ -5,7 +5,8 @@ class ClosetDao extends AbstractDao {
 		
 	public function createNewCloset($user, $closet){
         $sql = "INSERT INTO ".CLOSETS." (".CLOSET_USER_ID.", ".CLOSET_NAME.", ".CLOSET_PERMISSION.", ".CLOSET_LAST_UPDATED.", ".CLOSET_CREATED_ON.") " .
-                " VALUES (?,?,1,NOW(),NOW())";	   
+                " VALUES (?,?,1,NOW(),NOW()) " .
+                "ON DUPLICATE KEY UPDATE ".CLOSET_PERMISSION."=1";	   
 		
 		$name = $closet->getName();
 		$paramTypes = array('integer', 'text');
@@ -69,7 +70,8 @@ class ClosetDao extends AbstractDao {
 	
 	public function addItemToCloset($user, $closetItem){
 	    $sql = "INSERT INTO ".CLOSET_ITEMS." (".CLOSET_ID.", ".CLOSET_USER_ID.", ".CLOSET_ITEM_SKU.", ".CLOSET_ITEM_IMAGE.", ".CLOSET_ITEM_STATUS.", ".CLOSET_LAST_UPDATED.", ".CLOSET_ITEM_DATE_ADDED.") " .
-                " VALUES (?,?,?,?,1,NOW(),NOW())";	   
+                " VALUES (?,?,?,?,1,NOW(),NOW()) " .
+                "ON DUPLICATE KEY UPDATE ".CLOSET_ITEM_STATUS."=1, ".CLOSET_LAST_UPDATED."=NOW()";	   
 		
 		$closetId = $closetItem->getClosetId();		
 		$sku = $closetItem->getSku();

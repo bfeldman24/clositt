@@ -6,7 +6,8 @@ class UserDao extends AbstractDao {
     public function signUp($user){
         $sql = "INSERT INTO ".USERS." (".USER_NAME.", ".USER_EMAIL.", ".USER_PASS.", ".
                                         USER_STATUS.", ".USER_LOGIN_COUNT.", ".USER_IP.", ".USER_LAST_SIGNED_IN.", ".USER_DATE_SIGNED_UP.") " .
-                " VALUES (?,?,?,1,1,?,NOW(),NOW())";	   
+                " VALUES (?,?,?,1,1,?,NOW(),NOW()) " .
+                "ON DUPLICATE KEY UPDATE ".USER_STATUS."=1, ".USER_LAST_SIGNED_IN."=NOW()";
 		
 		$name = $user->getName();
 		$email = $user->getEmail();
@@ -50,7 +51,7 @@ class UserDao extends AbstractDao {
 	
 	public function updateUserPassword($user, $oldPassword){
 	    $sql = "UPDATE ".USERS.
-	          " SET ".USER_PASS." = ? " .
+	          " SET ".USER_PASS." = ?, ".USER_LAST_SIGNED_IN." = NOW() " .
               " WHERE ".USER_EMAIL." = ? AND ".USER_STATUS." = 1";              
 				
 		$password = $user->getPassword();
@@ -70,7 +71,7 @@ class UserDao extends AbstractDao {
 	
 	public function forceUpdateUserPassword($user){
 	    $sql = "UPDATE ".USERS.
-	          " SET ".USER_PASS." = ?, ".USER_STATUS." = 1".
+	          " SET ".USER_PASS." = ?, ".USER_STATUS." = 1, ".USER_LAST_SIGNED_IN." = NOW() " .
               " WHERE ".USER_EMAIL." = ? ";	   
 				
 		$password = $user->getPassword();
@@ -84,7 +85,7 @@ class UserDao extends AbstractDao {
 	
 	public function updateUserInfo($user){
 	    $sql = "UPDATE ".USERS.
-	          " SET ".USER_NAME." = ?, ".USER_EMAIL." = ? ".
+	          " SET ".USER_NAME." = ?, ".USER_EMAIL." = ?, ".USER_LAST_SIGNED_IN." = NOW() " .
               " WHERE ".USER_ID." = ? AND ".USER_STATUS." = 1";	   
 		
 		$name = $user->getName();
