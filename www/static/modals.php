@@ -51,7 +51,7 @@
                                         <p class="log">Create an account to get your own Clositt</p>
                                 
                                         <div>
-                                            <input id="signupModalTab-inputName" type="text" placeholder="Name" />
+                                            <input id="signupModalTab-inputName" type="text" placeholder="Full Name" />
                                             <input id="signupModalTab-inputEmail" type="email" placeholder="Email Address" />
                                             <input id="signupModalTab-inputPassword" type="password" placeholder="Password" />
                                             <div class="sub">
