@@ -64,7 +64,20 @@ class ClosetDao extends AbstractDao {
 		$paramTypes = array('integer', 'integer');
         $params = array($closetId, $user);
         
-        return $this->update($sql, $params, $paramTypes, "29864921");
+        $affectedClosetRows = $this->update($sql, $params, $paramTypes, "29864921");
+        
+        if ($affectedClosetRows === 1){
+            $sql = "UPDATE ".CLOSET_ITEMS.
+	           " SET ".CLOSET_ITEM_STATUS." = 2, ".CLOSET_LAST_UPDATED." = NOW() " . 
+                " WHERE " . CLOSET_ID . " = ? AND " . CLOSET_USER_ID . " = ?";	   		
+    		
+    		$paramTypes = array('integer', 'integer');
+            $params = array($closetId, $user);
+            
+            $this->update($sql, $params, $paramTypes, "29864921");        
+        }
+        
+        return $affectedClosetRows;
 	}
 	
 	
