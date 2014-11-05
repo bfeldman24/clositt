@@ -5,6 +5,8 @@ var closetPresenter = {
 	carouselRight: null,
 	user: null,
 	wishListClosetId: 2,
+	isBusy: false,
+	busyInterval: null,
 
 	init: function(){
 	    closetPresenter.isInitialized = true;
@@ -368,19 +370,29 @@ var closetFormPresenter = {
 	       }
 	    });
 	    
+	    $(document).on('keyup', '.addNewClosetInput', function(e) {
+            e.preventDefault();	 
+            
+            // on enter
+            if(e.keyCode == 13) {                      
+                $(e.currentTarget).next(".submitNewCloset").trigger("click");
+            }
+            
+            return false;
+        });
+	    
         closetFormPresenter.getClosetInfo();        
 	},		
 	
 	getClosetInfo: function(){
 		if(closetFormPresenter.closetNames == null){
-		    $.post( window.HOME_ROOT + "cl/getall", closetFormPresenter.setClosetInfo, "json");		  		  		  		  				
+		    $.post( window.HOME_ROOT + "cl/getall", closetFormPresenter.setClosetInfo, "json");			
 		}
 	},
 	
 	setClosetInfo: function(closets){
 	    var closetIds = [];
 		var closetNames = [];
-		var closetItems = [];
 		var closetItemsMapping = {};
 		var i=0;
         
@@ -395,23 +407,21 @@ var closetFormPresenter = {
     			  }
     		      
     		       closet.forEach(function(item){
-    		          if (item.item != null){
-            			closetItems.push(item.item);					    
+    		          if (item.item != null){					    
             			
             			if (closetItemsMapping[closetNames[i]] == null){
     				        closetItemsMapping[closetNames[i]] = [];
             			}	
             			        			
-            			closetItemsMapping[closetNames[i]].push(item.item);						 				
+            			closetItemsMapping[closetNames[i]].push(item.item);
     		          }
-            	   });	
+            	   });
             	   
             	   i++;				
     	    }
     	    
     	    closetFormPresenter.closetIds = closetIds;
     		closetFormPresenter.closetNames = closetNames;
-    		closetFormPresenter.closetItems = closetItems;
     		closetFormPresenter.closetItemsMapping = closetItemsMapping;
         }                	    	    
 	},
@@ -500,7 +510,26 @@ var closetFormPresenter = {
 		return false;		
 	},
 	
-	createNewCloset: function(closetName, el, sku){
+	createNewCloset: function(closetName, el, sku){	   
+	   if (closetPresenter.isBusy){
+	       if (closetPresenter.busyInterval == null){
+    	       closetPresenter.busyInterval = setInterval(function(){
+    	           closetPresenter.createNewCloset(closetName, el, sku);   
+    	       }, 3000);
+	       }
+	       
+	       return;
+	   }
+	   
+	   closetPresenter.isBusy = true;
+	   clearInterval(closetPresenter.busyInterval);	  
+	   closetPresenter.busyInterval = null;   
+	   
+	   if (closetFormPresenter.closetNames.indexOf(closetName.trim()) >= 0){
+	       Messenger.info("That clositt name already exists! Please enter a new clositt name.");   
+	       return;    
+	   }
+	   
 		var closittData = {
 	         title: closetName.trim(),
 	         owner: session.userid,
@@ -514,8 +543,13 @@ var closetFormPresenter = {
  			  } 			  			    		       
 		       
 		      Messenger.success('Clositt '+ closittData.title + ' was saved!');  
-		      closetFormPresenter.closetNames.push(closetName);
-		      closetFormPresenter.closetNames = closetFormPresenter.closetNames.sort();
+		      
+		      if (closetFormPresenter.closetNames.indexOf(closetName.trim()) < 0){
+		              closetFormPresenter.closetNames.push(closetName.trim());
+        		      closetFormPresenter.closetIds.push(result);
+        	  }
+		
+		      $(el.currentTarget).prev(".addNewClosetInput").val("");
 		       
 		       if (el == null){
 		          if ($("#closetNameList").length > 0){
@@ -524,7 +558,7 @@ var closetFormPresenter = {
             		                          $("<button>").addClass("btn btn-default nav-filter closetName newClosetName")
             		                              .attr("type","button")
             		                              .attr("name",closittData.title)
-            		                              .text(closittData.title)		                                      		                              
+            		                              .text(closittData.title)                  
             		                      )
             		                  );
 		              
@@ -533,13 +567,15 @@ var closetFormPresenter = {
 		              $newClositt.find(".newClosetName").removeClass("newClosetName", 3000);		              		              		              
 		          }   
 		       }else{
-		          		       		 
+		          		          		       		 
       		       var selector = ".addToClosetOptions";		       
-      		       if ($(el.currentTarget).parent().find(".addToClosetOptions .mCSB_container").length > 0){      		       										   		selector = ".addToClosetOptions	.mCSB_container";		       		       
+      		       if ($(el.currentTarget).parent().find(".addToClosetOptions .mCSB_container").length > 0){
+      		            selector = ".addToClosetOptions	.mCSB_container";
       		       }
       		       
       		       $(el.currentTarget).parent().find(selector).prepend(
-      			       $("<a>").addClass("ring_opt closetOption").attr("i",closetFormPresenter.closetNames.length - 1).append(
+      			       $("<a>").addClass("ring_opt closetOption").attr("i",closetFormPresenter.closetNames.length - 1)
+      			       .append(
       						$("<div>").addClass("customcheckbox pull-left icon-check")
       					).append( 
       					    $("<p>").addClass("pull-left").text(closetName)
@@ -550,6 +586,8 @@ var closetFormPresenter = {
        			       closetFormPresenter.addItemToCloset(el, sku, closetName, result);
        		   	   }
 		       }
+		       
+		       closetPresenter.isBusy = false;
 		});
 	},
 	
