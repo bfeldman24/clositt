@@ -281,7 +281,7 @@ p.log { color: #999999; font-size: 16px; text-align: center;font-weight: 600; li
 	padding:10px;
 	border-bottom:5px solid #66cbff;
 	position:absolute;
-	top:48px;
+	top:46px;
 	z-index:999;
 	max-height: 225px;
 }
@@ -365,7 +365,7 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 .items .col-lg-box { min-height: 295px; max-height: 295px; height: 295px; padding-bottom: 10px !important; }
 .items { margin-top: 26px; }
 .items .box { padding-bottom: 40px; max-width: 300px; }
-.items .item { border: 1px solid #d0d0d0; border-radius: 8px; background: #fff; position: relative; max-width: 225px; margin: 0 auto; }
+.items .item { border-left: 1px solid #d0d0d0; border-right: 1px solid #d0d0d0; border-top: 1px solid #d0d0d0; border-radius: 8px; background: #fff; position: relative; max-width: 225px; margin: 0 auto; }
 .items .item-type2 { max-width: 270px; }
 .items .item .mainwrap { background: #fff;  border-radius: 8px; position: relative;}
 .items .item .imagewrap { width: 100%; border-radius: 8px 8px 0 0; height: 175px; text-align: center; overflow: hidden; position: relative; cursor: pointer; }
@@ -375,15 +375,15 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 .items .item .detail span.price { color: #424242; font-size: 16px; font-family: 'Doppio One'; font-weight: 400; margin-right: 4px; }
 .items .item .detail del { color: #f44fa4; font-size: 16px; font-family: 'Doppio One'; font-weight: 400; }
 .items .item .detail p { color: #adadad; font-size: 13px; margin-top: 0px; margin-bottom: 0px; font-family: 'Open Sans', sans-serif; line-height: normal; }
-.items .item .cart_option { width: 100%; min-height: 40px; border-top: 1px solid #d0d0d0; position:relative; background: #FFF; border-radius: 0 0 8px 8px; z-index: 1}
-.items .item .cart_option a { display: block; float: left; width: 33%; border-right: 1px solid #d0d0d0; text-align: center; min-height: 40px; text-decoration:none; position:relative; }
+.items .item .cart_option { width: 100%; min-height: 40px; border-top: 1px solid #d0d0d0; border-bottom: 1px solid #d0d0d0; position:relative; background: #FFF; border-radius: 0 0 8px 8px; z-index: 10}
+.items .item .cart_option a { display: block; float: left; width: 33%; border-right: 1px solid #d0d0d0; text-align: center; min-height: 39px; text-decoration:none; position:relative; }
 .items .item .cart_option a:last-child { border-right: none; }
 .items .item .cart_option a i { font-size: 36px; color: #d0d0d0; }
 .items .item .cart_option a i.message-icon { font-size: 22px; padding-top: 8px; display: block; }
 .items .item .cart_option a i.dots-icon { font-size: 20px; padding-top: 7px; display: block; }
 .items .item .cart_option a i:hover, .items .item .cart_option a i.hover { color: #f44fa4; }
 .items .item .cart_option a i .badge { width: 9px; height: 9px; padding: 0; background: #66ccff; position: absolute; margin-left: -6px; margin-top: -2px; }
-.items .item .hover_more { width: 100%; min-height: 39px; border: 1px solid #d0d0d0; border-top: none; border-radius: 0 0 8px 8px; position: absolute; bottom: 0px; -webkit-transition: all .3s ease-out .02s; -moz-transition: all .3s ease-out .02s; -o-transition: all .3s ease-out .02s; transition: all .3s ease-out .02s; }
+.items .item .hover_more { width: 100%; min-height: 39px; border: 1px solid #d0d0d0; border-top: none; border-radius: 0 0 8px 8px; position: absolute; bottom: 0px; -webkit-transition: all .3s ease-out .02s; -moz-transition: all .3s ease-out .02s; -o-transition: all .3s ease-out .02s; transition: all .3s ease-out .02s; background: none repeat scroll 0 0 #fff; z-index: 1;}
 .items .item .hover_more a, #product a.socialbtn { display: block; float: left; width: 12%; margin:10px 5px 0; text-align: center; }
 .items .item .hover_more a i { font-size: 11px; color: #d0d0d0; z-index:-1; width:24px; height: 24px; line-height:22px; vertical-align:middle; border:1px solid #d0d0d0; border-radius:100%;  margin:0 auto; display:block; }
 .items .item .hover_more a:hover i { background: #66ccff; color:#fff; border-color:#66ccff;}
