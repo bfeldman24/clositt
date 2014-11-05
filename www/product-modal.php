@@ -340,14 +340,7 @@ $(document).ready(function(){
                 pagePresenter.scrollTo($("#mainProductImage").position().top);        
             <?php } ?>
         }
-    });
-    
-    <?php if ($productPage === true){ ?>
-        $("title").first().text("<?php echo $product->o . ": " . $product->n; ?>. Found on Clositt.com. ");
-        $('meta[property="og:image"]').attr("content","<?php echo $product->i; ?>");
-        $('meta[property="og:image:secure_url"]').attr("content","<?php echo $product->i; ?>");
-        $('meta[name="twitter:image:src"]').attr("content","<?php echo $product->i; ?>");        
-    <?php } ?>
+    });        
     
     if ($("#productModal .product-slider .slidewrap").length > 0){
          setTimeout(function () {

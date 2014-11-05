@@ -1,8 +1,7 @@
 <?php require_once(dirname(__FILE__) . '/../app/session.php'); ?>
 <!DOCTYPE HTML>
 <html>
-<head>
-    <title>Find IT on Clositt.com</title>
+<head>    
     <?php     
         if (isset($_GET['s'])){             
             require_once(dirname(__FILE__) . '/../app/Controller/ProductController.php');
@@ -22,6 +21,14 @@
             } 
             
             $product = $productData->product;            
+                        
+            echo '<title>' . $product->o . ': ' . $product->n . '. Found on Clositt.com. </title>';
+            echo '<meta property="og:image" content="'.$product->i.'" />';
+            echo '<meta property="og:image:secure_url" content="'.$product->i.'" />';
+            echo '<meta name="twitter:image:src" content="'.$product->i.'" />';
+                 
+        }else{
+            echo '<title>Find IT on Clositt.com</title>';   
         }
         
         include(dirname(__FILE__) . '/static/meta.php');
@@ -34,10 +41,14 @@
         $productPage = true;        
         
         include(dirname(__FILE__) . '/static/header.php');
+        include(dirname(__FILE__) . '/static/footerMeta.php');
         include(dirname(__FILE__) . '/product-modal.php');
         include(dirname(__FILE__) . '/static/footer.php');
     ?>
 </div>
-<?php include(dirname(__FILE__) . '/static/footerMeta.php'); ?>	
+
+<script type="text/javascript">
+ $(".badData").tooltip(); 
+</script>
 </body>
 </html>

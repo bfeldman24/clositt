@@ -1,4 +1,3 @@
-<title>Clositt Makes Searching for Clothes as Fun as Buying Clothes</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="http://clositt.com/favicon.ico">
@@ -8,6 +7,8 @@ $metaImage = HOME_PAGE . "css/images/clositt-twitter-header.jpg";
         
 if (isset($product) && $product != null){
     $metaImage = $product->i;
+}else{
+    echo '<title>Clositt Makes Searching for Clothes as Fun as Buying Clothes</title>';   
 }
 ?>
 
