@@ -22,7 +22,7 @@
             
             $product = $productData->product;            
                         
-            echo '<title>' . $product->o . ': ' . $product->n . '. Found on Clositt.com. </title>';
+            echo '<title>' . $product->o . ': ' . $product->n . ' for $' . $product->p . '. Found it on Clositt.com</title>';
             echo '<meta property="og:image" content="'.$product->i.'" />';
             echo '<meta property="og:image:secure_url" content="'.$product->i.'" />';
             echo '<meta name="twitter:image:src" content="'.$product->i.'" />';
