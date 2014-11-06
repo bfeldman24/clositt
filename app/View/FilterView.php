@@ -122,11 +122,11 @@ class FilterView {
         
         foreach ($categories as $category => $subcategories){
             if ($category != "Other"){
-                echo '<li class="categoryItem" ><a>'.$category.'</a>';
+                echo '<li class="categoryItem" ><a><span class="icon-svg19"></span> '.$category.'</a>';
                 
                 echo '<ul class="subcategory" parent="'.$category.'" style="display:none;">';
                 foreach ($subcategories as $subcategory){
-                    echo '<li class="subcategoryItem"><a class="select_filter" value="'.$subcategory[0].'"><span class="icon-svg19"></span> '.$subcategory[0].'</a></li>';    
+                    echo '<li class="subcategoryItem"><a class="select_filter" value="'.$subcategory[0].'">'.$subcategory[0].'</a></li>';    
                 }           
                 echo '</ul>';
                 
@@ -135,11 +135,11 @@ class FilterView {
         } 
         
         if (isset($categories['Other'])){
-            echo '<li class="categoryItem" ><a>Other</a>';
+            echo '<li class="categoryItem" ><a><span class="icon-svg19"></span> Other</a>';
                 
             echo '<ul class="subcategory" parent="Other" style="display:none;">';
             foreach ($categories['Other'] as $subcategory){
-                echo '<li class="subcategoryItem"><a class="select_filter" value="'.$subcategory[0].'"><span class="icon-svg19"></span> '.$subcategory[0].'</a></li>';    
+                echo '<li class="subcategoryItem"><a class="select_filter" value="'.$subcategory[0].'">'.$subcategory[0].'</a></li>';    
             }           
             echo '</ul>';
             
