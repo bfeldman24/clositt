@@ -91,6 +91,7 @@ var filterPresenter = {
     	 	}else{
     	 	      $(".noresults").remove();
     	 	      $("#search-bar-sort-block").css("visibility","hidden");
+		      searchController.isSearchActive = false;
     	 	      productPresenter.refreshProducts();
     	 	}
     	 	

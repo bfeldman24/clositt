@@ -600,7 +600,6 @@ var closetFormPresenter = {
         		      closetFormPresenter.closetIds.push(result);
         	  }
 		
-		      $(el.currentTarget).prev(".addNewClosetInput").val("");
 		       
 		       if (el == null){
 		          if ($("#closetNameList").length > 0){
@@ -618,6 +617,7 @@ var closetFormPresenter = {
 		              $newClositt.find(".newClosetName").removeClass("newClosetName", 3000);		              		              		              
 		          }   
 		       }else{
+			$(el.currentTarget).prev(".addNewClosetInput").val("");
 		          		          		       		 
       		       var selector = ".addToClosetOptions";		       
       		       if ($(el.currentTarget).parent().find(".addToClosetOptions .mCSB_container").length > 0){

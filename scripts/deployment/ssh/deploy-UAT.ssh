@@ -58,6 +58,7 @@ sudo mkdir /home/$1/app
 sudo cp -r app /home/$1/
 sudo rm -f /home/$1/app/Controller/*Admin*
 sudo rm -f /home/$1/app/Database/Dao/*Admin*
+sudo rm -rf /home/$1/app/Data/*
 
 echo "Copying configs..."
 sudo mkdir /home/$1/configs
