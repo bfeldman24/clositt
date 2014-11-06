@@ -107,21 +107,24 @@ input[type='checkbox']{
     if (typeof session == "object" && session.isLoggedIn){
         $("#inputName").val(session.name);
     }
+    
+    var isUpdatePassBusy = false;
+    var isUpdateNameBusy = false;
 
     $("form").on("submit",function(event){
-    	 event.preventDefault();
+    	 event.preventDefault();    	      
     	 
     	 if($("#inputName").attr("disabled") == "disabled" && $("#inputOldPassword").attr("disabled") == "disabled"){
     	       Messenger.info("There is nothing to save! Please enable the fields that you wish to change.");                     
     	 }else{
     	 
-          	 if($("#inputOldPassword").attr("disabled") != "disabled"){
+          	 if(!isUpdatePassBusy && $("#inputOldPassword").attr("disabled") != "disabled"){
                   if($('#inputPassword').val().length >= 7 && $('#inputPassword2').val().length >= 7){
                           if($('#inputPassword2').val() == $('#inputPassword').val()){                          	
                             var oldPassword = $("#inputOldPassword").val();
                       		var newPassword = $("#inputPassword").val();            		
                       	
-                      	
+                      	    isUpdatePassBusy = true; 
                       	    $.post( window.HOME_ROOT + "u/updatepass", {p: newPassword, op: oldPassword }, function(result){
                       	          if (result != "success"){
                       	             Messenger.error("Your old password is incorrect! Please try again.");	
@@ -134,6 +137,8 @@ input[type='checkbox']{
                                       $("#inputPassword2").val("");
                                       $(".newPasswordGroup").hide();                           	               
                        			  }	
+                       			  
+                       			  isUpdatePassBusy = false; 
                       		});	
                       	                  		
                           }else{
@@ -144,9 +149,10 @@ input[type='checkbox']{
                   }
           	 }
           	 
-          	 if($("#inputName").attr("disabled") != "disabled"){
+          	 if(!isUpdateNameBusy && $("#inputName").attr("disabled") != "disabled"){
           	    var name = $("#inputName").val();	
           	    
+          	    isUpdateNameBusy = true;
           	    $.post( window.HOME_ROOT + "u/update", {id: session.userid, n: name, e: session.email }, function(result){
         	          if (result != "success"){
         	             Messenger.error("There was a problem saving your new name!");
@@ -157,6 +163,8 @@ input[type='checkbox']{
                           $("#changeName").prop("checked",false);
                           $("#inputName").attr("disabled","disabled");                           	               
         			  }	
+        			  
+        			  isUpdateNameBusy = false;
         		});	         	    
           	 }	 
     	 }
