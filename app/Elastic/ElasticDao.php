@@ -183,7 +183,7 @@ class ElasticDao{
 
         $color = array();
         if( $criteria->getColors()){
-            $$color =  $criteria->getColors();
+            $color =  $criteria->getColors();
         }
 
         $terms = explode(" ", $criteria->getSearchString());
