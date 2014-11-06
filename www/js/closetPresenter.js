@@ -28,6 +28,9 @@ var closetPresenter = {
 		$(document).on("click", ".saveProductBtn", closetPresenter.saveProductToCloset);
 		$(document).on("click", ".unsavedCloset", closetPresenter.saveEntireCloset);
 		
+		$(document).on("click", ".switchery", closetPresenter.togglePriceAlerts);
+		$(".switchery").tooltip();
+		
 		$("#search-bar").on("keypress", closetPresenter.searchOnEnter);
 		$("#seach-bar-icon").on("click", closetPresenter.searchBarSubmit);     
 		
@@ -150,8 +153,11 @@ var closetPresenter = {
 	   var closetName = $(e.currentTarget).text();
 	   var closetNumber = $(e.currentTarget).parents(".closetPanel").attr("number");
 	   var closetSelector = $(e.currentTarget).parents(".closetPanel").attr("id");
+	   var isClosetAlertOn = $(e.currentTarget).parents(".closetPanel").find(".switchery").hasClass("off");
+       var closetAlert = isClosetAlertOn ? 'Y' : 'N';
 
 	   $("#editClosetName").val(closetName);
+	   $("#editClosetName").attr("alert", closetAlert);
 	   $("#editClosetName").attr("original", closetName);	   
 	   $("#editClosetName").attr("num", closetNumber);
 	   $("#editClosetName").attr("selector", closetSelector);	   	   	   
@@ -168,7 +174,8 @@ var closetPresenter = {
 	         id: $("#editClosetName").attr("num"),
 	         title: $("#editClosetName").val().trim(),
 	         owner: session.userid,
-	         status: 1
+	         status: 1,
+	         alert: $("#editClosetName").attr("alert")
 	    };
 	 		
 	 	var original = $("#editClosetName").attr("original");			
@@ -187,6 +194,18 @@ var closetPresenter = {
 				  }	
 			});	
 		}					
+	},
+	
+	updateClosetInfo: function(closetData){
+	    if (closetData != null && closetData.id != null && closetData.title != null){
+    	    $.post( window.HOME_ROOT + "cl/update", closetData, function(result){
+    	          if (result != "success") {
+    			    	Messenger.error(closetData.title + ' could not be saved.');
+     			  } else {
+    					Messenger.success("Clositt " + closetData.title + " was saved!");					
+    			  }	
+    		});
+	    }
 	},
 	
 	confirmRemoveCloset: function(){
@@ -337,6 +356,38 @@ var closetPresenter = {
         var searchTerm = $( "#search-bar" ).val().trim();        
         location.href = window.HOME_URL + "?outfit=" + encodeURIComponent(searchTerm);
         return false;
+    },
+    
+    togglePriceAlerts: function(e){        
+        var $btn = $(e.currentTarget);
+        
+        var closetName = $(e.currentTarget).parents(".closetPanel").attr("original");
+	    var closetNumber = $(e.currentTarget).parents(".closetPanel").attr("number");
+        
+        var closittData = {
+	         id: closetNumber,
+	         title: closetName,
+	         owner: session.userid,
+	         status: 1	      
+	    };
+        
+        if ($btn.hasClass("off")){            
+            closittData.alert = 'Y';            
+            
+            $btn.removeClass("off");            
+            $btn.attr("title","Daily Price Alerts On");
+            $btn.tooltip('destroy');
+            $btn.tooltip('show');
+        }else{
+            closittData.alert = 'N';            
+            
+            $btn.addClass("off");            
+            $btn.attr("title","Daily Price Alerts Off");
+            $btn.tooltip('destroy');
+            $btn.tooltip('show');
+        }   
+        
+        closetPresenter.updateClosetInfo(closittData);
     }	
 }
 

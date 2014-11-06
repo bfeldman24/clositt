@@ -5,6 +5,7 @@ require_once(dirname(__FILE__) . '/ProductEntity.php');
 // JAVASCRIPT Closet
 define("JS_CLOSET_ITEM_ID","id");
 define("JS_CLOSET_ITEM_NAME","title");
+define("JS_CLOSET_ITEM_PRICE_ALERTS","alert");
 define("JS_CLOSET_ITEM_USER_ID","owner");
 define("JS_CLOSET_ITEM_SKU","item");
 define("JS_CLOSET_ITEM_IMAGE","cache");
@@ -12,8 +13,11 @@ define("JS_CLOSET_ITEM_PRODUCT","reference");
 
 class ClosetItemEntity {
 
+    // Closet reference
 	private $closetId;
 	private $closetName;
+	private $priceAlerts;
+	
 	private $userId;
 	private $sku;
 	private $image;
@@ -34,6 +38,15 @@ class ClosetItemEntity {
 	public function setClosetName($closetName) {
 		if(isset($closetName)){
 			$this->closetName = $closetName;
+		}
+	}
+	
+	public function getPriceAlerts() {
+		return $this->priceAlerts;
+	}
+	public function setPriceAlerts($priceAlerts) {
+		if(isset($priceAlerts)){
+			$this->priceAlerts = $priceAlerts;
 		}
 	}
 	
@@ -81,6 +94,7 @@ class ClosetItemEntity {
 	
 		$closetItemEntity->setClosetId(BaseEntity::getDBField($row, CLOSET_ID));
 		$closetItemEntity->setClosetName(BaseEntity::getDBField($row, CLOSET_NAME));			
+		$closetItemEntity->setPriceAlerts(BaseEntity::getDBField($row, CLOSET_PRICE_ALERTS));			
 		$closetItemEntity->setUserId(BaseEntity::getDBField($row, CLOSET_USER_ID));
 		$closetItemEntity->setSku(BaseEntity::getDBField($row, CLOSET_ITEM_SKU));
 		$closetItemEntity->setImage(BaseEntity::getDBField($row, CLOSET_ITEM_IMAGE));	
@@ -96,7 +110,8 @@ class ClosetItemEntity {
 		$closetItemEntity = new ClosetItemEntity();
 		
 		$closetItemEntity->setClosetId(BaseEntity::getPostField($row, JS_CLOSET_ITEM_ID));
-		$closetItemEntity->setClosetName(BaseEntity::getPostField($row, JS_CLOSET_NAME));			
+		$closetItemEntity->setClosetName(BaseEntity::getPostField($row, JS_CLOSET_ITEM_NAME));			
+		$closetItemEntity->setPriceAlerts(BaseEntity::getPostField($row, JS_CLOSET_ITEM_PRICE_ALERTS));			
 		$closetItemEntity->setUserId(BaseEntity::getPostField($row, JS_CLOSET_ITEM_USER_ID));
 		$closetItemEntity->setSku(BaseEntity::getPostField($row, JS_CLOSET_ITEM_SKU));
 		$closetItemEntity->setImage(BaseEntity::getPostField($row, JS_CLOSET_ITEM_IMAGE));	    
@@ -109,6 +124,7 @@ class ClosetItemEntity {
 		
 		$closetItemArray[JS_CLOSET_ITEM_ID] = $this->getClosetId();
 		$closetItemArray[JS_CLOSET_ITEM_NAME] = $this->getClosetName();
+		$closetItemArray[JS_CLOSET_ITEM_PRICE_ALERTS] = $this->getPriceAlerts();
 		$closetItemArray[JS_CLOSET_ITEM_USER_ID] = $this->getUserId();
 		$closetItemArray[JS_CLOSET_ITEM_SKU] = $this->getSku();
 		$closetItemArray[JS_CLOSET_ITEM_IMAGE] = $this->getImage();

@@ -675,3 +675,51 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 
 /* OVERRIDE BOOTSTRAP */
 .log.bg-warning { padding: 10px;}
+
+/* OVERRIDE Swtichery */
+.switchery {
+  background-color: #67A12E;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-block;
+  height: 25px;
+  position: relative;
+  vertical-align: middle;
+  width: 45px;
+  margin: 0 10px 0 5px;
+
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  box-sizing: content-box;
+  background-clip: content-box;
+  
+  transition: border 0.4s ease 0s, box-shadow 0.4s ease 0s, background-color 0.2s ease 0s;
+}
+
+.switchery > small {
+  background: #66FF66; 
+  border-radius: 100%;
+  height: 25px;
+  position: absolute;
+  top: 0;
+  width: 25px;
+  font-size: 20px; 
+  font-family: 'Open Sans', inherit;
+  padding: 2px 7px;
+  left: 20px; 
+  transition: left 0.2s ease 0s;
+  color: #FFF;
+  font-weight: 100;
+}
+
+.switchery.off {
+     background-color: #666666;   
+}
+
+.switchery.off > small {
+    background: #CCCCCC;
+    left: 0;
+}

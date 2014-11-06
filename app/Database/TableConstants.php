@@ -99,6 +99,7 @@ define("CLOSET_ID","closetid");
 define("CLOSET_USER_ID","userid");
 define("CLOSET_NAME","closetname");
 define("CLOSET_PERMISSION","permission");
+define("CLOSET_PRICE_ALERTS","pricealerts");
 define("CLOSET_LAST_UPDATED","lastupdated");
 define("CLOSET_CREATED_ON","createdon");
 

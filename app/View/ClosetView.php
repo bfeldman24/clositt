@@ -58,6 +58,10 @@ class ClosetView {
                 }   
             }  
             
+            // Get the Price alerts info            
+            $priceAlertsTooltip = "Daily Price Alerts " . ($items[0]['alert'] === 'Y' ? "On" : "Off");
+            $priceAlertsClass = $items[0]['alert'] === 'Y' ? '' : "off";
+            
             // Get the clositt page links        
             $home = HOME_PAGE;
             $closittPageLink = $home . "!+/" . $userid . "/" . $closetRef;
@@ -78,10 +82,12 @@ class ClosetView {
                             
                                 <?php if($unsaved){ ?>
                                     <button class="unsavedCloset btn btn-clositt-theme">SAVE ENTIRE CLOSET</button>
-                                <?php } ?>
+                                <?php } ?>                                                                
                             
-                                <?php if (($_SESSION['active'] || isset($_GET['user'])) && !$unsaved){ ?>
-                                    <a class="socialbtn" site="facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $closittPageLinkEncoded; ?>">
+                                <?php if (($_SESSION['active'] || isset($_GET['user'])) && !$unsaved){ ?>                                      
+                                      <span class="switchery <?php echo $priceAlertsClass; ?>" data-toggle="tooltip" data-placement="bottom" title="<?php echo $priceAlertsTooltip; ?>"><small>$</small></span>            
+                                
+                                    <a class="socialbtn" site="facebook" target="_blank" href="http://www.facebook.com/plugins/share_button.php?width&layout=link&appId=1523738487865578&href=<?php echo $closittPageLinkEncoded; ?>">
                                         <i class="icon-svg9"></i>
                                     </a>
                                     <a class="socialbtn" site="twitter" target="_blank" href="https://twitter.com/share?url=<?php echo $closittPageLinkEncoded; ?>">

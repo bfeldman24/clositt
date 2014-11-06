@@ -62,7 +62,6 @@ if (!isset($nickname) || $nickname == ""){
 <html>
 <head>
 
-<link href="<?php echo HOME_ROOT; ?>lib/css/joyride-2.1.css" rel="stylesheet">
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>
 <style type="text/css">
 .clositt-inner{
@@ -214,31 +213,6 @@ if (!isset($nickname) || $nickname == ""){
 <script src="<?php echo HOME_ROOT; ?>lib/js/jquery.joyride-2.1.js"></script>
 
 <div id="closetId" style="display:none;"><?php if (isset($_GET['user'])){ echo $_GET['user']; };?></div>
-
-<!-- Joyride Content -->
-<ol id="joyRideTipContent">
-    <li data-class="closetNameHeader" data-text="Next" class="custom">
-        <h2>Your Clositt </h2>
-        <p>Welcome to YOUR Clositt! This is where you keep stuff you like. We've already created a Clositt for you to get you started. Feel free to create as many Clositts as you'd like.</p>
-    </li>
-    <li data-class="carousel-left" data-button="Next" data-options="tipLocation:right;">
-        <h2>Scrolling</h2>
-        <p>Click on the arrows to scroll through your Clositt.</p>
-    </li>
-    <li data-class="social-people-icon" data-button="Next" data-options="tipLocation:left;">
-        <h2>Share</h2>
-        <p>Share your Clositt with anyone by clicking here.</p>
-    </li>    
-    <li data-id="closet-settings" data-button="Next" data-options="tipLocation:left;">
-        <h2>Edit</h2>
-        <p>You can delete items from your Clositt, or change your Clositt names by clicking here.</p>
-    </li>    
-    <li data-id="subheader-trending" data-button="Finish" >
-        <h2>Let me Shop!</h2>
-        <p>You can get back to shopping by clicking here.</p>
-    </li>    
-</ol>
-
 
 <script type="text/javascript">
 
