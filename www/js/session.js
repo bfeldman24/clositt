@@ -152,7 +152,7 @@ var session = {
 	    var icon;
 	    var iconTag;
 	    
-	    if (closetPresenter.isInitialized){
+	    if (location.href.indexOf(".com/clositt") > 0){
 	       pageUrl = "#";
 	       linkTitle = session.nickname + "'s Account";  
 	       icon = "glyphicon glyphicon-user";
