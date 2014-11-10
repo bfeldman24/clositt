@@ -87,11 +87,8 @@ class Router {
                 echo $userController->logout();
                 break;    
             case 'update':            
-                echo $userController->updateUserInfo($_POST);
-                break;
-            case 'updatepass':            
-                echo $userController->updateUserPassword($_POST);
-                break;
+                print_r($userController->updateUserInfo($_POST));
+                break;            
             case 'resetpass':            
                 echo $userController->resetPassword($_POST['email']);
                 break;                   

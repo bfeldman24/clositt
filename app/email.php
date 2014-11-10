@@ -159,24 +159,26 @@ class EmailController{
     
     
     private static function sendEmail($email, $subject, $message, $headers, $options = null){
-        // Restrict duplicate emails
-        if (isset($_SESSION['lastSendEmailTime']) && (time() - $_SESSION['lastSendEmailTime'] < self::$timeDelayInSeconds)){
-            ListController::writeToFile("preventedDuplicateEmails", $email." - ".$subject);
-            return "failed";
+        if (isset($_SESSION) && isset($_SERVER['REMOTE_ADDR'])){
+            // Restrict duplicate emails
+            if (isset($_SESSION['lastSendEmailTime']) && (time() - $_SESSION['lastSendEmailTime'] < self::$timeDelayInSeconds)){
+                ListController::writeToFile("preventedDuplicateEmails", $email." - ".$subject);
+                return "failed";
+            }
+            $_SESSION['lastSendEmailTime'] = time(); 
+            
+            // Restrict too many emails
+            if (!isset($_SESSION['emailCounter'])){
+                $_SESSION['emailCounter'] = 0;
+            }
+            
+            if ($_SESSION['emailCounter'] > self::$emailLimit){
+                ListController::writeToFile("tooManyEmails", $email." - ".$subject);
+                return "failed";   
+            }
+            
+            $_SESSION['emailCounter']++;
         }
-        $_SESSION['lastSendEmailTime'] = time(); 
-        
-        // Restrict too many emails
-        if (!isset($_SESSION['emailCounter'])){
-            $_SESSION['emailCounter'] = 0;
-        }
-        
-        if ($_SESSION['emailCounter'] > self::$emailLimit){
-            ListController::writeToFile("tooManyEmails", $email." - ".$subject);
-            return "failed";   
-        }
-        
-        $_SESSION['emailCounter']++;
           
         // Send  
         if(mail($email, $subject, $message, $headers, $options)){                                    

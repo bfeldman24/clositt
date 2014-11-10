@@ -6,6 +6,7 @@ var session = {
 	isLoggedIn: false,
 	loginCount: -1,
 	goToClosittOnLogin: false,
+	priceAlertFrequency: 0,
 	
 	init: function(){	   
 	   if (sessionInit.active){
@@ -13,6 +14,7 @@ var session = {
 	       session.email = sessionInit.email;
 	       session.name = sessionInit.name;   
 	       session.nickname = session.name.split(" ")[0];
+	       session.priceAlertFrequency = sessionInit.pricealerts || 1;
 	       session.isLoggedIn = true;	       	       
 	       session.userDataAvailableCallback();
     	   session.updateLoggedInDropdownMenu();
@@ -46,6 +48,7 @@ var session = {
      			     session.name = user.n;
      			     session.nickname = session.name.split(" ")[0];
      			     session.email = user.e;
+     			     session.priceAlertFrequency = user.f;
      			     session.isLoggedIn = true; 			     
      			     session.loggedInCallback(); 
 	               }      
@@ -102,20 +105,16 @@ var session = {
 	       if (session.goToClosittOnLogin){
                 location.href = window.CLOSITT_PAGE; 
                 return;
-           }else{
-                session.updateLoggedInDropdownMenu();                
+           }      	
+        }
+        
+        session.updateLoggedInDropdownMenu();                
                 
-                if(typeof loggedIn == 'function'){
-                    loggedIn();                
-                }
-                
-                Messenger.success("Thanks " + session.nickname + "! You are now logged in and ready to go!");
-		   }          	
-        }else if(typeof loggedIn == 'function'){
-            session.updateLoggedInDropdownMenu();
-			loggedIn();
-			Messenger.success("Thanks " + session.nickname + "! You are now logged in and ready to go!");
-		}  
+        if(typeof loggedIn == 'function'){
+            loggedIn();                
+        }
+        
+        Messenger.success("Thanks " + session.nickname + "! You are now logged in and ready to go!");  
 		
 		$("#loginSignupModal").modal('hide');
 	},
@@ -152,7 +151,7 @@ var session = {
 	    var icon;
 	    var iconTag;
 	    
-	    if (location.href.indexOf(".com/clositt") > 0){
+	    if (location.href.indexOf(".com"+window.HOME_ROOT+"clositt") > 0){
 	       pageUrl = "#";
 	       linkTitle = session.nickname + "'s Account";  
 	       icon = "glyphicon glyphicon-user";

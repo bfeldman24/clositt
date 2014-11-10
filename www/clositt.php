@@ -262,11 +262,13 @@ $(".joyride-start").click(function(e){
 
 pagePresenter.defaultHeaderHeight = 0;
 
-<?php if (isset($isUnsavedSesssion) && $isUnsavedSesssion === true){ ?>
 function loggedIn(){
-    location.href = location.href;   
+    <?php if (isset($isUnsavedSesssion) && $isUnsavedSesssion === true){ ?>
+        location.href = location.href;   
+    <?php } ?>
+    
+    closetPresenter.setPriceAlerts();
 }
-<?php } ?>
 
 </script>
 

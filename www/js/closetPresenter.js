@@ -5,6 +5,7 @@ var closetPresenter = {
 	carouselRight: null,
 	user: null,
 	wishListClosetId: 2,
+	priceAlertFrequency: null,
 	isBusy: false,
 	busyInterval: null,
 
@@ -28,11 +29,11 @@ var closetPresenter = {
 		$(document).on("click", ".saveProductBtn", closetPresenter.saveProductToCloset);
 		$(document).on("click", ".unsavedCloset", closetPresenter.saveEntireCloset);
 		
-		$(document).on("click", ".switchery", closetPresenter.togglePriceAlerts);
-		$(".switchery").tooltip();
+		$(document).on("click", ".mobile-toggle", closetPresenter.togglePriceAlerts);
+		$(".mobile-toggle").tooltip();
 		
 		$("#search-bar").on("keypress", closetPresenter.searchOnEnter);
-		$("#seach-bar-icon").on("click", closetPresenter.searchBarSubmit);     
+		$("#seach-bar-icon").on("click", closetPresenter.searchBarSubmit);   				
 		
 		footer.focusOnInputInModal('#addclositt');
 		footer.focusOnInputInModal('#editClosittModal');
@@ -45,7 +46,7 @@ var closetPresenter = {
 	
 	setUser: function(user){
 	   closetPresenter.user = user;
-	},
+	},	
 	
 	getClosets: function(){	   
 		if(closetPresenter.user != undefined || session.isLoggedIn){		      
@@ -153,7 +154,7 @@ var closetPresenter = {
 	   var closetName = $(e.currentTarget).text();
 	   var closetNumber = $(e.currentTarget).parents(".closetPanel").attr("number");
 	   var closetSelector = $(e.currentTarget).parents(".closetPanel").attr("id");
-	   var isClosetAlertOn = $(e.currentTarget).parents(".closetPanel").find(".switchery").hasClass("off");
+	   var isClosetAlertOn = $(e.currentTarget).parents(".closetPanel").find(".mobile-toggle").hasClass("off");
        var closetAlert = isClosetAlertOn ? 'Y' : 'N';
 
 	   $("#editClosetName").val(closetName);
@@ -358,8 +359,13 @@ var closetPresenter = {
         return false;
     },
     
-    togglePriceAlerts: function(e){        
-        var $btn = $(e.currentTarget);
+    togglePriceAlerts: function(e){   
+        if (!session.isLoggedIn){
+            Messenger.alert("You must be logged in to save Price Alerts!");
+            return;   
+        }
+             
+        var $btn = $(e.currentTarget);                
         
         var closetName = $(e.currentTarget).parents(".closetPanel").attr("original");
 	    var closetNumber = $(e.currentTarget).parents(".closetPanel").attr("number");
@@ -375,20 +381,47 @@ var closetPresenter = {
             closittData.alert = 'Y';            
             
             $btn.removeClass("off");            
-            $btn.attr("title","Daily Price Alerts On");
-            $btn.tooltip('destroy');
-            $btn.tooltip('show');
+            $btn.attr("title", closetPresenter.priceAlertFrequency + " Price Alerts On");
         }else{
             closittData.alert = 'N';            
             
             $btn.addClass("off");            
-            $btn.attr("title","Daily Price Alerts Off");
-            $btn.tooltip('destroy');
-            $btn.tooltip('show');
+            $btn.attr("title", closetPresenter.priceAlertFrequency + " Price Alerts Off");            
         }   
         
+        $btn.tooltip('destroy');
+        $btn.tooltip('show');        
         closetPresenter.updateClosetInfo(closittData);
-    }	
+    },
+    
+    setPriceAlerts: function(){
+        var priceAlerts = '' + session.priceAlertFrequency;
+        
+        switch(priceAlerts){
+            case '2':
+                closetPresenter.priceAlertFrequency = "Weekly";
+                break;
+            case '3':
+                closetPresenter.priceAlertFrequency = "Monthly";           
+                break;
+            default:
+                closetPresenter.priceAlertFrequency = "Daily";
+        }
+    },
+    
+    updatePriceAlertFrequency: function(){
+        closetPresenter.setPriceAlerts();
+        
+        $(".mobile-toggle").each(function(){
+            var off = $(this).hasClass("off");
+            var offText = off ? "Off" : "On";
+            var tooltip = closetPresenter.priceAlertFrequency + " Price Alerts " + offText;
+            $(this).attr("title", tooltip);             
+        });   
+        
+        $(".mobile-toggle").tooltip('destroy');
+        $(".mobile-toggle").tooltip();
+    }        	
 }
 
 
