@@ -8,6 +8,7 @@ require_once(dirname(__FILE__) . '/../Model/ClosetItemEntity.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ClosetDao.php');
 require_once(dirname(__FILE__) . '/Debugger.php');
 require_once(dirname(__FILE__) . '/ProductController.php');
+require_once(dirname(__FILE__) . '/StatsController.php');				
 require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
 
 class ClosetController extends Debugger {	
@@ -73,13 +74,15 @@ class ClosetController extends Debugger {
                     $closet->setClosetId($closetId); 
                     
                     $_SESSION['closets'][$closetId] = $closet->toArray();
+                    
+                    StatsController::addClosetAction("Created a Guest Closet", $closetId, $closet->getName());
                     return $closetId;   
                 }
             }
         }
                     
         $this->debug("ClosetController", "createNewCloset", "There was no closet supplied to create!");
-        return false;
+        return "failed";
 	}
 	
 	public function updateCloset($data){
@@ -97,6 +100,8 @@ class ClosetController extends Debugger {
                         $closetid = $closet->getClosetId();                                                                                                                       
                         
                         $_SESSION['closets'][$closetid] = $closet->toArray();
+                        
+                        StatsController::addClosetAction("Updated a Guest Closet", $closetid, $closet->getName());
                         return "success";   
                     }                                                            
                 }
@@ -104,7 +109,7 @@ class ClosetController extends Debugger {
         }
                 
         $this->debug("ClosetController", "updateCloset", "There was no closet supplied to update!");
-        return false;
+        return "failed";
 	}
 	
 	public function deleteCloset($data){
@@ -121,6 +126,8 @@ class ClosetController extends Debugger {
                 }else{                    
                     if (isset($_SESSION['closets']) && isset($_SESSION['closets'][$closetId])){
                         unset($_SESSION['closets'][$closetId]);
+                        
+                        StatsController::addClosetAction("Removed a Guest Closet", $closetId, $closet->getName());
                         return "success";   
                     }                                                            
                 }
@@ -128,7 +135,7 @@ class ClosetController extends Debugger {
         }
                 
         $this->debug("ClosetController", "deleteCloset", "There was no closet supplied to delete!");
-        return false;
+        return "failed";
 	}	
    
     private function file_get_contents_curl($url) {
@@ -192,7 +199,7 @@ class ClosetController extends Debugger {
                             isset($_SESSION['closetItems'][$closetName]) && 
                             isset($_SESSION['closetItems'][$closetName][$sku])){
                         
-                                unset($_SESSION['closetItems'][$closetName][$sku]);        
+                                unset($_SESSION['closetItems'][$closetName][$sku]);   
                         }
                         
                         return "success";
@@ -211,14 +218,16 @@ class ClosetController extends Debugger {
                         $_SESSION['closetItems'][$closetName] = array();
                     }                                                              
                     
-                    $_SESSION['closetItems'][$closetName][$itemId] = $closetItem->toArray();                                        
+                    $_SESSION['closetItems'][$closetName][$itemId] = $closetItem->toArray();
+                    
+                    StatsController::add("Added Item to a Guest Closet", null, $closetName, $itemId, $closetItem->getClosetId());
                     return "success";
                 }
             }
         }
                 
         $this->debug("ClosetController", "addItemToCloset", "There was no closet item supplied to add!");
-        return false;
+        return "failed";
 	}
 	
 	public function removeItemFromCloset($data){
@@ -240,6 +249,8 @@ class ClosetController extends Debugger {
                         isset($_SESSION['closetItems'][$closetName][$itemId])){                     
                             
                             unset($_SESSION['closetItems'][$closetName][$itemId]);
+                            StatsController::add("Removed Item from a Guest Closet", null, $closetName, $itemId, $closetItem->getClosetId());
+                            
                             return "success";                     
                     }
                     
@@ -249,7 +260,7 @@ class ClosetController extends Debugger {
         }
                 
         $this->debug("ClosetController", "removeItemFromCloset", "There was no closet item supplied to remove!");
-        return false;
+        return "failed";
 	}
 	
 	public function getAllClosets($json = true){
