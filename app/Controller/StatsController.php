@@ -15,8 +15,8 @@ class StatsController{
         return self::add($action, null, null, $sku);        
     }
     
-    public static function addClosetAction($action, $closetid = null){	
-        return self::add($action, null, null, null, $closetid);        
+    public static function addClosetAction($action, $closetid = null, $closetName = null){	
+        return self::add($action, null, $closetName, null, $closetid);        
     }
     	
 	public static function add($action, $detail = null, $info = null, $sku = null, $closetid = null){	
