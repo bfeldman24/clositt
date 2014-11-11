@@ -46,12 +46,12 @@ class PriceAlertsController extends Debugger {
 	       $sentToUsers = array();
 	       
 	       foreach ($results as $user => $closets) {	       	       	   
-	           if ($user == 2 || $user == 35){
+	           if ($user < 36){
 	               $htmlAlerts = $this->getAlertsInHtml($closets);
 	               $userData = $this->getUserInfo($user);
                    $alertTemplate = $this->getAlertTemplate($userData['n'], $htmlAlerts, $frequency);                    
                    
-                   $success = EmailController::sendHtmlEmail($userData['e'], 'eli@clositt.com', 'Clositt Price Alerts', $alertTemplate);          
+                   $success = EmailController::sendHtmlEmail($userData['e'], 'PriceAlerts@Clositt.com', 'Clositt Price Alerts', $alertTemplate);          
                    $sentToUsers[$userData['e']] = $success;
 	           }
 	       }  
@@ -159,35 +159,35 @@ class PriceAlertsController extends Debugger {
 		?>		
 		
 		
-		<div style="padding: 20px; border: 1px solid #C2C2C2; background: #FFFFFF; margin-bottom:20px;">
+		<div style="padding: 20px; border: 1px solid #C2C2C2; background: #FFFFFF; margin-bottom:20px; margin-left: auto; margin-right: auto; max-width: 650px;">
             <a href="<?php echo $productPageLink; ?>" style="text-decoration:none;">
                 <div style="float:left; width: 225px; max-height: 270px; height: 270px;">
                     <img style="width: auto; max-height: 270px;" src="<?php echo $image ?>" alt="Image is not displaying" />
                 </div>
                 <div style="float:left; padding:0 20px">
-                    <h2 style="color:#7E7E7E; font-weight:bold; font-size: 32px; margin: 10px 0; line-height: 38px; max-width: 350px;"><?php echo $name ?></h2>
-                    <h4 style="color:#7E7E7E; font-weight:normal; font-size: 20px;font-family: sans-serif; text-transform: uppercase; margin-bottom: 10px;"><?php echo $store ?></h4>                    
+                    <h2 style="color:#7E7E7E; font-weight:bold; font-size: 24px; margin: 10px 0; line-height: 28px; max-width: 350px;"><?php echo $name ?></h2>
+                    <h4 style="color:#7E7E7E; font-weight:normal; font-size: 18px;font-family: sans-serif; text-transform: uppercase; margin-bottom: 0; margin-top: 15px;"><?php echo $store ?></h4>                    
 
                     <br>
                     
                     <div style="display:inline;">
-                        <span style="font-weight:lighter;font-size:46px;color:#000000">Price: </span>
-                        <span style="font-weight:lighter;font-size:46px;color:#999966"><?php echo $newprice ?></span>
+                        <span style="font-weight:lighter;font-size:32px;color:#000000">Price: </span>
+                        <span style="font-weight:lighter;font-size:32px;color:#01A611"><?php echo $newprice ?></span>
                     </div>
                     <br>
                     <div style="display:inline;">
-                        <span style="font-weight:lighter;font-size:32px;color:#000000">Was: </span>
-                        <span style="font-weight:lighter;font-size:32px;color:#FF7D6E;text-decoration: line-through;"><?php echo $oldprice ?></span>
+                        <span style="font-weight:lighter;font-size:26px;color:#000000">Was: </span>
+                        <span style="font-weight:lighter;font-size:26px;color:#FF7D6E;text-decoration: line-through;"><?php echo $oldprice ?></span>
                     </div>
                     <div>                        
-                        <h4 style="color:#BEBEBE; font-weight: lighter;margin: 10px 0 5px;">Date: <?php echo $formattedDate; ?></h4>
+                        <h4 style="color:#BEBEBE; font-weight: lighter;margin: 20px 0 5px;">Date: <?php echo $formattedDate; ?></h4>
                     </div>
                     <div style="display:inline;color:#AEAEAE;font-size: 12px; ">
                         <span style="font-weight: lighter;">Sent from your <strong><?php echo $closetName ?></strong> clositt</span>
                     </div>
                 </div>
                 <div style="clear:both;"></div>
-                <img style="float: right;margin-top: -50px;" src="http://www.clositt.com/css/images/logo.png" alt="Image is not displaying"/>            
+                <img style="float: right; margin-top: -50px; width: 20%;" src="http://www.clositt.com/css/images/logo.png" alt="Image is not displaying"/>            
                 <div style="clear:both;"></div>
             </a>
         </div>
@@ -215,7 +215,7 @@ class PriceAlertsController extends Debugger {
             <title>Some stuff in your Clositt just got cheaper!</title>
         </head>
         <body style="background: #F5F5F5;font-family: sans-serif, 'Open Sans';padding:20px;">
-            <h1 style="color:#7E7E7E; font-weight:lighter; font-size: 32px;">Some stuff in your Clositt just got cheaper!</h1>
+            <h1 style="color:#7E7E7E; font-weight:lighter; font-size: 32px;text-align: center;">Some stuff in your Clositt just got cheaper!</h1>
             
             <div>                
                 <?php echo $html; ?>            
@@ -225,7 +225,7 @@ class PriceAlertsController extends Debugger {
                 
                 <br><br>
                 <div style="text-align: center;color:#AEAEAE;font-size: 12px; ">
-                    <span style="font-weight: lighter;">You are receiving this email because you have chosen to get <?php echo $alertFrequency; ?> email notifications when prices in your clositt go on sale. If you no longer wish to receive this email, go to your clositt and turn off price alerts.</span>
+                    <span style="font-weight: lighter;">You are receiving this email because you have chosen to get <?php echo $alertFrequency; ?> email notifications when prices in your clositt go on sale. If you no longer wish to receive this email, go to <a href="http://www.clositt.com/clositt" style="color:#AEAEAE; text-decoration:underline;">www.clositt.com/clositt</a> and turn off price alerts.</span>
                 </div>
             </div>
         

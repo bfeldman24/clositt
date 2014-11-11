@@ -80,7 +80,7 @@ class EmailController{
         $message = '<!DOCTYPE HTML><html><head></head><body style="font-family: \'Open Sans\',​sans-serif"><div><div style="width: 100%; margin: 0 0 10px 0; padding-left: 5px; border-top: 5px solid #66ccff; max-height: 70px;"><img src="http://clositt.com/css/images/logo.png" /></div><br /><br />'.$message.'</div></body></html>';
         
         
-        $sender = "Clositt <Eli@Clositt.com>";   
+        $sender = "Clositt <Social@Clositt.com>";   
         if (isset($_SESSION['email'])){
             $sender = $_SESSION['email'];
             
@@ -89,7 +89,7 @@ class EmailController{
             }
         }
         				
-        $headers = "From: Clositt <Eli@Clositt.com> \r\n" .
+        $headers = "From: Clositt <Social@Clositt.com> \r\n" .
         		    "Reply-To: " . $sender. " \r\n" .
         		    "Bcc: eliyahurosen@gmail.com,bfeldman24@gmail.com" . "\r\n" .
         		    "MIME-Version: 1.0\r\n" .
