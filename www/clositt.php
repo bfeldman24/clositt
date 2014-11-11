@@ -14,6 +14,20 @@ if(isset($_GET['user'])){
 $closets = $closetController->getAllClosetItems($owner);
 $isUnsavedSesssion = false;
 
+$hasItemsInCloset = false;
+foreach ($closets as $closetName => $items) {       
+    foreach ($items as $item) {
+        if (isset($item['item'])){
+               $hasItemsInCloset = true;
+               break;
+        }
+    }
+    
+    if ($hasItemsInCloset){
+        break;   
+    }
+}
+
 if(isset($_GET['user'])){
     require_once(dirname(__FILE__) . '/../app/Controller/UserController.php'); 
     $userController = new UserController();
@@ -90,7 +104,11 @@ if (!isset($nickname) || $nickname == ""){
                 -->                
                 
                 <?php if ($isUnsavedSesssion){ ?>
-                <p class="log bg-warning">These clositts will be lost once you close your browser. Please <a class="showSignupTab" data-toggle="modal" data-target="#loginSignupModal">sign up</a> or <a class="showLoginTab" data-toggle="modal" data-target="#loginSignupModal">login</a> to save them.</p>
+                    <?php if ($hasItemsInCloset){ ?>
+                       <p class="log bg-warning">These clositts will be lost once you close your browser. Please <a class="showSignupTab" data-toggle="modal" data-target="#loginSignupModal">sign up</a> or <a class="showLoginTab" data-toggle="modal" data-target="#loginSignupModal">login</a> to save them.</p>                
+                    <?php }else{ ?>
+                        <p class="log alert-info">You have nothing in your clositt! Go back to find products that you love and organize them in your clositt below.</p>
+                    <?php } ?>
                 <br/><br/>
                 <?php } ?>
                 

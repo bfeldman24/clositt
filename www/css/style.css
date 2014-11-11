@@ -680,7 +680,7 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 }
 
 /* OVERRIDE BOOTSTRAP */
-.log.bg-warning { padding: 10px;}
+.log.bg-warning, .log.alert-info { padding: 10px;}
 
 /* IPHONE STYLE SWITCH  */
 .mobile-toggle {
