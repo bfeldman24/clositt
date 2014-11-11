@@ -201,9 +201,17 @@ var closetPresenter = {
 	    if (closetData != null && closetData.id != null && closetData.title != null){
     	    $.post( window.HOME_ROOT + "cl/update", closetData, function(result){
     	          if (result != "success") {
-    			    	Messenger.error(closetData.title + ' could not be saved.');
+    	               if (closetData.alert != null){
+    	                   Messenger.error('Price alert could not be saved!');
+    	               }else{
+    			    	    Messenger.error(closetData.title + ' could not be saved!');
+    	               }
      			  } else {
-    					Messenger.success("Clositt " + closetData.title + " was saved!");					
+     			       if (closetData.alert != null){
+    				    	Messenger.success("Price Alert Saved!");					
+     			       }else{
+         			        Messenger.success("Clositt " + closetData.title + " was saved!");					
+     			       }
     			  }	
     		});
 	    }
