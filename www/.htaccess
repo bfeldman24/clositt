@@ -5,8 +5,9 @@ Options +SymLinksIfOwnerMatch
 # disallows a directory listing on directories that do not have an index file
 Options -Indexes 
 
-
 RewriteEngine On
+RewriteRule ^clositt$ myclositt.php
+
 RewriteRule ^!\+/([0-9]*)/(.*)$ clositt.php?user=$1&closittname=$2
 RewriteRule ^!\+/(.*)$ clositt.php?user=$1
 RewriteRule ^!/(.*)$ product-page.php?s=$1

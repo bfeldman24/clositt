@@ -151,7 +151,7 @@ var session = {
 	    var icon;
 	    var iconTag;
 	    
-	    if (location.href.indexOf(".com"+window.HOME_ROOT+"clositt") > 0){
+	    if (location.href.indexOf(".com"+window.HOME_ROOT+"myclositt") > 0){
 	       pageUrl = "#";
 	       linkTitle = session.nickname + "'s Account";  
 	       icon = "glyphicon glyphicon-user";
