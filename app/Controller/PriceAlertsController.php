@@ -187,7 +187,7 @@ class PriceAlertsController extends Debugger {
                     </div>
                 </div>
                 <div style="clear:both;"></div>
-                <img style="float: right; margin-top: -50px; width: 20%;" src="http://www.clositt.com/css/images/logo.png" alt="Image is not displaying"/>            
+                <img style="float: right; margin-top: -50px; width: 20%;" src="<?php echo LOGO; ?>" alt="Image is not displaying"/>            
                 <div style="clear:both;"></div>
             </a>
         </div>
@@ -221,11 +221,11 @@ class PriceAlertsController extends Debugger {
                 <?php echo $html; ?>            
                 
                 <br><br>
-                <a href="http://www.clositt.com/myclositt" style="background-color: #66ccff; color: #fff; -moz-user-select: none; background-image: none;border: 1px solid transparent;border-radius: 4px;cursor: pointer;display: block;font-size: 24px;font-weight: 700;line-height: 1.42857;margin-bottom: 0;padding: 6px 12px;text-align: center;vertical-align: middle;white-space: nowrap;margin-left: auto;margin-right: auto;width: 200px;text-decoration:none;">See it on Clositt</a>        
+                <a href="<?php echo CLOSITT_PAGE; ?>" style="background-color: #66ccff; color: #fff; -moz-user-select: none; background-image: none;border: 1px solid transparent;border-radius: 4px;cursor: pointer;display: block;font-size: 24px;font-weight: 700;line-height: 1.42857;margin-bottom: 0;padding: 6px 12px;text-align: center;vertical-align: middle;white-space: nowrap;margin-left: auto;margin-right: auto;width: 200px;text-decoration:none;">See it on Clositt</a>        
                 
                 <br><br>
                 <div style="text-align: center;color:#AEAEAE;font-size: 12px; ">
-                    <span style="font-weight: lighter;">You are receiving this email because you have chosen to get <?php echo $alertFrequency; ?> email notifications when prices in your clositt go on sale. If you no longer wish to receive this email, go to <a href="http://www.clositt.com/myclositt" style="color:#AEAEAE; text-decoration:underline;">www.clositt.com/myclositt</a> and turn off price alerts.</span>
+                    <span style="font-weight: lighter;">You are receiving this email because you have chosen to get <?php echo $alertFrequency; ?> email notifications when prices in your clositt go on sale. If you no longer wish to receive this email, go to <a href="<?php echo CLOSITT_PAGE; ?>" style="color:#AEAEAE; text-decoration:underline;">www.clositt.com/myclositt</a> and turn off price alerts.</span>
                 </div>
             </div>
         
