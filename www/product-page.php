@@ -3,6 +3,8 @@
 <html>
 <head>    
     <?php     
+        $product = null;
+    
         if (isset($_GET['s'])){             
             require_once(dirname(__FILE__) . '/../app/Controller/ProductController.php');
             $productController = new ProductController();
@@ -29,6 +31,12 @@
                  
         }else{
             echo '<title>Find IT on Clositt.com</title>';   
+        }
+        
+        if (isset($_GET['pricealerts'])){
+            require_once(dirname(__FILE__) . '/../app/Controller/StatsController.php');
+            $sku = $product != null ? $product->s : "unknown";
+            StatsController::addItemAction("Clicked Price Alerts Email", $sku);
         }
         
         include(dirname(__FILE__) . '/static/meta.php');

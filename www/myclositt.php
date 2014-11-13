@@ -71,6 +71,11 @@ if (!isset($nickname) || $nickname == ""){
     $nickname .= "'s";   
 }   
 
+if (isset($_GET['pricealerts'])){
+    require_once(dirname(__FILE__) . '/../app/Controller/StatsController.php');
+    StatsController::add("Clicked Price Alerts Email", "myclositt");
+}
+
 ?>
 <!DOCTYPE HTML>
 <html>
