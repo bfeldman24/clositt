@@ -114,27 +114,18 @@ class ProductAdminDao extends AbstractDao {
         $sql .= " SET SQL_SAFE_UPDATES='ON'; ";        
                   
         return $this->update($sql, array(), array(), "0123984710");
-    }
-    
-    public function clearTempProducts($products){                
-        $sql = " DELETE FROM " . TEMP_PRODUCTS . 
-                " WHERE ". PRODUCT_STORE . " <> ? OR " . 
-                      PRODUCT_CUSTOMER . " <> ? OR " . 
-                      PRODUCT_CATEGORY . " <> ?";    
-        
-        $paramTypes = array('text','text','text');
-        list($firstProduct) = array_values($products);
-        $params = array($firstProduct['company'], $firstProduct['customer'], $firstProduct['category']);
-        return $this->update($sql, $params, $paramTypes, "98347223");
-    }  			
+    }         			
 	
 	public function addTempProducts($products){
 	    if(!isset($products) || !is_array($products)){
 			$this->logWarning("12876319","Nothing to add!");
 			return false; 
 		}
-	 
-	    $sql = "INSERT IGNORE INTO " . TEMP_PRODUCTS . 
+        
+        $sql = "CREATE TEMPORARY TABLE " . TEMP_PRODUCTS . " LIKE " . PRODUCTS;	 
+        $this->update($sql, array(), array(), "98326493");
+        	   
+	    $sql = "INSERT INTO " . TEMP_PRODUCTS . 
 	           " (" . PRODUCT_SKU . "," .
                       PRODUCT_STORE . "," . 
                       PRODUCT_CUSTOMER . "," . 
@@ -161,30 +152,31 @@ class ProductAdminDao extends AbstractDao {
         
         $affectedRows = 0;
         foreach ($products as $key => $value) {
-            
-            try {                                         
-                $params = array($value['sku'],
-                                $value['company'],
-                                $value['customer'],
-                                $value['category'],
-                                $value['name'],
-                                $value['link'],
-                                $value['image'],
-                                $value['price'],
-                                $value['shortlink']);
-                
-                $results = $stmt->execute($params);                                                                
-                                
-                if (is_numeric($results)){
-                    if ($results === 0){
-                        $results = 1;   
+            if (trim($value['sku']) != ""){
+                try {                                         
+                    $params = array($value['sku'],
+                                    $value['company'],
+                                    $value['customer'],
+                                    $value['category'],
+                                    $value['name'],
+                                    $value['link'],
+                                    $value['image'],
+                                    $value['price'],
+                                    $value['shortlink']);
+                    
+                    $results = $stmt->execute($params);                                                                
+                                    
+                    if (is_numeric($results)){
+                        if ($results === 0){
+                            $results = 1;   
+                        }
+                        
+                        $affectedRows += $results;
                     }
                     
-                    $affectedRows += $results;
+                } catch (Exception $e) {
+                    echo 'Caught exception: ',  $e->getMessage(), "\n\n";
                 }
-                
-            } catch (Exception $e) {
-                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
             }
         }        
         
@@ -268,7 +260,7 @@ class ProductAdminDao extends AbstractDao {
 	   $sql = "UPDATE " . PRODUCTS . " p " .
               " LEFT JOIN " . TEMP_PRODUCTS . " tp ON tp." . PRODUCT_SKU . " = p." . PRODUCT_SKU .
               " SET p." .PRODUCT_STATUS . " = 3 " .
-              " WHERE ISNULL(tp.".PRODUCT_SKU.") AND " .
+              " WHERE ISNULL(tp.".PRODUCT_SKU.") AND p." . PRODUCT_DATE_UPDATED . " < DATE(NOW()) AND " .
               " p.".PRODUCT_STORE." = ? AND p.".PRODUCT_CUSTOMER." = ? AND p.".PRODUCT_CATEGORY." = ? ";        
         
         $paramTypes = array('text','text','text');
