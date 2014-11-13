@@ -46,14 +46,12 @@ class PriceAlertsController extends Debugger {
 	       $sentToUsers = array();
 	       
 	       foreach ($results as $user => $closets) {	       	       	   
-	           if ($user < 36){
 	               $htmlAlerts = $this->getAlertsInHtml($closets);
 	               $userData = $this->getUserInfo($user);
                    $alertTemplate = $this->getAlertTemplate($userData['n'], $htmlAlerts, $frequency);                    
                    
                    $success = EmailController::sendHtmlEmail($userData['e'], 'PriceAlerts@Clositt.com', 'Clositt Price Alerts', $alertTemplate);          
                    $sentToUsers[$userData['e']] = $success;
-	           }
 	       }  
 	       
 	       // Log users sent
@@ -160,7 +158,7 @@ class PriceAlertsController extends Debugger {
 		
 		
 		<div style="padding: 20px; border: 1px solid #C2C2C2; background: #FFFFFF; margin-bottom:20px; margin-left: auto; margin-right: auto; max-width: 650px;">
-            <a href="<?php echo $productPageLink; ?>" style="text-decoration:none;">
+            <a href="<?php echo $productPageLink; ?>?pricealerts" style="text-decoration:none;">
                 <div style="float:left; width: 225px; max-height: 270px; height: 270px;">
                     <img style="width: auto; max-height: 270px;" src="<?php echo $image ?>" alt="Image is not displaying" />
                 </div>
@@ -186,8 +184,8 @@ class PriceAlertsController extends Debugger {
                         <span style="font-weight: lighter;">Sent from your <strong><?php echo $closetName ?></strong> clositt</span>
                     </div>
                 </div>
-                <div style="clear:both;"></div>
-                <img style="float: right; margin-top: -50px; width: 20%;" src="<?php echo LOGO; ?>" alt="Image is not displaying"/>            
+                 <div style="clear:both;"></div>
+                <img style="float: right; width: 20%; margin-top: -15px" src="http://www.clositt.com/css/images/logo.png" alt="Clositt.com"/>            
                 <div style="clear:both;"></div>
             </a>
         </div>
@@ -199,10 +197,10 @@ class PriceAlertsController extends Debugger {
     
     
     private static function getAlertTemplate($name, $html, $alertFrequency){
+        $hey = '';
         if (isset($name)){
-            $nickname = explode(' ', $name)[0] . "'s";   
-        }else{
-            $nickname = "My";   
+            $nickname = explode(' ', $name)[0];   
+            $hey = "Hey " . $nickname . "! ";
         }
            
         ob_start();
@@ -212,20 +210,20 @@ class PriceAlertsController extends Debugger {
         <!DOCTYPE HTML>
         <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
         <head>
-            <title>Some stuff in your Clositt just got cheaper!</title>
+            <title><?php echo $hey; ?>Some stuff in your Clositt just got cheaper!</title>
         </head>
         <body style="background: #F5F5F5;font-family: sans-serif, 'Open Sans';padding:20px;">
-            <h1 style="color:#7E7E7E; font-weight:lighter; font-size: 32px;text-align: center;">Some stuff in your Clositt just got cheaper!</h1>
+            <h1 style="color:#7E7E7E; font-weight:lighter; font-size: 32px;text-align: center;"><?php echo $hey; ?>Some stuff in your Clositt just got cheaper!</h1>
             
             <div>                
                 <?php echo $html; ?>            
                 
                 <br><br>
-                <a href="<?php echo CLOSITT_PAGE; ?>" style="background-color: #66ccff; color: #fff; -moz-user-select: none; background-image: none;border: 1px solid transparent;border-radius: 4px;cursor: pointer;display: block;font-size: 24px;font-weight: 700;line-height: 1.42857;margin-bottom: 0;padding: 6px 12px;text-align: center;vertical-align: middle;white-space: nowrap;margin-left: auto;margin-right: auto;width: 200px;text-decoration:none;">See it on Clositt</a>        
+                <a href="http://www.clositt.com/myclositt?pricealerts" style="background-color: #66ccff; color: #fff; -moz-user-select: none; background-image: none;border: 1px solid transparent;border-radius: 4px;cursor: pointer;display: block;font-size: 24px;font-weight: 700;line-height: 1.42857;margin-bottom: 0;padding: 6px 12px;text-align: center;vertical-align: middle;white-space: nowrap;margin-left: auto;margin-right: auto;width: 200px;text-decoration:none;">See it on Clositt</a>        
                 
                 <br><br>
                 <div style="text-align: center;color:#AEAEAE;font-size: 12px; ">
-                    <span style="font-weight: lighter;">You are receiving this email because you have chosen to get <?php echo $alertFrequency; ?> email notifications when prices in your clositt go on sale. If you no longer wish to receive this email, go to <a href="<?php echo CLOSITT_PAGE; ?>" style="color:#AEAEAE; text-decoration:underline;">www.clositt.com/myclositt</a> and turn off price alerts.</span>
+                    <span style="font-weight: lighter;">You are receiving this email because you have chosen to get <?php echo $alertFrequency; ?> email notifications when prices in your clositt go on sale. If you no longer wish to receive this email, go to <a href="http://www.clositt.com/myclositt?pricealerts" style="color:#AEAEAE; text-decoration:underline;">www.clositt.com/myclositt</a> and turn off price alerts.</span>
                 </div>
             </div>
         

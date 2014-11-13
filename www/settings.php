@@ -87,7 +87,7 @@ input[type='checkbox']{
                                   <div class="form-group">
                                     <div class="col-xs-12">
                                         <p class="log" style="margin-bottom:10px;">Price Alerts Email Frequency</p>
-                                        <small class="log">*You will only be emailed when prices drop</small>
+                                        <small class="log">*You will only be emailed when prices in your clositt drop</small>
                                     </div>
                                     <div class="col-xs-12 text-center">
                                         <div class="btn-group priceAlertFrequency">
