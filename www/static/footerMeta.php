@@ -55,4 +55,8 @@ $(document).ready(function() {
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
     </script>
-<?php } ?>
+<?php } 
+
+global $mdb2;
+$mdb2->disconnect();
+?>
