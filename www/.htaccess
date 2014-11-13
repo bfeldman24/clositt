@@ -87,3 +87,4 @@ ErrorDocument 502 /whoops.php
 ErrorDocument 503 /whoops.php
 ErrorDocument 504 /whoops.php
 ErrorDocument 505 /whoops.php
+AddHandler application/x-httpd-php5s .php .html
