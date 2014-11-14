@@ -7,6 +7,7 @@ Options -Indexes
 
 RewriteEngine On
 RewriteRule ^clositt$ myclositt.php
+RewriteRule ^track/([a-z]*)/([0-9]*)$ Router.php?classCode=s&method=trackemail&message=$1&user=$2
 
 RewriteRule ^!\+/([0-9]*)/(.*)$ clositt.php?user=$1&closittname=$2
 RewriteRule ^!\+/(.*)$ clositt.php?user=$1
