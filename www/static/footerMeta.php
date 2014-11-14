@@ -57,6 +57,5 @@ $(document).ready(function() {
     </script>
 <?php } 
 
-global $mdb2;
 $mdb2->disconnect();
 ?>
