@@ -118,15 +118,7 @@ class AbstractDao{
 	
 	public function logDebug($errorNum,  $sql = "", $msg = ""){
 		$this->log("DEBUG",$errorNum, $sql, $msg);	
-	}
-	
-	 /**
-	 * Disconnects the database connection
-     *
-     */		
-	private function disconnect(){
-		$this->db->disconnect();	
-	}
+	}	
 	
 	 /**
 	 * Close the sql error file
@@ -150,7 +142,7 @@ class AbstractDao{
 	    }
 	   
 		$error = "\n" . date("m/d/y h:i:s") . " - " . $errorLevel . " - (". $errorNum . $user . ") - " . $sql . ": " . $msg;
-		fwrite($this->file,$error);
+		fwrite($this->file, $error);
 	}			
 	
 	private function isSetAndNotNull($val){
