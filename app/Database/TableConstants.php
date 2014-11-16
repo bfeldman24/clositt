@@ -99,6 +99,7 @@ define("CLOSET_ID","closetid");
 define("CLOSET_USER_ID","userid");
 define("CLOSET_NAME","closetname");
 define("CLOSET_PERMISSION","permission");
+define("CLOSET_PRICE_ALERTS","pricealerts");
 define("CLOSET_LAST_UPDATED","lastupdated");
 define("CLOSET_CREATED_ON","createdon");
 
@@ -115,6 +116,7 @@ define("USER_ID","userid");
 define("USER_EMAIL","email");
 define("USER_NAME","name");
 define("USER_PASS","password");
+define("USER_ALERT_FREQUENCY","pricealertsfrequency");
 define("USER_IP","ip");
 define("USER_COOKIE","cookie");
 define("USER_STATUS","status");

@@ -96,6 +96,27 @@ class ProductController extends Debugger{
 	    return $this->getProducts($postData, $getData, $limit, $random, true);
 	}
 	
+	public function getMultipleProducts($skus){
+	    $productResults = array();	
+		
+		if(isset($skus) && is_array($skus) && count($skus) > 0){	
+			
+			$results = $this->productDao->getMultipleProducts($skus);						
+			
+			if(is_object($results)){
+				while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){					    								    
+            		$productEntity = new ProductEntity();	
+					ProductEntity::setProductFromDB($productEntity, $row);
+					$sku = $productEntity->getId();
+					$productResults[$sku] = $productEntity;
+				}
+			}
+		}
+		
+		return $productResults;
+	}
+	
+	
 	public function getProducts($postData, $getData, $limit, $random = false, $useTemplate = false){
 	    $searchResults = array();	    
 	    $searchResults['products'] = $useTemplate ? '' : array();
@@ -143,7 +164,7 @@ class ProductController extends Debugger{
 			if (isset($_SESSION['skipFirstBrowse'])){
     			// Log Stats
     			$pageStats = "p:".$page.", l:".$limit;
-        		StatsController::add('Browse', $pageStats, $productCrit->toString());			
+        		StatsController::add('Browsed', $pageStats, $productCrit->toString());			
 			}else{
 			     $_SESSION['skipFirstBrowse'] = true;
 			}
@@ -273,7 +294,7 @@ class ProductController extends Debugger{
         
         // Log Stats
         $pageStats = " p:" . $pageNumber . ",l:" . $numResultsPage;
-		StatsController::add('Search', $criteria->getSearchString(), $criteria->toString() . $pageStats);
+		StatsController::add('Searched', $criteria->getSearchString(), $criteria->toString() . $pageStats);
 
         //check if elastic is healthy. If not, do old style search on DB
         $elasticHealthy = false;

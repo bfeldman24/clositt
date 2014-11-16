@@ -5,7 +5,12 @@ class ProductView {
     public static function getProductGridTemplate($product, $lazyLoadImages = true, $columnSizeOverride = null){        
 	    if (!is_object($product) && !is_array($product)){      	
 	       return null;
-	    }	    	    				
+	    }	    	   
+	    
+	    global $isUnsaved;
+	    if(!isset($isUnsaved)){
+	       $isUnsaved = false;
+	    }
 		
 		if (method_exists($product,'getId')){
 		    
@@ -82,7 +87,9 @@ class ProductView {
                     
                     <div class="cart_option">
                         <?php if ($isClosetPage && !isset($_GET['user'])){ ?>
-                            <a class="removeProductBtn"><i class="icon-svg4 remove-prod"></i></a>
+                            <?php if(!$isUnsaved){ ?>
+                                <a class="removeProductBtn"><i class="icon-svg4 remove-prod"></i></a>                        
+                            <?php } ?>
                         <?php }else{ ?>
                             <div class="addToClosittDropdown"> 
                                 <a class="dropdown-toggle" data-toggle="dropdown"><i class="icon-svg20"></i></a>
@@ -97,21 +104,25 @@ class ProductView {
                             </div>
                         <?php } ?>
     
-                        <div class="commentDropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="icomoon-bubble-dots-4 message-icon"></i>
-                            </a>
-                            
-                            <div class="dropdown-menu comments" role="menu">
-                                <textarea class="commentTextArea" type="text" placeholder="#LoveIt..." ></textarea>                                
-                                <div class="addCommentBtn"><button class="btn btn-clositt-theme btn-xs">COMMENT</button></div>
-                                <div class="clear"></div>
-                                                                
-                                <ul class="review-comments"></ul>                                
+                        <?php if($isUnsaved){ ?>
+                            <a class="saveProductBtn text-center">SAVE</a>                        
+                        <?php }else{ ?>
+                            <div class="commentDropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="icomoon-bubble-dots-4 message-icon"></i>
+                                </a>
+                                
+                                <div class="dropdown-menu comments" role="menu">
+                                    <textarea class="commentTextArea" type="text" placeholder="#LoveIt..." ></textarea>                                
+                                    <div class="addCommentBtn"><button class="btn btn-clositt-theme btn-xs">COMMENT</button></div>
+                                    <div class="clear"></div>
+                                                                    
+                                    <ul class="review-comments"></ul>                                
+                                </div>
                             </div>
-                        </div>
-                         
-                        <a class="more-opt"><i class="icomoon-share-2 dots-icon"></i></a>
+                             
+                            <a class="more-opt"><i class="icomoon-share-2 dots-icon"></i></a>
+                        <?php } ?>
                     </div>                    
                 </div>
                 <div class="hover_more">

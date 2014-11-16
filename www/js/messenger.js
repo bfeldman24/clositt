@@ -4,6 +4,7 @@ var Messenger = {
 	timeout: 4000,
 	defaultTimeout: 4000,
 	debug: false,
+	isSilent: false,
 	
 	messageBoxTemplate: $('<ul class="messenger messenger-fixed messenger-theme-block"></ul>'),
 				
@@ -34,28 +35,30 @@ var Messenger = {
 		
 		timeout = timeout || Messenger.timeout; 
 		
-		var $alertMessage = Messenger.alertTemplate.clone();
-		
-		$alertMessage.children("div").first().addClass(status);
-		$alertMessage.find(".messenger-message-inner").first().text(msg);		
-		
-		$("#" + Messenger.id).append($alertMessage);
-		$("#" + Messenger.id).css("display","block");
+		if (!Messenger.isSilent){
+    		var $alertMessage = Messenger.alertTemplate.clone();
+    		
+    		$alertMessage.children("div").first().addClass(status);
+    		$alertMessage.find(".messenger-message-inner").first().text(msg);		
+    		
+    		$("#" + Messenger.id).append($alertMessage);
+    		$("#" + Messenger.id).css("display","block");    		    		
+    		
+    		setTimeout(function(){
+    			$alertMessage.remove();
+    			
+    			if($(".messenger-message-slot").size() <= 0){
+    				$("#" + Messenger.id).css("display","none");			
+    			}
+    			
+    		}, timeout );
+		}
 		
 		if (Messenger.debug){
 		      var d = new Date();
 		      var logTime = (d.getMonth() + 1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + " - ";
 		      console.log(logTime + msg);
 		}
-		
-		setTimeout(function(){
-			$alertMessage.remove();
-			
-			if($(".messenger-message-slot").size() <= 0){
-				$("#" + Messenger.id).css("display","none");			
-			}
-			
-		}, timeout );
 		
 		return true;
 	},

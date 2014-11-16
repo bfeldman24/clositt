@@ -14,7 +14,7 @@ class EmailController{
         $emailSubject = 'Welcome To Clositt!';    
         $emailMessage = "Welcome to Clositt! \r\n \r\n" .                                        
                         "We're happy that you're giving Clositt a try. \r\n \r\n" . 
-                        "We are dedicated to making shopping online fun and easy. And we're constantly working on getting better. We are still in beta, so if you have any question or suggestions, please let us know. You can email the founder directly here: Eli@Clositt.com \r\n \r\n" .
+                        "We are dedicated to making shopping online fun and easy. And we're constantly working on getting better. We are still in beta, so if you have any questions or suggestions, please let us know. You can email the founder directly here: Eli@Clositt.com \r\n \r\n" .
                         "Happy shopping, and we look forward to hearing from you. \r\n \r\n" .
                         "-Clositt Team";
         				
@@ -80,7 +80,7 @@ class EmailController{
         $message = '<!DOCTYPE HTML><html><head></head><body style="font-family: \'Open Sans\',​sans-serif"><div><div style="width: 100%; margin: 0 0 10px 0; padding-left: 5px; border-top: 5px solid #66ccff; max-height: 70px;"><img src="http://clositt.com/css/images/logo.png" /></div><br /><br />'.$message.'</div></body></html>';
         
         
-        $sender = "Clositt <Eli@Clositt.com>";   
+        $sender = "Clositt <Social@Clositt.com>";   
         if (isset($_SESSION['email'])){
             $sender = $_SESSION['email'];
             
@@ -89,7 +89,7 @@ class EmailController{
             }
         }
         				
-        $headers = "From: Clositt <Eli@Clositt.com> \r\n" .
+        $headers = "From: Clositt <Social@Clositt.com> \r\n" .
         		    "Reply-To: " . $sender. " \r\n" .
         		    "Bcc: eliyahurosen@gmail.com,bfeldman24@gmail.com" . "\r\n" .
         		    "MIME-Version: 1.0\r\n" .
@@ -159,24 +159,26 @@ class EmailController{
     
     
     private static function sendEmail($email, $subject, $message, $headers, $options = null){
-        // Restrict duplicate emails
-        if (isset($_SESSION['lastSendEmailTime']) && (time() - $_SESSION['lastSendEmailTime'] < self::$timeDelayInSeconds)){
-            ListController::writeToFile("preventedDuplicateEmails", $email." - ".$subject);
-            return "failed";
+        if (isset($_SESSION) && isset($_SERVER['REMOTE_ADDR'])){
+            // Restrict duplicate emails
+            if (isset($_SESSION['lastSendEmailTime']) && (time() - $_SESSION['lastSendEmailTime'] < self::$timeDelayInSeconds)){
+                ListController::writeToFile("preventedDuplicateEmails", $email." - ".$subject);
+                return "failed";
+            }
+            $_SESSION['lastSendEmailTime'] = time(); 
+            
+            // Restrict too many emails
+            if (!isset($_SESSION['emailCounter'])){
+                $_SESSION['emailCounter'] = 0;
+            }
+            
+            if ($_SESSION['emailCounter'] > self::$emailLimit){
+                ListController::writeToFile("tooManyEmails", $email." - ".$subject);
+                return "failed";   
+            }
+            
+            $_SESSION['emailCounter']++;
         }
-        $_SESSION['lastSendEmailTime'] = time(); 
-        
-        // Restrict too many emails
-        if (!isset($_SESSION['emailCounter'])){
-            $_SESSION['emailCounter'] = 0;
-        }
-        
-        if ($_SESSION['emailCounter'] > self::$emailLimit){
-            ListController::writeToFile("tooManyEmails", $email." - ".$subject);
-            return "failed";   
-        }
-        
-        $_SESSION['emailCounter']++;
           
         // Send  
         if(mail($email, $subject, $message, $headers, $options)){                                    

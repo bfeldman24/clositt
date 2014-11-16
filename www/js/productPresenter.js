@@ -105,11 +105,17 @@ var productPresenter = {
     },
     
     handleImageNotFound:  function(img) {
-        var sku = $(img).parents(".outfit").attr("pid");
-        $(img).removeAttr("data-src");
-        $(img).removeAttr("onerror");
-        $(img).attr( "src", window.HOME_ROOT + "i/" + sku);  
-        $(img).parents(".mainwrap").first().find(".detail h4").tooltip({delay: { "show": 1500, "hide": 0 }});                     
+        if (searchController.isSearchActive){
+            var sku = $(img).parents(".outfit").attr("pid");
+            $(img).removeAttr("data-src");
+            $(img).removeAttr("onerror");
+            $(img).attr( "src", window.HOME_ROOT + "i/" + sku);  
+            $(img).parents(".mainwrap").first().find(".detail h4").tooltip({delay: { "show": 1500, "hide": 0 }});
+    
+        }else{
+            $(img).parents(".outfit").remove();    
+        }
+        
         return true;
     }	   			
 };

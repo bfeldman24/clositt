@@ -4,8 +4,10 @@ require_once(dirname(__FILE__) . '/AbstractDao.php');
 class ClosetDao extends AbstractDao {
 		
 	public function createNewCloset($user, $closet){
-        $sql = "INSERT INTO ".CLOSETS." (".CLOSET_USER_ID.", ".CLOSET_NAME.", ".CLOSET_PERMISSION.", ".CLOSET_LAST_UPDATED.", ".CLOSET_CREATED_ON.") " .
-                " VALUES (?,?,1,NOW(),NOW())";	   
+        $sql = "INSERT INTO ".CLOSETS." (".CLOSET_USER_ID.", ".CLOSET_NAME.", ".CLOSET_PERMISSION.", ".
+                    CLOSET_PRICE_ALERTS.",".CLOSET_LAST_UPDATED.", ".CLOSET_CREATED_ON.") " .
+                " VALUES (?,?,1,'Y',NOW(),NOW()) " .
+                "ON DUPLICATE KEY UPDATE ".CLOSET_PERMISSION."=1";	   
 		
 		$name = $closet->getName();
 		$paramTypes = array('integer', 'text');
@@ -27,18 +29,30 @@ class ClosetDao extends AbstractDao {
         return -1;
 	}
 	
+	public function getClosetId($user, $closet){
+        $sql = "SELECT ".CLOSET_ID." FROM ".CLOSETS.
+               " WHERE ".CLOSET_USER_ID." = ? AND ".CLOSET_NAME." = ? ";
+		
+		$name = $closet->getName();
+		$paramTypes = array('integer', 'text');
+        $params = array($user, $name);
+        
+        return $this->getResults($sql, $params, $paramTypes, "8768390978");        
+	}
+	
 	
 	public function updateCloset($user, $closet){
 	    $sql = "UPDATE ".CLOSETS.
-	           " SET ".CLOSET_NAME." = ?, ".CLOSET_PERMISSION." = ?, ".CLOSET_LAST_UPDATED." = NOW() " .  
+	           " SET ".CLOSET_NAME." = ?, ".CLOSET_PERMISSION." = ?, ".CLOSET_PRICE_ALERTS." = ?, ".CLOSET_LAST_UPDATED." = NOW() " .  
                 " WHERE ".CLOSET_ID." = ? AND ".CLOSET_USER_ID." = ? AND ".CLOSET_PERMISSION." < 3";	   
 		
 		$closetId = $closet->getClosetId();
 		$name = $closet->getName();
 		$permission = $closet->getPermission();
+		$priceAlerts = $closet->getPriceAlerts();
 		
-		$paramTypes = array('text', 'integer', 'integer', 'integer');
-        $params = array($name, $permission, $closetId, $user);
+		$paramTypes = array('text', 'integer', 'text', 'integer', 'integer');
+        $params = array($name, $permission, $priceAlerts, $closetId, $user);
         
         return $this->update($sql, $params, $paramTypes, "29864921");
 	}
@@ -46,19 +60,33 @@ class ClosetDao extends AbstractDao {
 	
 	public function deleteCloset($user, $closetId){
 	   $sql = "UPDATE ".CLOSETS.
-	           " SET ".CLOSET_PERMISSION." = 3 , ".CLOSET_LAST_UPDATED." = NOW() " . 
+	           " SET ".CLOSET_PERMISSION." = 3, ".CLOSET_PRICE_ALERTS." = 'Y', ".CLOSET_LAST_UPDATED." = NOW() " . 
                 " WHERE " . CLOSET_ID . " = ? AND " . CLOSET_USER_ID . " = ?";	   		
 		
 		$paramTypes = array('integer', 'integer');
         $params = array($closetId, $user);
         
-        return $this->update($sql, $params, $paramTypes, "29864921");
+        $affectedClosetRows = $this->update($sql, $params, $paramTypes, "29864921");
+        
+        if ($affectedClosetRows === 1){
+            $sql = "UPDATE ".CLOSET_ITEMS.
+	           " SET ".CLOSET_ITEM_STATUS." = 2, ".CLOSET_LAST_UPDATED." = NOW() " . 
+                " WHERE " . CLOSET_ID . " = ? AND " . CLOSET_USER_ID . " = ?";	   		
+    		
+    		$paramTypes = array('integer', 'integer');
+            $params = array($closetId, $user);
+            
+            $this->update($sql, $params, $paramTypes, "29864921");        
+        }
+        
+        return $affectedClosetRows;
 	}
 	
 	
 	public function addItemToCloset($user, $closetItem){
 	    $sql = "INSERT INTO ".CLOSET_ITEMS." (".CLOSET_ID.", ".CLOSET_USER_ID.", ".CLOSET_ITEM_SKU.", ".CLOSET_ITEM_IMAGE.", ".CLOSET_ITEM_STATUS.", ".CLOSET_LAST_UPDATED.", ".CLOSET_ITEM_DATE_ADDED.") " .
-                " VALUES (?,?,?,?,1,NOW(),NOW())";	   
+                " VALUES (?,?,?,?,1,NOW(),NOW()) " .
+                "ON DUPLICATE KEY UPDATE ".CLOSET_ITEM_STATUS."=1, ".CLOSET_LAST_UPDATED."=NOW()";	   
 		
 		$closetId = $closetItem->getClosetId();		
 		$sku = $closetItem->getSku();
@@ -87,7 +115,7 @@ class ClosetDao extends AbstractDao {
 	
 	
 	public function getAllClosets($userId){
-	   $sql = "SELECT " . CLOSET_ID.", ".CLOSET_USER_ID.", ".CLOSET_NAME.", ".CLOSET_PERMISSION. 
+	   $sql = "SELECT " . CLOSET_ID.", ".CLOSET_USER_ID.", ".CLOSET_NAME.", ".CLOSET_PERMISSION.", ".CLOSET_PRICE_ALERTS. 
                 " FROM " . CLOSETS .
                 " WHERE " . CLOSET_USER_ID . " = ? AND ".CLOSET_PERMISSION." < 3".
                 " ORDER BY " . CLOSET_NAME;							       
@@ -100,7 +128,7 @@ class ClosetDao extends AbstractDao {
 	
 	
 	public function getAllClosetItems($owner, $isPrivate){
-	   $sql = "SELECT c." . CLOSET_ID.", c.".CLOSET_NAME.", i.".CLOSET_USER_ID.", i.".CLOSET_ITEM_SKU.", COALESCE(i.".CLOSET_ITEM_IMAGE.
+	   $sql = "SELECT c." . CLOSET_ID.", c.".CLOSET_NAME.", c.".CLOSET_PRICE_ALERTS.", i.".CLOSET_USER_ID.", i.".CLOSET_ITEM_SKU.", COALESCE(i.".CLOSET_ITEM_IMAGE.
 	                   ", p.".PRODUCT_IMAGE.") AS ".CLOSET_ITEM_IMAGE.", p.".PRODUCT_NAME.", p.".PRODUCT_STORE.", p.".PRODUCT_PRICE.", p.".PRODUCT_SHORT_LINK. 
                 " FROM " . CLOSETS . " c " .               
                 " LEFT JOIN " . CLOSET_ITEMS . " i ON c.".CLOSET_ID." = i.".CLOSET_ID . " AND " .

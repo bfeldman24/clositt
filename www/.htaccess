@@ -5,8 +5,10 @@ Options +SymLinksIfOwnerMatch
 # disallows a directory listing on directories that do not have an index file
 Options -Indexes 
 
-
 RewriteEngine On
+RewriteRule ^clositt$ myclositt.php
+RewriteRule ^track/([a-z]*)/([0-9]*)$ Router.php?classCode=s&method=trackemail&message=$1&user=$2
+
 RewriteRule ^!\+/([0-9]*)/(.*)$ clositt.php?user=$1&closittname=$2
 RewriteRule ^!\+/(.*)$ clositt.php?user=$1
 RewriteRule ^!/(.*)$ product-page.php?s=$1
@@ -86,3 +88,4 @@ ErrorDocument 502 /whoops.php
 ErrorDocument 503 /whoops.php
 ErrorDocument 504 /whoops.php
 ErrorDocument 505 /whoops.php
+AddHandler application/x-httpd-php5s .php .html

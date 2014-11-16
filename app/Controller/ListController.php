@@ -22,7 +22,13 @@ class ListController{
       	       $user = $_SESSION['userid'];  
       	   }
 	       
-	       $userInfo =  ", " . $user . ", " . $_SERVER['REMOTE_ADDR'] . ", " . date("m/d/Y H:i:s");
+	       if (isset($_SERVER['REMOTE_ADDR'])){
+	           $ip = $_SERVER['REMOTE_ADDR'];   
+	       }else{
+	           $ip = "Server Process";   
+	       }
+	       
+	       $userInfo =  ", " . $user . ", " . $ip . ", " . date("m/d/Y H:i:s");
 	       
     	   $file = fopen(self::$listDirectory . $fileName . self::$extension,"a");
            $numBytes = fwrite($file,"\n" . $item . $userInfo);

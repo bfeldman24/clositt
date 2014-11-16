@@ -6,7 +6,8 @@ class UserDao extends AbstractDao {
     public function signUp($user){
         $sql = "INSERT INTO ".USERS." (".USER_NAME.", ".USER_EMAIL.", ".USER_PASS.", ".
                                         USER_STATUS.", ".USER_LOGIN_COUNT.", ".USER_IP.", ".USER_LAST_SIGNED_IN.", ".USER_DATE_SIGNED_UP.") " .
-                " VALUES (?,?,?,1,1,?,NOW(),NOW())";	   
+                " VALUES (?,?,?,1,1,?,NOW(),NOW()) " .
+                "ON DUPLICATE KEY UPDATE ".USER_STATUS."=1, ".USER_LAST_SIGNED_IN."=NOW()";
 		
 		$name = $user->getName();
 		$email = $user->getEmail();
@@ -50,7 +51,7 @@ class UserDao extends AbstractDao {
 	
 	public function updateUserPassword($user, $oldPassword){
 	    $sql = "UPDATE ".USERS.
-	          " SET ".USER_PASS." = ? " .
+	          " SET ".USER_PASS." = ?, ".USER_LAST_SIGNED_IN." = NOW() " .
               " WHERE ".USER_EMAIL." = ? AND ".USER_STATUS." = 1";              
 				
 		$password = $user->getPassword();
@@ -70,7 +71,7 @@ class UserDao extends AbstractDao {
 	
 	public function forceUpdateUserPassword($user){
 	    $sql = "UPDATE ".USERS.
-	          " SET ".USER_PASS." = ?, ".USER_STATUS." = 1".
+	          " SET ".USER_PASS." = ?, ".USER_STATUS." = 1, ".USER_LAST_SIGNED_IN." = NOW() " .
               " WHERE ".USER_EMAIL." = ? ";	   
 				
 		$password = $user->getPassword();
@@ -83,16 +84,37 @@ class UserDao extends AbstractDao {
 	}
 	
 	public function updateUserInfo($user){
-	    $sql = "UPDATE ".USERS.
-	          " SET ".USER_NAME." = ?, ".USER_EMAIL." = ? ".
-              " WHERE ".USER_ID." = ? AND ".USER_STATUS." = 1";	   
-		
-		$name = $user->getName();
+	    $name = $user->getName();
 		$email = $user->getEmail();
 		$userId = $user->getUserId();
+		$priceAlertsFrequency = $user->getPriceAlertFrequency();
+	    
+	    if (!isset($userId) || $userId == ""){
+	       return null;  
+	    }
+	    
+	    $paramTypes = array();
+        $params = array();
+	    
+	    $sql = "UPDATE ".USERS;
+	    $sql .= " SET ".USER_LAST_SIGNED_IN." = NOW() ";
+        
+        if (isset($name) && $name != ""){
+            $sql .= ", ".USER_NAME." = ? ";    
+            $paramTypes[] = 'text';
+            $params[] = $name;
+        }
+        
+        if (isset($priceAlertsFrequency) && $priceAlertsFrequency != ""){
+            $sql .= ", ".USER_ALERT_FREQUENCY." = ? ";    
+            $paramTypes[] = 'integer';
+            $params[] = $priceAlertsFrequency;
+        }
+                
+        $sql .= " WHERE ".USER_ID." = ? AND ".USER_STATUS." = 1";		
 		
-		$paramTypes = array('text', 'text', 'integer');
-        $params = array($name, $email, $userId);
+		$paramTypes[] = 'integer';
+        $params[] = $userId;
         
         return $this->update($sql, $params, $paramTypes, "234982349");
 	}	
@@ -109,7 +131,7 @@ class UserDao extends AbstractDao {
 	}
 	
 	public function getAllUserInfo(){ 
-        $sql = "SELECT " . USER_NAME.", ".USER_EMAIL.", ".USER_STATUS.",".USER_DATE_SIGNED_UP.
+        $sql = "SELECT " . USER_NAME.", ".USER_EMAIL.", ".USER_ALERT_FREQUENCY.",".USER_STATUS.",".USER_DATE_SIGNED_UP.
                 " FROM " . USERS;
 		
 		$paramTypes = array();		
@@ -119,7 +141,7 @@ class UserDao extends AbstractDao {
 	}
 	
 	public function getUserPassword($email){ 
-        $sql = "SELECT " . USER_ID.", ".USER_EMAIL.", ".USER_NAME.", ".USER_PASS.
+        $sql = "SELECT " . USER_ID.", ".USER_EMAIL.", ".USER_NAME.", ".USER_ALERT_FREQUENCY.",".USER_PASS.
                 " FROM " . USERS .
                 " WHERE " . USER_EMAIL . " = ? AND ".USER_STATUS." = 1";		
 		

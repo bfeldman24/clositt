@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../session.php');
+require_once(dirname(__FILE__) . '/../globals.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/ProductAdminDao.php');
 require_once(dirname(__FILE__) . '/../Elastic/ElasticDao.php');
 require_once(dirname(__FILE__) . '/../Model/SpiderLinkEntity.php');
@@ -8,7 +8,6 @@ require_once(dirname(__FILE__) . '/../Model/ProductCriteria.php');
 require_once(dirname(__FILE__) . '/../Model/SpiderLinkEntity.php');
 require_once(dirname(__FILE__) . '/ProductController.php');
 require_once(dirname(__FILE__) . '/Debugger.php');
-
 
 class ProductAdminController extends Debugger {
 	private $productAdminDao = null;
@@ -120,22 +119,12 @@ class ProductAdminController extends Debugger {
 		if(isset($products) && is_array($products) && count((array)$products) > 0){	
             // echo " 4) products are set. ";
             
-            $this->createShortLinks($products);
-
-			// Clear temp table
-			$start = microtime();
-			$clearProducts = $this->productAdminDao->clearTempProducts($products);
-			$results['clearProductsTime'] = microtime() - $start;
-			$results['clearProducts'] = $clearProducts;	
-			$this->debug("ProductAdminController", "addAdminProducts", "clearProductsTime = " . $results['clearProductsTime']);				
-			$this->debug("ProductAdminController", "addAdminProducts", "clearProducts = " . $results['clearProducts']);				
-						
-			if ($clearProducts){
-			    // echo " 5) truncate table. "; 
+            $this->createShortLinks($products);			
 			      			
-         		// Step 1         		
-         		$start = microtime();
-         		$numberOfTempProducts = $this->productAdminDao->addTempProducts($products);			  
+    		// Step 1         		
+    		$start = microtime();
+    		$results['startAddingTempProducts'] = $start;
+    		$numberOfTempProducts = $this->productAdminDao->addTempProducts($products);			  
          		
          		if(is_numeric($numberOfTempProducts) && $numberOfTempProducts > 0){
          			// echo " 6) Inserted temp Products: " . $numberOfTempProducts;
@@ -171,18 +160,33 @@ class ProductAdminController extends Debugger {
          			$this->debug("ProductAdminController", "addAdminProducts", "newTime = " . $results['newTime']);				
         			$this->debug("ProductAdminController", "addAdminProducts", "new = " . $results['new']);
          			
-         			// Step 5
-         			if ($isLastInBatch){
-             			$start = microtime();
-             			$updatedProductStatus = $this->productAdminDao->setMissingProductsToNotAvailable($products);
-                        // echo " 11) Update Products Statuses: " . $updatedProductStatus;
-                        $results['updatedStatusTime'] = microtime() - $start;
-                        $results['updatedStatus'] = $updatedProductStatus;
-                        $this->debug("ProductAdminController", "addAdminProducts", "updatedStatusTime = " . $results['updatedStatusTime']);				
-            			$this->debug("ProductAdminController", "addAdminProducts", "updatedStatus = " . $results['updatedStatus']);
-         			}
+         			// Step 5         			
+            	    $start = microtime();
+            		$updatedProductStatus = $this->productAdminDao->setMissingProductsToNotAvailable($products);
+                    // echo " 11) Update Products Statuses: " . $updatedProductStatus;
+                    $results['updatedStatusTime'] = microtime() - $start;
+                    $results['updatedStatus'] = $updatedProductStatus;
+                    $this->debug("ProductAdminController", "addAdminProducts", "updatedStatusTime = " . $results['updatedStatusTime']);				
+        			$this->debug("ProductAdminController", "addAdminProducts", "updatedStatus = " . $results['updatedStatus']);
+        			
+        			// Step 6
+        			$start = microtime();
+        			
+        			$value = array_pop($products);                       
+                    $criteria = array("store" => $value['company'],
+                                        "customer" => $value['customer'],
+                                        "category" => $value['category'],
+                                        "status" => 1, 
+                                        "count" => $numberOfTempProducts);                                                              
+                            			
+            		$updatedSpiderStatus = $this->updateSpiderStatus($criteria);
+                    // echo " 11) Update Spider Status: " . $updatedSpiderStatus;
+                    $results['updatedSpiderStatusTime'] = microtime() - $start;
+                    $results['updatedSpiderStatus'] = $updatedSpiderStatus;
+                    $this->debug("ProductAdminController", "addAdminProducts", "updatedSpiderStatusTime = " . $results['updatedStatusTime']);				
+        			$this->debug("ProductAdminController", "addAdminProducts", "updatedSpiderStatus = " . $results['updatedSpiderStatus']);
          		}
-			}
+			
 		}else{
 		  // echo "not validated";
 		  // echo " 1)" . isset($products) ;

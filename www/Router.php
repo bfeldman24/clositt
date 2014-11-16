@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
 
 require_once(dirname(__FILE__) . '/../app/session.php');
 
@@ -48,7 +48,7 @@ class Router {
                     break;   
                 case 't':
                     Router::Tag();
-                    break;                                
+                    break; 
                 case 'u':
                     Router::User();
                     break;
@@ -56,10 +56,16 @@ class Router {
                     if(ENV == "DEV" || ENV == "QA"){
                         Router::Admin();
                     }
+                    break;
+                case 'qa':
+                    if(ENV == "DEV" || ENV == "QA"){
+                        Router::DataQualityAdmin();
+                    }
                     break;        
             } 
         }else{
-            echo "404";   
+            header("Location: http://www.clositt.com");
+            die();   
         }
     }
     
@@ -82,11 +88,8 @@ class Router {
                 echo $userController->logout();
                 break;    
             case 'update':            
-                echo $userController->updateUserInfo($_POST);
-                break;
-            case 'updatepass':            
-                echo $userController->updateUserPassword($_POST);
-                break;
+                print_r($userController->updateUserInfo($_POST));
+                break;            
             case 'resetpass':            
                 echo $userController->resetPassword($_POST['email']);
                 break;                   
@@ -123,6 +126,9 @@ class Router {
             case 'remove':            
                 echo $closetController->removeItemFromCloset($_POST);
                 break;
+            case 'createandadd':            
+                echo $closetController->createNewClosetAndAddItems($_POST);
+                break;    
             case 'get':            
                 echo $closetController->getAllClosets();
                 break;            
@@ -320,23 +326,7 @@ class Router {
         if (isset($results)){
             print_r($results);
         }
-    }
-    
-    /************************
-    *** LIST CONTROLLER ***
-    *************************/
-    public static function ListController(){        
-        require_once(dirname(__FILE__) . '/../app/Controller/ListController.php');  
-    
-        switch($_GET['method']){
-            case 'add':            
-                echo ListController::writeToFile($_POST['listName'], $_POST['item']);
-                break;  
-            case 'get':            
-                echo ListController::readFile($_POST['listName']);
-                break;        
-        }            
-    }
+    }        
     
     /************************
     *** ADMIN CONTROLLER ***
@@ -441,6 +431,30 @@ class Router {
             }
         }   
     }
+        
+    /************************************
+    *** DATA QUALITY ADMIN CONTROLLER ***
+    ************************************/
+    public static function DataQualityAdmin(){
+        if(ENV != "DEV" && ENV != "QA"){
+            return "500";   
+        }
+        
+        require_once(dirname(__FILE__) . '/../app/Controller/DataQualityAdminController.php');  
+        $dataQualityAdminController = new DataQualityAdminController();
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'){                          
+            $output = null;
+            
+            switch ($_GET['method']){                        
+                case 'get':
+                    $results = $dataQualityAdminController->get($_POST['queryNumber']);
+                    break;
+            }
+
+            print_r($results);
+        }   
+    }
     
     /************************
     ***  EMAIL CONTROLLER ***
@@ -458,9 +472,33 @@ class Router {
                 case 'share':
                     $success = EmailController::shareProduct($_POST['to'], $_POST['username'], $_POST['message'], $_POST['link'], $_POST['product'], $_POST['store']);
                     print_r($success);
-                    break;    
+                    break;  
+                case 'issue':            
+                    $message = "Product: " .$_POST['item'] . " has some issues. Please check it out";
+                    $success = EmailController::sendContactForm($_SESSION['name'], $_SESSION['userid'], $_SESSION['email'], "Data Issue", $message);
+                    break;  
             }      
         }
+    }
+    
+    /************************
+    *** LIST CONTROLLER ***
+    *************************/
+    public static function ListController(){        
+        require_once(dirname(__FILE__) . '/../app/Controller/ListController.php');  
+    
+        switch($_GET['method']){
+            case 'add':            
+                echo ListController::writeToFile($_POST['listName'], $_POST['item']);
+                break;  
+            case 'get':            
+                echo ListController::readFile($_POST['listName']);
+                break;
+            case 'issue':            
+                echo ListController::writeToFile($_POST['listName'], $_POST['item']);
+                Router::Email();
+                break;        
+        }            
     }
     
     /************************
@@ -474,15 +512,26 @@ class Router {
                 case 'social':                               
                     $closet = isset($_POST['closet']) ? $_POST['closet'] : null;
                     $sku = isset($_POST['id']) ? $_POST['id'] : null;
-                    $success = StatsController::add("Shared", $_POST['site'], $closet, $sku);
+                    $success = StatsController::add("Shared", $_POST['site'], null, $sku, $closet);
                     print_r($success);
                     break;
                 case 'shopit':                               
                     $success = StatsController::addItemAction("Visited Store", $_POST['id']);
                     print_r($success);
-                    break;    
+                    break;                                       
+            }      
+        }else if ($_SERVER['REQUEST_METHOD'] == 'GET'){   
+            switch($_GET['method']){                
+                case 'trackemail':                          
+                    StatsController::add("Opened Email", $_GET['user'], $_GET['message']);
+
+                    header( 'Content-Type: image/gif' );                    
+                    readfile('http://www.clositt.com/css/images/empty.gif');                    
+                    break;                                                
             }      
         }
+        
+        
     }
 }
 

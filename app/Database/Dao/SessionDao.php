@@ -11,7 +11,7 @@ class SessionDao extends AbstractDao{
      */		
 	function checkCookie($email, $cookieDB) {			
 		
-		$sql = "SELECT ".USER_ID.",".USER_EMAIL.",".USER_NAME." FROM " . USERS . 
+		$sql = "SELECT ".USER_ID.",".USER_EMAIL.",".USER_NAME.",".USER_ALERT_FREQUENCY." FROM " . USERS . 
 				" WHERE LOWER(". USER_EMAIL .") = LOWER(?) AND " . 
     				USER_COOKIE . " = ? AND " . 
     				USER_STATUS . " = 1";

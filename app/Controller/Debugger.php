@@ -15,9 +15,10 @@ class Debugger{
 	* Appends the sql error to the end of the file ($this->file)
     */		
 	public function debug($class, $method = "", $msg = ""){
-	    
-		$message = "DEBUG: ($class->$method) $msg";		
-		$this->log($message);
+	    if (DEBUG){
+    		$message = "DEBUG: ($class->$method) $msg";		
+    		$this->log($message);
+	    }
 	}
 	
 	/**
@@ -41,21 +42,19 @@ class Debugger{
 	/**
 	* Appends the sql error to the end of the file ($this->file)
     */		
-	public function log($msg){
-		if (DEBUG){
-			$fileName = null;
-			$message = "\n" . date("m/d/y h:i:s") . " - " . $msg;
-		
-			if(isset($this->debugLog) && $this->debugLog != null){
-				$fileName = $this->debugLog;
-			}else{	
-				$fileName = dirname(__FILE__) . "/../Logs/Debugger" . date("-Y-m-d") . ".txt";	
-			}
-
-			$file = fopen($fileName,"a");
-			fwrite($file, $message);
-			fclose($file);
+	public function log($msg){		
+		$fileName = null;
+		$message = "\n" . date("m/d/y h:i:s") . " - " . $msg;
+	
+		if(isset($this->debugLog) && $this->debugLog != null){
+			$fileName = $this->debugLog;
+		}else{	
+			$fileName = dirname(__FILE__) . "/../Logs/Debugger" . date("-Y-m-d") . ".txt";	
 		}
+
+		$file = fopen($fileName,"a");
+		fwrite($file, $message);
+		fclose($file);	
 	}
 }
 ?>

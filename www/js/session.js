@@ -6,6 +6,7 @@ var session = {
 	isLoggedIn: false,
 	loginCount: -1,
 	goToClosittOnLogin: false,
+	priceAlertFrequency: 0,
 	
 	init: function(){	   
 	   if (sessionInit.active){
@@ -13,6 +14,7 @@ var session = {
 	       session.email = sessionInit.email;
 	       session.name = sessionInit.name;   
 	       session.nickname = session.name.split(" ")[0];
+	       session.priceAlertFrequency = sessionInit.pricealerts || 1;
 	       session.isLoggedIn = true;	       	       
 	       session.userDataAvailableCallback();
     	   session.updateLoggedInDropdownMenu();
@@ -28,8 +30,7 @@ var session = {
         });       
         
         $(document).on("click", ".loggedoutBtns .login", function(e){
-            e.preventDefault();
-            session.goToClosittOnLogin = $(e.currentTarget).hasClass("myclositt");                                    
+            e.preventDefault();            
             $("#loginModalTabBtn").tab('show');
         });         
 	},
@@ -47,6 +48,7 @@ var session = {
      			     session.name = user.n;
      			     session.nickname = session.name.split(" ")[0];
      			     session.email = user.e;
+     			     session.priceAlertFrequency = user.f;
      			     session.isLoggedIn = true; 			     
      			     session.loggedInCallback(); 
 	               }      
@@ -103,16 +105,16 @@ var session = {
 	       if (session.goToClosittOnLogin){
                 location.href = window.CLOSITT_PAGE; 
                 return;
-           }else if(typeof loggedIn == 'function'){
-                session.updateLoggedInDropdownMenu();                
-                loggedIn();                
-                Messenger.success("Thanks " + session.nickname + "! You are now logged in and ready to go!");
-		   }          	
-        }else if(typeof loggedIn == 'function'){
-            session.updateLoggedInDropdownMenu();
-			loggedIn();
-			Messenger.success("Thanks " + session.nickname + "! You are now logged in and ready to go!");
-		}  
+           }      	
+        }
+        
+        session.updateLoggedInDropdownMenu();                
+                
+        if(typeof loggedIn == 'function'){
+            loggedIn();                
+        }
+        
+        Messenger.success("Thanks " + session.nickname + "! You are now logged in and ready to go!");  
 		
 		$("#loginSignupModal").modal('hide');
 	},
@@ -149,7 +151,7 @@ var session = {
 	    var icon;
 	    var iconTag;
 	    
-	    if (closetPresenter.isInitialized){
+	    if (location.href.indexOf(".com"+window.HOME_ROOT+"myclositt") > 0){
 	       pageUrl = "#";
 	       linkTitle = session.nickname + "'s Account";  
 	       icon = "glyphicon glyphicon-user";
@@ -184,7 +186,7 @@ var session = {
 	   
 		$("#loginBtns").html("")
 		    .append( $('<li>').addClass("loggedoutBtns").append( 
-		          $('<a>').addClass("login myclositt").attr('data-toggle','modal').attr("data-target","#loginSignupModal").append(
+		          $('<a>').addClass("myclositt").attr("href",window.HOME_ROOT + "clositt").append(
 		              $("<span>").append( 
         	    	            $("<i>").addClass("icon-svg20")
         	    	      ).append(

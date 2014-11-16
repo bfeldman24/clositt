@@ -1,8 +1,10 @@
 <!DOCTYPE>
 <html>
 <head>
-<?php 
-require_once(dirname(__FILE__) . '/../../../app/globals.php');
+<?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1); 
+require_once(dirname(__FILE__) . '/../../../app/session.php');
 include(dirname(__FILE__) . '/../../static/meta.php');   
 
 
@@ -344,6 +346,7 @@ ul.messenger.messenger-theme-block.messenger-fixed .messenger-message {
           			  <option value="Ralph Lauren">Ralph Lauren</option>
           			  <option value="REI">REI</option>
           			  <option value="Saks Fifth Avenue">Saks Fifth Avenue</option>
+          			  <option value="Shinesty">Shinesty</option>
           			  <option value="Target">Target</option>	
           			  <option value="The North Face">The North Face</option>
           			  <option value="Tommy Hilfiger">Tommy Hilfiger</option>      			    				  

@@ -53,6 +53,11 @@ sudo rm -rf /home/$1/scripts
 sudo rm -rf /home/$1/archive
 sudo rm /home/$1/robots.txt
 
+echo "Copy back app/Data directory"
+sudo rm -rf /home/$1/app/Data/
+sudo mkdir /home/$1/app/Data/
+sudo cp -rf "/home/clositt-archive/$d/app/Data/" /home/$1/app/
+
 echo "Setting permissions..."
 sudo chmod -R 777 /home/$1/app/Logs
 sudo chmod 777 /home/$1/app/Data

@@ -3,7 +3,7 @@ require_once('MDB2.php');
 
 function mdb2_connect() {
 
-	require_once(dirname(__FILE__) . '/../../../configs/clositt-config.php');
+	require_once(dirname(__FILE__) . '/../../../configs/clositt-config.php');	
 	
 	$options = array(
 	    'portability' => MDB2_PORTABILITY_ALL,
@@ -15,10 +15,16 @@ function mdb2_connect() {
 	$PEAR = new PEAR();
 	
 	if ($PEAR->isError($mdb2)) {
-	    die($mdb2->getMessage() . ', ' . $mdb2->getDebugInfo());
+	    require_once(dirname(__FILE__) . '/../../Controller/Debugger.php');
+	    $debugger = new Debugger();       
+	    $debugger->error("MDB2", "mdb2_connect", $mdb2->getMessage() . ', ' . $mdb2->getDebugInfo());
+	    define('IS_DB_CONNECTED', false);
+	    
+	    return null;	    
+	    //die($mdb2->getMessage() . ', ' . $mdb2->getDebugInfo());
 	}
 	
-	//$mdb2->setFetchMode(DB_FETCHMODE_OBJECT);
+	define('IS_DB_CONNECTED', true);	
 	
 	return $mdb2;
 

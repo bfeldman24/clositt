@@ -7,6 +7,7 @@ define("JS_USER_NAME","n");
 define("JS_USER_EMAIL","e");
 define("JS_USER_PASSWORD","p");
 define("JS_USER_CONFIRM_PASSWORD","cp");
+define("JS_USER_ALERT_FREQUENCY","f");
 
 class UserEntity {
 
@@ -15,6 +16,7 @@ class UserEntity {
 	private $email;	
 	private $password;
 	private $confirmPassword;
+	private $priceAlertFrequency;
 	private $cookie;
 	
 	public function getUserId() {
@@ -60,6 +62,15 @@ class UserEntity {
 		if(isset($confirmPassword)){
 			$this->confirmPassword = $confirmPassword;
 		}
+	}			
+		
+	public function getPriceAlertFrequency() {
+		return $this->priceAlertFrequency;
+	}
+	public function setPriceAlertFrequency($priceAlertFrequency) {
+		if(isset($priceAlertFrequency)){
+			$this->priceAlertFrequency = $priceAlertFrequency;
+		}
 	}	
 	
 	public function getCookie() {
@@ -94,6 +105,7 @@ class UserEntity {
 		$userEntity->setName(BaseEntity::getDBField($row, USER_NAME));
 		$userEntity->setEmail(BaseEntity::getDBField($row, USER_EMAIL));
 		$userEntity->setPassword(BaseEntity::getDBField($row, USER_PASS));
+		$userEntity->setPriceAlertFrequency(BaseEntity::getDBField($row, USER_ALERT_FREQUENCY));
 		$userEntity->setCookie(BaseEntity::getDBField($row, USER_COOKIE));
 		
 		return $userEntity;
@@ -110,6 +122,7 @@ class UserEntity {
     		$userEntity->setName(BaseEntity::getPostField($row, JS_USER_NAME));
     		$userEntity->setEmail(BaseEntity::getPostField($row, JS_USER_EMAIL));
     		$userEntity->setPassword($userEntity->secure(BaseEntity::getPostField($row, JS_USER_PASSWORD)));
+    		$userEntity->setPriceAlertFrequency(BaseEntity::getPostField($row, JS_USER_ALERT_FREQUENCY));
 
     		$confirm = BaseEntity::getPostField($row, JS_USER_CONFIRM_PASSWORD);    		
     		if (isset($confirm)){
@@ -128,6 +141,7 @@ class UserEntity {
 		$userArray[JS_USER_ID] = $this->getUserId();
 		$userArray[JS_USER_NAME] = $this->getName();
 		$userArray[JS_USER_EMAIL] = $this->getEmail();
+		$userArray[JS_USER_ALERT_FREQUENCY] = $this->getPriceAlertFrequency();
 		
 		foreach ($userArray as $key => $value){
 			if(!isset($value) || $value == ""){

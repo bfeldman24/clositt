@@ -5,6 +5,9 @@ var closetPresenter = {
 	carouselRight: null,
 	user: null,
 	wishListClosetId: 2,
+	priceAlertFrequency: null,
+	isBusy: false,
+	busyInterval: null,
 
 	init: function(){
 	    closetPresenter.isInitialized = true;
@@ -23,10 +26,14 @@ var closetPresenter = {
         $(document).on("click", "#removeClosetBtn", closetPresenter.removeCloset);
                 
 		$(document).on("click", "#saveNewClosetName", closetPresenter.saveNewClosetName);				
+		$(document).on("click", ".saveProductBtn", closetPresenter.saveProductToCloset);
+		$(document).on("click", ".unsavedCloset", closetPresenter.saveEntireCloset);
 		
+		$(document).on("click", ".mobile-toggle", closetPresenter.togglePriceAlerts);
+		$(".mobile-toggle").tooltip();
 		
 		$("#search-bar").on("keypress", closetPresenter.searchOnEnter);
-		$("#seach-bar-icon").on("click", closetPresenter.searchBarSubmit);     
+		$("#seach-bar-icon").on("click", closetPresenter.searchBarSubmit);   				
 		
 		footer.focusOnInputInModal('#addclositt');
 		footer.focusOnInputInModal('#editClosittModal');
@@ -39,13 +46,10 @@ var closetPresenter = {
 	
 	setUser: function(user){
 	   closetPresenter.user = user;
-	},
+	},	
 	
-	getClosets: function(){
-	   
-		if(closetPresenter.user != undefined){
-		      $.post( window.HOME_ROOT + "cl/getall", closetPresenter.showClosets, "json");		      		      		      
-		}else if(session.isLoggedIn){
+	getClosets: function(){	   
+		if(closetPresenter.user != undefined || session.isLoggedIn){		      
 			$.post( window.HOME_ROOT + "cl/getall", closetPresenter.showClosets, "json");		    			 
 		}else{
 			Messenger.info("We'd love to add that to your Clositt. Just sign in and we'll take care if it for you.");	
@@ -150,8 +154,11 @@ var closetPresenter = {
 	   var closetName = $(e.currentTarget).text();
 	   var closetNumber = $(e.currentTarget).parents(".closetPanel").attr("number");
 	   var closetSelector = $(e.currentTarget).parents(".closetPanel").attr("id");
+	   var isClosetAlertOn = $(e.currentTarget).parents(".closetPanel").find(".mobile-toggle").hasClass("off");
+       var closetAlert = isClosetAlertOn ? 'Y' : 'N';
 
 	   $("#editClosetName").val(closetName);
+	   $("#editClosetName").attr("alert", closetAlert);
 	   $("#editClosetName").attr("original", closetName);	   
 	   $("#editClosetName").attr("num", closetNumber);
 	   $("#editClosetName").attr("selector", closetSelector);	   	   	   
@@ -168,7 +175,8 @@ var closetPresenter = {
 	         id: $("#editClosetName").attr("num"),
 	         title: $("#editClosetName").val().trim(),
 	         owner: session.userid,
-	         status: 1
+	         status: 1,
+	         alert: $("#editClosetName").attr("alert")
 	    };
 	 		
 	 	var original = $("#editClosetName").attr("original");			
@@ -187,6 +195,26 @@ var closetPresenter = {
 				  }	
 			});	
 		}					
+	},
+	
+	updateClosetInfo: function(closetData){
+	    if (closetData != null && closetData.id != null && closetData.title != null){
+    	    $.post( window.HOME_ROOT + "cl/update", closetData, function(result){
+    	          if (result != "success") {
+    	               if (closetData.alert != null){
+    	                   Messenger.error('Price alert could not be saved!');
+    	               }else{
+    			    	    Messenger.error(closetData.title + ' could not be saved!');
+    	               }
+     			  } else {
+     			       if (closetData.alert != null){
+    				    	Messenger.success("Price Alert Saved!");					
+     			       }else{
+         			        Messenger.success("Clositt " + closetData.title + " was saved!");					
+     			       }
+    			  }	
+    		});
+	    }
 	},
 	
 	confirmRemoveCloset: function(){
@@ -244,6 +272,74 @@ var closetPresenter = {
 	   }
 	},
 	
+	saveEntireCloset: function(el){
+	    $(el.currentTarget).parents(".closetPanel").first().find(".outfit").each(function(){
+	       closetPresenter.saveProductToCloset($(this));
+	    });
+	},
+	
+	saveProductToCloset: function(el){
+	     if (el.currentTarget != null){	   	   
+	       el.preventDefault();
+	       var $item = $(el.currentTarget).parents(".outfit").first();
+	     }else{
+	       var $item = el;
+	     }
+	     
+	     var closetName = $item.parents(".closetPanel").first().attr("original");
+         var closetId = $item.parents(".closetPanel").first().attr("number");
+         var img = $item.find(".imagewrap img").attr("src"); 
+         var sku = $item.attr("pid");         
+         var itemName = $item.find(".productName").first().attr("title");
+	   	    
+	   	 var closetItem = {
+	         id: closetId,
+	         title: closetName.trim(),
+	         item: sku,
+	         cache: img,
+	         owner: session.userid,
+	         status: 1
+	     };   
+	   	     
+	     if (!isNaN(closetId) || closetId < 0){
+            // Add New Closet and Item              
+            $.post( window.HOME_ROOT + "cl/createandadd", closetItem, function(result){    	 			  
+	 			  if (result != "success") {
+						Messenger.error(itemName + ' could not be saved into ' + closetName, 6000);	 			       	 			       
+				  } else {    						    						
+						Messenger.success(itemName + ' was saved to "' + closetName + '"!', 8000);
+						
+						// add to closet mapping
+						if (closetFormPresenter.closetItemsMapping[closetName] == null){
+    				        closetFormPresenter.closetItemsMapping[closetName] = [];
+            			}	
+            			
+            			closetFormPresenter.closetItemsMapping[closetName].push(sku);	    						                
+						closetFormPresenter.updateClosetCount(sku);	
+						
+						if ($item.parents(".closetPanel").first().find(".outfit").length <= 1){
+						      Messenger.success('The entire clositt "' + closetName + '" was saved!', 8000);
+						      $item.parents(".closetPanel").first().remove();
+						      
+						      if ($(".unsaved-clositt-inner").first().find(".closetPanel").length <= 0){
+    						      $(".unsaved-clositt-inner").first().remove();
+    						  } 
+    						  
+						}else{
+    						  $item.remove();
+						}
+						
+						return true;
+				  }
+            });	     
+	     
+	     } else if (closetName.length > 0){				
+			closetFormPresenter.addItemToCloset(el, sku, closetName, closetId);			
+		 }
+				 
+		 return false;
+	},
+	
 	goToCloset: function(e){
 	   var closetName = $(e.currentTarget).attr("name");  	   
 	   
@@ -269,7 +365,71 @@ var closetPresenter = {
         var searchTerm = $( "#search-bar" ).val().trim();        
         location.href = window.HOME_URL + "?outfit=" + encodeURIComponent(searchTerm);
         return false;
-    }	
+    },
+    
+    togglePriceAlerts: function(e){   
+        if (!session.isLoggedIn){
+            Messenger.alert("You must be logged in to save Price Alerts!");
+            return;   
+        }
+             
+        var $btn = $(e.currentTarget);                
+        
+        var closetName = $(e.currentTarget).parents(".closetPanel").attr("original");
+	    var closetNumber = $(e.currentTarget).parents(".closetPanel").attr("number");
+        
+        var closittData = {
+	         id: closetNumber,
+	         title: closetName,
+	         owner: session.userid,
+	         status: 1	      
+	    };
+        
+        if ($btn.hasClass("off")){            
+            closittData.alert = 'Y';            
+            
+            $btn.removeClass("off");            
+            $btn.attr("title", closetPresenter.priceAlertFrequency + " Price Alerts On");
+        }else{
+            closittData.alert = 'N';            
+            
+            $btn.addClass("off");            
+            $btn.attr("title", closetPresenter.priceAlertFrequency + " Price Alerts Off");            
+        }   
+        
+        $btn.tooltip('destroy');
+        $btn.tooltip('show');        
+        closetPresenter.updateClosetInfo(closittData);
+    },
+    
+    setPriceAlerts: function(){
+        var priceAlerts = '' + session.priceAlertFrequency;
+        
+        switch(priceAlerts){
+            case '2':
+                closetPresenter.priceAlertFrequency = "Weekly";
+                break;
+            case '3':
+                closetPresenter.priceAlertFrequency = "Monthly";           
+                break;
+            default:
+                closetPresenter.priceAlertFrequency = "Daily";
+        }
+    },
+    
+    updatePriceAlertFrequency: function(){
+        closetPresenter.setPriceAlerts();
+        
+        $(".mobile-toggle").each(function(){
+            var off = $(this).hasClass("off");
+            var offText = off ? "Off" : "On";
+            var tooltip = closetPresenter.priceAlertFrequency + " Price Alerts " + offText;
+            $(this).attr("title", tooltip);             
+        });   
+        
+        $(".mobile-toggle").tooltip('destroy');
+        $(".mobile-toggle").tooltip();
+    }        	
 }
 
 
@@ -294,108 +454,114 @@ var closetFormPresenter = {
           	return false;  
 	    });
 	    
-	    closetFormPresenter.initNotLoggedIn();
-        closetFormPresenter.getClosetInfo();        
-	},
-	
-	initNotLoggedIn: function(){
-	   $(document).on("show.bs.dropdown",".addToClosittDropdown", closetFormPresenter.showClosetForm);
-	   $(document).on("shown.bs.dropdown",".addToClosittDropdown", function(e){
+	    $(document).on("show.bs.dropdown",".addToClosittDropdown", closetFormPresenter.showClosetForm);
+	    $(document).on("shown.bs.dropdown",".addToClosittDropdown", function(e){
 	       var $element = $(e.currentTarget).parent().find(".addToClosetOptions");
 	       if (!$element.hasClass("mCustomScrollbar")){
 	           $element.mCustomScrollbar();
 	       }
-	   });
-	},
+	    });
+	    
+	    $(document).on('keyup', '.addNewClosetInput', function(e) {
+            e.preventDefault();	 
+            
+            // on enter
+            if(e.keyCode == 13) {                      
+                $(e.currentTarget).next(".submitNewCloset").trigger("click");
+            }
+            
+            return false;
+        });
+	    
+        closetFormPresenter.getClosetInfo();        
+	},		
 	
 	getClosetInfo: function(){
-		if(closetFormPresenter.closetNames == null && session.isLoggedIn){
-		    $.post( window.HOME_ROOT + "cl/getall", closetFormPresenter.setClosetInfo, "json");		  		  		  		  				
+		if(closetFormPresenter.closetNames == null){
+		    $.post( window.HOME_ROOT + "cl/getall", closetFormPresenter.setClosetInfo, "json");			
 		}
 	},
 	
 	setClosetInfo: function(closets){
 	    var closetIds = [];
 		var closetNames = [];
-		var closetItems = [];
 		var closetItemsMapping = {};
 		var i=0;
-            
-        for (var c in closets){
-              var closet = closets[c];
-              closetIds[i] = closet[0].id;
-			  closetNames[i] = closet[0].title;
-			  
-			  if (closet[0].title == closetFormPresenter.wishList){
-			       closetFormPresenter.wishListId = closet[0].id;
-			  }
-		      
-		       closet.forEach(function(item){
-		          if (item.item != null){
-        			closetItems.push(item.item);					    
-        			
-        			if (closetItemsMapping[closetNames[i]] == null){
-				        closetItemsMapping[closetNames[i]] = [];
-        			}	
-        			        			
-        			closetItemsMapping[closetNames[i]].push(item.item);						 				
-		          }
-        	   });	
-        	   
-        	   i++;				
-	    }
-	    
-	    closetFormPresenter.closetIds = closetIds;
-		closetFormPresenter.closetNames = closetNames;
-		closetFormPresenter.closetItems = closetItems;
-		closetFormPresenter.closetItemsMapping = closetItemsMapping;
+        
+        if (closets != null && Object.keys(closets).length > 0){    
+            for (var c in closets){
+                  var closet = closets[c];
+                  closetIds[i] = closet[0].id;
+    			  closetNames[i] = closet[0].title;
+    			  
+    			  if (closet[0].title == closetFormPresenter.wishList){
+    			       closetFormPresenter.wishListId = closet[0].id;
+    			  }
+    		      
+    		       closet.forEach(function(item){
+    		          if (item.item != null){					    
+            			
+            			if (closetItemsMapping[closetNames[i]] == null){
+    				        closetItemsMapping[closetNames[i]] = [];
+            			}	
+            			        			
+            			closetItemsMapping[closetNames[i]].push(item.item);
+    		          }
+            	   });
+            	   
+            	   i++;				
+    	    }
+    	    
+    	    closetFormPresenter.closetIds = closetIds;
+    		closetFormPresenter.closetNames = closetNames;
+    		closetFormPresenter.closetItemsMapping = closetItemsMapping;
+        }                	    	    
 	},
 	
-	showClosetForm: function(el){
-		if(!session.isLoggedIn){
-			Messenger.info("We'd love to add that to your Clositt, but first you need to sign in.");
-			return false;				
-		}else{		  
-			if(closetFormPresenter.closetNames == null){
-				closetFormPresenter.getClosetInfo();
-			}			
+	showClosetForm: function(el){				  
+		if(closetFormPresenter.closetNames == null){
+			closetFormPresenter.getClosetInfo();
 			
-			var element = el.currentTarget;			
-			var sku = $(element).parents(".outfit").attr("pid");
-			
-			if($(element).parents(".item").find(".addToClosetOptions .closetOption").length <= 0){				
-			 	
-			 	$options = $("<div>");			
-				
-				for(var i=0; i< closetFormPresenter.closetNames.length; i++){	
-				    
-				    var radioBtn = "customcheckbox";
-				    if (closetFormPresenter.closetItemsMapping[closetFormPresenter.closetNames[i]] != null &&
-			              closetFormPresenter.closetItemsMapping[closetFormPresenter.closetNames[i]].indexOf(sku) >= 0){
-				        
-				        radioBtn = "customcheckbox icon-check";
-				    }									
-				
-				    var closetName = closetFormPresenter.closetNames[i];
-				    var closetTitle = "";
-				    
-				    if (closetName.length >= 20){
-				        closetName = closetName.substring(0,19) + "...";   
-				        closetTitle = closetFormPresenter.closetNames[i];     
-				    }
-				
-					$options.append(
-						$("<a>").addClass("ring_opt closetOption").attr("i",i).append(
-							$("<div>").addClass(radioBtn + " pull-left")
-						).append( 
-						    $("<p>").addClass("pull-left").attr("title",closetTitle).text(closetName)
-						)
-					);
-				}		
-														
-				$(element).parent().find(".addToClosetOptions").append( $options.children() );										
+			if (closetFormPresenter.closetNames == null){
+			     return;
 			}
-		}
+		}			
+		
+		var element = el.currentTarget;			
+		var sku = $(element).parents(".outfit").attr("pid");
+		
+		if($(element).parents(".item").find(".addToClosetOptions .closetOption").length <= 0){				
+		 	
+		 	$options = $("<div>");			
+			
+			for(var i=0; i< closetFormPresenter.closetNames.length; i++){	
+			    
+			    var radioBtn = "customcheckbox";
+			    if (closetFormPresenter.closetItemsMapping[closetFormPresenter.closetNames[i]] != null &&
+		              closetFormPresenter.closetItemsMapping[closetFormPresenter.closetNames[i]].indexOf(sku) >= 0){
+			        
+			        radioBtn = "customcheckbox icon-check";
+			    }									
+			
+			    var closetName = closetFormPresenter.closetNames[i];
+			    var closetTitle = "";
+			    
+			    if (closetName.length >= 20){
+			        closetName = closetName.substring(0,19) + "...";   
+			        closetTitle = closetFormPresenter.closetNames[i];     
+			    }
+			
+				$options.append(
+					$("<a>").addClass("ring_opt closetOption").attr("i",i).append(
+						$("<div>").addClass(radioBtn + " pull-left")
+					).append( 
+					    $("<p>").addClass("pull-left").attr("title",closetTitle).text(closetName)
+					)
+				);
+			}		
+													
+			$(element).parent().find(".addToClosetOptions").append( $options.children() );										
+		}		
 	},	
 	
 	addToCloset: function(el){		
@@ -436,7 +602,26 @@ var closetFormPresenter = {
 		return false;		
 	},
 	
-	createNewCloset: function(closetName, el, sku){
+	createNewCloset: function(closetName, el, sku){	   
+	   if (closetPresenter.isBusy){
+	       if (closetPresenter.busyInterval == null){
+    	       closetPresenter.busyInterval = setInterval(function(){
+    	           closetPresenter.createNewCloset(closetName, el, sku);   
+    	       }, 3000);
+	       }
+	       
+	       return;
+	   }
+	   
+	   closetPresenter.isBusy = true;
+	   clearInterval(closetPresenter.busyInterval);	  
+	   closetPresenter.busyInterval = null;   
+	   
+	   if (closetFormPresenter.closetNames.indexOf(closetName.trim()) >= 0){
+	       Messenger.info("That clositt name already exists! Please enter a new clositt name.");   
+	       return;    
+	   }
+	   
 		var closittData = {
 	         title: closetName.trim(),
 	         owner: session.userid,
@@ -450,31 +635,39 @@ var closetFormPresenter = {
  			  } 			  			    		       
 		       
 		      Messenger.success('Clositt '+ closittData.title + ' was saved!');  
-		      closetFormPresenter.closetNames.push(closetName);
-		      closetFormPresenter.closetNames = closetFormPresenter.closetNames.sort();
+		      
+		      if (closetFormPresenter.closetNames.indexOf(closetName.trim()) < 0){
+		              closetFormPresenter.closetNames.push(closetName.trim());
+        		      closetFormPresenter.closetIds.push(result);
+        	  }
+		
 		       
 		       if (el == null){
 		          if ($("#closetNameList").length > 0){
 		              var $newClositt = $("<li>").css("display","none").append(
             		                      $("<div>").addClass("btn-group").append(
-            		                          $("<button>").addClass("btn btn-default nav-filter closetName")
+            		                          $("<button>").addClass("btn btn-default nav-filter closetName newClosetName")
             		                              .attr("type","button")
             		                              .attr("name",closittData.title)
-            		                              .text(closittData.title)		                                      		                              
+            		                              .text(closittData.title)                  
             		                      )
             		                  );
 		              
 		              $newClositt.insertBefore("#closetNameList .addnew");
-		              $newClositt.show('slow');		              		              		              
+		              $newClositt.show('slow');
+		              $newClositt.find(".newClosetName").removeClass("newClosetName", 3000);		              		              		              
 		          }   
 		       }else{
-		          		       		 
+			$(el.currentTarget).prev(".addNewClosetInput").val("");
+		          		          		       		 
       		       var selector = ".addToClosetOptions";		       
-      		       if ($(el.currentTarget).parent().find(".addToClosetOptions .mCSB_container").length > 0){      		       										   		selector = ".addToClosetOptions	.mCSB_container";		       		       
+      		       if ($(el.currentTarget).parent().find(".addToClosetOptions .mCSB_container").length > 0){
+      		            selector = ".addToClosetOptions	.mCSB_container";
       		       }
       		       
       		       $(el.currentTarget).parent().find(selector).prepend(
-      			       $("<a>").addClass("ring_opt closetOption").attr("i",closetFormPresenter.closetNames.length - 1).append(
+      			       $("<a>").addClass("ring_opt closetOption").attr("i",closetFormPresenter.closetNames.length - 1)
+      			       .append(
       						$("<div>").addClass("customcheckbox pull-left icon-check")
       					).append( 
       					    $("<p>").addClass("pull-left").text(closetName)
@@ -485,6 +678,8 @@ var closetFormPresenter = {
        			       closetFormPresenter.addItemToCloset(el, sku, closetName, result);
        		   	   }
 		       }
+		       
+		       closetPresenter.isBusy = false;
 		});
 	},
 	
@@ -510,7 +705,13 @@ var closetFormPresenter = {
     	 			  if (result != "success") {
     						Messenger.error('Item could not be saved into ' + closetName);	 			       	 			       
     				  } else {
-    						Messenger.success('This item was added to "' + closetName + '"');
+    						var notLoggedInMsg = '';
+    						
+    						if (!session.isLoggedIn){
+    						   notLoggedInMsg = " temporarily. Please log in to save this clositt to your account!";
+    						}
+    						
+    						Messenger.success('This item was added to "' + closetName + '"' + notLoggedInMsg);
     						
     						// add to closet mapping
     						if (closetFormPresenter.closetItemsMapping[closetName] == null){

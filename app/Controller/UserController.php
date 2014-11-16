@@ -4,6 +4,7 @@ require_once(dirname(__FILE__) . '/../email.php');
 require_once(dirname(__FILE__) . '/../Model/UserEntity.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/UserDao.php');
 require_once(dirname(__FILE__) . '/Debugger.php');
+require_once(dirname(__FILE__) . '/ClosetController.php');
 
 
 class UserController extends Debugger {	
@@ -31,12 +32,31 @@ class UserController extends Debugger {
                 
                 if (isset($lastInsertId) && is_numeric($lastInsertId) && $lastInsertId > 0){                
 
+                    $user->setUserId($lastInsertId);
                     $session->setSession($user, true);
                     $session->setCookie($data['remember']);
                     
                     EmailController::sendWelcomeMessage($user->getEmail());    
-                                        
-                    $user->setUserId($lastInsertId);
+                    
+                    // Create default Closet   
+                    $defaultCloset = array();
+                    $defaultCloset['id'] = -1;
+                    $defaultCloset['title'] = "80's are back!";
+                    $defaultCloset['owner'] = $lastInsertId;
+                    $defaultCloset['item'] = 'sh372747380';
+                    $defaultCloset['cache'] = '//cdn.shopify.com/s/files/1/0234/5963/products/2014-10-22_21.27.14_large.jpg?v=1414780995';                    
+                    
+                    $closetController = new ClosetController();
+                    $closetController->createNewClosetAndAddItems($defaultCloset);
+                    
+                    $defaultCloset['item'] = 'sh369594921';
+                    $defaultCloset['cache'] = '//cdn.shopify.com/s/files/1/0234/5963/products/IMG_0125_large.jpg?v=1412793706';
+                    $closetController->createNewClosetAndAddItems($defaultCloset);
+                    
+                    $defaultCloset['item'] = 'sh378130880';
+                    $defaultCloset['cache'] = '//cdn.shopify.com/s/files/1/0234/5963/products/IMG_9480_large.jpeg?v=1414463803';
+                    $closetController->createNewClosetAndAddItems($defaultCloset);
+                                                            
                     return json_encode($user->toArray());                      
                 }else{
                     // does user already exist
@@ -116,55 +136,71 @@ class UserController extends Debugger {
 	
 	public function updateUserInfo($data){
 	   global $session;
+	   $results = array();
 	   
 	   if (isset($data)){
             $user = UserEntity::setFromPost($data);
             
             if (isset($user)){
                 $userId = $user->getUserId();
-                
+                                                
                 if ($userId == $_SESSION['userid']){ 
-                    $affectedRows = $this->userDao->updateUserInfo($user);
+                    $affectedRows = 0;
                     
-                    if ($affectedRows === 1){
-                        $session->setSession($user);
-                        return "success";
-                    }else{
-                        return "failed";   
+                    // Update user password                    
+                    if (!empty($data['op']) && !empty($data['p'])){
+                        $results['p'] = $this->updateUserPassword($data);                        
                     }
+                    
+                    // Update user name and price alerts                      
+                    if (!empty($data['n']) || !empty($data['f'])){
+                        $affectedRows = $this->userDao->updateUserInfo($user);
+                        $results['u'] = $affectedRows === 1 ? "success" : "failed";
+                        
+                        if ($results['u'] == "success"){
+                            $session->setSession($user);
+                        }
+                    }                    
+                    
+                    return json_encode($results);
                 }
             }
         }
                 
         $this->debug("UserController", "updateUserInfo", "There was no user supplied to update!");
-        return "failed";
+        $results['f'] = "error";
+        return json_encode($results);
 	}
 	
 	public function updateUserPassword($data){
-	   if (isset($data)){                                                                                  
-            $results = $this->userDao->getUserPassword($_SESSION['email']);
-                        
-            if(is_object($results)){
-    			if($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){        			    				    
-    				$userFromDB = UserEntity::setFromDB($row);								
-    				$savedHashedPassword = $userFromDB->getPassword();	
-    				
-    				if (isset($savedHashedPassword)){    				        				     
-                        $oldPassword = $data['op'];                        
-                                                    
-                        if (password_verify($oldPassword, $savedHashedPassword)){
-                            $user = new UserEntity();
-        				    $user->setUserId($_SESSION['userid']);
-        				    $user->setEmail($_SESSION['email']);
-        				    $user->setSecurePassword($data['p']);
+	   if (isset($data) && isset($data['id'])){
+	        $userId = $data['id'];
+	        
+	        if ($userId == $_SESSION['userid']){	                                                                                            
+                $results = $this->userDao->getUserPassword($_SESSION['email']);
                             
-                            $affectedRows = $this->userDao->updateUserPassword($user, $savedHashedPassword);
-                            
-                            return $affectedRows === 1 ? "success" : "failed";
-                        }
-    				}
-    			}                
-            }
+                if(is_object($results)){
+        			if($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){        			    				    
+        				$userFromDB = UserEntity::setFromDB($row);								
+        				$savedHashedPassword = $userFromDB->getPassword();	
+        				
+        				if (isset($savedHashedPassword)){    				        				     
+                            $oldPassword = $data['op'];                        
+                                                        
+                            if (password_verify($oldPassword, $savedHashedPassword)){
+                                $user = new UserEntity();
+            				    $user->setUserId($_SESSION['userid']);
+            				    $user->setEmail($_SESSION['email']);
+            				    $user->setSecurePassword($data['p']);
+                                
+                                $affectedRows = $this->userDao->updateUserPassword($user, $savedHashedPassword);
+                                
+                                return $affectedRows === 1 ? "success" : "failed";
+                            }
+        				}
+        			}                
+                }
+	        }
         }
                  
         $this->debug("UserController", "updateUserInfo", "There was no user supplied to update!");

@@ -189,7 +189,7 @@ var socialPresenter = {
 	       if (item.length > 0){
 	           shareData.id = item.attr("pid");   
 	       }else{	           
-	           shareData.closet = "closet: " + $(e.currentTarget).parents(".closetPanel").first().attr("number");  
+	           shareData.closet = $(e.currentTarget).parents(".closetPanel").first().attr("number");  
 	       }	       	           	       	   
     	   
     	   setTimeout(function(){

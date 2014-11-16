@@ -37,8 +37,14 @@ class AbstractDao{
 			$this->logDebug($errorCode ,$sql . " (" . $parameters . "), (".$parameterTypes.")" );
 		}
 		
-		$results = $stmt->execute($params);
-		$stmt->free();
+		try{
+		  $results = $stmt->execute($params);
+		  $stmt->free();
+		}catch (Exception $e){
+		      $msg = print_r($e, true);
+		      $this->logError($errorCode , $msg, $sql);
+		}
+		
 		
 		$PEAR = new PEAR();
 		if ($PEAR->isError($results)) {
@@ -76,7 +82,7 @@ class AbstractDao{
         try {              
              $affectedRows = $stmt->execute($params);
              
-        } catch (Exception $e) {
+        }catch (Exception $e) {
             $this->logError($errorCode ,$e->getMessage(), $sql);
             return false;
         }         		

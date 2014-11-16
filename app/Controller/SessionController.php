@@ -20,13 +20,14 @@ class SessionController extends Debugger{
       	$_SESSION['userid'] = null;
       	$_SESSION['name'] = null;
       	$_SESSION['email'] = null;
+      	$_SESSION['pricealerts'] = null;
       	$_SESSION['newuser'] = false;
       	$_SESSION['remember'] = false;
       	$_SESSION['time'] = 0;
       	$_SESSION['failed'] = false;
       	$_SESSION['failedcount'] = 0;
       	$_SESSION['isAdmin'] = false;      	      	      	
-      	$_SESSION['errors'] = null;
+      	$_SESSION['errors'] = null;      	
     }
     
     /**
@@ -83,10 +84,25 @@ class SessionController extends Debugger{
         if (!isset($user)){
             return false;   
         }	   
-	   	
-		$_SESSION['userid'] = $user->getUserId();
-		$_SESSION['email'] = htmlspecialchars($user->getEmail());
-		$_SESSION['name'] = stripslashes($user->getName());
+        
+        $_SESSION['userid'] = $user->getUserId();
+        
+        $email = $user->getEmail();
+        $name = $user->getName();
+        $priceAlerts = $user->getPriceAlertFrequency();
+		
+		if (!empty($email)){
+		  $_SESSION['email'] = htmlspecialchars($email);
+		}
+		
+		if (!empty($name)){
+		  $_SESSION['name'] = stripslashes($name);
+		}
+		
+		if (!empty($priceAlerts)){		
+		  $_SESSION['pricealerts'] = $priceAlerts;
+		}
+		
 		$_SESSION['active'] = true;
 		$_SESSION['failed'] = false;
 		$_SESSION['failedcount'] = 0;
@@ -140,6 +156,7 @@ class SessionController extends Debugger{
 		$_SESSION['failedcount'] += 1;
 		$_SESSION['errors'] = "Login information was not correct!";
 		$_SESSION['email'] = $user->getEmail();
+		$_SESSION['pricealerts'] = null;
         $_SESSION['active'] = false;      	
       	$_SESSION['newuser'] = false;      	
       	$_SESSION['time'] = 0;      	

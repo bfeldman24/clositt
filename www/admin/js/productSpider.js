@@ -7,14 +7,16 @@
 var spider = {
     links: null,
     stopSaveAll: false,
+    saveAllBatchLimit: 15,
     autoRunHash: '#autoSaveAll',
     testNewProductsHash: '#testNew',
     
     // Gets the category links
     getLinks: function(){
         $("#loadingMask").show();
-    	$("#links").html("");	
-    	spider.links = [];
+    	$links = $("<div>");
+    	$("#links").html("");
+    	spider.links = [];    	
     	
     	if (location.hash == spider.testNewProductsHash){
     	   for(var i=0; i < Object.keys(Companies).length; i++){
@@ -23,7 +25,7 @@ var spider = {
     	       var categoryName = "test";
     	       var category = Companies[companyName]; 
     	       
-    	       $("#links").append(
+    	       $links.append(
     	           $("<div>").addClass("company").append(
     	               $("<a>").attr("name",companyName)
     	            ).append(
@@ -31,7 +33,7 @@ var spider = {
     	            )
     	        );   
     	           	       
-	            $("#links > .company").last().append($("<div>").addClass("customer").append($("<div>").addClass("customerName").html("&raquo; " + customerName)));
+	            $links.find(".company").last().append($("<div>").addClass("customer").append($("<div>").addClass("customerName").html("&raquo; " + customerName)));
 	       	                          
                var link = {};
                link.company = companyName.replace(/'/g, "\\'");
@@ -40,7 +42,7 @@ var spider = {
                link.url = category["url"].replace(/'/g, "\\'");
                spider.links.push(link);
                	               
-               $("#links > .company > .customer").last().append(
+               $links.find(".company > .customer").last().append(
 					$("<div>").addClass("category").css("display","none").append(
 						$("<input>")
 							.attr("type","checkbox")
@@ -60,6 +62,7 @@ var spider = {
 				); 	   
     	   }
     	 
+    	   $("#links").html($links);
     	   $("#loadingMask").hide();  
     	   return true;
     	}
@@ -137,6 +140,7 @@ var spider = {
         							.attr("lastUpdated", link.lastUpdated)        							
         							.attr("url", link.url)
         							.attr("status", statusText)
+        							.attr("count", link.count)
         						).append(
         						      $("<a>").attr("href", link.url).attr("target","_blank").html(categoryName)
         						).append(
@@ -166,8 +170,7 @@ var spider = {
     },	
     
     // Gets the checked prdocuts from the link, validates them, and shows a sampling of them
-    testProductsFromLinks: function(showData, showSample, save, saveCallback){	
-    	$("#json-products").html("");
+    testProductsFromLinks: function(showData, showSample, save, saveCallback){	    	
     	$("#sample-grid").html("");
     	
     	if (saveCallback == null){
@@ -199,6 +202,8 @@ var spider = {
     			     console.log("Debugging: Just note that the url parameters were updated");
     			}
     			
+    			console.log("Getting -> " + company + " - " + customer + " - " + category);
+    			
     			var categoryData = {
     			     "company" : company,
     			     "customer" : customer, 
@@ -223,6 +228,7 @@ var spider = {
             
             if (data != null && itemCount > 0){
                 categoryData.link.siblings("a").after('<span class="isvalid" style="color:green">&nbsp;- Works! ('+itemCount+' products)</span>');
+                categoryData.link.attr("count", itemCount);
 			    
 			    var statusObj = {
 			        store: categoryData.company, 
@@ -232,9 +238,11 @@ var spider = {
 			        count: itemCount
 			    };
 			    
-			    $.post( window.HOME_ROOT + "spider/updatestatus", statusObj, function( data ) {
-			        console.log(JSON.stringify(data));
-			    }); 
+			    if (!categoryData.save){
+    			    $.post( window.HOME_ROOT + "spider/updatestatus", statusObj, function( data ) {
+    			        console.log(JSON.stringify(data));
+    			    }); 
+			    }
                 
                 if (categoryData.showSample){
                     spider.showSampleProducts(data, categoryData.company, categoryData.customer, categoryData.category);
@@ -255,6 +263,7 @@ var spider = {
     			         storeProducts[sku]['tags'] = categoryData.tags.split(","); 
     			    }			     			        	
     				
+    				/*
     				// Used for database
     				if ($("#json-products").text().trim() != ""){
         				var jsonProducts = $.parseJSON($("#json-products").text());
@@ -262,8 +271,9 @@ var spider = {
     				}
     				    				
     				$("#json-products").text(JSON.stringify(storeProducts));	
+    				*/
     									
-    				spider.saveAllProducts(categoryData.saveCallback);    				        					
+    				spider.saveAllProducts(categoryData.saveCallback, storeProducts);
                 }   
             
 			}else{
@@ -384,99 +394,99 @@ var spider = {
     },
 
     // Saves the products
-    saveAllProducts: function (saveCallback){
+    saveAllProducts: function (saveCallback, storeProducts){
     	var total = $("#links > .company > .customer > .category > input:checked").size();	
      	var success = 0;
      	var batchLimit = 1000;
      	var batch = {};
-     	var nextBatch = {};
      	
-     	if (total <= 0){
+     	if (storeProducts == null || Object.keys(storeProducts).length <= 0){
     		Messenger.info("There is nothing to save! Please add product data.");	
     	}else{ 	
     	    var tags = {};
-    	      	  var isLastBatch = true;
-    	    var products = $.parseJSON($("#json-products").text());
+    	    var isLastBatch = true;
+    	    var products = storeProducts;
+    	    var counter = 0;
     	    
     	    for (var i=0; i < Object.keys(products).length; i++){
-    	           var sku = Object.keys(products)[i];
+    	           var sku = Object.keys(products)[i];    	               	               	           
+    	           batch[sku] = products[sku];    	           
+    	           isLastBatch = i + 1 == Object.keys(products).length;
     	           
-    	           if (i < batchLimit){
-    	               batch[sku] = products[sku];
-    	           }else{
-    	               nextBatch[sku] = products[sku];
-    	               isLastBatch = false;
-    	           }    	               	           
-    	    }
-    	    
-    	    $("#json-products").text(JSON.stringify(nextBatch));	
-    	   
-    $.post( window.HOME_ROOT + "spider/update", { products: batch, isLastBatch: isLastBatch}, function( result ) {                        
-                console.log(JSON.stringify(result));                       
-                
-                var output = "";
-                
-                if (result == null){
-                    output += "Data was NOT saved successfully! ";
-                }else{
-                    if (result['clearProducts'] != null && result['clearProducts']){
-    
-                        if (result['new'] != null && !isNaN(result['new']) &&
-                            result['updated'] != null && !isNaN(result['updated']) && 
-                            result['historicalPrices'] != null && !isNaN(result['historicalPrices'])){
-                            
-                                output += " Success! ";
-                                output += " Processed " + result['numProducts'] + " products! ";
-                        }
-                        
-                        if (result['new'] == null || isNaN(result['new'])){
-                            output += "Error adding new products! ";
-                        }else{
-                            output += "Added " + result['new'] + " new products. ";    
-                        }
-                        
-                        if (result['updated'] == null || isNaN(result['updated'])){
-                            output += "Error updating existing products! ";
-                        }else{
-                            output += "Updated " + result['updated'] + " products! ";   
-                        }
-                        
-                        if (result['historicalPrices'] == null || isNaN(result['historicalPrices'])){
-                            output += "Error getting historical prices! ";
-                        }else{
-                            output += "Added " + result['historicalPrices'] + " historical prices! ";                        
-                        }
-                    }else{
-                        output += "There was an issue saving the products. Data was NOT saved successfully! ";        
-                    }                
-                }                        
-                
-                Messenger.success(output);
-                
-                if (Object.keys(nextBatch).length > 0){
-                    spider.saveAllProducts(saveCallback);
+    	           if (counter + 1 == batchLimit || isLastBatch){
+    	                  $.post( window.HOME_ROOT + "spider/update", { products: batch, isLastBatch: isLastBatch},
+    	                   function( result ) {                        
+                                console.log(JSON.stringify(result));                       
+                                
+                                var output = "";
+                                
+                                if (result == null){
+                                    output += "Data was NOT saved successfully! ";
+                                }else{
+                                    if (result['tempProducts'] != null){
                     
-                }else{
-                    if (saveCallback != null){
-                        saveCallback();           
-                    }    
-                }
-            }
-            , "json"
-            );	   
+                                        if (result['new'] != null && !isNaN(result['new']) &&
+                                            result['updated'] != null && !isNaN(result['updated']) && 
+                                            result['historicalPrices'] != null && !isNaN(result['historicalPrices'])){
+                                            
+                                                output += " Success! ";
+                                                output += " Processed " + result['numProducts'] + " products! ";
+                                        }
+                                        
+                                        if (result['new'] == null || isNaN(result['new'])){
+                                            output += "Error adding new products! ";
+                                        }else{
+                                            output += "Added " + result['new'] + " new products. ";    
+                                        }
+                                        
+                                        if (result['updated'] == null || isNaN(result['updated'])){
+                                            output += "Error updating existing products! ";
+                                        }else{
+                                            output += "Updated " + result['updated'] + " products! ";   
+                                        }
+                                        
+                                        if (result['historicalPrices'] == null || isNaN(result['historicalPrices'])){
+                                            output += "Error getting historical prices! ";
+                                        }else{
+                                            output += "Added " + result['historicalPrices'] + " historical prices! ";                        
+                                        }
+                                    }else{
+                                        output += "There was an issue saving the products. Data was NOT saved successfully! ";        
+                                    }                
+                                }                        
+                                
+                                Messenger.success(output);
+                                                                
+                                if (saveCallback != null){
+                                    saveCallback();           
+                                }                                    
+                            }
+                            , "json"
+                            );
+                            
+                            batch = {};
+                            counter = -1;
+    	           }    	           
+    	           
+    	           counter++;   	               	           
+    	    }    	        	        	        	        	               	   
     	}
     },
     
-    autoRun: function(){        
-        console.log("Sorting Categories by last saved date...");
+    autoRun: function(){                
         
         // Remove Broken Links for AutoRun
+        /*
         $brokenLinks = $(".category").filter(function(){
             return $(this).find(".isvalid").text().indexOf("BROKEN") >= 0; 
         });
         
         $("#brokenLinks").append($brokenLinks);        
-                
+        */
+        
+        // Order categories so that the last run shows first
+        /*        
+        console.log("Sorting Categories by last saved date...");
         var cats = $(".company").sort(function(a, b){
             
             var $aWorks = $(a).find(".isvalid").filter(function(){
@@ -503,11 +513,12 @@ var spider = {
             
             return dateA - dateB;
         });
-                    
+        
         cats = cats.clone();
         $("#links").html("");
         $("#links").append(cats);
-              
+        
+        */                    
         
         console.log("Auto Run...");        
         actionButtons.saveAll();
@@ -768,7 +779,7 @@ var categoryMaintenance = {
         
         var data = {u: home};
         
-        if (store.usePhantomjs){
+        if (store != null && store.usePhantomjs){
             data.phantom = true;   
         }
         
@@ -1016,6 +1027,8 @@ var actionButtons = {
     },
 
     saveAll: function(){
+         Messenger.isSilent = true;
+         
          // show  and uncheck all categories
          $(".category").show();
          $("#links").find(':checkbox').prop('checked', false);          
@@ -1028,34 +1041,39 @@ var actionButtons = {
          window.todaysDate = d.toLocaleDateString();
          
          $("#transparentLoadingMask").show(); 
-         Messenger.timeout = 15000;         
+         Messenger.timeout = 1500;         
          
          // Reverse the company order every other day:
          // This is so if the script goes through 1/2 of the products every 
          // day before failing or browser crashes, then all of the products
          // will get updated every 2 days. 
-         if (location.hash != spider.autoRunHash && d.getDate() % 2 == 0){
+         if (location.hash == spider.autoRunHash && d.getDate() % 2 == 0){
             Messenger.info("Reversing the company list (We do this every other day)");
             $("#links").append($(".company").get().reverse());
          }
-         
+                  
+         var count = 0;
          $("#links").find(':checkbox').each(function(){           
-                            
-            if ($(this).attr("lastUpdated") == "" || $(this).attr("lastUpdated") != window.todaysDate){                                
+                                    
+            if ($(this).attr("lastUpdated") != window.todaysDate){                                
     
-                $(this).prop('checked', true);                                
-                return false;       
+                $(this).prop('checked', true);       
+                $(this).attr("lastUpdated", window.todaysDate);                         
+                count++;      
             }else{
                 window.saveCounter++;   
+            }
+            
+            if (count >= spider.saveAllBatchLimit){
+                return false;   
             }                                     
         });
         
-        var nonBrokenLinksNotUpdatedToday = $("#links").find(':checkbox').filter(function(){
-             return ($(this).attr("lastUpdated") == "" || $(this).attr("lastUpdated") != window.todaysDate) && 
-                    $(this).attr("status").indexOf("BROKEN") < 0;
+        var linksNotUpdatedToday = $("#links").find(':checkbox').filter(function(){
+             return $(this).attr("lastUpdated") != window.todaysDate;
         });       
                     
-        if(nonBrokenLinksNotUpdatedToday.length > 0 && $("#links").find(':checkbox:checked').length > 0){            
+        if(linksNotUpdatedToday.length > 0 && $("#links").find(':checkbox:checked').length > 0){            
             spider.testProductsFromLinks(false, false, true, actionButtons.saveNextCategory);    
         }else{
             Messenger.info("All working categories are saved for today! Try again tomorrow.");   
@@ -1063,57 +1081,58 @@ var actionButtons = {
         }
     },
 
-    saveNextCategory: function(status){
+    saveNextCategory: function(){
         var areThereMoreCategories = false;
-        var currentCategory = null;
         var foundChecked = false;
+        var lastCheckedCategory = null;
+        var totalChecked = $("#links > .company > .customer > .category > input:checked").size();
+        var categoriesToCheck = spider.saveAllBatchLimit;
+        var totalProductsInBatchLimit = 1000;
+        var totalProductsInBatch = 0;
+        
         
         $("#links").find(':checkbox').each(function(){
-            if (foundChecked){                    
-                if ($(this).attr("lastUpdated") == "" || $(this).attr("lastUpdated") != window.todaysDate){
-                    $(this).prop('checked', true);  
-                    areThereMoreCategories = true;            
-                    return false;       
-                }        
-            }
-            
-            if ($(this).prop('checked')){
-                $(this).prop('checked', false);
-                currentCategory = $(this);  
-                foundChecked = true;          
-            }               
-             
+                if ($(this).prop('checked')){
+                    $(this).prop('checked', false);            
+                    
+                    var company = $(this).attr("company");
+                    var customer = $(this).attr("customer");
+                    var category = $(this).attr("category");                        
+                    var status = $(this).attr("status");
+                    
+                    if (status.indexOf("Works") >= 0){                                                                                   
+                        var d = new Date();
+                        $(this).siblings(".lastUpdated").text(d.toLocaleDateString());
+                
+                        window.saveCounter++;
+                        Messenger.info(window.saveCounter + "/" + window.totalToSave + " categories saved! " + company + " " + customer + " " + category);
+                    }else{
+                        Messenger.error(company + " " + customer + " " + category + " - BROKEN LINK!");   
+                    }
+                }else{               
+
+                    if ($(this).attr("lastUpdated") != window.todaysDate){
+                        $(this).prop('checked', true);  
+                        $(this).attr("lastUpdated", window.todaysDate);
+                        areThereMoreCategories = true;     
+                        lastCheckedCategory = $(this);
+                        var productCount = $(this).attr("count");
+                        
+                        if (!isNaN(productCount)){
+                            totalProductsInBatch += parseInt(productCount); 
+                        }                                  
+                        
+                        if (categoriesToCheck <= 0 || totalProductsInBatch >= totalProductsInBatchLimit){                        
+                            return false;       
+                        }
+                        
+                        categoriesToCheck--;
+                    }
+                }
         }); 
         
-        if (areThereMoreCategories){
-            $('html, body').animate({
-                scrollTop: currentCategory.offset().top - 100
-            }, 500);
-            
-            var company = currentCategory.attr("company");
-            var customer = currentCategory.attr("customer");
-            var category = currentCategory.attr("category");
-            
-            if (status != "failed"){                                                                        
-                var statusObj = {
-			        store: company, 
-			        customer: customer,
-			        category: category,
-			        status: 1
-			    };
-			    
-			    $.post( window.HOME_ROOT + "spider/updatestatus", statusObj, function( data ) {
-			        console.log(JSON.stringify(data));
-			    });
-            
-                var d = new Date();
-                currentCategory.siblings(".lastUpdated").text(d.toLocaleDateString());
-        
-                window.saveCounter++;
-                Messenger.info(window.saveCounter + "/" + window.totalToSave + " categories saved! " + company + " " + customer + " " + category);
-            }else{
-                Messenger.error(company + " " + customer + " " + category + " - BROKEN LINK!");   
-            }
+        if (areThereMoreCategories){            
+            $('html, body').scrollTop($(".category input:checked").first().offset().top - 100);                        
             
             if (!spider.stopSaveAll){
                 spider.testProductsFromLinks(false, false, true, actionButtons.saveNextCategory);                

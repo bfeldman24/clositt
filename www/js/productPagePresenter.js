@@ -29,7 +29,7 @@ var productPagePresenter = {
             
             setTimeout(function(){
                 $(".badData").tooltip();            
-            }, 2000);
+            }, 500);
         });
                                    
 	},
@@ -167,7 +167,7 @@ var productPagePresenter = {
 	       if (item.length > 0){
 	           
 	           setTimeout(function(){
-        	       $.post(window.HOME_ROOT + "l/add", {listName: "badData", item: item.attr("pid")}, function(result){
+        	       $.post(window.HOME_ROOT + "l/issue", {listName: "badData", item: item.attr("pid")}, function(result){
         	              if (result == "success"){
         	                   Messenger.success("Thanks! We are always trying to improve our product quality.");
         	              }else{

@@ -20,6 +20,7 @@
             userid: <?php echo $_SESSION["userid"]; ?>, 
             email: '<?php echo $_SESSION["email"]; ?>',
             name: '<?php echo $_SESSION["name"]; ?>',
+            pricealerts: '<?php echo $_SESSION["pricealerts"]; ?>',
         <?php }else{ ?>
             active: false
         <?php } ?>                                    
@@ -54,4 +55,7 @@ $(document).ready(function() {
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
     </script>
-<?php } ?>
+<?php } 
+
+$mdb2->disconnect();
+?>

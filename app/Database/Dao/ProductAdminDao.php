@@ -114,28 +114,18 @@ class ProductAdminDao extends AbstractDao {
         $sql .= " SET SQL_SAFE_UPDATES='ON'; ";        
                   
         return $this->update($sql, array(), array(), "0123984710");
-    }
-    
-    public function clearTempProducts($products){                
-        $sql = "DELETE FROM " . TEMP_PRODUCTS . 
-                " WHERE ". PRODUCT_STORE . " <> ? OR " . 
-                      PRODUCT_CUSTOMER . " <> ? OR " . 
-                      PRODUCT_CATEGORY . " <> ?";                                        
-        
-        $paramTypes = array('text','text','text');
-        list($firstProduct) = array_values($products);
-        $params = array($firstProduct['company'], $firstProduct['customer'], $firstProduct['category']);
-        $success = $this->update($sql, $params, $paramTypes, "98347223");
-        return $success ? true : false;
-    }  			
+    }         			
 	
 	public function addTempProducts($products){
 	    if(!isset($products) || !is_array($products)){
 			$this->logWarning("12876319","Nothing to add!");
 			return false; 
 		}
-	 
-	    $sql = "INSERT IGNORE INTO " . TEMP_PRODUCTS . 
+        
+        $sql = "CREATE TEMPORARY TABLE " . TEMP_PRODUCTS . " LIKE " . PRODUCTS;	 
+        $this->update($sql, array(), array(), "98326493");
+        	   
+	    $sql = "INSERT INTO " . TEMP_PRODUCTS . 
 	           " (" . PRODUCT_SKU . "," .
                       PRODUCT_STORE . "," . 
                       PRODUCT_CUSTOMER . "," . 
@@ -155,28 +145,38 @@ class ProductAdminDao extends AbstractDao {
         
         $paramTypes = array('text','text','text','text','text','text','text','decimal','text');
         $stmt = $this->db->prepare($sql, $paramTypes, MDB2_PREPARE_MANIP);
+        
+        if($this->debug){		    
+			$this->logDebug("128763191" ,$sql);
+		}	
+        
         $affectedRows = 0;
         foreach ($products as $key => $value) {
-            
-            try {                                         
-                $params = array($value['sku'],
-                                $value['company'],
-                                $value['customer'],
-                                $value['category'],
-                                $value['name'],
-                                $value['link'],
-                                $value['image'],
-                                $value['price'],
-                                $value['shortlink']);
-                
-                $results = $stmt->execute($params);                                                                
-                
-                if (is_numeric($results)){
-                    $affectedRows += $results;
+            if (trim($value['sku']) != ""){
+                try {                                         
+                    $params = array($value['sku'],
+                                    $value['company'],
+                                    $value['customer'],
+                                    $value['category'],
+                                    $value['name'],
+                                    $value['link'],
+                                    $value['image'],
+                                    $value['price'],
+                                    $value['shortlink']);
+                    
+                    $results = $stmt->execute($params);                                                                
+                                    
+                    if (is_numeric($results)){
+                        if ($results === 0){
+                            $results = 1;   
+                        }
+                        
+                        $affectedRows += $results;
+                    }
+                    
+                } catch (Exception $e) {
+                    echo 'Caught exception: ',  $e->getMessage(), "\n\n";
                 }
-                
-            } catch (Exception $e) {
-                echo 'Caught exception: ',  $e->getMessage(), "\n\n";
             }
         }        
         
@@ -215,17 +215,15 @@ class ProductAdminDao extends AbstractDao {
                       " RAND() ," .
                       "NOW() ," .
                       "NOW() " .
-               " FROM " . TEMP_PRODUCTS . " tp " .
-			   " WHERE " . PRODUCT_SKU . " NOT IN ( SELECT " . PRODUCT_SKU . " FROM " . PRODUCTS . " ) ";	           
-        
+               " FROM " . TEMP_PRODUCTS . " tp ";
         
         return $this->update($sql, array(), array(), "324987239");
 	}	
 	
 	public function updateExistingProducts(){	   	 
 	   
-	   $sql = "SET SQL_SAFE_UPDATES='OFF'; ";  
-	   $sql .= "UPDATE IGNORE " . PRODUCTS . " p " .
+	   //$sql = "SET SQL_SAFE_UPDATES='OFF'; ";  
+	   $sql = "UPDATE IGNORE " . PRODUCTS . " p " .
         	  " INNER JOIN " . TEMP_PRODUCTS . " tp ON tp." . PRODUCT_SKU . " = p." . PRODUCT_SKU .
               " SET " .
               "p." .PRODUCT_NAME . " = tp." . PRODUCT_NAME . "," .
@@ -234,7 +232,7 @@ class ProductAdminDao extends AbstractDao {
               "p." .PRODUCT_PRICE . " = tp." . PRODUCT_PRICE . "," . 
               "p." .PRODUCT_DATE_UPDATED. " = tp." . PRODUCT_DATE_UPDATED . "," .
               "p." .PRODUCT_STATUS. " = CASE WHEN p.".PRODUCT_STATUS." = 3 THEN 1 ELSE p.".PRODUCT_STATUS." END; ";               
-       $sql .= "SET SQL_SAFE_UPDATES='ON'; ";       
+       //$sql .= "SET SQL_SAFE_UPDATES='ON'; ";       
               
        return $this->update($sql, array(), array(), "923847293");
 	}		
@@ -262,7 +260,7 @@ class ProductAdminDao extends AbstractDao {
 	   $sql = "UPDATE " . PRODUCTS . " p " .
               " LEFT JOIN " . TEMP_PRODUCTS . " tp ON tp." . PRODUCT_SKU . " = p." . PRODUCT_SKU .
               " SET p." .PRODUCT_STATUS . " = 3 " .
-              " WHERE ISNULL(tp.".PRODUCT_SKU.") AND " .
+              " WHERE ISNULL(tp.".PRODUCT_SKU.") AND p." . PRODUCT_DATE_UPDATED . " < DATE(NOW()) AND " .
               " p.".PRODUCT_STORE." = ? AND p.".PRODUCT_CUSTOMER." = ? AND p.".PRODUCT_CATEGORY." = ? ";        
         
         $paramTypes = array('text','text','text');
@@ -350,7 +348,17 @@ class ProductAdminDao extends AbstractDao {
               " SET " . PRODUCT_STATUS . " = 5 " . 
               " WHERE " . PRODUCT_SKU . " IN (SELECT " . PRODUCT_SKU . " FROM " . TAGS . " WHERE " . TAG_STRING . " IN ('delete','notclothes','remove') )";                            
         
-        return $this->update($sql, array(), array(), "2309823");
+        $this->update($sql, array(), array(), "2309823");
+        
+        // Closetid 155 and 146 are ben and eli's delete clositts
+        $sql = "SET SQL_SAFE_UPDATES='OFF'; " .
+               " UPDATE " . PRODUCTS . " p " .
+               " RIGHT JOIN " . CLOSET_ITEMS . " c ON c.".PRODUCT_SKU." = p.".PRODUCT_SKU .
+               " SET p.".PRODUCT_STATUS." = 5 " .
+               " WHERE c.". CLOSET_ID." IN (155, 146); ".
+               " SET SQL_SAFE_UPDATES='ON';";
+               
+        return $this->update($sql, array(), array(), "2309824");       
 	}
 	
 	public function getCustomers(){	   
