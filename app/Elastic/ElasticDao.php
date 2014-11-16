@@ -52,8 +52,9 @@ class ElasticDao{
         return $results;
     }
 
-	public function getProductsWithCriteria($criteria, $pageNumber, $numResultsPage){        
-		$searchParams = $this->buildQuery($criteria, $pageNumber, $numResultsPage);
+	public function getProductsWithCriteria($criteria, $pageNumber, $numResultsPage){
+        $parsedQuery = array();
+        $searchParams = $this->buildQuery($criteria, $pageNumber, $numResultsPage, $parsedQuery);
         $products = array();
         $facets = array();
 
@@ -87,10 +88,10 @@ class ElasticDao{
         $time = $time_end - $time_start;
         $this->debugger->log("Total time to get products was : $time");
 
-		return array('products'=>$products, 'facets' => $facets);
+		return array('products'=>$products, 'facets' => $facets, 'query'=>$parsedQuery);
 	}
 
-    private function buildQuery($criteria, $pageNumber, $numResultsPage ){
+    private function buildQuery($criteria, $pageNumber, $numResultsPage, &$parsedQuery ){
 
         $start = $pageNumber * $numResultsPage;
 
@@ -99,11 +100,11 @@ class ElasticDao{
         $filters = array();
 
         //TODO Refactor these functions out of this DAO into a criteria builder
-        $this->addPriceFilter($criteria, $filters);
-        $this->addCustomerFilter($criteria, $filters);
-        $this->addStoresFilter($criteria, $filters);
-        $this->addColorFilter($criteria, $filters);
-        $this->addTagsFilter($criteria, $filters);
+        $this->addPriceFilter($criteria, $filters, $parsedQuery);
+        $this->addCustomerFilter($criteria, $filters, $parsedQuery);
+        $this->addStoresFilter($criteria, $filters, $parsedQuery);
+        $this->addColorFilter($criteria, $filters, $parsedQuery);
+        $this->addTagsFilter($criteria, $filters, $parsedQuery);
 
         $fields = array();
 
@@ -179,7 +180,7 @@ class ElasticDao{
         return $response;
     }
 
-    private function addColorFilter($criteria, &$filters){
+    private function addColorFilter($criteria, &$filters, &$parsedQuery){
 
         $color = array();
         if( $criteria->getColors()){
@@ -197,6 +198,7 @@ class ElasticDao{
         if(!empty($color)){
             $colors = array('term'=>array('color'=>array_map('strtolower', $color)));
             array_push($filters, $colors);
+            $parsedQuery["Colors"] = $color;
         }
     }
 
@@ -205,24 +207,25 @@ class ElasticDao{
      * Otherwise check if the "men" or "women" is in the search term and if
      * it is then add it as a filter
      */
-    private function addCustomerFilter($criteria, &$filters){
+    private function addCustomerFilter($criteria, &$filters, &$parsedQuery){
         if( $criteria->getCustomers()){
             $customerType = $criteria->getCustomers();
         }
-        elseif( stristr($criteria->getSearchString(), "men") !== false){
-            $customerType = "men";
-        }
         elseif( stristr($criteria->getSearchString(), "women") !== false){
             $customerType = "women";
+        }
+        elseif( stristr($criteria->getSearchString(), "men") !== false){
+            $customerType = "men";
         }
 
         if(!empty($customerType)){
             $customer = array('term'=>array('customer'=>$customerType));
             array_push($filters, $customer);
+            $parsedQuery["Gender"]= $customerType;
         }
     }
 
-    private function addPriceFilter($criteria, &$filters){
+    private function addPriceFilter($criteria, &$filters, &$parsedQuery){
         $price = array();
 
         if($criteria->getMinPrice()){
@@ -238,7 +241,7 @@ class ElasticDao{
         }
     }
 
-    private function addStoresFilter($criteria, &$filters){
+    private function addStoresFilter($criteria, &$filters, &$parsedQuery){
         $storesToSearch = array();
         if($criteria->getCompanies()){
             foreach($criteria->getCompanies() as $store){
@@ -256,10 +259,11 @@ class ElasticDao{
         if(!empty($storesToSearch)){
             $store = array('terms'=>array('store'=>array_map('strtolower', $storesToSearch)));
             array_push($filters, $store);
+            $parsedQuery["Stores"]= $storesToSearch;
         }
     }
 
-    private function addTagsFilter($criteria, &$filters){
+    private function addTagsFilter($criteria, &$filters, &$parsedQuery){
 
         $tagsToSearch = array();
         if($criteria->getCategories()){
@@ -278,6 +282,7 @@ class ElasticDao{
         if(!empty($tagsToSearch)){
             $tags = array('terms'=>array('category'=>array_map('strtolower', $tagsToSearch)));
             array_push($filters, $tags);
+            $parsedQuery["Tags"]= $tagsToSearch;
         }
 
     }
