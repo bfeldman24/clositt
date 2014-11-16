@@ -47,7 +47,7 @@ class ProductView {
 		    return null; 
 		}
 		
-		$price = !isset($price) || !is_numeric($price) ? '' : "$" . round($price);
+		$price = !isset($price) || !is_numeric($price) ? '' : "$" . number_format(round($price));
 		$tooltip = 'data-toggle="tooltip" data-placement="top" title="'.$name.'"';						
 
         if (isset($columnSizeOverride)){

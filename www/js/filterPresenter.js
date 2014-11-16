@@ -13,6 +13,9 @@ var filterPresenter = {
 	    $(".search-results").mCustomScrollbar();	    
 	    $('#company-search-dropdown').parent().on('hidden.bs.dropdown', filterPresenter.clearCompanyDropdown)
 	    
+	    filterPresenter.setupPriceDropdown();
+	    $('.pricefilter').first().parent().on('hide.bs.dropdown', filterPresenter.addPriceFilter)
+	    
 	    $(document).on("click", "#filters .categoryItem", filterPresenter.showCategorySubmenuItem);
         $(document).on("click", '#filters .selectedFilters>span>a', filterPresenter.removeFilter);
         $('#filters .select_filter').click(filterPresenter.onFilterSelect);        
@@ -46,8 +49,7 @@ var filterPresenter = {
 	 	$("#filters .selectedFilters span").each(function(){
             areAnyFiltersChecked = true;
             
-            var filterType = $(this).attr("filterType");
-            var filterValue = $(this).attr("value").toLowerCase().replace(/'/g, "\\'");
+            var filterType = $(this).attr("filterType");            
             
             if (criteria[filterType] == undefined || criteria[filterType] == null){
 	 		    criteria[filterType] = [];	 				 	
@@ -64,7 +66,13 @@ var filterPresenter = {
  			   if(criteria['abovePrice'] == null || abovePrice < criteria['abovePrice']){
  			      criteria['abovePrice'] = abovePrice;
  			   }
+ 			   
+ 			   if (isNaN(criteria['belowPrice'])){
+ 			        delete criteria['belowPrice'];
+ 			   }
+ 			   
 	 		}else{
+	 		    var filterValue = $(this).attr("value").toLowerCase().replace(/'/g, "\\'");
 		 		criteria[filterType].push(filterValue);
 	 		}
 	 	});	 
@@ -198,15 +206,8 @@ var filterPresenter = {
 	    
 	    if ($('.selectedFilters span[value="'+tagValue+'"]').length <= 0){	    
 	        var $filterButton = $('<span>').attr("value",tagValue).attr("filterType",tagType).text(tagValue).append(
-                                     $('<a class="icon-svg4"></a>')
-                         	   );
-	       
-	        if (tagType == "price"){
-	           var min = $(e.currentTarget).attr("min");
-	           var max = $(e.currentTarget).attr("max");
-	           
-	           $filterButton.attr("min",min).attr("max",max);  
-	        }
+                $('<a class="icon-svg4"></a>')
+    	    );	       	        
 	       
           	$(".selectedFilters").append($filterButton);
 	    }
@@ -227,43 +228,44 @@ var filterPresenter = {
  	    return false;
  	 },
 	 
-	 filterTypeAhead: function(){
-	     $(".alphabets>a").removeClass("selected");
-	     var storeSearch = $("input.drop-search").val().trim().toLowerCase();
+	 filterTypeAhead: function(e){
+	     var $dropdown = $(e.currentTarget).parents(".dropdown-menu");
+	     $dropdown.find(".alphabets>a").removeClass("selected");
+	     var searchTerm = $(e.currentTarget).val().trim().toLowerCase();
 	     
-	     if (!storeSearch || storeSearch == ""){
-	         $("ul.search-results[filterType=company] li").show();
-       	     $(".alphabets>a").show();
+	     if (!searchTerm || searchTerm == ""){
+	         $dropdown.find("ul.search-results[filterType=company] li").show();
+       	     $dropdown.find(".alphabets>a").show();
        	     return;
 	     }
 	     
-	     var invalidStores = $("ul.search-results[filterType=company] li").filter(function(){
-	           var store = $(this).find("a").attr("value");
+	     var invalidStores = $dropdown.find("ul.search-results[filterType=company] li").filter(function(){
+	           var item = $(this).find("a").attr("value");
 	           
-	           if (typeof store !== typeof undefined && store !== false) { 
-	               store = store.toLowerCase();
-	               return store.indexOf(storeSearch) != 0;
+	           if (typeof item !== typeof undefined && item !== false) { 
+	               item = item.toLowerCase();
+	               return item.indexOf(searchTerm) != 0;
 	           }
 	           
 	           return false;
 	     });
 	     	     
-	     var invalidFirstLetters = $(".alphabets>a").filter(function(){
+	     var invalidFirstLetters = $dropdown.find(".alphabets>a").filter(function(){
 	           var letter = $(this).text().toLowerCase();	          
-	           var searchFirstLetter = storeSearch.substr(0,1);
+	           var searchFirstLetter = searchTerm.substr(0,1);
 	           return searchFirstLetter != letter;	           	           
 	     });	     	     
 	     
-	     $("ul.search-results[filterType=company] li").show();
+	     $dropdown.find("ul.search-results[filterType=company] li").show();
 	     invalidStores.hide();
 	     
-	     if (storeSearch.length > 0){
-	           $("ul.search-results[filterType=company] li.brand-letter").hide(); 
+	     if (searchTerm.length > 0){
+	           $dropdown.find("ul.search-results[filterType=company] li.brand-letter").hide(); 
 	     }else{
-	           $("ul.search-results[filterType=company] li.brand-letter").show(); 
+	           $dropdown.find("ul.search-results[filterType=company] li.brand-letter").show(); 
 	     }
 	     
-	     $(".alphabets>a").show();
+	     $dropdown.find(".alphabets>a").show();
 	     invalidFirstLetters.hide();
 	 },
 	 
@@ -295,8 +297,94 @@ var filterPresenter = {
 		
 		var letter = $(e.currentTarget).attr("rel");
         $(e.currentTarget).addClass("selected");        			
-		$(".search-results").mCustomScrollbar("scrollTo", letter);
+		$(e.currentTarget).parents(".dropdown-menu").find(".search-results").mCustomScrollbar("scrollTo", letter);
 
         return false;
+	 },
+	 
+	 setupPriceDropdown: function(e){
+	    var maxValue = $("#price-range").attr("max");
+	    var startingMinRange = maxValue * -1;
+	    var startingMinValue = startingMinRange / 2;
+	   
+	    $( "#price-range" ).slider({
+            orientation: "vertical",
+            range: true,
+            step: 10,
+            min: startingMinRange,
+            max: 0,
+            values: [ startingMinValue, 0 ],
+            stop: filterPresenter.addPriceFilter,
+            slide: function( event, ui ) {
+              var minVal = Math.abs(ui.values[1]);
+              $( "#price-range-min-value" )
+                  .attr("value", minVal)
+                  .text("$" + filterPresenter.formatNumber(minVal, 0));
+              
+              var maxVal = Math.abs(ui.values[0]);
+              var maxValText = maxVal;
+              
+              if (maxVal == $("#price-range").attr("max")){
+                maxValText = "Unlimited";
+              }else{
+                maxValText = "$" + filterPresenter.formatNumber(maxVal, 0); 
+              }
+              
+              $( "#price-range-max-value" )
+                  .attr("value", maxVal)
+                  .text(maxValText);            
+            }
+        });         
+	 },
+	 
+	 addPriceFilter: function(event, ui){
+ 	    var minPrice = parseInt($("#price-range-min-value").attr("value"));	  
+ 	    var maxPrice = parseInt($("#price-range-max-value").attr("value"));
+	    var isMaxPrice = maxPrice == $("#price-range").attr("max") || isNaN(maxPrice);
+	
+	    // remove price tag if the min and price equal the bounds for the price range
+	    if (minPrice == 0 && isMaxPrice){
+	       if ($('.selectedFilters span[filterType="price"]').length > 0){      
+	           $('.selectedFilters span[filterType="price"]').remove();   
+	       }
+	       
+	       return;
+	    }
+	    
+	    var priceTagText = '';
+	        
+        if (minPrice == 0){
+           priceTagText = "Under $" + maxPrice;
+        }else if (isMaxPrice){
+           priceTagText = "Over $" + minPrice;
+        }else{
+           priceTagText = "$" + minPrice + " - $" + maxPrice;
+        }
+        
+        if (isMaxPrice){
+           maxPrice = "unlimited";  
+        }       	            
+	        
+	    if ($('.selectedFilters span[filterType="price"]').length <= 0){	               	       
+	       var $filterButton = $('<span>').attr("filterType","price").attr("min", minPrice).attr("max", maxPrice).text(priceTagText).append(
+                $('<a class="icon-svg4"></a>')
+    	    );	
+	       
+          	$(".selectedFilters").append($filterButton);
+	    }else{
+	       $('.selectedFilters span[filterType="price"]').first().attr("min", minPrice).attr("max", maxPrice).text(priceTagText).append(
+                $('<a class="icon-svg4"></a>')
+    	   );
+	    }
+	    
+	    if (ui == null){
+            filterPresenter.onFilterSelect();
+	    }
+	 },
+	 
+	 formatNumber: function(number, precision){
+	   return number.toFixed(precision).replace(/./g, function(c, i, a) {
+           return i && c !== "." && !((a.length - i) % 3) ? ',' + c : c;
+       }); 
 	 }	 	
 };

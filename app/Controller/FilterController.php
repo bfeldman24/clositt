@@ -1,4 +1,7 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
+
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/FilterDao.php');
 require_once(dirname(__FILE__) . '/../View/FilterView.php');
@@ -74,7 +77,7 @@ class FilterController extends Debugger {
 	
 			    $type = stripslashes($row[FILTER_TYPE]); 
 			    $value = stripslashes($row[FILTER_VALUE]); 
-			    $subvalue = stripslashes($row[FILTER_SUBVALUE]); 
+			    $subvalue = stripslashes($row[FILTER_SUBVALUE]); 			   
 			    $customer = stripslashes($row[FILTER_CUSTOMER]); 
 			     
 			    if (!isset($filters[$type])){
@@ -130,7 +133,7 @@ class FilterController extends Debugger {
 			}						
 	   }  		      
 	   
-	   $filters['price'] = array(0,50,100,150,200,250,500,1000);              
+	   $filters['maxprice'] = 1000;              
 
        $filters['color'] = array(       
           "Red" => "#F33",           
@@ -144,7 +147,7 @@ class FilterController extends Debugger {
           "Violet" => "#7848C0",
           "Purple" => "#939",
           "Pink" => "#FF98bF",
-          "White" => "#F0F0F0",
+          "White" => "#F5F5F5",
           "Gray" => "#999",
           "Black" => "#000",
           "Brown" => "#963"
