@@ -313,7 +313,7 @@ class ProductController extends Debugger{
 
         $facets = $results['facets'];
 
-        $results = array('products'=> $products, 'facets' => $facets);                
+        $results = array('products'=> $products, 'facets' => $facets, 'query' => $results['query']);
 		return json_encode($results);
 	}
 	

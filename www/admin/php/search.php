@@ -90,26 +90,14 @@ body{
                 <option value="custom">Custom</option>
             </select>
         </div>
-        <div class="col-xs-12 col-sm-2 form-group">
-            <label for="tags-weight">Weight for Tags</label>
-            <input type="text" class="form-control" id="tags-weight"></input>
-        </div>
-        <div class="col-xs-12 col-sm-2 form-group">
-            <label for="title-weight">Weight for Title</label>
-            <input type="text" class="form-control" id="title-weight" ></input>
-        </div>
-        <div class="col-xs-12 col-sm-2 form-group">
-            <label for="store-weight">Weight for store name</label>
-            <input type="text" class="form-control" id="store-weight" ></input>
-        </div>
-        <div class="col-xs-12 col-sm-2 form-group">
-            <label for="colors-weight">Weight for Colors</label>
-            <input type="text" class="form-control" id="colors-weight"></input>
+        <div class="row">
+            <div class="col-xs-12 col-sm-8">
+                <span id="queryString"></span>
+            </div>
         </div>
     </div>
     <hr>
-    
-    <div id="main-workspace" style="display:none;"></div>    
+    <div id="main-workspace" style="display:none;"></div>
     
     <section id="sample-grid-container" class="items">
         <div class="container">           
@@ -134,10 +122,6 @@ body{
 
         var search ={};
         search.searchTerm = $( "#search-bar" ).val().trim();
-        search.tagWeight =  $( "#tags-weight").val().trim();
-        search.colorWeight =  $( "#colors-weight").val().trim();
-        search.storeWeight =  $( "#store-weight").val().trim();
-        search.titleWeight =  $( "#title-weight").val().trim();
         search.queryType = $( "#search-type").val().trim();
         searchController.isSearchActive = true;
         searchController.hasMoreProducts = true
@@ -179,7 +163,30 @@ var searchAdmin = {
     lazyLoad: function(products){
 	    if (products == null){
 	        return null;
-	    }	   
+	    }
+
+        var parsedQuery = "";
+        if(products.query.Gender){
+            parsedQuery += "<br/>" + "Gender: " + products.query.Gender;
+        }
+
+        if(products.query.Stores){
+            parsedQuery += "<br/>" + "Stores: " + products.query.Stores.join(", ");
+        }
+
+        if(products.query.Tags){
+            parsedQuery += "<br/>" + "Tags: " + products.query.Tags.join(", ");
+        }
+
+        if(products.query.Colors){
+            parsedQuery += "<br/>" + "Colors: " + products.query.Colors.join(", ");
+        }
+
+        if(parsedQuery == ""){
+            parsedQuery = "No terms were matched";
+        }
+
+        $("#queryString").html(parsedQuery);
 
 	    if (products.products != null){
 	       products = products.products;  
@@ -195,7 +202,6 @@ var searchAdmin = {
                 $html.find("img[data-src]").unveil(200);
             }
 	   });
-			                   			   	   		
 	   gridPresenter.alignDefaultGrid(); 
 	   gridPresenter.endTask(); 
 	   gridPresenter.numberOfLoadingPages--;
