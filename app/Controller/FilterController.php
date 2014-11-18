@@ -79,6 +79,7 @@ class FilterController extends Debugger {
 			    $value = stripslashes($row[FILTER_VALUE]); 
 			    $subvalue = stripslashes($row[FILTER_SUBVALUE]); 			   
 			    $customer = stripslashes($row[FILTER_CUSTOMER]); 
+			    $customer = empty($customer) ? 'both' : $customer;
 			    $synonym = stripslashes($row[FILTER_SYNONYM]); 
 			     
 			    if (!isset($filters[$type])){
@@ -92,7 +93,7 @@ class FilterController extends Debugger {
 			         if (isset($filters[$type][$value])){
 			             // Update customer
 			             if ($filters[$type][$value]["customer"] != $customer){
-			                 $filters[$type][$value]["customer"] = "Both";
+			                 $filters[$type][$value]["customer"] = "both";
 			             }
 			         }else{
 		                $filters[$type][$value] = array("value" => $value, "customer" => $customer, "synonym" => $synonym); 
@@ -107,7 +108,7 @@ class FilterController extends Debugger {
 			         if (isset($filters[$type][$value][$subvalue])){
 			             // Update customer
 			             if ($filters[$type][$value][$subvalue]["customer"] != $customer){
-			                 $filters[$type][$value][$subvalue]["customer"] = "Both";
+			                 $filters[$type][$value][$subvalue]["customer"] = "both";
 			             }
 			         }else{
 		                $filters[$type][$value][$subvalue] = array("value" => $value, "subvalue" => $subvalue, "customer" => $customer, "synonym" => $synonym); 

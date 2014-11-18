@@ -137,11 +137,11 @@ class FilterView {
                         $synonym = empty($subcategory['synonym']) ? $item : $item . ',' . $subcategory['synonym'];
                     }else{
                         $item = $subcategory;
-                        $customer = '';
+                        $customer = 'both';
                         $synonym = $item;
                     }                    
                     
-                    echo '<li class="subcategoryItem"><a class="select_filter" value="'.$synonym.'" customer="'.$customer.'">'.$item.'</a></li>';    
+                    echo '<li class="subcategoryItem filterItem '.$customer.'"><a class="select_filter" value="'.$synonym.'">'.$item.'</a></li>';    
                 }           
                 echo '</ul>';
                 
@@ -160,11 +160,11 @@ class FilterView {
                     $synonym = empty($subcategory['synonym']) ? $item : $item . ',' . $subcategory['synonym'];
                 }else{
                     $item = $subcategory;
-                    $customer = '';
+                    $customer = 'both';
                     $synonym = $item;
                 } 
                     
-                echo '<li class="subcategoryItem"><a class="select_filter" value="'.$synonym.'" customer="'.$customer.'">'.$item.'</a></li>';
+                echo '<li class="subcategoryItem filterItem '.$customer.'"><a class="select_filter" value="'.$synonym.'">'.$item.'</a></li>';
             }           
             echo '</ul>';
             
@@ -181,9 +181,9 @@ class FilterView {
     public static function getFilterList($items){        
         for ($i=0; $i < count($items); $i++){
             $item = is_array($items[$i]) && !empty($items[$i]['value']) ? $items[$i]['value'] : $items[$i];
-            $cusomter = is_array($items[$i]) && !empty($items[$i]['customer']) ? $items[$i]['customer'] : '';
+            $customer = is_array($items[$i]) && !empty($items[$i]['customer']) ? $items[$i]['customer'] : 'both';
             
-            echo '<li><a class="select_filter" value="'.$item.'" customer="'.$cusomter.'">'.$item.'</a></li>';
+            echo '<li class="filterItem '.$customer.'"><a class="select_filter" value="'.$item.'">'.$item.'</a></li>';
         }         
     }
     
@@ -195,7 +195,7 @@ class FilterView {
                 $name = is_array($item) ? $item['value'] : $item;                
                 
                 $firstLetter = strtoupper(substr($name, 0, 1));
-                $cusomter = is_array($item) && !empty($item['customer']) ? $item['customer'] : '';
+                $customer = is_array($item) && !empty($item['customer']) ? $item['customer'] : 'both';
                 
                 if (isset($firstLetter) && $firstLetter != ""){
                                     
@@ -209,7 +209,7 @@ class FilterView {
                         echo '<li id="'.$firstLetter.$id.'" class="brand-letter">'.$firstLetter.'</li>';
                     }
                     
-                    echo '<li><a class="select_filter" value="'.$name.'" customer="'.$cusomter.'">'.$name.'</a></li>';               
+                    echo '<li class="filterItem '.$customer.'"><a class="select_filter" value="'.$name.'">'.$name.'</a></li>';               
                 }
             }
         }                

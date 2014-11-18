@@ -144,15 +144,17 @@ var filterPresenter = {
  	      
  	      if ($selected.length != 1){
  	          filterPresenter.defaultCustomer = "both"; 	 	           	          
- 	          filterPresenter.hideSubcategories("None");
+ 	          filterPresenter.hideSubcategories("none"); 	          
+ 	          
  	      }else if ($selected.attr("value") == "men"){
  	          filterPresenter.defaultCustomer = "men"; 	           	          
- 	          filterPresenter.hideSubcategories("Women");
+ 	          filterPresenter.hideSubcategories("women");
+ 	           	               	      
  	      }else{
  	          
               filterPresenter.defaultCustomer = "women";              	          
-	          filterPresenter.hideSubcategories("Men"); 	          	           	           	          
- 	      } 
+	          filterPresenter.hideSubcategories("men"); 	          	           	           	          
+ 	      }  	       	      
  	      
  	      // update cookie
  	      document.cookie="customer="+filterPresenter.defaultCustomer+"; expires=Sun, 31 Dec 9999 12:00:00 UTC; path=/";
@@ -169,35 +171,28 @@ var filterPresenter = {
  	      if (customer == "men"){
  	             $(".nav-filter.customer[value=men]").addClass("selected");
  	             filterPresenter.defaultCustomer = "men";
+ 	             filterPresenter.hideSubcategories("women"); 
  	      }else if (customer == "women"){
  	             $(".nav-filter.customer[value=women]").addClass("selected");
  	             filterPresenter.defaultCustomer = "women";
+ 	             filterPresenter.hideSubcategories("men"); 
  	      }else{
  	          filterPresenter.defaultCustomer = "both";   
+ 	          filterPresenter.hideSubcategories("none"); 
  	      }
  	},	
  	
- 	hideSubcategories: function(customer){ 	   	      
- 	     return; // TODO implement method
- 	  
-    	 // Toggle Subcategories
-         $(".subcategory").each(function(){
-               var isAllOneCustomer = true;
-           
-               $(this).find(".filter-options[filterType=category] .subcategoryItem a").each(function(){
-                   isAllOneCustomer = isAllOneCustomer && $(this).attr("filter-customer") == customer;
-               });
-               
-               if (isAllOneCustomer){                    
-                    $(this).prev().removeClass("open");
-                    $(this).prev().hide('blind', 'slow', function(){ $(this).hide(); });
-                    
-                    $(this).hide('blind', 'slow', function(){ $(this).hide(); });
-                    $(this).find(':checkbox').prop('checked', false);                                                            
-               }else{
-                    $(this).prev().show('blind', 'slow', function(){ $(this).show(); });                                        
-               }
-         });
+ 	hideSubcategories: function(customer){ 
+ 	      $(".filterItem").show(); 	   	              	 
+          $(".filterItem." + customer).hide();    
+          
+          $(".categoryItem").each(function(){
+                if ($(this).find(".filterItem." + customer).length == $(this).find(".filterItem").length){
+                    $(this).hide(); 
+                }else{
+                    $(this).show();   
+                }                                                
+          });                    
  	},
  	
  	createSelectedFilter: function(e){ 	       	  
@@ -277,7 +272,7 @@ var filterPresenter = {
 	 
 	 clearAlphabetSearchDropdown: function(){
 	       $("input.drop-search").val("");
-	       $("ul.search-results li").show(); 
+	       $("ul.search-results:not(.category-dropdown) li").show(); 
 	       $(".alphabets>a").show();
 	       $(".alphabets>a.selected").removeClass("selected");	       
 	 },
