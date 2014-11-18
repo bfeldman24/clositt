@@ -129,6 +129,30 @@ body{
 
         $.post(window.HOME_ROOT + "p/searchjson/0", search, function( data ) {
 
+                var parsedQuery = "";
+                if(data.query.Gender){
+                    parsedQuery += "<br/>" + "Gender: " + data.query.Gender;
+                }
+
+                if(data.query.Stores){
+                    parsedQuery += "<br/>" + "Stores: " + data.query.Stores.join(", ");
+                }
+
+                if(data.query.Tags){
+                    parsedQuery += "<br/>" + "Tags: " + data.query.Tags.join(", ");
+                }
+
+                if(data.query.Colors){
+                    parsedQuery += "<br/>" + "Colors: " + data.query.Colors.join(", ");
+                }
+
+                if(parsedQuery == ""){
+                    parsedQuery = "No terms were matched";
+                }
+
+                parsedQuery = "Search term is: " + data.query.SearchString + parsedQuery;
+                $("#queryString").html(parsedQuery);
+
                 if( data.products.length > 0){
                     $("#product-grid").children().remove();
                     searchAdmin.lazyLoad(data);
@@ -165,28 +189,6 @@ var searchAdmin = {
 	        return null;
 	    }
 
-        var parsedQuery = "";
-        if(products.query.Gender){
-            parsedQuery += "<br/>" + "Gender: " + products.query.Gender;
-        }
-
-        if(products.query.Stores){
-            parsedQuery += "<br/>" + "Stores: " + products.query.Stores.join(", ");
-        }
-
-        if(products.query.Tags){
-            parsedQuery += "<br/>" + "Tags: " + products.query.Tags.join(", ");
-        }
-
-        if(products.query.Colors){
-            parsedQuery += "<br/>" + "Colors: " + products.query.Colors.join(", ");
-        }
-
-        if(parsedQuery == ""){
-            parsedQuery = "No terms were matched";
-        }
-
-        $("#queryString").html(parsedQuery);
 
 	    if (products.products != null){
 	       products = products.products;  
