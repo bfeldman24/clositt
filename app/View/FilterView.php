@@ -26,14 +26,14 @@ class FilterView {
                             <li>
                                 <div class="btn-group ">
                                     <button type="button" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Item Type <span class="icon-svg19"></span></button>
-                                    <ul class="dropdown-menu brand-box search-results filter-drop filter-options" role="menu" filterType="tags">
+                                    <ul class="dropdown-menu brand-box search-results filter-options category-dropdown" role="menu" filterType="tags">
                                         <?php FilterView::getCategoryFilters($filters['category']); ?>
                                     </ul>
                                 </div>
                             </li>                           
                             <li>
                                 <div class="btn-group ">
-                                    <button type="button" id="company-search-dropdown" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Brand/Store <span class="icon-svg19"></span></button>
+                                    <button type="button" id="company-search-dropdown" class="btn btn-default nav-filter dropdown-toggle alphabet-search-dropdown" data-toggle="dropdown">Brand/Store <span class="icon-svg19"></span></button>
                                     <ul class="dropdown-menu scrollTo brand-box" role="menu">
                                         <?php echo FilterView::getAlphabetList($filters['company'], "c"); ?>                                        
                                         <li>
@@ -80,7 +80,7 @@ class FilterView {
                             </li>
                             <li>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Attribute <span class="icon-svg19"></span></button>
+                                    <button type="button" class="btn btn-default nav-filter dropdown-toggle alphabet-search-dropdown" data-toggle="dropdown">Attribute <span class="icon-svg19"></span></button>
                                     <ul class="dropdown-menu scrollTo brand-box right-align" role="menu">
                                         <?php echo FilterView::getAlphabetList($filters['attribute'], "a"); ?>                                        
                                         <li>
@@ -96,7 +96,7 @@ class FilterView {
                             </li>
                             <li>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default nav-filter dropdown-toggle" data-toggle="dropdown">Material <span class="icon-svg19"></span></button>
+                                    <button type="button" class="btn btn-default nav-filter dropdown-toggle alphabet-search-dropdown" data-toggle="dropdown">Material <span class="icon-svg19"></span></button>
                                     <ul class="dropdown-menu scrollTo brand-box right-align" role="menu">
                                         <?php echo FilterView::getAlphabetList($filters['material'], "m"); ?>                                        
                                         <li>
@@ -127,14 +127,21 @@ class FilterView {
         
         foreach ($categories as $category => $subcategories){
             if ($category != "Other"){
-                echo '<li class="categoryItem" ><a><span class="icon-svg19"></span> '.$category.'</a>';
+                echo '<li class="categoryItem" ><a>'.$category.'</a><span class="icon-caret-right submenu-caret"></span>';
                 
-                echo '<ul class="subcategory" parent="'.$category.'" style="display:none;">';
+                echo '<ul class="subcategory" parent="'.$category.'">';
                 foreach ($subcategories as $subcategory){
-                    $item = is_array($subcategory) && !empty($subcategory[0]) ? $subcategory[0] : $subcategory;
-                    $customer = is_array($subcategory) && !empty($subcategory[1]) ? $subcategory[1] : '';
+                    if (is_array($subcategory)){
+                        $item = $subcategory['subvalue'];
+                        $customer = $subcategory['customer'];    
+                        $synonym = empty($subcategory['synonym']) ? $item : $item . ',' . $subcategory['synonym'];
+                    }else{
+                        $item = $subcategory;
+                        $customer = '';
+                        $synonym = $item;
+                    }                    
                     
-                    echo '<li class="subcategoryItem"><a class="select_filter" value="'.$item.'" customer="'.$customer.'">'.$item.'</a></li>';    
+                    echo '<li class="subcategoryItem"><a class="select_filter" value="'.$synonym.'" customer="'.$customer.'">'.$item.'</a></li>';    
                 }           
                 echo '</ul>';
                 
@@ -143,11 +150,21 @@ class FilterView {
         } 
         
         if (isset($categories['Other'])){
-            echo '<li class="categoryItem" ><a><span class="icon-svg19"></span> Other</a>';
+            echo '<li class="categoryItem" ><a>Other</a><span class="icon-caret-right submenu-caret"></span>';
                 
-            echo '<ul class="subcategory" parent="Other" style="display:none;">';
+            echo '<ul class="subcategory" parent="Other">';
             foreach ($categories['Other'] as $subcategory){
-                echo '<li class="subcategoryItem"><a class="select_filter" value="'.$subcategory[0].'">'.$subcategory[0].'</a></li>';    
+                if (is_array($subcategory)){
+                    $item = $subcategory['subvalue'];
+                    $customer = $subcategory['customer'];    
+                    $synonym = empty($subcategory['synonym']) ? $item : $item . ',' . $subcategory['synonym'];
+                }else{
+                    $item = $subcategory;
+                    $customer = '';
+                    $synonym = $item;
+                } 
+                    
+                echo '<li class="subcategoryItem"><a class="select_filter" value="'.$synonym.'" customer="'.$customer.'">'.$item.'</a></li>';
             }           
             echo '</ul>';
             
@@ -163,8 +180,8 @@ class FilterView {
         
     public static function getFilterList($items){        
         for ($i=0; $i < count($items); $i++){
-            $item = is_array($items[$i]) && !empty($items[$i][0]) ? $items[$i][0] : $items[$i];
-            $cusomter = is_array($items[$i]) && !empty($items[$i][1]) ? $items[$i][1] : '';
+            $item = is_array($items[$i]) && !empty($items[$i]['value']) ? $items[$i]['value'] : $items[$i];
+            $cusomter = is_array($items[$i]) && !empty($items[$i]['customer']) ? $items[$i]['customer'] : '';
             
             echo '<li><a class="select_filter" value="'.$item.'" customer="'.$cusomter.'">'.$item.'</a></li>';
         }         
@@ -175,10 +192,10 @@ class FilterView {
         
         foreach ($items as $item){
             if (!empty($item)){
-                $name = is_array($item) ? $item[0] : $item;                
+                $name = is_array($item) ? $item['value'] : $item;                
                 
                 $firstLetter = strtoupper(substr($name, 0, 1));
-                $cusomter = is_array($item) && !empty($item[1]) ? $item[1] : '';
+                $cusomter = is_array($item) && !empty($item['customer']) ? $item['customer'] : '';
                 
                 if (isset($firstLetter) && $firstLetter != ""){
                                     
@@ -205,7 +222,7 @@ class FilterView {
         
         foreach ($items as $item){
             if (!empty($item)){
-                $name = is_array($item) ? $item[0] : $item;                                
+                $name = is_array($item) ? $item['value'] : $item;                                
                 $firstLetter = strtoupper(substr($name, 0, 1));
                 
                 if (isset($firstLetter) && $firstLetter != ""){

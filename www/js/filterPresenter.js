@@ -11,7 +11,7 @@ var filterPresenter = {
 	    filterPresenter.allFilters = [];	  
 	    filterPresenter.refreshCustomerFilter();
 	    $(".search-results").mCustomScrollbar();	    
-	    $('#company-search-dropdown').parent().on('hidden.bs.dropdown', filterPresenter.clearCompanyDropdown)
+	    $('.alphabet-search-dropdown').parent().on('hidden.bs.dropdown', filterPresenter.clearAlphabetSearchDropdown)
 	    
 	    filterPresenter.setupPriceDropdown();
 	    $('.pricefilter').first().parent().on('hide.bs.dropdown', filterPresenter.addPriceFilter)
@@ -72,8 +72,8 @@ var filterPresenter = {
  			   }
  			   
 	 		}else{
-	 		    var filterValue = $(this).attr("value").toLowerCase().replace(/'/g, "\\'");
-		 		criteria[filterType].push(filterValue);
+	 		    var filterValues = $(this).attr("value").toLowerCase().replace("all ", '').replace(/'/g, "\\'").split(",");
+		 		criteria[filterType] = criteria[filterType].concat(filterValues);
 	 		}
 	 	});	 
 	 	
@@ -104,7 +104,7 @@ var filterPresenter = {
     	 	}
     	 	
     	 	filterPresenter.needsRefresh = false;	 		 	
-    	 	filterPresenter.clearCompanyDropdown();
+    	 	filterPresenter.clearAlphabetSearchDropdown();
 	 	}
  	},
  	
@@ -201,11 +201,12 @@ var filterPresenter = {
  	},
  	
  	createSelectedFilter: function(e){ 	       	  
+ 	    var tagText = $(e.currentTarget).text();	  
  	    var tagValue = $(e.currentTarget).attr("value");	  
 	    var tagType = $(e.currentTarget).parents("ul.filter-options").attr("filterType");	  
 	    
 	    if ($('.selectedFilters span[value="'+tagValue+'"]').length <= 0){	    
-	        var $filterButton = $('<span>').attr("value",tagValue).attr("filterType",tagType).text(tagValue).append(
+	        var $filterButton = $('<span>').attr("value",tagValue).attr("filterType",tagType).text(tagText).append(
                 $('<a class="icon-svg4"></a>')
     	    );	       	        
 	       
@@ -234,12 +235,12 @@ var filterPresenter = {
 	     var searchTerm = $(e.currentTarget).val().trim().toLowerCase();
 	     
 	     if (!searchTerm || searchTerm == ""){
-	         $dropdown.find("ul.search-results[filterType=company] li").show();
+	         $dropdown.find("ul.search-results li").show();
        	     $dropdown.find(".alphabets>a").show();
        	     return;
 	     }
 	     
-	     var invalidStores = $dropdown.find("ul.search-results[filterType=company] li").filter(function(){
+	     var invalidStores = $dropdown.find("ul.search-results li").filter(function(){
 	           var item = $(this).find("a").attr("value");
 	           
 	           if (typeof item !== typeof undefined && item !== false) { 
@@ -256,37 +257,27 @@ var filterPresenter = {
 	           return searchFirstLetter != letter;	           	           
 	     });	     	     
 	     
-	     $dropdown.find("ul.search-results[filterType=company] li").show();
+	     $dropdown.find("ul.search-results li").show();
 	     invalidStores.hide();
 	     
 	     if (searchTerm.length > 0){
-	           $dropdown.find("ul.search-results[filterType=company] li.brand-letter").hide(); 
+	           $dropdown.find("ul.search-results li.brand-letter").hide(); 
 	     }else{
-	           $dropdown.find("ul.search-results[filterType=company] li.brand-letter").show(); 
+	           $dropdown.find("ul.search-results li.brand-letter").show(); 
 	     }
 	     
 	     $dropdown.find(".alphabets>a").show();
 	     invalidFirstLetters.hide();
 	 },
 	 
-	 showCategorySubmenuItem: function(e){
-	       e.preventDefault();
-	       	       	       
-	       var subcategory = $(e.currentTarget).find("ul.subcategory").first();		              	              
-	       subcategory.toggle("slow", function(){	           	           	           
-               if ($(e.currentTarget).hasClass("active")){                                        
-                    $(e.currentTarget).removeClass("active");
-               }else{
-                    $(e.currentTarget).addClass("active");
-               }
-	       });
-	           
+	 showCategorySubmenuItem: function(e){	      	       
+	       e.preventDefault(); 	                  	          
 	       return false;
 	 },
 	 
-	 clearCompanyDropdown: function(){
+	 clearAlphabetSearchDropdown: function(){
 	       $("input.drop-search").val("");
-	       $("ul.search-results[filterType=company] li").show(); 
+	       $("ul.search-results li").show(); 
 	       $(".alphabets>a").show();
 	       $(".alphabets>a.selected").removeClass("selected");	       
 	 },

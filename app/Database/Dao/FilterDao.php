@@ -7,7 +7,8 @@ class FilterDao extends AbstractDao {
         $sql = "SELECT " . FILTER_TYPE.", ".FILTER_VALUE.", ".FILTER_SUBVALUE.", ".FILTER_SYNONYM.",".FILTER_CUSTOMER . 
                 " FROM " . FILTERS .
                 " WHERE " . FILTER_STATUS . " = 1 " .
-                " ORDER BY " . FILTER_TYPE.", ".FILTER_VALUE.", ".FILTER_SUBVALUE.", ".FILTER_CUSTOMER;							       
+                " ORDER BY " . FILTER_TYPE.", ".FILTER_VALUE.", " . 
+                    "CASE WHEN ".FILTER_SUBVALUE." like 'All %' THEN 0 ELSE ".FILTER_SUBVALUE." END, ".FILTER_CUSTOMER;							       
 		
 		return $this->getResults($sql, array(), array(), "9812364012");	     
 	}	
