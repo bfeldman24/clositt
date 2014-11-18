@@ -1,3 +1,4 @@
+#!/bin/sh
 curl -XPUT http://localhost:9200/_river/my_jdbc_river/_meta -d '
 {
     "type" : "jdbc",
@@ -10,7 +11,7 @@ curl -XPUT http://localhost:9200/_river/my_jdbc_river/_meta -d '
         "bulk_size" : "1000",
         "sql" : [
             {
-                "statement" : "select distinct(tag) as tag from Tags"
+                "statement" : "select distinct(tag) as tag, char_length(tag) as taglength from Tags "
             }
         ]
     }

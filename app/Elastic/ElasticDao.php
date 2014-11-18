@@ -59,13 +59,11 @@ class ElasticDao{
         $facets = array();
 
         $time_start = microtime(true);
-
         try {
             $retDoc = $this->client->search($searchParams);
         }
         catch(Exception $e){
-            //TODO log error here
-
+            $this->debugger->log("Error occured searching ES: $e->getMessage()");
         }
 
 		if (isset($retDoc) && is_array($retDoc)){
@@ -110,6 +108,7 @@ class ElasticDao{
 
         if($criteria->getSearchString()){
 
+            //TODO clear this up. From old admin page that had weightings
             if(is_array($criteria->getFieldWeightings())){
                 $userWeights = $criteria->getFieldWeightings();
 
@@ -136,15 +135,19 @@ class ElasticDao{
 
         }
 
+        $parsedQuery['SearchString'] = $criteria->getSearchString();
         $queryType =$criteria->getQueryType();
         if (empty($queryType) || $queryType=="querystring"){
-            if($criteria->getSearchString()){
-                $searchParams['body']['query']['filtered']['query']['query_string'] = array( "query" => $criteria->getSearchString() ,"fields" => $fields);
-            }
 
             if(!empty($filters)){
-                $searchParams['body']['query']['filtered']['filter']['and'] = $filters;
+                $searchParams['body']['query']['bool']['must'] = $filters;
             }
+
+            $finalQueryString = trim($criteria->getSearchString());
+            if($finalQueryString && $finalQueryString != ""){
+                $searchParams['body']['query']['bool']['should']['query_string'] = array( "query" => $finalQueryString, "default_field" => "_all");
+            }
+
 
         }
         else if ($queryType=="custom"){
@@ -180,7 +183,7 @@ class ElasticDao{
         return $response;
     }
 
-    private function addColorFilter($criteria, &$filters, &$parsedQuery){
+    private function addColorFilter(&$criteria, &$filters, &$parsedQuery){
 
         $color = array();
         if( $criteria->getColors()){
@@ -192,12 +195,16 @@ class ElasticDao{
         foreach($terms as $term){
             if($this->arrayContainsInsensitive($term, $this->listColorsToParse) && in_array($term, $color) === false){
                 array_push($color, $term);
+                $criteria->setSearchString(str_ireplace($color, "", $criteria->getSearchString()));
             }
         }
 
         if(!empty($color)){
-            $colors = array('term'=>array('color'=>array_map('strtolower', $color)));
-            array_push($filters, $colors);
+            foreach($color as $singleColor){
+                $colors = array('term'=>array('color'=> strtolower($singleColor)));
+                array_push($filters, $colors);
+            }
+
             $parsedQuery["Colors"] = $color;
         }
     }
@@ -207,9 +214,9 @@ class ElasticDao{
      * Otherwise check if the "men" or "women" is in the search term and if
      * it is then add it as a filter
      */
-    private function addCustomerFilter($criteria, &$filters, &$parsedQuery){
-        if( $criteria->getCustomers()){
-            $customerType = $criteria->getCustomers();
+    private function addCustomerFilter(&$criteria, &$filters, &$parsedQuery){
+        if($criteria->getCustomers() && is_array($criteria->getCustomers())){
+            $customerType = $criteria->getCustomers()[0];
         }
         elseif( stristr($criteria->getSearchString(), "women") !== false){
             $customerType = "women";
@@ -221,6 +228,7 @@ class ElasticDao{
         if(!empty($customerType)){
             $customer = array('term'=>array('customer'=>$customerType));
             array_push($filters, $customer);
+            $criteria->setSearchString(str_ireplace($customerType, "", $criteria->getSearchString()));
             $parsedQuery["Gender"]= $customerType;
         }
     }
@@ -241,7 +249,7 @@ class ElasticDao{
         }
     }
 
-    private function addStoresFilter($criteria, &$filters, &$parsedQuery){
+    private function addStoresFilter(&$criteria, &$filters, &$parsedQuery){
         $storesToSearch = array();
         if($criteria->getCompanies()){
             foreach($criteria->getCompanies() as $store){
@@ -251,19 +259,23 @@ class ElasticDao{
 
         $storesFromElastic = $this->getAllFromElastic('stores', 'store');
         foreach($storesFromElastic as $store){
-            if(in_array($store, $storesToSearch) === false && stripos($criteria->getSearchString(), $store)){
+            if(in_array($store, $storesToSearch) === false && stripos($criteria->getSearchString(), $store)!==false){
                 array_push($storesToSearch, $store);
+                $criteria->setSearchString(str_ireplace($store, "", $criteria->getSearchString()));
             }
         }
 
         if(!empty($storesToSearch)){
-            $store = array('terms'=>array('store'=>array_map('strtolower', $storesToSearch)));
-            array_push($filters, $store);
+            foreach($storesToSearch as $store){
+                $store = array('term'=>array('store'=> strtolower($storesToSearch)));
+                array_push($filters, $store);
+            }
+
             $parsedQuery["Stores"]= $storesToSearch;
         }
     }
 
-    private function addTagsFilter($criteria, &$filters, &$parsedQuery){
+    private function addTagsFilter(&$criteria, &$filters, &$parsedQuery){
 
         $tagsToSearch = array();
         if($criteria->getCategories()){
@@ -272,27 +284,49 @@ class ElasticDao{
             }
         }
 
-        $tagsFromElastic = $this->getAllFromElastic('tags', 'tag');
+        $tagsFromElastic = $this->getAllFromElastic('tags', 'tag', 'taglength','desc');
         foreach($tagsFromElastic as $tag){
-            if(in_array($tag, $tagsToSearch) === false && stripos($criteria->getSearchString(), $tag)){
-                array_push($tagsToSearch, $tag);
+            $tempTag = $tag;
+            if (substr($tempTag, -1) == 's')
+            {
+                $tempTag = substr($tempTag, 0, -1);
+            }
+
+            if(in_array($tag, $tagsToSearch) === false){
+                //first check for exact match to the tag
+                if(stripos($criteria->getSearchString(), $tag) !== false){
+                    array_push($tagsToSearch, $tag);
+                    $criteria->setSearchString(str_ireplace($tag, "", $criteria->getSearchString()));
+                }
+                //Else check for tag without 's' at the end
+                elseif(stripos($criteria->getSearchString(), $tempTag) !== false){
+                    array_push($tagsToSearch, $tag);
+                    $criteria->setSearchString(str_ireplace($tempTag, "", $criteria->getSearchString()));
+                }
             }
         }
 
         if(!empty($tagsToSearch)){
-            $tags = array('terms'=>array('category'=>array_map('strtolower', $tagsToSearch)));
-            array_push($filters, $tags);
+            foreach($tagsToSearch as $tag){
+                $tags = array('term'=>array('category'=>strtolower($tag)));
+                array_push($filters, $tags);
+            }
+
             $parsedQuery["Tags"]= $tagsToSearch;
         }
 
     }
 
-    private function getAllFromElastic($indexName, $fieldName){
+    private function getAllFromElastic($indexName, $fieldName, $sortfield = null, $sortorder = null){
         $searchParams = array();
         $searchParams['index'] = $indexName;
         $searchParams['body']['query']['match_all']=array();
         $searchParams['body']['from']=0;
         $searchParams['body']['size']=400;
+        if($sortfield != null){
+            $searchParams['body']['sort']=array($sortfield=>$sortorder);
+        }
+
 
         try {
             $retDoc = $this->client->search($searchParams);
@@ -319,6 +353,7 @@ class ElasticDao{
         }
         return false;
     }
+
 }
 
 ?>
