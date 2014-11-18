@@ -73,10 +73,10 @@ ul>li>a{
     </div>       
 </div>
 
-<?php include(dirname(__FILE__) . '/../static/footer.php');   ?>
-<?php include(dirname(__FILE__) . '/../static/footerMeta.php');   ?>
-<script type="text/javascript">
+<?php include(dirname(__FILE__) . '/../static/footer.php'); ?>
+<?php include(dirname(__FILE__) . '/../static/footerMeta.php'); ?>
 
+<script type="text/javascript">
 var adminPage = {
     
     init: function(){
@@ -103,14 +103,16 @@ var adminPage = {
     },
     
     isElasticHealthy: function(){
+        Messenger.alert("Checking elastic health...");
         $.get(window.HOME_ROOT + "spider/iselastichealthy", function(health){
             alert('Elastic is ' + health);            
         });   
     }    
 }    
 
-adminPage.init();
-    
+$(document).ready(function(){
+    adminPage.init();    
+});
 </script>
 
 </body>

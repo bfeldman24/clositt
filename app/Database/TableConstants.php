@@ -89,6 +89,7 @@ define("FILTERS","Filters");
 define("FILTER_TYPE","type");
 define("FILTER_VALUE","value");
 define("FILTER_SUBVALUE","subvalue");
+define("FILTER_SYNONYM","synonym");
 define("FILTER_CUSTOMER","customer");
 define("FILTER_STATUS","status");
 define("FILTER_DATE","createdon");

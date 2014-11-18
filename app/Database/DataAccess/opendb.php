@@ -30,5 +30,4 @@ function mdb2_connect() {
 
 }
 
-// $mdb2->disconnect();
 ?>

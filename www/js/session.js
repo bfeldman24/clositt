@@ -186,7 +186,7 @@ var session = {
 	   
 		$("#loginBtns").html("")
 		    .append( $('<li>').addClass("loggedoutBtns").append( 
-		          $('<a>').addClass("myclositt").attr("href",window.HOME_ROOT + "clositt").append(
+		          $('<a>').addClass("myclositt").attr("href",window.HOME_ROOT + "myclositt").append(
 		              $("<span>").append( 
         	    	            $("<i>").addClass("icon-svg20")
         	    	      ).append(
