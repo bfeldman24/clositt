@@ -200,6 +200,10 @@ var filterPresenter = {
  	    var tagValue = $(e.currentTarget).attr("value");	  
 	    var tagType = $(e.currentTarget).parents("ul.filter-options").attr("filterType");	  
 	    
+	    if (tagText.trim() == ""){
+	       tagText = tagValue;  
+	    }
+	    
 	    if ($('.selectedFilters span[value="'+tagValue+'"]').length <= 0){	    
 	        var $filterButton = $('<span>').attr("value",tagValue).attr("filterType",tagType).text(tagText).append(
                 $('<a class="icon-svg4"></a>')

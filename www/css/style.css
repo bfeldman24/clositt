@@ -123,6 +123,22 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 /*--------------nav-------------*/
 
 #nav { padding-top: 20px; }
+#nav.sticky {
+    background: none repeat scroll 0 0 #fff;
+    left: 0;
+    max-width: 100%;
+    position: fixed;
+    right: 0;
+    top: -60px;
+    z-index: 100;
+    -webkit-transition: all .3s ease-out .02s; 
+    -moz-transition: all .3s ease-out .02s; 
+    -o-transition: all .3s ease-out .02s; 
+    transition: all .3s ease-out .02s;
+}
+#nav.sticky.show { top: 20px;}
+#nav.sticky #filters { padding-bottom: 5px; }
+
 #nav h4 { color: #66ccff; padding: 10px 0px; font-size: 14px; font-family: 'Source Sans Pro', sans-serif; font-weight: 600; }
 #nav .nav ul { margin: 0; padding: 0; }
 #nav .nav ul li { float: left; display: block; margin: 0; padding: 0; margin-right: 7px; }

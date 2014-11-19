@@ -9,6 +9,10 @@ var pagePresenter = {
     lastScrollHeight: 0,
     viewportHeight: 0,
     productLoaderPosition: 0,
+    navScrollHeight: 530,
+    isNavHiding: false,
+    isStickyNavEnabled: false,
+    
     
     init: function(){
         $("#subheader-navbar").show('fast');
@@ -26,11 +30,29 @@ var pagePresenter = {
                 $(window).scroll(pagePresenter.handleScrollEvents);
                 pagePresenter.handleScrollEvents();  
             }  
+            
+            // pagePresenter.navScrollHeight = Math.max($("#nav").position().top, pagePresenter.navScrollHeight);
+        });
+        
+        $("#header").mouseenter(function() {
+            if (!pagePresenter.isStickyNavEnabled && $("#nav").hasClass("sticky")){
+                //$("#nav").stop().show("blind", "fast");
+                $("#nav").stop().addClass("show");
+            }
+        });
+        
+        $("#nav").mouseleave(function() {
+            if (!pagePresenter.isStickyNavEnabled && $("#nav").hasClass("sticky") && !pagePresenter.isNavHiding){
+                //$("#nav").stop().hide("blind","slow");
+                $("#nav").stop().removeClass("show");
+                $("#nav .btn-group.open").removeClass("open");
+            }
         });
     },
     
     handleScrollEvents: function(){                     
 
+        // Lazy Load Products
         if(pagePresenter.areProductsInitialized &&
             pagePresenter.enableLazyLoading &&             
             pagePresenter.productLoaderPosition - pagePresenter.productLoadOffset < ($(window).scrollTop() + pagePresenter.viewportHeight + 100) &&
@@ -46,7 +68,25 @@ var pagePresenter = {
         }else if (!pagePresenter.areProductsInitialized){
             pagePresenter.areProductsInitialized = $(".outfit").length > 0;
         }          
-                             
+         
+        // Sticky Navigation Header  
+        if ($(window).scrollTop() > pagePresenter.navScrollHeight && !$("#nav").hasClass("sticky")){
+            $("#nav").stop().addClass("sticky show");
+            
+            pagePresenter.isNavHiding = true;
+            setTimeout(function(){
+                if (!pagePresenter.isStickyNavEnabled && $("#nav").hasClass("sticky")){
+                    //$("#nav").stop().hide("blind", "slow");       
+                    $("#nav").stop().removeClass("show");       
+                }                         
+                
+                pagePresenter.isNavHiding = false;
+            }, 5000);            
+            
+        }else if ($(window).scrollTop() <= pagePresenter.navScrollHeight && $("#nav").hasClass("sticky")){
+            //$("#nav").stop().removeClass("sticky").show("blind", "fast");
+            $("#nav").stop().removeClass("sticky show");
+        }                  
     },                
     
     scrollToTop: function(e){
