@@ -131,10 +131,10 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
     right: 0;
     top: -60px;
     z-index: 100;
-    -webkit-transition: all .3s ease-out .02s; 
-    -moz-transition: all .3s ease-out .02s; 
-    -o-transition: all .3s ease-out .02s; 
-    transition: all .3s ease-out .02s;
+    -webkit-transition: top .3s ease-out .02s; 
+    -moz-transition: top .3s ease-out .02s; 
+    -o-transition: top .3s ease-out .02s; 
+    transition: top .3s ease-out .02s;
 }
 #nav.sticky.show { top: 20px;}
 #nav.sticky #filters { padding-bottom: 5px; }
