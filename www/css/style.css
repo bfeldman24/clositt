@@ -235,7 +235,6 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 #nav .nav ul li .btn-group.open .categoryItem .subcategoryItem { padding-left: 25px; }
 #nav .nav ul li .btn-group.open .category-dropdown .categoryItem > a:hover {color: #fff; }
 
-
 .category-dropdown .mCustomScrollBox, .category-dropdown .mCustomScrollBox > div { overflow: visible; }
 .category-dropdown .categoryItem.active { background: none repeat scroll 0 0 #66ccff; border-radius: 5px; color: #fff; padding: 5px 0 0 10px !important; }
 #nav .nav ul li .btn-group.open .brand-box.category-dropdown li.active ul li a {color: #888; }
@@ -255,6 +254,27 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 .category-dropdown li.active .submenu-caret, .category-dropdown li:hover .submenu-caret{
     display: block;
 } 
+
+.category-dropdown li.disabled .submenu-caret{
+    color: #e5e5e5;
+} 
+
+
+#nav .nav ul li .btn-group.open .brand-box.category-dropdown li.categoryItem.disabled,
+#nav .nav ul li .btn-group.open .brand-box.category-dropdown li.categoryItem.disabled > a,
+#nav .nav ul li .btn-group.open .brand-box.category-dropdown li.categoryItem.disabled .subcategoryItem > a,
+#nav .nav ul li .btn-group.open .brand-box.category-dropdown li.categoryItem .subcategoryItem.disabled > a,
+#nav .nav ul li .btn-group.open .brand-box li.disabled a,
+.filterItem.disabled > a { color: #EEE; }
+#nav .nav ul li .btn-group.open .brand-box.category-dropdown li.categoryItem.disabled:hover,
+#nav .nav ul li .btn-group.open .brand-box.category-dropdown li.categoryItem.disabled:hover > a,
+#nav .nav ul li .btn-group.open .brand-box.category-dropdown li.categoryItem.disabled > a:hover,
+#nav .nav ul li .btn-group.open .brand-box.category-dropdown li.categoryItem.disabled .subcategoryItem:hover > a,
+#nav .nav ul li .btn-group.open .brand-box.category-dropdown li.categoryItem.disabled .subcategoryItem:hover > a:hover,
+#nav .nav ul li .btn-group.open .brand-box.category-dropdown li.categoryItem .subcategoryItem.disabled:hover > a,
+#nav .nav ul li .btn-group.open .brand-box.category-dropdown li.categoryItem .subcategoryItem.disabled > a:hover,
+.filterItem.disabled:hover > a,
+.filterItem.disabled > a:hover { background: #e5e5e5 !important; color: #fff !important; border-radius: 5px !important; }
 
 
 #addclositt .modal-title, #editClosittModal .modal-title, #confirmRemoveClosittModal .modal-title { font-size: 24px; font-family: 'Open Sans', sans-serif; font-weight: 600; color: #adadad; }

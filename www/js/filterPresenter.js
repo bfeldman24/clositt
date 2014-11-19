@@ -183,16 +183,16 @@ var filterPresenter = {
  	},	
  	
  	hideSubcategories: function(customer){ 
- 	      $(".filterItem").show(); 	   	              	 
-          $(".filterItem." + customer).hide();    
+ 	      $(".filterItem").removeClass("disabled");              	 
+          $(".filterItem." + customer).addClass("disabled");
           
           $(".categoryItem").each(function(){
                 if ($(this).find(".filterItem." + customer).length == $(this).find(".filterItem").length){
-                    $(this).hide(); 
+                    $(this).addClass("disabled"); 
                 }else{
-                    $(this).show();   
+                    $(this).removeClass("disabled");   
                 }                                                
-          });                    
+          }); 	                         
  	},
  	
  	createSelectedFilter: function(e){ 	       	  
