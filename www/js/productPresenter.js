@@ -105,7 +105,7 @@ var productPresenter = {
     },
     
     handleImageNotFound:  function(img) {
-        if (searchController.isSearchActive){
+        if (searchController.criteria != null && searchController.criteria.searchTerm != null){
             var sku = $(img).parents(".outfit").attr("pid");
             $(img).removeAttr("data-src");
             $(img).removeAttr("onerror");
