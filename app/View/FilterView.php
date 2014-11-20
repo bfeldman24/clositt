@@ -14,7 +14,7 @@ class FilterView {
         <section id="nav">
             <div class="container" id="filters">
                 <h4 class="text-center">Narrow by:</h4>
-                <div class="col-sm-offset-1 col-md-offset-2">
+                <div class="col-md-offset-1">
                     <div class="nav">
                         <ul>                        
                              <li>
@@ -80,8 +80,8 @@ class FilterView {
                             </li>
                             <li>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default nav-filter dropdown-toggle alphabet-search-dropdown" data-toggle="dropdown">Attribute <span class="icon-svg19"></span></button>
-                                    <ul class="dropdown-menu scrollTo brand-box right-align" role="menu">
+                                    <button type="button" class="btn btn-default nav-filter dropdown-toggle alphabet-search-dropdown brand-box-narrow-btn" data-toggle="dropdown">Attribute <span class="icon-svg19"></span></button>
+                                    <ul class="dropdown-menu scrollTo brand-box brand-box-narrow right-align" role="menu">
                                         <?php echo FilterView::getAlphabetList($filters['attribute'], "a"); ?>                                        
                                         <li>
                                             <input type="text" class="form-control drop-search input-search" placeholder="Search">
@@ -96,8 +96,8 @@ class FilterView {
                             </li>
                             <li>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default nav-filter dropdown-toggle alphabet-search-dropdown" data-toggle="dropdown">Material <span class="icon-svg19"></span></button>
-                                    <ul class="dropdown-menu scrollTo brand-box right-align" role="menu">
+                                    <button type="button" class="btn btn-default nav-filter dropdown-toggle alphabet-search-dropdown brand-box-narrow-btn" data-toggle="dropdown">Material <span class="icon-svg19"></span></button>
+                                    <ul class="dropdown-menu scrollTo brand-box brand-box-narrow right-align" role="menu">
                                         <?php echo FilterView::getAlphabetList($filters['material'], "m"); ?>                                        
                                         <li>
                                             <input type="text" class="form-control drop-search input-search" placeholder="Search">

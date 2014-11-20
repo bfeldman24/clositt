@@ -47,7 +47,9 @@ a:active, a:focus { outline: none; }
 .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus { color: #66ccff !important; background: none; background-color: transparent; }
 .navbar-default .navbar-brand { color: #f44fa4; font-size: 31px; font-weight: 600; font-family: 'Open Sans', sans-serif; padding: 0px 15px; text-transform: uppercase; }
 .navbar-default .navbar-brand:hover { color: #f44fa4; }
-.navbar-default .search-btn { font-size: 16px; padding: 8px 9px; background: #f44fa4; border: none; color: #fff; }
+.navbar-default .search-btn, .navbar-default .filter-btn { font-size: 16px; padding: 8px 9px !important; background: #f44fa4; border: none !important; color: #fff; }
+.navbar-default .filter-btn { margin-left: 5px; }
+.navbar-default .filter-btn-sm { display:none; }
 .navbar-default .search-btn:hover { background: #f44fa4; border: none; color: #fff; }
 .navbar-default .input-search { width: 450px; background: url(images/search_bg.png) no-repeat 8px 6px; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none; border: 1px solid #f4f4f4; padding-left: 40px; font-weight: 400; font-size: 13px; }
 
@@ -91,12 +93,11 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 }
 
 .btn-clositt-theme{
-    background-color: #66ccff;
-    color: #fff;
+    background-color: #66ccff !important;
+    color: #fff !important;
 }
 .btn-clositt-theme:hover, .btn-clositt-theme:focus, .btn-clositt-theme:active, .btn-clositt-theme.active{
-    background-color: #55bbee;
-    color: #fff;
+    background-color: #55bbee !important;    
 }
 .btn-default {
     background-color: #FFFFFF;
@@ -136,7 +137,7 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
     -o-transition: top .3s ease-out .02s; 
     transition: top .3s ease-out .02s;
 }
-#nav.sticky.show { top: 20px;}
+#nav.sticky.show { top: 20px !important;}
 #nav.sticky #filters { padding-bottom: 5px; }
 
 #nav h4 { color: #66ccff; padding: 10px 0px; font-size: 14px; font-family: 'Source Sans Pro', sans-serif; font-weight: 600; }
@@ -172,7 +173,9 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 #nav .nav ul li .btn-group.open .color-box li a.color-8 { background: #1f1f1f; }
 #nav .nav ul li .btn-group.open .color-box li a.color-9 { background: #8a5e3b; }
 #nav .nav ul li .btn-group.open .brand-box { min-width: 320px; margin: -5px 0 0 0; padding-bottom: 20px; border-radius: 0 5px 5px 5px; padding-top: 20px; }
-#nav .nav ul li .btn-group.open .brand-box.right-align {border-radius: 5px 0 5px 5px; margin: -5px 0 0 -140px; width: 250px; min-width: 250px;}
+#nav .nav ul li .btn-group.open .brand-box.brand-box-narrow {border-radius: 0 5px 5px 5px; width: 250px; min-width: 250px;}
+#nav .nav ul li .btn-group.open .brand-box.right-align {border-radius: 5px 0 5px 5px; margin: -5px 0 0 -140px;}
+
 
 #nav .nav ul li .btn-group.open .brand-box li { padding-left: 60px; margin-bottom: 0px; }
 #nav .nav ul li .btn-group.open .brand-box li a { color: #888888; font-size: 14px; letter-spacing: 1px; font-weight: 600; font-family: 'Open Sans', sans-serif; padding: 6px 5px; margin-bottom: 5px; text-transform: uppercase; }
@@ -655,14 +658,16 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
 
  @media (max-width: 767px) {
     #nav .nav ul li .nav-filter { width: 125px; }
-    #nav .nav ul li .btn-group.open .dropdown-menu { min-width: 125px; }
+    #search-form .filter-btn { display: none; }
+    .navbar-default .filter-btn-sm { display: block; padding: 9px 14px !important; position: fixed; right: 70px; top: 18px; }
+    #nav .nav ul li .btn-group.open .dropdown-menu { min-width: 250px; }
     #footer { padding: 30px 0; }
     #footer .foooter_logo { position: relative; }
     #footer .footer_nav ul li a { padding: 10px 40px 10px 0px; margin-right: 16px; }
     .navbar-form .form-group { float: left; }
     .navbar-form { margin-top: 0; margin-bottom: 0; border-top: none; }
-    .navbar-default .input-search { width: 230px; margin-right: 10px; }
-    .navbar-default .navbar-collapse.collapse.in .form-group { width: 90% }
+    .navbar-default .input-search { width: 230px; margin-right: 10px; }     
+    .navbar-default .navbar-collapse.collapse.in .form-group { width: 90% }    
     .navbar-default .navbar-collapse.collapse.in .input-search { width: 99% }
     #header { max-height: none; }
     #subscribe input[type="submit"] { width: 30%; }

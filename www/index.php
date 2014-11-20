@@ -4,6 +4,7 @@ require_once(dirname(__FILE__) . '/../app/Controller/FilterController.php');
 
 $filterController = new FilterController();              
 $filters = $filterController->getHtmlFilters();
+$homepage = true;
 ?>		
 <!DOCTYPE HTML>
 <html>
@@ -28,8 +29,10 @@ $filters = $filterController->getHtmlFilters();
         
         </div>
     </section>
-        
-    <?php print_r($filters); ?>
+    
+    <div style="min-height:95px">    
+        <?php print_r($filters); ?>
+    </div>
     
     <section class="items">
         <div class="container">           
