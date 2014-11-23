@@ -79,11 +79,13 @@ var pagePresenter = {
         if (!pagePresenter.isStickyNavAlwaysShown){
             if ($(window).scrollTop() > pagePresenter.navScrollHeight && !$("#nav").hasClass("sticky")){
                 $("#nav").stop().addClass("sticky");
+                $(".filter-btn").addClass("sticky");
                 $("#nav.sticky").css("top", (-1 * $("#filters").height()) + 25);
                                 
             }else if ($(window).scrollTop() <= pagePresenter.navScrollHeight && $("#nav").hasClass("sticky")){
                 //$("#nav").stop().removeClass("sticky").show("blind", "fast");
                 $("#nav").stop().removeClass("sticky show");
+                $(".filter-btn").removeClass("sticky");
             }    
         }              
     },                
