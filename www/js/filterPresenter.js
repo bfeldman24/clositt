@@ -26,7 +26,24 @@ var filterPresenter = {
         $(".drop-search").click(function(e){
           	e.preventDefault();
           	return false;
-      	});							
+      	});		
+      	
+      	$(".filter-btn").click(function(e){
+      	     e.preventDefault();
+      	     
+      	     pagePresenter.isStickyNavAlwaysShown = !pagePresenter.isStickyNavAlwaysShown;
+      	     
+      	     if ($(".filter-btn").hasClass("active")){
+      	         $(".filter-btn").removeClass("active");
+      	         $("#nav").removeClass("show");      	                       
+                 
+      	     }else{
+                 $("#nav").addClass("show", 1500);
+                 $(".filter-btn").addClass("active");
+      	     }
+      	     
+      	     return false;
+      	});					
 	},				 	
  	
  	refreshIfNeeded: function(){ 	        	  
@@ -99,7 +116,7 @@ var filterPresenter = {
     	 	}else{
     	 	      $(".noresults").remove();
     	 	      $("#search-bar-sort-block").css("visibility","hidden");
-		      searchController.isSearchActive = false;
+		          searchController.isSearchActive = false;
     	 	      productPresenter.refreshProducts();
     	 	}
     	 	
