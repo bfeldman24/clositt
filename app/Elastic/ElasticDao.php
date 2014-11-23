@@ -278,8 +278,8 @@ class ElasticDao{
     private function addTagsFilter(&$criteria, &$filters, &$parsedQuery){
 
         $tagsToSearch = array();
-        if($criteria->getCategories()){
-            foreach($criteria->getCategories() as $tag){
+        if($criteria->getTags()){
+            foreach($criteria->getTags() as $tag){
                 array_push($tagsToSearch, $tag);
             }
         }
