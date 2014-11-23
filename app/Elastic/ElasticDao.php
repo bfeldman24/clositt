@@ -200,11 +200,8 @@ class ElasticDao{
         }
 
         if(!empty($color)){
-            foreach($color as $singleColor){
-                $colors = array('term'=>array('color'=> strtolower($singleColor)));
-                array_push($filters, $colors);
-            }
-
+            $colors = array('terms'=>array('color'=> array_map('strtolower', $color)));
+            array_push($filters, $colors);
             $parsedQuery["Colors"] = $color;
         }
     }
@@ -217,18 +214,29 @@ class ElasticDao{
     private function addCustomerFilter(&$criteria, &$filters, &$parsedQuery){
         if($criteria->getCustomers() && is_array($criteria->getCustomers())){
             $customerType = $criteria->getCustomers()[0];
+            $termToRemove = $customerType;
         }
-        elseif( stristr($criteria->getSearchString(), "women") !== false){
+        elseif( stristr($criteria->getSearchString(), "womens") !== false){
+            $termToRemove = "womens";
             $customerType = "women";
+        }
+        elseif( stristr($criteria->getSearchString(), "mens") !== false){
+            $customerType = "men";
+            $termToRemove = "mens";
+
+        }elseif( stristr($criteria->getSearchString(), "women") !== false){
+            $customerType = "women";
+            $termToRemove = $customerType;
         }
         elseif( stristr($criteria->getSearchString(), "men") !== false){
             $customerType = "men";
+            $termToRemove = $customerType;
         }
 
         if(!empty($customerType)){
             $customer = array('term'=>array('customer'=>$customerType));
             array_push($filters, $customer);
-            $criteria->setSearchString(str_ireplace($customerType, "", $criteria->getSearchString()));
+            $criteria->setSearchString(str_ireplace($termToRemove, "", $criteria->getSearchString()));
             $parsedQuery["Gender"]= $customerType;
         }
     }
@@ -266,11 +274,8 @@ class ElasticDao{
         }
 
         if(!empty($storesToSearch)){
-            foreach($storesToSearch as $storeToSearh){
-                $store = array('term'=>array('store'=> strtolower($storeToSearh)));
-                array_push($filters, $store);
-            }
-
+            $stores = array('terms'=>array('store'=> array_map('strtolower', $storesToSearch)));
+            array_push($filters, $stores);
             $parsedQuery["Stores"]= $storesToSearch;
         }
     }
