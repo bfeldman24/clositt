@@ -266,8 +266,8 @@ class ElasticDao{
         }
 
         if(!empty($storesToSearch)){
-            foreach($storesToSearch as $store){
-                $store = array('term'=>array('store'=> strtolower($storesToSearch)));
+            foreach($storesToSearch as $storeToSearh){
+                $store = array('term'=>array('store'=> strtolower($storeToSearh)));
                 array_push($filters, $store);
             }
 
