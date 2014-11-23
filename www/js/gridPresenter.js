@@ -55,7 +55,7 @@ var gridPresenter = {
 	},
 	
 	showContent: function(numElements){
-	    if (gridPresenter.numberOfLoadingPages < gridPresenter.maxNumberOfPagesLoadingAtOnce - 1){
+	    if (gridPresenter.numberOfLoadingPages <= 0 || gridPresenter.numberOfLoadingPages < gridPresenter.maxNumberOfPagesLoadingAtOnce - 1){
 	       	
     		var lastHeight = $("#product-grid").children("div").last();
     		
@@ -70,7 +70,7 @@ var gridPresenter = {
     			
     			if(searchController.isSearchActive){
     			    gridPresenter.numberOfLoadingPages++; 				     				     			 		 
-    			    searchController.getProducts(gridPresenter.lazyLoad);       		              		        		    
+    			    searchController.getProducts();       		              		        		    
         		    gridPresenter.productIndex = 0; 		  			
         		    
         		}else{	    		    

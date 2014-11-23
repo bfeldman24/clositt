@@ -1,4 +1,4 @@
-<!DOCTYPE>
+<!DOCTYPE HTML>
 <html>
 <head>
 <title>Tags Admin</title>
@@ -59,6 +59,12 @@ body{
     min-height: 30px;
     height: auto;
     padding: 2px 0;
+}
+
+.overlay {
+    border-radius: 8px;
+    border: 1px solid #d0d0d0;
+    z-index: 1;
 }
 
 .overlay .productActions {
@@ -190,6 +196,13 @@ body{
     height: 160px !important;
 }
 
+.items .item {
+    border-color: #d0d0d0;
+    border-radius: 8px;
+    border-style: solid;
+    border-width: 1px;
+}
+
 .items .item .imagewrap {
     max-height: 130px;
     min-height: 130px;
@@ -246,7 +259,7 @@ body{
     <section id="sample-grid-container" class="items">
         <div class="container">           
             <div id="product-grid" class="row box-row"></div>
-            <div id="productSpinner" style="display:none;"><img src="../../css/images/loading.gif"/></div>
+            <div id="product-loader" class="loader"><i class="icon-svg5"></i></div>
         </div>
     </section>
     
@@ -735,12 +748,14 @@ gridPresenter.lazyLoad = function(products){
             $html.find("img[data-src]").unveil(200);
         }
    });
+   
+   if ($("#product-loader").length > 0){
+       pagePresenter.productLoaderPosition = $("#product-loader").position().top;
+   }
 		                   			   	   		
-   gridPresenter.alignDefaultGrid(); 
    gridPresenter.endTask(); 
-   gridPresenter.numberOfLoadingPages--;
+   gridPresenter.numberOfLoadingPages--;   
 };
-
 
 
 
@@ -757,7 +772,8 @@ $(document).ready(function() {
 	// Overrides:
 	gridPresenter.maxNumberOfPagesLoadingAtOnce = -1;
     searchController.isSearchActive = true;
-    searchController.url = "t/searchunapprovedtags/";    
+    searchController.useJson = true;
+    searchController.url = "t/searchunapprovedtags/";        
 });	
 </script>
 

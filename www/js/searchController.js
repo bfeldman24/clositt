@@ -5,6 +5,7 @@ var searchController = {
     pageIndex: 0,
     hasMoreProducts: true,
     isSearchActive: false,
+    useJson: false,
     
     init: function(){
         $("#search-bar").on("keyup", searchController.showClearBtn);
@@ -194,7 +195,7 @@ var searchController = {
     },            
     
     getProducts: function(json){                                        
-        json = json === true ? true : false;
+        json = searchController.useJson;
         
         if (searchController.hasMoreProducts){
             $("#product-loader").show();

@@ -20,17 +20,14 @@ var pagePresenter = {
         
         $(".back_to_top, .go_to_top").on("click", pagePresenter.scrollToTop);        
         
-        $(document).ready(function(){                        
-            if ($("#product-loader").length > 0 && typeof gridPresenter == 'object'){
-                pagePresenter.viewportHeight = $(window).height();
-                pagePresenter.productLoadOffset = pagePresenter.productLoadOffsetPercentage * pagePresenter.viewportHeight;                
-                pagePresenter.productLoaderPosition = $("#product-loader").position().top;
-                
-                $(window).scroll(pagePresenter.handleScrollEvents);
-                pagePresenter.handleScrollEvents();  
-            }  
+        if ($("#product-loader").length > 0 && typeof gridPresenter == 'object'){
+            pagePresenter.viewportHeight = $(window).height();
+            pagePresenter.productLoadOffset = pagePresenter.productLoadOffsetPercentage * pagePresenter.viewportHeight;                
+            pagePresenter.productLoaderPosition = $("#product-loader").position().top;
             
-        });
+            $(window).scroll(pagePresenter.handleScrollEvents);
+            pagePresenter.handleScrollEvents();  
+        }  
         
         $("#header").mouseenter(function() {
             if (!pagePresenter.isStickyNavAlwaysShown && $("#nav").hasClass("sticky") && !$("#nav").hasClass("show")){                                
