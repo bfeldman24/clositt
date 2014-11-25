@@ -75,14 +75,15 @@ var pagePresenter = {
         // Sticky Navigation Header  
         if (!pagePresenter.isStickyNavAlwaysShown){
             if ($(window).scrollTop() > pagePresenter.navScrollHeight && !$("#nav").hasClass("sticky")){
-                $("#nav").stop().addClass("sticky");
-                $(".filter-btn").addClass("sticky");
+                $("#nav").stop().addClass("sticky");                
                 $("#nav.sticky").css("top", (-1 * $("#filters").height()) + 25);
+                $("#nav .btn-group.open").removeClass("open");
+                $(".filter-btn").addClass("sticky");
                                 
             }else if ($(window).scrollTop() <= pagePresenter.navScrollHeight && $("#nav").hasClass("sticky")){
                 //$("#nav").stop().removeClass("sticky").show("blind", "fast");
                 $("#nav").stop().removeClass("sticky show");
-                $(".filter-btn").removeClass("sticky");
+                $(".filter-btn").removeClass("sticky");                
             }    
         }              
     },                
