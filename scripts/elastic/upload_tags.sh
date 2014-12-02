@@ -1,17 +1,23 @@
 #!/bin/sh
+
+curl -XDELETE http://localhost:9200/categories
+
 curl -XPUT http://localhost:9200/_river/my_jdbc_river/_meta -d '
 {
     "type" : "jdbc",
     "jdbc" : {
-        "index" : "tags",
-        "type" : "tag",
+        "index" : "categories",
+        "type" : "category",
         "url" : "jdbc:mysql://clositt.com:3306/thewinn2_clositt",
         "user" : "thewinn2_clstusr",
         "password" : "C1051ttUser",
         "bulk_size" : "1000",
         "sql" : [
             {
-                "statement" : "select distinct(tag) as tag, char_length(tag) as taglength from Tags "
+                "statement" : "select distinct(subvalue) as category, char_length(subvalue) as categorylength from Filters where type=\"category\""
+            },
+            {
+                "statement" : "select distinct(synonym) as category, char_length(synonym) as categorylength from Filters where type=\"category\""
             }
         ]
     }

@@ -31,3 +31,11 @@ printf "\nDeleting river\n"
 curl -XDELETE http://localhost:9200/_river
 
 printf "\nDone\n"
+
+
+printf "\n\Setting up Filters \n"
+
+./upload_attributes.sh
+./upload_materials.sh
+./upload_stores.sh
+./upload_tags.sh

@@ -1,20 +1,20 @@
 #!/bin/sh
 
-curl -XDELETE http://localhost:9200/stores
+curl -XDELETE http://localhost:9200/_river
 
 curl -XPUT http://localhost:9200/_river/my_jdbc_river/_meta -d '
 {
     "type" : "jdbc",
     "jdbc" : {
-        "index" : "stores",
-        "type" : "store",
+        "index" : "attributes",
+        "type" : "attribute",
         "url" : "jdbc:mysql://clositt.com:3306/thewinn2_clositt",
         "user" : "thewinn2_clstusr",
         "password" : "C1051ttUser",
         "bulk_size" : "1000",
         "sql" : [
             {
-                "statement" : "select value as store, char_length(value) as storelength from Filters where type =\"company\""
+                "statement" : "select value as attribute, char_length(value) as attributelength from Filters where type =\"attribute\""
             }
         ]
     }
