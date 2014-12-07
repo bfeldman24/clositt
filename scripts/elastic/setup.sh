@@ -12,9 +12,11 @@ curl -XPUT http://localhost:9200/products_$CURRENT_DATE -d @mappings.json
 printf "\nCreating river:\n"
 ./create_river.sh $CURRENT_DATE
 
+sleep 10
+
 while :
 do
-    if curl --silent http://localhost:9200/_river/my_jdbc_river/_custom?pretty=true | grep '"active":false' > /dev/null
+    if python river_done.py | grep 'Done' > /dev/null
     then
         break
     else
@@ -28,7 +30,7 @@ printf "\nSetting up alias:\n"
 ./create_alias.sh $CURRENT_DATE
 
 printf "\nDeleting river\n"
-curl -XDELETE http://localhost:9200/_river
+curl -XDELETE http://localhost:9200/_river*
 
 printf "\nDone\n"
 

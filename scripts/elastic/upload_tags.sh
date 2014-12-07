@@ -1,6 +1,6 @@
 #!/bin/sh
 
-curl -XDELETE http://localhost:9200/categories
+curl -XDELETE http://localhost:9200/categories*
 
 curl -XPUT http://localhost:9200/_river/my_jdbc_river/_meta -d '
 {
@@ -27,7 +27,7 @@ curl -XPUT http://localhost:9200/_river/my_jdbc_river/_meta -d '
 
 while :
 do
-    if curl --silent http://localhost:9200/_river/my_jdbc_river/_custom?pretty=true | grep '"active":false' > /dev/null
+    if python river_done.py | grep 'Done'  > /dev/null
     then
         break
     else
@@ -38,6 +38,6 @@ do
 done
 
 printf "\nDeleting river\n"
-curl -XDELETE http://localhost:9200/_river
+curl -XDELETE http://localhost:9200/_river*
 
 printf "\nDone\n"
