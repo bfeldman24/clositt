@@ -281,45 +281,80 @@ class ElasticDao{
     }
 
     private function addTagsFilter(&$criteria, &$filters, &$parsedQuery){
+        //TODO refactor this and rethink how we store this in the DB!!
+        $categoriesFromElastic = $this->getAllFromElastic('categories', 'category', 'categorylength','desc');
+        $attributesFromElastic = $this->getAllFromElastic('attributes', 'attribute', 'attributelength','desc');
+        $materialsFromElastic = $this->getAllFromElastic('materials', 'material', 'materiallength','desc');
 
-        $tagsToSearch = array();
+        $categoriesFromElastic = array_map('strtolower', $categoriesFromElastic);
+        $attributesFromElastic = array_map('strtolower', $attributesFromElastic);
+        $materialsFromElastic = array_map('strtolower', $materialsFromElastic);
+
+        $categoriesToSearch = array();
+        $attributesToSearch = array();
+        $materialsToSearch = array();
+
         if($criteria->getTags()){
             foreach($criteria->getTags() as $tag){
-                array_push($tagsToSearch, $tag);
+                $tag = strtolower($tag);
+                if(in_array($tag, $categoriesFromElastic)){
+                    array_push($categoriesToSearch, $tag);
+                }
+                elseif(in_array($tag, $attributesFromElastic)){
+                    array_push($attributesToSearch, $tag);
+                }
+                elseif(in_array($tag, $materialsFromElastic)){
+                    array_push($materialsToSearch, $tag);
+                }
             }
         }
 
-        $tagsFromElastic = $this->getAllFromElastic('tags', 'tag', 'taglength','desc');
-        foreach($tagsFromElastic as $tag){
+        $this->parseStringForTag($criteria, $categoriesFromElastic, $categoriesToSearch);
+        $this->parseStringForTag($criteria, $attributesFromElastic, $attributesToSearch);
+        $this->parseStringForTag($criteria, $materialsFromElastic, $materialsToSearch);
+
+
+        if(!empty($categoriesToSearch)){
+            $tags = array('terms'=>array('category'=> array_map('strtolower', $categoriesToSearch)));
+            array_push($filters, $tags);
+            $parsedQuery["Categories"]= $categoriesToSearch;
+        }
+
+        if(!empty($attributesToSearch)){
+            $tags = array('terms'=>array('category'=> array_map('strtolower', $attributesToSearch)));
+            array_push($filters, $tags);
+            $parsedQuery["Attributes"]= $attributesToSearch;
+        }
+
+        if(!empty($materialsToSearch)){
+            $tags = array('terms'=>array('category'=> array_map('strtolower', $materialsToSearch)));
+            array_push($filters, $tags);
+            $parsedQuery["Materials"]= $materialsToSearch;
+        }
+    }
+
+
+    private function parseStringForTag(&$criteria, $listFromElastic, &$arrayToSearch){
+        foreach($listFromElastic as $tag){
             $tempTag = $tag;
             if (substr($tempTag, -1) == 's')
             {
                 $tempTag = substr($tempTag, 0, -1);
             }
 
-            if(in_array($tag, $tagsToSearch) === false){
+            if(in_array($tag, $arrayToSearch) === false){
                 //first check for exact match to the tag
                 if(stripos($criteria->getSearchString(), $tag) !== false){
-                    array_push($tagsToSearch, $tag);
+                    array_push($arrayToSearch, $tag);
                     $criteria->setSearchString(str_ireplace($tag, "", $criteria->getSearchString()));
                 }
                 //Else check for tag without 's' at the end
                 elseif(stripos($criteria->getSearchString(), $tempTag) !== false){
-                    array_push($tagsToSearch, $tag);
+                    array_push($arrayToSearch, $tag);
                     $criteria->setSearchString(str_ireplace($tempTag, "", $criteria->getSearchString()));
                 }
             }
         }
-
-        if(!empty($tagsToSearch)){
-            foreach($tagsToSearch as $tag){
-                $tags = array('term'=>array('category'=>strtolower($tag)));
-                array_push($filters, $tags);
-            }
-
-            $parsedQuery["Tags"]= $tagsToSearch;
-        }
-
     }
 
     private function getAllFromElastic($indexName, $fieldName, $sortfield = null, $sortorder = null){

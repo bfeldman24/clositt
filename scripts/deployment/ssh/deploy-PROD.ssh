@@ -1,14 +1,10 @@
 #!/bin/sh
 
-# Check parameters
-if [ $# -ne 1 ]
-then
-	echo "I need a directory to run. Pass a directory as the first and only parameter."
-	exit 1
-fi
+DIR=$DIR
+: ${DIR:="clositt-public"}
 
 # Check production update
-if [ $1 = 'clositt-public' -o $1 = 'clositt-public2' ]
+if [ $DIR = 'clositt-public' -o $DIR = 'clositt-public2' ]
 then 
 	echo "Are you sure you want to update production? [y/n]"
 	read update
@@ -43,29 +39,29 @@ d=$(date +%d.%m.%y_%H.%M)
 echo "backup dir name will be /home/clositt-archive/$d"
 
 sudo mkdir "/home/clositt-archive/$d"
-sudo mv /home/$1/* "/home/clositt-archive/$d/"
-sudo mv /home/$1/www/.htaccess "/home/clositt-archive/$d/www/"
+sudo mv /home/$DIR/* "/home/clositt-archive/$d/"
+sudo mv /home/$DIR/www/.htaccess "/home/clositt-archive/$d/www/"
 
 echo "Copying over to prod..."
-sudo cp -rf * /home/$1/
-sudo cp www/.htaccess /home/$1/www
-sudo rm -rf /home/$1/scripts
-sudo rm -rf /home/$1/archive
-sudo rm /home/$1/robots.txt
+sudo cp -rf * /home/$DIR/
+sudo cp www/.htaccess /home/$DIR/www
+sudo rm -rf /home/$DIR/scripts
+sudo rm -rf /home/$DIR/archive
+sudo rm /home/$DIR/robots.txt
 
 echo "Copy back app/Data directory"
-sudo rm -rf /home/$1/app/Data/
-sudo mkdir /home/$1/app/Data/
-sudo cp -rf "/home/clositt-archive/$d/app/Data/" /home/$1/app/
+sudo rm -rf /home/$DIR/app/Data/
+sudo mkdir /home/$DIR/app/Data/
+sudo cp -rf "/home/clositt-archive/$d/app/Data/" /home/$DIR/app/
 
 echo "Setting permissions..."
-sudo chmod -R 777 /home/$1/app/Logs
-sudo chmod 777 /home/$1/app/Data
-sudo chmod -R 777 /home/$1/app/Data/Lists
-sudo chmod 777 /home/$1/app/Data/filters.html
+sudo chmod -R 777 /home/$DIR/app/Logs
+sudo chmod 777 /home/$DIR/app/Data
+sudo chmod -R 777 /home/$DIR/app/Data/Lists
+sudo chmod 777 /home/$DIR/app/Data/filters.html
 
 sudo rm /var/www/clositt.com
-sudo ln -s /home/$1/www /var/www/clositt.com
+sudo ln -s /home/$DIR/www /var/www/clositt.com
 
 echo "Make sure to update the elastic repo!"
 echo "Please verify the release!"

@@ -138,8 +138,16 @@ body{
                     parsedQuery += "<br/>" + "Stores: " + data.query.Stores.join(", ");
                 }
 
-                if(data.query.Tags){
-                    parsedQuery += "<br/>" + "Tags: " + data.query.Tags.join(", ");
+                if(data.query.Categories){
+                    parsedQuery += "<br/>" + "Categories: " + data.query.Categories.join(", ");
+                }
+
+                if(data.query.Materials){
+                    parsedQuery += "<br/>" + "Materials: " + data.query.Materials.join(", ");
+                }
+
+                if(data.query.Attributes){
+                    parsedQuery += "<br/>" + "Attributes: " + data.query.Attributes.join(", ");
                 }
 
                 if(data.query.Colors){
