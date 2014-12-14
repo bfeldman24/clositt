@@ -33,6 +33,21 @@ class StatsController{
 		}
 	
 		return "failed";
-	}					
+	}
+	
+	public static function getAll(){
+	    self::init();		    
+			
+		$searchResults = array();
+		$results = self::$statsDao->getAll();
+		
+		if(is_object($results)){		 
+			while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	
+				$searchResults[] = $row;
+			}
+		}
+	
+		return json_encode($searchResults);        
+    }					
 }
 ?>

@@ -26,7 +26,7 @@ ul {
 }
 
 ul>li{
-    list-style: hebrew outside none;   
+    list-style: hebrew outside none !important;   
 }
 
 ul>li>a{
@@ -55,6 +55,7 @@ ul>li>a{
             <li><a href="php/feedback.php">Feedback</a></li>
             <li><a href="php/reviews.php">Product Reviews</a></li>
             <li><a href="php/searchTerms.php">Search Terms</a></li>
+            <li><a href="php/stats.php">User Stats</a></li>
             <li><a href="php/dataQuality.php">Data Quality</a></li>
             <li><a href="php/users.php">Users</a></li>
             <li><a id="elasticHealthCheck">Elasic Health Check</a></li>

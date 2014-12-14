@@ -30,5 +30,27 @@ class StatsDao extends AbstractDao {
         $paramTypes = array('integer','text','text','text','text','integer','text', 'text');
         return $this->update($sql, $params, $paramTypes, "239847203");
 	}			
+	
+	public function getAll(){
+        $sql = "SELECT s.".USER_ID . "," .
+                      "s.".USER_IP . "," .
+                      "s.".STATS_SESSION_ID . "," .
+                      "s.".STATS_ACTION . ", " .
+                      "s.".PRODUCT_SKU.",".
+                      "s.".CLOSET_ID.",".
+                      "s.".STATS_DETAIL.",".
+                      "s.".STATS_INFO . ", " .
+                      "s.".STATS_TIMESTAMP .", ".
+                      "u.".USER_NAME.", ".
+                      "u.".USER_EMAIL .
+               " FROM ".STATS. " s" .
+               " LEFT JOIN " . USERS . " u ON u.".USER_ID." = s." . USER_ID .
+               " ORDER BY ".STATS_TIMESTAMP." Desc LIMIT 500";
+		
+		$paramTypes = array();
+        $params = array();
+        
+        return $this->getResults($sql, $params, $paramTypes, "768768996");        
+	}
 }
 ?>
