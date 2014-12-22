@@ -7,7 +7,7 @@ Options -Indexes
 
 RewriteEngine On
 RewriteRule ^clositt$ myclositt.php
-RewriteRule ^([a-z0-9]*)/hangitt.js$ hangitt.js.php?user=$1
+RewriteRule ^([a-z0-9]*)/hangitt.js$ js/hangitt.js.php?user=$1
 RewriteRule ^track/([a-z]*)/([0-9]*)$ Router.php?classCode=s&method=trackemail&message=$1&user=$2
 
 RewriteRule ^!\+/([0-9]*)/(.*)$ myclositt.php?user=$1&closittname=$2
