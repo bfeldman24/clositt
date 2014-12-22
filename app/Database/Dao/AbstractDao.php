@@ -148,6 +148,10 @@ class AbstractDao{
 	    if (isset($_SESSION['userid'])){
 	       $user = "[" .$_SESSION['userid'] . "]";  
 	    }
+	    
+	    if (strlen($msg) > 2000){
+	       $msg = substr($msg, 0, 2000);  
+	    }
 	   
 		$error = "\n" . date("m/d/y h:i:s") . " - " . $errorLevel . " - (". $errorNum . $user . ") - " . $sql . ": " . $msg;
 		fwrite($this->file,$error);

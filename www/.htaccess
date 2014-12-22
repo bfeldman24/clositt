@@ -7,6 +7,7 @@ Options -Indexes
 
 RewriteEngine On
 RewriteRule ^clositt$ myclositt.php
+RewriteRule ^([a-z0-9]*)/hangitt.js$ hangitt.js.php?user=$1
 
 RewriteRule ^!\+/([0-9]*)/(.*)$ clositt.php?user=$1&closittname=$2
 RewriteRule ^!\+/(.*)$ clositt.php?user=$1
@@ -21,6 +22,7 @@ RewriteRule ^b/([a-z0-9]*)/([a-z0-9]*)$ Router.php?classCode=b&method=browse&cus
 
 RewriteRule ^([a-z]{1,2})/([a-z0-9]*)$ Router.php?classCode=$1&method=$2
 RewriteRule ^([a-z]{1,2})/([a-z0-9]*)/([a-z0-9]*)$ Router.php?classCode=$1&method=$2&page=$3
+RewriteRule ^hangitt/([0-9]*)/([0-9]*)$ Router.php?classCode=cl&method=hangitt&userid=$1&closet=$2 [QSA,L]
 
 RewriteRule ^([a-z]+)$ $1.php
 RewriteRule ^([a-z]+).(html|HTML|phtml|PHTML|asp|ASP|jsp|JSP)$ $1.php

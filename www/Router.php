@@ -1,6 +1,6 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 require_once(dirname(__FILE__) . '/../app/session.php');
 
@@ -130,10 +130,15 @@ class Router {
                 break;    
             case 'get':            
                 echo $closetController->getAllClosets();
-                break;            
+                break;                           
             case 'getall':                               
                 echo $closetController->getAllClosetItems($_POST, true);
                 break;
+            case 'hangitt':                               
+                $image = $closetController->addCustomItemToCloset($_GET);
+                header('Content-Type: image/jpeg');                                                                        
+                print_r($image);
+                break;    
         }  
     }   
     

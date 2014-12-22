@@ -1,6 +1,6 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Model/ClosetEntity.php');
@@ -229,6 +229,68 @@ class ClosetController extends Debugger {
         $this->debug("ClosetController", "addItemToCloset", "There was no closet item supplied to add!");
         return "failed";
 	}
+
+    public function addCustomItemToCloset($data){	   	   	   
+	   if (isset($data)){  	                                                     
+            
+            if ($data['userid']){              
+                
+                // Make urls absolute
+                $img = null;
+                $link = null; 
+                $page = $data['page'];               
+                
+                // Update image src
+                if (strpos($data['src'], "/") === 0){
+                   	$tempLink = substr($data['page'], 0, strpos($data['page'], "/", 8));
+                   	$img = $tempLink . $data['src'];
+                }else if (strpos($data['src'] , "..") === 0){
+                   	$tempLink = substr($data['page'], 0, strrpos($data['page'], "/"));
+                   	$img = $tempLink . "/" . $data['src'];
+                }else{	
+                	$img = $data['src'];
+                } 
+                
+                // Update link
+                if (isset($data['link'])){
+                    if (strpos($data['link'], "/") === 0){
+                       	$tempLink = substr($data['page'], 0, strpos($data['page'], "/", 8));
+                       	$link = $tempLink . $data['link'];
+                    }else if (strpos($data['link'] , "..") === 0){
+                       	$tempLink = substr($data['page'], 0, strrpos($data['page'], "/"));
+                       	$link = $tempLink . "/" . $data['link'];
+                    }else{	
+                    	$link = $data['link'];
+                    }
+                }
+                
+                $img = $img ? str_replace("~~~","&",$img) : null;
+                $link = $link ? str_replace("~~~","&",$link) : null;
+                $page = $page ? str_replace("~~~","&",$page) : null;
+                $img = $img ? str_replace("~~","?",$img) : null;
+                $link = $link ? str_replace("~~","?",$link) : null;
+                $page = $page ? str_replace("~~","?",$page) : null;
+                                
+                // TODO Check if product exists
+                
+                try{
+                    $rawImage = $this->file_get_contents_curl($img);                            
+                }catch(Exception $e) {                     
+                    $rawImage = null;
+                    $this->error("ClosetController", "addCustomItemToCloset", "Could not cache image: $img");                          
+                }       
+                
+                                         
+                $affectedRows = $this->closetDao->addCustomItemToCloset($data['userid'], $data['closet'], $img, $rawImage, $link, $page);
+                
+                if ($affectedRows === 1){                                                                                                       
+                    return file_get_contents(dirname(__FILE__) . '/../../www/css/images/success.png');                
+                }                
+            }
+        }
+                        
+        return file_get_contents(dirname(__FILE__) . '/../../www/css/images/error.png');    
+	}		
 	
 	public function removeItemFromCloset($data){
 	   if (isset($data)){
@@ -263,11 +325,12 @@ class ClosetController extends Debugger {
         return "failed";
 	}
 	
-	public function getAllClosets($json = true){
+	public function getAllClosets($json = true, $id = false){
 	   $closets = array();
 	   
-	   if ($_SESSION['active']){
-    	   $closetResults = $this->closetDao->getAllClosets($_SESSION['userid']);	   
+	   if ($_SESSION['active'] || $id){
+	       $id = $id ? $id : $_SESSION['userid'];
+    	   $closetResults = $this->closetDao->getAllClosets($id);	   
     	   
     	   if(is_object($closetResults)){
     			while($row = $closetResults->fetchRow(MDB2_FETCHMODE_ASSOC)){	
@@ -300,7 +363,7 @@ class ClosetController extends Debugger {
     	   $closetItemResults = $this->closetDao->getAllClosetItems($owner, $owner == $_SESSION['userid']);    	   
     	   
     	   if(is_object($closetItemResults)){
-    			while($row = $closetItemResults->fetchRow(MDB2_FETCHMODE_ASSOC)){				    	
+    			while($row = $closetItemResults->fetchRow(MDB2_FETCHMODE_ASSOC)){				    	    			 
     				$closetItemEntity = ClosetItemEntity::setFromDB($row);				
     				$closetName = $closetItemEntity->getClosetName();
     				
@@ -309,14 +372,14 @@ class ClosetController extends Debugger {
     				}
     				
     				$closetItems[$closetName][] = $closetItemEntity->toArray();				
-    			}			
+    			}	    			
     	   }	 
 	   }else{
 	       $this->getAllSessionClosetItems($closetItems, true);
 	   }
 	   
 	   if ($json){	   
-	       return json_encode($closetItems, true);
+	       return json_encode($closetItems);
 	   }else{
 	       return $closetItems;   
 	   }

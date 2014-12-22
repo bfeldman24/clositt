@@ -98,6 +98,17 @@ class ClosetDao extends AbstractDao {
         return $this->update($sql, $params, $paramTypes, "39847293234");
 	}
 	
+	public function addCustomItemToCloset($userId, $closetId, $img, $rawImage, $link, $page){
+	    $sql = "INSERT INTO ".CLOSET_ITEMS_CUSTOM." (".CLOSET_ID.", ".CLOSET_USER_ID.", ".CLOSET_ITEM_IMAGE.", ".CLOSET_ITEM_CUSTOM_RAW_IMAGE.",".CLOSET_ITEM_CUSTOM_LINK.",".CLOSET_ITEM_CUSTOM_PAGE.",".CLOSET_ITEM_STATUS.", ".CLOSET_LAST_UPDATED.", ".CLOSET_ITEM_DATE_ADDED.") " .
+                " VALUES (?,?,?,?,?,?,1,NOW(),NOW()) " .
+                "ON DUPLICATE KEY UPDATE ".CLOSET_ITEM_STATUS."=1, ".CLOSET_LAST_UPDATED."=NOW()";	   				
+		
+		$paramTypes = array('integer', 'integer', 'text', 'blob', 'text', 'text');
+        $params = array($closetId, $userId, $img, $rawImage, $link, $page);
+        
+        return $this->update($sql, $params, $paramTypes, "39847293235");
+	}
+	
 	
 	public function removeItemFromCloset($user, $closetItem){
 	    $sql = "UPDATE ".CLOSET_ITEMS.
@@ -128,11 +139,21 @@ class ClosetDao extends AbstractDao {
 	
 	
 	public function getAllClosetItems($owner, $isPrivate){
-	   $sql = "SELECT c." . CLOSET_ID.", c.".CLOSET_NAME.", c.".CLOSET_PRICE_ALERTS.", i.".CLOSET_USER_ID.", i.".CLOSET_ITEM_SKU.", COALESCE(i.".CLOSET_ITEM_IMAGE.
-	                   ", p.".PRODUCT_IMAGE.") AS ".CLOSET_ITEM_IMAGE.", p.".PRODUCT_NAME.", p.".PRODUCT_STORE.", p.".PRODUCT_PRICE.", p.".PRODUCT_SHORT_LINK. 
+	   $sql = "SELECT c." . CLOSET_ID.
+	               ", c.".CLOSET_NAME.
+	               ", c.".CLOSET_PRICE_ALERTS.
+	               ", COALESCE(i.".CLOSET_USER_ID.", ci.".CLOSET_USER_ID.") as ".CLOSET_USER_ID.
+	               ", COALESCE(i.".CLOSET_ITEM_SKU.", ci.".CLOSET_USER_ID.") as ".CLOSET_ITEM_SKU.
+	               ", COALESCE(i.".CLOSET_ITEM_IMAGE.", ci.".CLOSET_ITEM_IMAGE.", p.".PRODUCT_IMAGE.") AS ".CLOSET_ITEM_IMAGE.
+	               ", p.".PRODUCT_NAME.
+	               ", p.".PRODUCT_STORE.
+	               ", p.".PRODUCT_PRICE.
+	               ", p.".PRODUCT_SHORT_LINK. 
                 " FROM " . CLOSETS . " c " .               
                 " LEFT JOIN " . CLOSET_ITEMS . " i ON c.".CLOSET_ID." = i.".CLOSET_ID . " AND " .
-                       "(isnull(i." . CLOSET_ITEM_STATUS . ") OR i." . CLOSET_ITEM_STATUS . " = 1) ".          
+                       "(isnull(i." . CLOSET_ITEM_STATUS . ") OR i." . CLOSET_ITEM_STATUS . " = 1) ". 
+                " LEFT JOIN " . CLOSET_ITEMS_CUSTOM . " ci ON c.".CLOSET_ID." = ci.".CLOSET_ID . " AND " .
+                       "(isnull(ci." . CLOSET_ITEM_STATUS . ") OR ci." . CLOSET_ITEM_STATUS . " = 1) ".                 
                 " LEFT JOIN " . PRODUCTS . " p ON p.".PRODUCT_SKU." = i.".CLOSET_ITEM_SKU .
                 " WHERE c." . CLOSET_USER_ID . " = ? AND c." . CLOSET_PERMISSION . " <= ? " .
                 " ORDER BY " . CLOSET_NAME;							       

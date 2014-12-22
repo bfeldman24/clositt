@@ -110,6 +110,18 @@ define("CLOSET_ITEM_IMAGE","image");
 define("CLOSET_ITEM_STATUS","status");
 define("CLOSET_ITEM_DATE_ADDED","dateadded");
 
+// Custom Closet Items
+define("CLOSET_ITEMS_CUSTOM","CustomClosetItems");
+define("CLOSET_ITEM_CUSTOM_RAW_IMAGE","rawimage");
+define("CLOSET_ITEM_CUSTOM_LINK","link");
+define("CLOSET_ITEM_CUSTOM_PAGE","urlfoundon");
+
+/*
+define("CLOSET_ITEM_IMAGE","image");
+define("CLOSET_ITEM_STATUS","status");
+define("CLOSET_ITEM_DATE_ADDED","dateadded");
+*/
+
 // Users 
 define("USERS","Users");
 define("USER_ID","userid");
