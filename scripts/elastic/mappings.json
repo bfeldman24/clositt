@@ -100,24 +100,18 @@
     "product": {
       "properties": {
         "store": {
-          "type": "multi_field",
-          "fields": {
-            "store": {
+          "type": "string",
+          "analyzer": "lowercase_single_phrase"
+        },
+        "category": {
               "type": "string",
               "analyzer": "lowercase_single_phrase"
-            }
-          }
-        },
-        "customer": {
-          "type": "string",
-          "index_analyzer": "standard",
-          "search_analyzer": "customer_synonym_analyzer"
-        },
+          },
         "details" : {
-                "type" : "string",
-                "index" : "analyzed",
-                "analyzer" : "htmlContent"
-                }
+            "type" : "string",
+            "index" : "analyzed",
+            "analyzer" : "htmlContent"
+            }
         },
         "name": {
           "fields":{
@@ -164,12 +158,14 @@
                   "tag":{
                      "type":"string",
                      "analyzer":"full_name"
+                  },
+                  "tag_single_word":{
+                      "type": "string",
+                      "analyzer": "lowercase_single_phrase"
                   }
                },
                "type":"multi_field"
           }
         }
-      }
-    }
-  }
+   }
 }

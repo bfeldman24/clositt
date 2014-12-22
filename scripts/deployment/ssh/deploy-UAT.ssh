@@ -1,10 +1,7 @@
 #!/bin/sh
 
-if [ $# -ne 1 ]
-then
-echo "I need a directory to run. Pass a directory as the first and only parameter."
-exit 1
-fi
+DIR=$DIR
+: ${DIR:="clositt-staging"}
 
 if [ $(pwd) != '/home/clositt-uat' ]
 then
@@ -12,7 +9,7 @@ then
         exit 1
 fi
 
-if [ $1 = 'clositt-public' ]
+if [ $DIR = 'clositt-public' ]
 then
         echo "You cannot run this script for production"
         exit 1
@@ -38,7 +35,7 @@ then
         exit 1
 fi
 
-sudo rm -rf /home/$1/*
+sudo rm -rf /home/$DIR/*
 echo "Cleared target directory"
 
 echo "Compiling all JS files..."
@@ -54,41 +51,41 @@ echo "Minified JS and CSS finished"
 
 
 echo "Copying app..."
-sudo mkdir /home/$1/app
-sudo cp -r app /home/$1/
-sudo rm -f /home/$1/app/Controller/*Admin*
-sudo rm -f /home/$1/app/Database/Dao/*Admin*
-sudo rm -rf /home/$1/app/Data/*
+sudo mkdir /home/$DIR/app
+sudo cp -r app /home/$DIR/
+sudo rm -f /home/$DIR/app/Controller/*Admin*
+sudo rm -f /home/$DIR/app/Database/Dao/*Admin*
+sudo rm -rf /home/$DIR/app/Data/*
 
 echo "Copying configs..."
-sudo mkdir /home/$1/configs
-sudo cp -r configs /home/$1/
+sudo mkdir /home/$DIR/configs
+sudo cp -r configs /home/$DIR/
 
 echo "Copying scripts..."
-sudo mkdir /home/$1/scripts
-sudo mkdir /home/$1/scripts/deployment
-sudo mkdir /home/$1/scripts/deployment/ssh
-sudo cp scripts/deployment/ssh/deploy-PROD.ssh /home/$1/scripts/deployment/ssh
+sudo mkdir /home/$DIR/scripts
+sudo mkdir /home/$DIR/scripts/deployment
+sudo mkdir /home/$DIR/scripts/deployment/ssh
+sudo cp scripts/deployment/ssh/deploy-PROD.ssh /home/$DIR/scripts/deployment/ssh
 
 echo "Copying www..."
-sudo mkdir /home/$1/www
-sudo cp www/*.php /home/$1/www/
-sudo cp www/favicon.ico /home/$1/www/
-sudo cp www/.htaccess /home/$1/www/
-sudo cp www/php.ini /home/$1/www/
-sudo cp -r www/static/ /home/$1/www/
-sudo cp -r www/css/ /home/$1/www/
-sudo cp -r www/lib/ /home/$1/www/
+sudo mkdir /home/$DIR/www
+sudo cp www/*.php /home/$DIR/www/
+sudo cp www/favicon.ico /home/$DIR/www/
+sudo cp www/.htaccess /home/$DIR/www/
+sudo cp www/php.ini /home/$DIR/www/
+sudo cp -r www/static/ /home/$DIR/www/
+sudo cp -r www/css/ /home/$DIR/www/
+sudo cp -r www/lib/ /home/$DIR/www/
 
-sudo mkdir /home/$1/www/js
-sudo cp www/js/clositt.min.js /home/$1/www/js
-sudo cp www/js/clositt.min.e.js /home/$1/www/js
+sudo mkdir /home/$DIR/www/js
+sudo cp www/js/clositt.min.js /home/$DIR/www/js
+sudo cp www/js/clositt.min.e.js /home/$DIR/www/js
 
 echo "Setting permissions..."
-sudo chmod -R 777 /home/$1/app/Logs
-sudo chmod 777 /home/$1/app/Data
-sudo chmod -R 777 /home/$1/app/Data/Lists
-sudo chmod 777 /home/$1/app/Data/filters.html
+sudo chmod -R 777 /home/$DIR/app/Logs
+sudo chmod 777 /home/$DIR/app/Data
+sudo chmod -R 777 /home/$DIR/app/Data/Lists
+sudo chmod 777 /home/$DIR/app/Data/filters.html
 
 
 echo "Moved current directory to target directory"

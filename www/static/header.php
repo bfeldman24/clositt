@@ -28,10 +28,19 @@ if (isset($_GET['outfit'])){
                             <input id="search-bar" type="text" class="form-control input-search" placeholder="Stop searching, Start finding. Start Here" <?php echo $searchValue; ?> />
                         </div>
                         <button type="submit" id="seach-bar-icon" class="btn btn-default search-btn icon-svg2"></button>
+                        
+                        <?php if (isset($homepage) && $homepage){ ?>
+                            <button class="btn btn-clositt-theme filter-btn icomoon-filter-3"></button>
+                        <?php } ?>
+                        
                     </form>
                     <ul id="loginBtns" class="nav navbar-nav navbar-right">                        
                     </ul>
                 </div>
+                
+                <?php if (isset($homepage) && $homepage){ ?>
+                    <button class="btn btn-clositt-theme filter-btn filter-btn-sm icomoon-filter-3"></button>
+                <?php } ?>
             </div>
         </nav>
         <div class="clear"></div>

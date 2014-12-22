@@ -4,10 +4,11 @@ require_once(dirname(__FILE__) . '/AbstractDao.php');
 class FilterDao extends AbstractDao {
 		
 	public function getFilters(){
-        $sql = "SELECT " . FILTER_TYPE.", ".FILTER_VALUE.", ".FILTER_SUBVALUE.", ".FILTER_CUSTOMER . 
+        $sql = "SELECT " . FILTER_TYPE.", ".FILTER_VALUE.", ".FILTER_SUBVALUE.", ".FILTER_SYNONYM.",".FILTER_CUSTOMER . 
                 " FROM " . FILTERS .
                 " WHERE " . FILTER_STATUS . " = 1 " .
-                " ORDER BY " . FILTER_TYPE.", ".FILTER_VALUE.", ".FILTER_SUBVALUE.", ".FILTER_CUSTOMER;							       
+                " ORDER BY " . FILTER_TYPE.", ".FILTER_VALUE.", " . 
+                    "CASE WHEN ".FILTER_SUBVALUE." like 'All %' THEN 0 ELSE ".FILTER_SUBVALUE." END, ".FILTER_CUSTOMER;							       
 		
 		return $this->getResults($sql, array(), array(), "9812364012");	     
 	}	

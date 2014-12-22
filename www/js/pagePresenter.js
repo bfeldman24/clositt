@@ -9,6 +9,9 @@ var pagePresenter = {
     lastScrollHeight: 0,
     viewportHeight: 0,
     productLoaderPosition: 0,
+    navScrollHeight: 600,    
+    isStickyNavAlwaysShown: false,
+    
     
     init: function(){
         $("#subheader-navbar").show('fast');
@@ -17,20 +20,42 @@ var pagePresenter = {
         
         $(".back_to_top, .go_to_top").on("click", pagePresenter.scrollToTop);        
         
-        $(document).ready(function(){                        
-            if ($("#product-loader").length > 0 && typeof gridPresenter == 'object'){
-                pagePresenter.viewportHeight = $(window).height();
-                pagePresenter.productLoadOffset = pagePresenter.productLoadOffsetPercentage * pagePresenter.viewportHeight;                
-                pagePresenter.productLoaderPosition = $("#product-loader").position().top;
+        if ($("#product-loader").length > 0 && typeof gridPresenter == 'object'){
+            pagePresenter.viewportHeight = $(window).height();
+            pagePresenter.productLoadOffset = pagePresenter.productLoadOffsetPercentage * pagePresenter.viewportHeight;                
+            pagePresenter.productLoaderPosition = $("#product-loader").position().top;
+            
+            $(window).scroll(pagePresenter.handleScrollEvents);
+            pagePresenter.handleScrollEvents();  
+        }  
+        
+        $("#header").mouseenter(function() {
+            if (!pagePresenter.isStickyNavAlwaysShown && $("#nav").hasClass("sticky") && !$("#nav").hasClass("show")){                                
+                $("#nav").stop().addClass("show");
                 
-                $(window).scroll(pagePresenter.handleScrollEvents);
-                pagePresenter.handleScrollEvents();  
-            }  
+                $(".brand-box-narrow-btn").each(function(){
+                    if ($(this).offset().left > 300){
+                        $(this).parent().find(".brand-box-narrow").addClass("right-align");
+                    }else{
+                        $(this).parent().find(".brand-box-narrow").removeClass("right-align");
+                    }
+                });
+            }
+        });
+                
+        $("#nav").mouseleave(function() {
+            if (!pagePresenter.isStickyNavAlwaysShown && $("#nav").hasClass("sticky")){
+                $("#nav.sticky").css("top", (-1 * $("#filters").height()) + 25);
+                                
+                $("#nav").stop().removeClass("show");
+                $("#nav .btn-group.open").removeClass("open");                
+            }
         });
     },
     
     handleScrollEvents: function(){                     
 
+        // Lazy Load Products
         if(pagePresenter.areProductsInitialized &&
             pagePresenter.enableLazyLoading &&             
             pagePresenter.productLoaderPosition - pagePresenter.productLoadOffset < ($(window).scrollTop() + pagePresenter.viewportHeight + 100) &&
@@ -46,7 +71,21 @@ var pagePresenter = {
         }else if (!pagePresenter.areProductsInitialized){
             pagePresenter.areProductsInitialized = $(".outfit").length > 0;
         }          
-                             
+         
+        // Sticky Navigation Header  
+        if (!pagePresenter.isStickyNavAlwaysShown){
+            if ($(window).scrollTop() > pagePresenter.navScrollHeight && !$("#nav").hasClass("sticky")){
+                $("#nav").stop().addClass("sticky");                
+                $("#nav.sticky").css("top", (-1 * $("#filters").height()) + 25);
+                $("#nav .btn-group.open").removeClass("open");
+                $(".filter-btn").addClass("sticky");
+                                
+            }else if ($(window).scrollTop() <= pagePresenter.navScrollHeight && $("#nav").hasClass("sticky")){
+                //$("#nav").stop().removeClass("sticky").show("blind", "fast");
+                $("#nav").stop().removeClass("sticky show");
+                $(".filter-btn").removeClass("sticky");                
+            }    
+        }              
     },                
     
     scrollToTop: function(e){

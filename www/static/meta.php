@@ -1,6 +1,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="http://clositt.com/favicon.ico">
+<link rel="icon" type="image/png" href="favicon.ico">
 
 <?php
 $metaImage = HOME_PAGE . "css/images/clositt-twitter-header.jpg";

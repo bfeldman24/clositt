@@ -1,4 +1,4 @@
-<!DOCTYPE>
+<!DOCTYPE HTML>
 <html>
 <head>
 <title>Search Admin</title>
@@ -90,26 +90,14 @@ body{
                 <option value="custom">Custom</option>
             </select>
         </div>
-        <div class="col-xs-12 col-sm-2 form-group">
-            <label for="tags-weight">Weight for Tags</label>
-            <input type="text" class="form-control" id="tags-weight"></input>
-        </div>
-        <div class="col-xs-12 col-sm-2 form-group">
-            <label for="title-weight">Weight for Title</label>
-            <input type="text" class="form-control" id="title-weight" ></input>
-        </div>
-        <div class="col-xs-12 col-sm-2 form-group">
-            <label for="store-weight">Weight for store name</label>
-            <input type="text" class="form-control" id="store-weight" ></input>
-        </div>
-        <div class="col-xs-12 col-sm-2 form-group">
-            <label for="colors-weight">Weight for Colors</label>
-            <input type="text" class="form-control" id="colors-weight"></input>
+        <div class="row">
+            <div class="col-xs-12 col-sm-8">
+                <span id="queryString"></span>
+            </div>
         </div>
     </div>
     <hr>
-    
-    <div id="main-workspace" style="display:none;"></div>    
+    <div id="main-workspace" style="display:none;"></div>
     
     <section id="sample-grid-container" class="items">
         <div class="container">           
@@ -134,16 +122,44 @@ body{
 
         var search ={};
         search.searchTerm = $( "#search-bar" ).val().trim();
-        search.tagWeight =  $( "#tags-weight").val().trim();
-        search.colorWeight =  $( "#colors-weight").val().trim();
-        search.storeWeight =  $( "#store-weight").val().trim();
-        search.titleWeight =  $( "#title-weight").val().trim();
         search.queryType = $( "#search-type").val().trim();
         searchController.isSearchActive = true;
         searchController.hasMoreProducts = true
         searchController.criteria = search;
 
         $.post(window.HOME_ROOT + "p/searchjson/0", search, function( data ) {
+
+                var parsedQuery = "";
+                if(data.query.Gender){
+                    parsedQuery += "<br/>" + "Gender: " + data.query.Gender;
+                }
+
+                if(data.query.Stores){
+                    parsedQuery += "<br/>" + "Stores: " + data.query.Stores.join(", ");
+                }
+
+                if(data.query.Categories){
+                    parsedQuery += "<br/>" + "Categories: " + data.query.Categories.join(", ");
+                }
+
+                if(data.query.Materials){
+                    parsedQuery += "<br/>" + "Materials: " + data.query.Materials.join(", ");
+                }
+
+                if(data.query.Attributes){
+                    parsedQuery += "<br/>" + "Attributes: " + data.query.Attributes.join(", ");
+                }
+
+                if(data.query.Colors){
+                    parsedQuery += "<br/>" + "Colors: " + data.query.Colors.join(", ");
+                }
+
+                if(parsedQuery == ""){
+                    parsedQuery = "No terms were matched";
+                }
+
+                parsedQuery = "Search term is: " + data.query.SearchString + parsedQuery;
+                $("#queryString").html(parsedQuery);
 
                 if( data.products.length > 0){
                     $("#product-grid").children().remove();
@@ -179,7 +195,8 @@ var searchAdmin = {
     lazyLoad: function(products){
 	    if (products == null){
 	        return null;
-	    }	   
+	    }
+
 
 	    if (products.products != null){
 	       products = products.products;  
@@ -195,7 +212,6 @@ var searchAdmin = {
                 $html.find("img[data-src]").unveil(200);
             }
 	   });
-			                   			   	   		
 	   gridPresenter.alignDefaultGrid(); 
 	   gridPresenter.endTask(); 
 	   gridPresenter.numberOfLoadingPages--;

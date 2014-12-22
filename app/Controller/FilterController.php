@@ -1,4 +1,7 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
+
 require_once(dirname(__FILE__) . '/../session.php');
 require_once(dirname(__FILE__) . '/../Database/Dao/FilterDao.php');
 require_once(dirname(__FILE__) . '/../View/FilterView.php');
@@ -74,8 +77,10 @@ class FilterController extends Debugger {
 	
 			    $type = stripslashes($row[FILTER_TYPE]); 
 			    $value = stripslashes($row[FILTER_VALUE]); 
-			    $subvalue = stripslashes($row[FILTER_SUBVALUE]); 
+			    $subvalue = stripslashes($row[FILTER_SUBVALUE]); 			   
 			    $customer = stripslashes($row[FILTER_CUSTOMER]); 
+			    $customer = empty($customer) ? 'both' : $customer;
+			    $synonym = stripslashes($row[FILTER_SYNONYM]); 
 			     
 			    if (!isset($filters[$type])){
 			         $filters[$type] = array();
@@ -83,54 +88,36 @@ class FilterController extends Debugger {
 			    }			    
 			     
 			    if ($subvalue == null){
-			         if ($customer == null){
-			             $filters[$type][] = $value;
-			         }else{			             		                      
-			             if (!isset($tempFilters[$type][$value])){			                 
-        			         $tempFilters[$type][$value] = $customer;
-        			         $filters[$type][] = array($value, $customer);
-        			         
-        			     }else if ($tempFilters[$type][$value] != $customer && $tempFilters[$type][$value] != "Both"){
-        			         $tempFilters[$type][$value] = $customer;
-        			         
-        			         // update existing record's customer to Both
-        			         for ($i = count($filters[$type]) - 1; $i >= 0; $i--){
-        			             if ($filters[$type][$i][0] == $value){
-        			                 $filters[$type][$i][1] = "Both";
-        			                 break;    
-        			             }    
-        			         }
-        			     }        			             			     
-			         }
-			    }else{
-			        if (!isset($filters[$type][$value])){
-    			         $filters[$type][$value] = array();
-    			         $tempFilters[$type][$value] = array();
-    			    }     			    
-    			    
-    			    if ($customer == null){
-			             $filters[$type][$value][] = $subvalue;
+			         // if filters value is already set, update customer, else add new filter
+			     
+			         if (isset($filters[$type][$value])){
+			             // Update customer
+			             if ($filters[$type][$value]["customer"] != $customer){
+			                 $filters[$type][$value]["customer"] = "both";
+			             }
 			         }else{
-			             if (!in_array($subvalue, $tempFilters[$type][$value])){
-        			         $tempFilters[$type][$value][$subvalue] = $customer;
-        			         $filters[$type][$value][] = array($subvalue, $customer);
-        			     }else if ($tempFilters[$type][$value][$subvalue] != $customer && $tempFilters[$type][$value][$subvalue] != "Both"){		         
-        			         $tempFilters[$type][$value][$subvalue] = $customer;
-        			         
-        			         // update existing record's customer to Both
-        			         for ($i = count($filters[$type][$value]) - 1; $i >= 0; $i--){
-        			             if ($filters[$type][$value][$i][0] == $subvalue){
-        			                 $filters[$type][$value][$i][1] = "Both";
-        			                 break;    
-        			             }    
-        			         }
-        			     }          			     			                
+		                $filters[$type][$value] = array("value" => $value, "customer" => $customer, "synonym" => $synonym); 
+		             }   			     
+			    }else{
+			         // if filters subvalue is already set, update customer, else add new subvalue
+			     
+			         if (!isset($filters[$type][$value])){
+			             $filters[$type][$value] = array();
 			         }
+			        
+			         if (isset($filters[$type][$value][$subvalue])){
+			             // Update customer
+			             if ($filters[$type][$value][$subvalue]["customer"] != $customer){
+			                 $filters[$type][$value][$subvalue]["customer"] = "both";
+			             }
+			         }else{
+		                $filters[$type][$value][$subvalue] = array("value" => $value, "subvalue" => $subvalue, "customer" => $customer, "synonym" => $synonym); 
+		             }			        			        			        			        
 			    }			 			    			   
 			}						
 	   }  		      
 	   
-	   $filters['price'] = array(0,50,100,150,200,250,500,1000);              
+	   $filters['maxprice'] = 1000;              
 
        $filters['color'] = array(       
           "Red" => "#F33",           
@@ -144,7 +131,7 @@ class FilterController extends Debugger {
           "Violet" => "#7848C0",
           "Purple" => "#939",
           "Pink" => "#FF98bF",
-          "White" => "#F0F0F0",
+          "White" => "#F5F5F5",
           "Gray" => "#999",
           "Black" => "#000",
           "Brown" => "#963"

@@ -48,7 +48,7 @@ class Router {
                     break;   
                 case 't':
                     Router::Tag();
-                    break;                                
+                    break; 
                 case 'u':
                     Router::User();
                     break;
@@ -64,7 +64,8 @@ class Router {
                     break;        
             } 
         }else{
-            echo "404";   
+            header("Location: http://www.clositt.com");
+            die();   
         }
     }
     
@@ -522,8 +523,26 @@ class Router {
                 case 'shopit':                               
                     $success = StatsController::addItemAction("Visited Store", $_POST['id']);
                     print_r($success);
-                    break;    
+                    break;                                       
             }      
+        }else if ($_SERVER['REQUEST_METHOD'] == 'GET'){   
+            switch($_GET['method']){                
+                case 'trackemail':                          
+                    StatsController::add("Opened Email", $_GET['user'], $_GET['message']);
+
+                    header( 'Content-Type: image/gif' );                    
+                    readfile('http://www.clositt.com/css/images/empty.gif');                    
+                    break;                                                
+            }      
+        }
+        
+        if(ENV == "DEV" || ENV == "QA"){
+            switch($_GET['method']){                
+                case 'getall':                          
+                    $stats = StatsController::getAll();
+                    print_r($stats);
+                    break;                                       
+            }   
         }
     }
 }

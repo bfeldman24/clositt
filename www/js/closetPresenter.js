@@ -449,9 +449,8 @@ var closetFormPresenter = {
 	init: function(){	    	       	       
 	    $(document).on("click",".closetOption", closetFormPresenter.addToCloset);	       
 	    $(document).on("click",".submitNewCloset", closetFormPresenter.addNewCloset);
-	    $(document).on("click",".create_new input.addNewClosetInput", function(e){
-	        e.preventDefault();
-          	return false;  
+	    $(document).on("click",".create_new", function(e){	                  	     
+            return false;  
 	    });
 	    
 	    $(document).on("show.bs.dropdown",".addToClosittDropdown", closetFormPresenter.showClosetForm);
@@ -477,9 +476,7 @@ var closetFormPresenter = {
 	},		
 	
 	getClosetInfo: function(){
-		if(closetFormPresenter.closetNames == null){
-		    $.post( window.HOME_ROOT + "cl/getall", closetFormPresenter.setClosetInfo, "json");			
-		}
+        $.post( window.HOME_ROOT + "cl/getall", closetFormPresenter.setClosetInfo, "json");			
 	},
 	
 	setClosetInfo: function(closets){
@@ -515,6 +512,7 @@ var closetFormPresenter = {
     	    closetFormPresenter.closetIds = closetIds;
     		closetFormPresenter.closetNames = closetNames;
     		closetFormPresenter.closetItemsMapping = closetItemsMapping;
+    		$(".item .addToClosetOptions .closetOption").remove(); // clear populated dropdowns
         }                	    	    
 	},
 	
