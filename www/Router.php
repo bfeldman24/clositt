@@ -136,7 +136,14 @@ class Router {
                 echo $closetController->getAllClosetItems($_POST, true);
                 break;
             case 'hangitt':                               
-                $image = $closetController->addCustomItemToCloset($_GET);
+                $image = '';
+                
+                try{
+                    $image = $closetController->addCustomItemToCloset($_GET);
+                }catch(Exception $e) {  
+                    $image = file_get_contents(dirname(__FILE__) . '/css/images/error.png');
+                }
+                
                 header('Content-Type: image/jpeg');                                                                        
                 print_r($image);
                 break;    

@@ -241,14 +241,14 @@ class ClosetController extends Debugger {
                 $page = $data['page'];               
                 
                 // Update image src
-                if (strpos($data['src'], "/") === 0){
+                if (strpos($data['src'], "/") === 0 && strpos($data['src'], "//") !== 0){
                    	$tempLink = substr($data['page'], 0, strpos($data['page'], "/", 8));
-                   	$img = $tempLink . $data['src'];
-                }else if (strpos($data['src'] , "..") === 0){
-                   	$tempLink = substr($data['page'], 0, strrpos($data['page'], "/"));
-                   	$img = $tempLink . "/" . $data['src'];
+                   	$img = $tempLink . $data['src'];                
+                }else if (strpos($data['src'] , "http") === 0 || strpos($data['src'] , "//") === 0 || strpos($data['src'] , "www") === 0){
+                   	$img = $data['src'];
                 }else{	
-                	$img = $data['src'];
+                	$tempLink = substr($data['page'], 0, strrpos($data['page'], "/"));
+                   	$img = $tempLink . "/" . $data['src'];
                 } 
                 
                 // Update link
@@ -256,17 +256,25 @@ class ClosetController extends Debugger {
                     if (strpos($data['link'], "/") === 0){
                        	$tempLink = substr($data['page'], 0, strpos($data['page'], "/", 8));
                        	$link = $tempLink . $data['link'];
-                    }else if (strpos($data['link'] , "..") === 0){
-                       	$tempLink = substr($data['page'], 0, strrpos($data['page'], "/"));
-                       	$link = $tempLink . "/" . $data['link'];
+                    }else if (strpos($data['link'] , "http") === 0 || strpos($data['link'] , "//") === 0 || strpos($data['link'] , "www") === 0){
+                   	    $link = $data['link'];
                     }else{	
-                    	$link = $data['link'];
+                    	$tempLink = substr($data['page'], 0, strrpos($data['page'], "/"));
+                        $link = $tempLink . "/" . $data['link'];
                     }
                 }
                 
+                // replace #'s
+                $img = $img ? str_replace("~~~~","#",$img) : null;
+                $link = $link ? str_replace("~~~~","#",$link) : null;
+                $page = $page ? str_replace("~~~~","#",$page) : null;
+                
+                // replace &'s
                 $img = $img ? str_replace("~~~","&",$img) : null;
                 $link = $link ? str_replace("~~~","&",$link) : null;
                 $page = $page ? str_replace("~~~","&",$page) : null;
+                
+                // replace ?'s
                 $img = $img ? str_replace("~~","?",$img) : null;
                 $link = $link ? str_replace("~~","?",$link) : null;
                 $page = $page ? str_replace("~~","?",$page) : null;
