@@ -70,8 +70,9 @@ class ClosetView {
                     break;   
             }
                         
-            $priceAlertsTooltip = $priceAlertsFrequency . " Price Alerts " . ($items[0]['alert'] === 'Y' ? "On" : "Off");
-            $priceAlertsClass = $items[0]['alert'] === 'Y' ? '' : "off";
+            $areAlertsOn = isset($items[0]['alert']) ? $items[0]['alert'] : false;            
+            $priceAlertsTooltip = $priceAlertsFrequency . " Price Alerts " . ($areAlertsOn === 'Y' ? "On" : "Off");
+            $priceAlertsClass = $areAlertsOn === 'Y' ? '' : "off";
             
             // Get the clositt page links        
             $home = HOME_PAGE;

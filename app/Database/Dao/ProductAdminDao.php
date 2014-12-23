@@ -358,7 +358,15 @@ class ProductAdminDao extends AbstractDao {
                " WHERE c.". CLOSET_ID." IN (155, 146); ".
                " SET SQL_SAFE_UPDATES='ON';";
                
-        return $this->update($sql, array(), array(), "2309824");       
+        $this->update($sql, array(), array(), "2309824");       
+        
+        $sql = "SET SQL_SAFE_UPDATES='OFF'; " .
+               " UPDATE " . PRODUCTS .               
+               " SET ".PRODUCT_RANDOM_INDEX." = -1 " .
+               " WHERE LOWER(". PRODUCT_NAME.") REGEXP 'boxer|brief|bra|bikini|body suit|bodysuit|bandeau|push-up|pushup|swim|thong|sexy|sexual|tube top|panty|underwear|bottom'; ".
+               " SET SQL_SAFE_UPDATES='ON';";
+               
+        return $this->update($sql, array(), array(), "2309825");               
 	}
 	
 	public function getCustomers(){	   
