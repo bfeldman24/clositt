@@ -291,7 +291,7 @@ class ClosetController extends Debugger {
                                          
                 $affectedRows = $this->closetDao->addCustomItemToCloset($data['userid'], $data['closet'], $img, $rawImage, $link, $page);
                 
-                if ($affectedRows === 1){                                                                                                       
+                if ($affectedRows === 1 || $affectedRows === 2){                                                                                                       
                     return file_get_contents(dirname(__FILE__) . '/../../www/css/images/success.png');                
                 }                
             }

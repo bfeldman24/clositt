@@ -162,12 +162,13 @@ var hangitt = {
             
             url += "&page=" + location.href.replace(/\?/g, '~~').replace(/\&/g, '~~~').replace(/\#/g, '~~~~');
             
+            console.log(url);
             $("#hangitt-dialog img").first().attr("src", url);
             $("#hangitt-dialog img").on("load", function(){
                 $("#hangitt-cancel").text("Ok");     
                 $("#hangitt-dialog img").off("load");
             });
-            
+                        
             $("#hangitt-cancel").text("Saving...");
             $("#hangitt-dialog select").remove();
             $(this).remove(); 
