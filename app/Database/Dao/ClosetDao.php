@@ -99,7 +99,7 @@ class ClosetDao extends AbstractDao {
 	}
 	
 	public function addCustomItemToCloset($userId, $closetId, $img, $rawImage, $link, $page){
-	    $sql = "INSERT INTO ".CLOSET_ITEMS_CUSTOM." (".CLOSET_ID.", ".CLOSET_USER_ID.", ".CLOSET_ITEM_IMAGE.", ".CLOSET_ITEM_CUSTOM_RAW_IMAGE.",".CLOSET_ITEM_CUSTOM_LINK.",".CLOSET_ITEM_CUSTOM_PAGE.",".CLOSET_ITEM_STATUS.", ".CLOSET_LAST_UPDATED.", ".CLOSET_ITEM_DATE_ADDED.") " .
+	    $sql = "INSERT INTO ".CLOSET_ITEMS_CUSTOM." (".CLOSET_ID.", ".CLOSET_USER_ID.",".CLOSET_ITEM_IMAGE.", ".CLOSET_ITEM_CUSTOM_RAW_IMAGE.",".CLOSET_ITEM_CUSTOM_LINK.",".CLOSET_ITEM_CUSTOM_PAGE.",".CLOSET_ITEM_STATUS.", ".CLOSET_LAST_UPDATED.", ".CLOSET_ITEM_DATE_ADDED.") " .
                 " VALUES (?,?,?,?,?,?,1,NOW(),NOW()) " .
                 "ON DUPLICATE KEY UPDATE ".CLOSET_ITEM_STATUS."=1, ".CLOSET_LAST_UPDATED."=NOW()";	   				
 		
@@ -160,7 +160,7 @@ class ClosetDao extends AbstractDao {
 	               ", c.".CLOSET_NAME.
 	               ", c.".CLOSET_PRICE_ALERTS.
 	               ", ci.".CLOSET_USER_ID.
-	               ", ci.".CLOSET_USER_ID.
+	               ", COALESCE(ci.".CLOSET_ITEM_SKU.", ci.".CLOSET_USER_ID.") AS ". CLOSET_ITEM_SKU .
 	               ", COALESCE(ci.".CLOSET_ITEM_IMAGE.", ci.".CLOSET_ITEM_CUSTOM_RAW_IMAGE.",p.".PRODUCT_IMAGE.") AS ".CLOSET_ITEM_IMAGE.
 	               ", p.".PRODUCT_NAME.
 	               ", p.".PRODUCT_STORE.
