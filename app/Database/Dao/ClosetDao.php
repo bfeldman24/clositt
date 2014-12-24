@@ -142,9 +142,9 @@ class ClosetDao extends AbstractDao {
 	   $sql = "SELECT c." . CLOSET_ID.
 	               ", c.".CLOSET_NAME.
 	               ", c.".CLOSET_PRICE_ALERTS.
-	               ", COALESCE(i.".CLOSET_USER_ID.", ci.".CLOSET_USER_ID.") as ".CLOSET_USER_ID.
-	               ", COALESCE(i.".CLOSET_ITEM_SKU.", ci.".CLOSET_USER_ID.") as ".CLOSET_ITEM_SKU.
-	               ", COALESCE(i.".CLOSET_ITEM_IMAGE.", ci.".CLOSET_ITEM_IMAGE.", p.".PRODUCT_IMAGE.") AS ".CLOSET_ITEM_IMAGE.
+	               ", i.".CLOSET_USER_ID.
+	               ", i.".CLOSET_ITEM_SKU.
+	               ", COALESCE(i.".CLOSET_ITEM_IMAGE.", p.".PRODUCT_IMAGE.") AS ".CLOSET_ITEM_IMAGE.
 	               ", p.".PRODUCT_NAME.
 	               ", p.".PRODUCT_STORE.
 	               ", p.".PRODUCT_PRICE.
@@ -152,16 +152,32 @@ class ClosetDao extends AbstractDao {
                 " FROM " . CLOSETS . " c " .               
                 " LEFT JOIN " . CLOSET_ITEMS . " i ON c.".CLOSET_ID." = i.".CLOSET_ID . " AND " .
                        "(isnull(i." . CLOSET_ITEM_STATUS . ") OR i." . CLOSET_ITEM_STATUS . " = 1) ". 
+                " LEFT JOIN " . PRODUCTS . " p ON p.".PRODUCT_SKU." = i.".CLOSET_ITEM_SKU .
+                " WHERE c." . CLOSET_USER_ID . " = ? AND c." . CLOSET_PERMISSION . " <= ? ";
+                
+                
+        $sql .= " UNION SELECT c." . CLOSET_ID.
+	               ", c.".CLOSET_NAME.
+	               ", c.".CLOSET_PRICE_ALERTS.
+	               ", ci.".CLOSET_USER_ID.
+	               ", ci.".CLOSET_USER_ID.
+	               ", COALESCE(ci.".CLOSET_ITEM_IMAGE.", ci.".CLOSET_ITEM_CUSTOM_RAW_IMAGE.",p.".PRODUCT_IMAGE.") AS ".CLOSET_ITEM_IMAGE.
+	               ", p.".PRODUCT_NAME.
+	               ", p.".PRODUCT_STORE.
+	               ", p.".PRODUCT_PRICE.
+	               ", p.".PRODUCT_SHORT_LINK. 
+                " FROM " . CLOSETS . " c " .                               
                 " LEFT JOIN " . CLOSET_ITEMS_CUSTOM . " ci ON c.".CLOSET_ID." = ci.".CLOSET_ID . " AND " .
                        "(isnull(ci." . CLOSET_ITEM_STATUS . ") OR ci." . CLOSET_ITEM_STATUS . " = 1) ".                 
-                " LEFT JOIN " . PRODUCTS . " p ON p.".PRODUCT_SKU." = i.".CLOSET_ITEM_SKU .
+                " LEFT JOIN " . PRODUCTS . " p ON p.".PRODUCT_IMAGE." = ci.".CLOSET_ITEM_IMAGE .
                 " WHERE c." . CLOSET_USER_ID . " = ? AND c." . CLOSET_PERMISSION . " <= ? " .
-                " ORDER BY " . CLOSET_NAME;							       
+                " ORDER BY " . CLOSET_NAME;	        
+                						       
 		
 		$permission = $isPrivate ? 2 : 1;
 		
-		$paramTypes = array('integer','integer');		
-		$params = array($owner, $permission);
+		$paramTypes = array('integer','integer','integer','integer');		
+		$params = array($owner, $permission, $owner, $permission);
 		
 		return $this->getResults($sql, $params, $paramTypes, "98763565478");
 	}	
