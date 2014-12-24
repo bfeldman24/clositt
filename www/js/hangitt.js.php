@@ -154,13 +154,13 @@ var hangitt = {
         
         if (closet != null && src != null){        
             var url = "http://clothies.bprowd.com/hangitt/<?php echo $_GET['user']; ?>/"+closet;
-            url += "?src=" + src.replace(/\?/g, '~~').replace(/\&/g, '~~~').replace(/\#/g, '~~~~');
+            url += "?src=" + src.replace(/\?/g, '~q~').replace(/\&/g, '~a~').replace(/\#/g, '~p~');
             
             if (link != null){
-                url += "&link=" + link.replace(/\?/g, '~~').replace(/\&/g, '~~~').replace(/\#/g, '~~~~');
+                url += "&link=" + link.replace(/\?/g, '~q~').replace(/\&/g, '~a~').replace(/\#/g, '~p~');
             }
             
-            url += "&page=" + location.href.replace(/\?/g, '~~').replace(/\&/g, '~~~').replace(/\#/g, '~~~~');
+            url += "&page=" + location.href.replace(/\?/g, '~q~').replace(/\&/g, '~a~').replace(/\#/g, '~p~');
             
             console.log(url);
             $("#hangitt-dialog img").first().attr("src", url);
