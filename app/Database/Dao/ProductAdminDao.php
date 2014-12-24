@@ -363,7 +363,7 @@ class ProductAdminDao extends AbstractDao {
         $sql = "SET SQL_SAFE_UPDATES='OFF'; " .
                " UPDATE " . PRODUCTS .               
                " SET ".PRODUCT_RANDOM_INDEX." = -1 " .
-               " WHERE LOWER(". PRODUCT_NAME.") REGEXP 'boxer|brief|bra|bikini|body suit|bodysuit|bandeau|push-up|pushup|swim|thong|sexy|sexual|tube top|panty|underwear|bottom'; ".
+               " WHERE LOWER(CONCAT(". PRODUCT_NAME.",". PRODUCT_CATEGORY.")) REGEXP 'boxer|brief|bra|bikini|body suit|bodysuit|bandeau|push-up|pushup|swim|thong|sexy|sexual|tube top|panty|underwear|bottom|linger'; ".
                " SET SQL_SAFE_UPDATES='ON';";
                
         return $this->update($sql, array(), array(), "2309825");               
