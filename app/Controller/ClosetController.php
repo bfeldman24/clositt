@@ -265,19 +265,19 @@ class ClosetController extends Debugger {
                 }
                 
                 // replace #'s
-                $img = $img ? str_replace("~~~~","#",$img) : null;
-                $link = $link ? str_replace("~~~~","#",$link) : null;
-                $page = $page ? str_replace("~~~~","#",$page) : null;
+                $img = $img ? str_replace("~p~","#",$img) : null;
+                $link = $link ? str_replace("~p~","#",$link) : null;
+                $page = $page ? str_replace("~p~","#",$page) : null;
                 
                 // replace &'s
-                $img = $img ? str_replace("~~~","&",$img) : null;
-                $link = $link ? str_replace("~~~","&",$link) : null;
-                $page = $page ? str_replace("~~~","&",$page) : null;
+                $img = $img ? str_replace("~a~","&",$img) : null;
+                $link = $link ? str_replace("~a~","&",$link) : null;
+                $page = $page ? str_replace("~a~","&",$page) : null;
                 
                 // replace ?'s
-                $img = $img ? str_replace("~~","?",$img) : null;
-                $link = $link ? str_replace("~~","?",$link) : null;
-                $page = $page ? str_replace("~~","?",$page) : null;
+                $img = $img ? str_replace("~q~","?",$img) : null;
+                $link = $link ? str_replace("~q~","?",$link) : null;
+                $page = $page ? str_replace("~q~","?",$page) : null;
                                 
                 // TODO Check if product exists
                 
