@@ -160,12 +160,12 @@ class ClosetDao extends AbstractDao {
 	               ", c.".CLOSET_NAME.
 	               ", c.".CLOSET_PRICE_ALERTS.
 	               ", ci.".CLOSET_USER_ID.
-	               ", COALESCE(ci.".CLOSET_ITEM_SKU.", ci.".CLOSET_USER_ID.") AS ". CLOSET_ITEM_SKU .
+	               ", COALESCE(ci.".CLOSET_ITEM_SKU.", 1) AS ". CLOSET_ITEM_SKU .
 	               ", COALESCE(ci.".CLOSET_ITEM_IMAGE.", ci.".CLOSET_ITEM_CUSTOM_RAW_IMAGE.",p.".PRODUCT_IMAGE.") AS ".CLOSET_ITEM_IMAGE.
 	               ", p.".PRODUCT_NAME.
 	               ", p.".PRODUCT_STORE.
 	               ", p.".PRODUCT_PRICE.
-	               ", p.".PRODUCT_SHORT_LINK. 
+	               ", COALESCE(p.".PRODUCT_SHORT_LINK.", ci.".CLOSET_ITEM_CUSTOM_LINK.", ci.".CLOSET_ITEM_CUSTOM_PAGE.")".
                 " FROM " . CLOSETS . " c " .                               
                 " LEFT JOIN " . CLOSET_ITEMS_CUSTOM . " ci ON c.".CLOSET_ID." = ci.".CLOSET_ID . " AND " .
                        "(isnull(ci." . CLOSET_ITEM_STATUS . ") OR ci." . CLOSET_ITEM_STATUS . " = 1) ".                 

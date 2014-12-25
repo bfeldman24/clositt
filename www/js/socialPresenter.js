@@ -112,15 +112,20 @@ var socialPresenter = {
     	   var item = $(e.currentTarget).parents(".item").first();
     	   var store = item.find(".productStore").text();
     	   var itemName = item.find(".productName").text();
+    	   var sku = item.parent().attr("pid");
     	       	   
     	   if (itemName == null || itemName.trim() == ""){
-    	       Messenger.error("Sorry. That product no longer exists in our database so it cannot be shared.");
-    	       return false;   
-    	   }
-    	   
-    	   $("#emailOutfitText").text("Check out this outfit" + (store != null && store.trim() != "" ? " from" : ''));
+    	       if (sku == "1"){
+                   itemName = socialPresenter.link;
+    	       }else{
+        	       Messenger.error("Sorry. That product no longer exists in our database so it cannot be shared.");
+        	       return false;   
+    	       }
+    	   }    	       	      	   
+
+	       $("#emailOutfitText").text("Check out this outfit" + (store != null && store.trim() != "" ? " from" : ''));
     	   $("#emailOutfitStore").text(store);	   
-    	   $("#emailOutfitLink").attr("href", socialPresenter.link).text(itemName);    	   
+    	   $("#emailOutfitLink").attr("href", socialPresenter.link).text(itemName);    	       
 	   }
 	   	   
 	   $('#shareProductModal').modal('show');
