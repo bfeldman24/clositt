@@ -31,7 +31,10 @@ class Router {
                     break;                 
                 case 'f':                
                     Router::Filter();
-                    break;    
+                    break;
+                case 'h':                
+                    Router::Hangitt();
+                    break;        
                 case 'l':
                     Router::ListController();
                     break;                                           
@@ -551,6 +554,20 @@ class Router {
                     break;                                       
             }   
         }
+    }
+    
+    /************************
+    *** HANGITT CONTROLLER ***
+    *************************/
+    public static function Hangitt(){        
+        require_once(dirname(__FILE__) . '/../app/Controller/HangittController.php');  
+    
+        switch($_GET['method']){
+            case 'get':            
+                $closets = HangittController::getClosets();
+                print_r(json_encode($closets));
+                break;               
+        }            
     }
 }
 

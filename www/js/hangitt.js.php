@@ -58,11 +58,16 @@ var hangitt = {
                 
         //$("img").css("z-index", "20000").css("position", "relative").css("cursor","pointer");
         var $images = $("<div>");
-        $("img:not(#hangitt-logo)").each(function(){
-            if($(this).width() > 50 && $(this).height() > 50){    
+        $("img:not(#hangitt-logo):visible").each(function(){
+            var src = $(this).attr("src");
+
+            if($(this).width() > 50 && $(this).height() > 50
+            && src.indexOf("clear") < 0 && src.indexOf("empty") < 0 
+            && $(this).parents(".header").length <= 0 && $(this).parents(".footer").length <= 0
+            && $(this).parents("#header").length <= 0 && $(this).parents("#footer").length <= 0){    
                 var link = $(this).parents("a").first().attr("href");            
                 $images.append(
-                   $("<img>").attr("src", $(this).attr("src")).attr("link",link).attr("style","width:20%;z-index:20000;position:relative;cursor:pointer;margin: 10px;")
+                   $("<img>").attr("src", src).attr("link",link).attr("style","width:20%;z-index:20000;position:relative;cursor:pointer;margin: 10px;vertical-align: top;")
                 );
             }
         });
