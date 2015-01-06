@@ -69,13 +69,21 @@ class ProductView {
             <div class="item" data-url="<?php echo $shortLink ?>">
                 <div class="mainwrap">
                     <div class="imagewrap">
-                        <?php if ($lazyLoadImages){ ?>
-                            <img class="loadingImage" src="<?php echo HOME_ROOT; ?>css/images/loading.gif"/>
-                            <img style="display:none;" data-src="<?php echo $image ?>" onerror="return productPresenter.handleImageNotFound(this)" />
-                        <?php }else{ ?>
-                            <img src="<?php echo $image ?>" onerror="return productPresenter.handleImageNotFound(this)" />
+                        <?php if ($sku === "1"){ ?>
+                            <a target="_blank" href="<?php echo $shortLink ?>">
                         <?php } ?>
-                    </div>
+                        
+                            <?php if ($lazyLoadImages){ ?>
+                                <img class="loadingImage" src="<?php echo HOME_ROOT; ?>css/images/loading.gif"/>
+                                <img style="display:none;" data-src="<?php echo $image ?>" onerror="return productPresenter.handleImageNotFound(this)" />
+                            <?php }else{ ?>
+                                <img src="<?php echo $image ?>" onerror="return productPresenter.handleImageNotFound(this)" />
+                            <?php } ?>
+                        
+                        <?php if ($sku === 1){ ?>
+                            </a>
+                        <?php } ?>
+                        </div>                    
                     <div class="detail">
                         <h4 class="productName" <?php echo $tooltip; ?>><?php echo $name ?></h4>
                         <div>

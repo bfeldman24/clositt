@@ -6,7 +6,7 @@ var productPresenter = {
 	populateStoreCallback: null,		
 	
 	init: function(){	
-	    $(document).on('click','.imagewrap', productPresenter.showProductModal);
+	    $(document).on('click','div.imagewrap', productPresenter.showProductModal);
 	    
 	    $(document).on("mouseenter",".mainwrap .more-opt", function(e){
            e.stopPropagation();
@@ -79,6 +79,10 @@ var productPresenter = {
 	    }
 	   
 	    var sku = $(e.currentTarget).parents(".outfit").attr("pid");
+	    
+	    if (sku == 1){
+	       return; // custom closet item that we don't have in the database
+	    }
 	    
 	    if ( $("#productModal #product").length <= 0){
 	       $('#productModal').modal("show");
