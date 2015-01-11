@@ -194,7 +194,7 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
     </section>    
     
     <section id="fifth-section">
-        <h1>FIND & DISCOVER CLOTHES</h1>
+        <h1>FIND IT ON CLOSITT</h1>
         <div class="center-block">
             <a href="<?php echo HOME_PAGE; ?>faq">FAQ</a>
             <a href="<?php echo HOME_PAGE; ?>">GET STARTED</a>
