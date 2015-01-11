@@ -89,6 +89,21 @@ $(document).ready(function() {
 	tagPresenter.init();
 	searchController.init();	
 	reviewsPresenter.init();	
+	
+	
+	<?php 
+    if (isset($_GET['login'])){
+        if ($_GET['login'] == "signup"){
+               ?>
+                    $("#getstarted").trigger("click");
+               <?php
+        }else if ($_GET['login'] == "login"){
+               ?>
+                    $(".login").first().trigger("click");
+               <?php
+        } 
+    }
+    ?>
 });
 
 
