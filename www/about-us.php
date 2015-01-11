@@ -137,7 +137,7 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
                 text-align:center   
             }
             
-            .center-block {
+            #fifth-section .center-block {
                 width: 100% !important;
                 padding-bottom: 20px;
             }
