@@ -142,8 +142,8 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
 <body>
 <div id="landing-wrapper">
     <div id="landing-header">
-        <a class="btn signup" href="<?php echo HOME_PAGE; ?>?login=signup">SIGNUP</a>
-        <a class="btn login" href="<?php echo HOME_PAGE; ?>?login=login">LOGIN</a>
+        <a class="btn signup" href="<?php echo HOME_PAGE; ?>signup">SIGNUP</a>
+        <a class="btn login" href="<?php echo HOME_PAGE; ?>login">LOGIN</a>
     </div>
     
     <section id="first-section">        
