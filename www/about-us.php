@@ -136,6 +136,18 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
             h2, p, a, div {
                 text-align:center   
             }
+            
+            .center-block {
+                width: 100% !important;
+                padding-bottom: 20px;
+            }
+            
+            .center-block a {
+                display: block;
+                padding-bottom: 10px;
+                margin-left: auto !important;
+                width: 100%;
+            }
         }
     </style>
 </head>
