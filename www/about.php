@@ -24,7 +24,7 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
         }
         
         h1 {
-            font-size: 55px;  
+            font-size: 3em;  
         }
         
         h2 {
@@ -46,10 +46,12 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
             color: #FFF;   
             text-decoration:none !important;
             padding-bottom: 4px;
+            outline: 0;
         }
         
         .btn:hover, .btn:active {
-            color: #EFEFEF;   
+            color: #FFF;
+            outline: 0;   
         }
         
         .signup {
@@ -57,18 +59,30 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
             margin-right: 10px
         }
         
+        .signup:hover, .signup:active {
+            background-color: #4FC3FD;
+        }
+               
         .login {
             background-color: #00C984;         
         }
         
+        .login:hover, .login:active {
+            background-color: #06B378;         
+        }
+        
         .start{
             background-color: #0080ff;
-            box-shadow: 3px 3px 13px #000;
+            box-shadow: 3px 6px 2px rgba(1, 1, 4, 0.62);
             font-size: 20px;
             margin: 157px auto 0;
             padding: 10px 0 5px;
             text-align: center;
             width: 200px;                     
+        }
+        
+        .start:hover, .start:active{
+            background-color: #006ceb;
         }
         
         section {
@@ -77,6 +91,19 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
             min-height: 300px;  
             margin: 0 !important; 
         }                
+        
+        .black-forty {
+            background: rgba(0,0,0,.4);   
+            width: 100%;
+            height: 100%;
+            min-height: 520px;
+        }
+        
+        .black-thirty {
+            background: rgba(0,0,0,.3);   
+            width: 100%;
+            height: 100%;
+        }
         
         #first-section {
             background: url('css/images/landing/laptop.jpg') no-repeat scroll center center / cover  rgba(0, 0, 0, 0);   
@@ -157,11 +184,14 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
         <a class="btn signup" href="<?php echo HOME_PAGE; ?>signup">SIGNUP</a>
         <a class="btn login" href="<?php echo HOME_PAGE; ?>login">LOGIN</a>
     </div>
-    
+        
     <section id="first-section">        
+        <div class="black-forty">
             <h1>FIND & DISCOVER CLOTHES</h1>
             <a class="btn start center-block" href="<?php echo HOME_PAGE; ?>">GET STARTED</a>
+        </div>
     </section>
+
     
     <section id="second-section">
         <div class="text-middle row">
@@ -170,7 +200,8 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
             </div>
             <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
                 <h2>All Your Favorite Brands at Your Fingertips</h2>
-                <p>Close all those browser tabs you have open for every store. We'll help you browse hundreds of brands at once, so you can find the perfect outfit.</p>
+                <p>Close all those browser tabs. We'll help you browse hundreds of brands at once so you can find the perfect
+outfit without hitting Ctrl+T </p>
             </div>
             <div class="col-sm-3 col-sm-offset-1 hidden-xs">
                 <img src="css/images/landing/shopping_bag.png" />
@@ -196,23 +227,25 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
                 <img src="css/images/landing/chat.png" />
             </div>
             <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
-                <h2>- COMING SOON -</h2>
-                <p>Pretty soon you'll be able to follow the brands and friends so you can find the latest trends.</p>
+                <h2>COMING SOON</h2>
+                <p>Pretty soon, you'll be able to follow your favorite brands and friends so you can stay on top of the latest trends.</p>
             </div>        
             <div class="col-sm-3 col-sm-offset-1 hidden-xs">
                 <img src="css/images/landing/chat.png" />
             </div>            
         </div>
     </section>    
-    
+        
     <section id="fifth-section">
-        <h1>FIND IT ON CLOSITT</h1>
-        <div class="center-block">
-            <a href="<?php echo HOME_PAGE; ?>faq">FAQ</a>
-            <a href="<?php echo HOME_PAGE; ?>">GET STARTED</a>
-            <a href="<?php echo HOME_PAGE; ?>contact-us">CONTACT US</a>
+        <div class="black-thirty">
+            <h1>FIND IT ON CLOSITT</h1>
+            <div class="center-block">
+                <a href="<?php echo HOME_PAGE; ?>">GET STARTED</a>
+                <a href="<?php echo HOME_PAGE; ?>contact-us">CONTACT US</a>
+            </div>
         </div>
     </section>
+    
 </div>
 
 <?php include(dirname(__FILE__) . '/static/footerMeta.php');   ?>
