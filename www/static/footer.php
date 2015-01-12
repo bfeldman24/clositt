@@ -32,6 +32,7 @@
         <div class="footer_nav pull-left">
             <ul class="clearfix">
                 <li><a href="<?php echo CONTACT_PAGE; ?>">Contact Us</a></li>
+                <li><a href="<?php echo ABOUT_PAGE; ?>">About </a></li>
                 <li><a href="<?php echo BLOG_PAGE; ?>">Blog </a></li>
                 <li><a href="<?php echo TERMS_PAGE; ?>">Terms</a></li>
                 <?php /* ?><li><a href="<?php echo SHOUT_OUTS_PAGE; ?>">Shout Outs</a></li><?php */ ?>

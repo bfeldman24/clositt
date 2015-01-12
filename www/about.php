@@ -73,7 +73,7 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
         
         .start{
             background-color: #0080ff;
-            box-shadow: 3px 6px 2px rgba(1, 1, 4, 0.62);
+            box-shadow: 3px 3px 2px rgba(1, 1, 4, 0.62);
             font-size: 20px;
             margin: 157px auto 0;
             padding: 10px 0 5px;
@@ -92,18 +92,12 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
             margin: 0 !important; 
         }                
         
-        .black-forty {
-            background: rgba(0,0,0,.4);   
+        .black-twenty {
+            background: rgba(0,0,0,.25);   
             width: 100%;
             height: 100%;
             min-height: 520px;
-        }
-        
-        .black-thirty {
-            background: rgba(0,0,0,.3);   
-            width: 100%;
-            height: 100%;
-        }
+        }                
         
         #first-section {
             background: url('css/images/landing/laptop.jpg') no-repeat scroll center center / cover  rgba(0, 0, 0, 0);   
@@ -176,6 +170,12 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
                 width: 100%;
             }
         }
+        
+        @media (max-width: 400px) {
+            h1{
+                font-size: 2em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -186,7 +186,7 @@ require_once(dirname(__FILE__) . '/../app/session.php'); ?>
     </div>
         
     <section id="first-section">        
-        <div class="black-forty">
+        <div class="black-twenty">
             <h1>FIND & DISCOVER CLOTHES</h1>
             <a class="btn start center-block" href="<?php echo HOME_PAGE; ?>">GET STARTED</a>
         </div>
@@ -237,7 +237,7 @@ outfit without hitting Ctrl+T </p>
     </section>    
         
     <section id="fifth-section">
-        <div class="black-thirty">
+        <div class="black-twenty">
             <h1>FIND IT ON CLOSITT</h1>
             <div class="center-block">
                 <a href="<?php echo HOME_PAGE; ?>">GET STARTED</a>

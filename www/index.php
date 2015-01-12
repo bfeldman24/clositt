@@ -2,6 +2,13 @@
 require_once(dirname(__FILE__) . '/../app/session.php'); 
 require_once(dirname(__FILE__) . '/../app/Controller/FilterController.php');
 
+$cookieName = "hasVisited";
+if(!isset($_COOKIE[$cookieName])){
+    setcookie($cookieName, "true", time() + 31104000, "/"); //expires in about 360 days
+    header("Location: " . ABOUT_PAGE);
+    die();
+}
+
 $filterController = new FilterController();              
 $filters = $filterController->getHtmlFilters();
 $homepage = true;
