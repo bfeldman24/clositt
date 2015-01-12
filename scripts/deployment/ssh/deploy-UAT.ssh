@@ -70,6 +70,7 @@ sudo cp scripts/deployment/ssh/deploy-PROD.ssh /home/$DIR/scripts/deployment/ssh
 echo "Copying www..."
 sudo mkdir /home/$DIR/www
 sudo cp www/*.php /home/$DIR/www/
+sudo cp www/*.html /home/$DIR/www/
 sudo cp www/favicon.ico /home/$DIR/www/
 sudo cp www/.htaccess /home/$DIR/www/
 sudo cp www/php.ini /home/$DIR/www/

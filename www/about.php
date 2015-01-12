@@ -1,8 +1,10 @@
 <?php 
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+require_once(dirname(__FILE__) . '/../app/session.php'); 
 
-require_once(dirname(__FILE__) . '/../app/session.php'); ?>
+$cookieName = "hasVisited";
+setcookie($cookieName, "true", time() + 31104000, "/"); //expires in about 360 days
+
+?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
