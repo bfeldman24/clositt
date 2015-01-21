@@ -36,6 +36,10 @@ setcookie($cookieName, "true", time() + 31104000, "/"); //expires in about 360 d
         h2, p, img {
             margin-bottom: 20px;   
         }
+        
+        p {
+            line-height:32px;   
+        }        
     
         #landing-header{
             position: absolute;
@@ -74,17 +78,17 @@ setcookie($cookieName, "true", time() + 31104000, "/"); //expires in about 360 d
         }
         
         .start{
-            background-color: #0080ff;
+            background-color: #FD9F00;
             box-shadow: 3px 3px 2px rgba(1, 1, 4, 0.62);
-            font-size: 20px;
             margin: 157px auto 0;
-            padding: 10px 0 5px;
-            text-align: center;
-            width: 200px;                     
+            text-align: center;            
+            font-size:38px;
+            width:264px;
+            padding:10px 0;          
         }
         
         .start:hover, .start:active{
-            background-color: #006ceb;
+            background-color: #E58D00;
         }
         
         section {
@@ -114,11 +118,17 @@ setcookie($cookieName, "true", time() + 31104000, "/"); //expires in about 360 d
         #second-section {
             background-color: #00C984; 
             padding: 50px 20px;  
-        }
+        }                
         
         #third-section {
             background-color: #54E5F5;   
             padding: 50px 20px;
+        }
+        
+        #third-section span.highlight {
+            font-size: 105%;
+            color: #00C984;
+            border-bottom: 1px dashed #00C984;;
         }
         
         #fourth-section {
@@ -190,7 +200,7 @@ setcookie($cookieName, "true", time() + 31104000, "/"); //expires in about 360 d
     <section id="first-section">        
         <div class="black-twenty">
             <h1>FIND & DISCOVER CLOTHES</h1>
-            <a class="btn start center-block" href="<?php echo HOME_PAGE; ?>">GET STARTED</a>
+            <a class="btn start center-block" href="<?php echo HOME_PAGE; ?>">SHOP NOW</a>
         </div>
     </section>
 
@@ -218,7 +228,7 @@ outfit without hitting Ctrl+T </p>
             </div>
             <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
                 <h2>Create a Clositt to Save Stuff for Later</h2>
-                <p>No more sending emails full of links. Simply add an item to your Clositt and we'll save it for you. You can share you Clositt with friends, and we'll even let you know if stuff in your Clositt gets cheaper!</p>
+                <p>No more sending emails full of links. Simply add an item to your Clositt and we'll save it for you. You can share you Clositt with friends, and we'll even let you know if stuff in your Clositt gets <span class="highlight">cheaper</span>!</p>
             </div>        
         </div>        
     </section>
@@ -229,8 +239,8 @@ outfit without hitting Ctrl+T </p>
                 <img src="css/images/landing/chat.png" />
             </div>
             <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
-                <h2>COMING SOON</h2>
-                <p>Pretty soon, you'll be able to follow your favorite brands and friends so you can stay on top of the latest trends.</p>
+                <h2>Share with your Friends</h2>
+                <p>Get feedback on clothes you like from your friends. Post a link to your clositt or any item on Facebook, Twitter, Google+, or Pinterest and find out if your friends think you should get it.</p>
             </div>        
             <div class="col-sm-3 col-sm-offset-1 hidden-xs">
                 <img src="css/images/landing/chat.png" />
@@ -242,7 +252,7 @@ outfit without hitting Ctrl+T </p>
         <div class="black-twenty">
             <h1>FIND IT ON CLOSITT</h1>
             <div class="center-block">
-                <a href="<?php echo HOME_PAGE; ?>">GET STARTED</a>
+                <a href="<?php echo HOME_PAGE; ?>">SHOP NOW</a>
                 <a href="<?php echo HOME_PAGE; ?>contact-us">CONTACT US</a>
             </div>
         </div>
