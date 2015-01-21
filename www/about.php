@@ -55,6 +55,11 @@ setcookie($cookieName, "true", time() + 31104000, "/"); //expires in about 360 d
             outline: 0;
         }
         
+        .btn.action{
+            font-size: 20px;
+            padding: 10px 15px;   
+        }
+        
         .btn:hover, .btn:active {
             color: #FFF;
             outline: 0;   
@@ -69,11 +74,11 @@ setcookie($cookieName, "true", time() + 31104000, "/"); //expires in about 360 d
             background-color: #4FC3FD;
         }
                
-        .login {
+        .login, .show-clositt {
             background-color: #00C984;         
         }
         
-        .login:hover, .login:active {
+        .login:hover, .login:active, .show-clositt:hover, .show-clositt:active {
             background-color: #06B378;         
         }
         
@@ -90,6 +95,22 @@ setcookie($cookieName, "true", time() + 31104000, "/"); //expires in about 360 d
         .start:hover, .start:active{
             background-color: #E58D00;
         }
+        
+        .search{
+            background-color: #66CCFF;     
+        }
+        
+        .search:hover, .search:active{
+            background-color: #55BBEE;
+        }       
+        
+        .shop{
+            background-color: #FF634B;     
+        }
+        
+        .shop:hover, .shop:active{
+            background-color: #EE523A;
+        }    
         
         section {
             width: 100%;
@@ -128,7 +149,7 @@ setcookie($cookieName, "true", time() + 31104000, "/"); //expires in about 360 d
         #third-section span.highlight {
             font-size: 105%;
             color: #00C984;
-            border-bottom: 1px dashed #00C984;;
+            border-bottom: 1px dashed #00C984;
         }
         
         #fourth-section {
@@ -214,6 +235,7 @@ setcookie($cookieName, "true", time() + 31104000, "/"); //expires in about 360 d
                 <h2>All Your Favorite Brands at Your Fingertips</h2>
                 <p>Close all those browser tabs. We'll help you browse hundreds of brands at once so you can find the perfect
 outfit without hitting Ctrl+T </p>
+                <p><a class="btn action search" href="<?php echo HOME_PAGE; ?>">Start Searching</a></p>
             </div>
             <div class="col-sm-3 col-sm-offset-1 hidden-xs">
                 <img src="css/images/landing/shopping_bag.png" />
@@ -228,7 +250,8 @@ outfit without hitting Ctrl+T </p>
             </div>
             <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
                 <h2>Create a Clositt to Save Stuff for Later</h2>
-                <p>No more sending emails full of links. Simply add an item to your Clositt and we'll save it for you. You can share you Clositt with friends, and we'll even let you know if stuff in your Clositt gets <span class="highlight">cheaper</span>!</p>
+                <p>No more sending emails full of links. Simply add an item to your Clositt and we'll save it for you. We'll even let you know if stuff in your Clositt gets cheaper!</p>                
+                <p><a class="btn action show-clositt" href="<?php echo HOME_PAGE; ?>myclositt">Show me a Clositt</a></p>
             </div>        
         </div>        
     </section>
@@ -240,7 +263,8 @@ outfit without hitting Ctrl+T </p>
             </div>
             <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
                 <h2>Share with your Friends</h2>
-                <p>Get feedback on clothes you like from your friends. Post a link to your clositt or any item on Facebook, Twitter, Google+, or Pinterest and find out if your friends think you should get it.</p>
+                <p>Get feedback on clothes from your friends. Simply post a link to your Clositt on any social network and find out which items your friends like best. No more sending emails full of links back and forth between friends.</p>
+                <p><a class="btn action shop" href="<?php echo HOME_PAGE; ?>">Let me Shop!</a></p>
             </div>        
             <div class="col-sm-3 col-sm-offset-1 hidden-xs">
                 <img src="css/images/landing/chat.png" />
