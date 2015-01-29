@@ -100,8 +100,13 @@ class ClosetItemEntity {
 		$closetItemEntity->setImage(BaseEntity::getDBField($row, CLOSET_ITEM_IMAGE));	
 		
 		$product = new ProductEntity();
-		ProductEntity::setProductFromDB($product, $row);		
-		$closetItemEntity->setProduct($product);
+		ProductEntity::setProductFromDB($product, $row);
+		$sku = $product->getId();
+		$img = $product->getImage();
+		
+		if (!empty($sku) && !empty($img)){				
+		      $closetItemEntity->setProduct($product);
+		}
 		
 		return $closetItemEntity;
 	}		

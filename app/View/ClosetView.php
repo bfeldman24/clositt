@@ -47,14 +47,12 @@ class ClosetView {
         foreach ($closets as $name => $items) {                        				
                         
             $closetRef = preg_replace('/[\s\W]+/', '', $name);
-            $closetRef .= $isUnsaved ? "-unsaved" : '';
-            $countItems = count($items);
-            $itemsCount = 0;
+            $closetRef .= $isUnsaved ? "-unsaved" : '';            
+            $itemsCount = 0;            
             
             foreach ($items as $item) {
-                if (isset($items[0]) && isset($items[0]['item']) && isset($items[0]['cache'])){
-                    $itemsCount = $countItems;
-                    break;       
+                if (isset($item) && !empty($item['item']) && !empty($item['cache'])){
+                    $itemsCount++;
                 }   
             }  
             
