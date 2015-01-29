@@ -396,15 +396,15 @@ class ClosetController extends Debugger {
 	public function getAllSessionClosetItems(&$closetItems = null, $getEmptyClosets = false){
 	   if (!isset($closetItems)){
 	       $closetItems = array();
-	   }
+	   }	   
 	   
 	   if(isset($_SESSION['closetItems'])){	       	       	       	       	      	       
 	       $skus = array(); 
 	       foreach ($_SESSION['closetItems'] as $closetName => $closetItemEntities){
                 $skus = array_merge($skus, array_keys($closetItemEntities)); 		
-	       }
+	       }	       
 	       
-            $products = $this->productController->getMultipleProducts($skus);           
+            $products = $this->productController->getMultipleProducts($skus, true);                       
             
             foreach ($_SESSION['closetItems'] as $closetName => $closetItemEntities){                            
                 if ($closetItemEntities != null && count($closetItemEntities) > 0){

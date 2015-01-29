@@ -96,15 +96,15 @@ class ProductController extends Debugger{
 	    return $this->getProducts($postData, $getData, $limit, $random, true);
 	}
 	
-	public function getMultipleProducts($skus){
+	public function getMultipleProducts($skus, $getNonLiveProductsAlso = false){
 	    $productResults = array();	
 		
 		if(isset($skus) && is_array($skus) && count($skus) > 0){	
 			
-			$results = $this->productDao->getMultipleProducts($skus);						
+			$results = $this->productDao->getMultipleProducts($skus, $getNonLiveProductsAlso);						
 			
 			if(is_object($results)){
-				while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){					    								    
+				while($row = $results->fetchRow(MDB2_FETCHMODE_ASSOC)){	                
             		$productEntity = new ProductEntity();	
 					ProductEntity::setProductFromDB($productEntity, $row);
 					$sku = $productEntity->getId();

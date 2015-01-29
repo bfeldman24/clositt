@@ -488,25 +488,28 @@ var closetFormPresenter = {
         if (closets != null && Object.keys(closets).length > 0){    
             for (var c in closets){
                   var closet = closets[c];
-                  closetIds[i] = closet[0].id;
-    			  closetNames[i] = closet[0].title;
-    			  
-    			  if (closet[0].title == closetFormPresenter.wishList){
-    			       closetFormPresenter.wishListId = closet[0].id;
-    			  }
-    		      
-    		       closet.forEach(function(item){
-    		          if (item.item != null){					    
-            			
-            			if (closetItemsMapping[closetNames[i]] == null){
-    				        closetItemsMapping[closetNames[i]] = [];
-            			}	
-            			        			
-            			closetItemsMapping[closetNames[i]].push(item.item);
-    		          }
-            	   });
-            	   
-            	   i++;				
+                  
+                  if (closet.length > 0){
+                      closetIds[i] = closet[0].id;
+        			  closetNames[i] = closet[0].title;
+        			  
+        			  if (closet[0].title == closetFormPresenter.wishList){
+        			       closetFormPresenter.wishListId = closet[0].id;
+        			  }
+        		      
+        		       closet.forEach(function(item){
+        		          if (item.item != null){					    
+                			
+                			if (closetItemsMapping[closetNames[i]] == null){
+        				        closetItemsMapping[closetNames[i]] = [];
+                			}	
+                			        			
+                			closetItemsMapping[closetNames[i]].push(item.item);
+        		          }
+                	   });
+                	   
+                	   i++;	
+                  }			
     	    }
     	    
     	    closetFormPresenter.closetIds = closetIds;
