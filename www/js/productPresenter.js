@@ -109,12 +109,16 @@ var productPresenter = {
     },
     
     handleImageNotFound:  function(img) {
-        if (searchController.criteria != null && searchController.criteria.searchTerm != null){
-            var sku = $(img).parents(".outfit").attr("pid");
-            $(img).removeAttr("data-src");
-            $(img).removeAttr("onerror");
-            $(img).attr( "src", window.HOME_ROOT + "i/" + sku);  
-            $(img).parents(".mainwrap").first().find(".detail h4").tooltip({delay: { "show": 1500, "hide": 0 }});
+        var enableMissingImagesWhileSearching = false;
+        
+        if (enableMissingImagesWhileSearching && 
+            searchController.criteria != null && searchController.criteria.searchTerm != null){
+
+                var sku = $(img).parents(".outfit").attr("pid");            
+                $(img).removeAttr("data-src");
+                $(img).removeAttr("onerror");
+                $(img).attr( "src", window.HOME_ROOT + "i/" + sku);  
+                $(img).parents(".mainwrap").first().find(".detail h4").tooltip({delay: { "show": 1500, "hide": 0 }});
     
         }else{
             $(img).parents(".outfit").remove();    
