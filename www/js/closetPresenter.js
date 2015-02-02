@@ -46,15 +46,7 @@ var closetPresenter = {
 	
 	setUser: function(user){
 	   closetPresenter.user = user;
-	},	
-	
-	getClosets: function(){	   
-		if(closetPresenter.user != undefined || session.isLoggedIn){		      
-			$.post( window.HOME_ROOT + "cl/getall", closetPresenter.showClosets, "json");		    			 
-		}else{
-			Messenger.info("We'd love to add that to your Clositt. Just sign in and we'll take care if it for you.");	
-		}
-	},				
+	},						
 	
 	showSettings: function(){	    
 
@@ -184,7 +176,11 @@ var closetPresenter = {
 		if (original != closittData.title){	
 			$.post( window.HOME_ROOT + "cl/update", closittData, function(result){
 		          if (result != "success") {
-				    	Messenger.error(original + ' could not be saved.');
+		                if (closetFormPresenter.closetNames.indexOf(original) >= 0){
+		                   Messenger.error("clositt " + original + ' already exists. Please enter a new clositt name');   
+		                }else{		                
+				    	   Messenger.error(original + ' could not be saved.');
+		                }
 	 			  } else {
 						Messenger.success("Clositt " + closittData.title + " was saved!");
 						
@@ -194,7 +190,7 @@ var closetPresenter = {
 						$("#editClosittModal").modal('hide');
 				  }	
 			});	
-		}					
+		}	
 	},
 	
 	updateClosetInfo: function(closetData){
@@ -240,7 +236,7 @@ var closetPresenter = {
 	    
 	    $.post( window.HOME_ROOT + "cl/delete", closittData, function(result){
 	          if (result != "success") {
-			    	Messenger.error(closittData.title + ' could not be saved.');
+			    	Messenger.error(closittData.title + ' could not be removed.');
  			  } else {
 					Messenger.success("Clositt " + closittData.title + " was successfully removed!");
 					

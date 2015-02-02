@@ -199,7 +199,7 @@ p.clositt-theme, span.clositt-theme, a.clositt-theme, h1.clositt-theme, h2.closi
 #nav .nav ul li .btn-group.open .dropdown-toggle.pricefilter { border-bottom: 1px solid #8cd9ff; border-radius: 5px;}
 .ui-slider-handle { cursor: pointer; }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus{outline: medium none; border: 1px solid #66ccff; background: none repeat scroll 0 0 #ccffff; }
-#price-range.ui-slider {margin: 0 auto; height: 150px;}
+#price-range.ui-slider {margin: 0 auto; height: 200px;}
 #price-range.ui-slider .ui-slider-range { background: none repeat scroll 0 0 #66ccff; }
 .price-range-value { color: #aaa; height: 20px; margin: 10px 0 5px 0; text-align: center;}
 .price-values {color: #666; font-size: 0.7em; left: 15px; margin-bottom: -0.5em; position: absolute;}

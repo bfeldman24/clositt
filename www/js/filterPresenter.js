@@ -317,7 +317,7 @@ var filterPresenter = {
 	    $( "#price-range" ).slider({
             orientation: "vertical",
             range: true,
-            step: 10,
+            step: 25,
             min: startingMinRange,
             max: 0,
             values: [ startingMinValue, 0 ],
