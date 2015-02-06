@@ -56,7 +56,7 @@ a:active, a:focus { outline: none; }
 .navbar-default .filter-btn.sticky { opacity: 1;}
 .navbar-default .filter-btn.filter-btn-sm { display:none; opacity: 0;}
 .navbar-default .search-btn:hover { background: #f44fa4; border: none; color: #fff; }
-.navbar-default .input-search { width: 450px; background: url(images/search_bg.png) no-repeat 8px 6px; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none; border: 1px solid #f4f4f4; padding-left: 40px; font-weight: 400; font-size: 13px; }
+.navbar-default .input-search { width: 325px; background: url(images/search_bg.png) no-repeat 8px 6px; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none; border: 1px solid #f4f4f4; padding-left: 40px; font-weight: 400; font-size: 13px; }
 
 .browse ul li{ float:left; display:block; padding:5px;}
 .browse ul li .btn-group button.btn i{ font-size:24px; color:#66ccff; line-height:29px; vertical-align:middle } 
@@ -642,19 +642,22 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
  }
  
  @media (max-width: 1050px) and (min-width: 990px) {    
-    .navbar-default .input-search { width: 375px; }
+    .navbar-default .input-search { width: 300px; }
  }
  @media (max-width: 990px) {
-#footer .foooter_logo { left: 0; }
-.navbar-default .input-search { width: 315px; }
-#header .header-container { max-width: none; }
-#footer .footer_nav ul { margin: 0px 0 0 auto }
-.navbar-default .navbar-toggle .icon-bar { background: #f44fa4; }
-.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus { background: #F3F3F3; }
-.modal-dialog { width: auto; }
-#productModal .modal-dialog { margin: 30px; }
-
+    #footer .foooter_logo { left: 0; }
+    .navbar-default .input-search { width: 275px; }
+    #header .header-container { max-width: none; }
+    #footer .footer_nav ul { margin: 0px 0 0 auto }
+    .navbar-default .navbar-toggle .icon-bar { background: #f44fa4; }
+    .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus { background: #F3F3F3; }
+    .modal-dialog { width: auto; }
+    #productModal .modal-dialog { margin: 30px; }
 }
+
+ @media (max-width: 930px){
+    .navbar-default .input-search { width: 225px; }
+ }
  @media (max-width: 840px) and (min-width: 768px) {
  .container-fluid > .navbar-collapse { padding:0;}
  .browse .btn-sm, .btn-group-sm > .btn { padding:3px 10px;}

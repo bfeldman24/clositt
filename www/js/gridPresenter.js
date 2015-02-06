@@ -5,15 +5,25 @@ var gridPresenter = {
     maxBrowsePages: 300,
     numberOfLoadingPages: 0,
     maxNumberOfPagesLoadingAtOnce: 2,
-    browsePages: [],        
+    browsePages: [],    
+    enableLazyLoading: false,    
 	
 	init: function(){			
 	    gridPresenter.randomStartingPosition = parseInt(Math.random() * 15000);			
 		gridPresenter.mixupBrowsePages();				
 		
+		
 		if ($( "#search-bar" ).val().length <= 0 && location.hash.indexOf("#outfit") != 0){		
-		      gridPresenter.showContent(15);			
-		}									
+		      //gridPresenter.showContent(15);			
+		      
+		      if($("#product-grid .outfit").length > 0){
+    		      $("#product-grid .outfit img[data-src]").unveil(200, productPresenter.showImageCallback);
+    		      
+    		      if ($("#product-loader").length > 0){
+             	       pagePresenter.productLoaderPosition = $("#product-loader").position().top;
+             	  }
+		      }
+		}											
 	},					
 
 	alignDefaultGrid: function(){	   		
@@ -55,6 +65,10 @@ var gridPresenter = {
 	},
 	
 	showContent: function(numElements){
+	    if (!gridPresenter.enableLazyLoading){
+	       return false;
+	    }
+	   
 	    if (gridPresenter.numberOfLoadingPages <= 0 || gridPresenter.numberOfLoadingPages < gridPresenter.maxNumberOfPagesLoadingAtOnce - 1){
 	       	
     		var lastHeight = $("#product-grid").children("div").last();

@@ -1,4 +1,7 @@
 <?php 
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 require_once(dirname(__FILE__) . '/../app/session.php'); 
 require_once(dirname(__FILE__) . '/../app/Controller/FilterController.php');
 
@@ -17,8 +20,30 @@ $homepage = true;
 <html>
 <head>
 
-<link href="<?php echo HOME_ROOT; ?>lib/css/joyride-2.1.css" rel="stylesheet">
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
+<link rel="stylesheet" href="<?php echo HOME_ROOT; ?>lib/css/shepherd-theme-arrows.css" />
+<style type="text/css">
+.shepherd-element.shepherd-theme-arrows.shepherd-transparent-text .shepherd-text {
+    color: #3b744f; 
+}
+
+.shepherd-element.shepherd-theme-arrows .shepherd-content {
+    width: 300px;
+    max-width: 100%; 
+}
+
+.shepherd-element.shepherd-theme-arrows .shepherd-content a {
+    color: inherit; 
+}
+
+.shepherd-element.shepherd-theme-arrows .shepherd-content footer .shepherd-buttons li .shepherd-button {
+    background: #55a892; 
+}
+
+.shepherd-element{
+    z-index: 99999;   
+}
+</style>
 <link href="<?php echo HOME_ROOT; ?>lib/css/flexslider.css" rel="stylesheet" />
 
 </head>
@@ -62,6 +87,23 @@ $homepage = true;
                     </div>
                 </div> 
                 */ ?>
+                
+                <?php                    
+                    require_once(dirname(__FILE__) . '/../app/Controller/ProductController.php'); 
+                    $productController = new ProductController();                    
+                    $browseData = array();                    
+                    $browseData['page'] = rand(0,300);                                        
+                                        
+                    if (isset($_COOKIE['customer'])) {
+                        $browseData['customer'] = substr($_COOKIE['customer'], 0, 1);                        
+                    }else{                        
+                        $browseData['customer'] = "b";   
+                    }
+                    
+                    $browseResults = $productController->getProductsHtml(array(), $browseData, 25, true);
+                    $browseProducts = json_decode($browseResults, true);
+                    print_r($browseProducts['products']);                    
+                ?>
                     
             </div>            
         </div>
@@ -73,17 +115,7 @@ $homepage = true;
 </div>
 
 <?php include(dirname(__FILE__) . '/static/footerMeta.php');   ?>
-
-<script type="text/javascript">
-	
-  $(window).load(function() {
-    $('.flexslider').flexslider({
-      animation: "slide"
-    });
-  });    
-
-</script>
-
+<script type="text/javascript" src="<?php echo HOME_ROOT; ?>lib/js/shepherd.min.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {	
@@ -121,6 +153,160 @@ function loggedIn(){
 function loggedOut(){
     closetFormPresenter.init();
 }
+
+
+
+
+
+
+
+
+(function() {
+    var init, setupShepherd;
+    
+    init = function() {
+        if (document.cookie == null || document.cookie.indexOf("tutorial=") < 0){
+            document.cookie="tutorial=true; expires=Thu, 31 Dec 9999 12:00:00 UTC";
+            return setupShepherd();
+        }else{
+            gridPresenter.enableLazyLoading = true;   
+        }
+    };
+    
+    setupShepherd = function() {
+        var shepherd;    
+        
+        var outfit = $(".outfit").eq(2);
+        outfit.addClass("sheperd-outfit");
+        outfit.find(".addToClosittDropdown").addClass("sheperd-outfit-clositt-btn");
+        $("#loginBtns li").first().addClass("sheperd-myclositts-btn");
+        pagePresenter.scrollTo(225);
+        
+        shepherd = new Shepherd.Tour({
+            defaults: {
+                classes: 'shepherd-theme-arrows',
+                showCancelLink: false,
+                scrollTo: false
+            }
+        });
+        
+        shepherd.addStep('start', {
+            title: 'Start Here',
+            text: ['Use the filters to sort through 1000\'s of items with just a couple clicks.'],
+            attachTo: '.womenfilter top',
+            classes: 'shepherd-theme-arrows',            
+            buttons: [
+                {
+                    text: 'Exit',
+                    classes: 'shepherd-button-secondary',
+                    action: shepherd.cancel
+                }, {
+                    text: 'Next',
+                    action: shepherd.next,
+                    classes: 'shepherd-button-example-primary'
+                }
+            ]
+        });
+        
+        shepherd.addStep('price', {
+            title: 'Sort by Price',
+            text: 'You can use the price filter to find items in your budget',
+            attachTo: '.nav-filter.pricefilter top',
+            classes: ' shepherd-theme-arrows',
+            buttons: [
+                {
+                  text: 'Back',
+                  classes: 'shepherd-button-secondary',
+                  action: shepherd.back
+                }, {
+                  text: 'Next',
+                  action: function(){
+                       pagePresenter.scrollTo($(".sheperd-outfit").offset().top - 75); 
+                       shepherd.next();
+                  }
+                }
+            ]
+        });          
+        
+        shepherd.addStep('foundone', {
+            title: 'Found One!',
+            text: 'When you find something you like, add it to a collection, called a Clositt. Go ahead and click the hanger button.',
+            attachTo: '.sheperd-outfit left',
+            classes: ' shepherd-theme-arrows',
+            scrollTo: true,
+            advanceOn: '.sheperd-outfit-clositt-btn click',
+            buttons: [
+                {
+                    text: 'Back',
+                    classes: 'shepherd-button-secondary',
+                    action: function(){
+                        pagePresenter.scrollTo($(".nav-filter.pricefilter").offset().top - 400); 
+                        shepherd.back();   
+                    }
+                }, {
+                    text: 'Next',
+                    action: function(){                    
+                        outfit.find(".addToClosittDropdown").addClass("open");                         
+                        shepherd.next();   
+                    }
+                }
+            ]
+        });
+        
+        shepherd.addStep('addtoclositt', {
+            title: 'Add to Clositt',
+            text: 'You can click the + to create a new Clositt, or you can add the item to an existing Clositt by checking one of the boxes below. When you are done, click the hanger again to close the dropdown. Try it out!',
+            attachTo: '.sheperd-outfit-clositt-btn left',
+            classes: ' shepherd-theme-arrows',
+            advanceOn: '.sheperd-outfit-clositt-btn click',
+            buttons: [
+                {
+                    text: 'Back',
+                    classes: 'shepherd-button-secondary',
+                    action: shepherd.back
+                }, {
+                    text: 'Next',
+                    action: function(){
+                        pagePresenter.scrollTo(0); 
+                        shepherd.next();   
+                    }
+                }
+            ]
+        });
+        
+        shepherd.addStep('yourclositts', {
+          title: 'Your Clositts',
+          text: 'You can view and manage all of your Clositts here. That\'s where you can add Price Alerts, and edit the items in your Clositt.',
+          attachTo: '.sheperd-myclositts-btn bottom',
+          classes: ' shepherd-theme-arrows',
+          scrollTo: true,
+          buttons: [
+            {
+                text: 'Back',
+                classes: 'shepherd-button-secondary',
+                action: function(){
+                    pagePresenter.scrollTo($(".sheperd-outfit").offset().top - 75); 
+                    shepherd.back();   
+                }
+            }, {
+                text: 'Done',
+                action: shepherd.next
+            }
+          ]
+        });
+        
+        Shepherd.once('complete', function(){
+            gridPresenter.enableLazyLoading = true;    
+        });
+        
+        Shepherd.once('cancel', function(){
+            gridPresenter.enableLazyLoading = true;    
+        });
+        
+        return shepherd.start();
+    };
+    $(init);
+}).call(this);
 </script>
 
 </body>
