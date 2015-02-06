@@ -151,7 +151,7 @@ var session = {
 	    var icon;
 	    var iconTag;
 	    
-	    if (location.href.indexOf(".com"+window.HOME_ROOT+"myclositt") > 0){
+	    if (location.href.indexOf(".com"+window.HOME_ROOT+"myclositts") > 0){
 	       pageUrl = "#";
 	       linkTitle = session.nickname + "'s Account";  
 	       icon = "glyphicon glyphicon-user";
@@ -159,7 +159,7 @@ var session = {
 	       linkClass = "user-settings";
 	    }else{
 	       pageUrl = window.CLOSITT_PAGE;
-	       linkTitle = session.nickname + "'s Clositt";
+	       linkTitle = session.nickname + "'s Clositts";
 	       icon = "icon-svg20"; // hanger
 	       iconTag = "<i>";
 	       linkClass = "";
@@ -177,6 +177,7 @@ var session = {
     	    	     )
     	       )
     	    )
+	    	.append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + 'about').text('About Us')))
 	    	.append( $('<li>').append( $('<a>').attr('onclick', 'session.logout()').text('Logout')));
 	    	
 	    $(document).on("click", ".user-settings", session.showUserAccountModal);
@@ -186,14 +187,15 @@ var session = {
 	   
 		$("#loginBtns").html("")
 		    .append( $('<li>').addClass("loggedoutBtns").append( 
-		          $('<a>').addClass("myclositt").attr("href",window.HOME_ROOT + "myclositt").append(
+		          $('<a>').addClass("myclositt").attr("href",window.HOME_ROOT + "myclositts").append(
 		              $("<span>").append( 
         	    	            $("<i>").addClass("icon-svg20")
         	    	      ).append(
-                                $("<span>").text(" My Clositt")
+                                $("<span>").text(" My Clositts")
                 	      )
 		          )
 		     ))
+		    .append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + 'about').text('About Us')))
 		    .append( $('<li>').addClass("loggedoutBtns active").append( 
 		          $('<a>').addClass("login").attr('data-toggle','modal').attr("data-target","#loginSignupModal").text('Login')
 		     ));			    		    	

@@ -98,7 +98,7 @@ if (isset($_GET['pricealerts']) && !isset($_SESSION['clickedPriceAlertsForMyClos
         <div id="nav">
             <div class="container">
             
-                <h4 class="text-center" id="user-closet-title"><?php echo $nickname; ?> Clositt</h4>
+                <h4 class="text-center" id="user-closet-title"><?php echo $nickname; ?> Clositts</h4>
                 <!--
                 <div class="col-xs-2 col-xs-offset-5">
                     <a class="icon-svg6 suffle-btn"></a>

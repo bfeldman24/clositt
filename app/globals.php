@@ -55,7 +55,7 @@ define('CLOSITT_JS',$js);
 define('QUERY_LIMIT',50);
 
 // PAGES
-define('CLOSITT_PAGE', HOME_PAGE. 'myclositt');
+define('CLOSITT_PAGE', HOME_PAGE. 'myclositts');
 define('CONTACT_PAGE', HOME_PAGE. 'contact-us');
 define('ABOUT_PAGE', HOME_PAGE. 'about');
 define('PRODUCT_PAGE', HOME_PAGE. 'product-page');
