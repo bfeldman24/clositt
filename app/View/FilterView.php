@@ -18,9 +18,9 @@ class FilterView {
                     <div class="nav">
                         <ul>                        
                              <li>
-                                <div class="btn-group">
+                                <div id="customerFilter" class="btn-group">
                                     <div class="btn btn-default nav-filter customer" type="customer" value="men" style="width:60px;">Men</div>
-                                    <div class="btn btn-default nav-filter customer" type="customer" value="women" style="width:80px;">Women</div>
+                                    <div class="btn btn-default nav-filter customer womenfilter" type="customer" value="women" style="width:80px;">Women</div>
                                 </div>
                             </li>
                             <li>
