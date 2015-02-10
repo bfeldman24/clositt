@@ -25,7 +25,7 @@ if (isset($_GET['outfit'])){
                     </div>
                     <form id="search-form" class="navbar-form navbar-left" role="search">
                         <div class="form-group">
-                            <input id="search-bar" type="text" class="form-control input-search" placeholder="Stop searching, Start finding. Start Here" <?php echo $searchValue; ?> />
+                            <input id="search-bar" type="text" class="form-control input-search" placeholder="Stop searching, Start finding" <?php echo $searchValue; ?> />
                         </div>
                         <button type="submit" id="seach-bar-icon" class="btn btn-default search-btn icon-svg2"></button>
                         

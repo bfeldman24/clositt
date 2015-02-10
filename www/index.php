@@ -161,26 +161,25 @@ function loggedOut(){
 
 
 
-(function() {
-    var init, setupShepherd;
-    
-    init = function() {
+var ShepherdTour = {    
+    init: function() {
+        $(document).on("click",".startTour", ShepherdTour.setupShepherd);
+        
         if (document.cookie == null || document.cookie.indexOf("tutorial=") < 0){
             document.cookie="tutorial=true; expires=Thu, 31 Dec 9999 12:00:00 UTC";
-            return setupShepherd();
+            ShepherdTour.setupShepherd();
         }else{
             gridPresenter.enableLazyLoading = true;   
         }
-    };
+    },
     
-    setupShepherd = function() {
+    setupShepherd: function() {
         var shepherd;    
         
         var outfit = $(".outfit").eq(2);
         outfit.addClass("sheperd-outfit");
         outfit.find(".addToClosittDropdown").addClass("sheperd-outfit-clositt-btn");
-        $("#loginBtns li").first().addClass("sheperd-myclositts-btn");
-        pagePresenter.scrollTo(225);
+        $("#loginBtns li").first().addClass("sheperd-myclositts-btn");        
         
         shepherd = new Shepherd.Tour({
             defaults: {
@@ -190,9 +189,29 @@ function loggedOut(){
             }
         });
         
+        shepherd.addStep('welcome', {
+            title: 'Welcome to Clositt!',
+            text: ['Let us show you around.'],
+            classes: 'shepherd-theme-arrows',            
+            buttons: [
+                {
+                    text: 'Skip Tour',
+                    classes: 'shepherd-button-secondary',
+                    action: shepherd.cancel
+                }, {
+                    text: 'Let\'s go',
+                    action: function(){                    
+                        pagePresenter.scrollTo(225);
+                        shepherd.next();   
+                    },
+                    classes: 'shepherd-button-example-primary'
+                }
+            ]
+        });
+        
         shepherd.addStep('start', {
             title: 'Start Here',
-            text: ['Use the filters to sort through 1000\'s of items with just a couple clicks.'],
+            text: ['Use the filters to sort through 1000\'s of items with just a couple clicks. <br><br>You can sort by store, price, color, material etc'],
             attachTo: '.womenfilter top',
             classes: 'shepherd-theme-arrows',            
             buttons: [
@@ -202,38 +221,21 @@ function loggedOut(){
                     action: shepherd.cancel
                 }, {
                     text: 'Next',
-                    action: shepherd.next,
+                    action: function(){                    
+                        pagePresenter.scrollTo($(".sheperd-outfit").offset().top - 100); 
+                        shepherd.next();   
+                    },
                     classes: 'shepherd-button-example-primary'
                 }
             ]
-        });
-        
-        shepherd.addStep('price', {
-            title: 'Sort by Price',
-            text: 'You can use the price filter to find items in your budget',
-            attachTo: '.nav-filter.pricefilter top',
-            classes: ' shepherd-theme-arrows',
-            buttons: [
-                {
-                  text: 'Back',
-                  classes: 'shepherd-button-secondary',
-                  action: shepherd.back
-                }, {
-                  text: 'Next',
-                  action: function(){
-                       pagePresenter.scrollTo($(".sheperd-outfit").offset().top - 75); 
-                       shepherd.next();
-                  }
-                }
-            ]
-        });          
+        });                    
         
         shepherd.addStep('foundone', {
             title: 'Found One!',
-            text: 'When you find something you like, add it to a collection, called a Clositt. Go ahead and click the hanger button.',
-            attachTo: '.sheperd-outfit left',
+            text: 'When you find something you like, click on the hanger button to add it to a collection, called a Clositt.',
+            attachTo: '.sheperd-outfit-clositt-btn left',
             classes: ' shepherd-theme-arrows',
-            scrollTo: true,
+            scrollTo: false,
             advanceOn: '.sheperd-outfit-clositt-btn click',
             buttons: [
                 {
@@ -251,35 +253,14 @@ function loggedOut(){
                     }
                 }
             ]
-        });
-        
-        shepherd.addStep('addtoclositt', {
-            title: 'Add to Clositt',
-            text: 'You can click the + to create a new Clositt, or you can add the item to an existing Clositt by checking one of the boxes below. When you are done, click the hanger again to close the dropdown. Try it out!',
-            attachTo: '.sheperd-outfit-clositt-btn left',
-            classes: ' shepherd-theme-arrows',
-            advanceOn: '.sheperd-outfit-clositt-btn click',
-            buttons: [
-                {
-                    text: 'Back',
-                    classes: 'shepherd-button-secondary',
-                    action: shepherd.back
-                }, {
-                    text: 'Next',
-                    action: function(){
-                        pagePresenter.scrollTo(0); 
-                        shepherd.next();   
-                    }
-                }
-            ]
-        });
+        });                
         
         shepherd.addStep('yourclositts', {
           title: 'Your Clositts',
-          text: 'You can view and manage all of your Clositts here. That\'s where you can add Price Alerts, and edit the items in your Clositt.',
+          text: 'You can view and manage all of your Clositts here. <br><br>You can also add price alerts, and share your Clositts with friends.',
           attachTo: '.sheperd-myclositts-btn bottom',
           classes: ' shepherd-theme-arrows',
-          scrollTo: true,
+          scrollTo: false,
           buttons: [
             {
                 text: 'Back',
@@ -303,10 +284,11 @@ function loggedOut(){
             gridPresenter.enableLazyLoading = true;    
         });
         
-        return shepherd.start();
-    };
-    $(init);
-}).call(this);
+        shepherd.start();
+    }
+}
+
+ShepherdTour.init();
 </script>
 
 </body>
