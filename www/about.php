@@ -216,6 +216,7 @@ setcookie($cookieName, "true", time() + 31104000, "/"); //expires in about 360 d
     <div id="landing-header">
         <a class="btn signup" href="<?php echo HOME_PAGE; ?>signup">SIGNUP</a>
         <a class="btn login" href="<?php echo HOME_PAGE; ?>login">LOGIN</a>
+        <a class="btn tour">TOUR</a>
     </div>
         
     <section id="first-section">        
@@ -277,6 +278,7 @@ outfit without hitting Ctrl+T </p>
             <h1>FIND IT ON CLOSITT</h1>
             <div class="center-block">
                 <a href="<?php echo HOME_PAGE; ?>">SHOP NOW</a>
+                <a class="tour">TOUR</a>
                 <a href="<?php echo HOME_PAGE; ?>contact-us">CONTACT US</a>
             </div>
         </div>
@@ -285,5 +287,11 @@ outfit without hitting Ctrl+T </p>
 </div>
 
 <?php include(dirname(__FILE__) . '/static/footerMeta.php');   ?>
+<script type="text/javascript">
+$(document).on("click",".tour", function(e){
+     document.cookie = "tutorial=; expires=Thu, 01 Jan 1970 00:00:00 UTC"; 
+     location.href = window.HOME_URL;
+});
+</script>
 </body>
 </html>
