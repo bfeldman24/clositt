@@ -37,7 +37,7 @@ a:active, a:focus { outline: none; }
 
 #header { max-height: 70px; position: fixed; width: 100%; top: 0; z-index: 1001; background: #fff; padding: 0px 0px; -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, .10); -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, .10); box-shadow: 0px 1px 3px rgba(0, 0, 0, .10); border-top:5px solid #66ccff; overflow: hidden; }
 #header .header-container { width: 100%; max-width: 90%; margin: 0 auto; }
-#loginBtns span i {font-size: 24px; vertical-align: middle;}
+#loginBtns span i {font-size: 22px; position: relative; top: -1px; vertical-align: middle;}
 
 #slider { margin: 0 0 0; }
 .navbar-default { background: none; border: none; margin: 0; min-height: 60px; padding-top: 5px; }
