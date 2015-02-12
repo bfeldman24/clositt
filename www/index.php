@@ -204,35 +204,56 @@ var ShepherdTour = {
                         pagePresenter.scrollTo(225);
                         shepherd.next();   
                     },
-                    classes: 'shepherd-button-example-primary'
+                    classes: 'btn-clositt-theme'
                 }
             ]
         });
         
         shepherd.addStep('start', {
             title: 'Start Here',
-            text: ['Use the filters to sort through 1000\'s of items with just a couple clicks. <br><br>You can sort by store, price, color, material etc'],
+            text: ['Use the filters to sort through 1000\'s of items with just a couple clicks. <br><br>You can sort by store, price, color, material & more'],
             attachTo: '.womenfilter top',
             classes: 'shepherd-theme-arrows',            
             buttons: [
                 {
-                    text: 'Exit',
+                    text: 'Back',
                     classes: 'shepherd-button-secondary',
-                    action: shepherd.cancel
+                    action: shepherd.back
                 }, {
                     text: 'Next',
                     action: function(){                    
                         pagePresenter.scrollTo($(".sheperd-outfit").offset().top - 100); 
                         shepherd.next();   
                     },
-                    classes: 'shepherd-button-example-primary'
+                    classes: 'btn-clositt-theme'
+                }
+            ]
+        });
+        
+        shepherd.addStep('start', {
+            title: 'Start Here',
+            text: ['Use the filters to sort through 1000\'s of items with just a couple clicks. <br><br>You can sort by store, price, color, material & more'],
+            attachTo: '.womenfilter top',
+            classes: 'shepherd-theme-arrows',            
+            buttons: [
+                {
+                    text: 'Back',
+                    classes: 'shepherd-button-secondary',
+                    action: shepherd.back
+                }, {
+                    text: 'Next',
+                    action: function(){                    
+                        pagePresenter.scrollTo($(".sheperd-outfit").offset().top - 100); 
+                        shepherd.next();   
+                    },
+                    classes: 'btn-clositt-theme'
                 }
             ]
         });                    
         
         shepherd.addStep('foundone', {
-            title: 'Found One!',
-            text: 'When you find something you like, click on the hanger button to add it to a collection, called a Clositt.',
+            title: 'Show the Filters',
+            text: 'You can click this button to show or hide the filters at any time while you are scrolling.',
             attachTo: '.sheperd-outfit-clositt-btn left',
             classes: ' shepherd-theme-arrows',
             scrollTo: false,
@@ -250,7 +271,8 @@ var ShepherdTour = {
                     action: function(){                    
                         outfit.find(".addToClosittDropdown").addClass("open");                         
                         shepherd.next();   
-                    }
+                    },
+                    classes: 'btn-clositt-theme'
                 }
             ]
         });                
@@ -271,7 +293,8 @@ var ShepherdTour = {
                 }
             }, {
                 text: 'Done',
-                action: shepherd.next
+                action: shepherd.next,
+                classes: 'btn-clositt-theme'
             }
           ]
         });

@@ -177,7 +177,7 @@ var session = {
     	    	     )
     	       )
     	    )
-	    	.append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + 'about').text('About Us')))
+	    	.append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + 'about').text('About')))
 	    	.append( $('<li>').append( $('<a>').addClass("startTour").text('Tour')))
 	    	.append( $('<li>').append( $('<a>').attr('onclick', 'session.logout()').text('Logout')));
 	    	
@@ -196,7 +196,7 @@ var session = {
                 	      )
 		          )
 		     ))
-		    .append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + 'about').text('About Us')))
+		    .append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + 'about').text('About')))
 		    .append( $('<li>').append( $('<a>').addClass("startTour").text('Tour')))
 		    .append( $('<li>').addClass("loggedoutBtns active").append( 
 		          $('<a>').addClass("login").attr('data-toggle','modal').attr("data-target","#loginSignupModal").text('Login')
