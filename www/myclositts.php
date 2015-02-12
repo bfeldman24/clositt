@@ -265,9 +265,8 @@ function loggedIn(){
     <?php } ?>
     
     closetPresenter.setPriceAlerts();
+    ShepherdTour.init();
 }
-
-
 
 
 
@@ -418,8 +417,6 @@ var ShepherdTour = {
         shepherd.start();
     }
 }
-
-ShepherdTour.init();
 
 </script>
 
