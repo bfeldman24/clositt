@@ -207,7 +207,7 @@ var ShepherdTour = {
                     classes: 'btn-clositt-theme'
                 }
             ]
-        });
+        });                
         
         shepherd.addStep('start', {
             title: 'Start Here',
@@ -228,32 +228,11 @@ var ShepherdTour = {
                     classes: 'btn-clositt-theme'
                 }
             ]
-        });
-        
-        shepherd.addStep('start', {
-            title: 'Start Here',
-            text: ['Use the filters to sort through 1000\'s of items with just a couple clicks. <br><br>You can sort by store, price, color, material & more'],
-            attachTo: '.womenfilter top',
-            classes: 'shepherd-theme-arrows',            
-            buttons: [
-                {
-                    text: 'Back',
-                    classes: 'shepherd-button-secondary',
-                    action: shepherd.back
-                }, {
-                    text: 'Next',
-                    action: function(){                    
-                        pagePresenter.scrollTo($(".sheperd-outfit").offset().top - 100); 
-                        shepherd.next();   
-                    },
-                    classes: 'btn-clositt-theme'
-                }
-            ]
-        });                    
+        });                                    
         
         shepherd.addStep('foundone', {
-            title: 'Show the Filters',
-            text: 'You can click this button to show or hide the filters at any time while you are scrolling.',
+            title: 'Found One!',
+            text: 'When you find something you like, click on the hanger button to add it to a collection, called a Clositt.',
             attachTo: '.sheperd-outfit-clositt-btn left',
             classes: ' shepherd-theme-arrows',
             scrollTo: false,
@@ -263,19 +242,44 @@ var ShepherdTour = {
                     text: 'Back',
                     classes: 'shepherd-button-secondary',
                     action: function(){
-                        pagePresenter.scrollTo($(".nav-filter.pricefilter").offset().top - 400); 
+                        pagePresenter.scrollTo(225);
                         shepherd.back();   
                     }
                 }, {
                     text: 'Next',
                     action: function(){                    
-                        outfit.find(".addToClosittDropdown").addClass("open");                         
+                        pagePresenter.scrollTo($(".sheperd-outfit").offset().top); 
                         shepherd.next();   
                     },
                     classes: 'btn-clositt-theme'
                 }
             ]
-        });                
+        });    
+        
+        shepherd.addStep('showfilters', {
+            title: 'Show the Filters',
+            text: 'You can click this button to show or hide the filters at any time while you are scrolling.',
+            attachTo: '.filter-btn bottom',
+            classes: ' shepherd-theme-arrows',
+            scrollTo: false,
+            buttons: [
+                {
+                    text: 'Back',
+                    classes: 'shepherd-button-secondary',
+                    action: function(){
+                        pagePresenter.scrollTo($(".sheperd-outfit").offset().top - 100);
+                        shepherd.back();   
+                    }
+                }, {
+                    text: 'Next',
+                    action: function(){  
+                        pagePresenter.scrollTo($(".nav-filter.pricefilter").offset().top - 400);                                           
+                        shepherd.next();   
+                    },
+                    classes: 'btn-clositt-theme'
+                }
+            ]
+        });                            
         
         shepherd.addStep('yourclositts', {
           title: 'Your Clositts',
