@@ -262,10 +262,11 @@ pagePresenter.defaultHeaderHeight = 0;
 function loggedIn(){
     <?php if (isset($isUnsavedSesssion) && $isUnsavedSesssion === true){ ?>
         location.href = location.href;   
-    <?php } ?>
+    <?php }else{ ?>
+        ShepherdTour.init();
+    <?php } ?>    
     
-    closetPresenter.setPriceAlerts();
-    ShepherdTour.init();
+    closetPresenter.setPriceAlerts();    
 }
 
 
