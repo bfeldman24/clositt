@@ -22,29 +22,6 @@ $homepage = true;
 
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>		
 <link rel="stylesheet" href="<?php echo HOME_ROOT; ?>lib/css/shepherd-theme-arrows.css" />
-<style type="text/css">
-.shepherd-element.shepherd-theme-arrows.shepherd-transparent-text .shepherd-text {
-    color: #3b744f; 
-}
-
-.shepherd-element.shepherd-theme-arrows .shepherd-content {
-    width: 300px;
-    max-width: 100%; 
-}
-
-.shepherd-element.shepherd-theme-arrows .shepherd-content a {
-    color: inherit; 
-}
-
-.shepherd-element.shepherd-theme-arrows .shepherd-content footer .shepherd-buttons li .shepherd-button {
-    background: #55a892; 
-}
-
-.shepherd-element{
-    z-index: 99999;   
-}
-</style>
-<link href="<?php echo HOME_ROOT; ?>lib/css/flexslider.css" rel="stylesheet" />
 
 </head>
 <body>

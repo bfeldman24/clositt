@@ -820,3 +820,25 @@ a.ring_opt:hover, a.ring_opt:hover p{ color: #fff; background: #66ccff;}
     background: #CCCCCC;
     left: 0;
 }
+
+/* OVERRIDE SHEPHERD TOUR */
+.shepherd-element.shepherd-theme-arrows.shepherd-transparent-text .shepherd-text {
+    color: #3b744f; 
+}
+
+.shepherd-element.shepherd-theme-arrows .shepherd-content {
+    width: 300px;
+    max-width: 100%; 
+}
+
+.shepherd-element.shepherd-theme-arrows .shepherd-content a {
+    color: inherit; 
+}
+
+.shepherd-element.shepherd-theme-arrows .shepherd-content footer .shepherd-buttons li .shepherd-button {
+    background: #55a892; 
+}
+
+.shepherd-element{
+    z-index: 99999;   
+}

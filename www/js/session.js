@@ -177,9 +177,13 @@ var session = {
     	    	     )
     	       )
     	    )
-	    	.append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + 'about').text('About')))
-	    	.append( $('<li>').append( $('<a>').addClass("startTour").text('Tour')))
-	    	.append( $('<li>').append( $('<a>').attr('onclick', 'session.logout()').text('Logout')));
+	    	.append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + 'about').text('About')));
+	    	
+	    if (location.pathname == window.HOME_ROOT || location.pathname == window.HOME_ROOT + "myclositts"){    	
+	    	$("#loginBtns").append( $('<li>').append( $('<a>').addClass("startTour").text('Tour')))
+	    }
+	    
+	    $("#loginBtns").append( $('<li>').append( $('<a>').attr('onclick', 'session.logout()').text('Logout')));
 	    	
 	    $(document).on("click", ".user-settings", session.showUserAccountModal);
 	},
@@ -196,11 +200,15 @@ var session = {
                 	      )
 		          )
 		     ))
-		    .append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + 'about').text('About')))
-		    .append( $('<li>').append( $('<a>').addClass("startTour").text('Tour')))
-		    .append( $('<li>').addClass("loggedoutBtns active").append( 
-		          $('<a>').addClass("login").attr('data-toggle','modal').attr("data-target","#loginSignupModal").text('Login')
-		     ));			    		    	
+		    .append( $('<li>').append( $('<a>').attr('href', window.HOME_ROOT + 'about').text('About')));
+		    
+		if (location.pathname == window.HOME_ROOT){    
+		    $("#loginBtns").append( $('<li>').append( $('<a>').addClass("startTour").text('Tour')))
+		}
+		
+	    $("#loginBtns").append( $('<li>').addClass("loggedoutBtns active").append( 
+	          $('<a>').addClass("login").attr('data-toggle','modal').attr("data-target","#loginSignupModal").text('Login')
+	     ));			    		    	
 	},	
 
  	logout: function(){	 	   	  								

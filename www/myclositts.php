@@ -83,6 +83,7 @@ if (isset($_GET['pricealerts']) && !isset($_SESSION['clickedPriceAlertsForMyClos
 <head>
 
 <?php include(dirname(__FILE__) . '/static/meta.php'); ?>
+<link rel="stylesheet" href="<?php echo HOME_ROOT; ?>lib/css/shepherd-theme-arrows.css" />
 <style type="text/css">
 .clositt-inner{
     min-height: 300px;   
@@ -234,7 +235,7 @@ if (isset($_GET['pricealerts']) && !isset($_SESSION['clickedPriceAlertsForMyClos
     
     
     
-<script src="<?php echo HOME_ROOT; ?>lib/js/jquery.joyride-2.1.js"></script>
+<script type="text/javascript" src="<?php echo HOME_ROOT; ?>lib/js/shepherd.min.js"></script>
 
 <div id="closetId" style="display:none;"><?php if (isset($_GET['user'])){ echo $_GET['user']; };?></div>
 
@@ -256,34 +257,6 @@ $(document).ready(function(){
     socialPresenter.init();	        
 });   
 
-function startClosittTour(manual){
-    if(manual || session.loginCount <= 3){
-        
-        if (localStorage.myClositt == undefined || localStorage.myClositt == null){
-            localStorage.myClositt = 1;   
-        }        
-        
-        if (localStorage.myClositt < 5){
-        	$('#joyRideTipContent').joyride({
-                autoStart : true,                  
-                modal:true,
-                expose: false,
-                preStepCallback : function (index, tip) {
-                  if (index == 0) {
-                    $(tip).find(".joyride-close-tip").text("Skip Tour");
-                  }
-                }
-            });
-        }
-    			
-    	localStorage.myClositt++;
-    }
-}
-
-$(".joyride-start").click(function(e){
-    startClosittTour(true);
-});    
-
 pagePresenter.defaultHeaderHeight = 0;
 
 function loggedIn(){
@@ -293,6 +266,160 @@ function loggedIn(){
     
     closetPresenter.setPriceAlerts();
 }
+
+
+
+
+
+var ShepherdTour = {    
+    init: function() {
+        $(document).on("click",".startTour", ShepherdTour.setupShepherd);
+        
+        if (document.cookie == null || document.cookie.indexOf("closittTour=") < 0){
+            document.cookie="closittTour=true; expires=Thu, 31 Dec 9999 12:00:00 UTC";
+            ShepherdTour.setupShepherd();
+        }else{
+            gridPresenter.enableLazyLoading = true;   
+        }
+    },
+    
+    setupShepherd: function() {
+        var shepherd;    
+        
+        var outfit = $(".outfit").eq(2);
+        outfit.addClass("sheperd-outfit");
+        outfit.find(".addToClosittDropdown").addClass("sheperd-outfit-clositt-btn");
+        $("#loginBtns li").first().addClass("sheperd-myclositts-btn");        
+        
+        shepherd = new Shepherd.Tour({
+            defaults: {
+                classes: 'shepherd-theme-arrows',
+                showCancelLink: false,
+                scrollTo: false
+            }
+        });
+        
+        shepherd.addStep('welcome', {
+            title: 'Welcome to Your Clositt!',
+            text: ['Let us show you around.'],
+            classes: 'shepherd-theme-arrows',            
+            buttons: [
+                {
+                    text: 'Skip Tour',
+                    classes: 'shepherd-button-secondary',
+                    action: shepherd.cancel
+                }, {
+                    text: 'Let\'s go',
+                    action: shepherd.next,
+                    classes: 'btn-clositt-theme'
+                }
+            ]
+        });                
+        
+        shepherd.addStep('start', {
+            title: 'Your Clositts',
+            text: ['This is where all of your Clositts are. Click on a button to go directly to that Clositt'],
+            attachTo: '.closetName left',
+            classes: 'shepherd-theme-arrows',            
+            buttons: [
+                {
+                    text: 'Back',
+                    classes: 'shepherd-button-secondary',
+                    action: shepherd.back
+                }, {
+                    text: 'Next',
+                    action: function(){                    
+                        pagePresenter.scrollTo($(".mobile-toggle").offset().top - 200); 
+                        shepherd.next();   
+                    },
+                    classes: 'btn-clositt-theme'
+                }
+            ]
+        });                                    
+        
+        shepherd.addStep('foundone', {
+            title: 'Price Alerts!',
+            text: 'Want to know when stuff in your Clositt gets cheaper? Flip this switch to enable price alerts, and we\'ll automatically send you an email if the price goes down. Now that\'s smart shopping! Give it a try. ',
+            attachTo: '.mobile-toggle right',
+            classes: ' shepherd-theme-arrows',
+            scrollTo: false,
+            buttons: [
+                {
+                    text: 'Back',
+                    classes: 'shepherd-button-secondary',
+                    action: function(){
+                        pagePresenter.scrollTo(0);
+                        shepherd.back();   
+                    }
+                }, {
+                    text: 'Next',
+                    action: function(){                     
+                        shepherd.next();   
+                    },
+                    classes: 'btn-clositt-theme'
+                }
+            ]
+        });    
+        
+        shepherd.addStep('showfilters', {
+            title: 'Edit Clositt',
+            text: 'You can edit or delete your Clositt by clicking here. But why would you ever want to do that?',
+            attachTo: '.closet-title right',
+            classes: ' shepherd-theme-arrows',
+            scrollTo: false,
+            buttons: [
+                {
+                    text: 'Back',
+                    classes: 'shepherd-button-secondary',
+                    action: function(){
+                        shepherd.back();   
+                    }
+                }, {
+                    text: 'Next',
+                    action: function(){  
+                        pagePresenter.scrollTo(0);                                           
+                        shepherd.next();   
+                    },
+                    classes: 'btn-clositt-theme'
+                }
+            ]
+        });                            
+        
+        shepherd.addStep('yourclositts', {
+          title: 'Account settings',
+          text: 'You can change your password and change how often you receive Price Alert emails by clicking on your account right here.',
+          attachTo: '.user-settings bottom',
+          classes: ' shepherd-theme-arrows',
+          scrollTo: false,
+          buttons: [
+            {
+                text: 'Back',
+                classes: 'shepherd-button-secondary',
+                action: function(){
+                    pagePresenter.scrollTo($(".closet-title").offset().top - 200); 
+                    shepherd.back();   
+                }
+            }, {
+                text: 'Done',
+                action: shepherd.next,
+                classes: 'btn-clositt-theme'
+            }
+          ]
+        });
+        
+        Shepherd.once('complete', function(){
+            gridPresenter.enableLazyLoading = true;    
+        });
+        
+        Shepherd.once('cancel', function(){
+            gridPresenter.enableLazyLoading = true;    
+        });
+        
+        shepherd.start();
+    }
+}
+
+ShepherdTour.init();
 
 </script>
 
