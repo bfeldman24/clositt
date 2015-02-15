@@ -244,17 +244,22 @@ if (isset($_GET['pricealerts']) && !isset($_SESSION['clickedPriceAlertsForMyClos
 
 $(document).ready(function(){        
     <?php if(isset($_GET['user'])){ ?>
-        closetPresenter.setUser(<?php echo $_GET['user']; ?>);        
+        closetPresenter.setUser(<?php echo $_GET['user']; ?>); 
+    
+        <?php if(isset($_GET['tour']) && $_GET['tour']){ ?>
+            ShepherdTour.setupShepherd();
+        <?php } ?>                   
+        
     <?php } ?>        
 
     pagePresenter.enableLazyLoading = false;     
     pagePresenter.init();    
     closetPresenter.init();        	
+    productPresenter.init();
     productPagePresenter.init();	
-    productPresenter.init();	
     reviewsPresenter.init();
     tagPresenter.init();
-    socialPresenter.init();	        
+    socialPresenter.init();	      	      
 });   
 
 pagePresenter.defaultHeaderHeight = 0;
@@ -301,7 +306,7 @@ var ShepherdTour = {
         
         shepherd.addStep('welcome', {
             title: 'Welcome to Your Clositt!',
-            text: ['Let us show you around.'],
+            text: ['The one place where you can save and organize your clothing! Let us show you around.'],
             classes: 'shepherd-theme-arrows',            
             buttons: [
                 {
@@ -328,8 +333,9 @@ var ShepherdTour = {
                     action: shepherd.back
                 }, {
                     text: 'Next',
-                    action: function(){                    
-                        pagePresenter.scrollTo($(".mobile-toggle").offset().top - 200); 
+                    action: function(){                                            
+                        pagePresenter.scrollTo(
+                            $("<?php echo empty($_GET['user']) ? '.mobile-toggle' : '.closet-title'; ?>").offset().top - 200); 
                         shepherd.next();   
                     },
                     classes: 'btn-clositt-theme'
@@ -339,8 +345,14 @@ var ShepherdTour = {
         
         shepherd.addStep('foundone', {
             title: 'Price Alerts!',
+            
+            <?php if(empty($_GET['user'])){ ?>
             text: 'Want to know when stuff in your Clositt gets cheaper? Flip this switch to enable price alerts, and we\'ll automatically send you an email if the price goes down. Now that\'s smart shopping! Give it a try. ',
-            attachTo: '.mobile-toggle right',
+            attachTo: '.mobile-toggle right',            
+            <?php }else{ ?>
+            text: 'Want to know when stuff in your Clositt gets cheaper? When you are signed in there is a switch to enable price alerts, and we\'ll automatically send you an email if the price goes down. Now that\'s smart shopping!',
+            attachTo: '.itemCount right',            
+            <?php } ?>             
             classes: ' shepherd-theme-arrows',
             scrollTo: false,
             buttons: [
@@ -374,8 +386,8 @@ var ShepherdTour = {
                     action: function(){
                         shepherd.back();   
                     }
-                }, {
-                    text: 'Next',
+                }, {                    
+                    text: '<?php echo empty($_GET["user"]) ? "Next" : "Done"; ?>',                    
                     action: function(){  
                         pagePresenter.scrollTo(0);                                           
                         shepherd.next();   
@@ -385,6 +397,7 @@ var ShepherdTour = {
             ]
         });                            
         
+        <?php if(empty($_GET['user'])){ ?>
         shepherd.addStep('yourclositts', {
           title: 'Account settings',
           text: 'You can change your password and change how often you receive Price Alert emails by clicking on your account right here.',
@@ -406,6 +419,7 @@ var ShepherdTour = {
             }
           ]
         });
+        <?php } ?>                
         
         Shepherd.once('complete', function(){
             gridPresenter.enableLazyLoading = true;    

@@ -252,7 +252,7 @@ outfit without hitting Ctrl+T </p>
             <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
                 <h2>Create a Clositt to Save Stuff for Later</h2>
                 <p>No more sending emails full of links. Simply add an item to your Clositt and we'll save it for you. We'll even let you know if stuff in your Clositt gets cheaper!</p>                
-                <p><a class="btn action show-clositt" href="<?php echo HOME_PAGE; ?>myclositt">Show me a Clositt</a></p>
+                <p><a class="btn action show-clositt" href="<?php echo HOME_PAGE; ?>show-me-a-clositt">Show me a Clositt</a></p>
             </div>        
         </div>        
     </section>
