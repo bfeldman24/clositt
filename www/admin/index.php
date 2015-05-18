@@ -59,6 +59,7 @@ ul>li>a{
             <li><a href="php/dataQuality.php">Data Quality</a></li>
             <li><a href="php/users.php">Users</a></li>
             <li><a id="elasticHealthCheck">Elasic Health Check</a></li>
+            <li><a href="../spider/deleteunwanted">Remove Bad Products</a></li>
             <li style="display:none;"><a id="populateTags">Populate Tags (Careful, this takes a while)</a></li>
         </ul>
         

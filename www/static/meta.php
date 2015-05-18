@@ -20,7 +20,7 @@
 <link rel="icon" type="image/png" href="favicon.ico">
 
 <?php
-$metaImage = HOME_PAGE . "css/images/clositt-twitter-header.jpg";
+$metaImage = HOME_PAGE . "css/images/clositt-social-header.jpg";
         
 if (isset($product) && $product != null){
     $metaImage = $product->i;
@@ -52,7 +52,7 @@ if (isset($product) && $product != null){
     window.HOME_URL = "<?php echo HOME_PAGE; ?>";
         
     window.CLOSITT_PAGE = "<?php echo CLOSITT_PAGE; ?>";    
-    window.SETTINGS_PAGE = "<?php echo SETTINGS_PAGE; ?>";        
+    window.SETTINGS_PAGE = "<?php echo SETTINGS_PAGE; ?>";     
 </script>
 
 <?php if (ENV == "PROD"){ ?>

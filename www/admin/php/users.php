@@ -19,10 +19,11 @@ if (isset($users)){
     for ($i=0; $i < $userCount; $i++){
                 
         $userTable .= "<tr>";                
-        $userTable .= "<td>".($i+1)."</td>";
+        $userTable .= "<td>".($userCount - $i)."</td>";
         $userTable .= "<td>".$users[$i][USER_NAME]."</td>";
         $userTable .= "<td>".$users[$i][USER_EMAIL]."</td>";
-        $userTable .= "<td>".$users[$i][USER_STATUS]."</td>";
+        $userTable .= "<td>".$users[$i][USER_LOGIN_COUNT]."</td>";
+        $userTable .= "<td>".$users[$i][USER_LAST_SIGNED_IN]."</td>";
         $userTable .= "<td>".$users[$i][USER_DATE_SIGNED_UP]."</td>";        
         $userTable .= "</tr>";
     }   
@@ -86,7 +87,8 @@ li{
                 <th>#</th>
                 <th>User</th>
                 <th>Email</th>
-                <th>Status</th>
+                <th>Login Count</th>
+                <th>Last Logged In</th>
                 <th>Date Signed Up</th>
             </tr>
             <?php echo $userTable; ?>

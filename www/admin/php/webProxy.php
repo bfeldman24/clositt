@@ -49,7 +49,7 @@ if(isset($_REQUEST['u']) && $_REQUEST['u'] != ""){
 
     if (isset($_REQUEST['phantom'])){
     	$phantom = "phantomjs";
-        $phantomScript = "/home/ben/clositt-private/phantomjs/phantomWebProxy.js";
+        $phantomScript = "/home/ben/clositt/scripts/phantomjs/phantomWebProxy.js";
         $command = $phantom . " " . $phantomScript . " " . $url;
         
         exec($command, $output);

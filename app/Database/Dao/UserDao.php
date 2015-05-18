@@ -131,8 +131,15 @@ class UserDao extends AbstractDao {
 	}
 	
 	public function getAllUserInfo(){ 
-        $sql = "SELECT " . USER_NAME.", ".USER_EMAIL.", ".USER_ALERT_FREQUENCY.",".USER_STATUS.",".USER_DATE_SIGNED_UP.
-                " FROM " . USERS;
+        $sql = "SELECT " . 
+                USER_NAME.", " .
+                USER_EMAIL.", " .
+                USER_ALERT_FREQUENCY.",".
+                USER_LOGIN_COUNT.",".
+                USER_LAST_SIGNED_IN.",".
+                USER_DATE_SIGNED_UP.
+                " FROM " . USERS .
+                " ORDER BY " . USER_ID . " desc";
 		
 		$paramTypes = array();		
 		$params = array();

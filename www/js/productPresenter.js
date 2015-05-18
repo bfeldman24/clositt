@@ -32,6 +32,8 @@ var productPresenter = {
             $mainitem.find(".more-opt i").removeClass('hover');
             $(e.currentTarget).removeClass("open");
         });
+        
+        $(document).on("error", "img", productPresenter.handleImageNotFound);
 	},		 			
 	
 	refreshImages: function(){	   
